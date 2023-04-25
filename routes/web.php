@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('index');
 });
 
 Route::get('/data', function () {
@@ -29,7 +29,7 @@ Route::get('/jsgrid', function () {
 //chuyen trang
 Route::get('/{name?}', function ($name = "index") {
     return view($name);
-
+});
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
