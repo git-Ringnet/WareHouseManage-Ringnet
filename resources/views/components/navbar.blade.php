@@ -28,8 +28,8 @@
   <link rel="stylesheet" href="{{asset('plugins/daterangepicker/daterangepicker.css')}}">
   <!-- summernote -->
   <link rel="stylesheet" href="{{asset('plugins/summernote/summernote-bs4.min.css')}}">
-    <!-- jQuery -->
-    <script src="{{asset('plugins/jquery/jquery.min.js')}}"></script>
+  <!-- jQuery -->
+  <script src="{{asset('plugins/jquery/jquery.min.js')}}"></script>
   <!-- jQuery UI 1.11.4 -->
   <script src="{{asset('plugins/jquery-ui/jquery-ui.min.js')}}"></script>
   <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
@@ -248,12 +248,16 @@
                   Simple Tables
                 </p>
               </a>
+            </li>
+            <li class="nav-item">
               <a href="{{asset('./data')}}" class="nav-link">
                 <i class="nav-icon fas fa-table"></i>
                 <p>
                   DataTables
                 </p>
               </a>
+            </li>
+            <li class="nav-item">
               <a href="{{asset('./jsgrid')}}" class="nav-link">
                 <i class="nav-icon fas fa-table"></i>
                 <p>
