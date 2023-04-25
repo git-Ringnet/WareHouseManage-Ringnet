@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UsersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,6 +18,16 @@ Route::get('/', function () {
     return view('index');
 });
 
+//Admin
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('userlist',[UsersController::class,'show'])->name('userslist');
+    Route::get('adduser',[UsersController::class,'add'])->name('add');
+    Route::post('adduser',[UsersController::class,'addUser'])->name('adduser');
+    Route::get('edituser/{id}',[UsersController::class,'edit'])->name('edit');
+    Route::post('edituser/{id}',[UsersController::class,'editUser'])->name('edituser');
+
+});
+
 Route::get('/data', function () {
     return view('tables.data');
 });
@@ -27,12 +38,16 @@ Route::get('/simple', function () {
 Route::get('/{name?}', function ($name = "index") {
     return view($name);
 });
+
+
+
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified'
 ])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
+    Route::get('/', function () {
+        return view('index');
     })->name('dashboard');
 });

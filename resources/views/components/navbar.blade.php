@@ -195,6 +195,31 @@
             <i class="fas fa-expand-arrows-alt"></i>
           </a>
         </li>
+
+        <li class="nav-item">
+          @if (Route::has('login'))
+          @auth
+          <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"> {{ Auth::user()->name }}
+              <span class="caret"></span></button>
+            <ul class="dropdown-menu">
+              <li><a href="{{ route('profile.show') }}"> {{ __('Profile') }}
+                </a></li>
+              <li>
+                <form method="POST" action="{{ route('logout') }}" x-data>
+                  @csrf
+                  <button class="btn btn-primary" type="submit">
+                    {{ __('Log Out') }}
+                  </button>
+              </li>
+              </form>
+            </ul>
+          </div>
+          @else
+          <a href="{{ route('login') }}" class="text-sm text-gray-700 underline">Đăng nhập</a>
+          @endauth
+          @endif
+        </li>
       </ul>
     </nav>
     <!-- /.navbar -->
@@ -258,7 +283,7 @@
               </a>
             </li>
             <li class="nav-item">
-              <a href="{{asset('./data')}}" class="nav-link">
+              <a href="{{route('admin.userslist')}}" class="nav-link">
                 <i class="nav-icon fas fa-table"></i>
                 <p>
                   Nhân viên
@@ -274,7 +299,7 @@
               </a>
             </li>
             <li class="nav-item">
-              <a href="{{asset('./data')}}" class="nav-link">
+              <a href="#" class="nav-link">
                 <i class="nav-icon fas fa-table"></i>
                 <p>
                   Khách hàng
