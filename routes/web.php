@@ -17,6 +17,19 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/data', function () {
+    return view('tables.data');
+});
+Route::get('/simple', function () {
+    return view('tables.simple');
+});
+Route::get('/jsgrid', function () {
+    return view('tables.jsgrid');
+});
+//chuyen trang
+Route::get('/{name?}', function ($name = "index") {
+    return view($name);
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
