@@ -229,7 +229,7 @@
               <a href="{{asset('index')}}" class="nav-link active">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
                 <p>
-                  Dashboard
+                  Trang chủ
                 </p>
               </a>
             </li>
@@ -237,7 +237,7 @@
               <a href="{{asset('./simple')}}" class="nav-link">
                 <i class="nav-icon fas fa-table"></i>
                 <p>
-                  Simple Tables
+                  Sản phẩm
                 </p>
               </a>
             </li>
@@ -245,7 +245,39 @@
               <a href="{{asset('./data')}}" class="nav-link">
                 <i class="nav-icon fas fa-table"></i>
                 <p>
-                  DataTables
+                  Nhập hàng
+                </p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{{asset('./data')}}" class="nav-link">
+                <i class="nav-icon fas fa-table"></i>
+                <p>
+                  Xuất hàng
+                </p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{{asset('./data')}}" class="nav-link">
+                <i class="nav-icon fas fa-table"></i>
+                <p>
+                  Nhân viên
+                </p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{{asset('./data')}}" class="nav-link">
+                <i class="nav-icon fas fa-table"></i>
+                <p>
+                  Nhà cung cấp
+                </p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{{asset('./data')}}" class="nav-link">
+                <i class="nav-icon fas fa-table"></i>
+                <p>
+                  Khách hàng
                 </p>
               </a>
             </li>
