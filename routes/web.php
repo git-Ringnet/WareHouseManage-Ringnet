@@ -23,9 +23,6 @@ Route::get('/data', function () {
 Route::get('/simple', function () {
     return view('tables.simple');
 });
-Route::get('/jsgrid', function () {
-    return view('tables.jsgrid');
-});
 //chuyen trang
 Route::get('/{name?}', function ($name = "index") {
     return view($name);
