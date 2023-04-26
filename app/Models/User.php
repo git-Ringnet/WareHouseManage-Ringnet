@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -28,6 +29,7 @@ class User extends Authenticatable
         'email',
         'password',
     ];
+    protected $table = 'users';
 
     /**
      * The attributes that should be hidden for serialization.
@@ -58,4 +60,27 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+    public function getAllUsers()
+    {
+        // $users = DB::select('SELECT * FROM users');
+        $users = DB::table($this->table)
+            ->select('users.*', 'roles.name as role_name')
+            ->join('roles', 'users.roleid', '=', 'roles.id')
+            ->orderBy('users.created_at', 'DESC')
+            ->get();
+        return $users;
+    }
+    public function addUser($data)
+    {
+        return DB::table($this->table)->insert($data);
+        // DB::insert('INSERT INTO users(name, email, password,roleid,phonenumber) VALUES (?,?,?,?,?)', $data);
+    }
+    public function getDetailUser($id)
+    {
+       return DB::select('SELECT * FROM '.$this->table.' WHERE id  = ?', [$id]);
+    }
+    public function updateUser($data,$id)
+    {
+       return DB::table($this->table)->where('id',$id)->update($data);
+    }
 }
