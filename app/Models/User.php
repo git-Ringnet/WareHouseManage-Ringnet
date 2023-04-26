@@ -79,4 +79,8 @@ class User extends Authenticatable
     {
        return DB::insert('SELECT * FROM '.$this->table.'WHERE id  = ?', [$id]);
     }
+    public function updateUser($data,$id)
+    {
+       return DB::table($this->table)->where('id',$id)->update($data);
+    }
 }

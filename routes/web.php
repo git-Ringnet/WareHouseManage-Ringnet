@@ -24,7 +24,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('adduser',[UsersController::class,'add'])->name('add');
     Route::post('adduser',[UsersController::class,'addUser'])->name('adduser');
     Route::get('edituser/{id}',[UsersController::class,'edit'])->name('edit');
-    Route::post('edituser/{id}',[UsersController::class,'editUser'])->name('edituser');
+    Route::post('update',[UsersController::class,'editUser'])->name('edituser');
+    Route::get('delete',[UsersController::class,'deleteUser'])->name('delete');
+
 
 });
 

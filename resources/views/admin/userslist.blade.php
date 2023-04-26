@@ -51,7 +51,11 @@
                     <td>{{$value->phonenumber}}</td>
                     <td>{{$value->email}}</td>
                     <td>{!!$value->status==0?'<button type="submit" class="btn btn-sm btn-secondary">Active</button>':' <button type="submit" class="btn btn-sm btn-primary">Disable</button>'!!}</td>
-                    <td class="text-center"><span><a class="btn btn-primary" href="{{route('admin.edit',['id'=>$value->id])}}">Edit</a><a class="btn btn-danger" href="">Xóa</a></span></td>
+                    <td class="text-center"><span><a class="btn btn-primary" href="{{route('admin.edit',['id'=>$value->id])}}">Edit</a><form style="margin-left: 20px;"  onclick="return confirm('Bạn có chắc chắn muốn xoá !!')" action="{{route('admin.delete')}}" method="get" enctype="multipart/form">
+									@csrf
+                             <button type="submit" class="btn btn-danger btn-sm"> Delete</button>
+                              <input type="hidden" name="id" value="{{$value->id}}" />
+                              </form></span></td>
                   </tr>
                   @endforeach
               </table>

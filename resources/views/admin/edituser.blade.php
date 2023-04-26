@@ -29,18 +29,18 @@
             <div class="alert alert-danger">Dữ liệu nhập vào không đúng</div>
             @endif
             <div class="card-body">
-              <form action="" method="post">
+            <form action="{{route('admin.edituser')}}" method="post">
                 @csrf
                 <div class="mb-3">
                   <label for="">Họ và tên</label>
-                  <input type="text" class="form-control" name="name" placeholder="Họ và tên" value="{{old('name')?? }}">
+                  <input type="text" class="form-control" name="name" placeholder="Họ và tên" value="{{old('name')}}">
                   @error('name')
                   <span style="color:red">{{$message}}</span>
                   @enderror
                 </div>
                 <div class="mb-3">
                   <label for="">Email</label>
-                  <input type="text" class="form-control" name="email" placeholder="Họ và tên">
+                  <input type="text" class="form-control" name="email" placeholder="Nhập email" {{old('email')}}>
                   @error('email')
                   <span style="color:red">{{$message}}</span>
                   @enderror
@@ -55,8 +55,9 @@
                 <div class="mb-3">
                   <label for="">Role</label>
                   <select class="form-control" name="role" id="">
+                    <option value="0">Chọn chức vụ</option>
                     @foreach($roles as $role)
-                    <option value="{{$role->id}}" >{{$role->name}}</option>
+                    <option value="{{$role->id}}" {{old('role')==$role->id?'selected':false}}>{{$role->name}}</option>
                     @endforeach
                   </select>
                   @error('role')
@@ -65,14 +66,15 @@
                 </div>
                 <div class="mb-3">
                   <label for="">Phone</label>
-                  <input type="text" class="form-control" name="phonenumber" placeholder="Số điện thoại">
+                  <input type="text" class="form-control" name="phonenumber" placeholder="Số điện thoại" value="{{old('email')}}">
                   @error('phonenumber')
                   <span style="color:red">{{$message}}</span>
                   @enderror
                 </div>
-                <button type="submit" class="btn btn-primary">Cập nhật</button>
+                <button type="submit" class="btn btn-primary">Cập Nhật</button>
                 <a href="{{route('admin.userslist')}}" class="btn btn-warning">Quay lại</a>
               </form>
+            </div>
             </div>
             <!-- /.card-body -->
           </div>
