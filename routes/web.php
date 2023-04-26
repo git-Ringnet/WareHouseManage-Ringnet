@@ -27,10 +27,6 @@ Route::get('/simple', function () {
 //nha cung cap
 Route::resource('provides', provideController::class);
 
-//chuyen trang
-Route::get('/{name?}', function ($name = "index") {
-    return view($name);
-});
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
@@ -39,4 +35,9 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+});
+
+//chuyen trang
+Route::get('/{name?}', function ($name = "index") {
+    return view($name);
 });
