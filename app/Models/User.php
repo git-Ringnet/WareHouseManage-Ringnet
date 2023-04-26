@@ -77,7 +77,7 @@ class User extends Authenticatable
     }
     public function getDetailUser($id)
     {
-       return DB::insert('SELECT * FROM '.$this->table.'WHERE id  = ?', [$id]);
+       return DB::select('SELECT * FROM '.$this->table.' WHERE id  = ?', [$id]);
     }
     public function updateUser($data,$id)
     {

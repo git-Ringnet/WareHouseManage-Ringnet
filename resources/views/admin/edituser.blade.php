@@ -33,14 +33,14 @@
                 @csrf
                 <div class="mb-3">
                   <label for="">Họ và tên</label>
-                  <input type="text" class="form-control" name="name" placeholder="Họ và tên" value="{{old('name')}}">
+                  <input type="text" class="form-control" name="name" placeholder="Họ và tên" value="{{old('name') ?? $userDetail->name}}">
                   @error('name')
                   <span style="color:red">{{$message}}</span>
                   @enderror
                 </div>
                 <div class="mb-3">
                   <label for="">Email</label>
-                  <input type="text" class="form-control" name="email" placeholder="Nhập email" {{old('email')}}>
+                  <input type="text" class="form-control" name="email" placeholder="Nhập email" value="{{old('email')?? $userDetail->email}}">
                   @error('email')
                   <span style="color:red">{{$message}}</span>
                   @enderror
@@ -66,7 +66,7 @@
                 </div>
                 <div class="mb-3">
                   <label for="">Phone</label>
-                  <input type="text" class="form-control" name="phonenumber" placeholder="Số điện thoại" value="{{old('email')}}">
+                  <input type="text" class="form-control" name="phonenumber" placeholder="Số điện thoại" value="{{old('phonenumber')?? $userDetail->phonenumber}}">
                   @error('phonenumber')
                   <span style="color:red">{{$message}}</span>
                   @enderror

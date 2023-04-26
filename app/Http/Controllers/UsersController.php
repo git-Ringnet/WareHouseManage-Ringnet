@@ -41,13 +41,15 @@ class UsersController extends Controller
         return redirect()->route('admin.userslist')->with('status', ' Added Successfully');
     }
 
-    public function edit(Request $request,$id=0)
+    public function edit(Request $request)
     {
-
+        $id = session('id');
         $request->session()->put('id', $id);
         $user = User::where('id', $id)->get();
+        $userDetail = $this->users->getDetailUser($id);
+        $userDetail = $userDetail[0];
         $roles = new Roles;
-        return view('admin/edituser', ['useredit' => $user])->with('roles', $roles->getAll());
+        return view('admin/edituser', ['useredit' => $user,'userDetail'=>$userDetail])->with('roles', $roles->getAll());
     }
     public function editUser(UserRequest $request)
     {
