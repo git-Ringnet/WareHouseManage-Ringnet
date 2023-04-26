@@ -43,7 +43,7 @@ class provideController extends Controller
             'provide_email' => $request->provide_email,
             'provide_status' => $request->provide_status,
         ]);
-        return redirect()->route('provides.index')->with('successA', 'Thêm nhà cung cấp thành công!');
+        return redirect()->route('provides.index')->with('mgs', 'Thêm nhà cung cấp thành công!');
     }
 
     /**
@@ -80,7 +80,7 @@ class provideController extends Controller
     {
         $provides = Provides::find($id);
         $provides->update($request->all());
-        return redirect()->route('provides.index')->with('successU', 'Cập nhật thành công!');
+        return redirect()->route('provides.index')->with('mgs', 'Cập nhật thành công!');
     }
 
     /**
@@ -92,6 +92,6 @@ class provideController extends Controller
     public function destroy($id)
     {
         $provides = Provides::destroy($id);
-        return redirect()->route('provides.index')->with('successD', 'Xóa thành công!');
+        return redirect()->route('provides.index')->with('mgs', 'Xóa thành công!');
     }
 }

@@ -2,30 +2,6 @@
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-    @if (Session::has('successA'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ Session::get('successA') }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    @endif
-    @if (Session::has('successD'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ Session::get('successD') }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    @endif
-    @if (Session::has('successU'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ Session::get('successU') }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    @endif
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
@@ -97,8 +73,8 @@
                                                     <i class="fas fa-pencil-alt"></i>
                                                     Edit
                                                 </a>
-                                                <form action="{{ route('provides.destroy', $item->id) }}"
-                                                    method="POST" class="d-inline">
+                                                <form action="{{ route('provides.destroy', $item->id) }}" method="POST"
+                                                    class="d-inline">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger btn-sm"><i

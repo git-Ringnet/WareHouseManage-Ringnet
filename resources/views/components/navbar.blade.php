@@ -67,15 +67,9 @@
 </head>
 <?php
 $current_url = $_SERVER['REQUEST_URI'];
-//rong
+//index
 if (strpos($current_url, '') !== false) {
     $index_class = 'active';
-}
-//index
-if (strpos($current_url, 'index') !== false) {
-    $index_class = 'active';
-} else {
-    $index_class = '';
 }
 //provides
 if (strpos($current_url, 'provides') !== false) {
@@ -85,7 +79,6 @@ if (strpos($current_url, 'provides') !== false) {
     $provides_class = '';
 }
 ?>
-
 
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
@@ -315,3 +308,13 @@ if (strpos($current_url, 'provides') !== false) {
             </div>
             <!-- /.sidebar -->
         </aside>
+        <div class="main-header">
+            @if (Session::has('mgs'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ Session::get('mgs') }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
+        </div>
