@@ -94,4 +94,12 @@ class provideController extends Controller
         $provides = Provides::destroy($id);
         return redirect()->route('provides.index')->with('mgs', 'Xóa thành công!');
     }
+
+    public function updateStatus(Request $request)
+    {
+        $data = $request->all();
+        $provide = Provides::findOrFail($data['idProvide']);
+        $provide->provide_status = $data['newStatus'];
+        $provide->save();
+    }
 }

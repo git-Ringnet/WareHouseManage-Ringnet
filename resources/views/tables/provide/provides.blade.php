@@ -61,11 +61,20 @@
                                             <td>{{ $item->provide_phone }}</td>
                                             <td>{{ $item->provide_email }}</td>
                                             <td>
-                                                @if ($item->provide_status == 1)
-                                                    <p style="color:#09BD3C;">Active</p>
-                                                @else
-                                                    Disable
-                                                @endif
+                                                <select class="p-1 px-2 status-select"
+                                                    style="border: 1px solid #D6D6D6; <?php if ($item->provide_status == 1) {
+                                                        echo 'color:#09BD3C;';
+                                                    } else {
+                                                        echo 'color:#D6D6D6';
+                                                    }
+                                                    ?>" id="{{$item->id}}" name="status-select" >
+                                                    <option value="1" <?php if ($item->provide_status == 1) {
+                                                        echo 'selected';
+                                                    } ?>>Active</option>
+                                                    <option value="0" <?php if ($item->provide_status == 0) {
+                                                        echo 'selected';
+                                                    } ?>>Disable</option>
+                                                </select>
                                             </td>
                                             <td>
                                                 <a class="btn btn-info btn-sm"
@@ -100,6 +109,21 @@
     </section>
     <!-- /.content -->
 </div>
+<script>
+        $(document).ready(function () {
+            $('.status-select').change(function () {
+                var newStatus = $(this).val();
+                var idProvide = $(this).attr('id');
+                $.ajax({
+                    url: '{{ route('update')}}',
+                    type: 'GET',
+                    data: { newStatus: newStatus, idProvide: idProvide},
+                });
+                location.reload();
+            });     
+        });
+</script>
+
 </body>
 
 </html>

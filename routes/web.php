@@ -26,6 +26,7 @@ Route::get('/simple', function () {
 });
 //nha cung cap
 Route::resource('provides', provideController::class);
+Route::get('/update-status', [provideController::class, 'updateStatus'])->name('update');
 
 Route::middleware([
     'auth:sanctum',
