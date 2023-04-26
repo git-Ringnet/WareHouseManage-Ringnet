@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\provideController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +24,9 @@ Route::get('/data', function () {
 Route::get('/simple', function () {
     return view('tables.simple');
 });
+//nha cung cap
+Route::resource('provides', provideController::class);
+
 //chuyen trang
 Route::get('/{name?}', function ($name = "index") {
     return view($name);
