@@ -9,6 +9,6 @@ class Provides extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'provide_name','provide_represent','provide_phone','provide_email','provide_status'
+        'product_id','privide_name','provide_represent','provide_phone','provide_email','provide_status'
     ];
 }
