@@ -28,6 +28,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('delete',[UsersController::class,'deleteUser'])->name('delete');
 });
 
+//nha cung cap
+Route::resource('provides', provideController::class);
+Route::get('/update-status', [provideController::class, 'updateStatus'])->name('update');
+
 Route::get('/data', function () {
     return view('tables.data');
 });
