@@ -73,6 +73,13 @@ $current_url = $_SERVER['REQUEST_URI'];
 if (strpos($current_url, '') !== false) {
     $index_class = 'active';
 }
+//products
+if (strpos($current_url, 'products') !== false) {
+    $products_class = 'active';
+    $index_class = '';
+} else {
+    $products_class = '';
+}
 //provides
 if (strpos($current_url, 'provides') !== false) {
     $provides_class = 'active';
@@ -257,7 +264,7 @@ if (strpos($current_url, 'provides') !== false) {
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ asset('./simple') }}" class="nav-link">
+                            <a href="{{ asset('./products') }}" class="nav-link <?php echo $products_class; ?>">
                                 <i class="nav-icon fas fa-table"></i>
                                 <p>
                                     Sản phẩm

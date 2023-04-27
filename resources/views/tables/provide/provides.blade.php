@@ -67,7 +67,8 @@
                                                     } else {
                                                         echo 'color:#D6D6D6';
                                                     }
-                                                    ?>" id="{{$item->id}}" name="status-select" >
+                                                    ?>"
+                                                    id="{{ $item->id }}" name="status-select">
                                                     <option value="1" <?php if ($item->provide_status == 1) {
                                                         echo 'selected';
                                                     } ?>>Active</option>
@@ -110,18 +111,24 @@
     <!-- /.content -->
 </div>
 <script>
-        $(document).ready(function () {
-            $('.status-select').change(function () {
-                var newStatus = $(this).val();
-                var idProvide = $(this).attr('id');
-                $.ajax({
-                    url: '{{ route('update')}}',
-                    type: 'GET',
-                    data: { newStatus: newStatus, idProvide: idProvide},
-                });
-                location.reload();
-            });     
+    $(document).ready(function() {
+        $('.status-select').change(function() {
+            var newStatus = $(this).val();
+            var idProvide = $(this).attr('id');
+            $.ajax({
+                url: '{{ route('update') }}',
+                type: 'GET',
+                data: {
+                    newStatus: newStatus,
+                    idProvide: idProvide
+                },
+                success: function() {
+                    alert('Cập nhật tình trạng thành công!');
+                }
+            });
+            location.reload();
         });
+    });
 </script>
 
 </body>

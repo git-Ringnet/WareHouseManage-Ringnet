@@ -21,7 +21,7 @@ Route::get('/', function () {
 Route::get('/data', function () {
     return view('tables.data');
 });
-Route::get('/simple', function () {
+Route::get('/products', function () {
     return view('tables.simple');
 });
 //nha cung cap
