@@ -15,12 +15,59 @@ class UsersController extends Controller
         $this->users = new User();
     }
 
-    public function show()
+    public function show(Request $request)
     {
         $title = "Danh sách người dùng";
-        $usersList = $this->users->getAllUsers();
-        return view('admin/userslist', compact('title', 'usersList'));
+
+
+         //Xử lí sắp xếp 
+         $sortType = $request->input('sort-type');
+
+         $sortBy = $request->input('sort-by');
+ 
+         $allowSort = ['asc', 'desc'];
+ 
+         if (!empty($sortType) && in_array($sortType, $allowSort)) {
+ 
+ 
+             if ($sortType == 'desc') {
+                 $sortType = 'asc';
+             } else {
+                 $sortType = 'desc';
+             }
+         } else {
+             $sortType = 'asc';
+         }
+ 
+        $sortByArr = [
+             'sortBy' => $sortBy,
+             'sortType' => $sortType
+        ];
+        $roles = new Roles;
+        $roles = $roles->getAll();
+
+         $filters =[];
+         if (!empty($request->status)) {
+            $status = $request->status;
+            $filters[] = ['users.status', '=', $status];
+        }
+        if (!empty($request->roleid)) {
+            $roleid = $request->roleid;
+            $filters[] = ['users.roleid', '=', $roleid];
+        }
+
+        $keywords = null;
+
+        if (!empty($request->keywords)) {
+            $keywords = $request->keywords;
+           
+        }
+   
+        $usersList = $this->users->getAllUsers($filters,$keywords,$sortByArr);
+        return view('admin/userslist', compact('title', 'usersList', 'sortType','roles'));
     }
+
+
     public function add()
     {   
         $roles = new Roles;
@@ -38,7 +85,7 @@ class UsersController extends Controller
         ];
         $this->users->addUser($data);
 
-        return redirect()->route('admin.userslist')->with('status', ' Added Successfully');
+        return redirect()->route('admin.userslist')->with('msg', 'Thêm người dùng thành công');
     }
 
     public function edit(Request $request)
@@ -69,6 +116,6 @@ class UsersController extends Controller
         $user = $request->id;
         $user = User::where('id', $user)->first();
         $user->delete();
-        return back()->with('status', 'Delete Successfully');
+        return back()->with('msg', 'Xóa người dùng thành công');
     }
 }
