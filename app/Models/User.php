@@ -60,14 +60,34 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
-    public function getAllUsers()
+    public function getAllUsers($filter = [], $keywords = null, $sortByArr = null)
     {
         // $users = DB::select('SELECT * FROM users');
         $users = DB::table($this->table)
             ->select('users.*', 'roles.name as role_name')
-            ->join('roles', 'users.roleid', '=', 'roles.id')
-            ->orderBy('users.created_at', 'DESC')
-            ->get();
+            ->join('roles', 'users.roleid', '=', 'roles.id');
+
+
+        $orderBy = 'users.created_at';
+        $orderType = 'desc';
+        if (!empty($sortByArr) && is_array($sortByArr)) {
+            if (!empty($sortByArr['sortBy']) && !empty($sortByArr['sortType'])) {
+                $orderBy = trim($sortByArr['sortBy']);
+                $orderType = trim($sortByArr['sortType']);
+            }
+        }
+        $users = $users->orderBy($orderBy, $orderType);
+
+        if (!empty($filter)) {
+            $users = $users->where($filter);
+        }
+        if (!empty($keywords)) {
+            $users = $users->where(function ($query) use ($keywords) {
+                $query->orWhere('users.name', 'like', '%' . $keywords . '%');
+                $query->orWhere('users.email', 'like', '%' . $keywords . '%');
+            });
+        }
+        $users = $users->paginate(5);
         return $users;
     }
     public function addUser($data)
@@ -77,10 +97,10 @@ class User extends Authenticatable
     }
     public function getDetailUser($id)
     {
-       return DB::select('SELECT * FROM '.$this->table.' WHERE id  = ?', [$id]);
+        return DB::select('SELECT * FROM ' . $this->table . ' WHERE id  = ?', [$id]);
     }
-    public function updateUser($data,$id)
+    public function updateUser($data, $id)
     {
-       return DB::table($this->table)->where('id',$id)->update($data);
+        return DB::table($this->table)->where('id', $id)->update($data);
     }
 }

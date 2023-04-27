@@ -41,7 +41,7 @@
                 </div>
                 <div class="mb-3">
                   <label for="">Email</label>
-                  <input type="text" class="form-control" name="email" placeholder="Nhập email" {{old('email')}}>
+                  <input type="text" class="form-control" name="email" placeholder="Nhập email" value=" {{old('email')}}">
                   @error('email')
                   <span style="color:red">{{$message}}</span>
                   @enderror
@@ -67,7 +67,7 @@
                 </div>
                 <div class="mb-3">
                   <label for="">Phone</label>
-                  <input type="text" class="form-control" name="phonenumber" placeholder="Số điện thoại" value="{{old('email')}}">
+                  <input type="text" class="form-control" name="phonenumber" placeholder="Số điện thoại" value="{{old('phonenumber')}}">
                   @error('phonenumber')
                   <span style="color:red">{{$message}}</span>
                   @enderror
