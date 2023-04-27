@@ -311,7 +311,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ asset('./guests') }}" class="nav-link">
                                 <i class="nav-icon fas fa-table"></i>
                                 <p>
                                     Khách hàng
@@ -324,3 +324,4 @@
             </div>
             <!-- /.sidebar -->
         </aside>
+        

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GuestsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\provideController;
@@ -29,8 +30,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
 });
 
 //nha cung cap
-Route::resource('provides', provideController::class);
-Route::get('/update-status', [provideController::class, 'updateStatus'])->name('update');
+Route::resource('provides', ProvideController::class);
+Route::get('/update-status', [ProvideController::class, 'updateStatus'])->name('update');
 
 Route::get('/data', function () {
     return view('tables.data');
@@ -38,6 +39,9 @@ Route::get('/data', function () {
 Route::get('/simple', function () {
     return view('tables.simple');
 });
+//khach hang
+Route::resource('guests', GuestsController::class);
+Route::get('/updatestatus', [GuestsController::class, 'updateStatus'])->name('updateKH');
 
 Route::middleware([
     'auth:sanctum',

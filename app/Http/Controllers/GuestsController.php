@@ -2,15 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Provides;
+use App\Models\Guests;
 use Illuminate\Http\Request;
 
-class ProvideController extends Controller
+class GuestsController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
-        $provides = Provides::orderBy('id', 'ASC')->paginate(10);
-        return view('tables.provide.provides', compact('provides'));
+        $guests = Guests::orderBy('id', 'ASC')->paginate(10);
+        return view('tables.guest.guests', compact('guests'));
     }
 
     /**
@@ -20,7 +25,7 @@ class ProvideController extends Controller
      */
     public function create()
     {
-        return view('tables.provide.addProvide');
+        return view('tables.guest.addGuest');
     }
 
     /**
@@ -31,14 +36,14 @@ class ProvideController extends Controller
      */
     public function store(Request $request)
     {
-        Provides::create([
-            'provide_name' => $request->provide_name,
-            'provide_represent' => $request->provide_represent,
-            'provide_phone' => $request->provide_phone,
-            'provide_email' => $request->provide_email,
-            'provide_status' => $request->provide_status,
+        Guests::create([
+            'guest_name' => $request->guest_name,
+            'guest_represent' => $request->guest_represent,
+            'guest_phone' => $request->guest_phone,
+            'guest_email' => $request->guest_email,
+            'guest_status' => $request->guest_status,
         ]);
-        return redirect()->route('provides.index')->with('msg', 'Thêm nhà cung cấp thành công!');
+        return redirect()->route('guests.index')->with('msg', 'Thêm nhà cung cấp thành công!');
     }
 
     /**
@@ -60,8 +65,8 @@ class ProvideController extends Controller
      */
     public function edit($id)
     {
-        $provides = Provides::find($id);
-        return view('tables.provide.editProvide', compact('provides'));
+        $guests = Guests::find($id);
+        return view('tables.guest.editGuest', compact('guests'));
     }
 
     /**
@@ -73,9 +78,9 @@ class ProvideController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $provides = Provides::find($id);
-        $provides->update($request->all());
-        return redirect()->route('provides.index')->with('msg', 'Cập nhật thành công!');
+        $guests = Guests::find($id);
+        $guests->update($request->all());
+        return redirect()->route('guests.index')->with('msg', 'Cập nhật thành công!');
     }
 
     /**
@@ -86,14 +91,14 @@ class ProvideController extends Controller
      */
     public function destroy($id)
     {
-        $provides = Provides::destroy($id);
-        return redirect()->route('provides.index')->with('msg', 'Xóa thành công!');
+        $guests = Guests::destroy($id);
+        return redirect()->route('guests.index')->with('msg', 'Xóa thành công!');
     }
     public function updateStatus(Request $request)
     {
         $data = $request->all();
-        $provide = Provides::findOrFail($data['idProvide']);
-        $provide->provide_status = $data['newStatus'];
-        $provide->save();
+        $guests = Guests::findOrFail($data['idGuest']);
+        $guests->guest_status = $data['newStatus'];
+        $guests->save();
     }
 }
