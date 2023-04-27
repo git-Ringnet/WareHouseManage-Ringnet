@@ -57,11 +57,12 @@
   <!-- overlayScrollbars -->
   <script src="{{asset('plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js')}}"></script>
   <!-- AdminLTE App -->
-  <script src="{{asset('dist/js/adminlte.js')}}"></script>
+<script src="{{asset('dist/js/adminlte.js')}}"></script>
   <!-- AdminLTE for demo purposes -->
   <script src="{{asset('dist/js/demo.js')}}"></script>
   <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
   <script src="{{asset('dist/js/pages/dashboard.js')}}"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -126,7 +127,7 @@
                 </div>
               </div>
               <!-- Message End -->
-            </a>
+</a>
             <div class="dropdown-divider"></div>
             <a href="#" class="dropdown-item">
               <!-- Message Start -->
@@ -187,7 +188,7 @@
               <span class="float-right text-muted text-sm">2 days</span>
             </a>
             <div class="dropdown-divider"></div>
-            <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+<a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
           </div>
         </li>
         <li class="nav-item">
@@ -203,7 +204,6 @@
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
       <!-- Brand Logo -->
       <a href="#" class="brand-link">
-        <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
         <span class="brand-text font-weight-light">AdminLTE 3</span>
       </a>
 
@@ -226,18 +226,27 @@
             <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
             <li class="nav-item menu-open">
-              <a href="{{asset('index')}}" class="nav-link active">
+              <a href="{{asset('index')}}" class="nav-link <?php ?> active">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
                 <p>
-                  Dashboard
+                  Trang chủ
+                </p>
+              </a>
+            </li>
+          
+            <li class="nav-item">
+              <a href="{{asset('./data')}}" class="nav-link">
+                <i class="nav-icon fas fa-table"></i>
+                <p>
+                Sản phẩm
                 </p>
               </a>
             </li>
             <li class="nav-item">
               <a href="{{asset('./simple')}}" class="nav-link">
                 <i class="nav-icon fas fa-table"></i>
-                <p>
-                  Simple Tables
+                <p> 
+                  Nhập hàng
                 </p>
               </a>
             </li>
@@ -245,7 +254,31 @@
               <a href="{{asset('./data')}}" class="nav-link">
                 <i class="nav-icon fas fa-table"></i>
                 <p>
-                  DataTables
+                  Xuất hàng
+                </p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{{asset('./data')}}" class="nav-link">
+                <i class="nav-icon fas fa-table"></i>
+                <p>
+                  Nhân viên
+                </p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{{asset('./provides')}}" class="nav-link">
+                <i class="nav-icon fas fa-table"></i>
+                <p>
+                  Nhà cung cấp
+                </p>
+              </a>
+            </li>
+<li class="nav-item">
+              <a href="{{asset('./data')}}" class="nav-link">
+                <i class="nav-icon fas fa-table"></i>
+                <p>
+                  Khách hàng
                 </p>
               </a>
             </li>

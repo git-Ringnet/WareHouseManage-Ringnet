@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AjaxController;
+use App\Http\Controllers\ProductsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,16 +19,13 @@ Route::get('/', function () {
     return view('index');
 });
 
-Route::get('/data', function () {
-    return view('tables.data');
-});
+Route::resource('data',ProductsController::class);
+Route::get('/data_eidt',[ProductsController::class,'edit_ajax'])->name('ajax');
+Route::get('/data_show',[ProductsController::class,'show_ajax'])->name('show_ajax');
 Route::get('/simple', function () {
     return view('tables.simple');
 });
-//chuyen trang
-Route::get('/{name?}', function ($name = "index") {
-    return view($name);
-});
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
@@ -35,4 +34,8 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+});
+//chuyen trang
+Route::get('/{name?}', function ($name = "index") {
+    return view($name);
 });
