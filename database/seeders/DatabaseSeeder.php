@@ -30,6 +30,8 @@ class DatabaseSeeder extends Seeder
             productsSeeder::class,
             ProvidesSeeder::class,
             SerinumbersSeeder::class,
+            UsersTableSeeder::class,
+            RolesTableSeeder::class,
         ]);
     }
 }
