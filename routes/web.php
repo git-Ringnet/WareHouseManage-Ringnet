@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
+=======
+use App\Http\Controllers\provideController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,7 +33,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 Route::get('/data', function () {
     return view('tables.data');
 });
-Route::get('/simple', function () {
+Route::get('/products', function () {
     return view('tables.simple');
 });
 //chuyen trang
@@ -40,7 +42,9 @@ Route::get('/{name?}', function ($name = "index") {
 });
 
 
-
+//nha cung cap
+Route::resource('provides', provideController::class);
+Route::get('/update-status', [provideController::class, 'updateStatus'])->name('update');
 
 Route::middleware([
     'auth:sanctum',
@@ -50,4 +54,9 @@ Route::middleware([
     Route::get('/', function () {
         return view('index');
     })->name('dashboard');
+});
+
+//chuyen trang
+Route::get('/{name?}', function ($name = "index") {
+    return view($name);
 });
