@@ -53,10 +53,10 @@
                                 <div class="form-group">
                                     <label for="pwd">Provide status:</label>
                                     <select name="provide_status" class="form-control">
-                                        <option value="1" <?php if ($provides->provide_status == 1) {
+                                        <option value="0" <?php if ($provides->provide_status == 0) {
                                             echo 'selected';
                                         } ?>>Active</option>
-                                        <option value="0" <?php if ($provides->provide_status == 0) {
+                                        <option value="1" <?php if ($provides->provide_status == 1) {
                                             echo 'selected';
                                         } ?>>Disable</option>
                                     </select>

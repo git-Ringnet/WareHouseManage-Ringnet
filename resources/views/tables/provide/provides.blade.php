@@ -62,17 +62,17 @@
                                             <td>{{ $item->provide_email }}</td>
                                             <td>
                                                 <select class="p-1 px-2 status-select"
-                                                    style="border: 1px solid #D6D6D6; <?php if ($item->provide_status == 1) {
+                                                    style="border: 1px solid #D6D6D6; <?php if ($item->provide_status == 0) {
                                                         echo 'color:#09BD3C;';
                                                     } else {
                                                         echo 'color:#D6D6D6';
                                                     }
                                                     ?>"
                                                     id="{{ $item->id }}" name="status-select">
-                                                    <option value="1" <?php if ($item->provide_status == 1) {
+                                                    <option value="0" <?php if ($item->provide_status == 0) {
                                                         echo 'selected';
                                                     } ?>>Active</option>
-                                                    <option value="0" <?php if ($item->provide_status == 0) {
+                                                    <option value="1" <?php if ($item->provide_status == 1) {
                                                         echo 'selected';
                                                     } ?>>Disable</option>
                                                 </select>
@@ -83,7 +83,7 @@
                                                     <i class="fas fa-pencil-alt"></i>
                                                     Edit
                                                 </a>
-                                                <form action="{{ route('provides.destroy', $item->id) }}" method="POST"
+                                                <form onclick="return confirm('Are you sure?')" action="{{ route('provides.destroy', $item->id) }}" method="POST"
                                                     class="d-inline">
                                                     @csrf
                                                     @method('DELETE')

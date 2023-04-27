@@ -47,8 +47,8 @@
                                 <div class="form-group">
                                     <label for="pwd">Provide status:</label>
                                     <select name="provide_status" class="form-control">
-                                        <option value="1">Active</option>
-                                        <option value="0">Disable</option>
+                                        <option value="0">Active</option>
+                                        <option value="1">Disable</option>
                                     </select>
                                 </div>
                                 <button type="submit" class="btn btn-primary">Add provide</button>

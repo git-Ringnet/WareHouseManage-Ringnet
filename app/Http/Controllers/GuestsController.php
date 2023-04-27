@@ -43,7 +43,7 @@ class GuestsController extends Controller
             'guest_email' => $request->guest_email,
             'guest_status' => $request->guest_status,
         ]);
-        return redirect()->route('guests.index')->with('msg', 'Thêm nhà cung cấp thành công!');
+        return redirect()->route('guests.index')->with('msg', 'Thêm khách hàng thành công!');
     }
 
     /**

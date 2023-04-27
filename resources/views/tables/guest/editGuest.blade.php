@@ -52,10 +52,10 @@
                                 <div class="form-group">
                                     <label for="pwd">Guest status:</label>
                                     <select name="guest_status" class="form-control">
-                                        <option value="1" <?php if ($guests->guest_status == 1) {
+                                        <option value="0" <?php if ($guests->guest_status == 0) {
                                             echo 'selected';
                                         } ?>>Active</option>
-                                        <option value="0" <?php if ($guests->guest_status == 0) {
+                                        <option value="1" <?php if ($guests->guest_status == 1) {
                                             echo 'selected';
                                         } ?>>Disable</option>
                                     </select>
