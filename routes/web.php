@@ -19,7 +19,6 @@ Route::get('/', function () {
     return view('index');
 });
 
-//Admin nhân viên
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('userlist',[UsersController::class,'show'])->name('userslist');
     Route::get('adduser',[UsersController::class,'add'])->name('add');
@@ -35,13 +34,6 @@ Route::get('/data', function () {
 Route::get('/simple', function () {
     return view('tables.simple');
 });
-//chuyen trang
-Route::get('/{name?}', function ($name = "index") {
-    return view($name);
-});
-
-
-
 
 Route::middleware([
     'auth:sanctum',
@@ -51,4 +43,8 @@ Route::middleware([
     Route::get('/', function () {
         return view('index');
     })->name('dashboard');
+});
+//chuyen trang
+Route::get('/{name?}', function ($name = "index") {
+    return view($name);
 });
