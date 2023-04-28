@@ -40,8 +40,8 @@
                                         <th scope="col">Trị trung bình</th>
                                         <th scope="col">Trị tồn kho</th>
                                         <th scope="col">Trạng thái</th>
-                                        <th scope="col"></th>
-                                        <th></th>
+                                        <th scope="col">Action</th>
+                                        <th scope=""></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -73,15 +73,15 @@
                                             <td>{{ number_format($value->total_sum) }}</td>
                                             <td class="p-0 text-center">
                                                 @if ($value->qty_sum == 0)
-                                                    <div class="py-2 rounded mt-4 pb-1 bg-danger">
+                                                    <div class="py-1 rounded mt-3 pb-1 bg-danger">
                                                         <span class="text-light">Hết hàng</span>
                                                     </div>
                                                 @elseif($value->qty_sum < 5)
-                                                    <div class="py-2 rounded mt-4 pb-1 bg-warning">
+                                                    <div class="py-1 rounded mt-3 pb-1 bg-warning">
                                                         <span class="text-light">Gần hết</span>
                                                     </div>
                                                 @else
-                                                    <div class="py-2 rounded mt-4 pb-1 bg-success">
+                                                    <div class="py-1 rounded mt-3 pb-1 bg-success">
                                                         <span class="text-light">Sẵn hàng</span>
                                                     </div>
                                                 @endif
@@ -97,8 +97,9 @@
                                                         </svg>
                                                     </a>
                                                 </div>
-                                                <div class="dropdown_item" id="{{ $value->id }}"
-                                                    data-toggle="collapse"
+                                            </td>
+                                            <td>
+                                                <div id="dropdown_item{{ $value->id }}" data-toggle="collapse"
                                                     data-target="#product-details-<?php echo $value->id; ?>">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="32"
                                                         height="32" viewBox="0 0 32 32" fill="none">
@@ -189,6 +190,17 @@
     rows.forEach(row => {
         if (row.innerHTML.trim() === '') {
             row.remove();
+        }
+    });
+    let count = 1;
+    let btn_menu = document.getElementById("dropdown_item1");
+    btn_menu.addEventListener("click", function() {
+        if (count === 1) {
+            document.getElementById("dropdown_item1").style.transform = "rotate(180deg)";
+            count++;
+        } else {
+            document.getElementById("dropdown_item1").style.transform = "rotate(0deg)";
+            count = 1;
         }
     });
 </script>
