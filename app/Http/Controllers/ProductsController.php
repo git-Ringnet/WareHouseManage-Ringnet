@@ -39,7 +39,7 @@ class ProductsController extends Controller
                 'products.ID_category',
                 'products.products_trademark',
                 'products.created_at',
-                'products.updated_at'
+                'products.updated_at',
             )
             ->select(
                 'products.id',
@@ -49,12 +49,38 @@ class ProductsController extends Controller
                 'products.products_trademark',
                 'products.created_at',
                 'products.updated_at',
+                DB::raw('SUM(product.product_qty * product.product_price) as total_sum'),
                 DB::raw('SUM(product.product_qty) as qty_sum'),
-                DB::raw('AVG(product.product_price) as price_avg')
+                DB::raw('SUM(product.product_qty * product.product_price) / SUM(product.product_qty) as price_avg'),
             )
             ->get();
+        //lấy tất cả sản phẩm con theo sản phẩm lớn
+        $product =  DB::table('product')
+            ->join('products', 'product.products_id', '=', 'products.id')
+            ->whereIn('products.id', $productIds)
+            ->groupBy(
+                'product.id',
+                'product.products_id',
+                'product.product_name',
+                'product.product_category',
+                'product.product_trademark',
+                'product_qty',
+                'product.product_price',
+                'product.created_at',
+                'product.updated_at',
+                'products.id',
+                'products.products_code'
+            )
+            ->select(
+                'product.*',
+                'products.products_code',
+                DB::raw('SUM(product.product_qty * product.product_price) as total')
+            )
+            ->get();
+        // var_dump($product);
+        // die();
         $category = Category::all();
-        return view('tables.data', compact('products', 'category', 'qtySums'));
+        return view('tables.data', compact('products', 'category', 'qtySums', 'product'));
     }
 
     /**

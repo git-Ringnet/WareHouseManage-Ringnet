@@ -41,17 +41,18 @@
                                         <th scope="col">Trị tồn kho</th>
                                         <th scope="col">Trạng thái</th>
                                         <th scope="col"></th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($qtySums as $value)
                                         <tr>
-                                            <th scope="row">{{ $value->id }}</th>
+                                            <td scope="row">{{ $value->id }}</td>
                                             <th><a
                                                     href="{{ route('data.show', $value->id) }}">{{ $value->products_code }}</a>
                                             </th>
-                                            <th>{{ $value->products_name }}</th>
-                                            <th>
+                                            <td>{{ $value->products_name }}</td>
+                                            <td>
                                                 <select class="product_category" name="product_category"
                                                     id="{{ $value->id }}">
                                                     @foreach ($category as $va)
@@ -60,17 +61,17 @@
                                                             {{ $va->category_name }}</option>
                                                     @endforeach
                                                 </select>
-                                            </th>
-                                            <th>{{ $value->products_trademark }}</th>
-                                            <th>
+                                            </td>
+                                            <td>{{ $value->products_trademark }}</td>
+                                            <td>
                                                 @if ($value->qty_sum == 0)
                                                     0
                                                 @endif
                                                 {{ $value->qty_sum }}
-                                            </th>
-                                            <th>{{ number_format($value->price_avg) }}</th>
-                                            <th>Trị tồn kho</th>
-                                            <th class="p-0 text-center">
+                                            </td>
+                                            <td>{{ number_format($value->price_avg) }}</td>
+                                            <td>{{ number_format($value->total_sum) }}</td>
+                                            <td class="p-0 text-center">
                                                 @if ($value->qty_sum == 0)
                                                     <div class="py-2 rounded mt-4 pb-1 bg-danger">
                                                         <span class="text-light">Hết hàng</span>
@@ -84,8 +85,8 @@
                                                         <span class="text-light">Sẵn hàng</span>
                                                     </div>
                                                 @endif
-                                            </th>
-                                            <th>
+                                            </td>
+                                            <td>
                                                 <div class="icon">
                                                     <a href="{{ route('data.edit', $value->id) }}">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="32"
@@ -96,7 +97,9 @@
                                                         </svg>
                                                     </a>
                                                 </div>
-                                                <div class="dropdown_item" id="{{ $value->id }}">
+                                                <div class="dropdown_item" id="{{ $value->id }}"
+                                                    data-toggle="collapse"
+                                                    data-target="#product-details-<?php echo $value->id; ?>">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="32"
                                                         height="32" viewBox="0 0 32 32" fill="none">
                                                         <rect width="32" height="32" rx="4"
@@ -106,9 +109,25 @@
                                                             fill="#555555" />
                                                     </svg>
                                                 </div>
-                                            </th>
+                                            </td>
                                         </tr>
-                                        <tr id="sub_product_1"></tr>
+                                        @foreach ($product as $item)
+                                            <tr id="product-details-{{ $value->id }}" class="collapse">
+                                                @if ($value->id == $item->products_id)
+                                                    <td>{{ $item->id }}</td>
+                                                    <td>{{ $value->products_code }}</td>
+                                                    <td>{{ $item->product_name }}</td>
+                                                    <td>{{ $item->product_category }}</td>
+                                                    <td>{{ $item->product_trademark }}</td>
+                                                    <td>{{ $item->product_qty }}</td>
+                                                    <td>{{ number_format($item->product_price) }}</td>
+                                                    <td>{{ number_format($item->total) }}</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                @endif
+                                            </tr>
+                                        @endforeach
+                                        {{-- <tr id="sub_product_1"></tr> --}}
                                     @endforeach
                                 </tbody>
                             </table>
@@ -160,12 +179,18 @@
                 <th>` + product.product_qty + `</th>
                 <th>` + product.product_price + `</th>
                 </tr>`;
-
                 });
                 $('#sub_product_1').html(output);
             }
         });
     })
+    //xóa tất cả thẻ tr rỗng
+    const rows = document.querySelectorAll('tr');
+    rows.forEach(row => {
+        if (row.innerHTML.trim() === '') {
+            row.remove();
+        }
+    });
 </script>
 </body>
 
