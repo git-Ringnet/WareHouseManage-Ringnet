@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\GuestsController;
+use App\Http\Controllers\ProductsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\provideController;
@@ -21,21 +22,22 @@ Route::get('/', function () {
 });
 
 Route::prefix('admin')->name('admin.')->group(function () {
-    Route::get('userlist',[UsersController::class,'show'])->name('userslist');
-    Route::get('adduser',[UsersController::class,'add'])->name('add');
-    Route::post('adduser',[UsersController::class,'addUser'])->name('adduser');
-    Route::get('edituser',[UsersController::class,'edit'])->name('edit');
-    Route::post('update',[UsersController::class,'editUser'])->name('edituser');
-    Route::get('delete',[UsersController::class,'deleteUser'])->name('delete');
+    Route::get('userlist', [UsersController::class, 'show'])->name('userslist');
+    Route::get('adduser', [UsersController::class, 'add'])->name('add');
+    Route::post('adduser', [UsersController::class, 'addUser'])->name('adduser');
+    Route::get('edituser', [UsersController::class, 'edit'])->name('edit');
+    Route::post('update', [UsersController::class, 'editUser'])->name('edituser');
+    Route::get('delete', [UsersController::class, 'deleteUser'])->name('delete');
 });
 
 //nha cung cap
 Route::resource('provides', ProvideController::class);
 Route::get('/update-status', [ProvideController::class, 'updateStatus'])->name('update');
 
-Route::get('/data', function () {
-    return view('tables.data');
-});
+Route::resource('data', ProductsController::class);
+Route::get('/data_edit',[ProductsController::class,'edit_ajax'])->name('ajax');
+Route::get('/data_show',[ProductsController::class,'show_ajax'])->name('show_ajax');
+
 Route::get('/simple', function () {
     return view('tables.simple');
 });

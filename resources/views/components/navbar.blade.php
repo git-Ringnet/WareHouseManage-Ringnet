@@ -74,7 +74,7 @@ if (strpos($current_url, '') !== false) {
     $index_class = 'active';
 }
 //products
-if (strpos($current_url, 'products') !== false) {
+if (strpos($current_url, 'data') !== false) {
     $products_class = 'active';
     $index_class = '';
 } else {
@@ -271,7 +271,7 @@ if (strpos($current_url, 'guests') !== false) {
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ asset('./products') }}" class="nav-link <?php echo $products_class; ?>">
+                            <a href="{{ asset('./data') }}" class="nav-link <?php echo $products_class; ?>">
                                 <i class="nav-icon fas fa-table"></i>
                                 <p>
                                     Sản phẩm

@@ -29,6 +29,20 @@
                     <span class="ml-2">Thêm nhà cung cấp</span>
                 </button>
             </a>
+            <form action="" class="mt-2 col-md-4 p-0 position-relative">
+                <input type="text" class="rounded py-1 w-100">
+                <div class="position-absolute" style="top: 10%;right:1%;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M15.1835 7.36853C13.0254 5.21049 9.52656 5.21049 7.36853 7.36853C5.21049 9.52656 5.21049 13.0254 7.36853 15.1835C9.52656 17.3415 13.0254 17.3415 15.1835 15.1835C17.3415 13.0254 17.3415 9.52656 15.1835 7.36853ZM16.2441 6.30787C13.5003 3.56404 9.05169 3.56404 6.30787 6.30787C3.56404 9.05169 3.56404 13.5003 6.30787 16.2441C9.05169 18.988 13.5003 18.988 16.2441 16.2441C18.988 13.5003 18.988 9.05169 16.2441 6.30787Z"
+                            fill="#555555" />
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M15.1797 15.1796C15.4726 14.8867 15.9474 14.8867 16.2403 15.1796L19.5303 18.4696C19.8232 18.7625 19.8232 19.2374 19.5303 19.5303C19.2374 19.8232 18.7626 19.8232 18.4697 19.5303L15.1797 16.2403C14.8868 15.9474 14.8868 15.4725 15.1797 15.1796Z"
+                            fill="#555555" />
+                    </svg>
+                </div>
+            </form>
         </div><!-- /.container-fluid -->
     </section>
 
@@ -83,7 +97,8 @@
                                                     <i class="fas fa-pencil-alt"></i>
                                                     Edit
                                                 </a>
-                                                <form onclick="return confirm('Are you sure?')" action="{{ route('provides.destroy', $item->id) }}" method="POST"
+                                                <form onclick="return confirm('Are you sure?')"
+                                                    action="{{ route('provides.destroy', $item->id) }}" method="POST"
                                                     class="d-inline">
                                                     @csrf
                                                     @method('DELETE')
