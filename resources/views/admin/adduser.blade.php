@@ -72,6 +72,13 @@
                   <span style="color:red">{{$message}}</span>
                   @enderror
                 </div>
+                <div class="form-group">
+                  <label for="pwd">Trạng thái:</label>
+                  <select name="status" class="form-control">
+                      <option value="0">Active</option>
+                      <option value="1">Disable</option>
+                  </select>
+              </div>
                 <button type="submit" class="btn btn-primary">Thêm nhân viên</button>
                 <a href="{{route('admin.userslist')}}" class="btn btn-warning">Quay lại</a>
               </form>

@@ -82,6 +82,7 @@ class UsersController extends Controller
             'password' =>$request->password,
             'roleid' =>$request->role,
             'phonenumber' =>$request->phonenumber,
+            'status' =>$request->status,
         ];
         $this->users->addUser($data);
 
@@ -90,23 +91,25 @@ class UsersController extends Controller
 
     public function edit(Request $request)
     {
-        $id = session('id');
-        $request->session()->put('id', $id);
+        $id = $request->id;
+        // $id = session('id');
+        // $request->session()->put('id', $id);
         $user = User::where('id', $id)->get();
-        $userDetail = $this->users->getDetailUser($id);
-        $userDetail = $userDetail[0];
+        // $userDetail = $userDetail[0];
+        $userDetail = User::find($id);
         $roles = new Roles;
-        return view('admin/edituser', ['useredit' => $user,'userDetail'=>$userDetail])->with('roles', $roles->getAll());
+        return view('admin/edituser', ['useredit' => $user],compact('userDetail'))->with('roles', $roles->getAll());
     }
     public function editUser(UserRequest $request)
     {
-        $id = session('id');
+        $id = $request->id;
         $data = [
             'name' => $request->name,
             'email' =>$request->email,
             'password' =>$request->password,
             'roleid' =>$request->role,
             'phonenumber' =>$request->phonenumber,
+            'status' =>$request->status,
         ];
         $this->users->updateUser($data,$id);
         return back();
@@ -117,5 +120,13 @@ class UsersController extends Controller
         $user = User::where('id', $user)->first();
         $user->delete();
         return back()->with('msg', 'Xóa người dùng thành công');
+    }
+    public function updateStatus(Request $request)
+    {
+        $data = $request->all();
+        // var_dump($data);
+        $user = User::findOrFail($data['idStatus']);
+        $user->status = $data['newStatus'];
+        $user->save();
     }
 }

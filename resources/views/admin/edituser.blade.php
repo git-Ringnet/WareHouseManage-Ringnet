@@ -71,6 +71,17 @@
                   <span style="color:red">{{$message}}</span>
                   @enderror
                 </div>
+                <div class="form-group">
+                  <label for="pwd">Trạng thái:</label>
+                  <select name="status" class="form-control">
+                      <option value="1" <?php if ($userDetail->status == 0) {
+                          echo 'selected';
+                      } ?>>Active</option>
+                      <option value="0" <?php if ($userDetail->status == 1) {
+                          echo 'selected';
+                      } ?>>Disable</option>
+                  </select>
+              </div>
                 <button type="submit" class="btn btn-primary">Cập Nhật</button>
                 <a href="{{route('admin.userslist')}}" class="btn btn-warning">Quay lại</a>
               </form>

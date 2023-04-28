@@ -21,7 +21,7 @@
       <div class="row m-auto filter">
         <form class="w-100" action="" method="get">
             <div class="row">
-              <div class="col-2">
+              <div class="col-2 d-none">
                 <select class="form-control" name="roleid" id="">
                     <option value="0">Vai trò</option>
                     @if(!empty($roles))
@@ -31,12 +31,11 @@
                     @endif
                 </select>
             </div>
-            <div class="col-2">
+            <div class="col-2 d-none">
               <select class="form-control" name="status" id="">
                   <option value="">Trạng thái</option>
                   <option value="0"{{request()->status==0?'selected':false}}>Active</option>
                   <option value="1"{{request()->status==1?'selected':false}}>Disable</option>
-                  
               </select>
           </div>
                 <div class="col-5">
@@ -47,6 +46,7 @@
                 </div>
             </div>
         </form>
+        
     </div>
     </div><!-- /.container-fluid -->
   </section>
@@ -97,7 +97,24 @@
                     <td>{{$value->role_name}}</td>
                     <td>{{$value->phonenumber}}</td>
                     <td>{{$value->email}}</td>
-                    <td>{!!$value->status==0?'<button type="submit" class="btn btn-sm btn-secondary">Active</button>':' <button type="submit" class="btn btn-sm btn-primary">Disable</button>'!!}</td>
+                    {{-- <td>{!!$value->status==0?'<button type="submit" class="btn btn-sm btn-secondary">Active</button>':' <button type="submit" class="btn btn-sm btn-primary">Disable</button>'!!}</td> --}}
+                    <td>
+                      <select class="p-1 px-2 status-select"
+                          style="border: 1px solid #D6D6D6; <?php if ($value->status == 0) {
+                              echo 'color:#09BD3C;';
+                          } else {
+                              echo 'color:#D6D6D6';
+                          }
+                          ?>"
+                          id="{{$value->id }}" name="status-select">
+                          <option value="0" <?php if ($value->status == 0) {
+                              echo 'selected';
+                          } ?>>Active</option>
+                          <option value="1" <?php if ($value->status == 1) {
+                              echo 'selected';
+                          } ?>>Disable</option>
+                      </select>
+                  </td>
                     <td class="text-center"><span><a> <form action="{{route('admin.edit')}}" method="get" enctype="multipart/form">
                       @csrf
                       <button type="submit" class="btn btn-info btn-sm"> Edit</button>   
@@ -123,6 +140,28 @@
   </section>
   <!-- /.content -->
 </div>
+<script>
+  $(document).ready(function() {
+      $('.status-select').change(function() {
+          var newStatus = $(this).val();
+          var idStatus = $(this).attr('id');
+          $.ajax({
+              url: '{{ route('admin.update') }}',
+              type: 'GET',
+              data: {
+                  newStatus: newStatus,
+                  idStatus: idStatus
+              },
+              success: function(data) {
+                  alert('Cập nhật tình trạng thành công!');
+                  console.log(data);
+              }
+          
+          });
+          location.reload();
+      });
+  });
+</script>
 </body>
 
 </html>

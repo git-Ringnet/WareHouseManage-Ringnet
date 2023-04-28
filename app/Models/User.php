@@ -24,11 +24,17 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+    public $timestamps = TRUE;
+
     protected $fillable = [
         'name',
         'email',
         'password',
+        'phonenumber',
+        'status',
     ];
+
+
     protected $table = 'users';
 
     /**
@@ -87,7 +93,7 @@ class User extends Authenticatable
                 $query->orWhere('users.email', 'like', '%' . $keywords . '%');
             });
         }
-        $users = $users->paginate(5);
+        $users = $users->orderBy('users.created_at', 'asc')->paginate(5);
         return $users;
     }
     public function addUser($data)
