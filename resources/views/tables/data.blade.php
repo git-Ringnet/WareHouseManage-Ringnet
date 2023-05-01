@@ -77,7 +77,7 @@
                       </div>
                     </th>
                   </tr>
-                  <!-- <tr></tr> -->
+                  <tr id="sub_product_{{$value->id}}"></tr>
                   @endforeach
                 </tbody>
               </table>
@@ -110,6 +110,7 @@
   })
   $('.dropdown_item').click(function() {
     var product_id = $(this).attr('id');
+    var number = 1;
     $.ajax({
       url: "{{route('show_ajax')}}",
       type: "get",
@@ -129,12 +130,13 @@
                 <th>` + product.product_qty +`</th>
                 <th>` + product.product_price +`</th>
                 </tr>`;
-         
-          }); $('#sub_product_1').html(output);
+          }); $('#sub_product_'+number).html(output);
       }
     });
   })
+
 </script>
+
 </body>
 
 </html>

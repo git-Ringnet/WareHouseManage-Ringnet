@@ -20,7 +20,7 @@ Route::get('/', function () {
 });
 
 Route::resource('data',ProductsController::class);
-Route::get('/data_eidt',[ProductsController::class,'edit_ajax'])->name('ajax');
+Route::get('/data_edit',[ProductsController::class,'edit_ajax'])->name('ajax');
 Route::get('/data_show',[ProductsController::class,'show_ajax'])->name('show_ajax');
 Route::get('/simple', function () {
     return view('tables.simple');
