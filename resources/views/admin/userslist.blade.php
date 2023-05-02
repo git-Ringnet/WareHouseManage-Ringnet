@@ -21,7 +21,7 @@
       <div class="row m-auto filter">
         <form class="w-100" action="" method="get">
             <div class="row">
-              <div class="col-2 d-none">
+              <div class="col-2">
                 <select class="form-control" name="roleid" id="">
                     <option value="0">Vai trò</option>
                     @if(!empty($roles))
@@ -31,12 +31,20 @@
                     @endif
                 </select>
             </div>
-            <div class="col-2 d-none">
+            <div class="col-2">
               <select class="form-control" name="status" id="">
                   <option value="">Trạng thái</option>
                   <option value="0"{{request()->status==0?'selected':false}}>Active</option>
                   <option value="1"{{request()->status==1?'selected':false}}>Disable</option>
               </select>
+          </div>
+          <div>
+            <input type="checkbox" id="status_active" name="status[]" value="0">
+            <label>Active</label>
+          </div>
+          <div>
+            <input type="checkbox" id="status_inactive" name="status[]" value="1">
+            <label>Inactive</label>
           </div>
                 <div class="col-5">
                     <input type="search" name="keywords" class="form-control" value="{{request()->keywords}}" placeholder="Tìm kiếm sản phẩm">
@@ -46,7 +54,9 @@
                 </div>
             </div>
         </form>
+        <button type="button" id="btn-filter">Thêm bộ lọc</button>
         
+
     </div>
     </div><!-- /.container-fluid -->
   </section>

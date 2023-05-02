@@ -15,6 +15,7 @@ class UsersController extends Controller
         $this->users = new User();
     }
 
+
     public function show(Request $request)
     {
         $title = "Danh sách người dùng";
@@ -47,9 +48,12 @@ class UsersController extends Controller
         $roles = $roles->getAll();
 
          $filters =[];
+         $status =[];
          if (!empty($request->status)) {
-            $status = $request->status;
-            $filters[] = ['users.status', '=', $status];
+            $status = $request->input('status', []);
+            if (!empty($status)) {
+                $status = $status;
+            }
         }
         if (!empty($request->roleid)) {
             $roleid = $request->roleid;
@@ -62,8 +66,7 @@ class UsersController extends Controller
             $keywords = $request->keywords;
            
         }
-   
-        $usersList = $this->users->getAllUsers($filters,$keywords,$sortByArr);
+        $usersList = $this->users->getAllUsers($filters,$status,$keywords,$sortByArr);
         return view('admin/userslist', compact('title', 'usersList', 'sortType','roles'));
     }
 
