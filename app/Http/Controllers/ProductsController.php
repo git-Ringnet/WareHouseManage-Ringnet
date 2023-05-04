@@ -186,7 +186,8 @@ class ProductsController extends Controller
         $products->save();
         $products = Products::all();
         $qtySums = array();
-        return view('tables.data', compact('products','qtySums'));
+        // return view('tables.data', compact('products','qtySums'));
+        return redirect()->route('data.index');
     }
 
     /**
@@ -211,5 +212,25 @@ class ProductsController extends Controller
         $data = $request->all();
         $product = DB::table('product')->where('products_id', $data['product_id'])->get();
         return $product;
+    }
+    public function insertProducts()
+    {
+        $cate = Category::all();
+        return view('tables.insertProducts',compact('cate'));
+    }
+    public function storeProducts(Request $request)
+    {
+        $data = $request->all();
+        $products = new Products();
+        $products->products_image = $request->products_img;
+        $products->products_code = $request->products_code;
+        $products->products_name = $request->products_name;
+        $products->ID_category = $request->product_category;
+        $products->products_trademark = $request->products_trademark;
+        $products->products_unit = $request->products_unit;
+        $products->products_description = $request->products_description;
+        $products->save();
+        // return  view('tables.data',compact('products', 'category', 'qtySums', 'product'));
+        return redirect()->route('data.index');
     }
 }

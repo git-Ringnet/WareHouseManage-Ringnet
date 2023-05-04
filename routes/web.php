@@ -41,6 +41,8 @@ Route::get('/data', function () {
     return view('tables.data');
 });
 Route::resource('data',ProductsController::class);
+Route::get('/insertProducts',[ProductsController::class,'insertProducts'])->name('insertProducts');
+Route::POST('/storeProducts',[ProductsController::class,'storeProducts'])->name('storeProducts');
 Route::get('/data_edit',[ProductsController::class,'edit_ajax'])->name('ajax');
 Route::get('/data_show',[ProductsController::class,'show_ajax'])->name('show_ajax');
 Route::get('/simple', function () {
