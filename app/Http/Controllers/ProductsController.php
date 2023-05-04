@@ -22,9 +22,64 @@ class ProductsController extends Controller
      */
     public function index()
     {
+        //lấy tất cả products
         $products = Products::all();
+        //lấy tất cả id của products đưa vào mảng
+        $productIds = array();
+        foreach ($products as $value) {
+            array_push($productIds, $value->id);
+        }
+        //lấy tất cả products, tổng số lượng sản phẩm con của products, 
+        $qtySums = DB::table('products')
+            ->leftjoin('product', 'product.products_id', '=', 'products.id')
+            ->whereIn('products.id', $productIds)
+            ->groupBy(
+                'products.id',
+                'products.products_code',
+                'products.products_name',
+                'products.ID_category',
+                'products.products_trademark',
+                'products.created_at',
+                'products.updated_at',
+            )
+            ->select(
+                'products.id',
+                'products.products_code',
+                'products.products_name',
+                'products.ID_category',
+                'products.products_trademark',
+                'products.created_at',
+                'products.updated_at',
+                DB::raw('SUM(product.product_qty * product.product_price) as total_sum'),
+                DB::raw('SUM(product.product_qty) as qty_sum'),
+                DB::raw('SUM(product.product_qty * product.product_price) / SUM(product.product_qty) as price_avg'),
+            )
+            ->get();
+        //lấy tất cả sản phẩm con theo sản phẩm lớn
+        $product =  DB::table('product')
+            ->join('products', 'product.products_id', '=', 'products.id')
+            ->whereIn('products.id', $productIds)
+            ->groupBy(
+                'product.id',
+                'product.products_id',
+                'product.product_name',
+                'product.product_category',
+                'product.product_trademark',
+                'product_qty',
+                'product.product_price',
+                'product.created_at',
+                'product.updated_at',
+                'products.id',
+                'products.products_code'
+            )
+            ->select(
+                'product.*',
+                'products.products_code',
+                DB::raw('SUM(product.product_qty * product.product_price) as total')
+            )
+            ->get();
         $category = Category::all();
-        return view('tables.data', compact('products', 'category'));
+        return view('tables.data', compact('products', 'category', 'qtySums', 'product'));
     }
 
     /**
@@ -46,8 +101,6 @@ class ProductsController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        var_dump($data);
-        die();
         $product_name = $request->product_name;
         $product_provide = $request->product_provide;
         $product_category = $request->product_category;
@@ -132,7 +185,8 @@ class ProductsController extends Controller
         $products->products_description = $request->get('products_description');
         $products->save();
         $products = Products::all();
-        return view('tables.data', compact('products'));
+        $qtySums = array();
+        return view('tables.data', compact('products','qtySums'));
     }
 
     /**

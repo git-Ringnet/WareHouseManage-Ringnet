@@ -157,7 +157,11 @@
     </div>
   </section>
 </div>
-
+<style>
+  .error {
+    border: 2px solid red;
+  }
+</style>
 <script>
   function updateRowNumbers() {
     $('tbody tr').each(function(index) {
@@ -175,12 +179,47 @@
 
   }
   var btn_add_products = document.getElementById('myform');
-  btn_add_products.addEventListener('submit',function(e){
+  btn_add_products.addEventListener('submit', function(e) {
     e.preventDefault();
+    var error = false;
+    $('input[name="product_name[]"]').each(function() {
+      if ($(this).val() === '') {
+        $(this).addClass('error');
+        error = true;
+      } else {
+        $(this).removeClass('error');
+      }
+    });
+    $('input[name="product_qty[]"]').each(function() {
+      if ($(this).val() === '') {
+        $(this).addClass('error');
+        error = true;
+      } else {
+        $(this).removeClass('error');
+      }
+    });
+    $('input[name="product_SN[]"]').each(function() {
+      if ($(this).val() === '') {
+        $(this).addClass('error');
+        error = true;
+      } else {
+        $(this).removeClass('error');
+      }
+    });
+
+    $('input[name^="product_qty[]"]').each(function(index) {
+      var qty = $(this).val();
+      var sn_count = $('input[name="product_SN' + index + '[]"]').length;
+      if (qty != sn_count) {
+        error = true;
+      }
+    });
+    if (error) {
+      return false;
+    }
     updateProductSN();
     $(this).submit();
   });
-
   var rowCount = $('tbody tr').length;
   $('.addRow').on('click', function() {
     var tr = '<tr>' +
@@ -263,7 +302,6 @@
     $(targetId).remove();
     parentTr.remove();
     updateRowNumbers();
-    // updateProductSN();
   });
 </script>
 

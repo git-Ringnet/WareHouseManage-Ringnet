@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AjaxController;
+use App\Http\Controllers\InsertProductController;
 use App\Http\Controllers\ProductsController;
 use Illuminate\Support\Facades\Route;
 
@@ -25,7 +26,7 @@ Route::get('/data_show',[ProductsController::class,'show_ajax'])->name('show_aja
 Route::get('/simple', function () {
     return view('tables.simple');
 });
-
+Route::resource('insertProduct',InsertProductController::class);
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),

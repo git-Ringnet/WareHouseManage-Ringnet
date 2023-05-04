@@ -57,7 +57,7 @@
   <!-- overlayScrollbars -->
   <script src="{{asset('plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js')}}"></script>
   <!-- AdminLTE App -->
-<script src="{{asset('dist/js/adminlte.js')}}"></script>
+  <script src="{{asset('dist/js/adminlte.js')}}"></script>
   <!-- AdminLTE for demo purposes -->
   <script src="{{asset('dist/js/demo.js')}}"></script>
   <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
@@ -127,7 +127,7 @@
                 </div>
               </div>
               <!-- Message End -->
-</a>
+            </a>
             <div class="dropdown-divider"></div>
             <a href="#" class="dropdown-item">
               <!-- Message Start -->
@@ -188,7 +188,7 @@
               <span class="float-right text-muted text-sm">2 days</span>
             </a>
             <div class="dropdown-divider"></div>
-<a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+            <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
           </div>
         </li>
         <li class="nav-item">
@@ -233,19 +233,19 @@
                 </p>
               </a>
             </li>
-          
+
             <li class="nav-item">
               <a href="{{asset('./data')}}" class="nav-link">
                 <i class="nav-icon fas fa-table"></i>
                 <p>
-                Sản phẩm
+                  Sản phẩm
                 </p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="{{asset('./simple')}}" class="nav-link">
+              <a href="{{asset('./insertProduct')}}" class="nav-link">
                 <i class="nav-icon fas fa-table"></i>
-                <p> 
+                <p>
                   Nhập hàng
                 </p>
               </a>
@@ -274,7 +274,7 @@
                 </p>
               </a>
             </li>
-<li class="nav-item">
+            <li class="nav-item">
               <a href="{{asset('./data')}}" class="nav-link">
                 <i class="nav-icon fas fa-table"></i>
                 <p>
