@@ -21,9 +21,6 @@ use App\Http\Controllers\provideController;
 Route::get('/', function () {
     return view('index');
 });
-Route::resource('data',ProductsController::class);
-Route::get('/data_edit',[ProductsController::class,'edit_ajax'])->name('ajax');
-Route::get('/data_show',[ProductsController::class,'show_ajax'])->name('show_ajax');
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('userlist', [UsersController::class, 'show'])->name('userslist');
@@ -43,6 +40,9 @@ Route::get('/update-status', [provideController::class, 'updateStatus'])->name('
 Route::get('/data', function () {
     return view('tables.data');
 });
+Route::resource('data',ProductsController::class);
+Route::get('/data_edit',[ProductsController::class,'edit_ajax'])->name('ajax');
+Route::get('/data_show',[ProductsController::class,'show_ajax'])->name('show_ajax');
 Route::get('/simple', function () {
     return view('tables.simple');
 });
