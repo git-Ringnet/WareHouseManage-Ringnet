@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\AjaxController;
+use App\Http\Controllers\InsertProductController;
+use App\Http\Controllers\ProductsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\provideController;

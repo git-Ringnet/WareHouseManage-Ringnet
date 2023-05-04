@@ -18,31 +18,41 @@ class productsSeeder extends Seeder
                 'products_code' => 'N3K-C3548P-XL',
                 'products_name' => 'Cisco Catalyst 9800-CL Wireless Controller for Cloud',
                 'ID_category' => 1,
-                'products_trademark' => 'Cisco'
+                'products_trademark' => 'Cisco',
+                'products_unit' => 'Cái',
+                'products_description' => 'Ringnet1'
             ],
             [   'id' => 2,
                 'products_code' => 'IEM-3400-8T',
                 'products_name' => 'Catalyst IE3400 with 8 GE Copper ports',
                 'ID_category' => 2,
-                'products_trademark' => 'Cisco'
+                'products_trademark' => 'Cisco',
+                'products_unit' => 'Cái',
+                'products_description' => 'Ringnet2'
             ],
             [   'id' => 3,
                 'products_code' => 'ASR1002X-5G-K9',
                 'products_name' => 'Cisco Catalyst 9800-CL Wireless Controller for Cloud',
                 'ID_category' => 3,
-                'products_trademark' => 'Cisco'
+                'products_trademark' => 'Cisco',
+                'products_unit' => 'Cái',
+                'products_description' => 'Ringnet3'
             ],
             [   'id' => 4,
                 'products_code' => 'ASR1002-X',
                 'products_name' => 'Cisco Catalyst 9800-CL Wireless Controller for Cloud',
                 'ID_category' => 4,
-                'products_trademark' => 'Cisco'
+                'products_trademark' => 'Cisco',
+                'products_unit' => 'Cái',
+                'products_description' => 'Ringnet4'
             ],
             [   'id' => 5,
                 'products_code' => 'ASR1001X-2.5G-K9',
                 'products_name' => 'Cisco Catalyst 9800-CL Wireless Controller for Cloud',
                 'ID_category' => 5,
-                'products_trademark' => 'Cisco'
+                'products_trademark' => 'Cisco',
+                'products_unit' => 'Cái',
+                'products_description' => 'Ringnet5'
             ],
         ]);
     }

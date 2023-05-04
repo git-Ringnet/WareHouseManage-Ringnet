@@ -15,10 +15,13 @@ class CreateProducts extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id()->autoIncrement();
+            $table->string('products_image')->nullable();
             $table->string('products_code');
             $table->string('products_name');
             $table->integer('ID_category');
             $table->string('products_trademark');
+            $table->string('products_unit')->nullable();
+            $table->text('products_description')->nullable();
             $table->timestamps();
         });
     }
