@@ -6,7 +6,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 ><a href="{{route('insertProducts')}}">Thêm</a></h1>
+                    <h1 ><a href="{{route('insertProducts')}}" class="btn btn-primary">Thêm</a></h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -31,7 +31,7 @@
                             <table id="example2" class="table table-bordered table-hover">
                                 <thead>
                                     <tr>
-                                        <th scope="col">#</th>
+                                        <th scope="col" style="width:7%;">#</th>
                                         <th scope="col">Mã sản phẩm</th>
                                         <th scope="col">Tên sản phẩm</th>
                                         <th scope="col">Danh mục</th>
@@ -115,10 +115,10 @@
                                         @foreach ($product as $item)
                                             <tr id="product-details-{{ $value->id }}" class="collapse">
                                                 @if ($value->id == $item->products_id)
-                                                    <td>{{ $item->id }}</td>
+                                                    <td>{{ $value->id }} - {{ $item->id }}</td>
                                                     <td>{{ $value->products_code }}</td>
                                                     <td>{{ $item->product_name }}</td>
-                                                    <td>{{ $item->product_category }}</td>
+                                                    <td><p>Loại hàng</p>{{ $item->product_category }}</td>
                                                     <td>{{ $item->product_trademark }}</td>
                                                     <td>{{ $item->product_qty }}</td>
                                                     <td>{{ number_format($item->product_price) }}</td>

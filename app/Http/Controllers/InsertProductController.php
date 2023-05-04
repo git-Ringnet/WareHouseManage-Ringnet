@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Provides;
 use Illuminate\Http\Request;
 
 class InsertProductController extends Controller
@@ -23,7 +24,8 @@ class InsertProductController extends Controller
      */
     public function create()
     {
-        //
+        $provide = Provides::all();
+        return view('tables.insert',compact('provide'));
     }
 
     /**

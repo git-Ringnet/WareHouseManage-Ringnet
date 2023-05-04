@@ -117,13 +117,11 @@
                   <td><input type="text" name="product_qty[]"></td>
                   <td><input type="text" name="product_price[]"></td>
                   <td><input type="text" name="product_total[]"></td>
-                  <!-- <td><a href="javacript:;" class="btn btn-info deleteRow">-</a></td> -->
                 </tr>
               </tbody>
 
             </table>
             <a href="javacript:;" class="btn btn-info addRow">+</a>
-            <!-- <button id="add_products">Thêm sản phẩm</button> -->
             <button type="submit">Thêm</button>
             <!-- Modal -->
             <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

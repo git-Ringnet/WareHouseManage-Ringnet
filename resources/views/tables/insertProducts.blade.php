@@ -28,7 +28,7 @@
               <h3 class="card-title">Sản phẩm / Thêm sản phẩm</h3>
             </div>
             <!-- /.card-header -->
-            <form action="{{route('storeProducts')}}" method="POST">
+            <form action="{{route('storeProducts')}}" method="POST" enctype="multipart/form-data">
               @csrf
               <div class="card-body">
                 <div class="row">
@@ -81,7 +81,7 @@
                 </div>
                 </table>
               </div>
-              <button type="submit">Thêm</button>
+              <button type="submit" class="btn btn-primary">Thêm</button>
             </form>
           </div>
         </div>

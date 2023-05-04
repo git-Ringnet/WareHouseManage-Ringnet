@@ -34,7 +34,8 @@
               <div class="card-body">
                 <div class="row">
                   <div class="col-md-3">
-                    <h2>Hình ảnh sản phẩm</h2>
+                    <h2>Hình ảnh sản phẩm</h2>  
+                    <img src="{{url('dist/img')}}/{{$products->products_image}}.png" alt="">
                     <input type="file" value="" name="products_img">
                   </div>
                   <div class="col-md-9">
@@ -82,7 +83,7 @@
                 </div>
                 </table>
               </div>
-              <button type="submit">Edit</button>
+              <button type="submit" class="btn btn-primary">Edit</button>
             </form>
           </div>
         </div>
