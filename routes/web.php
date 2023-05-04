@@ -37,9 +37,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
 Route::resource('provides', provideController::class);
 Route::get('/update-status', [provideController::class, 'updateStatus'])->name('update');
 
-Route::get('/data', function () {
-    return view('tables.data');
-});
+// Route::get('/data', function () {
+//     return view('tables.data');
+// });
 Route::resource('data',ProductsController::class);
 Route::get('/data_edit',[ProductsController::class,'edit_ajax'])->name('ajax');
 Route::get('/data_show',[ProductsController::class,'show_ajax'])->name('show_ajax');
