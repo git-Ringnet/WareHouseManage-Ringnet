@@ -66,7 +66,7 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
-    public function getAllUsers($filter = [],$status=[], $keywords = null, $sortByArr = null)
+    public function getAllUsers($filter = [], $status = [], $roles = [], $keywords = null, $sortByArr = null)
     {
         // $users = DB::select('SELECT * FROM users');
         $users = DB::table($this->table)
@@ -88,8 +88,11 @@ class User extends Authenticatable
             $users = $users->where($filter);
         }
         if (!empty($status)) {
-        $users = $users->whereIn('status',$status);
-    }
+            $users = $users->whereIn('status', $status);
+        }
+        if (!empty($roles)) {
+            $users = $users->whereIn('roleid', $roles);
+        }
         if (!empty($keywords)) {
             $users = $users->where(function ($query) use ($keywords) {
                 $query->orWhere('users.name', 'like', '%' . $keywords . '%');

@@ -1,0 +1,45 @@
+#status-options,
+#role-options {
+    width: 210px;
+    background-color: #fff;
+    border-radius: 8px;
+}
+
+li {
+    list-style: none;
+}
+
+.heading-title h5 {
+    color: #fff;
+}
+
+.heading-title {
+    background: #333333;
+    border-radius: 8px 8px 0px 0px;
+}
+
+.select-checkbox>.cursor {
+    cursor: pointer;
+}
+
+.filter-group {
+    background: #DEE2E6;
+    border-radius: 8px;
+    padding: 8px 16px;
+}
+
+.btn-filter {
+    background: #FFFFFF;
+    border-radius: 8px;
+}
+.filter-options{
+    position: relative;
+}
+.block-options{
+    position: absolute;
+    z-index: 1024;
+}
+.delete-item{
+    cursor: pointer;
+}
+
