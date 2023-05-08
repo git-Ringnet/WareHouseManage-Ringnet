@@ -34,6 +34,7 @@
     <link rel="stylesheet" href="{{ asset('plugins/summernote/summernote-bs4.min.css') }}">
     <!-- jQuery -->
     <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
+
     <!-- jQuery UI 1.11.4 -->
     <script src="{{ asset('plugins/jquery-ui/jquery-ui.min.js') }}"></script>
     <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
@@ -68,6 +69,41 @@
     <script src="{{ asset('dist/js/pages/dashboard.js') }}"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 </head>
+<?php
+$current_url = $_SERVER['REQUEST_URI'];
+//index
+if (strpos($current_url, '') !== false) {
+    $index_class = 'active';
+}
+//products
+if (strpos($current_url, 'data') !== false) {
+    $products_class = 'active';
+    $index_class = '';
+} else {
+    $products_class = '';
+}
+//provides
+if (strpos($current_url, 'provides') !== false) {
+    $provides_class = 'active';
+    $index_class = '';
+} else {
+    $provides_class = '';
+}
+//guests
+if (strpos($current_url, 'guests') !== false) {
+    $guests_class = 'active';
+    $index_class = '';
+} else {
+    $guests_class = '';
+}
+//users
+if (strpos($current_url, 'admin') !== false) {
+    $user_class = 'active';
+    $index_class = '';
+} else {
+    $user_class = '';
+}
+?>
 
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
@@ -205,7 +241,6 @@
                         <i class="fas fa-expand-arrows-alt"></i>
                     </a>
                 </li>
-
                 <li class="nav-item">
                     @if (Route::has('login'))
                     @auth
@@ -231,6 +266,7 @@
                     @endauth
                     @endif
                 </li>
+
             </ul>
         </nav>
         <!-- /.navbar -->
@@ -239,8 +275,6 @@
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
             <a href="#" class="brand-link">
-                <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
-                    style="opacity: .8">
                 <span class="brand-text font-weight-light">AdminLTE 3</span>
             </a>
 
@@ -262,10 +296,8 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                         data-accordion="false">
-                        <!-- Add icons to the links using the .nav-icon class
-               with font-awesome or any other icon font library -->
-                        <li class="nav-item menu-open">
-                            <a href="{{ asset('index') }}" class="nav-link active">
+                        <li class="nav-item">
+                            <a href="{{ asset('index') }}" class="nav-link <?php echo $index_class; ?>">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
                                     Trang chủ
@@ -273,7 +305,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ asset('./simple') }}" class="nav-link">
+                            <a href="{{ asset('./data') }}" class="nav-link <?php echo $products_class; ?>">
                                 <i class="nav-icon fas fa-table"></i>
                                 <p>
                                     Sản phẩm
@@ -281,7 +313,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ asset('./data') }}" class="nav-link">
+                            <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-table"></i>
                                 <p>
                                     Nhập hàng
@@ -289,7 +321,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ asset('./data') }}" class="nav-link">
+                            <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-table"></i>
                                 <p>
                                     Xuất hàng
@@ -297,7 +329,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('admin.userslist') }}" class="nav-link">
+                            <a href="{{ route('admin.userslist') }}" class="nav-link <?php echo $user_class; ?>">
                                 <i class="nav-icon fas fa-table"></i>
                                 <p>
                                     Nhân viên
@@ -305,7 +337,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ asset('./provides') }}" class="nav-link">
+                            <a href="{{ asset('./provides') }}" class="nav-link <?php echo $provides_class; ?>">
                                 <i class="nav-icon fas fa-table"></i>
                                 <p>
                                     Nhà cung cấp
@@ -313,7 +345,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ asset('./guests') }}" class="nav-link <?php echo $guests_class; ?>">
                                 <i class="nav-icon fas fa-table"></i>
                                 <p>
                                     Khách hàng
@@ -326,3 +358,14 @@
             </div>
             <!-- /.sidebar -->
         </aside>
+        <div class="main-header">
+            @if (Session::has('msg'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ Session::get('msg') }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
+        </div>
+

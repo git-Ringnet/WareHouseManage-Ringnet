@@ -17,10 +17,10 @@ class CreateProduct extends Migration
             $table->id()->autoIncrement();
             $table->integer('products_id');
             $table->string('product_name');
-            $table->string('product_category');
+            $table->string('product_category')->nullable();
             $table->string('product_trademark')->nullable();
-            $table->integer('product_qty');
-            $table->integer('product_price');
+            $table->integer('product_qty')->nullable();
+            $table->integer('product_price')->nullable();
             $table->timestamps();
         });
     }

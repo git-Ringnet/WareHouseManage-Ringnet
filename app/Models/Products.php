@@ -15,8 +15,11 @@ class Products extends Model
     }
     protected $table = 'products';
     protected $fillable = [
+        'products_image',
         'products_code',
         'products_name',
-        'products_trademark'
+        'products_trademark',
+        'products_unit',
+        'products_description'
     ];
 }

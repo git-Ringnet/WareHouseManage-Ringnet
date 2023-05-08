@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\AjaxController;
+use App\Http\Controllers\GuestsController;
+use App\Http\Controllers\InsertProductController;
+use App\Http\Controllers\ProductsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\provideController;
@@ -34,9 +38,15 @@ Route::prefix('admin')->name('admin.')->group(function () {
 Route::resource('provides', provideController::class);
 Route::get('/update-status', [provideController::class, 'updateStatus'])->name('update');
 
-Route::get('/data', function () {
-    return view('tables.data');
-});
+//khach hang
+Route::resource('guests', GuestsController::class);
+Route::get('/updatestatus', [GuestsController::class, 'updateStatus'])->name('updateKH');
+
+Route::resource('data',ProductsController::class);
+Route::get('/insertProducts',[ProductsController::class,'insertProducts'])->name('insertProducts');
+Route::POST('/storeProducts',[ProductsController::class,'storeProducts'])->name('storeProducts');
+Route::get('/data_edit',[ProductsController::class,'edit_ajax'])->name('ajax');
+Route::get('/data_show',[ProductsController::class,'show_ajax'])->name('show_ajax');
 Route::get('/simple', function () {
     return view('tables.simple');
 });
