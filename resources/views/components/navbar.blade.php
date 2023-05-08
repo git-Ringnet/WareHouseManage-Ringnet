@@ -24,6 +24,8 @@
     <link rel="stylesheet" href="{{ asset('plugins/jqvmap/jqvmap.min.css') }}">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
+    <!-- Việt css -->
+    <link rel="stylesheet" href="{{ asset('dist/css/css.css') }}">
     <!-- overlayScrollbars -->
     <link rel="stylesheet" href="{{ asset('plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
     <!-- Daterange picker -->
@@ -110,8 +112,7 @@ if (strpos($current_url, 'admin') !== false) {
             <!-- Left navbar links -->
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i
-                            class="fas fa-bars"></i></a>
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
                     <a href="#" class="nav-link">Home</a>
@@ -240,6 +241,32 @@ if (strpos($current_url, 'admin') !== false) {
                         <i class="fas fa-expand-arrows-alt"></i>
                     </a>
                 </li>
+                <li class="nav-item">
+                    @if (Route::has('login'))
+                    @auth
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                            {{ Auth::user()->name }}
+                            <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            <li><a href="{{ route('profile.show') }}"> {{ __('Profile') }}
+                                </a></li>
+                            <li>
+                                <form method="POST" action="{{ route('logout') }}" x-data>
+                                    @csrf
+                                    <button class="btn btn-primary" type="submit">
+                                        {{ __('Log Out') }}
+                                    </button>
+                            </li>
+                            </form>
+                        </ul>
+                    </div>
+                    @else
+                    <a href="{{ route('login') }}" class="text-sm text-gray-700 underline">Đăng nhập</a>
+                    @endauth
+                    @endif
+                </li>
+
             </ul>
         </nav>
         <!-- /.navbar -->
@@ -341,3 +368,4 @@ if (strpos($current_url, 'admin') !== false) {
                 </div>
             @endif
         </div>
+
