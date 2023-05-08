@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Products;
 use App\Models\Provides;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,7 @@ class InsertProductController extends Controller
      */
     public function index()
     {
-        return view('tables.insertProduct');
+        return view('tables.order.insertProduct');
     }
 
     /**
@@ -25,7 +26,8 @@ class InsertProductController extends Controller
     public function create()
     {
         $provide = Provides::all();
-        return view('tables.insert',compact('provide'));
+        $products = Products::all();
+        return view('tables.order.insert',compact('provide','products'));
     }
 
     /**

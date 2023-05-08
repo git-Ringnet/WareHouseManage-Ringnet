@@ -128,7 +128,6 @@
                                                 @endif
                                             </tr>
                                         @endforeach
-                                        {{-- <tr id="sub_product_1"></tr> --}}
                                     @endforeach
                                 </tbody>
                             </table>
@@ -159,32 +158,7 @@
             }
         });
     })
-    $('.dropdown_item').click(function() {
-        var product_id = $(this).attr('id');
-        $.ajax({
-            url: "{{ route('show_ajax') }}",
-            type: "get",
-            data: {
-                product_id: product_id,
-            },
-            success: function(data) {
-                var output = "";
-                $.each(data, function(index, product) {
-                    var subProduct = '#sub_product_' + product.products_id;
-                    output += `<tr>
-                <th scope="row">` + product.id + `</th>
-                <th>Mã sản phẩm</th>
-                <th>` + product.product_name + `</th>
-                <th>` + product.product_category + `</th>
-                <th>` + product.product_trademark + `</th>
-                <th>` + product.product_qty + `</th>
-                <th>` + product.product_price + `</th>
-                </tr>`;
-                });
-                $('#sub_product_1').html(output);
-            }
-        });
-    })
+   
     //xóa tất cả thẻ tr rỗng
     const rows = document.querySelectorAll('tr');
     rows.forEach(row => {

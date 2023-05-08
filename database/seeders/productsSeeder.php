@@ -19,7 +19,6 @@ class productsSeeder extends Seeder
                 'products_name' => 'Cisco Catalyst 9800-CL Wireless Controller for Cloud',
                 'ID_category' => 1,
                 'products_trademark' => 'Cisco',
-                'products_unit' => 'Cái',
                 'products_description' => 'Ringnet1'
             ],
             [   'id' => 2,
@@ -27,7 +26,6 @@ class productsSeeder extends Seeder
                 'products_name' => 'Catalyst IE3400 with 8 GE Copper ports',
                 'ID_category' => 2,
                 'products_trademark' => 'Cisco',
-                'products_unit' => 'Cái',
                 'products_description' => 'Ringnet2'
             ],
             [   'id' => 3,
@@ -35,7 +33,6 @@ class productsSeeder extends Seeder
                 'products_name' => 'Cisco Catalyst 9800-CL Wireless Controller for Cloud',
                 'ID_category' => 3,
                 'products_trademark' => 'Cisco',
-                'products_unit' => 'Cái',
                 'products_description' => 'Ringnet3'
             ],
             [   'id' => 4,
@@ -43,7 +40,6 @@ class productsSeeder extends Seeder
                 'products_name' => 'Cisco Catalyst 9800-CL Wireless Controller for Cloud',
                 'ID_category' => 4,
                 'products_trademark' => 'Cisco',
-                'products_unit' => 'Cái',
                 'products_description' => 'Ringnet4'
             ],
             [   'id' => 5,
@@ -51,7 +47,6 @@ class productsSeeder extends Seeder
                 'products_name' => 'Cisco Catalyst 9800-CL Wireless Controller for Cloud',
                 'ID_category' => 5,
                 'products_trademark' => 'Cisco',
-                'products_unit' => 'Cái',
                 'products_description' => 'Ringnet5'
             ],
         ]);

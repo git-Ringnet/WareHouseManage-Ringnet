@@ -65,6 +65,7 @@ class ProductsController extends Controller
                 'product.product_name',
                 'product.product_category',
                 'product.product_trademark',
+                'product.product_unit',
                 'product_qty',
                 'product.product_price',
                 'product.created_at',
@@ -79,7 +80,7 @@ class ProductsController extends Controller
             )
             ->get();
         $category = Category::all();
-        return view('tables.data', compact('products', 'category', 'qtySums', 'product'));
+        return view('tables.products.data', compact('products', 'category', 'qtySums', 'product'));
     }
 
     /**
@@ -150,7 +151,7 @@ class ProductsController extends Controller
     {
         $products = Products::findOrFail($id);
         $provide = Provides::all();
-        return view('tables.test', compact('products', 'provide'));
+        return view('tables.products.test', compact('products', 'provide'));
     }
 
     /**
@@ -163,7 +164,7 @@ class ProductsController extends Controller
     {
         $products = Products::findOrFail($id);
         $cate = Category::all();
-        return view('tables.edit_products', compact('products', 'cate'));
+        return view('tables.products.edit_products', compact('products', 'cate'));
     }
 
     /**
@@ -188,10 +189,7 @@ class ProductsController extends Controller
         $products->products_unit = $request->get('products_unit');
         $products->products_description = $request->get('products_description');
         $products->save();
-        $products = Products::all();
-        $qtySums = array();
-        // return view('tables.data', compact('products','qtySums'));
-        return redirect()->route('data.index');
+        return redirect()->route('data.products.index');
     }
 
     /**
@@ -220,11 +218,10 @@ class ProductsController extends Controller
     public function insertProducts()
     {
         $cate = Category::all();
-        return view('tables.insertProducts',compact('cate'));
+        return view('tables.products.insertProducts',compact('cate'));
     }
     public function storeProducts(Request $request)
     {
-        $data = $request->all();
         $products = new Products();
         $get_image = $request->file('products_img');
         if($get_image){

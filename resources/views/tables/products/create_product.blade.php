@@ -105,7 +105,6 @@
                     </button>
                   </td>
                   <td><input type="text" name="product_name[]"></td>
-                  <!-- <td><input type="text" name="product_provide[]"></td> -->
                   <td>
                     <select name="product_provide[]" id="">
                       @foreach($provide as $va)
