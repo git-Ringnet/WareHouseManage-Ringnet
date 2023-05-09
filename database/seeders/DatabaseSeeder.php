@@ -32,6 +32,7 @@ class DatabaseSeeder extends Seeder
             SerinumbersSeeder::class,
             UsersTableSeeder::class,
             RolesTableSeeder::class,
+            ExportSeeder::class,
         ]);
     }
 }
