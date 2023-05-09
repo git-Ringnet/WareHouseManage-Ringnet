@@ -33,7 +33,7 @@ class DatabaseSeeder extends Seeder
             UsersTableSeeder::class,
             RolesTableSeeder::class,
             OrdersSeeder::class,
-            ProductOrderSeeder::class
+            ProductOrderSeeder::class,
 			ExportSeeder::class,
         ]);
     }

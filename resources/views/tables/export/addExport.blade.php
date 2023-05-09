@@ -236,7 +236,8 @@
                             <tr>
                                 <td></td>
                                 <td></td>
-                                <td><a href="#" class="btn btn-secondary" id="add-field-btn">Thêm sản phẩm</a>
+                                <td>
+                                    <a href="#" class="btn btn-secondary" id="add-field-btn">Thêm sản phẩm</a>
                                 </td>
                             </tr>
                         </tbody>
