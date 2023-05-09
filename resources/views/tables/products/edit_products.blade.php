@@ -25,15 +25,17 @@
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title">Sản phẩm / Thêm sản phẩm</h3>
+              <h3 class="card-title">Sản phẩm / Sửa sản phẩm</h3>
             </div>
             <!-- /.card-header -->
-            <form action="{{route('storeProducts')}}" method="POST">
+            <form action="{{route('data.update',$products->id)}}" method="post" enctype="multipart/form-data">
               @csrf
+              @method('PUT')
               <div class="card-body">
                 <div class="row">
                   <div class="col-md-3">
-                    <h2>Hình ảnh sản phẩm</h2>
+                    <h2>Hình ảnh sản phẩm</h2>  
+                    <img src="{{url('dist/img')}}/{{$products->products_image}}.png" alt="">
                     <input type="file" value="" name="products_img">
                   </div>
                   <div class="col-md-9">
@@ -41,39 +43,39 @@
                     <div class="row">
                       <div class="col-md-3">
                         <div class="product_name">
-                          <h5>Tên sản phẩm</h5>
-                          <input type="text" name="products_name" class="w-100 p-1">
+                          <h4>Tên sản phẩm</h4>
+                          <input type="text" name="products_name" value="{{$products->products_name}}">
                         </div>
                         <div class="product_code">
-                          <h5>Mã sản phẩm</h5>
-                          <input type="text" name="products_code" class="w-100 p-1">
+                          <h4>Mã sản phẩm</h4>
+                          <input type="text" name="products_code" value="{{$products->products_code}}">
                         </div>
                         <div class="product_id">
-                          <h5>ID</h5>
-                          <input type="text" name="products_id" readonly class="w-100 p-1">
+                          <h4>ID</h4>
+                          <input type="text" name="products_id" value="{{$products->id}}" readonly>
                         </div>
                       </div>
                       <div class="col-md-3">
                         <div class="product_category">
-                          <h5>Danh mục</h5>
-                          <select name="product_category" id="" class="w-100" style="height: 35.56px;">
+                          <h4>Danh mục</h4>
+                          <select name="product_category" id="">
                             @foreach($cate as $va)
-                            <option value="{{$va->id}}">{{$va->category_name}}</option>
+                            <option value="{{$va->id}}" {{ ( $va->id == $products->getCategory->id) ? 'selected' : '' }}>{{$va->category_name}}</option>
                             @endforeach
                           </select>
                         </div>
                         <div class="product_trademark">
-                          <h5>Thương hiệu</h5>
-                          <input type="text" name="products_trademark" class="w-100 p-1">
+                          <h4>Thương hiệu</h4>
+                          <input type="text" name="products_trademark" value="{{$products->products_trademark}}">
                         </div>
                         <div class="product_unit">
-                          <h5>Đơn vị</h5>
-                          <input type="text" name="products_unit" class="w-100 p-1">
+                          <h4>Đơn vị</h4>
+                          <input type="text" name="products_unit" value="{{$products->products_unit}}">
                         </div>
                       </div>
                       <div class="col-md-4">
-                        <h5>Mô tả</h5>
-                        <textarea name="products_description" id="" cols="30" rows="7" class="w-100"></textarea>
+                        <h4>Mô tả</h4>
+                        <textarea name="products_description" id="" cols="30" rows="8">{{$products->products_description}}</textarea>
                       </div>
                       <div class="col-md-2"></div>
                     </div>
@@ -81,7 +83,7 @@
                 </div>
                 </table>
               </div>
-              <button type="submit">Thêm</button>
+              <button type="submit" class="btn btn-primary">Edit</button>
             </form>
           </div>
         </div>

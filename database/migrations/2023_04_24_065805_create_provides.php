@@ -20,6 +20,8 @@ class CreateProvides extends Migration
             $table->string('provide_phone');
             $table->string('provide_email');
             $table->integer('provide_status');
+            $table->string('provide_address');
+            $table->string('provide_code');
             $table->timestamps();
         });
     }

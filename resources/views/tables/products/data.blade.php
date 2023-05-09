@@ -31,7 +31,7 @@
                             <table id="example2" class="table table-bordered table-hover">
                                 <thead>
                                     <tr>
-                                        <th scope="col">#</th>
+                                        <th scope="col" style="width:7%;">#</th>
                                         <th scope="col">Mã sản phẩm</th>
                                         <th scope="col">Tên sản phẩm</th>
                                         <th scope="col">Danh mục</th>
@@ -115,10 +115,10 @@
                                         @foreach ($product as $item)
                                             <tr id="product-details-{{ $value->id }}" class="collapse">
                                                 @if ($value->id == $item->products_id)
-                                                    <td>{{ $item->id }}</td>
+                                                    <td>{{ $value->id }} - {{ $item->id }}</td>
                                                     <td>{{ $value->products_code }}</td>
                                                     <td>{{ $item->product_name }}</td>
-                                                    <td>{{ $item->product_category }}</td>
+                                                    <td><p>Loại hàng</p>{{ $item->product_category }}</td>
                                                     <td>{{ $item->product_trademark }}</td>
                                                     <td>{{ $item->product_qty }}</td>
                                                     <td>{{ number_format($item->product_price) }}</td>
@@ -128,7 +128,6 @@
                                                 @endif
                                             </tr>
                                         @endforeach
-                                        {{-- <tr id="sub_product_1"></tr> --}}
                                     @endforeach
                                 </tbody>
                             </table>
@@ -159,32 +158,7 @@
             }
         });
     })
-    $('.dropdown_item').click(function() {
-        var product_id = $(this).attr('id');
-        $.ajax({
-            url: "{{ route('show_ajax') }}",
-            type: "get",
-            data: {
-                product_id: product_id,
-            },
-            success: function(data) {
-                var output = "";
-                $.each(data, function(index, product) {
-                    var subProduct = '#sub_product_' + product.products_id;
-                    output += `<tr>
-                <th scope="row">` + product.id + `</th>
-                <th>Mã sản phẩm</th>
-                <th>` + product.product_name + `</th>
-                <th>` + product.product_category + `</th>
-                <th>` + product.product_trademark + `</th>
-                <th>` + product.product_qty + `</th>
-                <th>` + product.product_price + `</th>
-                </tr>`;
-                });
-                $('#sub_product_1').html(output);
-            }
-        });
-    })
+   
     //xóa tất cả thẻ tr rỗng
     const rows = document.querySelectorAll('tr');
     rows.forEach(row => {

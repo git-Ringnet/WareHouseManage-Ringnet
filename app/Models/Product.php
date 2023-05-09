@@ -18,7 +18,7 @@ class Product extends Model
         return $this->hasMany(Serinumbers::class);
     }
     protected $fillable = [
-        'products_id','product_name','product_category','product_trademark','product_qty',
+        'products_id','product_name','product_category','product_unit','product_trademark','product_qty',
         'product_price'
     ];
 }

@@ -9,6 +9,6 @@ class Serinumbers extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'serinumber','product_id'
+        'serinumber','product_id','seri_status'
     ];
 }

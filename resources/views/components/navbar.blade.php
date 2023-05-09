@@ -293,7 +293,7 @@ if (strpos($current_url, 'exports') !== false) {
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{asset('./insertProduct')}}" class="nav-link">
                                 <i class="nav-icon fas fa-table"></i>
                                 <p>
                                     Nhập hàng
