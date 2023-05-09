@@ -145,22 +145,10 @@ class AddProductController extends Controller
                 $pro->product_qty = $product_qty[$i];
                 $pro->product_price = $product_price[$i];
                 $pro->save();
-
-                // foreach ($serinumbers as $serinumber) {
-                //     $serinumber->product_id = $pro->id;
-                //     $serinumber->seri_status = 1;
-                //     $serinumber->save();
-                // }   
-            } else {
+            } else {   
                 $updateProduct = Product::findOrFail($check->id);
                 $updateProduct->product_qty += $product_qty[$i];
                 $updateProduct->save();
-                // $serinumbers = Serinumbers::where('product_id', $products_id[$i])->get();
-                // foreach ($serinumbers as $serinumber) {
-                //     $serinumber->product_id = $updateProduct->id;
-                //     $serinumber->seri_status = 1;
-                //     $serinumber->save();
-                // }
             }
             $serinumbers = Serinumbers::where('product_id', $products_id[$i])->get();
             foreach ($serinumbers as $serinumber) {

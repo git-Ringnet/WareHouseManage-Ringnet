@@ -177,19 +177,27 @@ class ProductsController extends Controller
     public function update(Request $request, $id)
     {
         $products = Products::findOrFail($id);
-        if($request->get('products_img') == null){
-            $products->products_image = $products->products_image;
-        }else{
-            $products->products_image = $request->get('products_img');
+
+        $get_image = $request->file('products_img');
+        if($get_image){
+            $get_name_image = $get_image->getClientOriginalName();
+            $name_image = current(explode('.', $get_name_image));
+            $new_image =  $get_name_image;
+            $get_image->move('../public/dist/img', $new_image);
+            $products->products_image = $name_image;
         }
+        else{
+            $products->products_image = $products->products_image;
+        }
+
         $products->products_code = $request->get('products_code');
         $products->products_name = $request->get('products_name');
         $products->ID_category = $request->get('product_category');
         $products->products_trademark = $request->get('products_trademark');
-        $products->products_unit = $request->get('products_unit');
+        // $products->products_unit = $request->get('products_unit');
         $products->products_description = $request->get('products_description');
         $products->save();
-        return redirect()->route('data.products.index');
+        return redirect()->route('data.index');
     }
 
     /**
@@ -229,13 +237,15 @@ class ProductsController extends Controller
             $name_image = current(explode('.', $get_name_image));
             $new_image =  $get_name_image;
             $get_image->move('../public/dist/img', $new_image);
+            $products->products_image = $name_image;
+        }else{
+            $products->products_image = "";
         }
-        $products->products_image = $name_image;
         $products->products_code = $request->products_code;
         $products->products_name = $request->products_name;
         $products->ID_category = $request->product_category;
         $products->products_trademark = $request->products_trademark;
-        $products->products_unit = $request->products_unit;
+        // $products->products_unit = $request->products_unit;
         $products->products_description = $request->products_description;
 
         $products->save();

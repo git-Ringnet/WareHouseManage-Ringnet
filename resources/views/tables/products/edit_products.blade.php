@@ -28,7 +28,7 @@
               <h3 class="card-title">Sản phẩm / Sửa sản phẩm</h3>
             </div>
             <!-- /.card-header -->
-            <form action="{{route('data.update',$products->id)}}" method="post">
+            <form action="{{route('data.update',$products->id)}}" method="post" enctype="multipart/form-data">
               @csrf
               @method('PUT')
               <div class="card-body">
