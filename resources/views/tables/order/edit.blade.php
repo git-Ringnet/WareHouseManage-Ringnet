@@ -121,8 +121,8 @@
           <tbody>
             @foreach($product_order as $pro)
             <tr>
-              <input type="hidden" name="new_product" value="{{newProduct->id}}">
-              <td><input type="text" name='product_id[]' value="{{$pro->products_id}}"></td>
+              <input type="hidden" name="product_id[]" value="{{$pro->product_id}}">
+              <td><input type="text" name='products_id[]' value="{{$pro->products_id}}"></td>
               <td><input type="text" name="product_name[]" value="{{$pro->product_name}}"> </td>
               <td> <input type="text" name="product_category[]" value=" {{$pro->product_category}}"> </td>
               <td> <input type="text" name="product_unit[]" value="  {{$pro->product_unit}}"> </td>

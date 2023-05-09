@@ -2,6 +2,9 @@
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
+  @if(Session::has('section'))
+    {{Session::get('section')}}
+  @endif
   <section class="content-header">
     <div class="container-fluid">
      <a href="{{route('insertProduct.create')}}"> <div class="btn btn-primary">Tạo đơn</div></a>

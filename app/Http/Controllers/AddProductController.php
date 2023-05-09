@@ -20,7 +20,7 @@ class AddProductController extends Controller
      */
     public function index()
     {
-        $order = Orders::all();
+        $order = Orders::orderByDesc('id')->get();
         return view('tables.order.insertProduct', compact('order'));
     }
 
@@ -33,7 +33,9 @@ class AddProductController extends Controller
     {
         $provide = Provides::all();
         $products = Products::all();
-        return view('tables.order.insert', compact('provide', 'products'));
+        $lastId = DB::table('productorders')->latest('id')->value('id');
+        $last = ProductOrders::latest()->value('id');
+        return view('tables.order.insert', compact('provide', 'products', 'lastId'));
     }
 
     /**
@@ -50,16 +52,17 @@ class AddProductController extends Controller
         $order->users_id = 1;
         $order->order_status = 0;
         $order->save();
-        $products_id = $request->product_id;
+        $product_id = $request->product_id;
+        $products_id = $request->products_id;
         $product_name = $request->product_name;
         $product_category = $request->product_category;
         $product_unit = $request->product_unit;
         $product_trademark = $request->product_trademark;
         $product_qty = $request->product_qty;
         $product_price = $request->product_price;
-
         for ($i = 0; $i < count($products_id); $i++) {
             $pro = new ProductOrders();
+            $pro->product_id = $product_id[$i];
             $pro->products_id = $products_id[$i];
             $pro->product_name = $product_name[$i];
             $pro->product_category = $product_category[$i];
@@ -124,42 +127,49 @@ class AddProductController extends Controller
     {
         $data = $request->all();
         $updateOrder = Orders::find($id);
-        $updateOrder->order_status = 1;
-        $updateOrder->save();
-        $products_id = $request->product_id;
-        $product_name = $request->product_name;
-        $product_category = $request->product_category;
-        $product_unit = $request->product_unit;
-        $product_trademark = $request->product_trademark;
-        $product_qty = $request->product_qty;
-        $product_price = $request->product_price;
-        for ($i = 0; $i < count($product_name); $i++) {
-            $check = Product::where('product_name', $product_name[$i])->where('product_category', $product_category[$i])->first();
-            if ($check == NULL) {
-                $pro = new Product();
-                $pro->products_id = $products_id[$i];
-                $pro->product_name = $product_name[$i];
-                $pro->product_category = $product_category[$i];
-                $pro->product_unit = $product_unit[$i];
-                $pro->product_trademark = $product_trademark[$i];
-                $pro->product_qty = $product_qty[$i];
-                $pro->product_price = $product_price[$i];
-                $pro->save();
-            } else {   
-                $updateProduct = Product::findOrFail($check->id);
-                $updateProduct->product_qty += $product_qty[$i];
-                $updateProduct->save();
-            }
-            $serinumbers = Serinumbers::where('product_id', $products_id[$i])->get();
-            foreach ($serinumbers as $serinumber) {
-                if ($pro->wasRecentlyCreated) {
-                    $serinumber->product_id = $pro->id;
+        if ($updateOrder->order_status == 0) {
+            $updateOrder->order_status = 1;
+            $updateOrder->save();
+            $product_id = $request->product_id;
+            $products_id = $request->products_id;
+            $product_name = $request->product_name;
+            $product_category = $request->product_category;
+            $product_unit = $request->product_unit;
+            $product_trademark = $request->product_trademark;
+            $product_qty = $request->product_qty;
+            $product_price = $request->product_price;
+            for ($i = 0; $i < count($product_name); $i++) {
+                $check = Product::where('product_name', $product_name[$i])->where('product_category', $product_category[$i])->first();
+                $serinumbers = Serinumbers::where('product_id', $product_id[$i])->get();
+                if ($check == NULL) {
+                    $pro = new Product();
+                    $pro->products_id = $products_id[$i];
+                    $pro->product_name = $product_name[$i];
+                    $pro->product_category = $product_category[$i];
+                    $pro->product_unit = $product_unit[$i];
+                    $pro->product_trademark = $product_trademark[$i];
+                    $pro->product_qty = $product_qty[$i];
+                    $pro->product_price = $product_price[$i];
+                    $pro->save();
+                    foreach ($serinumbers as $serinumber) {
+                        $serinumber->product_id = $pro->id;
+                        $serinumber->seri_status = 1;
+                        $serinumber->save();
+                    }
                 } else {
-                    $serinumber->product_id = $updateProduct->id;
+                    $updateProduct = Product::findOrFail($check->id);
+                    $updateProduct->product_qty += $product_qty[$i];
+                    $updateProduct->save();
+                    $serinumbers = Serinumbers::where('product_id', $product_id[$i])->get();
+                    foreach ($serinumbers as $serinumber) {
+                        $serinumber->product_id = $updateProduct->id;
+                        $serinumber->seri_status = 1;
+                        $serinumber->save();
+                    }
                 }
-                $serinumber->seri_status = 1;
-                $serinumber->save();
             }
+        } else {
+            return redirect()->route('insertProduct.index')->with('section', 'Đơn hàng đã được duyệt');
         }
     }
 

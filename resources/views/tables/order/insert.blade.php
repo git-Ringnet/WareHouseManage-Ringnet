@@ -91,7 +91,7 @@
     <div class="container-fluid">
       <select id="select_page" style="width:200px;" class="operator">
         @foreach($provide as $value)
-        <option value="{{$value->id}}">{{$value->provide_represent}} <span> </span> <span> </span> {{$value->provide_name}}</option>
+        <option value="{{$value->id}}">{{$value->provide_represent}} &emsp; &emsp; {{$value->provide_name}}</option>
         @endforeach
       </select>
     </div>
@@ -129,11 +129,40 @@
 
           </tbody>
         </table>
-
         <div id="list_modal">
         </div>
       </div><!-- /.container-fluid -->
-      <a href="javacript:;" class="btn btn-info addRow">+</a>
+      <a href="javacript:;" class="btn btn-info addRow">Thêm sản phẩm</a>
+      <div class="container">
+        <div class="row position-relative">
+          <div class="col-sm-6"></div>
+          <div class="col-sm-6">
+            <div class="mt-4 w-50" style="float: right;">
+              <div class="d-flex justify-content-between">
+                <span><b>Giá trị trước thuế:</b></span>
+                <span id="total_price">55.000.000đ</span>
+              </div>
+              <div class="d-flex justify-content-between mt-2">
+                <span><b>Thuế VAT:</b></span>
+                <span>5.500.000đ</span>
+              </div>
+              <div class="d-flex justify-content-between mt-2">
+                <span class="text-primary">Giảm giá:</span>
+                <span>0đ</span>
+              </div>
+              <div class="d-flex justify-content-between mt-2">
+                <span class="text-primary">Phí vận chuyển:</span>
+                <span>0đ</span>
+              </div>
+              <div class="d-flex justify-content-between mt-2">
+                <span class="text-lg"><b>Tổng cộng:</b></span>
+                <span><b>60.500.000đ</b></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <button type="submit" name="action" class="btn btn-primary" value="AddProduct">Thêm</button>
   </form>
   </section>
@@ -141,6 +170,20 @@
 </div>
 
 <script>
+  $(document).on('keyup', 'input[name="product_qty[]"], input[name="product_price[]"]', function() {
+    var row = $(this).closest('tr');
+    var qty = parseFloat(row.find('input[name="product_qty[]"]').val());
+    var price = parseFloat(row.find('input[name="product_price[]"]').val());
+    var total;
+    if(isNaN(qty) || isNaN(price)){
+      total = 0;
+    }else{
+      total = qty * price;
+    }
+    row.find('input[name="product_total[]"]').val(total);
+  });
+
+
   function updateRowNumbers() {
     $('tbody tr').each(function(index) {
       $(this).find('th:first').text(index + 1);
@@ -156,11 +199,14 @@
     });
   }
   var rowCount = $('tbody tr').length;
+  var last = "<?php echo $lastId; ?>";
   $('.addRow').on('click', function() {
+    last++;
     var tr = '<tr>' +
+      '<input type="hidden" name="product_id[]" value="' + last + '">' +
       '<td scope="row">' + rowCount + '</td>' +
       '<td>' +
-      '<select name="product_id[]">' +
+      '<select name="products_id[]">' +
       '@foreach($products as $va)' +
       '<option value="{{$va->id}}">{{$va->products_code}}</option>' +
       '@endforeach' +
@@ -264,9 +310,9 @@
           <label for="">Công ty</label>
           <input type="text" name="provide_name" value="` + data.provide_name + `"> <br>
           <label for="">Địa chỉ xuất hóa đơn</label>
-          <input type="text" name="provide_address" value="`+data.provide_address+`"> <br>
+          <input type="text" name="provide_address" value="` + data.provide_address + `"> <br>
           <label for="">Mã số thuế</label>
-          <input type="text" name="provide_code" value="`+data.provide_code+`"> <br>
+          <input type="text" name="provide_code" value="` + data.provide_code + `"> <br>
           </div>
           <div class="col-md-4"></div>
           <div class="col-md-4">
