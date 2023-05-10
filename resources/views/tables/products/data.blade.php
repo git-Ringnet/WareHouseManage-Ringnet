@@ -31,7 +31,7 @@
                             <table id="example2" class="table table-bordered table-hover">
                                 <thead>
                                     <tr>
-                                        <th scope="col">#</th>
+                                        <th scope="col" style="width:7%;">#</th>
                                         <th scope="col">Mã sản phẩm</th>
                                         <th scope="col">Tên sản phẩm</th>
                                         <th scope="col">Danh mục</th>
@@ -45,7 +45,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($qtySums as $value)
+                                    @foreach ($products as $value)
                                         <tr>
                                             <td scope="row">{{ $value->id }}</td>
                                             <th><a
@@ -64,19 +64,19 @@
                                             </td>
                                             <td>{{ $value->products_trademark }}</td>
                                             <td>
-                                                @if ($value->qty_sum == 0)
+                                                @if ($value->inventory == 0)
                                                     0
                                                 @endif
-                                                {{ $value->qty_sum }}
+                                                {{ $value->inventory }}
                                             </td>
                                             <td>{{ number_format($value->price_avg) }}</td>
-                                            <td>{{ number_format($value->total_sum) }}</td>
+                                            <td>{{ number_format($value->price_inventory) }}</td>
                                             <td class="p-0 text-center">
-                                                @if ($value->qty_sum == 0)
+                                                @if ($value->inventory == 0)
                                                     <div class="py-1 rounded mt-3 pb-1 bg-danger">
                                                         <span class="text-light">Hết hàng</span>
                                                     </div>
-                                                @elseif($value->qty_sum < 5)
+                                                @elseif($value->inventory < 5)
                                                     <div class="py-1 rounded mt-3 pb-1 bg-warning">
                                                         <span class="text-light">Gần hết</span>
                                                     </div>
@@ -115,10 +115,10 @@
                                         @foreach ($product as $item)
                                             <tr id="product-details-{{ $value->id }}" class="collapse">
                                                 @if ($value->id == $item->products_id)
-                                                    <td>{{ $item->id }}</td>
+                                                    <td>{{ $value->id }} - {{ $item->id }}</td>
                                                     <td>{{ $value->products_code }}</td>
                                                     <td>{{ $item->product_name }}</td>
-                                                    <td>{{ $item->product_category }}</td>
+                                                    <td><p>Loại hàng</p>{{ $item->product_category }}</td>
                                                     <td>{{ $item->product_trademark }}</td>
                                                     <td>{{ $item->product_qty }}</td>
                                                     <td>{{ number_format($item->product_price) }}</td>
@@ -128,7 +128,6 @@
                                                 @endif
                                             </tr>
                                         @endforeach
-                                        {{-- <tr id="sub_product_1"></tr> --}}
                                     @endforeach
                                 </tbody>
                             </table>
@@ -159,32 +158,7 @@
             }
         });
     })
-    $('.dropdown_item').click(function() {
-        var product_id = $(this).attr('id');
-        $.ajax({
-            url: "{{ route('show_ajax') }}",
-            type: "get",
-            data: {
-                product_id: product_id,
-            },
-            success: function(data) {
-                var output = "";
-                $.each(data, function(index, product) {
-                    var subProduct = '#sub_product_' + product.products_id;
-                    output += `<tr>
-                <th scope="row">` + product.id + `</th>
-                <th>Mã sản phẩm</th>
-                <th>` + product.product_name + `</th>
-                <th>` + product.product_category + `</th>
-                <th>` + product.product_trademark + `</th>
-                <th>` + product.product_qty + `</th>
-                <th>` + product.product_price + `</th>
-                </tr>`;
-                });
-                $('#sub_product_1').html(output);
-            }
-        });
-    })
+   
     //xóa tất cả thẻ tr rỗng
     const rows = document.querySelectorAll('tr');
     rows.forEach(row => {

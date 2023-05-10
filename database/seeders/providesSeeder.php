@@ -21,7 +21,9 @@ class ProvidesSeeder extends Seeder
                 'provide_represent' => 'Nguyễn Văn A',
                 'provide_phone' => '113',
                 'provide_email' => 'a@gmail.com',
-                'provide_status' => 1
+                'provide_status' => 1,
+                'provide_address' => '38 Út tịch',
+                'provide_code' => 123
             ],
             [
                 'id' => 2,
@@ -29,7 +31,9 @@ class ProvidesSeeder extends Seeder
                 'provide_represent' => 'Nguyễn Văn B',
                 'provide_phone' => '114',
                 'provide_email' => 'b@gmail.com',
-                'provide_status' => 1
+                'provide_status' => 1,
+                'provide_address' => '38 Út tịch',
+                'provide_code' => 456
             ],
             [
                 'id' => 3,
@@ -37,7 +41,9 @@ class ProvidesSeeder extends Seeder
                 'provide_represent' => 'Nguyễn Văn C',
                 'provide_phone' => '115',
                 'provide_email' => 'c@gmail.com',
-                'provide_status' => 1
+                'provide_status' => 1,
+                'provide_address' => '38 Út tịch',
+                'provide_code' => 789
             ],
         ]);
     }

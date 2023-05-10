@@ -1,6 +1,7 @@
 <?php
-
+use App\Http\Controllers\AddProductController;
 use App\Http\Controllers\AjaxController;
+use App\Http\Controllers\ExportController;
 use App\Http\Controllers\GuestsController;
 use App\Http\Controllers\InsertProductController;
 use App\Http\Controllers\ProductsController;
@@ -42,11 +43,20 @@ Route::get('/update-status', [provideController::class, 'updateStatus'])->name('
 Route::resource('guests', GuestsController::class);
 Route::get('/updatestatus', [GuestsController::class, 'updateStatus'])->name('updateKH');
 
+//xuat hang
+Route::resource('exports', ExportController::class);
+
+//
 Route::resource('data',ProductsController::class);
 Route::get('/insertProducts',[ProductsController::class,'insertProducts'])->name('insertProducts');
 Route::POST('/storeProducts',[ProductsController::class,'storeProducts'])->name('storeProducts');
 Route::get('/data_edit',[ProductsController::class,'edit_ajax'])->name('ajax');
 Route::get('/data_show',[ProductsController::class,'show_ajax'])->name('show_ajax');
+
+Route::get('/show_provide',[AddProductController::class,'show_provide'])->name('show_provide');
+Route::resource('insertProduct',AddProductController::class);
+
+
 Route::get('/simple', function () {
     return view('tables.simple');
 });

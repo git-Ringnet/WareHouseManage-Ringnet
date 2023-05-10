@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Products;
-use App\Models\Provides;
+use App\Models\Exports;
 use Illuminate\Http\Request;
 
-class InsertProductController extends Controller
+class ExportController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +14,10 @@ class InsertProductController extends Controller
      */
     public function index()
     {
-        return view('tables.order.insertProduct');
+        $export = Exports::leftjoin('guests', 'exports.guest_id', '=', 'guests.id')
+        ->leftjoin('users', 'exports.user_id', '=', 'users.id')
+        ->paginate(10);
+        return view('tables.export.exports', compact('export'));
     }
 
     /**
@@ -25,9 +27,7 @@ class InsertProductController extends Controller
      */
     public function create()
     {
-        $provide = Provides::all();
-        $products = Products::all();
-        return view('tables.order.insert',compact('provide','products'));
+        return view('tables.export.addExport');
     }
 
     /**

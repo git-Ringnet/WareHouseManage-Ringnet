@@ -25,15 +25,17 @@
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title">Sản phẩm / Thêm sản phẩm</h3>
+              <h3 class="card-title">Sản phẩm / Sửa sản phẩm</h3>
             </div>
             <!-- /.card-header -->
-            <form action="{{route('storeProducts')}}" method="POST">
+            <form action="{{route('data.update',$products->id)}}" method="post" enctype="multipart/form-data">
               @csrf
+              @method('PUT')
               <div class="card-body">
                 <div class="row">
                   <div class="col-md-3">
-                    <h2>Hình ảnh sản phẩm</h2>
+                    <h2>Hình ảnh sản phẩm</h2>  
+                    <img src="{{url('dist/img')}}/{{$products->products_image}}.png" alt="">
                     <input type="file" value="" name="products_img">
                   </div>
                   <div class="col-md-9">
@@ -42,15 +44,15 @@
                       <div class="col-md-3">
                         <div class="product_name">
                           <h4>Tên sản phẩm</h4>
-                          <input type="text" name="products_name" >
+                          <input type="text" name="products_name" value="{{$products->products_name}}">
                         </div>
                         <div class="product_code">
                           <h4>Mã sản phẩm</h4>
-                          <input type="text" name="products_code">
+                          <input type="text" name="products_code" value="{{$products->products_code}}">
                         </div>
                         <div class="product_id">
                           <h4>ID</h4>
-                          <input type="text" name="products_id" readonly>
+                          <input type="text" name="products_id" value="{{$products->id}}" readonly>
                         </div>
                       </div>
                       <div class="col-md-3">
@@ -58,22 +60,22 @@
                           <h4>Danh mục</h4>
                           <select name="product_category" id="">
                             @foreach($cate as $va)
-                            <option value="{{$va->id}}">{{$va->category_name}}</option>
+                            <option value="{{$va->id}}" {{ ( $va->id == $products->getCategory->id) ? 'selected' : '' }}>{{$va->category_name}}</option>
                             @endforeach
                           </select>
                         </div>
                         <div class="product_trademark">
                           <h4>Thương hiệu</h4>
-                          <input type="text" name="products_trademark" >
+                          <input type="text" name="products_trademark" value="{{$products->products_trademark}}">
                         </div>
                         <div class="product_unit">
                           <h4>Đơn vị</h4>
-                          <input type="text" name="products_unit">
+                          <input type="text" name="products_unit" value="{{$products->products_unit}}">
                         </div>
                       </div>
                       <div class="col-md-4">
                         <h4>Mô tả</h4>
-                        <textarea name="products_description" id="" cols="30" rows="8"></textarea>
+                        <textarea name="products_description" id="" cols="30" rows="8">{{$products->products_description}}</textarea>
                       </div>
                       <div class="col-md-2"></div>
                     </div>
@@ -81,7 +83,7 @@
                 </div>
                 </table>
               </div>
-              <button type="submit">Thêm</button>
+              <button type="submit" class="btn btn-primary">Edit</button>
             </form>
           </div>
         </div>

@@ -29,34 +29,8 @@ class ProductsController extends Controller
         foreach ($products as $value) {
             array_push($productIds, $value->id);
         }
-        //lấy tất cả products, tổng số lượng sản phẩm con của products, 
-        $qtySums = DB::table('products')
-            ->leftjoin('product', 'product.products_id', '=', 'products.id')
-            ->whereIn('products.id', $productIds)
-            ->groupBy(
-                'products.id',
-                'products.products_code',
-                'products.products_name',
-                'products.ID_category',
-                'products.products_trademark',
-                'products.created_at',
-                'products.updated_at',
-            )
-            ->select(
-                'products.id',
-                'products.products_code',
-                'products.products_name',
-                'products.ID_category',
-                'products.products_trademark',
-                'products.created_at',
-                'products.updated_at',
-                DB::raw('SUM(product.product_qty * product.product_price) as total_sum'),
-                DB::raw('SUM(product.product_qty) as qty_sum'),
-                DB::raw('SUM(product.product_qty * product.product_price) / SUM(product.product_qty) as price_avg'),
-            )
-            ->get();
         //lấy tất cả sản phẩm con theo sản phẩm lớn
-        $product =  DB::table('product')
+        $product = DB::table('product')
             ->join('products', 'product.products_id', '=', 'products.id')
             ->whereIn('products.id', $productIds)
             ->groupBy(
@@ -65,10 +39,13 @@ class ProductsController extends Controller
                 'product.product_name',
                 'product.product_category',
                 'product.product_trademark',
+                'product.product_unit',
                 'product_qty',
                 'product.product_price',
                 'product.created_at',
                 'product.updated_at',
+                'product.tax',
+                'product.total',
                 'products.id',
                 'products.products_code'
             )
@@ -79,7 +56,7 @@ class ProductsController extends Controller
             )
             ->get();
         $category = Category::all();
-        return view('tables.data', compact('products', 'category', 'qtySums', 'product'));
+        return view('tables.products.data', compact('products', 'category', 'product'));
     }
 
     /**
@@ -150,7 +127,7 @@ class ProductsController extends Controller
     {
         $products = Products::findOrFail($id);
         $provide = Provides::all();
-        return view('tables.test', compact('products', 'provide'));
+        return view('tables.products.test', compact('products', 'provide'));
     }
 
     /**
@@ -163,7 +140,7 @@ class ProductsController extends Controller
     {
         $products = Products::findOrFail($id);
         $cate = Category::all();
-        return view('tables.edit_products', compact('products', 'cate'));
+        return view('tables.products.edit_products', compact('products', 'cate'));
     }
 
     /**
@@ -176,17 +153,26 @@ class ProductsController extends Controller
     public function update(Request $request, $id)
     {
         $products = Products::findOrFail($id);
-        $products->products_image = $request->get('products_img');
+
+        $get_image = $request->file('products_img');
+        if($get_image){
+            $get_name_image = $get_image->getClientOriginalName();
+            $name_image = current(explode('.', $get_name_image));
+            $new_image =  $get_name_image;
+            $get_image->move('../public/dist/img', $new_image);
+            $products->products_image = $name_image;
+        }
+        else{
+            $products->products_image = $products->products_image;
+        }
+
         $products->products_code = $request->get('products_code');
         $products->products_name = $request->get('products_name');
         $products->ID_category = $request->get('product_category');
         $products->products_trademark = $request->get('products_trademark');
-        $products->products_unit = $request->get('products_unit');
+        // $products->products_unit = $request->get('products_unit');
         $products->products_description = $request->get('products_description');
         $products->save();
-        $products = Products::all();
-        $qtySums = array();
-        // return view('tables.data', compact('products','qtySums'));
         return redirect()->route('data.index');
     }
 
@@ -216,21 +202,29 @@ class ProductsController extends Controller
     public function insertProducts()
     {
         $cate = Category::all();
-        return view('tables.insertProducts',compact('cate'));
+        return view('tables.products.insertProducts',compact('cate'));
     }
     public function storeProducts(Request $request)
     {
-        $data = $request->all();
         $products = new Products();
-        $products->products_image = $request->products_img;
+        $get_image = $request->file('products_img');
+        if($get_image){
+            $get_name_image = $get_image->getClientOriginalName();
+            $name_image = current(explode('.', $get_name_image));
+            $new_image =  $get_name_image;
+            $get_image->move('../public/dist/img', $new_image);
+            $products->products_image = $name_image;
+        }else{
+            $products->products_image = "";
+        }
         $products->products_code = $request->products_code;
         $products->products_name = $request->products_name;
         $products->ID_category = $request->product_category;
         $products->products_trademark = $request->products_trademark;
-        $products->products_unit = $request->products_unit;
+        // $products->products_unit = $request->products_unit;
         $products->products_description = $request->products_description;
+
         $products->save();
-        // return  view('tables.data',compact('products', 'category', 'qtySums', 'product'));
         return redirect()->route('data.index');
     }
 }
