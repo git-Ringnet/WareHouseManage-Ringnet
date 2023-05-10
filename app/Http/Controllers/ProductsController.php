@@ -29,34 +29,8 @@ class ProductsController extends Controller
         foreach ($products as $value) {
             array_push($productIds, $value->id);
         }
-        //lấy tất cả products, tổng số lượng sản phẩm con của products, 
-        $qtySums = DB::table('products')
-            ->leftjoin('product', 'product.products_id', '=', 'products.id')
-            ->whereIn('products.id', $productIds)
-            ->groupBy(
-                'products.id',
-                'products.products_code',
-                'products.products_name',
-                'products.ID_category',
-                'products.products_trademark',
-                'products.created_at',
-                'products.updated_at',
-            )
-            ->select(
-                'products.id',
-                'products.products_code',
-                'products.products_name',
-                'products.ID_category',
-                'products.products_trademark',
-                'products.created_at',
-                'products.updated_at',
-                DB::raw('SUM(product.product_qty * product.product_price) as total_sum'),
-                DB::raw('SUM(product.product_qty) as qty_sum'),
-                DB::raw('SUM(product.product_qty * product.product_price) / SUM(product.product_qty) as price_avg'),
-            )
-            ->get();
         //lấy tất cả sản phẩm con theo sản phẩm lớn
-        $product =  DB::table('product')
+        $product = DB::table('product')
             ->join('products', 'product.products_id', '=', 'products.id')
             ->whereIn('products.id', $productIds)
             ->groupBy(
@@ -70,6 +44,8 @@ class ProductsController extends Controller
                 'product.product_price',
                 'product.created_at',
                 'product.updated_at',
+                'product.tax',
+                'product.total',
                 'products.id',
                 'products.products_code'
             )
@@ -80,7 +56,7 @@ class ProductsController extends Controller
             )
             ->get();
         $category = Category::all();
-        return view('tables.products.data', compact('products', 'category', 'qtySums', 'product'));
+        return view('tables.products.data', compact('products', 'category', 'product'));
     }
 
     /**

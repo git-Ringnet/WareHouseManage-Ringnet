@@ -60,6 +60,8 @@ class AddProductController extends Controller
         $product_trademark = $request->product_trademark;
         $product_qty = $request->product_qty;
         $product_price = $request->product_price;
+        $product_tax = $request->product_tax;
+        $product_total = $request->product_total;
         for ($i = 0; $i < count($products_id); $i++) {
             $pro = new ProductOrders();
             $pro->product_id = $product_id[$i];
@@ -71,6 +73,8 @@ class AddProductController extends Controller
             $pro->product_qty = $product_qty[$i];
             $pro->product_price = $product_price[$i];
             $pro->order_id =  $order->id;
+            $pro->product_tax =  $product_tax[$i];
+            $pro->product_total = $product_total[$i];
             $pro->save();
             $product_SN = $request->{'product_SN' . $i};
             if (count($product_SN) > 1) {
@@ -89,6 +93,7 @@ class AddProductController extends Controller
                 $Seri->save();
             }
         }
+        return redirect()->route('insertProduct.index')->with('section', 'Đơn hàng đã được duyệt');
     }
 
     /**
@@ -128,8 +133,6 @@ class AddProductController extends Controller
         $data = $request->all();
         $updateOrder = Orders::find($id);
         if ($updateOrder->order_status == 0) {
-            $updateOrder->order_status = 1;
-            $updateOrder->save();
             $product_id = $request->product_id;
             $products_id = $request->products_id;
             $product_name = $request->product_name;
@@ -138,9 +141,12 @@ class AddProductController extends Controller
             $product_trademark = $request->product_trademark;
             $product_qty = $request->product_qty;
             $product_price = $request->product_price;
+            $product_tax = $request->product_tax;
+            $product_total = $request->product_total;
             for ($i = 0; $i < count($product_name); $i++) {
                 $check = Product::where('product_name', $product_name[$i])->where('product_category', $product_category[$i])->first();
                 $serinumbers = Serinumbers::where('product_id', $product_id[$i])->get();
+                $products = Products::where('id', $products_id[$i])->first();
                 if ($check == NULL) {
                     $pro = new Product();
                     $pro->products_id = $products_id[$i];
@@ -150,12 +156,18 @@ class AddProductController extends Controller
                     $pro->product_trademark = $product_trademark[$i];
                     $pro->product_qty = $product_qty[$i];
                     $pro->product_price = $product_price[$i];
+                    $pro->tax = $product_tax[$i];
+                    $pro->total = $product_total[$i];
                     $pro->save();
                     foreach ($serinumbers as $serinumber) {
                         $serinumber->product_id = $pro->id;
                         $serinumber->seri_status = 1;
                         $serinumber->save();
                     }
+                    $products->inventory += $product_qty[$i];
+                    $products->price_inventory += $product_total[$i];
+                    $products->price_avg = ($products->price_inventory / $products->inventory); 
+                    $products->update();
                 } else {
                     $updateProduct = Product::findOrFail($check->id);
                     $updateProduct->product_qty += $product_qty[$i];
@@ -166,8 +178,15 @@ class AddProductController extends Controller
                         $serinumber->seri_status = 1;
                         $serinumber->save();
                     }
+                    $products->inventory += $product_qty[$i];
+                    $products->price_inventory += $product_total[$i];
+                    $products->price_avg = ($products->price_inventory / $products->inventory); 
+                    $products->update();
                 }
             }
+            $updateOrder->order_status = 1;
+            $updateOrder->save();
+            return redirect()->route('insertProduct.index')->with('section', 'Đơn hàng đã được duyệt');
         } else {
             return redirect()->route('insertProduct.index')->with('section', 'Đơn hàng đã được duyệt');
         }

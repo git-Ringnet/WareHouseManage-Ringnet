@@ -19,6 +19,9 @@ class Products extends Model
         'products_code',
         'products_name',
         'products_trademark',
-        'products_description'
+        'products_description',
+        'inventory',
+        'price_avg',
+        'price_inventory',
     ];
 }
