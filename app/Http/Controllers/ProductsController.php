@@ -6,7 +6,6 @@ use App\Models\Category;
 use App\Models\Details;
 use App\Models\Product;
 use App\Models\Products;
-use App\Models\Provides;
 use App\Models\Serinumbers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -20,11 +19,90 @@ class ProductsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    private $products;
+    public function __construct()
     {
-        //lấy tất cả products
-        $products = Products::all();
+        $this->products = new Products();
+    }
+    public function index(Request $request)
+    {
         //lấy tất cả id của products đưa vào mảng
+
+        $sortType = $request->input('sort-type');
+
+        $sortBy = $request->input('sort-by');
+
+        $allowSort = ['asc', 'desc'];
+
+        if (!empty($sortType) && in_array($sortType, $allowSort)) {
+
+
+            if ($sortType == 'desc') {
+                $sortType = 'asc';
+            } else {
+                $sortType = 'desc';
+            }
+        } else {
+            $sortType = 'asc';
+        }
+
+        $sortByArr = [
+            'sortBy' => $sortBy,
+            'sortType' => $sortType
+        ];
+
+        $filters = [];
+        $status = [];
+        $categoryarr = [];
+        $string = array();
+        $class = '';
+
+        if (!empty($request->status)) {
+            $statusValues = [1 => 'Active', 0 => 'Disable'];
+            $status = $request->input('status', []);
+            $statusLabels = array_map(function ($value) use ($statusValues) {
+                return $statusValues[$value];
+            }, $status);
+            array_push($string, ['label' => 'Trạng thái', 'values' => $statusLabels, 'class' => 'status']);
+        }
+
+
+        $keywords = null;
+
+        if (!empty($request->keywords)) {
+            $keywords = $request->keywords;
+        }
+
+        $categories = Category::all();
+        $categoryarr = [];
+        if (!empty($request->categoryarr)) {
+            $categoryarr = $request->input('categoryarr', []);
+            if (!empty($categoryarr)) {
+                $selectedCategory = Category::whereIn('id', $categoryarr)->get();
+                $selectedCategory = $selectedCategory->pluck('category_name')->toArray();
+            }
+            array_push($string, ['label' => 'Danh mục', 'values' => $selectedCategory, 'class' => 'category']);
+        }
+
+
+        $quantity = null;
+        $quantity = $request->input('quantity');
+
+        
+      
+
+        if (!empty($request->quantity)) {
+            $quantity = $request->quantity;
+            $filters[] = ['SUM(product.product_qty)', '<', $quantity];
+        }
+
+        $products = $this->products->getAllProducts($filters, $status, $categoryarr, $keywords, $sortByArr);
+
+
+
+        // dd($request->quantity);
+        // dd($request->comparison_operator);
+
         $productIds = array();
         foreach ($products as $value) {
             array_push($productIds, $value->id);
@@ -55,6 +133,7 @@ class ProductsController extends Controller
                 DB::raw('SUM(product.product_qty * product.product_price) / SUM(product.product_qty) as price_avg'),
             )
             ->get();
+        // dd($qtySums);
         //lấy tất cả sản phẩm con theo sản phẩm lớn
         $product =  DB::table('product')
             ->join('products', 'product.products_id', '=', 'products.id')
@@ -78,8 +157,9 @@ class ProductsController extends Controller
                 DB::raw('SUM(product.product_qty * product.product_price) as total')
             )
             ->get();
-        $category = Category::all();
-        return view('tables.data', compact('products', 'category', 'qtySums', 'product'));
+     
+
+        return view('tables.data', compact('products', 'categories', 'qtySums', 'product', 'sortType', 'string'));
     }
 
     /**
@@ -149,7 +229,7 @@ class ProductsController extends Controller
     public function show($id)
     {
         $products = Products::findOrFail($id);
-        $provide = Provides::all();
+        $provide = products::all();
         return view('tables.test', compact('products', 'provide'));
     }
 
@@ -216,7 +296,7 @@ class ProductsController extends Controller
     public function insertProducts()
     {
         $cate = Category::all();
-        return view('tables.insertProducts',compact('cate'));
+        return view('tables.insertProducts', compact('cate'));
     }
     public function storeProducts(Request $request)
     {

@@ -3,7 +3,7 @@
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
   <section class="content-header">
-    <div class="container-fluid pt-5">
+    <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
           <a href="{{route('admin.add')}}" class="btn btn-primary">
@@ -21,7 +21,7 @@
             <div class="col-2">
               <button type="submit" class="btn btn-primary btn-block">Tìm kiếm</button>
             </div>
-            <a class="btn btn-primary ml-auto" href="{{route('admin.userslist')}}">Tắt bộ lọc</a>
+            <a class="btn btn-primary ml-auto delete-filter" href="{{route('admin.userslist')}}">Tắt bộ lọc</a>
           </div>
           <div class="row d-flex justify-contents-center align-items-center mr-auto pt-2">
             <div class="icon-filter mr-3 ml-1">
@@ -36,8 +36,8 @@
               <span class="filter-group">
                 {{ $item['label'] }}:
                 <span class="filter-values">{{ implode(', ', $item['values']) }}</span>
-                <a class="delete-item delete-btn-{{ $item['class'] }}"><svg width="24" height="24"
-                    viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <a class="delete-item delete-btn-{{ $item['class'] }}"><svg width="24" height="24" viewBox="0 0 24 24"
+                    fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M18 18L6 6" stroke="#555555" stroke-width="1.5" stroke-linecap="round"
                       stroke-linejoin="round" />
                     <path d="M18 6L6 18" stroke="#555555" stroke-width="1.5" stroke-linecap="round"
@@ -93,14 +93,14 @@
                   </div>
                   <ul class="ks-cboxtags p-0 m-0 px-2">
                     <li>
-                      <input type="checkbox" id="status_active" {{ in_array(0, $status) ? 'checked' : '' }}
-                        name="status[]" value="0">
+                      <input type="checkbox" id="status_active" {{ in_array(1, $status) ? 'checked' : '' }}
+                        name="status[]" value="1">
                       <label for="status_active">Active</label>
                     </li>
                     <li>
-                      <input type="checkbox" id="status_inactive" {{ in_array(1, $status) ? 'checked' : '' }}
-                        name="status[]" value="1">
-                      <label for="status_inactive">Inactive</label>
+                      <input type="checkbox" id="status_inactive" {{ in_array(0, $status) ? 'checked' : '' }}
+                        name="status[]" value="0">
+                      <label for="status_inactive">Disable</label>
                     </li>
                   </ul>
                 </div>
@@ -136,13 +136,14 @@
                 </div>
               </div>
             </div>
-        </form>
+            {{--
+        </form> --}}
       </div>
     </div><!-- /.container-fluid -->
   </section>
-  @if (session('msg'))
+  {{-- @if (session('msg'))
   <div class="alert alert-success">{{session('msg')}}</div>
-  @endif
+  @endif --}}
   <!-- Main content -->
   <section class="content">
     <div class="container-fluid">
@@ -154,42 +155,51 @@
               <table id="example2" class="table table-bordered table-hover">
                 <thead>
                   <tr>
-                    <th>Mã nhân viên<a href="?sort-by=id&sort-type={{$sortType}}"><svg width="24" height="24"
-                          viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path fill-rule="evenodd" clip-rule="evenodd"
-                            d="M11.5006 5C11.6332 5 11.7604 5.05268 11.8542 5.14645C11.948 5.24021 12.0006 5.36739 12.0006 5.5V17.293L15.1466 14.146C15.2405 14.0521 15.3679 13.9994 15.5006 13.9994C15.6334 13.9994 15.7607 14.0521 15.8546 14.146C15.9485 14.2399 16.0013 14.3672 16.0013 14.5C16.0013 14.6328 15.9485 14.7601 15.8546 14.854L11.8546 18.854C11.8082 18.9006 11.753 18.9375 11.6923 18.9627C11.6315 18.9879 11.5664 19.0009 11.5006 19.0009C11.4349 19.0009 11.3697 18.9879 11.309 18.9627C11.2483 18.9375 11.1931 18.9006 11.1466 18.854L7.14663 14.854C7.05274 14.7601 7 14.6328 7 14.5C7 14.3672 7.05274 14.2399 7.14663 14.146C7.24052 14.0521 7.36786 13.9994 7.50063 13.9994C7.63341 13.9994 7.76075 14.0521 7.85463 14.146L11.0006 17.293V5.5C11.0006 5.36739 11.0533 5.24021 11.1471 5.14645C11.2408 5.05268 11.368 5 11.5006 5Z"
-                            fill="#555555" />
-                        </svg>
-                      </a></th>
-                    <th> Họ tên nhân viên<a href="?sort-by=name&sort-type={{$sortType}}"><svg width="24" height="24"
-                          viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path fill-rule="evenodd" clip-rule="evenodd"
-                            d="M11.5006 5C11.6332 5 11.7604 5.05268 11.8542 5.14645C11.948 5.24021 12.0006 5.36739 12.0006 5.5V17.293L15.1466 14.146C15.2405 14.0521 15.3679 13.9994 15.5006 13.9994C15.6334 13.9994 15.7607 14.0521 15.8546 14.146C15.9485 14.2399 16.0013 14.3672 16.0013 14.5C16.0013 14.6328 15.9485 14.7601 15.8546 14.854L11.8546 18.854C11.8082 18.9006 11.753 18.9375 11.6923 18.9627C11.6315 18.9879 11.5664 19.0009 11.5006 19.0009C11.4349 19.0009 11.3697 18.9879 11.309 18.9627C11.2483 18.9375 11.1931 18.9006 11.1466 18.854L7.14663 14.854C7.05274 14.7601 7 14.6328 7 14.5C7 14.3672 7.05274 14.2399 7.14663 14.146C7.24052 14.0521 7.36786 13.9994 7.50063 13.9994C7.63341 13.9994 7.76075 14.0521 7.85463 14.146L11.0006 17.293V5.5C11.0006 5.36739 11.0533 5.24021 11.1471 5.14645C11.2408 5.05268 11.368 5 11.5006 5Z"
-                            fill="#555555" />
-                        </svg>
-                      </a></th>
-                    <th>Vai trò</th>
-                    <th>Số điện thoại<a href="?sort-by=phonenumber&sort-type={{$sortType}}"><svg width="24" height="24"
-                          viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path fill-rule="evenodd" clip-rule="evenodd"
-                            d="M11.5006 5C11.6332 5 11.7604 5.05268 11.8542 5.14645C11.948 5.24021 12.0006 5.36739 12.0006 5.5V17.293L15.1466 14.146C15.2405 14.0521 15.3679 13.9994 15.5006 13.9994C15.6334 13.9994 15.7607 14.0521 15.8546 14.146C15.9485 14.2399 16.0013 14.3672 16.0013 14.5C16.0013 14.6328 15.9485 14.7601 15.8546 14.854L11.8546 18.854C11.8082 18.9006 11.753 18.9375 11.6923 18.9627C11.6315 18.9879 11.5664 19.0009 11.5006 19.0009C11.4349 19.0009 11.3697 18.9879 11.309 18.9627C11.2483 18.9375 11.1931 18.9006 11.1466 18.854L7.14663 14.854C7.05274 14.7601 7 14.6328 7 14.5C7 14.3672 7.05274 14.2399 7.14663 14.146C7.24052 14.0521 7.36786 13.9994 7.50063 13.9994C7.63341 13.9994 7.76075 14.0521 7.85463 14.146L11.0006 17.293V5.5C11.0006 5.36739 11.0533 5.24021 11.1471 5.14645C11.2408 5.05268 11.368 5 11.5006 5Z"
-                            fill="#555555" />
-                        </svg>
-                      </a></th>
-                    <th>Email<a href="?sort-by=email&sort-type={{$sortType}}"><svg width="24" height="24"
-                          viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path fill-rule="evenodd" clip-rule="evenodd"
-                            d="M11.5006 5C11.6332 5 11.7604 5.05268 11.8542 5.14645C11.948 5.24021 12.0006 5.36739 12.0006 5.5V17.293L15.1466 14.146C15.2405 14.0521 15.3679 13.9994 15.5006 13.9994C15.6334 13.9994 15.7607 14.0521 15.8546 14.146C15.9485 14.2399 16.0013 14.3672 16.0013 14.5C16.0013 14.6328 15.9485 14.7601 15.8546 14.854L11.8546 18.854C11.8082 18.9006 11.753 18.9375 11.6923 18.9627C11.6315 18.9879 11.5664 19.0009 11.5006 19.0009C11.4349 19.0009 11.3697 18.9879 11.309 18.9627C11.2483 18.9375 11.1931 18.9006 11.1466 18.854L7.14663 14.854C7.05274 14.7601 7 14.6328 7 14.5C7 14.3672 7.05274 14.2399 7.14663 14.146C7.24052 14.0521 7.36786 13.9994 7.50063 13.9994C7.63341 13.9994 7.76075 14.0521 7.85463 14.146L11.0006 17.293V5.5C11.0006 5.36739 11.0533 5.24021 11.1471 5.14645C11.2408 5.05268 11.368 5 11.5006 5Z"
-                            fill="#555555" />
-                        </svg>
-                      </a></th>
-                    <th>Trạng thái<a href="?sort-by=status&sort-type={{$sortType}}"><svg width="24" height="24"
-                          viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path fill-rule="evenodd" clip-rule="evenodd"
-                            d="M11.5006 5C11.6332 5 11.7604 5.05268 11.8542 5.14645C11.948 5.24021 12.0006 5.36739 12.0006 5.5V17.293L15.1466 14.146C15.2405 14.0521 15.3679 13.9994 15.5006 13.9994C15.6334 13.9994 15.7607 14.0521 15.8546 14.146C15.9485 14.2399 16.0013 14.3672 16.0013 14.5C16.0013 14.6328 15.9485 14.7601 15.8546 14.854L11.8546 18.854C11.8082 18.9006 11.753 18.9375 11.6923 18.9627C11.6315 18.9879 11.5664 19.0009 11.5006 19.0009C11.4349 19.0009 11.3697 18.9879 11.309 18.9627C11.2483 18.9375 11.1931 18.9006 11.1466 18.854L7.14663 14.854C7.05274 14.7601 7 14.6328 7 14.5C7 14.3672 7.05274 14.2399 7.14663 14.146C7.24052 14.0521 7.36786 13.9994 7.50063 13.9994C7.63341 13.9994 7.76075 14.0521 7.85463 14.146L11.0006 17.293V5.5C11.0006 5.36739 11.0533 5.24021 11.1471 5.14645C11.2408 5.05268 11.368 5 11.5006 5Z"
-                            fill="#555555" />
-                        </svg>
-                      </a></th>
+                    <input type="hidden" id="sortByInput" name="sort-by" value="id">
+                    <input type="hidden" id="sortTypeInput" name="sort-type" value="{{$sortType}}">
+                    <th>
+                      <span class="d-flex">
+                        <a href="#" class="sort-link" data-sort-by="id" data-sort-type="{{$sortType}}"><button class="btn-sort"
+                            type="submit">Mã nhân viên</button></a>
+                            <div class="icon" id="icon-id"></div>
+                      </span>
+                    </th>
+                    <th>
+                      <span class="d-flex">
+                        <a href="#" class="sort-link" data-sort-by="name" data-sort-type="{{$sortType}}"><button class="btn-sort"
+                            type="submit">Họ tên nhân viên</button></a>
+                            <div class="icon" id="icon-name"></div>
+                      </span>
+                    </th>
+                    <th>
+                      <span class="d-flex">
+                        <a href="#" class="sort-link" data-sort-by="roleid" data-sort-type="{{$sortType}}"><button class="btn-sort"
+                            type="submit">Vai trò</button></a>
+                            <div class="icon" id="icon-roleid"></div>
+                      </span>
+                    </th>
+                    <th>
+                      <span class="d-flex">
+                        <a href="#" class="sort-link" data-sort-by="phonenumber" data-sort-type="{{$sortType}}"><button class="btn-sort"
+                            type="submit">Số điện thoại</button></a>
+                            <div class="icon" id="icon-phonenumber"></div>
+                      </span>
+                    </th>
+                    <th>
+                      <span class="d-flex">
+                        <a href="#" class="sort-link" data-sort-by="email" data-sort-type="{{$sortType}}"><button class="btn-sort"
+                            type="submit">Email</button></a>
+                            <div class="icon" id="icon-email"></div>
+                      </span>
+                    </th>
+                    <th>
+                      <span class="d-flex">
+                        <a href="#" class="sort-link" data-sort-by="status" data-sort-type="{{$sortType}}"><button class="btn-sort"
+                            type="submit">Trạng thái</button></a>
+                            <div class="icon" id="icon-status"></div>
+                      </span>
+                    </th>
+                    </form>
                     <th></th>
                   </tr>
                 </thead>
@@ -206,16 +216,16 @@
                         class="btn btn-sm btn-secondary">Active</button>':' <button type="submit"
                         class="btn btn-sm btn-primary">Disable</button>'!!}</td> --}}
                     <td>
-                      <select class="p-1 px-2 status-select" style="border: 1px solid #D6D6D6; <?php if ($value->status == 0) {
+                      <select class="p-1 px-2 status-select" style="border: 1px solid #D6D6D6; <?php if ($value->status == 1) {
                               echo 'color:#09BD3C;';
                           } else {
                               echo 'color:#D6D6D6';
                           }
                           ?>" id="{{$value->id }}" name="status-select">
-                        <option value="0" <?php if ($value->status == 0) {
+                        <option value="1" <?php if ($value->status == 1) {
                           echo 'selected';
                           } ?>>Active</option>
-                        <option value="1" <?php if ($value->status == 1) {
+                        <option value="0" <?php if ($value->status == 0) {
                           echo 'selected';
                           } ?>>Disable</option>
                       </select>
@@ -325,6 +335,52 @@ $(document).ready(function() {
             document.getElementById('search-filter').submit();
         });
     });
+
+    $(document).ready(function() {
+    // Khôi phục trạng thái icon khi tải lại trang
+    restoreIconState();
+    localStorage.clear();
+    $('.sort-link').on('click', function() {
+      var sortBy = $(this).data('sort-by');
+      var sortType = $(this).data('sort-type');
+      var iconId = 'icon-' + sortBy;
+      var iconElement = $('#' + iconId);
+      
+      var svgHTML = "<svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>";
+        if (sortType === 'desc') {
+          svgHTML += "<path fill-rule='evenodd' clip-rule='evenodd' d='M11.5006 5C11.6332 5 11.7604 5.05268 11.8542 5.14645C11.948 5.24021 12.0006 5.36739 12.0006 5.5V17.293L15.1466 14.146C15.2405 14.0521 15.3679 13.9994 15.5006 13.9994C15.6334 13.9994 15.7607 14.0521 15.8546 14.146C15.9485 14.2399 16.0013 14.3672 16.0013 14.5C16.0013 14.6328 15.9485 14.7601 15.8546 14.854L11.8546 18.854C11.8082 18.9006 11.753 18.9375 11.6923 18.9627C11.6315 18.9879 11.5664 19.0009 11.5006 19.0009C11.4349 19.0009 11.3697 18.9879 11.309 18.9627C11.2483 18.9375 11.1931 18.9006 11.1466 18.854L7.14663 14.854C7.05274 14.7601 7 14.6328 7 14.5C7 14.3672 7.05274 14.2399 7.14663 14.146C7.24052 14.0521 7.36786 13.9994 7.50063 13.9994C7.63341 13.9994 7.76075 14.0521 7.85463 14.146L11.0006 17.293V5.5C11.0006 5.36739 11.0533 5.24021 11.1471 5.14645C11.2408 5.05268 11.368 5 11.5006 5Z' fill='#555555'/>";
+        }else {
+          svgHTML += "<path fill-rule='evenodd' clip-rule='evenodd' d='M11.5006 19.0009C11.6332 19.0009 11.7604 18.9482 11.8542 18.8544C11.948 18.7607 12.0006 18.6335 12.0006 18.5009V6.70789L15.1466 9.85489C15.2405 9.94878 15.3679 10.0015 15.5006 10.0015C15.6334 10.0015 15.7607 9.94878 15.8546 9.85489C15.9485 9.76101 16.0013 9.63367 16.0013 9.50089C16.0013 9.36812 15.9485 9.24078 15.8546 9.14689L11.8546 5.14689C11.8082 5.10033 11.753 5.06339 11.6923 5.03818C11.6315 5.01297 11.5664 5 11.5006 5C11.4349 5 11.3697 5.01297 11.309 5.03818C11.2483 5.06339 11.1931 5.10033 11.1466 5.14689L7.14663 9.14689C7.10014 9.19338 7.06327 9.24857 7.03811 9.30931C7.01295 9.37005 7 9.43515 7 9.50089C7 9.63367 7.05274 9.76101 7.14663 9.85489C7.24052 9.94878 7.36786 10.0015 7.50063 10.0015C7.63341 10.0015 7.76075 9.94878 7.85463 9.85489L11.0006 6.70789V18.5009C11.0006 18.6335 11.0533 18.7607 11.1471 18.8544C11.2408 18.9482 11.368 19.0009 11.5006 19.0009Z' fill='#555555'/>"
+        }svgHTML += "</svg>";
+          // Hiển thị icon tương ứng
+      iconElement.html(svgHTML);
+      // Hiển thị icon tương ứng
+      iconElement.html(svgHTML);
+      
+      // Lưu trạng thái của mũi tên vào localStorage
+      localStorage.setItem(iconId, svgHTML);
+
+      // Cập nhật giá trị sort-by và sort-type
+      $('#sortByInput').val(sortBy);
+      $('#sortTypeInput').val(sortType);
+    });
+
+    function restoreIconState() {
+      // Khôi phục trạng thái của mũi tên từ localStorage
+      $('.icon').each(function() {
+        var iconId = $(this).attr('id');
+        var iconHTML = localStorage.getItem(iconId);
+        if (iconHTML) {
+          $(this).html(iconHTML);
+        }
+      });
+    }
+  });
+
+  // Xóa tất cả các dữ liệu trong Local Storage
+  $('.delete-filter').on('click', function() {
+  localStorage.clear();
+});
 </script>
 </body>
 
