@@ -22,6 +22,39 @@ class UsersController extends Controller
         $title = "Danh sách người dùng";
 
 
+
+        $allRoles = new Roles;
+        $allRoles = $allRoles->getAll();
+
+        $filters = [];
+        $status = [];
+        $roles = [];
+        $string = array();
+        $class = '';
+
+        if (!empty($request->status)) {
+            $statusValues = [1 => 'Active', 0 => 'Disable'];
+            $status = $request->input('status', []);
+            $statusLabels = array_map(function ($value) use ($statusValues) {
+                return $statusValues[$value];
+            }, $status);
+            array_push($string, ['label' => 'Trạng thái', 'values' => $statusLabels, 'class' => 'status']);
+        }
+
+        if (!empty($request->roles)) {
+            $roles = $request->input('roles', []);
+            if (!empty($roles)) {
+                $selectedRoles = Roles::whereIn('id', $roles)->get();
+                $selectedRoleNames = $selectedRoles->pluck('name')->toArray();
+            }
+            array_push($string, ['label' => 'Vai trò', 'values' => $selectedRoleNames, 'class' => 'roles']);
+        }
+
+        $keywords = null;
+
+        if (!empty($request->keywords)) {
+            $keywords = $request->keywords;
+        }
         //Xử lí sắp xếp 
         $sortType = $request->input('sort-type');
 
@@ -30,8 +63,6 @@ class UsersController extends Controller
         $allowSort = ['asc', 'desc'];
 
         if (!empty($sortType) && in_array($sortType, $allowSort)) {
-
-
             if ($sortType == 'desc') {
                 $sortType = 'asc';
             } else {
@@ -41,43 +72,7 @@ class UsersController extends Controller
             $sortType = 'asc';
         }
 
-        $sortByArr = [
-            'sortBy' => $sortBy,
-            'sortType' => $sortType
-        ];
-        $allRoles = new Roles;
-        $allRoles = $allRoles->getAll();
-
-        $filters = [];
-        $status = [];
-        $roles = [];
-        $string = array();
-        $class='';
-
-        if (!empty($request->status)) {
-            $statusValues = [0 => 'Active', 1 => 'Disable'];
-            $status = $request->input('status', []);
-            $statusLabels = array_map(function ($value) use ($statusValues) {
-                return $statusValues[$value];
-            }, $status);
-            array_push($string, ['label' => 'Trạng thái', 'values' => $statusLabels,'class' => 'status']);
-        }
-        
-        if (!empty($request->roles)) {
-            $roles = $request->input('roles', []);
-            if (!empty($roles)) {
-                $selectedRoles = Roles::whereIn('id', $roles)->get();
-                $selectedRoleNames = $selectedRoles->pluck('name')->toArray();
-            }
-            array_push($string, ['label' => 'Vai trò', 'values' => $selectedRoleNames,'class' => 'roles']);
-        }
-
-        $keywords = null;
-
-        if (!empty($request->keywords)) {
-            $keywords = $request->keywords;
-        }
-        $usersList = $this->users->getAllUsers($filters, $status, $roles, $keywords, $sortByArr);
+        $usersList = $this->users->getAllUsers($filters, $status, $roles, $keywords, $sortBy, $sortType);
         return view('admin/userslist', compact('title', 'usersList', 'sortType', 'allRoles', 'string'));
     }
 
@@ -106,17 +101,18 @@ class UsersController extends Controller
     public function edit(Request $request)
     {
         $id = $request->id;
-        // $id = session('id');
-        // $request->session()->put('id', $id);
+        $request->session()->put('id', $id);
         $user = User::where('id', $id)->get();
         // $userDetail = $userDetail[0];
         $userDetail = User::find($id);
         $roles = new Roles;
+        // dd($id);
         return view('admin/edituser', ['useredit' => $user], compact('userDetail'))->with('roles', $roles->getAll());
     }
     public function editUser(UserRequest $request)
     {
-        $id = $request->id;
+        $id = session('id');
+
         $data = [
             'name' => $request->name,
             'email' => $request->email,
@@ -125,8 +121,10 @@ class UsersController extends Controller
             'phonenumber' => $request->phonenumber,
             'status' => $request->status,
         ];
+        // dd($id);
+
         $this->users->updateUser($data, $id);
-        return back();
+        return redirect(route('admin.userslist'))->with('msg', 'Sửa người dùng thành công');
     }
     public function deleteUser(Request $request)
     {

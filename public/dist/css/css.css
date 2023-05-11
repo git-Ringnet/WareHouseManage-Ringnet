@@ -1,6 +1,8 @@
 #status-options,
-#role-options {
-    width: 210px;
+#role-options,
+#category-options,
+#quantity-options {
+    width: 230px;
     background-color: #fff;
     border-radius: 8px;
 }
@@ -32,14 +34,35 @@ li {
     background: #FFFFFF;
     border-radius: 8px;
 }
-.filter-options{
+
+.filter-options {
     position: relative;
 }
-.block-options{
+
+.block-options {
     position: absolute;
     z-index: 1024;
 }
-.delete-item{
+
+.delete-item {
     cursor: pointer;
 }
 
+.input-group {
+    display: flex;
+    align-items: center;
+}
+
+.comparison_operator,
+.quantity-input {
+    padding: 10px;
+    border: 1px solid #D6D6D6;
+    border-radius: 8px;
+}
+
+.btn-sort {
+    background: none;
+    border: none;
+    padding: 0;
+    font-weight: 600;
+}

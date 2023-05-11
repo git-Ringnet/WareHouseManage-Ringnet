@@ -66,41 +66,39 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
-    public function getAllUsers($filter = [], $status = [], $roles = [], $keywords = null, $sortByArr = null)
+    public function getAllUsers($filter = [], $status = [], $roles = [], $keywords = null, $orderBy = null, $orderType = null)
     {
         // $users = DB::select('SELECT * FROM users');
         $users = DB::table($this->table)
             ->select('users.*', 'roles.name as role_name')
             ->join('roles', 'users.roleid', '=', 'roles.id');
 
-
-        $orderBy = 'users.created_at';
-        $orderType = 'desc';
-        if (!empty($sortByArr) && is_array($sortByArr)) {
-            if (!empty($sortByArr['sortBy']) && !empty($sortByArr['sortType'])) {
-                $orderBy = trim($sortByArr['sortBy']);
-                $orderType = trim($sortByArr['sortType']);
-            }
-        }
-        $users = $users->orderBy($orderBy, $orderType);
+        // Các điều kiện tìm kiếm và lọc dữ liệu ở đây
 
         if (!empty($filter)) {
             $users = $users->where($filter);
         }
+
         if (!empty($status)) {
             $users = $users->whereIn('status', $status);
         }
+
         if (!empty($roles)) {
             $users = $users->whereIn('roleid', $roles);
         }
+
         if (!empty($keywords)) {
             $users = $users->where(function ($query) use ($keywords) {
                 $query->orWhere('users.name', 'like', '%' . $keywords . '%');
                 $query->orWhere('users.email', 'like', '%' . $keywords . '%');
             });
         }
+
+        if(!empty($orderBy) && !empty($orderType)) {
+            $users = $users->orderBy($orderBy, $orderType);
+        }
         // dd($users);
-        $users = $users->orderBy('users.created_at', 'asc')->paginate(5);
+        $users = $users->paginate(5);
         return $users;
     }
     public function addUser($data)
