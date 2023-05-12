@@ -101,6 +101,13 @@ if (strpos($current_url, 'admin') !== false) {
 } else {
     $user_class = '';
 }
+//exports
+if (strpos($current_url, 'exports') !== false) {
+    $export_class = 'active';
+    $index_class = '';
+} else {
+    $export_class = '';
+}
 ?>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -294,7 +301,7 @@ if (strpos($current_url, 'admin') !== false) {
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ asset('./exports') }}" class="nav-link <?php echo $export_class; ?>">
                                 <i class="nav-icon fas fa-table"></i>
                                 <p>
                                     Xuất hàng

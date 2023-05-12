@@ -140,8 +140,8 @@
               <td> <input type="text" name="product_trademark[]" value=" {{$pro->product_trademark}}"> </td>
               <td> <input type="text" name="product_qty[]" value="{{$pro->product_qty}}"> </td>
               <td> <input type="text" name="product_price[]" value="{{$pro->product_price}}"> </td>
-              <td><input type="text" name="product_price[]"> </td>
-              <td><input type="text" name="product_price[]"> </td>
+              <td><input type="text" name="product_tax[]" value="{{$pro->product_tax}}"></td>
+              <td><input type="text" name="product_total[]" value="{{$pro->product_total}}"></td>
               <td><button name="btn_add_SN[]" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal{{$pro->id}}">SN</button></td>
               <td><a href="javascript:;" class="btn btn-info deleteRow">-</a></td>
             </tr>

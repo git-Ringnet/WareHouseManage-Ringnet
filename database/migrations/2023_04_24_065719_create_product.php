@@ -22,6 +22,8 @@ class CreateProduct extends Migration
             $table->string('product_trademark')->nullable();
             $table->integer('product_qty')->nullable();
             $table->integer('product_price')->nullable();
+            $table->string('tax')->nullable();
+            $table->string('total')->nullable();
             $table->timestamps();
         });
     }

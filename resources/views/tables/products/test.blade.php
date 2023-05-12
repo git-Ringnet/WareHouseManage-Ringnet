@@ -77,7 +77,7 @@
             </div>
           </div>
           <h3>Chủng loại sản phẩm</h3>
-          <form action="{{route('data.store')}}" method="post" id="myform">
+          <form action="{{route('data.store')}}" method="post" id="myform" style="overflow-x: scroll">
             @csrf
             <table class="table" id="myTable">
               <thead>

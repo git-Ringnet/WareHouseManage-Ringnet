@@ -45,7 +45,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($qtySums as $value)
+                                    @foreach ($products as $value)
                                         <tr>
                                             <td scope="row">{{ $value->id }}</td>
                                             <th><a
@@ -64,19 +64,19 @@
                                             </td>
                                             <td>{{ $value->products_trademark }}</td>
                                             <td>
-                                                @if ($value->qty_sum == 0)
+                                                @if ($value->inventory == 0)
                                                     0
                                                 @endif
-                                                {{ $value->qty_sum }}
+                                                {{ $value->inventory }}
                                             </td>
                                             <td>{{ number_format($value->price_avg) }}</td>
-                                            <td>{{ number_format($value->total_sum) }}</td>
+                                            <td>{{ number_format($value->price_inventory) }}</td>
                                             <td class="p-0 text-center">
-                                                @if ($value->qty_sum == 0)
+                                                @if ($value->inventory == 0)
                                                     <div class="py-1 rounded mt-3 pb-1 bg-danger">
                                                         <span class="text-light">Hết hàng</span>
                                                     </div>
-                                                @elseif($value->qty_sum < 5)
+                                                @elseif($value->inventory < 5)
                                                     <div class="py-1 rounded mt-3 pb-1 bg-warning">
                                                         <span class="text-light">Gần hết</span>
                                                     </div>

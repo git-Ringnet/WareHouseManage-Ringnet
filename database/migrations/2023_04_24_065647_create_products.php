@@ -21,6 +21,9 @@ class CreateProducts extends Migration
             $table->integer('ID_category');
             $table->string('products_trademark');
             $table->text('products_description')->nullable();
+            $table->integer('inventory')->nullable();
+            $table->integer('price_avg')->nullable();
+            $table->integer('price_inventory')->nullable();
             $table->timestamps();
         });
     }

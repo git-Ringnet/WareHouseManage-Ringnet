@@ -24,6 +24,8 @@ return new class extends Migration
             $table->integer('product_qty')->nullable();
             $table->integer('product_price')->nullable();
             $table->integer('order_id');
+            $table->integer('product_tax')->nullable();
+            $table->integer('product_total')->nullable();
             $table->timestamps();
         });
     }
