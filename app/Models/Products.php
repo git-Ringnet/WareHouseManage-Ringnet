@@ -28,39 +28,11 @@ class Products extends Model
         'price_avg',
         'price_inventory',
     ];
-    public function getAllProducts($filter = [], $status = [], $categoryarr = [], $keywords = null, $sortByArr = null)
+    public function getAllProducts($id = null, $code = null, $products_name = null, $categoryarr, $keywords = null, $sortByArr = null)
     {
         //lấy tất cả products
-        $products = Products::all();
-        
-        $productIds = array();
-        foreach ($products as $value) {
-            array_push($productIds, $value->id);
-        }
-        $products = DB::table('products')
-            ->leftjoin('product', 'product.products_id', '=', 'products.id')
-            ->whereIn('products.id', $productIds)
-            ->groupBy(
-                'products.id',
-                'products.products_code',
-                'products.products_name',
-                'products.ID_category',
-                'products.products_trademark',
-                'products.created_at',
-                'products.updated_at',
-            )
-            ->select(
-                'products.id',
-                'products.products_code',
-                'products.products_name',
-                'products.ID_category',
-                'products.products_trademark',
-                'products.created_at',
-                'products.updated_at',
-                DB::raw('SUM(product.product_qty * product.product_price) as total_sum'),
-                DB::raw('SUM(product.product_qty) as qty_sum'),
-                DB::raw('SUM(product.product_qty * product.product_price) / SUM(product.product_qty) as price_avg'),
-            );
+        $products = DB::table($this->table)
+            ->select('products.*');
 
 
         $orderBy = 'created_at';
@@ -73,16 +45,26 @@ class Products extends Model
         }
         $products = $products->orderBy($orderBy, $orderType);
 
-        if (!empty($filter)) {
-            $products = $products->where($filter);
+
+        if (!empty($id)) {
+            $products = $products->where('products.id', $id);
+        }
+        if (!empty($code)) {
+            $products = $products->where(function ($query) use ($code) {
+                $query->orWhere('products_code', 'like', '%' . $code . '%');
+            });
+        }
+        if (!empty($products_name)) {
+            $products = $products->where(function ($query) use ($products_name) {
+                $query->orWhere('products_name', 'like', '%' . $products_name . '%');
+            });
         }
         if (!empty($status)) {
             $products = $products->whereIn('guest_status', $status);
         }
         if (!empty($categoryarr)) {
-            $products = $products->whereIn('products.id', $categoryarr);
+            $products = $products->whereIn('products.ID_category', $categoryarr);
         }
-
 
         if (!empty($keywords)) {
             $products = $products->where(function ($query) use ($keywords) {
@@ -90,6 +72,7 @@ class Products extends Model
                 $query->orWhere('products_code', 'like', '%' . $keywords . '%');
             });
         }
+        // dd($products);
         $products = $products->orderBy('products.created_at', 'asc')->paginate(5);
         return $products;
     }
