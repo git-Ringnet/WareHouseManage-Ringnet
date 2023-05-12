@@ -108,7 +108,7 @@
             <input type="text" id="provide_phone" name="provide_phone" value="{{$provide_order[0]->provide_phone}}">
           </div>
         </div>
-      </div>`
+      </div>
     </section>
     <!-- Main content -->
     <section class="content">
