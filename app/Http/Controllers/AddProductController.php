@@ -237,6 +237,8 @@ class AddProductController extends Controller
         $product_trademark = $request->product_trademark;
         $product_qty = $request->product_qty;
         $product_price = $request->product_price;
+        $product_tax = $request->product_tax;
+        $product_total = $request->product_total;
         // duyệt qua mảng product
         for ($i = 0; $i < count($products_id); $i++) {
             // Thêm sản phẩm vào bảng ProductOrders
@@ -250,6 +252,8 @@ class AddProductController extends Controller
             $pro->product_qty = $product_qty[$i];
             $pro->product_price = $product_price[$i];
             $pro->order_id =  $order->id;
+            $pro->product_tax = $product_tax[$i];
+            $pro->product_total = $product_total[$i];
             $pro->save();
             // Tìm SN theo id sản phẩm
             $product_SN = $request->{'product_SN' . $i};
@@ -282,6 +286,8 @@ class AddProductController extends Controller
             $product_trademark = $request->product_trademark;
             $product_qty = $request->product_qty;
             $product_price = $request->product_price;
+            $product_tax = $request->product_tax;
+            $product_total = $request->product_total;
             for ($i = 0; $i < count($product_name); $i++) {
                 $check = Product::where('product_name', $product_name[$i])->where('product_category', $product_category[$i])->first();
                 $serinumbers = Serinumbers::where('product_id', $product_id[$i])->get();
@@ -294,6 +300,8 @@ class AddProductController extends Controller
                     $pro->product_trademark = $product_trademark[$i];
                     $pro->product_qty = $product_qty[$i];
                     $pro->product_price = $product_price[$i];
+                    $pro->product_tax = $product_tax[$i];
+                    $pro->product_total = $product_total[$i];
                     $pro->save();
                     foreach ($serinumbers as $serinumber) {
                         $serinumber->product_id = $pro->id;
@@ -350,6 +358,8 @@ class AddProductController extends Controller
         $product_trademark = $request->product_trademark;
         $product_qty = $request->product_qty;
         $product_price = $request->product_price;
+        $product_tax = $request->product_tax;
+        $product_total = $request->product_total;
         for ($i = 0; $i < count($product_id); $i++) {
             $check = ProductOrders::where('id', $product_id[$i])->first();
             if ($check == null) {
@@ -363,6 +373,8 @@ class AddProductController extends Controller
                 $pro->product_qty = $product_qty[$i];
                 $pro->product_price = $product_price[$i];
                 $pro->order_id =  $request->order_id;
+                $pro->product_tax = $product_tax[$i];
+                $pro->product_total = $product_total[$i];
                 $pro->save();
                 $product_SN = $request->{'product_SN' . $i};
                 if (count($product_SN) > 1) {
@@ -388,6 +400,8 @@ class AddProductController extends Controller
                 $check->product_trademark = $product_trademark[$i];
                 $check->product_qty = $product_qty[$i];
                 $check->product_price = $product_price[$i];
+                $check->product_tax = $product_tax[$i];
+                $check->product_total = $product_total[$i];
                 $check->save();
             }
         }
