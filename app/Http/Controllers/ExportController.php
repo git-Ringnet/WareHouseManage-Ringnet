@@ -95,27 +95,25 @@ class ExportController extends Controller
         $customer = Guests::findOrFail($data['idCustomer']);
         return $customer;
     }
-    public function updateCustomer(Request $request, $id)
+    public function updateCustomer(Request $request)
     {
         $data = $request->all();
-
-        $customer = Guests::find($id);
-
-        if ($customer) {
-            $customer->guest_name = $data['guest_name'];
-            $customer->guest_addressInvoice = $data['guest_addressInvoice'];
-            $customer->guest_code = $data['guest_code'];
-            $customer->guest_addressDeliver = $data['guest_addressDeliver'];
-            $customer->guest_receiver = $data['guest_receiver'];
-            $customer->guest_phoneReceiver = $data['guest_phoneReceiver'];
-            $customer->guest_represent = $data['guest_represent'];
-            $customer->guest_email = $data['guest_email'];
-            $customer->guest_phone = $data['guest_phone'];
-            $customer->guest_pay = $data['guest_pay'];
-            $customer->guest_payTerm = $data['guest_payTerm'];
-            $customer->guest_note = $data['guest_note'];
-
-            $customer->save();
-        }
+        $update_guest = Guests::findOrFail($data['id']);
+        $update_guest->guest_name = $data['guest_name'];
+        $update_guest->guest_addressInvoice = $data['guest_addressInvoice'];
+        $update_guest->guest_code = $data['guest_code'];
+        $update_guest->guest_addressDeliver = $data['guest_addressDeliver'];
+        $update_guest->guest_receiver = $data['guest_receiver'];
+        $update_guest->guest_represent = $data['guest_represent'];
+        $update_guest->guest_email = $data['guest_email'];
+        $update_guest->guest_phone = $data['guest_phone'];
+        $update_guest->guest_pay = $data['guest_pay'];
+        $update_guest->guest_payTerm = $data['guest_payTerm'];
+        $update_guest->guest_note = $data['guest_note'];
+        $update_guest->save();
+    }
+    public function addCustomer(Request $request)
+    {
+        
     }
 }

@@ -47,7 +47,7 @@ Route::get('/updatestatus', [GuestsController::class, 'updateStatus'])->name('up
 Route::resource('exports', ExportController::class);
 Route::get('/searchExport', [ExportController::class, 'searchExport'])->name('searchExport');
 //cap nhat thong tin khach hang
-Route::put('/customers/{id}', [ExportController::class, 'updateCustomer'])->name('updateCustomer');
+Route::get('/customers', [ExportController::class, 'updateCustomer'])->name('updateCustomer');
 
 //
 Route::resource('data',ProductsController::class);

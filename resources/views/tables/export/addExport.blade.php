@@ -342,22 +342,22 @@
                 },
                 success: function(data) {
                     $('#data-container').html(
-                        '<form id="update-form" action="{{ route("updateCustomer",1) }}" method="POST">' +
-                        '@csrf' + '@method("PUT")' +
                         '<div class="border-bottom p-3 d-flex justify-content-between">' +
                         '<b>Thông tin khách hàng</b>' +
-                        '<button type="submit" class="btn btn-primary">' +
+                        '<button id="btn-customer" class="btn btn-primary">' +
                         '<img src="../dist/img/icon/Union.png">' +
                         '<span>Lưu thông tin</span></button></div>' +
                         '<div class="row p-3">' +
                         '<div class="col-sm-6">' +
                         '<div class="form-group">' +
+                        '<input type="text" hidden class="form-control" id="id" name="id" value="' +
+                        data.id + '" required>' +
                         '<label for="congty">Công ty:</label>' +
-                        '<input type="text" class="form-control" placeholder="Nhập thông tin" name="guest_name" value="' +
+                        '<input type="text" class="form-control" id="guest_name" placeholder="Nhập thông tin" name="guest_name" value="' +
                         data.guest_name + '" required>' +
                         '</div>' + '<div class="form-group">' +
                         '<label>Địa chỉ xuất hóa đơn:</label>' +
-                        '<input type="text" class="form-control" placeholder="Nhập thông tin" name="guest_addressInvoice" value="' +
+                        '<input type="text" class="form-control" placeholder="Nhập thông tin" id="guest_addressInvoice" name="guest_addressInvoice" value="' +
                         data.guest_addressInvoice + '">' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">Mã số thuế:</label>' +
@@ -365,42 +365,42 @@
                         data.guest_code + '">' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">Địa chỉ giao hàng:</label>' +
-                        '<input type="text" class="form-control" placeholder="Nhập thông tin" name="guest_addressDeliver" value="' +
+                        '<input type="text" class="form-control" id="guest_code" placeholder="Nhập thông tin" name="guest_addressDeliver" value="' +
                         data.guest_addressDeliver + '">' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">Người nhận hàng:</label>' +
-                        '<input type="text" class="form-control" placeholder="Nhập thông tin" name="guest_receiver" value="' +
+                        '<input type="text" class="form-control" id="guest_addressDeliver" placeholder="Nhập thông tin" name="guest_receiver" value="' +
                         data.guest_receiver + '">' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">SĐT người nhận:</label>' +
-                        '<input type="text" class="form-control" placeholder="Nhập thông tin" name="guest_phoneReceiver" value="' +
+                        '<input type="text" class="form-control" id="guest_receiver" placeholder="Nhập thông tin" name="guest_phoneReceiver" value="' +
                         data.guest_phoneReceiver + '">' +
                         '</div>' + '</div>' + '<div class="col-sm-6">' +
                         '<div class="form-group">' +
                         '<label for="email">Người đại diện:</label>' +
-                        '<input type="text" class="form-control" placeholder="Nhập thông tin" name="guest_represent" value="' +
+                        '<input type="text" class="form-control" id="guest_represent" placeholder="Nhập thông tin" name="guest_represent" value="' +
                         data.guest_represent + '" required>' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">Email:</label>' +
-                        '<input type="email" class="form-control" placeholder="Nhập thông tin" name="guest_email" value="' +
+                        '<input type="email" class="form-control" id="guest_email" placeholder="Nhập thông tin" name="guest_email" value="' +
                         data.guest_email + '" required>' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">Số điện thoại:</label>' +
-                        '<input type="text" class="form-control" placeholder="Nhập thông tin" name="guest_phone" value="' +
+                        '<input type="text" class="form-control" id="guest_phone" placeholder="Nhập thông tin" name="guest_phone" value="' +
                         data.guest_phone + '" required>' +
                         '</div>' + '<div class="form-group">' +
                         ' <label for="email">Hình thức thanh toán:</label>' +
-                        '<input type="text" class="form-control" placeholder="Nhập thông tin" name="guest_pay" value="' +
+                        '<input type="text" class="form-control" id="guest_pay" placeholder="Nhập thông tin" name="guest_pay" value="' +
                         data.guest_pay + '">' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">Điều kiện thanh toán:</label>' +
-                        '<input type="text" class="form-control" placeholder="Nhập thông tin" name="guest_payTerm" value="' +
+                        '<input type="text" class="form-control" id="guest_payTerm" placeholder="Nhập thông tin" name="guest_payTerm" value="' +
                         data.guest_payTerm + '">' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">Ghi chú:</label>' +
-                        '<input type="text" class="form-control" placeholder="Nhập thông tin" name="guest_note" value="' +
+                        '<input type="text" class="form-control" id="guest_note" placeholder="Nhập thông tin" name="guest_note" value="' +
                         data.guest_note + '">' +
-                        '</div></div></div></form>'
+                        '</div></div></div>'
                     );
                 }
             });
@@ -408,30 +408,45 @@
     });
     //lấy tên sản phẩm từ mã sản phẩm
     //cập nhật thông tin khách hàng
-    $(document).ready(function() {
-        $('#update-form').on('submit', function(event) {
-            event.preventDefault();
-
-            var formData = $(this).serialize();
-            var url = $(this).attr('action');
-
-            $.ajax({
-                url: url,
-                type: 'PUT',
-                data: formData,
-                success: function(response) {
-                    // Hiển thị thông báo thành công
-                    alert('Update success!');
-                },
-                error: function(error) {
-                    // Hiển thị thông báo lỗi
-                    alert('Update failed!');
-                }
-            });
-        });
-    });
+    $(document).on('click', '#btn-customer', function(e) {
+        e.preventDefault();
+        var id = $('#id').val();
+        var guest_name = $('#guest_name').val();
+        var guest_addressInvoice = $('#guest_addressInvoice').val();
+        var guest_code = $('#guest_code').val();
+        var guest_addressDeliver = $('#guest_addressDeliver').val();
+        var guest_receiver = $('#guest_receiver').val();
+        var guest_represent = $('#guest_represent').val();
+        var guest_email = $('#guest_email').val();
+        var guest_phone = $('#guest_phone').val();
+        var guest_pay = $('#guest_pay').val();
+        var guest_payTerm = $('#guest_payTerm').val();
+        var guest_note = $('#guest_note').val();
+        
+        $.ajax({
+            url: "{{ route('updateCustomer') }}",
+            type: "get",
+            data: {
+                id: id,
+                guest_name,
+                guest_addressInvoice,
+                guest_code,
+                guest_addressDeliver,
+                guest_receiver,
+                guest_represent,
+                guest_email,
+                guest_phone,
+                guest_pay,
+                guest_payTerm,
+                guest_note
+            },
+            success: function(data) {
+                alert('Lưu thông tin thành công');
+            }
+        })
+    })
     //thêm thông tin khách hàng
-
+    
 </script>
 </body>
 
