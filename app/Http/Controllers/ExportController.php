@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Exports;
+use App\Models\Guests;
+use App\Models\Products;
 use Illuminate\Http\Request;
 
 class ExportController extends Controller
@@ -15,8 +17,8 @@ class ExportController extends Controller
     public function index()
     {
         $export = Exports::leftjoin('guests', 'exports.guest_id', '=', 'guests.id')
-        ->leftjoin('users', 'exports.user_id', '=', 'users.id')
-        ->paginate(10);
+            ->leftjoin('users', 'exports.user_id', '=', 'users.id')
+            ->paginate(10);
         return view('tables.export.exports', compact('export'));
     }
 
@@ -27,7 +29,9 @@ class ExportController extends Controller
      */
     public function create()
     {
-        return view('tables.export.addExport');
+        $products = Products::all();
+        $customer = Guests::all();
+        return view('tables.export.addExport', compact('customer', 'products'));
     }
 
     /**
@@ -84,5 +88,34 @@ class ExportController extends Controller
     public function destroy($id)
     {
         //
+    }
+    public function searchExport(Request $request)
+    {
+        $data = $request->all();
+        $customer = Guests::findOrFail($data['idCustomer']);
+        return $customer;
+    }
+    public function updateCustomer(Request $request, $id)
+    {
+        $data = $request->all();
+
+        $customer = Guests::find($id);
+
+        if ($customer) {
+            $customer->guest_name = $data['guest_name'];
+            $customer->guest_addressInvoice = $data['guest_addressInvoice'];
+            $customer->guest_code = $data['guest_code'];
+            $customer->guest_addressDeliver = $data['guest_addressDeliver'];
+            $customer->guest_receiver = $data['guest_receiver'];
+            $customer->guest_phoneReceiver = $data['guest_phoneReceiver'];
+            $customer->guest_represent = $data['guest_represent'];
+            $customer->guest_email = $data['guest_email'];
+            $customer->guest_phone = $data['guest_phone'];
+            $customer->guest_pay = $data['guest_pay'];
+            $customer->guest_payTerm = $data['guest_payTerm'];
+            $customer->guest_note = $data['guest_note'];
+
+            $customer->save();
+        }
     }
 }
