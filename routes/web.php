@@ -49,8 +49,10 @@ Route::get('/data_edit',[ProductsController::class,'edit_ajax'])->name('ajax');
 Route::get('/data_show',[ProductsController::class,'show_ajax'])->name('show_ajax');
 
 Route::get('/show_provide',[AddProductController::class,'show_provide'])->name('show_provide');
+Route::get('/update_provide',[AddProductController::class,'update_provide'])->name('update_provide');
 Route::resource('insertProduct',AddProductController::class);
-
+Route::POST('/addBillEdit',[AddProductController::class,'addBillEdit'])->name('addBillEdit');
+Route::post('/insertProductP',[AddProductController::class,'addBill'])->name('addBill');
 
 Route::get('/simple', function () {
     return view('tables.simple');

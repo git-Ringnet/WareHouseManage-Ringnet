@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('products_id');
             $table->string('product_name');
             $table->string('product_category')->nullable();
-            $table->integer('product_unit')->nullable();
+            $table->string('product_unit')->nullable();
             $table->string('product_trademark')->nullable();
             $table->integer('product_qty')->nullable();
             $table->integer('product_price')->nullable();
