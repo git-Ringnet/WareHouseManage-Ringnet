@@ -126,8 +126,21 @@ class AddProductController extends Controller
         $provide = Provides::all();
         $products = Products::all();
         $lastId = DB::table('productorders')->latest('id')->value('id');
-        $product_order = DB::table('productorders')->where('order_id', $order->id)->get();
-        return view('tables.order.edit', compact('provide', 'order', 'product_order', 'provide_order', 'lastId', 'products'));
+        $product_order = DB::table('productorders')->where('order_id', $order->id)->get(); 
+        $productIds = array();
+        foreach ($product_order as $value) {
+            array_push($productIds, $value->id);
+        }
+        $seri =  DB::table('serinumbers')
+        ->join('productorders', 'serinumbers.product_id', '=', 'productorders.id')
+        ->whereIn('productorders.id', $productIds)->get();
+        //  $product_order = ProductOrders::with('serinumbes')->where('product_id',$order->id)->get();
+        // foreach ($product_order as $va){
+        //     foreach ($va->serinumbes as $seri) {
+        //         var_dump($seri);
+        //     } die();
+        // }
+        return view('tables.order.edit', compact('provide', 'order', 'product_order', 'provide_order', 'lastId', 'products','seri'));
     }
 
     /**
