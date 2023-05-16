@@ -48,6 +48,12 @@ Route::resource('exports', ExportController::class);
 Route::get('/searchExport', [ExportController::class, 'searchExport'])->name('searchExport');
 //cap nhat thong tin khach hang
 Route::get('/customers', [ExportController::class, 'updateCustomer'])->name('updateCustomer');
+//them thong tin khach hang
+Route::get('addguest', [ExportController::class, 'addCustomer'])->name('addCustomer');
+//lấy thông tin sản phẩm từ mã sản phẩm cha
+Route::get('nameProducts', [ExportController::class, 'nameProduct'])->name('nameProduct');
+//lấy thông tin sản phẩm từ tên sản phẩm
+Route::get('getProduct', [ExportController::class, 'getProduct'])->name('getProduct');
 
 //
 Route::resource('data',ProductsController::class);

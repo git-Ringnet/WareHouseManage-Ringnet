@@ -19,14 +19,13 @@ class productExportSeeder extends Seeder
             [
                 'products_id' => '1',
                 'product_id' => '1',
+                'export_id' => '1',
                 'product_name' => 'Cisco Catalyst 9800-CL Wireless Controler for Cloud',
                 'product_qty' => 3,
                 'product_price' => 4000000,
                 'product_note' => 'Bảo hành 12 tháng',
                 'product_tax' => '10',
                 'product_total' => 12000000,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
         ]);
     }

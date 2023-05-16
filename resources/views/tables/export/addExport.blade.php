@@ -133,73 +133,76 @@
                 </div>
             </div>
 
-            {{-- Form thông tin khách hàng --}}
+            <form action="{{ route('exports.store') }}" method="POST">
+                @csrf
+                {{-- Form thông tin khách hàng --}}
+                <section id="data-container" class="container-fluid bg-white"></section>
+                {{-- Bảng thêm sản phẩm --}}
+                <div class="mt-4" style="overflow-x: scroll;">
+                    <table class="table">
+                        <thead class="bg-white border-0 rounded-top">
+                            <tr>
+                                <th><input type="checkbox"></th>
+                                <th>STT</th>
+                                <th>Mã sản phẩm</th>
+                                <th>Tên sản phẩm</th>
+                                <th>ĐVT</th>
+                                <th>Số lượng</th>
+                                <th>Giá bán</th>
+                                <th>Ghi chú</th>
+                                <th>Thuế</th>
+                                <th>Thành tiền</th>
+                                <th>S/N</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr id="dynamic-fields"></tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <span class="btn btn-secondary" id="add-field-btn">Thêm sản phẩm</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
-            <section id="data-container" class="container-fluid bg-white"></section>
-
-            {{-- Bảng thêm sản phẩm --}}
-            <div class="mt-4" style="overflow-x: scroll;">
-                <table class="table">
-                    <thead class="bg-white border-0 rounded-top">
-                        <tr>
-                            <th><input type="checkbox"></th>
-                            <th>STT</th>
-                            <th>Mã sản phẩm</th>
-                            <th>Tên sản phẩm</th>
-                            <th>ĐVT</th>
-                            <th>Số lượng</th>
-                            <th>Giá bán</th>
-                            <th>Ghi chú</th>
-                            <th>Thuế</th>
-                            <th>Thành tiền</th>
-                            <th>S/N</th>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr id="dynamic-fields"></tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td>
-                                <span class="btn btn-secondary" id="add-field-btn">Thêm sản phẩm</span>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="row position-relative">
-                <div class="col-sm-6"></div>
-                <div class="col-sm-6">
-                    <div class="mt-4 w-50" style="float: right;">
-                        <div class="d-flex justify-content-between">
-                            <span><b>Giá trị trước thuế:</b></span>
-                            <span>55.000.000đ</span>
-                        </div>
-                        <div class="d-flex justify-content-between mt-2">
-                            <span><b>Thuế VAT:</b></span>
-                            <span>5.500.000đ</span>
-                        </div>
-                        <div class="d-flex justify-content-between mt-2">
-                            <span class="text-primary">Giảm giá:</span>
-                            <span>0đ</span>
-                        </div>
-                        <div class="d-flex justify-content-between mt-2">
-                            <span class="text-primary">Phí vận chuyển:</span>
-                            <span>0đ</span>
-                        </div>
-                        <div class="d-flex justify-content-between mt-2">
-                            <span class="text-lg"><b>Tổng cộng:</b></span>
-                            <span><b>60.500.000đ</b></span>
+                <div class="row position-relative">
+                    <div class="col-sm-6"></div>
+                    <div class="col-sm-6">
+                        <div class="mt-4 w-50" style="float: right;">
+                            <div class="d-flex justify-content-between">
+                                <span><b>Giá trị trước thuế:</b></span>
+                                <span>{{ number_format(55000000) }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mt-2">
+                                <span><b>Thuế VAT:</b></span>
+                                <span>{{ number_format(5500000) }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mt-2">
+                                <span class="text-primary">Giảm giá:</span>
+                                <span>0đ</span>
+                            </div>
+                            <div class="d-flex justify-content-between mt-2">
+                                <span class="text-primary">Phí vận chuyển:</span>
+                                <span>0đ</span>
+                            </div>
+                            <div class="d-flex justify-content-between mt-2">
+                                <span class="text-lg"><b>Tổng cộng:</b></span>
+                                <span><b id="spanValue" data-value="60500000">{{ number_format(60500000) }}</b></span>
+                                <input type="text" hidden name="totalValue" value="" id="inputValue">
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="text-center mt-4">
-                <span class="btn btn-primary mr-1">Lưu</span>
-                <span class="btn border-secondary ml-1">Hủy</span>
-            </div>
+                <div class="text-center mt-4">
+                    <button type="submit" name="action" class="btn btn-primary mr-1">Lưu</button>
+                    <span class="btn border-secondary ml-1">Hủy</span>
+                </div>
+            </form>
         </div>
     </section>
 </div>
@@ -214,48 +217,49 @@
         $('#data-container').html(
             '<div class="border-bottom p-3 d-flex justify-content-between">' +
             '<b>Thông tin khách hàng</b>' +
-            '<a href="#" class="btn btn-primary">' +
+            '<button id="btn-addCustomer" class="btn btn-primary">' +
             '<img src="../dist/img/icon/Union.png">' +
-            '<span>Lưu thông tin</span></a></div>' +
+            '<span>Lưu thông tin</span></button></div>' +
             '<div class="row p-3">' +
             '<div class="col-sm-6">' +
             '<div class="form-group">' +
+            '<input type="text" hidden class="form-control" name="id" value="{{ (int) $guest_id->id }}">' +
             '<label for="congty">Công ty:</label>' +
-            '<input type="text" class="form-control" id="email" placeholder="Nhập thông tin" name="guest_name" value="">' +
+            '<input type="text" class="form-control" id="guest_name" placeholder="Nhập thông tin" name="guest_name" value="">' +
             '</div>' + '<div class="form-group">' +
             '<label>Địa chỉ xuất hóa đơn:</label>' +
-            '<input type="text" class="form-control" id="email" placeholder="Nhập thông tin" name="guest_addressInvoice" value="">' +
+            '<input type="text" class="form-control" id="guest_addressInvoice" placeholder="Nhập thông tin" name="guest_addressInvoice" value="">' +
             '</div>' + '<div class="form-group">' +
             '<label for="email">Mã số thuế:</label>' +
-            '<input type="text" class="form-control" id="email" placeholder="Nhập thông tin" name="guest_code" value="">' +
+            '<input type="text" class="form-control" id="guest_code" placeholder="Nhập thông tin" name="guest_code" value="">' +
             '</div>' + '<div class="form-group">' +
             '<label for="email">Địa chỉ giao hàng:</label>' +
-            '<input type="text" class="form-control" id="email" placeholder="Nhập thông tin" name="guest_addressDeliver" value="">' +
+            '<input type="text" class="form-control" id="guest_addressDeliver" placeholder="Nhập thông tin" name="guest_addressDeliver" value="">' +
             '</div>' + '<div class="form-group">' +
             '<label for="email">Người nhận hàng:</label>' +
-            '<input type="text" class="form-control" id="email" placeholder="Nhập thông tin" name="guest_receiver" value="">' +
+            '<input type="text" class="form-control" id="guest_receiver" placeholder="Nhập thông tin" name="guest_receiver" value="">' +
             '</div>' + '<div class="form-group">' +
             '<label for="email">SĐT người nhận:</label>' +
-            '<input type="text" class="form-control" id="email" placeholder="Nhập thông tin" name="guest_phoneReceiver" value="">' +
+            '<input type="text" class="form-control" id="guest_phoneReceiver" placeholder="Nhập thông tin" name="guest_phoneReceiver" value="">' +
             '</div>' + '</div>' + '<div class="col-sm-6">' +
             '<div class="form-group">' +
             '<label for="email">Người đại diện:</label>' +
-            '<input type="text" class="form-control" id="email" placeholder="Nhập thông tin" name="guest_represent" value="">' +
+            '<input type="text" class="form-control" id="guest_represent" placeholder="Nhập thông tin" name="guest_represent" value="">' +
             '</div>' + '<div class="form-group">' +
             '<label for="email">Email:</label>' +
-            '<input type="email" class="form-control" id="email" placeholder="Nhập thông tin" name="guest_email" value="">' +
+            '<input type="email" class="form-control" id="guest_email" placeholder="Nhập thông tin" name="guest_email" value="">' +
             '</div>' + '<div class="form-group">' +
             '<label for="email">Số điện thoại:</label>' +
-            '<input type="text" class="form-control" id="email" placeholder="Nhập thông tin" name="guest_phone" value="">' +
+            '<input type="text" class="form-control" id="guest_phone" placeholder="Nhập thông tin" name="guest_phone" value="">' +
             '</div>' + '<div class="form-group">' +
             ' <label for="email">Hình thức thanh toán:</label>' +
-            '<input type="text" class="form-control" id="email" placeholder="Nhập thông tin" name="guest_pay" value="">' +
+            '<input type="text" class="form-control" id="guest_pay" placeholder="Nhập thông tin" name="guest_pay" value="">' +
             '</div>' + '<div class="form-group">' +
             '<label for="email">Điều kiện thanh toán:</label>' +
-            '<input type="text" class="form-control" id="email" placeholder="Nhập thông tin" name="guest_payTerm" value="">' +
+            '<input type="text" class="form-control" id="guest_payTerm" placeholder="Nhập thông tin" name="guest_payTerm" value="">' +
             '</div>' + '<div class="form-group">' +
             '<label for="email">Ghi chú:</label>' +
-            '<input type="text" class="form-control" id="email" placeholder="Nhập thông tin" name="guest_note" value="">' +
+            '<input type="text" class="form-control" id="guest_note" placeholder="Nhập thông tin" name="guest_note" value="">' +
             '</div></div></div>'
         );
     });
@@ -272,24 +276,28 @@
                 "text": `${fieldCounter}`
             });
             const TenInput = $("<td>" +
-                "<select name='' class='p-1 pr-5'>" +
+                "<select id='maProduct' class='p-1 pr-5'>" +
                 '@foreach ($products as $value)' +
                 "<option value='{{ $value->id }}'>{{ $value->products_code }}</option>" +
                 '@endforeach' +
                 "</select>"
             );
             const ProInput = $("<td>" +
-                "<select name='' class='p-1 pr-5'>" +
-                '@foreach ($products as $value)' +
-                "<option value='{{ $value->id }}'>{{ $value->products_code }}</option>" +
-                '@endforeach' +
-                "</select>"
-            );
-            const dvtInput = $("<td><input type='text'></td>");
-            const slInput = $("<td><input type='text'></td>");
-            const giaInput = $("<td><input type='text'></td>");
-            const ghichuInput = $("<td><input type='text'></td>");
-            const thueInput = $("<td><input type='text'></td>");
+                "<select class='child-select p-1 pr-5'>" +
+                "<option value=''>Lựa chọn sản phẩm</option>" +
+                "</select>" +
+                "</td>");
+            const dvtInput = $("<td><input type='text' id='product_unit' class='product_unit'></td>");
+            const slInput = $("<td><input type='text' id='product_qty' class='quantity-input'></td>");
+            const giaInput = $("<td><input type='text' id='product_price'></td>");
+            const ghichuInput = $("<td><input type='text' id=''></td>");
+            const thueInput = $("<td>" +
+                "<select class='p-1 pr-5'>" +
+                "<option value='0'>0%</option>" +
+                "<option value='8'>8%</option>" +
+                "<option value='10'>10%</option>" +
+                "</select>" +
+                "</td>");
             const thanhTienInput = $("<td><span class='px-2'>12.000.000</span></td>");
             const sn = $("<td><img src='../dist/img/icon/list.png'></td>");
             const info = $("<td><img src='../dist/img/icon/Group.png'></td>");
@@ -334,6 +342,7 @@
     $(document).ready(function() {
         $('.search-info').click(function() {
             var idCustomer = $(this).attr('id');
+            $('#radio1').prop('checked', true);
             $.ajax({
                 url: '{{ route('searchExport') }}',
                 type: 'GET',
@@ -361,19 +370,19 @@
                         data.guest_addressInvoice + '">' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">Mã số thuế:</label>' +
-                        '<input type="text" class="form-control" placeholder="Nhập thông tin" name="guest_code" value="' +
+                        '<input type="text" class="form-control" id="guest_code" placeholder="Nhập thông tin" name="guest_code" value="' +
                         data.guest_code + '">' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">Địa chỉ giao hàng:</label>' +
-                        '<input type="text" class="form-control" id="guest_code" placeholder="Nhập thông tin" name="guest_addressDeliver" value="' +
+                        '<input type="text" class="form-control" id="guest_addressDeliver" placeholder="Nhập thông tin" name="guest_addressDeliver" value="' +
                         data.guest_addressDeliver + '">' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">Người nhận hàng:</label>' +
-                        '<input type="text" class="form-control" id="guest_addressDeliver" placeholder="Nhập thông tin" name="guest_receiver" value="' +
+                        '<input type="text" class="form-control" id="guest_receiver" placeholder="Nhập thông tin" name="guest_receiver" value="' +
                         data.guest_receiver + '">' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">SĐT người nhận:</label>' +
-                        '<input type="text" class="form-control" id="guest_receiver" placeholder="Nhập thông tin" name="guest_phoneReceiver" value="' +
+                        '<input type="text" class="form-control" id="guest_phoneReceiver" placeholder="Nhập thông tin" name="guest_phoneReceiver" value="' +
                         data.guest_phoneReceiver + '">' +
                         '</div>' + '</div>' + '<div class="col-sm-6">' +
                         '<div class="form-group">' +
@@ -416,13 +425,14 @@
         var guest_code = $('#guest_code').val();
         var guest_addressDeliver = $('#guest_addressDeliver').val();
         var guest_receiver = $('#guest_receiver').val();
+        var guest_phoneReceiver = $('#guest_phoneReceiver').val();
         var guest_represent = $('#guest_represent').val();
         var guest_email = $('#guest_email').val();
         var guest_phone = $('#guest_phone').val();
         var guest_pay = $('#guest_pay').val();
         var guest_payTerm = $('#guest_payTerm').val();
         var guest_note = $('#guest_note').val();
-        
+
         $.ajax({
             url: "{{ route('updateCustomer') }}",
             type: "get",
@@ -433,6 +443,7 @@
                 guest_code,
                 guest_addressDeliver,
                 guest_receiver,
+                guest_phoneReceiver,
                 guest_represent,
                 guest_email,
                 guest_phone,
@@ -446,7 +457,105 @@
         })
     })
     //thêm thông tin khách hàng
-    
+    $(document).on('click', '#btn-addCustomer', function(e) {
+        e.preventDefault();
+        var guest_name = $('#guest_name').val();
+        var guest_addressInvoice = $('#guest_addressInvoice').val();
+        var guest_code = $('#guest_code').val();
+        var guest_addressDeliver = $('#guest_addressDeliver').val();
+        var guest_receiver = $('#guest_receiver').val();
+        var guest_phoneReceiver = $('#guest_phoneReceiver').val();
+        var guest_represent = $('#guest_represent').val();
+        var guest_email = $('#guest_email').val();
+        var guest_phone = $('#guest_phone').val();
+        var guest_pay = $('#guest_pay').val();
+        var guest_payTerm = $('#guest_payTerm').val();
+        var guest_note = $('#guest_note').val();
+
+        $.ajax({
+            url: "{{ route('addCustomer') }}",
+            type: "get",
+            data: {
+                guest_name,
+                guest_addressInvoice,
+                guest_code,
+                guest_addressDeliver,
+                guest_receiver,
+                guest_phoneReceiver,
+                guest_represent,
+                guest_email,
+                guest_phone,
+                guest_pay,
+                guest_payTerm,
+                guest_note
+            },
+            success: function(data) {
+                alert('Thêm thông tin thành công');
+            }
+        })
+    })
+    //lấy thông tin sản phẩm từ mã sản phẩm
+    $(document).ready(function() {
+        $(document).on('change', '#maProduct', function() {
+            var idProducts = $(this).val();
+            var childSelect = $(this).closest('tr').find('.child-select');
+            if (idProducts) {
+                $.ajax({
+                    url: "{{ route('nameProduct') }}",
+                    type: "get",
+                    data: {
+                        idProducts: idProducts,
+                    },
+                    success: function(response) {
+                        // Update the child select with the new options
+                        childSelect.empty();
+                        childSelect.append('<option value="">Lựa chọn sản phẩm</option>');
+                        $.each(response, function(index, product) {
+                            childSelect.append(
+                                `<option value="${product.id}">${product.product_name}</option>`
+                            );
+                        });
+                    }
+                });
+            } else {
+                // Clear the child select if no parent is selected
+                childSelect.empty();
+                childSelect.append('<option value="">Lựa chọn sản phẩm</option>');
+            }
+        });
+    });
+    //lấy thông tin sản phẩm con từ tên sản phẩm con
+    $(document).on('change', '.child-select', function() {
+        var idProduct = $(this).val();
+        var productUnitElement = $(this).closest('tr').find('.product_unit');
+        if (idProduct) {
+            $.ajax({
+                url: "{{ route('getProduct') }}",
+                type: "get",
+                data: {
+                    idProduct: idProduct,
+                },
+                success: function(response) {
+                    productUnitElement.val(response.product_unit);
+                },
+            });
+        }
+    });
+    //Kiểm tra số lượng rỗng hoặc nhỏ hơn hoặc bằng 0
+    $(document).on('blur', '.quantity-input', function() {
+        var input = $(this);
+        var quantity = input.val();
+        if (isNaN(quantity) || quantity <= 0) {
+            alert('Số lượng không hợp lệ');
+        }
+    });
+    //gán tổng số tiền vào input
+    document.addEventListener('DOMContentLoaded', function() {
+        var spanElement = document.getElementById('spanValue');
+        var inputElement = document.getElementById('inputValue');
+        var value = spanElement.getAttribute('data-value');
+        inputElement.value = value;
+    });
 </script>
 </body>
 

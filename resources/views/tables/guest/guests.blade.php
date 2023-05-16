@@ -62,17 +62,17 @@
                                             <td>{{ $item->guest_email }}</td>
                                             <td>
                                                 <select class="p-1 px-2 status-select"
-                                                    style="border: 1px solid #D6D6D6; <?php if ($item->guest_status == 0) {
+                                                    style="border: 1px solid #D6D6D6; <?php if ($item->guest_status == 1) {
                                                         echo 'color:#09BD3C;';
                                                     } else {
                                                         echo 'color:#D6D6D6';
                                                     }
                                                     ?>"
                                                     id="{{ $item->id }}" name="status-select">
-                                                    <option value="0" <?php if ($item->guest_status == 0) {
+                                                    <option value="1" <?php if ($item->guest_status == 1) {
                                                         echo 'selected';
                                                     } ?>>Active</option>
-                                                    <option value="1" <?php if ($item->guest_status == 1) {
+                                                    <option value="0" <?php if ($item->guest_status == 0) {
                                                         echo 'selected';
                                                     } ?>>Disable</option>
                                                 </select>

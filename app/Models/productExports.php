@@ -5,13 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Exports extends Model
+class productExports extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'guest_id',
-        'user_id',
-        'total',
-        'export_status',
+        'products_id', 'product_id', 'product_name', 'product_qty', 'product_price', 'product_note',
+        'product_tax','product_total'
     ];
 }
