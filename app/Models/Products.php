@@ -28,7 +28,7 @@ class Products extends Model
         'price_avg',
         'price_inventory',
     ];
-    public function getAllProducts($id = null, $code = null, $products_name = null, $categoryarr, $keywords = null, $sortByArr = null)
+    public function getAllProducts($filters = [], $status = [], $code = null, $products_name = null, $categoryarr, $trademarkarr, $keywords = null, $sortByArr = null)
     {
         //lấy tất cả products
         $products = DB::table($this->table)
@@ -45,10 +45,10 @@ class Products extends Model
         }
         $products = $products->orderBy($orderBy, $orderType);
 
-
-        if (!empty($id)) {
-            $products = $products->where('products.id', $id);
+        if (!empty($filters)) {
+            $products = $products->where($filters);
         }
+
         if (!empty($code)) {
             $products = $products->where(function ($query) use ($code) {
                 $query->orWhere('products_code', 'like', '%' . $code . '%');
@@ -59,11 +59,11 @@ class Products extends Model
                 $query->orWhere('products_name', 'like', '%' . $products_name . '%');
             });
         }
-        if (!empty($status)) {
-            $products = $products->whereIn('guest_status', $status);
-        }
         if (!empty($categoryarr)) {
             $products = $products->whereIn('products.ID_category', $categoryarr);
+        }
+        if (!empty($trademarkarr)) {
+            $products = $products->whereIn('products.products_trademark', $trademarkarr);
         }
 
         if (!empty($keywords)) {
@@ -72,8 +72,17 @@ class Products extends Model
                 $query->orWhere('products_code', 'like', '%' . $keywords . '%');
             });
         }
+        if (in_array("0", $status)) {
+            $products = $products->orWhere('inventory', '==', 0);
+        }
+        if (in_array("1", $status)) {
+            $products = $products->orWhereBetween('inventory', [1, 5]);
+        }
+        if (in_array("2", $status)) {
+            $products = $products->orWhere('inventory', '>', 5);
+        }
         // dd($products);
-        $products = $products->orderBy('products.created_at', 'asc')->paginate(5);
+        $products = $products->orderBy('products.created_at', 'asc')->paginate(10);
         return $products;
     }
 }

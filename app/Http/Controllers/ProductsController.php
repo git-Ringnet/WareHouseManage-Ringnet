@@ -63,58 +63,59 @@ class ProductsController extends Controller
         if (!empty($request->id)) {
             $id = $request->input('id');
             $idArray = explode(' ', $id);
-            array_push($string, ['label' => 'ID', 'values' => $idArray, 'class' => 'id']);
+            array_push($string, ['label' => 'ID:', 'values' => $idArray, 'class' => 'id']);
         }
         $code = null;
 
         if (!empty($request->code)) {
             $code = $request->code;
+            $codeArr = explode(' ', $code);
+            array_push($string, ['label' => 'Mã sản phẩm:', 'values' => $codeArr, 'class' => 'code']);
         }
         $products_name = null;
 
         if (!empty($request->products_name)) {
             $products_name = $request->products_name;
+            $products_namearr = explode(' ', $products_name);
+            array_push($string, ['label' => 'Tên sản phẩm:', 'values' => $products_namearr, 'class' => 'products_name']);
         }
 
-
-
-        // // Trạng thái
-        // if (!empty($request->status)) {
-        //     $statusValues = [1 => 'Active', 0 => 'Disable'];
-        //     $status = $request->input('status', []);
-        //     $statusLabels = array_map(function ($value) use ($statusValues) {
-        //         return $statusValues[$value];
-        //     }, $status);
-        //     array_push($string, ['label' => 'Trạng thái', 'values' => $statusLabels, 'class' => 'status']);
-        // }
-
         // // Tồn kho
-        // if (!empty($request->comparison_operator) && !empty($request->quantity)) {
-        //     $quantity = $request->input('quantity');
-        //     $comparison_operator = $request->input('comparison_operator');
-        //     array_push($filters, ['products.inventory', $comparison_operator, $quantity]);
-        //     $inventoryArray = explode(' ', $quantity);
-        //     array_push($string, ['label' => 'Tồn kho', 'values' =>$inventoryArray, 'class' => 'quantity']);
-        // }
+        if (!empty($request->comparison_operator) && !empty($request->quantity)) {
+            $quantity = $request->input('quantity');
+            $comparison_operator = $request->input('comparison_operator');
+            $filters[] = ['products.inventory', $comparison_operator, $quantity];
+            $inventoryArray = explode(' ', $quantity);
+            array_push($string, ['label' => 'Tồn kho ' . $comparison_operator, 'values' => $inventoryArray, 'class' => 'quantity']);
+        }
 
         // // Trị trung bình
-        // if (!empty($request->avg_operator) && !empty($request->avg)) {
-        //     $avg = $request->avg;
-        //     $operator = $request->avg_operator;
-        //     array_push($filters, ['products.price_avg', $operator, $avg]);
-        //     $avgArray = explode(' ', $avg);
-        //     array_push($string, ['label' => 'Trị trung bình', 'values' =>$avgArray, 'class' => 'avg']);
-        // }
+        if (!empty($request->avg_operator) && !empty($request->avg)) {
+            $avg = $request->avg;
+            $operator = $request->avg_operator;
+            array_push($filters, ['products.price_avg', $operator, $avg]);
+            $avgArray = explode(' ', $avg);
+            array_push($string, ['label' => 'Trị trung bình ' . $operator, 'values' => $avgArray, 'class' => 'avg']);
+        }
         // // Trị tồn kho
-        // if (!empty($request->price_inven_operator) && !empty($request->price_inven)) {
-        //     $price_inven = $request->price_inven;
-        //     $operator = $request->price_inven_operator;
-        //     $filters[] = ['products.price_inventory', $operator, $price_inven];
-        //     $price_invenArray = explode(' ', $price_inven);
-        //     array_push($string, ['label' => 'Trị tồn kho', 'values' =>$price_invenArray, 'class' => 'price_inven']);
-        // }
+        if (!empty($request->price_inven_operator) && !empty($request->price_inven)) {
+            $price_inven = $request->price_inven;
+            $operator = $request->price_inven_operator;
+            $filters[] = ['products.price_inventory', $operator, $price_inven];
+            $price_invenArray = explode(' ', $price_inven);
+            array_push($string, ['label' => 'Trị tồn kho ' . $operator, 'values' => $price_invenArray, 'class' => 'price_inven']);
+        }
+        
+        //Status
+        if (!empty($request->status)) {
+            $statusValues = [0 => 'Hết hàng', 1 => 'Gần hết', 2 => 'Sẵn hàng'];
+            $status = $request->input('status', []);
+            $statusLabels = array_map(function ($value) use ($statusValues) {
+                return $statusValues[$value];
+            }, $status);
+            array_push($string, ['label' => 'Trạng thái:', 'values' => $statusLabels, 'class' => 'status']);
+        }
 
-        // dd($filters);
         $keywords = null;
 
         if (!empty($request->keywords)) {
@@ -129,15 +130,21 @@ class ProductsController extends Controller
                 $selectedCategory = Category::whereIn('id', $categoryarr)->get();
                 $selectedCategory = $selectedCategory->pluck('category_name')->toArray();
             }
-            array_push($string, ['label' => 'Danh mục', 'values' => $selectedCategory, 'class' => 'category']);
+            array_push($string, ['label' => 'Danh mục:', 'values' => $selectedCategory, 'class' => 'category']);
+        }
+        // Thương hiệu
+        $trademarkarr = [];
+        if (!empty($request->trademarkarr)) {
+            $trademarkarr = $request->input('trademarkarr', []);
+            array_push($string, ['label' => 'Thương hiệu:', 'values' => $trademarkarr, 'class' => 'trademark']);
         }
         // dd($string);
         //lấy tất cả products
-        $products = $products = $this->products->getAllProducts($id,$code,$products_name,$categoryarr, $keywords, $sortByArr);
+        $products = $products = $this->products->getAllProducts($filters, $status, $code, $products_name, $categoryarr, $trademarkarr, $keywords, $sortByArr);
 
         //Lấy trademarks
         $trademarks = Products::all();
-        
+
         //lấy tất cả id của products đưa vào mảng
         $productIds = array();
         foreach ($products as $value) {
@@ -169,7 +176,7 @@ class ProductsController extends Controller
                 DB::raw('SUM(product.product_qty * product.product_price) as total')
             )
             ->get();
-        return view('tables.products.data', compact('products', 'categories', 'product', 'string','sortType','trademarks'));
+        return view('tables.products.data', compact('products', 'categories', 'product', 'string', 'sortType', 'trademarks'));
     }
 
     /**

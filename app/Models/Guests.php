@@ -13,7 +13,7 @@ class Guests extends Model
         'guest_name','guest_represent','guest_phone','guest_email','guest_status'
     ];
     protected $table = 'guests';
-    public function getAllGuests($filter = [], $status = [], $keywords = null, $sortByArr = null)
+    public function getAllGuests($filter = [],$name = null,$represent = null,$phonenumber = null,$email = null, $status = [], $keywords = null, $sortByArr = null)
     {
         $guests = DB::table($this->table)
             ->select('guests.*');
@@ -30,6 +30,26 @@ class Guests extends Model
 
         if (!empty($filter)) {
             $guests = $guests->where($filter);
+        }
+        if (!empty($name)) {
+            $guests = $guests->where(function ($query) use ($name) {
+                $query->orWhere('guest_name', 'like', '%' . $name . '%');
+            });
+        }
+        if (!empty($represent)) {
+            $guests = $guests->where(function ($query) use ($represent) {
+                $query->orWhere('guest_represent', 'like', '%' . $represent . '%');
+            });
+        }
+        if (!empty($phonenumber)) {
+            $guests = $guests->where(function ($query) use ($phonenumber) {
+                $query->orWhere('guest_phone', 'like', '%' . $phonenumber . '%');
+            });
+        }
+        if (!empty($email)) {
+            $guests = $guests->where(function ($query) use ($email) {
+                $query->orWhere('guest_email', 'like', '%' . $email . '%');
+            });
         }
         if (!empty($status)) {
             $guests = $guests->whereIn('guest_status', $status);

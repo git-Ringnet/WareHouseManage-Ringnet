@@ -31,6 +31,24 @@ class UsersController extends Controller
         $roles = [];
         $string = array();
         $class = '';
+        $name = '';
+        if (!empty($request->name)) {
+            $name = $request->name;
+            $nameArr = explode(' ', $name);
+            array_push($string, ['label' => 'Tên nhân viên:', 'values' => $nameArr, 'class' => 'name']);
+        }
+        $phonenumber = '';
+        if (!empty($request->phonenumber)) {
+            $phonenumber = $request->phonenumber;
+            $nameArr = explode(' ', $phonenumber);
+            array_push($string, ['label' => 'Số điện thoại:', 'values' => $nameArr, 'class' => 'phonenumber']);
+        }
+        $email = '';
+        if (!empty($request->email)) {
+            $email = $request->email;
+            $nameArr = explode(' ', $email);
+            array_push($string, ['label' => 'Email:', 'values' => $nameArr, 'class' => 'email']);
+        }
 
         if (!empty($request->status)) {
             $statusValues = [1 => 'Active', 0 => 'Disable'];
@@ -38,7 +56,7 @@ class UsersController extends Controller
             $statusLabels = array_map(function ($value) use ($statusValues) {
                 return $statusValues[$value];
             }, $status);
-            array_push($string, ['label' => 'Trạng thái', 'values' => $statusLabels, 'class' => 'status']);
+            array_push($string, ['label' => 'Trạng thái:', 'values' => $statusLabels, 'class' => 'status']);
         }
 
         if (!empty($request->roles)) {
@@ -47,7 +65,7 @@ class UsersController extends Controller
                 $selectedRoles = Roles::whereIn('id', $roles)->get();
                 $selectedRoleNames = $selectedRoles->pluck('name')->toArray();
             }
-            array_push($string, ['label' => 'Vai trò', 'values' => $selectedRoleNames, 'class' => 'roles']);
+            array_push($string, ['label' => 'Vai trò:', 'values' => $selectedRoleNames, 'class' => 'roles']);
         }
 
         $keywords = null;
@@ -72,7 +90,7 @@ class UsersController extends Controller
             $sortType = 'asc';
         }
 
-        $usersList = $this->users->getAllUsers($filters, $status, $roles, $keywords, $sortBy, $sortType);
+        $usersList = $this->users->getAllUsers($filters,$name, $phonenumber, $email, $status, $roles, $keywords, $sortBy, $sortType);
         return view('admin/userslist', compact('title', 'usersList', 'sortType', 'allRoles', 'string'));
     }
 

@@ -29,6 +29,7 @@ li {
     background: #DEE2E6;
     border-radius: 8px;
     padding: 8px 16px;
+    margin-right: 5px;
 }
 
 .btn-filter {
@@ -60,7 +61,11 @@ li {
 .avg_operator,
 .price_inven-input,
 .price_inven_operator,
-.id-input,#myInput {
+.id-input,
+#myInput,
+#myInput-trademark,
+#myInput-category,
+.input-quantity {
     padding: 5px 10px;
     border: 1px solid #D6D6D6;
     border-radius: 5px;
@@ -89,6 +94,12 @@ li {
     color: #888;
 }
 
-#myInput {
-    padding-right: 30px;
+.input-group .title {
+    width: 100%;
+}
+
+.block-options .input-group input {
+    border-radius: 8px;
+    border-top-left-radius: 8px !important;
+    border-bottom-left-radius: 8px !important;
 }

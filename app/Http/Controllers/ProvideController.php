@@ -44,6 +44,30 @@ class ProvideController extends Controller
          $roles = [];
          $string = array();
          $class='';
+         $name = '';
+        if (!empty($request->name)) {
+            $name = $request->name;
+            $nameArr = explode(' ', $name);
+            array_push($string, ['label' => 'Đơn vị:', 'values' => $nameArr, 'class' => 'name']);
+        }
+        $represent = '';
+        if (!empty($request->represent)) {
+            $represent = $request->represent;
+            $nameArr = explode(' ', $represent);
+            array_push($string, ['label' => 'Đại diện:', 'values' => $nameArr, 'class' => 'represent']);
+        }
+        $phonenumber = '';
+        if (!empty($request->phonenumber)) {
+            $phonenumber = $request->phonenumber;
+            $nameArr = explode(' ', $phonenumber);
+            array_push($string, ['label' => 'Số điện thoại:', 'values' => $nameArr, 'class' => 'phonenumber']);
+        }
+        $email = '';
+        if (!empty($request->email)) {
+            $email = $request->email;
+            $nameArr = explode(' ', $email);
+            array_push($string, ['label' => 'Email:', 'values' => $nameArr, 'class' => 'email']);
+        }
  
          if (!empty($request->status)) {
              $statusValues = [1 => 'Active', 0 => 'Disable'];
@@ -51,7 +75,7 @@ class ProvideController extends Controller
              $statusLabels = array_map(function ($value) use ($statusValues) {
                  return $statusValues[$value];
              }, $status);
-             array_push($string, ['label' => 'Trạng thái', 'values' => $statusLabels,'class' => 'status']);
+             array_push($string, ['label' => 'Trạng thái:', 'values' => $statusLabels,'class' => 'status']);
          }
          
  
@@ -60,7 +84,7 @@ class ProvideController extends Controller
          if (!empty($request->keywords)) {
              $keywords = $request->keywords;
          }
-         $provides = $this->provides->getAllProvides($filters, $status, $keywords, $sortByArr);
+         $provides = $this->provides->getAllProvides($filters,$name, $represent, $phonenumber, $email, $status, $keywords, $sortByArr);
          return view('tables.provide.provides', compact('provides', 'sortType', 'string'));
     }
 

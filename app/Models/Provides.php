@@ -10,10 +10,10 @@ class Provides extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'provide_name','provide_represent','provide_phone','provide_email','provide_status','provide_address','provide_code'
+        'provide_name', 'provide_represent', 'provide_phone', 'provide_email', 'provide_status', 'provide_address', 'provide_code'
     ];
     protected $table = 'provides';
-    public function getAllProvides($filter = [], $status = [], $keywords = null, $sortByArr = null)
+    public function getAllProvides($filter = [], $name = null, $represent = null, $phonenumber = null, $email = null, $status = [], $keywords = null, $sortByArr = null)
     {
         $provides = DB::table($this->table)
             ->select('provides.*');
@@ -30,6 +30,26 @@ class Provides extends Model
 
         if (!empty($filter)) {
             $provides = $provides->where($filter);
+        }
+        if (!empty($name)) {
+            $provides = $provides->where(function ($query) use ($name) {
+                $query->orWhere('provide_name', 'like', '%' . $name . '%');
+            });
+        }
+        if (!empty($represent)) {
+            $provides = $provides->where(function ($query) use ($represent) {
+                $query->orWhere('provide_represent', 'like', '%' . $represent . '%');
+            });
+        }
+        if (!empty($phonenumber)) {
+            $provides = $provides->where(function ($query) use ($phonenumber) {
+                $query->orWhere('provide_phone', 'like', '%' . $phonenumber . '%');
+            });
+        }
+        if (!empty($email)) {
+            $provides = $provides->where(function ($query) use ($email) {
+                $query->orWhere('provide_email', 'like', '%' . $email . '%');
+            });
         }
         if (!empty($status)) {
             $provides = $provides->whereIn('provide_status', $status);

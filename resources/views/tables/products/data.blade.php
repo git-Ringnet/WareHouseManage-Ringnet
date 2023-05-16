@@ -39,7 +39,7 @@
                         <div class="filter-results">
                             @foreach ($string as $item)
                             <span class="filter-group">
-                                {{ $item['label'] }}:
+                                {{ $item['label'] }}
                                 <span class="filter-values">{{ implode(', ', $item['values']) }}</span>
                                 <a class="delete-item delete-btn-{{ $item['class'] }}"><svg width="24" height="24"
                                         viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -85,31 +85,73 @@
                                     <button class="dropdown-item" id="btn-status">Trạng thái</button>
                                 </div>
                             </div>
-                            <?php  $status = [];
-                        $categoryarr=[];
-                      if (isset(request()->status)) {
+                            <?php 
+                            $categoryarr=[];
+                            $status=[];
+                        if (isset(request()->status)) {
                         $status= request()->status;
-                      }
-                      else {
+                        }
+                        else {
                         $status = [];
-                      }
-                      if (isset(request()->categoryarr)) {
-                        $categoryarr= request()->categoryarr;
-                      }
-                      else {
-                        $categoryarr = [];
-                      }
-                    ?>
-                            {{-- Tìm id --}}
+                        }
+                        if (isset(request()->categoryarr)) {
+                            $categoryarr= request()->categoryarr;
+                        }
+                        else {
+                            $categoryarr = [];
+                        }
+                        $trademarkarr=[];
+                        
+                        if (isset(request()->trademarkarr)) {
+                            $trademarkarr= request()->trademarkarr;
+                        }
+                        else {
+                            $trademarkarr = [];
+                        }
+                        $comparison_operator=null;
+                        $quantity=null;
+                        //Tồn kho
+                        if (isset(request()->comparison_operator) && isset(request()->quantity)) {
+                            $comparison_operator= request()->comparison_operator;
+                            $quantity= request()->quantity;
+                        }
+                        else {
+                            $comparison_operator=null;
+                        $quantity=null;
+                        }
+                        //Trị trung bình
+                        $avg_operator=null;
+                        $avg=null;
+                        if (isset(request()->avg_operator) && isset(request()->avg)) {
+                            $avg_operator= request()->avg_operator;
+                            $avg= request()->avg;
+                        }
+                        else {
+                            $avg_operator=null;
+                        $avg=null;
+                        }
+                        //Trị tồn kho
+                        $price_inven_operator=null;
+                        $price_inven=null;
+                        if (isset(request()->price_inven_operator) && isset(request()->price_inven)) {
+                            $price_inven_operator= request()->price_inven_operator;
+                            $price_inven= request()->price_inven;
+                        }
+                        else {
+                            $price_inven_operator=null;
+                        $price_inven=null;
+                        }
+                        ?>
                             <div class="block-options" id="id-options" style="display:none">
                                 <div class="wrap w-100">
                                     <div class="heading-title py-3 px-2">
                                         <h5>Tên:</h5>
                                     </div>
                                     <div class="input-group px-2">
-                                        <label class="title" for="">Tên sản phẩm</label>
-                                        <input type="search" name="products_name" class="form-control"
-                                            value="{{request()->products_name}}" placeholder="Chứa từ khóa..">
+                                        <label class="title" for="">Chứa kí tự</label>
+                                        <input type="search" name="products_name"
+                                            class="form-control  products_name-input"
+                                            value="{{request()->products_name}}" placeholder="Nhập thông tin..">
                                     </div>
                                 </div>
                                 <div class="d-flex justify-contents-center align-items-baseline px-2">
@@ -122,12 +164,12 @@
                             <div class="block-options" id="code-options" style="display:none">
                                 <div class="wrap w-100">
                                     <div class="heading-title py-3 px-2">
-                                        <h5>ID:</h5>
+                                        <h5>Mã sản phẩm:</h5>
                                     </div>
                                     <div class="input-group px-2">
-                                        <label class="title" for="">Mã sản phẩm</label>
-                                        <input type="search" name="code" class="form-control"
-                                            value="{{request()->code}}" placeholder="Chứa từ khóa..">
+                                        <label class="title" for="">Chứa kí tự</label>
+                                        <input type="search" name="code" class="form-control code-input"
+                                            value="{{request()->code}}" placeholder="Nhập thông tin..">
                                     </div>
                                 </div>
                                 <div class="d-flex justify-contents-center align-items-baseline px-2">
@@ -137,7 +179,7 @@
                                 </div>
                             </div>
                             {{-- filter Status --}}
-                            {{-- <div class="block-options" id="status-options" style="display:none">
+                            <div class="block-options" id="status-options" style="display:none">
                                 <div class="wrap w-100">
                                     <div class="heading-title py-3 px-2">
                                         <h5>Trạng thái:</h5>
@@ -149,14 +191,19 @@
                                     </div>
                                     <ul class="ks-cboxtags p-0 m-0 px-2">
                                         <li>
-                                            <input type="checkbox" id="status_active" {{ in_array(1, $status)
+                                            <input type="checkbox" id="status_active" {{ in_array(2, $status)
+                                                ? 'checked' : '' }} name="status[]" value="2">
+                                            <label for="status_active">Sẵn hàng</label>
+                                        </li>
+                                        <li>
+                                            <input type="checkbox" id="status_inactive" {{ in_array(1, $status)
                                                 ? 'checked' : '' }} name="status[]" value="1">
-                                            <label for="status_active">Active</label>
+                                            <label for="status_inactive">Gần hết</label>
                                         </li>
                                         <li>
                                             <input type="checkbox" id="status_inactive" {{ in_array(0, $status)
                                                 ? 'checked' : '' }} name="status[]" value="0">
-                                            <label for="status_inactive">Disable</label>
+                                            <label for="status_inactive">Hết hàng</label>
                                         </li>
                                     </ul>
                                 </div>
@@ -165,19 +212,24 @@
                                     <button type="button" id="cancel-status"
                                         class="btn btn-secondary btn-block">Hủy</button>
                                 </div>
-                            </div> --}}
+                            </div>
                             {{-- filter danh mục --}}
                             <div class="block-options" id="category-options" style="display:none">
                                 <div class="wrap w-100">
                                     <div class="heading-title py-3 px-2">
-                                        <h5>Vai trò:</h5>
+                                        <h5>Danh mục:</h5>
+                                    </div>
+                                    <div class="search-container px-2 mt-1">
+                                        <input type="text" placeholder="Tìm thuộc tính lọc" id="myInput-category"
+                                            class="pr-4" onkeyup="filterCategory()">
+                                        <span class="search-icon"><i class="fas fa-search"></i></span>
                                     </div>
                                     <div
                                         class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
                                         <a class="cursor select-all-category mr-auto">Chọn tất cả</a>
                                         <a class="cursor deselect-all-category">Hủy chọn</a>
                                     </div>
-                                    <ul class="ks-cboxtags p-0 m-0 px-2">
+                                    <ul class="ks-cboxtags-category p-0 m-0 px-2">
                                         @if(!empty($categories))
                                         @foreach($categories as $category)
                                         <li>
@@ -200,14 +252,19 @@
                             <div class="block-options" id="trademark-options" style="display:none">
                                 <div class="wrap w-100">
                                     <div class="heading-title py-3 px-2">
-                                        <h5>Vai trò:</h5>
+                                        <h5>Thương hiệu</h5>
+                                    </div>
+                                    <div class="search-container px-2 mt-1">
+                                        <input type="text" placeholder="Tìm thuộc tính lọc" id="myInput-trademark"
+                                            class="pr-4" onkeyup="filterTrademark()">
+                                        <span class="search-icon"><i class="fas fa-search"></i></span>
                                     </div>
                                     <div
                                         class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
-                                        <a class="cursor select-all-category mr-auto">Chọn tất cả</a>
-                                        <a class="cursor deselect-all-category">Hủy chọn</a>
+                                        <a class="cursor select-all-trademark mr-auto">Chọn tất cả</a>
+                                        <a class="cursor deselect-all-trademark">Hủy chọn</a>
                                     </div>
-                                    <ul class="ks-cboxtags p-0 m-0 px-2">
+                                    <ul class="ks-cboxtags-trademark p-0 m-0 px-2">
                                         @if(!empty($trademarks))
                                         @php
                                         $seenValues = [];
@@ -215,10 +272,12 @@
                                         @foreach ($trademarks as $value)
                                         @if (!in_array($value->products_trademark, $seenValues))
                                         <li>
-                                            <input type="checkbox" id="trademark_active" {{ in_array($value->products_trademark,
-                                                $seenValues) ? 'checked' : '' }}
-                                                name="trademarks[]" value="{{$value->products_trademark}}">
-                                            <label for="trademark_active">{{ $value->products_trademark }}</label>
+                                            <input type="checkbox" id="trademark_active" {{
+                                                in_array($value->products_trademark,
+                                            $trademarkarr) ? 'checked' : '' }}
+                                            name="trademarkarr[]" value="{{$value->products_trademark}}">
+                                            <label id="trademark_value" for="trademark_active">{{
+                                                $value->products_trademark }}</label>
                                         </li>
                                         @php
                                         $seenValues[] = $value->products_trademark;
@@ -235,7 +294,7 @@
                                 </div>
                             </div>
                             {{-- filter tồn kho --}}
-                            {{-- <div class="block-options" id="quantity-options" style="display:none">
+                            <div class="block-options" id="quantity-options" style="display:none">
                                 <div class="wrap w-100">
                                     <div class="heading-title py-3 px-2">
                                         <h5>Tồn kho:</h5>
@@ -248,7 +307,7 @@
                                                 <=< /option>
                                         </select>
                                         <input class="w-50 quantity-input" type="number" name="quantity"
-                                            placeholder="Số lượng">
+                                            value="{{ request()->quantity}}" placeholder="Số lượng">
                                     </div>
                                 </div>
                                 <div class="d-flex justify-contents-center align-items-baseline px-2">
@@ -256,9 +315,9 @@
                                     <button type="button" id="cancel-quantity"
                                         class="btn btn-secondary btn-block">Hủy</button>
                                 </div>
-                            </div> --}}
+                            </div>
                             {{-- filter trị trung bình --}}
-                            {{-- <div class="block-options" id="avg-options" style="display:none">
+                            <div class="block-options" id="avg-options" style="display:none">
                                 <div class="wrap w-100">
                                     <div class="heading-title py-3 px-2">
                                         <h5>Trị trung bình:</h5>
@@ -270,7 +329,7 @@
                                                 <=< /option>
                                         </select>
                                         <input class="w-50 avg-input" type="number" name="avg"
-                                            placeholder="Nhập giá trị">
+                                            value="{{ request()->avg}}" placeholder="Nhập giá trị">
                                     </div>
                                 </div>
                                 <div class="d-flex justify-contents-center align-items-baseline px-2">
@@ -278,9 +337,9 @@
                                     <button type="button" id="cancel-avg"
                                         class="btn btn-secondary btn-block">Hủy</button>
                                 </div>
-                            </div> --}}
+                            </div>
                             {{-- filter trị tồn kho --}}
-                            {{-- <div class="block-options" id="price_inven-options" style="display:none">
+                            <div class="block-options" id="price_inven-options" style="display:none">
                                 <div class="wrap w-100">
                                     <div class="heading-title py-3 px-2">
                                         <h5>Trị tồn kho:</h5>
@@ -293,7 +352,7 @@
                                                 <=< /option>
                                         </select>
                                         <input class="w-50 price_inven-input" type="number" name="price_inven"
-                                            placeholder="Nhập giá trị">
+                                            value="{{ request()->price_inven}}" placeholder="Nhập giá trị">
                                     </div>
                                 </div>
                                 <div class="d-flex justify-contents-center align-items-baseline px-2">
@@ -301,7 +360,7 @@
                                     <button type="button" id="cancel-price_inven"
                                         class="btn btn-secondary btn-block">Hủy</button>
                                 </div>
-                            </div> --}}
+                            </div>
                         </div>
                     </div>
             </div><!-- /.container-fluid -->
@@ -569,7 +628,6 @@ $('#cancel-price_inven').click(function(event) {
     event.preventDefault();
     $('#price_inven-options').hide();
 });
-
 $('#btn-avg').click(function(event) {
     event.preventDefault();
     $('#avg-options').toggle();
@@ -578,7 +636,6 @@ $('#cancel-avg').click(function(event) {
     event.preventDefault();
     $('#avg-options').hide();
 });
-
 $('#btn-quantity').click(function(event) {
     event.preventDefault();
     $('#quantity-options').toggle();
@@ -587,7 +644,6 @@ $('#cancel-quantity').click(function(event) {
     event.preventDefault();
     $('#quantity-options').hide();
 });
-
 $('#btn-category').click(function(event) {
     event.preventDefault();
     $('#category-options').toggle();
@@ -622,7 +678,17 @@ $(document).ready(function() {
     $('#status-options input[type="checkbox"]').prop('checked', false);
   });
 });
+$(document).ready(function() {
+  // Chọn tất cả các checkbox
+  $('.select-all-trademark').click(function() {
+    $('#trademark-options input[type="checkbox"]').prop('checked', true);
+  });
 
+  // Hủy tất cả các checkbox
+  $('.deselect-all-trademark').click(function() {
+    $('#trademark-options input[type="checkbox"]').prop('checked', false);
+  });
+});
 $(document).ready(function() {
         $('.filter-results').on('click', '.delete-btn-status', function() {
             $('.deselect-all').click();
@@ -636,20 +702,26 @@ $(document).ready(function() {
         });
     });
     $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-trademark', function() {
+            $('.deselect-all-trademark').click();
+            document.getElementById('search-filter').submit();
+        });
+    });
+    $(document).ready(function() {
         $('.filter-results').on('click', '.delete-btn-quantity', function() {
-            $('.deselect-all-quantity').click();
+            $('.quantity-input').val('');
             document.getElementById('search-filter').submit();
         });
     });
     $(document).ready(function() {
         $('.filter-results').on('click', '.delete-btn-avg', function() {
-            $('.deselect-all-avg').click();
+            $('.avg-input').val('');
             document.getElementById('search-filter').submit();
         });
     });
     $(document).ready(function() {
         $('.filter-results').on('click', '.delete-btn-price_inven', function() {
-            $('.deselect-all-price_inven').click();
+            $('.price_inven-input').val('');
             document.getElementById('search-filter').submit();
         });
     });
@@ -659,8 +731,20 @@ $(document).ready(function() {
             document.getElementById('search-filter').submit();
         });
     });
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-code', function() {
+            $('.code-input').val('');
+            document.getElementById('search-filter').submit();
+        });
+    });
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-products_name', function() {
+            $('.products_name-input').val('');
+            document.getElementById('search-filter').submit();
+        });
+    });
 
-    //Xử lí tìm kiếm bộ lọc
+    //Xử lí tìm kiếm bộ lọc tổng
     function filterFunction() {
   var input = $("#myInput");
   var filter = input.val().toUpperCase();
@@ -675,7 +759,34 @@ $(document).ready(function() {
     }
   });
 }
+function filterTrademark() {
+  var input = $("#myInput-trademark");
+  var filter = input.val().toUpperCase();
+  var buttons = $(".ks-cboxtags-trademark li");
 
+  buttons.each(function() {
+    var text = $(this).text();
+    if (text.toUpperCase().indexOf(filter) > -1) {
+      $(this).show();
+    } else {
+      $(this).hide();
+    }
+  });
+}
+function filterCategory() {
+  var input = $("#myInput-category");
+  var filter = input.val().toUpperCase();
+  var buttons = $(".ks-cboxtags-category li");
+
+  buttons.each(function() {
+    var text = $(this).text();
+    if (text.toUpperCase().indexOf(filter) > -1) {
+      $(this).show();
+    } else {
+      $(this).hide();
+    }
+  });
+}
 //Sort
 $(document).ready(function() {
     // Khôi phục trạng thái icon khi tải lại trang

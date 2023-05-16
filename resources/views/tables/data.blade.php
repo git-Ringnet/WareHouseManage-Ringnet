@@ -39,7 +39,7 @@
                         <div class="filter-results">
                             @foreach ($string as $item)
                             <span class="filter-group">
-                                {{ $item['label'] }}:
+                                {{ $item['label'] }}
                                 <span class="filter-values">{{ implode(', ', $item['values']) }}</span>
                                 <a class="delete-item delete-btn-{{ $item['class'] }}"><svg width="24" height="24"
                                         viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
