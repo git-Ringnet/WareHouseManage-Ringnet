@@ -66,7 +66,7 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
-    public function getAllUsers($filter = [], $status = [], $roles = [], $keywords = null, $orderBy = null, $orderType = null)
+    public function getAllUsers($filter = [], $name = null, $phonenumber = null, $email = null, $status = [], $roles = [], $keywords = null, $orderBy = null, $orderType = null)
     {
         // $users = DB::select('SELECT * FROM users');
         $users = DB::table($this->table)
@@ -78,7 +78,21 @@ class User extends Authenticatable
         if (!empty($filter)) {
             $users = $users->where($filter);
         }
-
+        if (!empty($name)) {
+            $users = $users->where(function ($query) use ($name) {
+                $query->orWhere('users.name', 'like', '%' . $name . '%');
+            });
+        }
+        if (!empty($phonenumber)) {
+            $users = $users->where(function ($query) use ($phonenumber) {
+                $query->orWhere('users.phonenumber', 'like', '%' . $phonenumber . '%');
+            });
+        }
+        if (!empty($email)) {
+            $users = $users->where(function ($query) use ($email) {
+                $query->orWhere('users.email', 'like', '%' . $email . '%');
+            });
+        }
         if (!empty($status)) {
             $users = $users->whereIn('status', $status);
         }

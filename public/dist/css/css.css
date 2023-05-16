@@ -1,7 +1,8 @@
 #status-options,
 #role-options,
 #category-options,
-#quantity-options {
+#quantity-options,
+.block-options {
     width: 230px;
     background-color: #fff;
     border-radius: 8px;
@@ -28,6 +29,7 @@ li {
     background: #DEE2E6;
     border-radius: 8px;
     padding: 8px 16px;
+    margin-right: 5px;
 }
 
 .btn-filter {
@@ -54,10 +56,19 @@ li {
 }
 
 .comparison_operator,
-.quantity-input {
-    padding: 10px;
+.quantity-input,
+.avg-input,
+.avg_operator,
+.price_inven-input,
+.price_inven_operator,
+.id-input,
+#myInput,
+#myInput-trademark,
+#myInput-category,
+.input-quantity {
+    padding: 5px 10px;
     border: 1px solid #D6D6D6;
-    border-radius: 8px;
+    border-radius: 5px;
 }
 
 .btn-sort {
@@ -65,4 +76,30 @@ li {
     border: none;
     padding: 0;
     font-weight: 600;
+}
+
+.search-container {
+    position: relative;
+}
+
+.search-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+.search-icon i {
+    color: #888;
+}
+
+.input-group .title {
+    width: 100%;
+}
+
+.block-options .input-group input {
+    border-radius: 8px;
+    border-top-left-radius: 8px !important;
+    border-bottom-left-radius: 8px !important;
 }

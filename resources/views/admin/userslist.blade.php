@@ -34,7 +34,7 @@
             <div class="filter-results">
               @foreach ($string as $item)
               <span class="filter-group">
-                {{ $item['label'] }}:
+                {{ $item['label'] }}
                 <span class="filter-values">{{ implode(', ', $item['values']) }}</span>
                 <a class="delete-item delete-btn-{{ $item['class'] }}"><svg width="24" height="24" viewBox="0 0 24 24"
                     fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -63,8 +63,11 @@
                   </span>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <button class="dropdown-item" id="btn-status">Status</button>
-                  <button class="dropdown-item" id="btn-roles">Roles</button>
+                  <button class="dropdown-item" id="btn-name">Tên nhân viên</button>
+                  <button class="dropdown-item" id="btn-roles">Vai trò</button>
+                  <button class="dropdown-item" id="btn-phonenumber">Số điện thoại</button>
+                  <button class="dropdown-item" id="btn-email">email</button>
+                  <button class="dropdown-item" id="btn-status">Trạng thái</button>
                 </div>
               </div>
               <?php  $status = [];
@@ -82,6 +85,57 @@
           $roles = [];
         }
       ?>
+              {{-- Tìm tên nhân viên --}}
+              <div class="block-options" id="name-options" style="display:none">
+                <div class="wrap w-100">
+                  <div class="heading-title py-3 px-2">
+                    <h5>Tên nhân viên:</h5>
+                  </div>
+                  <div class="input-group px-2">
+                    <label class="title" for="">Chứa kí tự</label>
+                    <input type="search" name="name" class="form-control name-input" value="{{request()->name}}"
+                      placeholder="Nhập thông tin..">
+                  </div>
+                </div>
+                <div class="d-flex justify-contents-center align-items-baseline px-2">
+                  <button type="submit" class="btn btn-primary btn-block mr-2">Xác Nhận</button>
+                  <button type="button" id="cancel-name" class="btn btn-secondary btn-block">Hủy</button>
+                </div>
+              </div>
+              {{-- Tìm số điện thoại --}}
+              <div class="block-options" id="phonenumber-options" style="display:none">
+                <div class="wrap w-100">
+                  <div class="heading-title py-3 px-2">
+                    <h5>Đơn vị:</h5>
+                  </div>
+                  <div class="input-group px-2">
+                    <label class="title" for="">Chứa kí tự</label>
+                    <input type="number" name="phonenumber" class="form-control phonenumber-input"
+                      value="{{request()->phonenumber}}" placeholder="Nhập thông tin..">
+                  </div>
+                </div>
+                <div class="d-flex justify-contents-center align-items-baseline px-2">
+                  <button type="submit" class="btn btn-primary btn-block mr-2">Xác Nhận</button>
+                  <button type="button" id="cancel-phonenumber" class="btn btn-secondary btn-block">Hủy</button>
+                </div>
+              </div>
+              {{-- Tìm Email --}}
+              <div class="block-options" id="email-options" style="display:none">
+                <div class="wrap w-100">
+                  <div class="heading-title py-3 px-2">
+                    <h5>Email:</h5>
+                  </div>
+                  <div class="input-group px-2">
+                    <label class="title" for="">Chứa kí tự</label>
+                    <input type="search" name="email" class="form-control email-input" value="{{request()->email}}"
+                      placeholder="Nhập thông tin..">
+                  </div>
+                </div>
+                <div class="d-flex justify-contents-center align-items-baseline px-2">
+                  <button type="submit" class="btn btn-primary btn-block mr-2">Xác Nhận</button>
+                  <button type="button" id="cancel-email" class="btn btn-secondary btn-block">Hủy</button>
+                </div>
+              </div>
               <div class="block-options" id="status-options" style="display:none">
                 <div class="wrap w-100">
                   <div class="heading-title py-3 px-2">
@@ -159,44 +213,44 @@
                     <input type="hidden" id="sortTypeInput" name="sort-type" value="{{$sortType}}">
                     <th>
                       <span class="d-flex">
-                        <a href="#" class="sort-link" data-sort-by="id" data-sort-type="{{$sortType}}"><button class="btn-sort"
-                            type="submit">Mã nhân viên</button></a>
-                            <div class="icon" id="icon-id"></div>
+                        <a href="#" class="sort-link" data-sort-by="id" data-sort-type="{{$sortType}}"><button
+                            class="btn-sort" type="submit">Mã nhân viên</button></a>
+                        <div class="icon" id="icon-id"></div>
                       </span>
                     </th>
                     <th>
                       <span class="d-flex">
-                        <a href="#" class="sort-link" data-sort-by="name" data-sort-type="{{$sortType}}"><button class="btn-sort"
-                            type="submit">Họ tên nhân viên</button></a>
-                            <div class="icon" id="icon-name"></div>
+                        <a href="#" class="sort-link" data-sort-by="name" data-sort-type="{{$sortType}}"><button
+                            class="btn-sort" type="submit">Họ tên nhân viên</button></a>
+                        <div class="icon" id="icon-name"></div>
                       </span>
                     </th>
                     <th>
                       <span class="d-flex">
-                        <a href="#" class="sort-link" data-sort-by="roleid" data-sort-type="{{$sortType}}"><button class="btn-sort"
-                            type="submit">Vai trò</button></a>
-                            <div class="icon" id="icon-roleid"></div>
+                        <a href="#" class="sort-link" data-sort-by="roleid" data-sort-type="{{$sortType}}"><button
+                            class="btn-sort" type="submit">Vai trò</button></a>
+                        <div class="icon" id="icon-roleid"></div>
                       </span>
                     </th>
                     <th>
                       <span class="d-flex">
-                        <a href="#" class="sort-link" data-sort-by="phonenumber" data-sort-type="{{$sortType}}"><button class="btn-sort"
-                            type="submit">Số điện thoại</button></a>
-                            <div class="icon" id="icon-phonenumber"></div>
+                        <a href="#" class="sort-link" data-sort-by="phonenumber" data-sort-type="{{$sortType}}"><button
+                            class="btn-sort" type="submit">Số điện thoại</button></a>
+                        <div class="icon" id="icon-phonenumber"></div>
                       </span>
                     </th>
                     <th>
                       <span class="d-flex">
-                        <a href="#" class="sort-link" data-sort-by="email" data-sort-type="{{$sortType}}"><button class="btn-sort"
-                            type="submit">Email</button></a>
-                            <div class="icon" id="icon-email"></div>
+                        <a href="#" class="sort-link" data-sort-by="email" data-sort-type="{{$sortType}}"><button
+                            class="btn-sort" type="submit">Email</button></a>
+                        <div class="icon" id="icon-email"></div>
                       </span>
                     </th>
                     <th>
                       <span class="d-flex">
-                        <a href="#" class="sort-link" data-sort-by="status" data-sort-type="{{$sortType}}"><button class="btn-sort"
-                            type="submit">Trạng thái</button></a>
-                            <div class="icon" id="icon-status"></div>
+                        <a href="#" class="sort-link" data-sort-by="status" data-sort-type="{{$sortType}}"><button
+                            class="btn-sort" type="submit">Trạng thái</button></a>
+                        <div class="icon" id="icon-status"></div>
                       </span>
                     </th>
                     </form>
@@ -287,6 +341,52 @@
     $('#role-options').hide();
 
 });
+
+$('#btn-name').click(function(event) {
+    event.preventDefault();
+    $('#name-options').toggle();
+});
+$('#cancel-name').click(function(event) {
+    event.preventDefault();
+    $('#name-options').hide();
+});
+$('#btn-phonenumber').click(function(event) {
+    event.preventDefault();
+    $('#phonenumber-options').toggle();
+});
+$('#cancel-phonenumber').click(function(event) {
+    event.preventDefault();
+    $('#phonenumber-options').hide();
+});
+$('#btn-email').click(function(event) {
+    event.preventDefault();
+    $('#email-options').toggle();
+});
+$('#cancel-email').click(function(event) {
+    event.preventDefault();
+    $('#email-options').hide();
+});
+
+$(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-name', function() {
+            $('.name-input').val('');
+            document.getElementById('search-filter').submit();
+        });
+    });
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-phonenumber', function() {
+            $('.phonenumber-input').val('');
+            document.getElementById('search-filter').submit();
+        });
+    });
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-email', function() {
+            $('.email-input').val('');
+            document.getElementById('search-filter').submit();
+        });
+    });
+
+
 $('#btn-roles').click(function(event) {
     event.preventDefault();
     $('#role-options').toggle();
