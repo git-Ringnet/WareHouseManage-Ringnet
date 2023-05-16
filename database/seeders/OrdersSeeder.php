@@ -26,10 +26,10 @@ class OrdersSeeder extends Seeder
             ['id' => 9,'provide_id' => 4,'users_id'=> 1,'order_status' => 1],
             ['id' => 10,'provide_id' => 5,'users_id'=> 1,'order_status' => 1],
             ['id' => 11,'provide_id' => 1,'users_id'=> 1,'order_status' => 1],
-            ['id' => 12,'provide_id' => 2,'users_id'=> 1,'order_status' => 1],
-            ['id' => 13,'provide_id' => 3,'users_id'=> 1,'order_status' => 1],
-            ['id' => 14,'provide_id' => 4,'users_id'=> 1,'order_status' => 1],
-            ['id' => 15,'provide_id' => 5,'users_id'=> 1,'order_status' => 1],
+            ['id' => 12,'provide_id' => 2,'users_id'=> 1,'order_status' => 0],
+            ['id' => 13,'provide_id' => 3,'users_id'=> 1,'order_status' => 0],
+            ['id' => 14,'provide_id' => 4,'users_id'=> 1,'order_status' => 0],
+            ['id' => 15,'provide_id' => 5,'users_id'=> 1,'order_status' => 2],
         ]);
     }
 }
