@@ -11,4 +11,8 @@ class Provides extends Model
     protected $fillable = [
         'provide_name','provide_represent','provide_phone','provide_email','provide_status','provide_address','provide_code'
     ];
+    public function getOrder()
+    {
+        return $this->hasOne(Orders::class);
+    }
 }

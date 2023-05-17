@@ -8,7 +8,9 @@ use App\Models\ProductOrders;
 use App\Models\Products;
 use App\Models\Provides;
 use App\Models\Serinumbers;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class AddProductController extends Controller
@@ -20,15 +22,23 @@ class AddProductController extends Controller
      */
     public function index()
     {
-        $order = Orders::orderByDesc('id')->get();
         $productIds = array();
+        $order = Orders::orderByDesc('id')->get();
         foreach ($order as $value) {
             array_push($productIds, $value->id);
         }
-        $product =  DB::table('productorders')
+        $orders = User::join('orders', 'users.id', '=', 'orders.users_id')
+            ->whereIn('users.id', $productIds)
+            ->orderByDesc('orders.id')
+            ->paginate(10);
+        // foreach ($orders as $or) {
+        //     var_dump($or->getProvide);
+        // }
+        // die();
+        $product = DB::table('productorders')
             ->join('orders', 'productorders.order_id', '=', 'orders.id')
             ->whereIn('orders.id', $productIds)->get();
-        return view('tables.order.insertProduct', compact('order', 'product'));
+        return view('tables.order.insertProduct', compact('orders', 'product'));
     }
 
     /**
@@ -41,7 +51,7 @@ class AddProductController extends Controller
         $provide = Provides::all();
         $products = Products::all();
         $lastId = DB::table('productorders')->latest('id')->value('id');
-        $last = ProductOrders::latest()->value('id');
+        $las = DB::table('productorders')->get()->last()->id;
         return view('tables.order.insert', compact('provide', 'products', 'lastId'));
     }
 
@@ -53,11 +63,6 @@ class AddProductController extends Controller
      */
     public function store(Request $request)
     {
-        $order = new Orders();
-        $order->provide_id = $request['provide_id'];
-        $order->users_id = 1;
-        $order->order_status = 0;
-        $order->save();
         $product_id = $request->product_id;
         $products_id = $request->products_id;
         $product_name = $request->product_name;
@@ -68,7 +73,13 @@ class AddProductController extends Controller
         $product_price = $request->product_price;
         $product_tax = $request->product_tax;
         $product_total = $request->product_total;
+        $order = new Orders();
         for ($i = 0; $i < count($products_id); $i++) {
+            $order->provide_id = $request['provide_id'];
+            $order->users_id = Auth::user()->id;
+            $order->order_status = 0;
+            $order->total += $product_total[$i];
+            $order->save();
             $pro = new ProductOrders();
             $pro->product_id = $product_id[$i];
             $pro->products_id = $products_id[$i];
@@ -126,21 +137,15 @@ class AddProductController extends Controller
         $provide = Provides::all();
         $products = Products::all();
         $lastId = DB::table('productorders')->latest('id')->value('id');
-        $product_order = DB::table('productorders')->where('order_id', $order->id)->get(); 
+        $product_order = DB::table('productorders')->where('order_id', $order->id)->get();
         $productIds = array();
         foreach ($product_order as $value) {
             array_push($productIds, $value->id);
         }
         $seri =  DB::table('serinumbers')
-        ->join('productorders', 'serinumbers.product_id', '=', 'productorders.id')
-        ->whereIn('productorders.id', $productIds)->get();
-        //  $product_order = ProductOrders::with('serinumbes')->where('product_id',$order->id)->get();
-        // foreach ($product_order as $va){
-        //     foreach ($va->serinumbes as $seri) {
-        //         var_dump($seri);
-        //     } die();
-        // }
-        return view('tables.order.edit', compact('provide', 'order', 'product_order', 'provide_order', 'lastId', 'products','seri'));
+            ->join('productorders', 'serinumbers.product_id', '=', 'productorders.id')
+            ->whereIn('productorders.id', $productIds)->get();
+        return view('tables.order.edit', compact('provide', 'order', 'product_order', 'provide_order', 'lastId', 'products', 'seri'));
     }
 
     /**
@@ -153,7 +158,7 @@ class AddProductController extends Controller
     public function update(Request $request, $id)
     {
         $updateOrder = Orders::find($id);
-        if ($updateOrder->order_status == 0) {
+        if ($updateOrder->order_status == 0 || $updateOrder->order_status == 2) {
             $product_id = $request->product_id;
             $products_id = $request->products_id;
             $product_name = $request->product_name;
@@ -187,7 +192,7 @@ class AddProductController extends Controller
                     }
                     $products->inventory += $product_qty[$i];
                     $products->price_inventory += $product_total[$i];
-                    $products->price_avg = ($products->price_inventory / $products->inventory); 
+                    $products->price_avg = ($products->price_inventory / $products->inventory);
                     $products->update();
                 } else {
                     $updateProduct = Product::findOrFail($check->id);
@@ -201,7 +206,7 @@ class AddProductController extends Controller
                     }
                     $products->inventory += $product_qty[$i];
                     $products->price_inventory += $product_total[$i];
-                    $products->price_avg = ($products->price_inventory / $products->inventory); 
+                    $products->price_avg = ($products->price_inventory / $products->inventory);
                     $products->update();
                 }
             }
@@ -209,7 +214,7 @@ class AddProductController extends Controller
             $updateOrder->save();
             return redirect()->route('insertProduct.index')->with('section', 'Đơn hàng đã được duyệt');
         } else {
-            return redirect()->route('insertProduct.index')->with('section', 'Đơn hàng đã được duyệt');
+            return redirect()->route('insertProduct.index')->with('section', 'Đơn hàng đã được duyệt trước đó');
         }
     }
 
@@ -374,6 +379,46 @@ class AddProductController extends Controller
         $product_tax = $request->product_tax;
         $product_total = $request->product_total;
         for ($i = 0; $i < count($product_id); $i++) {
+            // Kiểm tra product_SN chưa tồn tại sẽ tiến hành thêm mới
+            $product_SN = $request->{'product_SN' . $i};
+            if ($product_SN != null) {
+                if (count($product_SN) > 1) {
+                    foreach ($product_SN as $seri_number) {
+                        $checkSN = Serinumbers::where('serinumber', $seri_number)->first();
+                        if ($checkSN == null) {
+                            $Seri = new Serinumbers();
+                            $Seri->product_id = $product_id[$i];
+                            $Seri->serinumber = $seri_number;
+                            $Seri->seri_status = 0;
+                            $Seri->save();
+                        } else {
+                            $checkSN->serinumber = $seri_number;
+                            $checkSN->save();
+                        }
+                    }
+                }
+                // Lấy danh sách SN theo id sản phẩm
+                $arrSN = Serinumbers::where('product_id', $product_id[$i])->get();
+                $product_SN_array = [];
+                foreach ($arrSN as $product_SN) {
+                    $serinumber = $product_SN->serinumber;
+                    array_push($product_SN_array, $serinumber);
+                }
+
+                // Tìm SN người dùng xóa khỏi danh sách
+                // Sửa product_SN bằng 0
+                $deleteSN = array_diff($product_SN_array, $request->{'product_SN' . $i});
+                foreach ($deleteSN as $delete) {
+                    $del = Serinumbers::where('serinumber', $delete)->get();
+                    foreach ($del as $va) {
+                        $va->product_id = 0;
+                        $va->save();
+                    }
+                }
+            } else {
+                return back()->with('session', 'Vui lòng thêm SN');
+            }
+
             $check = ProductOrders::where('id', $product_id[$i])->first();
             if ($check == null) {
                 $pro = new ProductOrders();
@@ -405,7 +450,7 @@ class AddProductController extends Controller
                     $Seri->seri_status = 0;
                     $Seri->save();
                 }
-            }else{
+            } else {
                 $check->products_id = $products_id[$i];
                 $check->product_name = $product_name[$i];
                 $check->product_category = $product_category[$i];
@@ -437,5 +482,19 @@ class AddProductController extends Controller
             }
         }
         return redirect()->route('insertProduct.index')->with('section', 'Lưu đơn hàng thành công');
+    }
+
+    // Hủy đơn
+    public function deleteBill(Request $request)
+    {
+        $data = $request->all();
+        $dele = Orders::findOrFail($data['order_id']);
+        if ($dele->order_status != 1) {
+            $dele->order_status = 2;
+            $dele->save();
+        } else {
+            return redirect()->route('insertProduct.index')->with('section', 'Sản phẩm đã được duyệt không thể hủy');
+        }
+        return redirect()->route('insertProduct.index')->with('section', 'Đã hủy đơn');
     }
 }

@@ -9,10 +9,10 @@ class Orders extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'provide_id','users_id','order_status'
+        'provide_id', 'users_id', 'order_status', 'total'
     ];
     public function getProvide()
     {
-        return $this->hasOne(Provides::class,'id','provide_id');
+        return $this->hasOne(Provides::class, 'provide_id', 'id');
     }
 }

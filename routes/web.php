@@ -58,7 +58,7 @@ Route::get('/update_provide',[AddProductController::class,'update_provide'])->na
 Route::resource('insertProduct',AddProductController::class);
 Route::POST('/addBillEdit',[AddProductController::class,'addBillEdit'])->name('addBillEdit');
 Route::post('/insertProductP',[AddProductController::class,'addBill'])->name('addBill');
-
+Route::put('/deleteBill/{id?}',[AddProductController::class,'deleteBill'])->name('deleteBill');
 Route::get('/simple', function () {
     return view('tables.simple');
 });
