@@ -32,7 +32,8 @@ li {
     margin-right: 5px;
 }
 
-.btn-filter {
+.btn-filter,
+.btn-delete-filter {
     background: #FFFFFF;
     border-radius: 8px;
 }
@@ -65,7 +66,8 @@ li {
 #myInput,
 #myInput-trademark,
 #myInput-category,
-.input-quantity {
+.input-quantity,
+.input-search {
     padding: 5px 10px;
     border: 1px solid #D6D6D6;
     border-radius: 5px;
@@ -102,4 +104,32 @@ li {
     border-radius: 8px;
     border-top-left-radius: 8px !important;
     border-bottom-left-radius: 8px !important;
+}
+
+.scrollbar,.ks-cboxtags-trademark {
+    overflow-y: auto;
+    scrollbar-width: thin;
+    /* ẩn thanh cuộn trên các trình duyệt mới */
+    scrollbar-color: #999999 #f0f0f0;
+    height: 180px !important;
+    /* màu của thanh cuộn */
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    /* chiều rộng của thanh cuộn */
+}
+::-webkit-scrollbar-track {
+    background-color: #f0f0f0;
+    /* màu nền của thanh cuộn */
+}
+::-webkit-scrollbar-thumb {
+    background-color: #999999;
+    /* màu của thanh cuộn */
+    border-radius: 3px;
+    /* bo tròn các góc của thanh cuộn */
+}
+::-webkit-scrollbar-thumb:hover {
+    background-color: #666666;
+    /* màu của thanh cuộn khi hover */
 }
