@@ -66,45 +66,63 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
-    public function getAllUsers($filter = [], $keywords = null, $sortByArr = null)
+    public function getAllUsers($filter = [], $name = null, $phonenumber = null, $email = null, $status = [], $roles = [], $keywords = null, $orderBy = null, $orderType = null)
     {
         // $users = DB::select('SELECT * FROM users');
         $users = DB::table($this->table)
             ->select('users.*', 'roles.name as role_name')
             ->join('roles', 'users.roleid', '=', 'roles.id');
 
-
-        $orderBy = 'users.created_at';
-        $orderType = 'desc';
-        if (!empty($sortByArr) && is_array($sortByArr)) {
-            if (!empty($sortByArr['sortBy']) && !empty($sortByArr['sortType'])) {
-                $orderBy = trim($sortByArr['sortBy']);
-                $orderType = trim($sortByArr['sortType']);
-            }
-        }
-        $users = $users->orderBy($orderBy, $orderType);
+        // Các điều kiện tìm kiếm và lọc dữ liệu ở đây
 
         if (!empty($filter)) {
             $users = $users->where($filter);
         }
+        if (!empty($name)) {
+            $users = $users->where(function ($query) use ($name) {
+                $query->orWhere('users.name', 'like', '%' . $name . '%');
+            });
+        }
+        if (!empty($phonenumber)) {
+            $users = $users->where(function ($query) use ($phonenumber) {
+                $query->orWhere('users.phonenumber', 'like', '%' . $phonenumber . '%');
+            });
+        }
+        if (!empty($email)) {
+            $users = $users->where(function ($query) use ($email) {
+                $query->orWhere('users.email', 'like', '%' . $email . '%');
+            });
+        }
+        if (!empty($status)) {
+            $users = $users->whereIn('status', $status);
+        }
+
+        if (!empty($roles)) {
+            $users = $users->whereIn('roleid', $roles);
+        }
+
         if (!empty($keywords)) {
             $users = $users->where(function ($query) use ($keywords) {
                 $query->orWhere('users.name', 'like', '%' . $keywords . '%');
                 $query->orWhere('users.email', 'like', '%' . $keywords . '%');
             });
         }
-        $users = $users->orderBy('users.created_at', 'asc')->paginate(5);
+
+        if(!empty($orderBy) && !empty($orderType)) {
+            $users = $users->orderBy($orderBy, $orderType);
+        }
+        // dd($users);
+        $users = $users->paginate(5);
         return $users;
     }
     public function addUser($data)
     {
         return DB::table($this->table)->insert($data);
-        // DB::insert('INSERT INTO users(name, email, password,roleid,phonenumber) VALUES (?,?,?,?,?)', $data);
     }
-    public function getDetailUser($id)
-    {
-        return DB::select('SELECT * FROM ' . $this->table . ' WHERE id  = ?', [$id]);
-    }
+    // public function getDetailUser($id)
+    // {
+    //     return DB::select('SELECT * FROM ' . $this->table . ' WHERE id  = ?', [$id]);
+    // }
     public function updateUser($data, $id)
     {
         return DB::table($this->table)->where('id', $id)->update($data);

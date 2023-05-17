@@ -20,10 +20,131 @@ class ProductsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    private $products;
+    public function __construct()
     {
+        $this->products = new Products();
+    }
+
+    public function index(Request $request)
+    {
+        //lấy tất cả id của products đưa vào mảng
+
+        $sortType = $request->input('sort-type');
+
+        $sortBy = $request->input('sort-by');
+
+        $allowSort = ['asc', 'desc'];
+
+        if (!empty($sortType) && in_array($sortType, $allowSort)) {
+
+
+            if ($sortType == 'desc') {
+                $sortType = 'asc';
+            } else {
+                $sortType = 'desc';
+            }
+        } else {
+            $sortType = 'asc';
+        }
+
+        $sortByArr = [
+            'sortBy' => $sortBy,
+            'sortType' => $sortType
+        ];
+
+        $filters = [];
+        $status = [];
+        $categoryarr = [];
+        $string = array();
+        $class = '';
+
+        $id = 0;
+        if (!empty($request->id)) {
+            $id = $request->input('id');
+            $idArray = explode(' ', $id);
+            array_push($string, ['label' => 'ID:', 'values' => $idArray, 'class' => 'id']);
+        }
+        $code = null;
+
+        if (!empty($request->code)) {
+            $code = $request->code;
+            $codeArr = explode(' ', $code);
+            array_push($string, ['label' => 'Mã sản phẩm:', 'values' => $codeArr, 'class' => 'code']);
+        }
+        $products_name = null;
+
+        if (!empty($request->products_name)) {
+            $products_name = $request->products_name;
+            $products_namearr = explode(' ', $products_name);
+            array_push($string, ['label' => 'Tên sản phẩm:', 'values' => $products_namearr, 'class' => 'products_name']);
+        }
+
+        // // Tồn kho
+        if (!empty($request->comparison_operator) && !empty($request->quantity)) {
+            $quantity = $request->input('quantity');
+            $comparison_operator = $request->input('comparison_operator');
+            $filters[] = ['products.inventory', $comparison_operator, $quantity];
+            $inventoryArray = explode(' ', $quantity);
+            array_push($string, ['label' => 'Tồn kho ' . $comparison_operator, 'values' => $inventoryArray, 'class' => 'quantity']);
+        }
+
+        // // Trị trung bình
+        if (!empty($request->avg_operator) && !empty($request->avg)) {
+            $avg = $request->avg;
+            $operator = $request->avg_operator;
+            array_push($filters, ['products.price_avg', $operator, $avg]);
+            $avgArray = explode(' ', $avg);
+            array_push($string, ['label' => 'Trị trung bình ' . $operator, 'values' => $avgArray, 'class' => 'avg']);
+        }
+        // // Trị tồn kho
+        if (!empty($request->price_inven_operator) && !empty($request->price_inven)) {
+            $price_inven = $request->price_inven;
+            $operator = $request->price_inven_operator;
+            $filters[] = ['products.price_inventory', $operator, $price_inven];
+            $price_invenArray = explode(' ', $price_inven);
+            array_push($string, ['label' => 'Trị tồn kho ' . $operator, 'values' => $price_invenArray, 'class' => 'price_inven']);
+        }
+        
+        //Status
+        if (!empty($request->status)) {
+            $statusValues = [0 => 'Hết hàng', 1 => 'Gần hết', 2 => 'Sẵn hàng'];
+            $status = $request->input('status', []);
+            $statusLabels = array_map(function ($value) use ($statusValues) {
+                return $statusValues[$value];
+            }, $status);
+            array_push($string, ['label' => 'Trạng thái:', 'values' => $statusLabels, 'class' => 'status']);
+        }
+
+        $keywords = null;
+
+        if (!empty($request->keywords)) {
+            $keywords = $request->keywords;
+        }
+
+        $categories = Category::all();
+        $categoryarr = [];
+        if (!empty($request->categoryarr)) {
+            $categoryarr = $request->input('categoryarr', []);
+            if (!empty($categoryarr)) {
+                $selectedCategory = Category::whereIn('id', $categoryarr)->get();
+                $selectedCategory = $selectedCategory->pluck('category_name')->toArray();
+            }
+            array_push($string, ['label' => 'Danh mục:', 'values' => $selectedCategory, 'class' => 'category']);
+        }
+        // Thương hiệu
+        $trademarkarr = [];
+        if (!empty($request->trademarkarr)) {
+            $trademarkarr = $request->input('trademarkarr', []);
+            array_push($string, ['label' => 'Thương hiệu:', 'values' => $trademarkarr, 'class' => 'trademark']);
+        }
+        // dd($string);
         //lấy tất cả products
-        $products = Products::all();
+        $products = $products = $this->products->getAllProducts($filters, $status, $code, $products_name, $categoryarr, $trademarkarr, $keywords, $sortByArr);
+
+        //Lấy trademarks
+        $trademarks = Products::all();
+
         //lấy tất cả id của products đưa vào mảng
         $productIds = array();
         foreach ($products as $value) {
@@ -55,8 +176,7 @@ class ProductsController extends Controller
                 DB::raw('SUM(product.product_qty * product.product_price) as total')
             )
             ->get();
-        $category = Category::all();
-        return view('tables.products.data', compact('products', 'category', 'product'));
+        return view('tables.products.data', compact('products', 'categories', 'product', 'string', 'sortType', 'trademarks'));
     }
 
     /**
@@ -155,14 +275,13 @@ class ProductsController extends Controller
         $products = Products::findOrFail($id);
 
         $get_image = $request->file('products_img');
-        if($get_image){
+        if ($get_image) {
             $get_name_image = $get_image->getClientOriginalName();
             $name_image = current(explode('.', $get_name_image));
             $new_image =  $get_name_image;
             $get_image->move('../public/dist/img', $new_image);
             $products->products_image = $name_image;
-        }
-        else{
+        } else {
             $products->products_image = $products->products_image;
         }
 
@@ -202,19 +321,19 @@ class ProductsController extends Controller
     public function insertProducts()
     {
         $cate = Category::all();
-        return view('tables.products.insertProducts',compact('cate'));
+        return view('tables.products.insertProducts', compact('cate'));
     }
     public function storeProducts(Request $request)
     {
         $products = new Products();
         $get_image = $request->file('products_img');
-        if($get_image){
+        if ($get_image) {
             $get_name_image = $get_image->getClientOriginalName();
             $name_image = current(explode('.', $get_name_image));
             $new_image =  $get_name_image;
             $get_image->move('../public/dist/img', $new_image);
             $products->products_image = $name_image;
-        }else{
+        } else {
             $products->products_image = "";
         }
         $products->products_code = $request->products_code;

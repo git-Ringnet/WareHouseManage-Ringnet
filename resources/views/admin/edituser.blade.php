@@ -47,7 +47,7 @@
                 </div>
                 <div class="mb-3">
                   <label for="">Password</label>
-                  <input type="password" class="form-control" name="password" placeholder="Mật khẩu">
+                  <input type="password" class="form-control" name="password" placeholder="Mật khẩu" value="{{ old('password')?? $userDetail->password }}">
                   @error('password')
                   <span style="color:red">{{$message}}</span>
                   @enderror
@@ -55,7 +55,7 @@
                 <div class="mb-3">
                   <label for="">Role</label>
                   <select class="form-control" name="role" id="">
-                    <option value="0">Chọn chức vụ</option>
+                    <option value="{{ old('role')?? $userDetail->roleid }}">Chức vụ</option>
                     @foreach($roles as $role)
                     <option value="{{$role->id}}" {{old('role')==$role->id?'selected':false}}>{{$role->name}}</option>
                     @endforeach
@@ -66,7 +66,7 @@
                 </div>
                 <div class="mb-3">
                   <label for="">Phone</label>
-                  <input type="text" class="form-control" name="phonenumber" placeholder="Số điện thoại" value="{{old('phonenumber')?? $userDetail->phonenumber}}">
+                  <input type="number" class="form-control" name="phonenumber" placeholder="Số điện thoại" value="{{old('phonenumber')?? $userDetail->phonenumber}}">
                   @error('phonenumber')
                   <span style="color:red">{{$message}}</span>
                   @enderror

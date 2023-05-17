@@ -7,10 +7,85 @@ use Illuminate\Http\Request;
 
 class ProvideController extends Controller
 {
-    public function index()
+    private $provides;
+    public function __construct()
     {
-        $provides = Provides::orderBy('id', 'ASC')->paginate(10);
-        return view('tables.provide.provides', compact('provides'));
+        $this->provides = new Provides();
+    }
+    public function index(Request $request)
+    {
+        // $provides = Provides::orderBy('id', 'ASC')->paginate(10);
+        // return view('tables.provide.provides', compact('provides'));
+        $sortType = $request->input('sort-type');
+
+         $sortBy = $request->input('sort-by');
+ 
+         $allowSort = ['asc', 'desc'];
+ 
+         if (!empty($sortType) && in_array($sortType, $allowSort)) {
+ 
+ 
+             if ($sortType == 'desc') {
+                 $sortType = 'asc';
+             } else {
+                 $sortType = 'desc';
+             }
+         } else {
+             $sortType = 'asc';
+         }
+ 
+         $sortByArr = [
+             'sortBy' => $sortBy,
+             'sortType' => $sortType
+         ];
+ 
+         $filters = [];
+         $status = [];
+         $roles = [];
+         $string = array();
+         $class='';
+         $name = '';
+        if (!empty($request->name)) {
+            $name = $request->name;
+            $nameArr = explode(' ', $name);
+            array_push($string, ['label' => 'Đơn vị:', 'values' => $nameArr, 'class' => 'name']);
+        }
+        $represent = '';
+        if (!empty($request->represent)) {
+            $represent = $request->represent;
+            $nameArr = explode(' ', $represent);
+            array_push($string, ['label' => 'Đại diện:', 'values' => $nameArr, 'class' => 'represent']);
+        }
+        $phonenumber = '';
+        if (!empty($request->phonenumber)) {
+            $phonenumber = $request->phonenumber;
+            $nameArr = explode(' ', $phonenumber);
+            array_push($string, ['label' => 'Số điện thoại:', 'values' => $nameArr, 'class' => 'phonenumber']);
+        }
+        $email = '';
+        if (!empty($request->email)) {
+            $email = $request->email;
+            $nameArr = explode(' ', $email);
+            array_push($string, ['label' => 'Email:', 'values' => $nameArr, 'class' => 'email']);
+        }
+ 
+         if (!empty($request->status)) {
+             $statusValues = [1 => 'Active', 0 => 'Disable'];
+             $status = $request->input('status', []);
+             $statusLabels = array_map(function ($value) use ($statusValues) {
+                 return $statusValues[$value];
+             }, $status);
+             array_push($string, ['label' => 'Trạng thái:', 'values' => $statusLabels,'class' => 'status']);
+         }
+         
+ 
+         $keywords = null;
+ 
+         if (!empty($request->keywords)) {
+             $keywords = $request->keywords;
+         }
+         $provides = $this->provides->getAllProvides($filters,$name, $represent, $phonenumber, $email, $status, $keywords, $sortByArr);
+         return view('tables.provide.provides', compact('provides', 'sortType', 'string'));
     }
 
     /**

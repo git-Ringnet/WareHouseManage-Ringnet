@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Roles;
 use \Illuminate\Support\Facades\DB;
 use App\Http\Requests\UserRequest;
+
 class UsersController extends Controller
 {
     private $users;
@@ -15,61 +16,87 @@ class UsersController extends Controller
         $this->users = new User();
     }
 
+
     public function show(Request $request)
     {
         $title = "Danh sách người dùng";
 
 
-         //Xử lí sắp xếp 
-         $sortType = $request->input('sort-type');
 
-         $sortBy = $request->input('sort-by');
- 
-         $allowSort = ['asc', 'desc'];
- 
-         if (!empty($sortType) && in_array($sortType, $allowSort)) {
- 
- 
-             if ($sortType == 'desc') {
-                 $sortType = 'asc';
-             } else {
-                 $sortType = 'desc';
-             }
-         } else {
-             $sortType = 'asc';
-         }
- 
-        $sortByArr = [
-             'sortBy' => $sortBy,
-             'sortType' => $sortType
-        ];
-        $roles = new Roles;
-        $roles = $roles->getAll();
+        $allRoles = new Roles;
+        $allRoles = $allRoles->getAll();
 
-         $filters =[];
-         if (!empty($request->status)) {
-            $status = $request->status;
-            $filters[] = ['users.status', '=', $status];
+        $filters = [];
+        $status = [];
+        $roles = [];
+        $string = array();
+        $class = '';
+        $name = '';
+        if (!empty($request->name)) {
+            $name = $request->name;
+            $nameArr = explode(' ', $name);
+            array_push($string, ['label' => 'Tên nhân viên:', 'values' => $nameArr, 'class' => 'name']);
         }
-        if (!empty($request->roleid)) {
-            $roleid = $request->roleid;
-            $filters[] = ['users.roleid', '=', $roleid];
+        $phonenumber = '';
+        if (!empty($request->phonenumber)) {
+            $phonenumber = $request->phonenumber;
+            $nameArr = explode(' ', $phonenumber);
+            array_push($string, ['label' => 'Số điện thoại:', 'values' => $nameArr, 'class' => 'phonenumber']);
+        }
+        $email = '';
+        if (!empty($request->email)) {
+            $email = $request->email;
+            $nameArr = explode(' ', $email);
+            array_push($string, ['label' => 'Email:', 'values' => $nameArr, 'class' => 'email']);
+        }
+
+        if (!empty($request->status)) {
+            $statusValues = [1 => 'Active', 0 => 'Disable'];
+            $status = $request->input('status', []);
+            $statusLabels = array_map(function ($value) use ($statusValues) {
+                return $statusValues[$value];
+            }, $status);
+            array_push($string, ['label' => 'Trạng thái:', 'values' => $statusLabels, 'class' => 'status']);
+        }
+
+        if (!empty($request->roles)) {
+            $roles = $request->input('roles', []);
+            if (!empty($roles)) {
+                $selectedRoles = Roles::whereIn('id', $roles)->get();
+                $selectedRoleNames = $selectedRoles->pluck('name')->toArray();
+            }
+            array_push($string, ['label' => 'Vai trò:', 'values' => $selectedRoleNames, 'class' => 'roles']);
         }
 
         $keywords = null;
 
         if (!empty($request->keywords)) {
             $keywords = $request->keywords;
-           
         }
-   
-        $usersList = $this->users->getAllUsers($filters,$keywords,$sortByArr);
-        return view('admin/userslist', compact('title', 'usersList', 'sortType','roles'));
+        //Xử lí sắp xếp 
+        $sortType = $request->input('sort-type');
+
+        $sortBy = $request->input('sort-by');
+
+        $allowSort = ['asc', 'desc'];
+
+        if (!empty($sortType) && in_array($sortType, $allowSort)) {
+            if ($sortType == 'desc') {
+                $sortType = 'asc';
+            } else {
+                $sortType = 'desc';
+            }
+        } else {
+            $sortType = 'asc';
+        }
+
+        $usersList = $this->users->getAllUsers($filters,$name, $phonenumber, $email, $status, $roles, $keywords, $sortBy, $sortType);
+        return view('admin/userslist', compact('title', 'usersList', 'sortType', 'allRoles', 'string'));
     }
 
 
     public function add()
-    {   
+    {
         $roles = new Roles;
 
         return view('admin/adduser')->with('roles', $roles->getAll());
@@ -78,11 +105,11 @@ class UsersController extends Controller
     {
         $data = [
             'name' => $request->name,
-            'email' =>$request->email,
-            'password' =>$request->password,
-            'roleid' =>$request->role,
-            'phonenumber' =>$request->phonenumber,
-            'status' =>$request->status,
+            'email' => $request->email,
+            'password' => $request->password,
+            'roleid' => $request->role,
+            'phonenumber' => $request->phonenumber,
+            'status' => $request->status,
         ];
         $this->users->addUser($data);
 
@@ -92,27 +119,30 @@ class UsersController extends Controller
     public function edit(Request $request)
     {
         $id = $request->id;
-        // $id = session('id');
-        // $request->session()->put('id', $id);
+        $request->session()->put('id', $id);
         $user = User::where('id', $id)->get();
         // $userDetail = $userDetail[0];
         $userDetail = User::find($id);
         $roles = new Roles;
-        return view('admin/edituser', ['useredit' => $user],compact('userDetail'))->with('roles', $roles->getAll());
+        // dd($id);
+        return view('admin/edituser', ['useredit' => $user], compact('userDetail'))->with('roles', $roles->getAll());
     }
     public function editUser(UserRequest $request)
     {
-        $id = $request->id;
+        $id = session('id');
+
         $data = [
             'name' => $request->name,
-            'email' =>$request->email,
-            'password' =>$request->password,
-            'roleid' =>$request->role,
-            'phonenumber' =>$request->phonenumber,
-            'status' =>$request->status,
+            'email' => $request->email,
+            'password' => $request->password,
+            'roleid' => $request->role,
+            'phonenumber' => $request->phonenumber,
+            'status' => $request->status,
         ];
-        $this->users->updateUser($data,$id);
-        return back();
+        // dd($id);
+
+        $this->users->updateUser($data, $id);
+        return redirect(route('admin.userslist'))->with('msg', 'Sửa người dùng thành công');
     }
     public function deleteUser(Request $request)
     {
