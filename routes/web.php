@@ -24,7 +24,7 @@ Route::get('/', function () {
     return view('index');
 });
 
-Route::prefix('admin')->name('admin.')->group(function () {
+Route::prefix('admin')->name('admin.')->middleware('permission:admin')->group(function () {
     Route::get('userlist', [UsersController::class, 'show'])->name('userslist');
     Route::get('adduser', [UsersController::class, 'add'])->name('add');
     Route::post('adduser', [UsersController::class, 'addUser'])->name('adduser');
@@ -36,7 +36,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 
 //nha cung cap
-Route::resource('provides', provideController::class);
+Route::resource('provides', provideController::class)->middleware('permission:Manager');
 Route::get('/update-status', [provideController::class, 'updateStatus'])->name('update');
 
 //khach hang
