@@ -106,7 +106,7 @@ class UsersController extends Controller
         $data = [
             'name' => $request->name,
             'email' => $request->email,
-            'password' => $request->password,
+            'password' => bcrypt($request->password),
             'roleid' => $request->role,
             'phonenumber' => $request->phonenumber,
             'status' => $request->status,
@@ -130,7 +130,6 @@ class UsersController extends Controller
     public function editUser(UserRequest $request)
     {
         $id = session('id');
-
         $data = [
             'name' => $request->name,
             'email' => $request->email,

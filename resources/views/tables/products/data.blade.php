@@ -19,13 +19,20 @@
                 <form class="w-100" action="" method="get" id='search-filter'>
                     <div class="row">
                         <div class="col-5">
-                            <input type="search" name="keywords" class="form-control" value="{{request()->keywords}}"
-                                placeholder="Tìm kiếm đơn vị, đại diện hoặc email">
+                            <input type="text" placeholder="Tìm kiếm theo mã sản phẩm hoặc tên sản phẩm" name="keywords"
+                                class="pr-4 input-search w-100" value="{{request()->keywords}}">
+                            <span class="search-icon"><i class="fas fa-search"></i></span>
                         </div>
                         <div class="col-2">
                             <button type="submit" class="btn btn-primary btn-block">Tìm kiếm</button>
                         </div>
-                        <a class="btn btn-primary ml-auto" href="{{route('data.index')}}">Tắt bộ lọc</a>
+                        <a class="btn ml-auto btn-delete-filter" href="{{route('data.index')}}"><span><svg width="24"
+                                    height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M6 5.4643C6 5.34116 6.04863 5.22306 6.13518 5.13599C6.22174 5.04892 6.33913 5 6.46154 5H17.5385C17.6609 5 17.7783 5.04892 17.8648 5.13599C17.9514 5.22306 18 5.34116 18 5.4643V7.32149C18 7.43599 17.9579 7.54645 17.8818 7.63164L13.8462 12.1428V16.6075C13.8461 16.7049 13.8156 16.7998 13.7589 16.8788C13.7022 16.9578 13.6223 17.0168 13.5305 17.0476L10.7612 17.9762C10.6919 17.9994 10.618 18.0058 10.5458 17.9947C10.4735 17.9836 10.4049 17.9554 10.3456 17.9124C10.2863 17.8695 10.238 17.8129 10.2047 17.7475C10.1713 17.682 10.1539 17.6096 10.1538 17.5361V12.1428L6.11815 7.63164C6.0421 7.54645 6.00002 7.43599 6 7.32149V5.4643Z"
+                                        fill="#555555" />
+                                </svg>
+                            </span>Tắt bộ lọc</a>
                     </div>
                     <div class="row d-flex justify-contents-center align-items-center mr-auto pt-2">
                         <div class="icon-filter mr-3 ml-1">
@@ -74,15 +81,16 @@
                                             onkeyup="filterFunction()">
                                         <span class="search-icon"><i class="fas fa-search"></i></span>
                                     </div>
-                                    {{-- <button class="dropdown-item" id="btn-id">ID</button> --}}
-                                    <button class="dropdown-item" id="btn-code">Mã sản phẩm</button>
-                                    <button class="dropdown-item" id="btn-id">Tên sản phẩm</button>
-                                    <button class="dropdown-item" id="btn-category">Danh mục</button>
-                                    <button class="dropdown-item" id="btn-trademark">Thương hiệu</button>
-                                    <button class="dropdown-item" id="btn-quantity">Tồn kho</button>
-                                    <button class="dropdown-item" id="btn-avg">Trị trung bình</button>
-                                    <button class="dropdown-item" id="btn-price_inven">Trị tồn kho</button>
-                                    <button class="dropdown-item" id="btn-status">Trạng thái</button>
+                                    <div class="scrollbar">
+                                        <button class="dropdown-item" id="btn-code">Mã sản phẩm</button>
+                                        <button class="dropdown-item" id="btn-id">Tên sản phẩm</button>
+                                        <button class="dropdown-item" id="btn-category">Danh mục</button>
+                                        <button class="dropdown-item" id="btn-trademark">Thương hiệu</button>
+                                        <button class="dropdown-item" id="btn-quantity">Tồn kho</button>
+                                        <button class="dropdown-item" id="btn-avg">Trị trung bình</button>
+                                        <button class="dropdown-item" id="btn-price_inven">Trị tồn kho</button>
+                                        <button class="dropdown-item" id="btn-status">Trạng thái</button>
+                                    </div>
                                 </div>
                             </div>
                             <?php 
@@ -184,12 +192,17 @@
                                     <div class="heading-title py-3 px-2">
                                         <h5>Trạng thái:</h5>
                                     </div>
+                                    <div class="search-container px-2 mt-1">
+                                        <input type="text" placeholder="Tìm thuộc tính lọc" id="myInput-status"
+                                            class="pr-4 input-search" onkeyup="filterStatus()">
+                                        <span class="search-icon"><i class="fas fa-search"></i></span>
+                                    </div>
                                     <div
                                         class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
                                         <a class="cursor select-all mr-auto">Chọn tất cả</a>
                                         <a class="cursor deselect-all">Hủy chọn</a>
                                     </div>
-                                    <ul class="ks-cboxtags p-0 m-0 px-2">
+                                    <ul class="ks-cboxtags-status p-0 m-0 px-2">
                                         <li>
                                             <input type="checkbox" id="status_active" {{ in_array(2, $status)
                                                 ? 'checked' : '' }} name="status[]" value="2">
@@ -365,7 +378,6 @@
                     </div>
             </div><!-- /.container-fluid -->
     </section>
-
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
@@ -777,6 +789,20 @@ function filterCategory() {
   var input = $("#myInput-category");
   var filter = input.val().toUpperCase();
   var buttons = $(".ks-cboxtags-category li");
+
+  buttons.each(function() {
+    var text = $(this).text();
+    if (text.toUpperCase().indexOf(filter) > -1) {
+      $(this).show();
+    } else {
+      $(this).hide();
+    }
+  });
+}
+function filterStatus() {
+  var input = $("#myInput-status");
+  var filter = input.val().toUpperCase();
+  var buttons = $(".ks-cboxtags-status li");
 
   buttons.each(function() {
     var text = $(this).text();

@@ -55,9 +55,9 @@
                 <div class="mb-3">
                   <label for="">Role</label>
                   <select class="form-control" name="role" id="">
-                    <option value="{{ old('role')?? $userDetail->roleid }}">Chức vụ</option>
+                    {{-- <option value="{{ old('role')?? $userDetail->roleid }}">Chức vụ</option> --}}
                     @foreach($roles as $role)
-                    <option value="{{$role->id}}" {{old('role')==$role->id?'selected':false}}>{{$role->name}}</option>
+                    <option value="{{$role->id}}" {{old('role')?? $userDetail->roleid==$role->id?'selected':false}} >{{$role->name}}</option>
                     @endforeach
                   </select>
                   @error('role')
