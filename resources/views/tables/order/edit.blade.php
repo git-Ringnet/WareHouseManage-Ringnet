@@ -1,4 +1,5 @@
 <x-navbar></x-navbar>
+@if(Auth::check() != null)
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
@@ -15,14 +16,37 @@
           <div class="col-sm-6">
             <div class="w-75">
               <div class="">
-                <span>Nhập hàng</span>
+                <span>Xuất hàng</span>
                 <span>/</span>
-                <span><b>Đơn nhập hàng mới</b></span>
+                <span><b>Đơn hàng mới</b></span>
               </div>
               <div class="mt-3">
-                <button type="submit" class="btn btn-danger text-white">Duyệt đơn</button>
-                <button type="submit" class="btn btn-secondary ml-4" id="deleteBill">Hủy đơn</button>
+                @if(Auth::user()->id == $order->users_id)
+                <button class="btn btn-danger text-white" id="add_bill">Duyệt đơn</button>
+                <a href="#" class="btn btn-secondary ml-4">Hủy đơn</a>
                 <a href="#" class="btn border border-secondary ml-4">In đơn hàng</a>
+                @endif
+              </div>
+              <div class="mt-3">
+                <div class="input-group mb-1 position-relative">
+                  <input type="text" class="form-control" placeholder="Nhập thông tin khách hàng" aria-label="Username" aria-describedby="basic-addon1" id="myInput" autocomplete="off">
+                  <div class="position-absolute" style="right: 5px;top: 17%;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M15.1835 7.36853C13.0254 5.21049 9.52656 5.21049 7.36853 7.36853C5.21049 9.52656 5.21049 13.0254 7.36853 15.1835C9.52656 17.3415 13.0254 17.3415 15.1835 15.1835C17.3415 13.0254 17.3415 9.52656 15.1835 7.36853ZM16.2441 6.30787C13.5003 3.56404 9.05169 3.56404 6.30787 6.30787C3.56404 9.05169 3.56404 13.5003 6.30787 16.2441C9.05169 18.988 13.5003 18.988 16.2441 16.2441C18.988 13.5003 18.988 9.05169 16.2441 6.30787Z" fill="#555555" />
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M15.1796 15.1796C15.4725 14.8867 15.9474 14.8867 16.2403 15.1796L19.5303 18.4696C19.8232 18.7625 19.8232 19.2374 19.5303 19.5303C19.2374 19.8232 18.7625 19.8232 18.4696 19.5303L15.1796 16.2403C14.8867 15.9474 14.8867 15.4725 15.1796 15.1796Z" fill="#555555" />
+                    </svg>
+                  </div>
+                </div>
+                <ul id="myUL" class="bg-white position-absolute w-100 rounded shadow" style="z-index: 99;">
+                  @foreach($provide as $value)
+                  <li>
+                    <a href="#" class="text-dark d-flex justify-content-between p-2 search-info select_page" id="{{ $value->id }}" name="select_page">
+                      <span>{{ $value->provide_represent }}</span>
+                      <span class="mr-5">{{ $value->provide_name }}</span>
+                    </a>
+                  </li>
+                  @endforeach
+                </ul>
               </div>
             </div>
           </div>
@@ -88,47 +112,57 @@
         </div>
       </div><!-- /.container-fluid -->
     </section>
-    <section class="content-header">
-      <div class="container-fluid">
-        <select id="select_page" style="width:200px;" class="operator" name="provide_id">
-          @foreach($provide as $value)
-          <option value="{{$value->id}}" {{ ( $order->provide_id == $value->id) ? 'selected' : '' }}> {{$value->provide_name}} </option>
-          @endforeach
-        </select>
-      </div>
-    </section>
     <section id="infor_provide">
-      <div class="d-flex justify-content-between align-items-center">
-        <div class="title">
-          <h4>Thông tin nhà cung cấp</h4>
-        </div>
-        <div class="save_infor btn btn-secondary">Lưu thông tin</div>
+      <div class="border-bottom p-3 d-flex justify-content-between">
+        <b>Thông tin nhà cung cấp</b>
+        @if(Auth::user()->id == $order->users_id)
+        <button id="btn-addProvide" class="btn btn-primary save_infor">
+          <span>Lưu thông tin</span></button>
+        @endif
       </div>
-      <div class="content">
-        <div class="row">
-          <div class="col-md-4">
-            <label for="">Công ty</label>
-            <input required type="text" id="provide_name" name="provide_name" value="{{$provide_order[0]->provide_name}}"> <br>
-            <label for="">Địa chỉ xuất hóa đơn</label>
-            <input required type="text" id="provide_address" name="provide_address" value="{{$provide_order[0]->provide_address}}"> <br>
-            <label for="">Mã số thuế</label>
-            <input required type="text" id="provide_code" name="provide_code" value="{{$provide_order[0]->provide_code}}"> <br>
+      <input type="hidden" name="provide_id" value="{{$provide_order[0]->id}}" id="provide_id">
+      <div class="row p-3">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="congty">Công ty:</label>
+            <input required type="text" class="form-control" id="provide_name" placeholder="Nhập thông tin" name="provide_name" value="{{$provide_order[0]->provide_name}}">
           </div>
-          <div class="col-md-4"></div>
-          <div class="col-md-4">
-            <label for="">Người đại diện</label>
-            <input required type="text" id="provide_represent" name="provide_represent" value="{{$provide_order[0]->provide_represent}}"> <br>
-            <label for="">Email</label>
-            <input required type="text" id="provide_email" name="provide_email" value="{{$provide_order[0]->provide_email}}"> <br>
-            <label for="">Số điện thoại</label>
-            <input required type="text" id="provide_phone" name="provide_phone" value="{{$provide_order[0]->provide_phone}}">
+          <div class="form-group">
+            <label>Địa chỉ xuất hóa đơn:</label>
+            <input required type="text" class="form-control" id="provide_address" placeholder="Nhập thông tin" name="provide_address" value="{{$provide_order[0]->provide_address}}">
+          </div>
+          <div class="form-group">
+            <label for="email">Mã số thuế:</label>
+            <input required type="text" class="form-control" id="provide_code" placeholder="Nhập thông tin" name="provide_code" value="{{$provide_order[0]->provide_code}}">
+          </div>
+          <div class="form-group">
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="email">Người đại diện:</label>
+            <input required type="text" class="form-control" id="provide_represent" placeholder="Nhập thông tin" name="provide_represent" value="{{$provide_order[0]->provide_represent}}">
+          </div>
+          <div class="form-group">
+            <label for="email">Email:</label>
+            <input required type="email" class="form-control" id="provide_email" placeholder="Nhập thông tin" name="provide_email" value="{{$provide_order[0]->provide_email}}">
+          </div>
+          <div class="form-group">
+            <label for="email">Số điện thoại:</label>
+            <input required type="text" class="form-control" id="provide_phone" placeholder="Nhập thông tin" name="provide_phone" value="{{$provide_order[0]->provide_phone}}">
+          </div>
+          <div class="form-group">
+          </div>
+          <div class="form-group">
+          </div>
+          <div class="form-group">
           </div>
         </div>
       </div>
     </section>
     <!-- Main content -->
-    <section class="content">
-      <div class="container-fluid">
+    <div class="container-fluid">
+      <section class="content">
         <table class="table table-bordered table-hover">
           <thead>
             <tr>
@@ -165,7 +199,7 @@
             <?php $stt++; ?>
             @endforeach
             <div id="list_modal">
-            <?php $stt = 0; ?>
+              <?php $stt = 0; ?>
               @foreach($product_order as $pro)
               <div class="modal fade" id="exampleModal{{$stt}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">'
                 <div class="modal-dialog" role="document">
@@ -204,24 +238,26 @@
             </div>
           </tbody>
         </table>
-
+        @if(Auth::user()->id == $order->users_id)
         <a href="javascript:;" class="btn btn-info addRow">Thêm sản phẩm</a>
         <a href="javascript:;" class="btn btn-primary addBillEdit">Lưu</a>
-      </div><!-- /.container-fluid -->
+        @endif
+
+      </section>
+    </div><!-- /.container-fluid -->
   </form>
-  </section>
   <!-- /.content -->
 </div>
-
+@endif
 <script>
   // Hủy đơn hàng
-  $(document).on('click','#deleteBill',function(e){
+  $(document).on('click', '#deleteBill', function(e) {
     e.preventDefault();
     var order_id = <?php echo $order->id ?>;
     var deleteUrl = "{{route('deleteBill', ['order_id' => ''])}}".replace('order_id', order_id);
     $('#form_submit').attr('action', deleteUrl);
     $('#form_submit').submit();
-});
+  });
   // Update productSN trước khi thêm dữ liệu
   function updateProductSN() {
     $('.modal-body').each(function(index) {
@@ -231,6 +267,19 @@
       div_value2.attr('class', 'div_value' + index + '[]');
     });
   }
+
+  //hiện danh sách khách hàng khi click trường tìm kiếm
+  $("#myUL").hide();
+  $("#myInput").on("click", function() {
+    $("#myUL").show();
+  });
+
+  //ẩn danh sách khách hàng
+  $(document).click(function(event) {
+    if (!$(event.target).closest("#myInput").length) {
+      $("#myUL").hide();
+    }
+  });
 
   // Chuyển hướng form để thêm dữ liệu
   $(document).on('click', '.addBillEdit', function(e) {
@@ -353,10 +402,9 @@
   });
 
   // AJAX hiển thị thông tin nhà cung cấp 
-  $('#select_page').change(function() {
-    var infor_provide = "";
-    var provides_id = $('#select_page').val();
-    $('#infor_provide').empty();
+  $('.search-info').click(function() {
+    var provides_id = $(this).attr('id');
+    $('#radio1').prop('checked', true);
     $.ajax({
       url: "{{ route('show_provide') }}",
       type: "get",
@@ -364,47 +412,54 @@
         provides_id: provides_id,
       },
       success: function(data) {
-        infor_provide += ` <div class="d-flex justify-content-between align-items-center">
-          <div class="title"><h4>Thông tin nhà cung cấp</h4></div>
-          <div class="save_infor btn btn-secondary">Lưu thông tin</div>
-           </div>
-          <div class="content">
-          <div class="row">
-          <div class="col-md-4">
-          <input type="hidden" id="provide_id" name="provide_id" value="` + data.id + `"> <br>
-          <label for="">Công ty</label>
-          <input type="text" id="provide_name" name="provide_name" value="` + data.provide_name + `"> <br>
-          <label for="">Địa chỉ xuất hóa đơn</label>
-          <input type="text" id="provide_address" name="provide_address" value="` + data.provide_address + `"> <br>
-          <label for="">Mã số thuế</label>
-          <input type="text" id="provide_code" name="provide_code" value="` + data.provide_code + `"> <br>
-          </div>
-          <div class="col-md-4"></div>
-          <div class="col-md-4">
-          <label for="">Người  đại diện</label>
-          <input type="text" id="provide_represent" name="provide_represent" value="` + data.provide_represent + `"> <br>
-          <label for="">Email</label>
-          <input type="text" id="provide_email" name="provide_email" value="` + data.provide_email + `"> <br>
-          <label for="">Số điện thoại</label>
-          <input type="text" id="provide_phone" name="provide_phone" value="` + data.provide_phone + `">
-          </div>
-          </div>
-          </div>`
-        $('#infor_provide').append(infor_provide);
+        $('#infor_provide').html(
+          '<input type="hidden" name="provide_id" id="provide_id" value="' + data.id + '">  ' +
+          '<div class="border-bottom p-3 d-flex justify-content-between">' +
+          '<b>Thông tin nhà cung cấp</b>' +
+          '<button id="btn-addCustomer" class="btn btn-primary">' +
+          '<span>Lưu thông tin</span></button></div>' +
+          '<div class="row p-3">' +
+          '<div class="col-sm-6">' +
+          '<div class="form-group">' +
+          '<label for="congty">Công ty:</label>' +
+          '<input required type="text" class="form-control" id="provide_name" placeholder="Nhập thông tin" name="provide_name" value="' + data.provide_name + '">' +
+          '</div>' + '<div class="form-group">' +
+          '<label>Địa chỉ xuất hóa đơn:</label>' +
+          '<input required type="text" class="form-control" id="provide_address" placeholder="Nhập thông tin" name="provide_address" value="' + data.provide_address + '">' +
+          '</div>' + '<div class="form-group">' +
+          '<label for="email">Mã số thuế:</label>' +
+          '<input required type="text" class="form-control" id="provide_code" placeholder="Nhập thông tin" name="provide_code" value="' + data.provide_code + '">' +
+          '</div>' + '<div class="form-group">' +
+          '</div>' + '</div>' + '<div class="col-sm-6">' +
+          '<div class="form-group">' +
+          '<label for="email">Người đại diện:</label>' +
+          '<input required type="text" class="form-control" id="provide_represent" placeholder="Nhập thông tin" name="provide_represent" value="' + data.provide_represent + '">' +
+          '</div>' + '<div class="form-group">' +
+          '<label for="email">Email:</label>' +
+          '<input required type="email" class="form-control" id="provide_email" placeholder="Nhập thông tin" name="provide_email" value="' + data.provide_email + '">' +
+          '</div>' + '<div class="form-group">' +
+          '<label for="email">Số điện thoại:</label>' +
+          '<input required type="text" class="form-control" id="provide_phone" placeholder="Nhập thông tin" name="provide_phone" value="' + data.provide_phone + '">' +
+          '</div>' + '<div class="form-group">' +
+          '</div>' + '<div class="form-group">' +
+          '</div>' + '<div class="form-group">' +
+          '</div></div></div>'
+        );
+        $('#provide_id').val(data.id);
       }
     });
-  });
-
+  })
   // Ajax thay đổi thông tin khách hàng
-  $(document).on('click', '.save_infor', function(e) {
+  $(document).on('click', '#btn-addProvide', function(e) {
     e.preventDefault();
-    var provides_id = $('#select_page').val();
+    var provides_id = $('#provide_id').val();
     var provide_name = $('#provide_name').val();
     var provide_address = $('#provide_address').val();
     var provide_represent = $('#provide_represent').val();
     var provide_email = $('#provide_email').val();
     var provide_phone = $('#provide_phone').val();
     var provide_code = $('#provide_code').val();
+    console.log(provides_id);
     $.ajax({
       url: "{{ route('update_provide') }}",
       type: "get",
@@ -428,7 +483,6 @@
     var div = $(this).parent('div');
     $(div).remove();
   })
-
 </script>
 </body>
 

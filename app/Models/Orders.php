@@ -13,6 +13,6 @@ class Orders extends Model
     ];
     public function getProvide()
     {
-        return $this->hasOne(Provides::class, 'provide_id', 'id');
+        return $this->hasOne(Provides::class);
     }
 }

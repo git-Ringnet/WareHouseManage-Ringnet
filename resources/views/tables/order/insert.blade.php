@@ -1,4 +1,5 @@
 <x-navbar></x-navbar>
+@if(Auth::check() != null)
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
@@ -97,81 +98,80 @@
       </div>
   </section>
   <div class="container-fluid">
-  <form action="{{route('insertProduct.store')}}" method="POST" id="form_submit">
-    <input type="hidden" id="provide_id" name="provide_id">
-    @csrf
-    <section id="infor_provide" class="bg-white">
-    </section>
-    <!-- Main content -->
-    <div class="d-flex justify-content-end align-items-center">
-      <button>Import file</button>
-      <button>Mẫu nhập nhanh</button>
-    </div>
+    <form action="{{route('insertProduct.store')}}" method="POST" id="form_submit">
+      <input type="hidden" id="provide_id" name="provide_id">
+      @csrf
+      <section id="infor_provide" class="bg-white">
+      </section>
+      <!-- Main content -->
+      <div class="d-flex justify-content-end align-items-center">
+        <button class="btn btn-primary m-2" id="import_file">Import file</button>
+        <button class="btn btn-primary m-2" id="form_quick">Mẫu nhập nhanh</button>
+      </div>
 
-    <section class="content">
-      <div class="container-fluid">
-        <table class="table table-bordered table-hover">
-          <thead>
-            <tr>
-              <td><input type="checkbox"></td>
-              <td>Mã đơn</td>
-              <td>Thông tin sản phẩm</td>
-              <td>Loại hàng</td>
-              <td>Đơn vị tính</td>
-              <td>Thương hiệu</td>
-              <td>Số lượng</td>
-              <td>Giá nhập</td>
-              <td>Thuế</td>
-              <td>Thành tiền</td>
-              <td>SN</td>
-              <td></td>
-            </tr>
-          </thead>
-          <tbody>
-
-          </tbody>
-        </table>
-        <div id="list_modal">
-        </div>
-      </div><!-- /.container-fluid -->
-      <a href="javascript:;" class="btn btn-info addRow">Thêm sản phẩm</a>
-      <div class="container">
-        <div class="row position-relative">
-          <div class="col-sm-6"></div>
-          <div class="col-sm-6">
-            <div class="mt-4 w-50" style="float: right;">
-              <div class="d-flex justify-content-between">
-                <span><b>Giá trị trước thuế:</b></span>
-                <span id="total_price">55.000.000đ</span>
-              </div>
-              <div class="d-flex justify-content-between mt-2">
-                <span><b>Thuế VAT:</b></span>
-                <span>5.500.000đ</span>
-              </div>
-              <div class="d-flex justify-content-between mt-2">
-                <span class="text-primary">Giảm giá:</span>
-                <span>0đ</span>
-              </div>
-              <div class="d-flex justify-content-between mt-2">
-                <span class="text-primary">Phí vận chuyển:</span>
-                <span>0đ</span>
-              </div>
-              <div class="d-flex justify-content-between mt-2">
-                <span class="text-lg"><b>Tổng cộng:</b></span>
-                <span><b>60.500.000đ</b></span>
+      <section class="content">
+        <div class="container-fluid">
+          <table class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <td><input type="checkbox"></td>
+                <td>Mã đơn</td>
+                <td>Thông tin sản phẩm</td>
+                <td>Loại hàng</td>
+                <td>Đơn vị tính</td>
+                <td>Thương hiệu</td>
+                <td>Số lượng</td>
+                <td>Giá nhập</td>
+                <td>Thuế</td>
+                <td>Thành tiền</td>
+                <td>SN</td>
+                <td></td>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+          <div id="list_modal">
+          </div>
+        </div><!-- /.container-fluid -->
+        <a href="javascript:;" class="btn btn-info addRow">Thêm sản phẩm</a>
+        <div class="container">
+          <div class="row position-relative">
+            <div class="col-sm-6"></div>
+            <div class="col-sm-6">
+              <div class="mt-4 w-50" style="float: right;">
+                <div class="d-flex justify-content-between">
+                  <span><b>Giá trị trước thuế:</b></span>
+                  <span id="total_price">55.000.000đ</span>
+                </div>
+                <div class="d-flex justify-content-between mt-2">
+                  <span><b>Thuế VAT:</b></span>
+                  <span>5.500.000đ</span>
+                </div>
+                <div class="d-flex justify-content-between mt-2">
+                  <span class="text-primary">Giảm giá:</span>
+                  <span>0đ</span>
+                </div>
+                <div class="d-flex justify-content-between mt-2">
+                  <span class="text-primary">Phí vận chuyển:</span>
+                  <span>0đ</span>
+                </div>
+                <div class="d-flex justify-content-between mt-2">
+                  <span class="text-lg"><b>Tổng cộng:</b></span>
+                  <span><b>60.500.000đ</b></span>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <button style="bottom: 0;" type="submit" name="action" class="btn btn-primary position-sticky" value="AddProduct">Lưu</button>
-  </form>
+        <button style="bottom: 0;" type="submit" name="action" class="btn btn-primary position-sticky" value="AddProduct">Lưu</button>
+    </form>
   </div>
   </section>
   <!-- /.content -->
 </div>
-
+@endif
 <script>
   $("#radio1").on("click", function() {
     $('#infor_provide').empty();
@@ -187,24 +187,24 @@
       '<div class="col-sm-6">' +
       '<div class="form-group">' +
       '<label for="congty">Công ty:</label>' +
-      '<input type="text" class="form-control" id="provide_name" placeholder="Nhập thông tin" name="provide_name" value="">' +
+      '<input required type="text" class="form-control" id="provide_name_new" placeholder="Nhập thông tin" name="provide_name_new" value="">' +
       '</div>' + '<div class="form-group">' +
       '<label>Địa chỉ xuất hóa đơn:</label>' +
-      '<input type="text" class="form-control" id="provide_address" placeholder="Nhập thông tin" name="provide_address" value="">' +
+      '<input required type="text" class="form-control" id="provide_address_new" placeholder="Nhập thông tin" name="provide_address_new" value="">' +
       '</div>' + '<div class="form-group">' +
       '<label for="email">Mã số thuế:</label>' +
-      '<input type="text" class="form-control" id="provide_code" placeholder="Nhập thông tin" name="provide_code" value="">' +
+      '<input required type="text" class="form-control" id="provide_code_new" placeholder="Nhập thông tin" name="provide_code_new" value="">' +
       '</div>' + '<div class="form-group">' +
       '</div>' + '</div>' + '<div class="col-sm-6">' +
       '<div class="form-group">' +
       '<label for="email">Người đại diện:</label>' +
-      '<input type="text" class="form-control" id="provide_represent" placeholder="Nhập thông tin" name="provide_represent" value="">' +
+      '<input required type="text" class="form-control" id="provide_represent_new" placeholder="Nhập thông tin" name="provide_represent_new" value="">' +
       '</div>' + '<div class="form-group">' +
       '<label for="email">Email:</label>' +
-      '<input type="email" class="form-control" id="provide_email" placeholder="Nhập thông tin" name="provide_email" value="">' +
+      '<input required type="email" class="form-control" id="provide_email_new" placeholder="Nhập thông tin" name="provide_email_new" value="">' +
       '</div>' + '<div class="form-group">' +
       '<label for="email">Số điện thoại:</label>' +
-      '<input type="text" class="form-control" id="provide_phone" placeholder="Nhập thông tin" name="provide_phone" value="">' +
+      '<input required type="text" class="form-control" id="provide_phone_new" placeholder="Nhập thông tin" name="provide_phone_new" value="">' +
       '</div>' + '<div class="form-group">' +
       '</div>' + '<div class="form-group">' +
       '</div>' + '<div class="form-group">' +
@@ -241,7 +241,7 @@
     var provides_id = document.getElementById('form_submit');
     provides_id.setAttribute('action', '{{route("addBill")}}');
     provides_id.submit();
-  })
+  });
 
   $(document).on('keyup', 'input[name="product_qty[]"], input[name="product_price[]"] ,input[name="product_tax[]"]', function() {
     var row = $(this).closest('tr');
@@ -364,7 +364,7 @@
     updateRowNumbers();
   });
 
-  $(document).on('click', '.save_infor', function(e) {
+  $(document).on('click', '#btn-addProvide', function(e) {
     e.preventDefault();
     var provides_id = $('#provide_id').val();
     var provide_name = $('#provide_name').val();
@@ -392,10 +392,8 @@
   })
 
   $('.search-info').click(function() {
-    // var infor_provide = "";
     var provides_id = $(this).attr('id');
     $('#radio1').prop('checked', true);
-    // $('#infor_provide').empty(); 
     $.ajax({
       url: "{{ route('show_provide') }}",
       type: "get",
@@ -405,51 +403,107 @@
       success: function(data) {
         $('#infor_provide').html(
           '<div class="border-bottom p-3 d-flex justify-content-between">' +
-      '<b>Thông tin nhà cung cấp</b>' +
-      '<button id="btn-addCustomer" class="btn btn-primary">' +
-      '<span>Lưu thông tin</span></button></div>' +
-      '<div class="row p-3">' +
-      '<div class="col-sm-6">' +
-      '<div class="form-group">' +
-      '<label for="congty">Công ty:</label>' +
-      '<input type="text" class="form-control" id="provide_name" placeholder="Nhập thông tin" name="provide_name" value="'+data.provide_name +'">' +
-      '</div>' + '<div class="form-group">' +
-      '<label>Địa chỉ xuất hóa đơn:</label>' +
-      '<input type="text" class="form-control" id="provide_address" placeholder="Nhập thông tin" name="provide_address" value="'+data.provide_address+'">' +
-      '</div>' + '<div class="form-group">' +
-      '<label for="email">Mã số thuế:</label>' +
-      '<input type="text" class="form-control" id="provide_code" placeholder="Nhập thông tin" name="provide_code" value="'+data.provide_code+'">' +
-      '</div>' + '<div class="form-group">' +
-      '</div>' + '</div>' + '<div class="col-sm-6">' +
-      '<div class="form-group">' +
-      '<label for="email">Người đại diện:</label>' +
-      '<input type="text" class="form-control" id="provide_represent" placeholder="Nhập thông tin" name="provide_represent" value="'+data.provide_represent+'">' +
-      '</div>' + '<div class="form-group">' +
-      '<label for="email">Email:</label>' +
-      '<input type="email" class="form-control" id="provide_email" placeholder="Nhập thông tin" name="provide_email" value="'+data.provide_email+'">' +
-      '</div>' + '<div class="form-group">' +
-      '<label for="email">Số điện thoại:</label>' +
-      '<input type="text" class="form-control" id="provide_phone" placeholder="Nhập thông tin" name="provide_phone" value="'+data.provide_phone+'">' +
-      '</div>' + '<div class="form-group">' +
-      '</div>' + '<div class="form-group">' +
-      '</div>' + '<div class="form-group">' +
-      '</div></div></div>'
+          '<b>Thông tin nhà cung cấp</b>' +
+          '<button id="btn-addProvide" class="btn btn-primary">' +
+          '<span>Lưu thông tin</span></button></div>' +
+          '<div class="row p-3">' +
+          '<div class="col-sm-6">' +
+          '<div class="form-group">' +
+          '<label for="congty">Công ty:</label>' +
+          '<input required type="text" class="form-control" id="provide_name" placeholder="Nhập thông tin" name="provide_name" value="' + data.provide_name + '">' +
+          '</div>' + '<div class="form-group">' +
+          '<label>Địa chỉ xuất hóa đơn:</label>' +
+          '<input required type="text" class="form-control" id="provide_address" placeholder="Nhập thông tin" name="provide_address" value="' + data.provide_address + '">' +
+          '</div>' + '<div class="form-group">' +
+          '<label for="email">Mã số thuế:</label>' +
+          '<input required type="text" class="form-control" id="provide_code" placeholder="Nhập thông tin" name="provide_code" value="' + data.provide_code + '">' +
+          '</div>' + '<div class="form-group">' +
+          '</div>' + '</div>' + '<div class="col-sm-6">' +
+          '<div class="form-group">' +
+          '<label for="email">Người đại diện:</label>' +
+          '<input required type="text" class="form-control" id="provide_represent" placeholder="Nhập thông tin" name="provide_represent" value="' + data.provide_represent + '">' +
+          '</div>' + '<div class="form-group">' +
+          '<label for="email">Email:</label>' +
+          '<input required type="email" class="form-control" id="provide_email" placeholder="Nhập thông tin" name="provide_email" value="' + data.provide_email + '">' +
+          '</div>' + '<div class="form-group">' +
+          '<label for="email">Số điện thoại:</label>' +
+          '<input required type="text" class="form-control" id="provide_phone" placeholder="Nhập thông tin" name="provide_phone" value="' + data.provide_phone + '">' +
+          '</div>' + '<div class="form-group">' +
+          '</div>' + '<div class="form-group">' +
+          '</div>' + '<div class="form-group">' +
+          '</div></div></div>'
         );
-        // $('#infor_provide').append(infor_provide);
         $('#provide_id').val(data.id);
       }
     });
   })
-
+  // Kiểm tra dữ liệu trước khi submit
   $(document).on('submit', '#form_submit', function(e) {
     e.preventDefault();
-    if ($('#provide_id').val().trim() == '') {
-      alert('Chưa chọn nhà cung cấp');
-    } else {
-      $(this).off('submit');
-      this.submit();
+    var error = false;
+    if(rowCount < 1){
+      alert('Vui lòng nhập ít nhất 1 sản phẩm');
+      error = true;
     }
+    $('input[name="product_name[]"]').each(function() {
+      if ($(this).val() === '') {
+        alert('Vui lòng nhập tên sản phẩm')
+      }
+    });
+
+    $('input[name="product_qty[]"]').each(function() {
+      if ($(this).val() === '') {
+        alert('Vui lòng nhập số lượng sản phẩm')
+        error = true;
+      } else if (isNaN($(this).val())) {
+        $(this).addClass('error');
+        error = true;
+        alert('Số lượng phải là số')
+      }
+    });
+
+    $('input[name="product_price[]"]').each(function() {
+      if ($(this).val() === '') {
+        alert('Vui lòng nhập giá sản phẩm')
+        error = true;
+      } else if (isNaN($(this).val())) {
+        alert('Giá phải là số');
+        error = true;
+      }
+    });
+
+    $('input[name="product_SN[]"]').each(function() {
+      if ($(this).val() === '') {
+        alert('Vui lòng nhập seri number');
+        error = true;
+      }
+    });
+
+    $('input[name^="product_qty[]"]').each(function(index) {
+      var qty = $(this).val();
+      var sn_count = $('input[name="product_SN' + index + '[]"]').length;
+      if (qty != sn_count) {
+        error = true;
+        alert('Số lượng và seri number không hợp lệ');
+      }
+    });
+    if ($('#provide_id').val().trim() == '' && $('#radio1').prop('checked') == true) {
+      error = true;
+      alert('Vui lòng chọn nhà cung cấp');
+    }
+    if (error) {
+      return false;
+    }
+    updateProductSN();
+    $(this).off('submit');
+    this.submit();
   });
+  $(document).on('click', '#form_quick', function(e) {
+    e.preventDefault();
+  });
+  $(document).on('click', '#import_file', function(e) {
+    e.preventDefault();
+  })
 </script>
 </body>
 

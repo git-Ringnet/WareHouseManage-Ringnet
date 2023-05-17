@@ -65,7 +65,4 @@ class Provides extends Model
         $provides = $provides->orderBy('id', 'asc')->paginate(5);
         return $provides;
     }
-     {
-        return $this->hasOne(Orders::class);
-    }
 }

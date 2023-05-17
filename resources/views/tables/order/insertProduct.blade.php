@@ -1,4 +1,5 @@
 <x-navbar></x-navbar>
+@if(Auth::check() != null)
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
@@ -40,7 +41,7 @@
           <tr>
             <td><input type="checkbox"></td>
             <td>{{$stt}}</td>
-            <td></td>
+            <td>{{$va->provide_name}}</td>
             <td>{{$va->updated_at}}</td>
             <td>{{$va->name}}</td>
             <td>{{$va->total}}</td>
@@ -90,14 +91,7 @@
   </section>
   <!-- /.content -->
 </div>
-<script>
-  function onlyOne(checkbox) {
-    var checkboxes = document.getElementsByName('check')
-    checkboxes.forEach((item) => {
-      if (item !== checkbox) item.checked = false
-    })
-  }
-</script>
 </body>
 
 </html>
+@endif
