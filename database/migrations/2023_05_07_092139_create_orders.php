@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('provide_id');
             $table->integer('users_id');
             $table->integer('order_status');
+            $table->integer('total')->nullable();
             $table->timestamps();
         });
     }

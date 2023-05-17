@@ -1,4 +1,5 @@
 <x-navbar></x-navbar>
+@if(Auth::check() != null)
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
@@ -35,14 +36,15 @@
           </tr>
         </thead>
         <tbody>
-          @foreach($order as $va)
+          <?php $stt = 1; ?>
+          @foreach($orders as $va)
           <tr>
             <td><input type="checkbox"></td>
-            <td>{{$va->id}}</td>
-            <td></td>
+            <td>{{$stt}}</td>
+            <td>{{$va->provide_name}}</td>
             <td>{{$va->updated_at}}</td>
-            <td>{{$va->users_id}}</td>
-            <td>56.000.000</td>
+            <td>{{$va->name}}</td>
+            <td>{{$va->total}}</td>
             <td>
               @if($va->order_status == 0)
               <span class="p-2 bg-warning">Chờ duyệt</span>
@@ -72,7 +74,7 @@
             @if($va->id == $item->id)
             <td></td>
             <td></td>
-            <td>Nhà cung cấp</td>
+            <td></td>
             <td><span>{{$item->product_name}}</span></td>
             <td><span>Số lượng</span><p>{{$item->product_qty}}</p></td>
             <td><span>Tổng tiên</span><p>{{$item->product_qty * $item->product_price}}</p></td>
@@ -80,22 +82,16 @@
             @endif
           </tr>
           @endforeach
+          <?php $stt++; ?>
           @endforeach
-
         </tbody>
       </table>
+      {{ $orders->links() }}
     </div><!-- /.container-fluid -->
   </section>
   <!-- /.content -->
 </div>
-<script>
-  function onlyOne(checkbox) {
-    var checkboxes = document.getElementsByName('check')
-    checkboxes.forEach((item) => {
-      if (item !== checkbox) item.checked = false
-    })
-  }
-</script>
 </body>
 
 </html>
+@endif
