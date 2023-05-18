@@ -28,7 +28,6 @@ class AddProductController extends Controller
             array_push($productIds, $value->id);
         }
         $orders = User::join('orders', 'users.id', '=', 'orders.users_id')
-            ->join('provides','orders.provide_id','=','provides.id')
             ->whereIn('users.id', $productIds)
             ->orderByDesc('orders.id')
             ->paginate(10);
@@ -330,8 +329,8 @@ class AddProductController extends Controller
                     $pro->product_trademark = $product_trademark[$i];
                     $pro->product_qty = $product_qty[$i];
                     $pro->product_price = $product_price[$i];
-                    $pro->product_tax = $product_tax[$i];
-                    $pro->product_total = $product_total[$i];
+                    // $pro->product_tax = $product_tax[$i];
+                    $pro->total = $product_total[$i];
                     $pro->save();
                     foreach ($serinumbers as $serinumber) {
                         $serinumber->product_id = $pro->id;
@@ -356,6 +355,7 @@ class AddProductController extends Controller
         } else {
             return redirect()->route('insertProduct.index')->with('section', 'Đơn hàng đã được duyệt');
         }
+        return redirect()->route('insertProduct.index')->with('section', 'Duyệt nhanh đơn hàng thành công');
     }
     // update provide AJAX
     public function update_provide(Request $request)
@@ -378,7 +378,7 @@ class AddProductController extends Controller
     public function addBillEdit(Request $request)
     {
         $order = Orders::findOrFail($request->order_id);
-        if($order->order_status != 1){
+        if ($order->order_status != 1) {
             $order->provide_id = $request->provide_id;
             $order->save();
             $product_id = $request->product_id;
@@ -417,7 +417,7 @@ class AddProductController extends Controller
                         $serinumber = $product_SN->serinumber;
                         array_push($product_SN_array, $serinumber);
                     }
-    
+
                     // Tìm SN người dùng xóa khỏi danh sách
                     // Sửa product_SN bằng 0
                     $deleteSN = array_diff($product_SN_array, $request->{'product_SN' . $i});
@@ -431,7 +431,7 @@ class AddProductController extends Controller
                 } else {
                     return back()->with('session', 'Vui lòng thêm SN');
                 }
-    
+
                 $check = ProductOrders::where('id', $product_id[$i])->first();
                 if ($check == null) {
                     $pro = new ProductOrders();
@@ -495,7 +495,7 @@ class AddProductController extends Controller
                 }
             }
             return redirect()->route('insertProduct.index')->with('section', 'Lưu đơn hàng thành công');
-        }else{
+        } else {
             return redirect()->route('insertProduct.index')->with('section', 'Đơn hàng đã được duyệt không thể chỉnh sưa');
         }
     }

@@ -110,7 +110,7 @@
       </div>
 
       <section class="content">
-        <div class="container-fluid">
+        <div class="container-fluid" style="overflow-x: scroll;">
           <table class="table table-bordered table-hover">
             <thead>
               <tr>
@@ -142,11 +142,11 @@
               <div class="mt-4 w-50" style="float: right;">
                 <div class="d-flex justify-content-between">
                   <span><b>Giá trị trước thuế:</b></span>
-                  <span id="total_price">55.000.000đ</span>
+                  <span id="total-amount-sum">Đ</span>
                 </div>
                 <div class="d-flex justify-content-between mt-2">
                   <span><b>Thuế VAT:</b></span>
-                  <span>5.500.000đ</span>
+                  <span id="product-tax">Đ</span>
                 </div>
                 <div class="d-flex justify-content-between mt-2">
                   <span class="text-primary">Giảm giá:</span>
@@ -164,7 +164,6 @@
             </div>
           </div>
         </div>
-
         <button style="bottom: 0;" type="submit" name="action" class="btn btn-primary position-sticky" value="AddProduct">Lưu</button>
     </form>
   </div>
@@ -173,6 +172,51 @@
 </div>
 @endif
 <script>
+  $(document).on('input', '[name^="product_qty"], [name^="product_price"]', function() {
+    var productQty = parseInt($(this).closest('tr').find('[name^="product_qty"]').val());
+    var productPrice = 0;
+    $(this).closest('tr').find('[name^="product_price"]').each(function() {
+      productPrice += parseFloat($(this).val());
+    });
+    if (!isNaN(productQty) && !isNaN(productPrice)) {
+      var totalAmount = productQty * productPrice;
+      $(this).closest('tr').find('[name^="product_total"]').val(totalAmount);
+      calculateTotalAmount();
+    }
+  });
+
+  function calculateTotalAmount() {
+    var totalAmount = 0;
+    $('tr').each(function() {
+      var rowTotal = parseFloat($(this).find('[name^="product_total"]').val());
+      if (!isNaN(rowTotal)) {
+        totalAmount += rowTotal;
+      }
+    });
+    $('#total-amount-sum').text(totalAmount);
+  }
+  $(document).on('input', '[name^="product_tax"]', function() {
+    var taxValue = parseFloat($(this).val());
+    var productQty = parseInt($(this).closest('tr').find('[name^="product_qty"]').val());
+    var productPrice = parseFloat($(this).closest('tr').find('[name^="product_price"]').val());
+    if (!isNaN(taxValue) && !isNaN(productQty) && !isNaN(productPrice)) {
+      var taxAmount = (productQty * productPrice * taxValue) / 100;
+      $(this).closest('tr').find('[name^="product_tax"]').text(taxAmount);
+      calculateTotalTax();
+    }
+  });
+
+  function calculateTotalTax() {
+    var totalTax = 0;
+    $('tr').each(function() {
+      var rowTax = parseFloat($(this).find('[name^="product_tax"]').text());
+      if (!isNaN(rowTax)) {
+        totalTax += rowTax;
+      }
+    });
+    $('#product-tax').text(totalTax);
+  }
+
   $("#radio1").on("click", function() {
     $('#infor_provide').empty();
   });
@@ -238,25 +282,71 @@
   var add_bill = document.getElementById('add_bill');
   add_bill.addEventListener('click', function(e) {
     e.preventDefault();
+    var error = false;
+    if (rowCount < 1) {
+      alert('Vui lòng nhập ít nhất 1 sản phẩm');
+      error = true;
+    }
+    $('input[name="product_name[]"]').each(function() {
+      if ($(this).val() === '') {
+        alert('Vui lòng nhập tên sản phẩm')
+      }
+    });
+    $('input[name^="product_total"]').each(function() {
+      if ($(this).val() === '') {
+        alert('Tổng tiền không hợp lệ')
+        error = true;
+      } else if (isNaN($(this).val())) {
+        error = true;
+        alert('Tổng tiền phải là số')
+      }
+    })
+    $('input[name="product_qty[]"]').each(function() {
+      if ($(this).val() === '') {
+        alert('Vui lòng nhập số lượng sản phẩm')
+        error = true;
+      } else if (isNaN($(this).val())) {
+        error = true;
+        alert('Số lượng phải là số')
+      }
+    });
+
+    $('input[name="product_price[]"]').each(function() {
+      if ($(this).val() === '') {
+        alert('Vui lòng nhập giá sản phẩm')
+        error = true;
+      } else if (isNaN($(this).val())) {
+        alert('Giá phải là số');
+        error = true;
+      }
+    });
+
+    $('input[name="product_SN[]"]').each(function() {
+      if ($(this).val() === '') {
+        alert('Vui lòng nhập seri number');
+        error = true;
+      }
+    });
+
+    $('input[name^="product_qty[]"]').each(function(index) {
+      var qty = $(this).val();
+      var sn_count = $('input[name="product_SN' + index + '[]"]').length;
+      if (qty != sn_count) {
+        error = true;
+        alert('Số lượng và seri number không hợp lệ');
+      }
+    });
+    if ($('#provide_id').val().trim() == '' && $('#radio1').prop('checked') == true) {
+      error = true;
+      alert('Vui lòng chọn nhà cung cấp');
+    }
+    if (error) {
+      return false;
+    }
+    updateProductSN();
     var provides_id = document.getElementById('form_submit');
     provides_id.setAttribute('action', '{{route("addBill")}}');
     provides_id.submit();
-  });
-
-  $(document).on('keyup', 'input[name="product_qty[]"], input[name="product_price[]"] ,input[name="product_tax[]"]', function() {
-    var row = $(this).closest('tr');
-    var qty = parseFloat(row.find('input[name="product_qty[]"]').val());
-    var price = parseFloat(row.find('input[name="product_price[]"]').val());
-    var tax = parseFloat(row.find('input[name="product_tax"]').val());
-    var total, tax_amount;
-    if (isNaN(qty) || isNaN(price)) {
-      total = 0;
-    } else {
-      total = qty * price;
-    }
-    row.find('input[name="product_total[]"]').val(total);
-    tax_amount = total * tax / 100;
-    console.log(tax_amount);
   });
 
   function updateRowNumbers() {
@@ -291,9 +381,9 @@
       '<td><input required type="text" name="product_category[]"></td>' +
       '<td><input required type="text" name="product_unit[]"></td>' +
       '<td><input required type="text" name="product_trademark[]"></td>' +
-      '<td><input required type="text" name="product_qty[]"></td>' +
-      '<td><input required type="text" name="product_price[]"></td>' +
-      '<td><input required type="text" name="product_tax[]"></td>' +
+      '<td><input required type="number" name="product_qty[]"></td>' +
+      '<td><input required type="number" name="product_price[]"></td>' +
+      '<td><input required type="number" name="product_tax[]"></td>' +
       '<td><input readonly type="text" name="product_total[]"></td>' +
       '<td>' +
       '<button name="btn_add_SN[]" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal' + rowCount + '">' +
@@ -441,7 +531,7 @@
   $(document).on('submit', '#form_submit', function(e) {
     e.preventDefault();
     var error = false;
-    if(rowCount < 1){
+    if (rowCount < 1) {
       alert('Vui lòng nhập ít nhất 1 sản phẩm');
       error = true;
     }
@@ -450,13 +540,20 @@
         alert('Vui lòng nhập tên sản phẩm')
       }
     });
-
+    $('input[name^="product_total"]').each(function() {
+      if ($(this).val() === '') {
+        alert('Tổng tiền không hợp lệ')
+        error = true;
+      } else if (isNaN($(this).val())) {
+        error = true;
+        alert('Tổng tiền phải là số')
+      }
+    })
     $('input[name="product_qty[]"]').each(function() {
       if ($(this).val() === '') {
         alert('Vui lòng nhập số lượng sản phẩm')
         error = true;
       } else if (isNaN($(this).val())) {
-        $(this).addClass('error');
         error = true;
         alert('Số lượng phải là số')
       }
@@ -498,6 +595,7 @@
     $(this).off('submit');
     this.submit();
   });
+
   $(document).on('click', '#form_quick', function(e) {
     e.preventDefault();
   });

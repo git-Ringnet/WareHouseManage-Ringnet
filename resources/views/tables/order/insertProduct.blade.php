@@ -41,7 +41,7 @@
           <tr>
             <td><input type="checkbox"></td>
             <td>{{$stt}}</td>
-            <td>{{$va->provide_name}}</td>
+            <td>{{$va->getProvide->provide_name}}</td>
             <td>{{$va->updated_at}}</td>
             <td>{{$va->name}}</td>
             <td>{{$va->total}}</td>
@@ -76,8 +76,12 @@
             <td></td>
             <td></td>
             <td><span>{{$item->product_name}}</span></td>
-            <td><span>Số lượng</span><p>{{$item->product_qty}}</p></td>
-            <td><span>Tổng tiên</span><p>{{$item->product_qty * $item->product_price}}</p></td>
+            <td><span>Số lượng</span>
+              <p>{{$item->product_qty}}</p>
+            </td>
+            <td><span>Tổng tiên</span>
+              <p>{{$item->product_qty * $item->product_price}}</p>
+            </td>
             <td></td>
             @endif
           </tr>
@@ -86,7 +90,7 @@
           @endforeach
         </tbody>
       </table>
-      {{ $orders->links() }}
+      {{$orders->links()}}
     </div><!-- /.container-fluid -->
   </section>
   <!-- /.content -->
