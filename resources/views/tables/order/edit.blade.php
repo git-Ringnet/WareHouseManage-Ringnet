@@ -22,7 +22,7 @@
               </div>
             </div>
           </div>
-          <div class="col-sm-6">
+          <div class="col-sm-6"> 
             <div class="w-50 position-relative" style="float: right;">
               <div class="justify-content-between d-flex">
                 <span style="z-index: 99">

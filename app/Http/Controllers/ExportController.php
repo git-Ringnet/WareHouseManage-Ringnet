@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Exports;
 use App\Models\Guests;
 use App\Models\Product;
+use App\Models\productExports;
 use App\Models\Products;
+use App\Models\Serinumbers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -21,7 +23,7 @@ class ExportController extends Controller
     {
         $export = Exports::leftJoin('guests', 'exports.guest_id', '=', 'guests.id')
             ->leftJoin('users', 'exports.user_id', '=', 'users.id')
-            ->select('exports.id', 'guests.guest_represent', 'users.name', 'exports.total', 'exports.updated_at','export_status')
+            ->select('exports.id', 'guests.guest_represent', 'users.name', 'exports.total', 'exports.updated_at', 'export_status')
             ->paginate(10);
         return view('tables.export.exports', compact('export'));
     }
@@ -37,7 +39,7 @@ class ExportController extends Controller
         $customer = Guests::all();
         $guest_id = DB::table('guests')->select('id')->orderBy('id', 'DESC')->first();
         (int)$guest_id->id += 1;
-        return view('tables.export.addExport', compact('customer', 'products','guest_id'));
+        return view('tables.export.addExport', compact('customer', 'products', 'guest_id'));
     }
 
     /**
@@ -48,13 +50,87 @@ class ExportController extends Controller
      */
     public function store(Request $request)
     {
-        $export = new Exports();
-        $export->guest_id = $request['id'];
-        $export->user_id = Auth::user()->id;
-        $export->total =  $request['totalValue'];
-        $export->export_status = 1;
-        $export->save();
-        return redirect()->route('exports.index')->with('msg', 'Tạo đơn thành công!');
+        if (Auth::check()) {
+            //bảng seri number
+            $productIDs = $request->input('product_id');
+            $productQtys = $request->input('product_qty');
+
+            $totalQtyNeeded = 0;
+            $serinumbers = [];
+
+            // Tính tổng số lượng cần thiết cho mỗi product_id
+            $productQtyMap = [];
+            if ($productIDs == null) {
+                return redirect()->route('exports.index')->with('danger', 'Chưa thêm sản phẩm!');
+            } else {
+                for ($i = 0; $i < count($productIDs); $i++) {
+                    $productID = $productIDs[$i];
+                    $productQty = $productQtys[$i];
+
+                    $totalQtyNeeded += $productQty;
+
+                    if (!isset($productQtyMap[$productID])) {
+                        $productQtyMap[$productID] = 0;
+                    }
+                    $productQtyMap[$productID] += $productQty;
+                }
+
+                // Kiểm tra và cập nhật seri_status
+                foreach ($productQtyMap as $productID => $productQty) {
+                    $serinumbers = Serinumbers::where('product_id', $productID)
+                        ->where('seri_status', 1)
+                        ->limit($productQty)
+                        ->get();
+
+                    if (count($serinumbers) < $productQty) {
+                        return redirect()->route('exports.index')->with('danger', 'Vượt quá số lượng!');
+                    } else {
+                        foreach ($serinumbers as $serinumber) {
+                            if ($serinumber->seri_status == 1) {
+                                $serinumber->seri_status = 2;
+                                $serinumber->save();
+                            }
+                        }
+                        //bảng xuất hàng
+                        if ($request->products_id == null || $request->product_id == null) {
+                            return redirect()->route('exports.index')->with('danger', 'Chưa thêm sản phẩm!');
+                        } else if ($request->product_qty == null) {
+                            return redirect()->route('exports.index')->with('danger', 'Chưa nhập số lượng!');
+                        } else {
+                            $export = new Exports();
+                            $export->guest_id = $request->id;
+                            $export->user_id = Auth::user()->id;
+                            $export->total = $request->totalValue;
+                            $export->export_status = 1;
+                            $export->save();
+                        }
+                        //bảng product export
+                        for ($i = 0; $i < count($productIDs); $i++) {
+                            $productID = $productIDs[$i];
+                            $productQty = $productQtys[$i];
+
+                            $nameProduct = Product::where('id', $productID)->value('product_name');
+
+                            $proExport = new productExports();
+                            $proExport->products_id = $request->products_id[$i];
+                            $proExport->product_id = $productID;
+                            $proExport->export_id = $export->id;
+                            $proExport->product_name = $nameProduct;
+                            $proExport->product_unit = $request->product_unit[$i];
+                            $proExport->product_qty = $productQty;
+                            $proExport->product_price = $request->product_price[$i];
+                            $proExport->product_note = $request->product_note[$i];
+                            $proExport->product_tax = $request->product_tax[$i];
+                            $proExport->product_total = $request->totalValue;
+                            $proExport->save();
+                        }
+                        return redirect()->route('exports.index')->with('msg', 'Tạo đơn thành công!');
+                    }
+                }
+            }
+        } else {
+            return redirect()->back();
+        }
     }
 
     /**

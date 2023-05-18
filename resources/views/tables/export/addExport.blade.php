@@ -133,7 +133,7 @@
                 </div>
             </div>
 
-            <form action="{{ route('exports.store') }}" method="POST">
+            <form action="{{ route('exports.store') }}" method="POST" id="export_form">
                 @csrf
                 {{-- Form thông tin khách hàng --}}
                 <section id="data-container" class="container-fluid bg-white"></section>
@@ -169,18 +169,17 @@
                         </tbody>
                     </table>
                 </div>
-
                 <div class="row position-relative">
                     <div class="col-sm-6"></div>
                     <div class="col-sm-6">
                         <div class="mt-4 w-50" style="float: right;">
                             <div class="d-flex justify-content-between">
                                 <span><b>Giá trị trước thuế:</b></span>
-                                <span>{{ number_format(55000000) }}</span>
+                                <span id="total-amount-sum">{{ number_format(0) }}</span>
                             </div>
                             <div class="d-flex justify-content-between mt-2">
                                 <span><b>Thuế VAT:</b></span>
-                                <span>{{ number_format(5500000) }}</span>
+                                <span id="product-tax">{{ number_format(0) }}</span>
                             </div>
                             <div class="d-flex justify-content-between mt-2">
                                 <span class="text-primary">Giảm giá:</span>
@@ -192,15 +191,16 @@
                             </div>
                             <div class="d-flex justify-content-between mt-2">
                                 <span class="text-lg"><b>Tổng cộng:</b></span>
-                                <span><b id="spanValue" data-value="60500000">{{ number_format(60500000) }}</b></span>
+                                <span><b id="spanValue" data-value="0">{{ number_format(0) }}</b></span>
                                 <input type="text" hidden name="totalValue" value="" id="inputValue">
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="text-center mt-4">
-                    <button type="submit" name="action" class="btn btn-primary mr-1">Lưu</button>
-                    <span class="btn border-secondary ml-1">Hủy</span>
+                    <button type="submit" name="action" class="btn btn-primary mr-1"
+                        onclick="validateAndSubmit(event)">Lưu</button>
+                    <a href="{{ route('exports.index') }}"><span class="btn border-secondary ml-1">Hủy</span></a>
                 </div>
             </form>
         </div>
@@ -215,6 +215,7 @@
     });
     $("#radio2").on("click", function() {
         $('#data-container').html(
+            '<div id="form-guest">' +
             '<div class="border-bottom p-3 d-flex justify-content-between">' +
             '<b>Thông tin khách hàng</b>' +
             '<button id="btn-addCustomer" class="btn btn-primary">' +
@@ -225,42 +226,42 @@
             '<div class="form-group">' +
             '<input type="text" hidden class="form-control" name="id" value="{{ (int) $guest_id->id }}">' +
             '<label for="congty">Công ty:</label>' +
-            '<input type="text" class="form-control" id="guest_name" placeholder="Nhập thông tin" name="guest_name" value="">' +
+            '<input type="text" class="form-control" id="guest_name" placeholder="Nhập thông tin" name="guest_name" value="" required>' +
             '</div>' + '<div class="form-group">' +
             '<label>Địa chỉ xuất hóa đơn:</label>' +
-            '<input type="text" class="form-control" id="guest_addressInvoice" placeholder="Nhập thông tin" name="guest_addressInvoice" value="">' +
+            '<input type="text" class="form-control" id="guest_addressInvoice" placeholder="Nhập thông tin" name="guest_addressInvoice" value="" required>' +
             '</div>' + '<div class="form-group">' +
             '<label for="email">Mã số thuế:</label>' +
-            '<input type="text" class="form-control" id="guest_code" placeholder="Nhập thông tin" name="guest_code" value="">' +
+            '<input type="text" class="form-control" id="guest_code" placeholder="Nhập thông tin" name="guest_code" value="" required>' +
             '</div>' + '<div class="form-group">' +
             '<label for="email">Địa chỉ giao hàng:</label>' +
-            '<input type="text" class="form-control" id="guest_addressDeliver" placeholder="Nhập thông tin" name="guest_addressDeliver" value="">' +
+            '<input type="text" class="form-control" id="guest_addressDeliver" placeholder="Nhập thông tin" name="guest_addressDeliver" value="" required>' +
             '</div>' + '<div class="form-group">' +
             '<label for="email">Người nhận hàng:</label>' +
-            '<input type="text" class="form-control" id="guest_receiver" placeholder="Nhập thông tin" name="guest_receiver" value="">' +
+            '<input type="text" class="form-control" id="guest_receiver" placeholder="Nhập thông tin" name="guest_receiver" value="" required>' +
             '</div>' + '<div class="form-group">' +
             '<label for="email">SĐT người nhận:</label>' +
-            '<input type="text" class="form-control" id="guest_phoneReceiver" placeholder="Nhập thông tin" name="guest_phoneReceiver" value="">' +
+            '<input type="text" class="form-control" id="guest_phoneReceiver" placeholder="Nhập thông tin" name="guest_phoneReceiver" value="" required>' +
             '</div>' + '</div>' + '<div class="col-sm-6">' +
             '<div class="form-group">' +
             '<label for="email">Người đại diện:</label>' +
-            '<input type="text" class="form-control" id="guest_represent" placeholder="Nhập thông tin" name="guest_represent" value="">' +
+            '<input type="text" class="form-control" id="guest_represent" placeholder="Nhập thông tin" name="guest_represent" value="" required>' +
             '</div>' + '<div class="form-group">' +
             '<label for="email">Email:</label>' +
-            '<input type="email" class="form-control" id="guest_email" placeholder="Nhập thông tin" name="guest_email" value="">' +
+            '<input type="email" class="form-control" id="guest_email" placeholder="Nhập thông tin" name="guest_email" value="" required>' +
             '</div>' + '<div class="form-group">' +
             '<label for="email">Số điện thoại:</label>' +
-            '<input type="text" class="form-control" id="guest_phone" placeholder="Nhập thông tin" name="guest_phone" value="">' +
+            '<input type="text" class="form-control" id="guest_phone" placeholder="Nhập thông tin" name="guest_phone" value="" required>' +
             '</div>' + '<div class="form-group">' +
             ' <label for="email">Hình thức thanh toán:</label>' +
-            '<input type="text" class="form-control" id="guest_pay" placeholder="Nhập thông tin" name="guest_pay" value="">' +
+            '<input type="text" class="form-control" id="guest_pay" placeholder="Nhập thông tin" name="guest_pay" value="" required>' +
             '</div>' + '<div class="form-group">' +
             '<label for="email">Điều kiện thanh toán:</label>' +
-            '<input type="text" class="form-control" id="guest_payTerm" placeholder="Nhập thông tin" name="guest_payTerm" value="">' +
+            '<input type="text" class="form-control" id="guest_payTerm" placeholder="Nhập thông tin" name="guest_payTerm" value="" required>' +
             '</div>' + '<div class="form-group">' +
             '<label for="email">Ghi chú:</label>' +
-            '<input type="text" class="form-control" id="guest_note" placeholder="Nhập thông tin" name="guest_note" value="">' +
-            '</div></div></div>'
+            '<input type="text" class="form-control" id="guest_note" placeholder="Nhập thông tin" name="guest_note" value="" required>' +
+            '</div></div></div></div>'
         );
     });
     //add sản phẩm
@@ -276,29 +277,30 @@
                 "text": `${fieldCounter}`
             });
             const TenInput = $("<td>" +
-                "<select id='maProduct' class='p-1 pr-5'>" +
+                "<select id='maProduct' class='p-1 pr-5' name='products_id[]'>" +
                 '@foreach ($products as $value)' +
                 "<option value='{{ $value->id }}'>{{ $value->products_code }}</option>" +
                 '@endforeach' +
                 "</select>"
             );
             const ProInput = $("<td>" +
-                "<select class='child-select p-1 pr-5'>" +
+                "<select class='child-select p-1 pr-5' name='product_id[]'>" +
                 "<option value=''>Lựa chọn sản phẩm</option>" +
                 "</select>" +
                 "</td>");
-            const dvtInput = $("<td><input type='text' id='product_unit' class='product_unit'></td>");
-            const slInput = $("<td><input type='text' id='product_qty' class='quantity-input'></td>");
-            const giaInput = $("<td><input type='text' id='product_price'></td>");
-            const ghichuInput = $("<td><input type='text' id=''></td>");
+            const dvtInput = $(
+                "<td><input type='text' id='product_unit' class='product_unit' name='product_unit[]' required></td>"
+            );
+            const slInput = $(
+                "<td><input type='number' id='product_qty' class='quantity-input' name='product_qty[]' required></td>"
+            );
+            const giaInput = $(
+                "<td><input type='number' id='product_price' name='product_price[]' required></td>");
+            const ghichuInput = $("<td><input type='text' id='' name='product_note[]'></td>");
             const thueInput = $("<td>" +
-                "<select class='p-1 pr-5'>" +
-                "<option value='0'>0%</option>" +
-                "<option value='8'>8%</option>" +
-                "<option value='10'>10%</option>" +
-                "</select>" +
+                "<input type='number' id='product_tax' class='product_tax' name='product_tax[]' required>" +
                 "</td>");
-            const thanhTienInput = $("<td><span class='px-2'>12.000.000</span></td>");
+            const thanhTienInput = $("<td><span class='px-5 total-amount'>0</span></td>");
             const sn = $("<td><img src='../dist/img/icon/list.png'></td>");
             const info = $("<td><img src='../dist/img/icon/Group.png'></td>");
             const deleteBtn = $("<td><img src='../dist/img/icon/vector.png'></td>", {
@@ -309,7 +311,7 @@
             });
             newRow.append(checkbox, MaInput, TenInput, ProInput, dvtInput, slInput,
                 giaInput, ghichuInput, thueInput, thanhTienInput, sn, info, deleteBtn);
-            $("#dynamic-fields").after(newRow);
+            $("#dynamic-fields").before(newRow);
             fieldCounter++;
         });
         //xóa sản phẩm
@@ -351,6 +353,7 @@
                 },
                 success: function(data) {
                     $('#data-container').html(
+                        '<div id="form-guest">' +
                         '<div class="border-bottom p-3 d-flex justify-content-between">' +
                         '<b>Thông tin khách hàng</b>' +
                         '<button id="btn-customer" class="btn btn-primary">' +
@@ -409,7 +412,7 @@
                         '<label for="email">Ghi chú:</label>' +
                         '<input type="text" class="form-control" id="guest_note" placeholder="Nhập thông tin" name="guest_note" value="' +
                         data.guest_note + '">' +
-                        '</div></div></div>'
+                        '</div></div></div><div>'
                     );
                 }
             });
@@ -556,6 +559,107 @@
         var value = spanElement.getAttribute('data-value');
         inputElement.value = value;
     });
+    //tính thành tiền của sản phẩm
+    $(document).on('input', '.quantity-input, [name^="product_price"]', function() {
+        // Lấy giá trị từ trường số lượng (product_qty)
+        var productQty = parseInt($(this).closest('tr').find('.quantity-input').val());
+
+        // Lấy giá trị từ trường giá sản phẩm (product_price)
+        var productPrice = 0;
+        $(this).closest('tr').find('[name^="product_price"]').each(function() {
+            productPrice += parseFloat($(this).val());
+        });
+
+        // Kiểm tra xem productQty và productPrice có phải là số hợp lệ không
+        if (!isNaN(productQty) && !isNaN(productPrice)) {
+            // Thực hiện phép tính
+            var totalAmount = productQty * productPrice;
+
+            // Hiển thị kết quả
+            $(this).closest('tr').find('.total-amount').text(totalAmount);
+
+            // Tính toán lại tổng thành tiền
+            calculateTotalAmount();
+        }
+    });
+
+    function calculateTotalAmount() {
+        var totalAmount = 0;
+        // Lặp qua từng hàng
+        $('tr').each(function() {
+            var rowTotal = parseFloat($(this).find('.total-amount').text());
+            // Kiểm tra xem rowTotal có phải là một số hợp lệ không
+            if (!isNaN(rowTotal)) {
+                // Cộng dồn vào tổng totalAmount
+                totalAmount += rowTotal;
+            }
+        });
+        // Hiển thị tổng total-amount-sum
+        $('#total-amount-sum').text(totalAmount);
+    }
+    $(document).on('input', '.product_tax', function() {
+        // Lấy giá trị từ trường thuế
+        var taxValue = parseFloat($(this).val());
+        // Lấy giá trị từ trường số lượng (product_qty)
+        var productQty = parseInt($(this).closest('tr').find('.quantity-input').val());
+        // Lấy giá trị từ trường giá sản phẩm (product_price)
+        var productPrice = parseFloat($(this).closest('tr').find('[name^="product_price"]').val());
+        // Kiểm tra xem taxValue, productQty và productPrice có phải là số hợp lệ không
+        if (!isNaN(taxValue) && !isNaN(productQty) && !isNaN(productPrice)) {
+            // Tính toán tổng thuế cho hàng hiện tại
+            var taxAmount = (productQty * productPrice * taxValue) / 100;
+            // Hiển thị kết quả thuế cho hàng hiện tại
+            $(this).closest('tr').find('.product_tax').text(taxAmount);
+            // Tính toán lại tổng thuế
+            calculateTotalTax();
+        }
+    });
+
+    function calculateTotalTax() {
+        var totalTax = 0;
+        // Lặp qua từng hàng
+        $('tr').each(function() {
+            var rowTax = parseFloat($(this).find('.product_tax').text());
+            // Kiểm tra xem rowTax có phải là một số hợp lệ không
+            if (!isNaN(rowTax)) {
+                // Cộng dồn vào tổng totalTax
+                totalTax += rowTax;
+            }
+        });
+        // Hiển thị tổng totalTax
+        $('#product-tax').text(totalTax);
+    }
+    //tính tổng cộng 
+    
+
+    //hàm kiểm tra submit
+    function validateAndSubmit(event) {
+        var formGuest = $('#form-guest');
+
+        if (formGuest.length) {
+            var requiredInputs = formGuest.find(':input[required]');
+            var isValid = true;
+
+            // Kiểm tra tất cả các trường required
+            requiredInputs.each(function() {
+                if (!$(this).val()) {
+                    isValid = false;
+                    return false; // Dừng vòng lặp nếu có trường không hợp lệ
+                }
+            });
+
+            if (isValid) {
+                $('#export_form').submit();
+                $('#btn-addCustomer').click();
+            } else {
+                alert('Lỗi: Vui lòng điền đầy đủ thông tin!');
+                event.preventDefault();
+            }
+        } else {
+            alert('Lỗi: Chưa chọn nhà cung cấp!');
+            event.preventDefault();
+        }
+    }
 </script>
 </body>
 

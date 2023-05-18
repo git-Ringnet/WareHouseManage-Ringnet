@@ -19,11 +19,12 @@ return new class extends Migration
             $table->integer('product_id');
             $table->integer('export_id');
             $table->string('product_name');
+            $table->string('product_unit');
             $table->integer('product_qty');
-            $table->integer('product_price');
+            $table->bigInteger('product_price');
             $table->string('product_note');
             $table->integer('product_tax');
-            $table->integer('product_total');
+            $table->bigInteger('product_total');
             $table->timestamps();
         });
     }
