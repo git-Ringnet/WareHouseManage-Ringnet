@@ -11,8 +11,8 @@ class Orders extends Model
     protected $fillable = [
         'provide_id', 'users_id', 'order_status', 'total'
     ];
-    public function getProvide()
-    {
-        return $this->hasOne(Provides::class);
-    }
+    // public function getProvide()
+    // {
+    //     return $this->hasOne(Provides::class,'id','provide_id');
+    // }
 }

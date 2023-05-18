@@ -128,4 +128,8 @@ class User extends Authenticatable
     {
         return DB::table($this->table)->where('id', $id)->update($data);
     }
+    public function getProvide()
+    {
+        return $this->hasOne(Provides::class,'id','provide_id');
+    }
 }
