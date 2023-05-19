@@ -24,7 +24,7 @@
                                 placeholder="Tìm kiếm đơn vị, đại diện hoặc email">
                         </div>
                         <div class="col-2">
-                            <button type="submit" class="btn btn-primary btn-block">Tìm kiếm</button>
+                            
                         </div>
                         <a class="btn ml-auto btn-delete-filter" href="{{route('guests.index')}}"><span><svg width="24"
                             height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
