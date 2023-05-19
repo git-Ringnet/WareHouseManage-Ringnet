@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\productExports;
 use App\Models\Products;
 use App\Models\Serinumbers;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -227,7 +228,13 @@ class ExportController extends Controller
      */
     public function edit($id)
     {
-        //
+        $exports = Exports::find($id);
+        $guest = Guests::find($exports->guest_id);
+        $customer = Guests::all();
+        $user = User::find($exports->user_id);
+        $productExport = productExports::find($exports->id);
+        $products = Products::find($productExport->products_id);
+        return view('tables.export.editExport', compact('exports','guest','user','productExport','products','customer'));
     }
 
     /**
