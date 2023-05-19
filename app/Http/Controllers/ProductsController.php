@@ -58,8 +58,8 @@ class ProductsController extends Controller
         $categoryarr = [];
         $string = array();
         $class = '';
-
         $id = 0;
+
         if (!empty($request->id)) {
             $id = $request->input('id');
             $idArray = explode(' ', $id);
@@ -88,7 +88,7 @@ class ProductsController extends Controller
             $inventoryArray = explode(' ', $quantity);
             array_push($string, ['label' => 'Tồn kho ' . $comparison_operator, 'values' => $inventoryArray, 'class' => 'quantity']);
         }
-
+        // var_dump($request->comparison_operator);
         // // Trị trung bình
         if (!empty($request->avg_operator) && !empty($request->avg)) {
             $avg = $request->avg;
@@ -105,7 +105,7 @@ class ProductsController extends Controller
             $price_invenArray = explode(' ', $price_inven);
             array_push($string, ['label' => 'Trị tồn kho ' . $operator, 'values' => $price_invenArray, 'class' => 'price_inven']);
         }
-        
+
         //Status
         if (!empty($request->status)) {
             $statusValues = [0 => 'Hết hàng', 1 => 'Gần hết', 2 => 'Sẵn hàng'];

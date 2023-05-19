@@ -34,7 +34,6 @@ Route::prefix('admin')->name('admin.')->middleware('permission:admin')->group(fu
     Route::get('updatestatus', [UsersController::class, 'updateStatus'])->name('update');
 });
 
-
 //nha cung cap
 Route::resource('provides', provideController::class)->middleware('permission:Manager');
 Route::get('/update-status', [provideController::class, 'updateStatus'])->name('update');
@@ -45,6 +44,15 @@ Route::get('/updatestatus', [GuestsController::class, 'updateStatus'])->name('up
 
 //xuat hang
 Route::resource('exports', ExportController::class);
+Route::get('/searchExport', [ExportController::class, 'searchExport'])->name('searchExport');
+//cap nhat thong tin khach hang
+Route::get('/customers', [ExportController::class, 'updateCustomer'])->name('updateCustomer');
+//them thong tin khach hang
+Route::get('addguest', [ExportController::class, 'addCustomer'])->name('addCustomer');
+//lấy thông tin sản phẩm từ mã sản phẩm cha
+Route::get('nameProducts', [ExportController::class, 'nameProduct'])->name('nameProduct');
+//lấy thông tin sản phẩm từ tên sản phẩm
+Route::get('getProduct', [ExportController::class, 'getProduct'])->name('getProduct');
 
 //
 Route::resource('data',ProductsController::class);
@@ -52,7 +60,6 @@ Route::get('/insertProducts',[ProductsController::class,'insertProducts'])->name
 Route::POST('/storeProducts',[ProductsController::class,'storeProducts'])->name('storeProducts');
 Route::get('/data_edit',[ProductsController::class,'edit_ajax'])->name('ajax');
 Route::get('/data_show',[ProductsController::class,'show_ajax'])->name('show_ajax');
-
 Route::get('/show_provide',[AddProductController::class,'show_provide'])->name('show_provide');
 Route::get('/update_provide',[AddProductController::class,'update_provide'])->name('update_provide');
 Route::resource('insertProduct',AddProductController::class);

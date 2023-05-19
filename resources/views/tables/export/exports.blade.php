@@ -17,7 +17,8 @@
             </div>
             <a href="{{ route('exports.create') }}">
                 <button type="button" class="btn btn-primary d-flex align-items-center">
-                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd"
                             d="M6 0C6.38791 -1.97352e-08 6.70237 0.314463 6.70237 0.702373L6.70237 11.2976C6.70237 11.6855 6.38791 12 6 12C5.61209 12 5.29763 11.6855 5.29763 11.2976V0.702373C5.29763 0.314463 5.61209 -1.97352e-08 6 0Z"
                             fill="white" />
@@ -32,20 +33,22 @@
                 <form class="w-100" action="" method="get" id='search-filter'>
                     <div class="row">
                         <div class="col-5">
-                            <input type="text" placeholder="Tìm kiếm theo mã sản phẩm hoặc tên sản phẩm" name="keywords" 
-                                class="pr-4 form-control input-search w-100" value="{{request()->keywords}}">
+                            <input type="text" placeholder="Tìm kiếm theo mã sản phẩm hoặc tên sản phẩm"
+                                name="keywords" class="pr-4 form-control input-search w-100"
+                                value="{{ request()->keywords }}">
                             <span class="search-icon"><i class="fas fa-search"></i></span>
                         </div>
                         <div class="col-2">
-                            <button type="submit" class="btn btn-primary btn-block">Tìm kiếm</button>
+
                         </div>
-                        <a class="btn ml-auto btn-delete-filter" href="{{route('exports.index')}}"><span><svg width="24"
-                            height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                              d="M6 5.4643C6 5.34116 6.04863 5.22306 6.13518 5.13599C6.22174 5.04892 6.33913 5 6.46154 5H17.5385C17.6609 5 17.7783 5.04892 17.8648 5.13599C17.9514 5.22306 18 5.34116 18 5.4643V7.32149C18 7.43599 17.9579 7.54645 17.8818 7.63164L13.8462 12.1428V16.6075C13.8461 16.7049 13.8156 16.7998 13.7589 16.8788C13.7022 16.9578 13.6223 17.0168 13.5305 17.0476L10.7612 17.9762C10.6919 17.9994 10.618 18.0058 10.5458 17.9947C10.4735 17.9836 10.4049 17.9554 10.3456 17.9124C10.2863 17.8695 10.238 17.8129 10.2047 17.7475C10.1713 17.682 10.1539 17.6096 10.1538 17.5361V12.1428L6.11815 7.63164C6.0421 7.54645 6.00002 7.43599 6 7.32149V5.4643Z"
-                              fill="#555555" />
-                          </svg>
-                        </span>Tắt bộ lọc</a>
+                        <a class="btn ml-auto btn-delete-filter" href="{{ route('exports.index') }}"><span><svg
+                                    width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M6 5.4643C6 5.34116 6.04863 5.22306 6.13518 5.13599C6.22174 5.04892 6.33913 5 6.46154 5H17.5385C17.6609 5 17.7783 5.04892 17.8648 5.13599C17.9514 5.22306 18 5.34116 18 5.4643V7.32149C18 7.43599 17.9579 7.54645 17.8818 7.63164L13.8462 12.1428V16.6075C13.8461 16.7049 13.8156 16.7998 13.7589 16.8788C13.7022 16.9578 13.6223 17.0168 13.5305 17.0476L10.7612 17.9762C10.6919 17.9994 10.618 18.0058 10.5458 17.9947C10.4735 17.9836 10.4049 17.9554 10.3456 17.9124C10.2863 17.8695 10.238 17.8129 10.2047 17.7475C10.1713 17.682 10.1539 17.6096 10.1538 17.5361V12.1428L6.11815 7.63164C6.0421 7.54645 6.00002 7.43599 6 7.32149V5.4643Z"
+                                        fill="#555555" />
+                                </svg>
+                            </span>Tắt bộ lọc</a>
                     </div>
                     <div class="row d-flex justify-contents-center align-items-center mr-auto pt-2">
                         <div class="icon-filter mr-3 ml-1">
@@ -58,18 +61,19 @@
                         </div>
                         <div class="filter-results">
                             @foreach ($string as $item)
-                            <span class="filter-group">
-                                {{ $item['label'] }}
-                                <span class="filter-values">{{ implode(', ', $item['values']) }}</span>
-                                <a class="delete-item delete-btn-{{ $item['class'] }}"><svg width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M18 18L6 6" stroke="#555555" stroke-width="1.5" stroke-linecap="round"
-                                            stroke-linejoin="round" />
-                                        <path d="M18 6L6 18" stroke="#555555" stroke-width="1.5" stroke-linecap="round"
-                                            stroke-linejoin="round" />
-                                    </svg>
-                                </a>
-                            </span>
+                                <span class="filter-group">
+                                    {{ $item['label'] }}
+                                    <span class="filter-values">{{ implode(', ', $item['values']) }}</span>
+                                    <a class="delete-item delete-btn-{{ $item['class'] }}"><svg width="24"
+                                            height="24" viewBox="0 0 24 24" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M18 18L6 6" stroke="#555555" stroke-width="1.5"
+                                                stroke-linecap="round" stroke-linejoin="round" />
+                                            <path d="M18 6L6 18" stroke="#555555" stroke-width="1.5"
+                                                stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </a>
+                                </span>
                             @endforeach
                         </div>
                         <div class="filter-options">
@@ -102,33 +106,30 @@
                                     <button class="dropdown-item" id="btn-status">Trạng thái</button>
                                 </div>
                             </div>
-                            <?php  $status = [];
-                                if (isset(request()->status)) {
-                                $status= request()->status;
-                                }
-                                else {
+                            <?php $status = [];
+                            if (isset(request()->status)) {
+                                $status = request()->status;
+                            } else {
                                 $status = [];
-                                }
-
-                                $name=[];
-                                if (isset(request()->name)) {
-                                    $name= request()->name;
-                                }
-                                else {
-                                    $name = [];
-                                }
-                                $comparison_operator=null;
-                                $sum=null;
-                                //Tổng tiền
-                                if (isset(request()->comparison_operator) && isset(request()->sum)) {
-                                    $comparison_operator= request()->comparison_operator;
-                                    $sum= request()->sum;
-                                }
-                                else {
-                                    $comparison_operator=null;
-                                    $sum=null;
-                                }
-                                ?>
+                            }
+                            
+                            $name = [];
+                            if (isset(request()->name)) {
+                                $name = request()->name;
+                            } else {
+                                $name = [];
+                            }
+                            $comparison_operator = null;
+                            $sum = null;
+                            //Tổng tiền
+                            if (isset(request()->comparison_operator) && isset(request()->sum)) {
+                                $comparison_operator = request()->comparison_operator;
+                                $sum = request()->sum;
+                            } else {
+                                $comparison_operator = null;
+                                $sum = null;
+                            }
+                            ?>
 
                             {{-- Tìm mã đơn hàng --}}
                             <div class="block-options" id="id-options" style="display:none">
@@ -139,7 +140,7 @@
                                     <div class="input-group px-2">
                                         <label class="title" for="">Chứa kí tự</label>
                                         <input type="search" name="id" class="form-control id-input"
-                                            value="{{request()->id}}" placeholder="Nhập thông tin..">
+                                            value="{{ request()->id }}" placeholder="Nhập thông tin..">
                                     </div>
                                 </div>
                                 <div class="d-flex justify-contents-center align-items-baseline px-2">
@@ -157,7 +158,7 @@
                                     <div class="input-group px-2">
                                         <label class="title" for="">Chứa kí tự</label>
                                         <input type="search" name="guest" class="form-control guest-input"
-                                            value="{{request()->guest}}" placeholder="Nhập thông tin..">
+                                            value="{{ request()->guest }}" placeholder="Nhập thông tin..">
                                     </div>
                                 </div>
                                 <div class="d-flex justify-contents-center align-items-baseline px-2">
@@ -179,18 +180,21 @@
                                     </div>
                                     <ul class="ks-cboxtags p-0 m-0 px-2">
                                         <li>
-                                            <input type="checkbox" id="status_active" {{ in_array(0, $status)
-                                                ? 'checked' : '' }} name="status[]" value="0">
+                                            <input type="checkbox" id="status_active"
+                                                {{ in_array(0, $status) ? 'checked' : '' }}
+                                                name="status[]" value="0">
                                             <label for="status_active">Đã hủy</label>
                                         </li>
                                         <li>
-                                            <input type="checkbox" id="status_inactive" {{ in_array(1, $status)
-                                                ? 'checked' : '' }} name="status[]" value="1">
+                                            <input type="checkbox" id="status_inactive"
+                                                {{ in_array(1, $status) ? 'checked' : '' }}
+                                                name="status[]" value="1">
                                             <label for="status_inactive">Đã báo giá</label>
                                         </li>
                                         <li>
-                                            <input type="checkbox" id="status_inactive" {{ in_array(2, $status)
-                                                ? 'checked' : '' }} name="status[]" value="2">
+                                            <input type="checkbox" id="status_inactive"
+                                                {{ in_array(2, $status) ? 'checked' : '' }}
+                                                name="status[]" value="2">
                                             <label for="status_inactive">Đã chốt</label>
                                         </li>
                                     </ul>
@@ -213,28 +217,29 @@
                                         <a class="cursor deselect-all-creator">Hủy chọn</a>
                                     </div>
                                     <ul class="ks-cboxtags-name p-0 m-0 px-2">
-                                        @if(!empty($exports))
-                                        @php
-                                        $seenValues = [];
-                                        @endphp
-                                        @foreach ($exports as $value)
-                                        @if (!in_array($value->name, $seenValues))
-                                        <li>
-                                            <input type="checkbox" id="name_active" {{ in_array($value->name,
-                                            $name) ? 'checked' : '' }}
-                                            name="name[]" value="{{$value->name}}">
-                                            <label id="name" for="name">{{
-                                                $value->name }}</label>
-                                        </li>
-                                        @php
-                                        $seenValues[] = $value->name;
-                                        @endphp
-                                        @endif
-                                        @endforeach
+                                        @if (!empty($exports))
+                                            @php
+                                                $seenValues = [];
+                                            @endphp
+                                            @foreach ($exports as $value)
+                                                @if (!in_array($value->name, $seenValues))
+                                                    <li>
+                                                        <input type="checkbox" id="name_active"
+                                                            {{ in_array($value->name, $name) ? 'checked' : '' }}
+                                                            name="name[]" value="{{ $value->name }}">
+                                                        <label id="name"
+                                                            for="name">{{ $value->name }}</label>
+                                                    </li>
+                                                    @php
+                                                        $seenValues[] = $value->name;
+                                                    @endphp
+                                                @endif
+                                            @endforeach
                                         @endif
                                     </ul>
                                     <div class="d-flex justify-contents-center align-items-baseline px-2">
-                                        <button type="submit" class="btn btn-primary btn-block mr-2">Xác Nhận</button>
+                                        <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                            Nhận</button>
                                         <button type="button" id="cancel-creator"
                                             class="btn btn-secondary btn-block">Hủy</button>
                                     </div>
@@ -251,10 +256,10 @@
                                             style="width: 40%">
                                             <option value=">=">>=</option>
                                             <option value="<=">
-                                                <=</option>
+                                                <=< /option>
                                         </select>
                                         <input class="w-50 input-quantity sum-input" type="number" name="sum"
-                                            value="{{ request()->sum}}" placeholder="Số lượng">
+                                            value="{{ request()->sum }}" placeholder="Số lượng">
                                     </div>
                                 </div>
                                 <div class="d-flex justify-contents-center align-items-baseline px-2">
@@ -271,11 +276,11 @@
                                     </div>
                                     <div class="input-group pt-2 justify-content-around">
                                         <label for="start">Từ ngày:</label>
-                                        <input type="date" id="start" name="trip_start" value="{{request()->start}}"
-                                            min="2018-01-01" max="2050-12-31">
+                                        <input type="date" id="start" name="trip_start"
+                                            value="{{ request()->start }}" min="2018-01-01" max="2050-12-31">
                                         <label for="start">Đến ngày:</label>
-                                        <input type="date" id="end" name="trip_end" value="{{request()->end}}"
-                                            min="2018-01-01" max="2050-12-31">
+                                        <input type="date" id="end" name="trip_end"
+                                            value="{{ request()->end }}" min="2018-01-01" max="2050-12-31">
                                     </div>
                                 </div>
                                 <div class="d-flex justify-contents-center align-items-baseline px-2">
@@ -300,11 +305,12 @@
                                 <thead>
                                     <tr>
                                         <input type="hidden" id="sortByInput" name="sort-by" value="product_id">
-                                        <input type="hidden" id="sortTypeInput" name="sort-type" value="{{$sortType}}">
+                                        <input type="hidden" id="sortTypeInput" name="sort-type"
+                                            value="{{ $sortType }}">
                                         <th scope="col">
                                             <span class="d-flex">
                                                 <a href="#" class="sort-link" data-sort-by="product_id"
-                                                    data-sort-type="{{$sortType}}"><button class="btn-sort"
+                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Mã đơn hàng</button></a>
                                                 <div class="icon" id="icon-product_id"></div>
                                             </span>
@@ -312,7 +318,7 @@
                                         <th scope="col">
                                             <span class="d-flex">
                                                 <a href="#" class="sort-link" data-sort-by="guest_represent"
-                                                    data-sort-type="{{$sortType}}"><button class="btn-sort"
+                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Khách hàng</button></a>
                                                 <div class="icon" id="icon-guest_represent"></div>
                                             </span>
@@ -320,7 +326,7 @@
                                         <th scope="col">
                                             <span class="d-flex">
                                                 <a href="#" class="sort-link" data-sort-by="updated_at"
-                                                    data-sort-type="{{$sortType}}"><button class="btn-sort"
+                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Chỉnh sửa cuối</button></a>
                                                 <div class="icon" id="icon-updated_at"></div>
                                             </span>
@@ -328,7 +334,7 @@
                                         <th scope="col">
                                             <span class="d-flex">
                                                 <a href="#" class="sort-link" data-sort-by="name"
-                                                    data-sort-type="{{$sortType}}"><button class="btn-sort"
+                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Người tạo</button></a>
                                                 <div class="icon" id="icon-name"></div>
                                             </span>
@@ -336,7 +342,7 @@
                                         <th scope="col">
                                             <span class="d-flex">
                                                 <a href="#" class="sort-link" data-sort-by="total"
-                                                    data-sort-type="{{$sortType}}"><button class="btn-sort"
+                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Tổng tiền</button></a>
                                                 <div class="icon" id="icon-total"></div>
                                             </span>
@@ -344,7 +350,7 @@
                                         <th scope="col">
                                             <span class="d-flex">
                                                 <a href="#" class="sort-link" data-sort-by="export_status"
-                                                    data-sort-type="{{$sortType}}"><button class="btn-sort"
+                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Trạng thái</button></a>
                                                 <div class="icon" id="icon-export_status"></div>
                                             </span>
@@ -355,30 +361,30 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($export as $value)
-                                    <tr>
-                                        <td>{{ $value->product_id }}</td>
-                                        <td>{{ $value->guest_represent }}</td>
-                                        <td>{{ $value->updated_at }}</td>
-                                        <td>{{ $value->name }}</td>
-                                        <td>{{ number_format($value->total) }}</td>
-                                        <td>
-                                            @if ($value->export_status == 0)
-                                            <span class="p-2 bg-danger rounded">Đã hủy</span>
-                                            @elseif($value->export_status == 1)
-                                            <span class="p-2 bg-warning rounded">Đã báo giá</span>
-                                            @elseif($value->export_status == 2)
-                                            <span class="p-2 bg-success rounded">Đã chốt</span>
-                                            @endif
-                                        </td>
-                                        <td>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
-                                                viewBox="0 0 32 32" fill="none">
-                                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                                    d="M18.7832 6.79483C18.987 6.71027 19.2056 6.66675 19.4263 6.66675C19.6471 6.66675 19.8656 6.71027 20.0695 6.79483C20.2734 6.87938 20.4586 7.00331 20.6146 7.15952L21.9607 8.50563C22.1169 8.66165 22.2408 8.84693 22.3253 9.05087C22.4099 9.25482 22.4534 9.47342 22.4534 9.69419C22.4534 9.91495 22.4099 10.1336 22.3253 10.3375C22.2408 10.5414 22.1169 10.7267 21.9607 10.8827L20.2809 12.5626C20.2711 12.5736 20.2609 12.5844 20.2503 12.595C20.2397 12.6056 20.2289 12.6158 20.2178 12.6256L11.5607 21.2827C11.4257 21.4177 11.2426 21.4936 11.0516 21.4936H8.34644C7.94881 21.4936 7.62647 21.1712 7.62647 20.7736V18.0684C7.62647 17.8775 7.70233 17.6943 7.83737 17.5593L16.4889 8.9086C16.5003 8.89532 16.5124 8.88235 16.525 8.86973C16.5376 8.8571 16.5506 8.84504 16.5639 8.83354L18.2381 7.15952C18.394 7.00352 18.5795 6.8793 18.7832 6.79483ZM17.0354 10.3984L9.06641 18.3667V20.0536H10.7534L18.7221 12.085L17.0354 10.3984ZM19.7402 11.0668L18.0537 9.38022L19.2572 8.17685C19.2794 8.15461 19.3057 8.13696 19.3348 8.12493C19.3638 8.11289 19.3949 8.10669 19.4263 8.10669C19.4578 8.10669 19.4889 8.11289 19.5179 8.12493C19.5469 8.13697 19.5737 8.15504 19.5959 8.17728L20.9428 9.52411C20.9651 9.5464 20.9831 9.57315 20.9951 9.60228C21.0072 9.63141 21.0134 9.66264 21.0134 9.69419C21.0134 9.72573 21.0072 9.75696 20.9951 9.78609C20.9831 9.81522 20.9651 9.84197 20.9428 9.86426L19.7402 11.0668ZM6.6665 24.6134C6.6665 24.2158 6.98885 23.8935 7.38648 23.8935H24.6658C25.0634 23.8935 25.3858 24.2158 25.3858 24.6134C25.3858 25.0111 25.0634 25.3334 24.6658 25.3334H7.38648C6.98885 25.3334 6.6665 25.0111 6.6665 24.6134Z"
-                                                    fill="#555555"></path>
-                                            </svg>
-                                        </td>
-                                    </tr>
+                                        <tr>
+                                            <td>{{ $value->id }}</td>
+                                            <td>{{ $value->guest_represent }}</td>
+                                            <td>{{ $value->updated_at }}</td>
+                                            <td>{{ $value->name }}</td>
+                                            <td>{{ number_format($value->total) }}</td>
+                                            <td>
+                                                @if ($value->export_status == 0)
+                                                    <span class="p-2 bg-danger rounded">Đã hủy</span>
+                                                @elseif($value->export_status == 1)
+                                                    <span class="p-2 bg-warning rounded">Đã báo giá</span>
+                                                @elseif($value->export_status == 2)
+                                                    <span class="p-2 bg-success rounded">Đã chốt</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                                                    viewBox="0 0 32 32" fill="none">
+                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                        d="M18.7832 6.79483C18.987 6.71027 19.2056 6.66675 19.4263 6.66675C19.6471 6.66675 19.8656 6.71027 20.0695 6.79483C20.2734 6.87938 20.4586 7.00331 20.6146 7.15952L21.9607 8.50563C22.1169 8.66165 22.2408 8.84693 22.3253 9.05087C22.4099 9.25482 22.4534 9.47342 22.4534 9.69419C22.4534 9.91495 22.4099 10.1336 22.3253 10.3375C22.2408 10.5414 22.1169 10.7267 21.9607 10.8827L20.2809 12.5626C20.2711 12.5736 20.2609 12.5844 20.2503 12.595C20.2397 12.6056 20.2289 12.6158 20.2178 12.6256L11.5607 21.2827C11.4257 21.4177 11.2426 21.4936 11.0516 21.4936H8.34644C7.94881 21.4936 7.62647 21.1712 7.62647 20.7736V18.0684C7.62647 17.8775 7.70233 17.6943 7.83737 17.5593L16.4889 8.9086C16.5003 8.89532 16.5124 8.88235 16.525 8.86973C16.5376 8.8571 16.5506 8.84504 16.5639 8.83354L18.2381 7.15952C18.394 7.00352 18.5795 6.8793 18.7832 6.79483ZM17.0354 10.3984L9.06641 18.3667V20.0536H10.7534L18.7221 12.085L17.0354 10.3984ZM19.7402 11.0668L18.0537 9.38022L19.2572 8.17685C19.2794 8.15461 19.3057 8.13696 19.3348 8.12493C19.3638 8.11289 19.3949 8.10669 19.4263 8.10669C19.4578 8.10669 19.4889 8.11289 19.5179 8.12493C19.5469 8.13697 19.5737 8.15504 19.5959 8.17728L20.9428 9.52411C20.9651 9.5464 20.9831 9.57315 20.9951 9.60228C21.0072 9.63141 21.0134 9.66264 21.0134 9.69419C21.0134 9.72573 21.0072 9.75696 20.9951 9.78609C20.9831 9.81522 20.9651 9.84197 20.9428 9.86426L19.7402 11.0668ZM6.6665 24.6134C6.6665 24.2158 6.98885 23.8935 7.38648 23.8935H24.6658C25.0634 23.8935 25.3858 24.2158 25.3858 24.6134C25.3858 25.0111 25.0634 25.3334 24.6658 25.3334H7.38648C6.98885 25.3334 6.6665 25.0111 6.6665 24.6134Z"
+                                                        fill="#555555"></path>
+                                                </svg>
+                                            </td>
+                                        </tr>
                                     @endforeach
                                 </tbody>
                             </table>
@@ -398,82 +404,82 @@
     <!-- /.content -->
 </div>
 <script>
-$('#btn-update_at').click(function(event) {
-    event.preventDefault();
-    $('#update_at-options').toggle();
-});
-$('#cancel-update_at').click(function(event) {
-    event.preventDefault();
-    $('#update_at-options').hide();
-});
+    $('#btn-update_at').click(function(event) {
+        event.preventDefault();
+        $('#update_at-options').toggle();
+    });
+    $('#cancel-update_at').click(function(event) {
+        event.preventDefault();
+        $('#update_at-options').hide();
+    });
     $('#btn-sum').click(function(event) {
-    event.preventDefault();
-    $('#sum-options').toggle();
-});
-$('#cancel-sum').click(function(event) {
-    event.preventDefault();
-    $('#sum-options').hide();
-});
-$('#btn-creator').click(function(event) {
-    event.preventDefault();
-    $('#creator-options').toggle();
-});
-$('#cancel-creator').click(function(event) {
-    event.preventDefault();
-    $('#creator-options').hide();
-});
+        event.preventDefault();
+        $('#sum-options').toggle();
+    });
+    $('#cancel-sum').click(function(event) {
+        event.preventDefault();
+        $('#sum-options').hide();
+    });
+    $('#btn-creator').click(function(event) {
+        event.preventDefault();
+        $('#creator-options').toggle();
+    });
+    $('#cancel-creator').click(function(event) {
+        event.preventDefault();
+        $('#creator-options').hide();
+    });
     $('#btn-status').click(function(event) {
-    event.preventDefault();
-    $('#status-options').toggle();
-});
-$('#cancel-status').click(function(event) {
-    event.preventDefault();
-    $('#status-options').hide();
-});
-$('#btn-id').click(function(event) {
-    event.preventDefault();
-    $('#id-options').toggle();
-});
-$('#cancel-id').click(function(event) {
-    event.preventDefault();
-    $('#id-options').hide();
-});
+        event.preventDefault();
+        $('#status-options').toggle();
+    });
+    $('#cancel-status').click(function(event) {
+        event.preventDefault();
+        $('#status-options').hide();
+    });
+    $('#btn-id').click(function(event) {
+        event.preventDefault();
+        $('#id-options').toggle();
+    });
+    $('#cancel-id').click(function(event) {
+        event.preventDefault();
+        $('#id-options').hide();
+    });
 
-$('#btn-guest').click(function(event) {
-    event.preventDefault();
-    $('#guest-options').toggle();
-});
-$('#cancel-guest').click(function(event) {
-    event.preventDefault();
-    $('#guest-options').hide();
-});
+    $('#btn-guest').click(function(event) {
+        event.preventDefault();
+        $('#guest-options').toggle();
+    });
+    $('#cancel-guest').click(function(event) {
+        event.preventDefault();
+        $('#guest-options').hide();
+    });
 
-// Check box
-$(document).ready(function() {
-  // Chọn tất cả các checkbox
-  $('.select-all-creator').click(function() {
-    $('#creator-options input[type="checkbox"]').prop('checked', true);
-  });
+    // Check box
+    $(document).ready(function() {
+        // Chọn tất cả các checkbox
+        $('.select-all-creator').click(function() {
+            $('#creator-options input[type="checkbox"]').prop('checked', true);
+        });
 
-  // Hủy tất cả các checkbox
-  $('.deselect-all-creator').click(function() {
-    $('#creator-options input[type="checkbox"]').prop('checked', false);
-  });
-});
-$(document).ready(function() {
-  // Chọn tất cả các checkbox
-  $('.select-all').click(function() {
-    $('#status-options input[type="checkbox"]').prop('checked', true);
-  });
+        // Hủy tất cả các checkbox
+        $('.deselect-all-creator').click(function() {
+            $('#creator-options input[type="checkbox"]').prop('checked', false);
+        });
+    });
+    $(document).ready(function() {
+        // Chọn tất cả các checkbox
+        $('.select-all').click(function() {
+            $('#status-options input[type="checkbox"]').prop('checked', true);
+        });
 
-  // Hủy tất cả các checkbox
-  $('.deselect-all').click(function() {
-    $('#status-options input[type="checkbox"]').prop('checked', false);
-  });
-});
+        // Hủy tất cả các checkbox
+        $('.deselect-all').click(function() {
+            $('#status-options input[type="checkbox"]').prop('checked', false);
+        });
+    });
 
-//Xóa filter
-$(document).ready(function() {
+    //Xóa filter
+    $(document).ready(function() {
         $('.filter-results').on('click', '.delete-btn-status', function() {
             $('.deselect-all').click();
             document.getElementById('search-filter').submit();
@@ -485,19 +491,19 @@ $(document).ready(function() {
             document.getElementById('search-filter').submit();
         });
     });
-$(document).ready(function() {
+    $(document).ready(function() {
         $('.filter-results').on('click', '.delete-btn-id', function() {
             $('.id-input').val('');
             document.getElementById('search-filter').submit();
         });
     });
-$(document).ready(function() {
+    $(document).ready(function() {
         $('.filter-results').on('click', '.delete-btn-guest', function() {
             $('.guest-input').val('');
             document.getElementById('search-filter').submit();
         });
     });
-$(document).ready(function() {
+    $(document).ready(function() {
         $('.filter-results').on('click', '.delete-btn-sum', function() {
             $('.sum-input').val('');
             document.getElementById('search-filter').submit();
@@ -505,69 +511,73 @@ $(document).ready(function() {
     });
 
 
-//Xử lí tìm kiếm bộ lọc tổng
-function filterFunction() {
-  var input = $("#myInput");
-  var filter = input.val().toUpperCase();
-  var buttons = $("#dropdown-menu button");
+    //Xử lí tìm kiếm bộ lọc tổng
+    function filterFunction() {
+        var input = $("#myInput");
+        var filter = input.val().toUpperCase();
+        var buttons = $("#dropdown-menu button");
 
-  buttons.each(function() {
-    var text = $(this).text();
-    if (text.toUpperCase().indexOf(filter) > -1) {
-      $(this).show();
-    } else {
-      $(this).hide();
+        buttons.each(function() {
+            var text = $(this).text();
+            if (text.toUpperCase().indexOf(filter) > -1) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
     }
-  });
-}
 
 
-//Sort
-$(document).ready(function() {
-    // Khôi phục trạng thái icon khi tải lại trang
-    restoreIconState();
-    localStorage.clear();
-    $('.sort-link').on('click', function() {
-      var sortBy = $(this).data('sort-by');
-      var sortType = $(this).data('sort-type');
-      var iconId = 'icon-' + sortBy;
-      var iconElement = $('#' + iconId);
-      
-      var svgHTML = "<svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>";
-        if (sortType === 'desc') {
-          svgHTML += "<path fill-rule='evenodd' clip-rule='evenodd' d='M11.5006 5C11.6332 5 11.7604 5.05268 11.8542 5.14645C11.948 5.24021 12.0006 5.36739 12.0006 5.5V17.293L15.1466 14.146C15.2405 14.0521 15.3679 13.9994 15.5006 13.9994C15.6334 13.9994 15.7607 14.0521 15.8546 14.146C15.9485 14.2399 16.0013 14.3672 16.0013 14.5C16.0013 14.6328 15.9485 14.7601 15.8546 14.854L11.8546 18.854C11.8082 18.9006 11.753 18.9375 11.6923 18.9627C11.6315 18.9879 11.5664 19.0009 11.5006 19.0009C11.4349 19.0009 11.3697 18.9879 11.309 18.9627C11.2483 18.9375 11.1931 18.9006 11.1466 18.854L7.14663 14.854C7.05274 14.7601 7 14.6328 7 14.5C7 14.3672 7.05274 14.2399 7.14663 14.146C7.24052 14.0521 7.36786 13.9994 7.50063 13.9994C7.63341 13.9994 7.76075 14.0521 7.85463 14.146L11.0006 17.293V5.5C11.0006 5.36739 11.0533 5.24021 11.1471 5.14645C11.2408 5.05268 11.368 5 11.5006 5Z' fill='#555555'/>";
-        }else {
-          svgHTML += "<path fill-rule='evenodd' clip-rule='evenodd' d='M11.5006 19.0009C11.6332 19.0009 11.7604 18.9482 11.8542 18.8544C11.948 18.7607 12.0006 18.6335 12.0006 18.5009V6.70789L15.1466 9.85489C15.2405 9.94878 15.3679 10.0015 15.5006 10.0015C15.6334 10.0015 15.7607 9.94878 15.8546 9.85489C15.9485 9.76101 16.0013 9.63367 16.0013 9.50089C16.0013 9.36812 15.9485 9.24078 15.8546 9.14689L11.8546 5.14689C11.8082 5.10033 11.753 5.06339 11.6923 5.03818C11.6315 5.01297 11.5664 5 11.5006 5C11.4349 5 11.3697 5.01297 11.309 5.03818C11.2483 5.06339 11.1931 5.10033 11.1466 5.14689L7.14663 9.14689C7.10014 9.19338 7.06327 9.24857 7.03811 9.30931C7.01295 9.37005 7 9.43515 7 9.50089C7 9.63367 7.05274 9.76101 7.14663 9.85489C7.24052 9.94878 7.36786 10.0015 7.50063 10.0015C7.63341 10.0015 7.76075 9.94878 7.85463 9.85489L11.0006 6.70789V18.5009C11.0006 18.6335 11.0533 18.7607 11.1471 18.8544C11.2408 18.9482 11.368 19.0009 11.5006 19.0009Z' fill='#555555'/>"
-        }svgHTML += "</svg>";
-          // Hiển thị icon tương ứng
-      iconElement.html(svgHTML);
-      // Hiển thị icon tương ứng
-      iconElement.html(svgHTML);
-      
-      // Lưu trạng thái của mũi tên vào localStorage
-      localStorage.setItem(iconId, svgHTML);
+    //Sort
+    $(document).ready(function() {
+        // Khôi phục trạng thái icon khi tải lại trang
+        restoreIconState();
+        localStorage.clear();
+        $('.sort-link').on('click', function() {
+            var sortBy = $(this).data('sort-by');
+            var sortType = $(this).data('sort-type');
+            var iconId = 'icon-' + sortBy;
+            var iconElement = $('#' + iconId);
 
-      // Cập nhật giá trị sort-by và sort-type
-      $('#sortByInput').val(sortBy);
-      $('#sortTypeInput').val(sortType);
+            var svgHTML =
+                "<svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>";
+            if (sortType === 'desc') {
+                svgHTML +=
+                    "<path fill-rule='evenodd' clip-rule='evenodd' d='M11.5006 5C11.6332 5 11.7604 5.05268 11.8542 5.14645C11.948 5.24021 12.0006 5.36739 12.0006 5.5V17.293L15.1466 14.146C15.2405 14.0521 15.3679 13.9994 15.5006 13.9994C15.6334 13.9994 15.7607 14.0521 15.8546 14.146C15.9485 14.2399 16.0013 14.3672 16.0013 14.5C16.0013 14.6328 15.9485 14.7601 15.8546 14.854L11.8546 18.854C11.8082 18.9006 11.753 18.9375 11.6923 18.9627C11.6315 18.9879 11.5664 19.0009 11.5006 19.0009C11.4349 19.0009 11.3697 18.9879 11.309 18.9627C11.2483 18.9375 11.1931 18.9006 11.1466 18.854L7.14663 14.854C7.05274 14.7601 7 14.6328 7 14.5C7 14.3672 7.05274 14.2399 7.14663 14.146C7.24052 14.0521 7.36786 13.9994 7.50063 13.9994C7.63341 13.9994 7.76075 14.0521 7.85463 14.146L11.0006 17.293V5.5C11.0006 5.36739 11.0533 5.24021 11.1471 5.14645C11.2408 5.05268 11.368 5 11.5006 5Z' fill='#555555'/>";
+            } else {
+                svgHTML +=
+                    "<path fill-rule='evenodd' clip-rule='evenodd' d='M11.5006 19.0009C11.6332 19.0009 11.7604 18.9482 11.8542 18.8544C11.948 18.7607 12.0006 18.6335 12.0006 18.5009V6.70789L15.1466 9.85489C15.2405 9.94878 15.3679 10.0015 15.5006 10.0015C15.6334 10.0015 15.7607 9.94878 15.8546 9.85489C15.9485 9.76101 16.0013 9.63367 16.0013 9.50089C16.0013 9.36812 15.9485 9.24078 15.8546 9.14689L11.8546 5.14689C11.8082 5.10033 11.753 5.06339 11.6923 5.03818C11.6315 5.01297 11.5664 5 11.5006 5C11.4349 5 11.3697 5.01297 11.309 5.03818C11.2483 5.06339 11.1931 5.10033 11.1466 5.14689L7.14663 9.14689C7.10014 9.19338 7.06327 9.24857 7.03811 9.30931C7.01295 9.37005 7 9.43515 7 9.50089C7 9.63367 7.05274 9.76101 7.14663 9.85489C7.24052 9.94878 7.36786 10.0015 7.50063 10.0015C7.63341 10.0015 7.76075 9.94878 7.85463 9.85489L11.0006 6.70789V18.5009C11.0006 18.6335 11.0533 18.7607 11.1471 18.8544C11.2408 18.9482 11.368 19.0009 11.5006 19.0009Z' fill='#555555'/>"
+            }
+            svgHTML += "</svg>";
+            // Hiển thị icon tương ứng
+            iconElement.html(svgHTML);
+            // Hiển thị icon tương ứng
+            iconElement.html(svgHTML);
+
+            // Lưu trạng thái của mũi tên vào localStorage
+            localStorage.setItem(iconId, svgHTML);
+
+            // Cập nhật giá trị sort-by và sort-type
+            $('#sortByInput').val(sortBy);
+            $('#sortTypeInput').val(sortType);
+        });
+
+        function restoreIconState() {
+            // Khôi phục trạng thái của mũi tên từ localStorage
+            $('.icon').each(function() {
+                var iconId = $(this).attr('id');
+                var iconHTML = localStorage.getItem(iconId);
+                if (iconHTML) {
+                    $(this).html(iconHTML);
+                }
+            });
+        }
     });
 
-    function restoreIconState() {
-      // Khôi phục trạng thái của mũi tên từ localStorage
-      $('.icon').each(function() {
-        var iconId = $(this).attr('id');
-        var iconHTML = localStorage.getItem(iconId);
-        if (iconHTML) {
-          $(this).html(iconHTML);
-        }
-      });
-    }
-  });
-
-  // Xóa tất cả các dữ liệu trong Local Storage
-  $('.delete-filter').on('click', function() {
-  localStorage.clear();
-});
+    // Xóa tất cả các dữ liệu trong Local Storage
+    $('.delete-filter').on('click', function() {
+        localStorage.clear();
+    });
 </script>
 </body>
 

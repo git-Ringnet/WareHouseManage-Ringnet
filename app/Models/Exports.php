@@ -14,9 +14,9 @@ class Exports extends Model
     public function getAllExports($filter = [], $status = [], $name = [], $date = [], $keywords = null, $orderBy = null, $orderType = null)
     {
         $exports = DB::table($this->table)
-            ->leftjoin('guests', 'exports.guest_id', '=', 'guests.id')
-            ->leftjoin('users', 'exports.user_id', '=', 'users.id');
-
+            ->leftJoin('guests', 'exports.guest_id', '=', 'guests.id')
+            ->leftJoin('users', 'exports.user_id', '=', 'users.id')
+            ->select('exports.id', 'guests.guest_represent', 'users.name', 'exports.total', 'exports.updated_at', 'export_status');
         // Các điều kiện tìm kiếm và lọc dữ liệu ở đây
 
         if (!empty($filter)) {
@@ -48,8 +48,14 @@ class Exports extends Model
             };
             $exports = $exports->orderBy($orderBy, $orderType);
         }
-        
+
         $exports = $exports->paginate(10);
         return $exports;
     }
+    protected $fillable = [
+        'guest_id',
+        'user_id',
+        'total',
+        'export_status',
+    ];
 }

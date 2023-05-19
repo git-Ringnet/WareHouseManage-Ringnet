@@ -86,6 +86,13 @@ if (strpos($current_url, 'data') !== false) {
 } else {
     $products_class = '';
 }
+//
+if (strpos($current_url, 'insertProduct') !== false) {
+    $insert_class = 'active';
+    $index_class = '';
+} else {
+    $insert_class = '';
+}
 //provides
 if (strpos($current_url, 'provides') !== false) {
     $provides_class = 'active';
@@ -324,7 +331,7 @@ if (strpos($current_url, 'exports') !== false) {
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{asset('./insertProduct')}}" class="nav-link">
+                            <a href="{{asset('./insertProduct')}}" class="nav-link <?php echo $insert_class; ?>">
                                 <i class="nav-icon fas fa-table"></i>
                                 <p>
                                     Nhập hàng
@@ -379,3 +386,12 @@ if (strpos($current_url, 'exports') !== false) {
             </div>
             @endif
         </div>
+            @if (Session::has('danger'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ Session::get('danger') }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
+ 
