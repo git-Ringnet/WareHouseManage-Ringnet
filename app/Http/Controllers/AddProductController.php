@@ -251,9 +251,21 @@ class AddProductController extends Controller
     // Duyệt Đơn Hàng Nhanh
     public function addBill(Request $request)
     {
+        $new_provide = new Provides();
+        if($request->provide_name_new != null && $request->provide_address_new != null && $request->provide_code_new != null &&
+        $request->provide_represent_new != null && $request->provide_email_new != null && $request->provide_phone_new != null){
+           $new_provide->provide_name = $request->provide_name_new;
+           $new_provide->provide_represent = $request->provide_represent_new;
+           $new_provide->provide_phone = $request->provide_phone_new;
+           $new_provide->provide_email = $request->provide_email_new;
+           $new_provide->provide_status = 1;
+           $new_provide->provide_address = $request->provide_address_new;
+           $new_provide->provide_code = $request->provide_code_new;
+           $new_provide->save();
+        }
         // Thêm sản phẩm vào bảng Orders
         $order = new Orders();
-        $order->provide_id = $request['provide_id'];
+        $order->provide_id = $new_provide->id == null ? $request['provide_id'] : $new_provide->id;
         $order->users_id = 1;
         $order->order_status = 0;
         $order->save();
@@ -320,6 +332,7 @@ class AddProductController extends Controller
             for ($i = 0; $i < count($product_name); $i++) {
                 $check = Product::where('product_name', $product_name[$i])->where('product_category', $product_category[$i])->first();
                 $serinumbers = Serinumbers::where('product_id', $product_id[$i])->get();
+                $products = Products::where('id', $products_id[$i])->first();
                 if ($check == NULL) {
                     $pro = new Product();
                     $pro->products_id = $products_id[$i];
@@ -329,7 +342,7 @@ class AddProductController extends Controller
                     $pro->product_trademark = $product_trademark[$i];
                     $pro->product_qty = $product_qty[$i];
                     $pro->product_price = $product_price[$i];
-                    // $pro->product_tax = $product_tax[$i];
+                    $pro->tax = $product_tax[$i];
                     $pro->total = $product_total[$i];
                     $pro->save();
                     foreach ($serinumbers as $serinumber) {
@@ -337,6 +350,10 @@ class AddProductController extends Controller
                         $serinumber->seri_status = 1;
                         $serinumber->save();
                     }
+                    $products->inventory += $product_qty[$i];
+                    $products->price_inventory += $product_total[$i];
+                    $products->price_avg = ($products->price_inventory / $products->inventory);
+                    $products->update();
                 } else {
                     $updateProduct = Product::findOrFail($check->id);
                     $updateProduct->product_qty += $product_qty[$i];
@@ -347,16 +364,71 @@ class AddProductController extends Controller
                         $serinumber->seri_status = 1;
                         $serinumber->save();
                     }
+                    $products->inventory += $product_qty[$i];
+                    $products->price_inventory += $product_total[$i];
+                    $products->price_avg = ($products->price_inventory / $products->inventory);
+                    $products->update();
                 }
             }
-            // update lại bảng 
             $updateOrder->order_status = 1;
             $updateOrder->save();
         } else {
-            return redirect()->route('insertProduct.index')->with('section', 'Đơn hàng đã được duyệt');
+            return redirect()->route('insertProduct.index')->with('section', 'Đơn hàng đã được duyệt trước đó');
         }
+
+        // $updateOrder = Orders::find($order->id);
+        // if ($updateOrder->order_status == 0) {
+        //     $product_id = $request->product_id;
+        //     $products_id = $request->products_id;
+        //     $product_name = $request->product_name;
+        //     $product_category = $request->product_category;
+        //     $product_unit = $request->product_unit;
+        //     $product_trademark = $request->product_trademark;
+        //     $product_qty = $request->product_qty;
+        //     $product_price = $request->product_price;
+        //     $product_tax = $request->product_tax;
+        //     $product_total = $request->product_total;
+        //     for ($i = 0; $i < count($product_name); $i++) {
+        //         $check = Product::where('product_name', $product_name[$i])->where('product_category', $product_category[$i])->first();
+        //         $serinumbers = Serinumbers::where('product_id', $product_id[$i])->get();
+        //         if ($check == NULL) {
+        //             $pro = new Product();
+        //             $pro->products_id = $products_id[$i];
+        //             $pro->product_name = $product_name[$i];
+        //             $pro->product_category = $product_category[$i];
+        //             $pro->product_unit = $product_unit[$i];
+        //             $pro->product_trademark = $product_trademark[$i];
+        //             $pro->product_qty = $product_qty[$i];
+        //             $pro->product_price = $product_price[$i];
+        //             // $pro->product_tax = $product_tax[$i];
+        //             $pro->total = $product_total[$i];
+        //             $pro->save();
+        //             foreach ($serinumbers as $serinumber) {
+        //                 $serinumber->product_id = $pro->id;
+        //                 $serinumber->seri_status = 1;
+        //                 $serinumber->save();
+        //             }
+        //         } else {
+        //             $updateProduct = Product::findOrFail($check->id);
+        //             $updateProduct->product_qty += $product_qty[$i];
+        //             $updateProduct->save();
+        //             $serinumbers = Serinumbers::where('product_id', $product_id[$i])->get();
+        //             foreach ($serinumbers as $serinumber) {
+        //                 $serinumber->product_id = $updateProduct->id;
+        //                 $serinumber->seri_status = 1;
+        //                 $serinumber->save();
+        //             }
+        //         }
+        //     }
+        //     // update lại bảng 
+        //     $updateOrder->order_status = 1;
+        //     $updateOrder->save();
+        // } else {
+        //     return redirect()->route('insertProduct.index')->with('section', 'Đơn hàng đã được duyệt');
+        // }
         return redirect()->route('insertProduct.index')->with('section', 'Duyệt nhanh đơn hàng thành công');
     }
+
     // update provide AJAX
     public function update_provide(Request $request)
     {
