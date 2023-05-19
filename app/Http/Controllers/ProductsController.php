@@ -88,7 +88,7 @@ class ProductsController extends Controller
             $inventoryArray = explode(' ', $quantity);
             array_push($string, ['label' => 'Tồn kho ' . $comparison_operator, 'values' => $inventoryArray, 'class' => 'quantity']);
         }
-        var_dump($request->comparison_operator);
+        // var_dump($request->comparison_operator);
         // // Trị trung bình
         if (!empty($request->avg_operator) && !empty($request->avg)) {
             $avg = $request->avg;
