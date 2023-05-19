@@ -35,7 +35,8 @@
                             <input type="search" name="keywords" class="form-control" value="{{request()->keywords}}"
                                 placeholder="Tìm kiếm đơn vị, đại diện hoặc email">
                         </div>
-                        <div class="col-2">
+                        <div class="col-2 d-none">
+                  <button type="submit" class="btn btn-primary btn-block">Tìm kiếm</button>
                             <button type="submit" class="btn btn-primary btn-block">Tìm kiếm</button>
                         </div>
                         <a class="btn ml-auto btn-delete-filter" href="{{route('guests.index')}}"><span><svg width="24"
@@ -55,20 +56,66 @@
                                     fill="#555555" />
                             </svg>
                         </div>
-                        <div class="filter-results">
+                        <?php
+                        session_start();
+                        
+                        $fullUrl = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+                        if ($fullUrl === route('guests.index')) {
+                            // Xử lý khi route hiện tại bằng route('data.index')
+                            unset($_SESSION['labels']); // Xóa session
+                        }
+                        if (!isset($_SESSION['labels'])) {
+                            $_SESSION['labels'] = [];
+                        }
+                        
+                        // Lấy mảng labels từ nguồn dữ liệu hoặc quá trình xử lý khác
+                        $labelsToAdd = [];
+                        foreach ($string as $item) {
+                            $labelsToAdd[] = $item['label'];
+                        }
+                        
+                        $deleteItem = request()->delete_item;
+                        // var_dump($deleteItem);
+                        // echo '<br>';
+                        if (($key = array_search($deleteItem, $_SESSION['labels'])) !== false) {
+                            unset($_SESSION['labels'][$key]);
+                        }
+                        // Kiểm tra từng giá trị trong mảng labelsToAdd và thêm vào cuối mảng nếu giá trị đó chưa tồn tại trong mảng labels
+                        foreach ($labelsToAdd as $label) {
+                            if (!in_array($label, $_SESSION['labels'])) {
+                                $_SESSION['labels'][] = $label; // Thêm vào cuối mảng
+                            }
+                        }
+                        
+                        // Đánh số vị trí cho từng phần tử trong mảng session
+                        $numberedLabels = array_values($_SESSION['labels']);
+                        // var_dump(request()->delete_item);
+                        
+                        // var_dump($_SESSION['labels']);
+                        ?>
+                        <div class="filter-results d-flex">
+                            <input id="delete-item-input" type="hidden" name="delete_item" value="">
                             @foreach ($string as $item)
-                            <span class="filter-group">
-                                {{ $item['label'] }}
-                                <span class="filter-values">{{ implode(', ', $item['values']) }}</span>
-                                <a class="delete-item delete-btn-{{ $item['class'] }}"><svg width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M18 18L6 6" stroke="#555555" stroke-width="1.5" stroke-linecap="round"
-                                            stroke-linejoin="round" />
-                                        <path d="M18 6L6 18" stroke="#555555" stroke-width="1.5" stroke-linecap="round"
-                                            stroke-linejoin="round" />
-                                    </svg>
-                                </a>
-                            </span>
+                                <span class="filter-group" style="order: @php
+                                $index = array_search($item['label'], $numberedLabels);
+                                                if ($index !== false) {
+                                                    echo $index + 1;
+                                                } else {
+                                                    echo 0;
+                                                } @endphp">
+                                    {{ $item['label'] }}
+                                    <span class="filter-values">{{ implode(', ', $item['values']) }}</span>
+                                    <a class="delete-item delete-btn-{{ $item['class'] }}"
+                                        onclick="updateDeleteItemValue('{{ $item['label'] }}')">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M18 18L6 6" stroke="#555555" stroke-width="1.5"
+                                                stroke-linecap="round" stroke-linejoin="round" />
+                                            <path d="M18 6L6 18" stroke="#555555" stroke-width="1.5"
+                                                stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </a>
+                                </span>
                             @endforeach
                         </div>
                         <div class="filter-options">
@@ -323,7 +370,7 @@
                                 </tbody>
                             </table>
                             <div class="paginator mt-4 d-flex justify-content-end">
-                                {{ $guests->links() }}
+                                {{ $guests->appends(request()->except('page'))->links() }}
                             </div>
                         </div>
                         <!-- /.card-body -->
@@ -489,6 +536,9 @@ $(document).ready(function() {
   $('.delete-filter').on('click', function() {
   localStorage.clear();
 });
+function updateDeleteItemValue(label) {
+        document.getElementById('delete-item-input').value = label;
+    }
 </script>
 
 </body>

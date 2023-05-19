@@ -20,21 +20,109 @@ class AddProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    private $orders;
+    public function __construct()
     {
+        $this->orders = new Orders();
+    }
+    public function index(Request $request)
+    {
+        $string = array();
+        $filters = [];
+        $status = [];
+        $provide_name = [];
+        //Mã đơn
+        if (!empty($request->id)) {
+            $id = $request->id;
+            array_push($filters, ['orders.id', '=', $id]);
+            $nameArr = explode(' ', $id);
+            array_push($string, ['label' => 'Mã đơn hàng:', 'values' => $nameArr, 'class' => 'id']);
+        }
+        //Nhà cung cấp
+        if (!empty($request->guest)) {
+            $guest = $request->guest;
+            array_push($filters, ['guests.guest_represent', 'like', '%' . $guest . '%']);
+            $nameArr = explode(' ', $guest);
+            array_push($string, ['label' => 'Khách hàng:', 'values' => $nameArr, 'class' => 'guest']);
+        }
+
+        //Tổng tiền
+        if (!empty($request->comparison_operator) && !empty($request->sum)) {
+            $sum = $request->input('sum');
+            $comparison_operator = $request->input('comparison_operator');
+            $filters[] = ['orders.total', $comparison_operator, $sum];
+            $inventoryArray = explode(' ', $sum);
+            array_push($string, ['label' => 'Tổng tiền' . $comparison_operator, 'values' => $inventoryArray, 'class' => 'sum']);
+        }
+
+        //Nhà cung cấp
+        $provides = Provides::all();
+        $provide_namearr = [];
+        if (!empty($request->provide_namearr)) {
+            $provide_namearr = $request->input('provide_namearr', []);
+            if (!empty($provide_namearr)) {
+                $selectedProvides = Provides::whereIn('id', $provide_namearr)->get();
+                $selectedProvides = $selectedProvides->pluck('provide_name')->toArray();
+            }
+            array_push($string, ['label' => 'Nhà cung cấp:', 'values' => $selectedProvides, 'class' => 'provide_name']);
+        }
+
+        //Trạng thái
+        if (!empty($request->status)) {
+            $statusValues = [0 => 'Chờ duyệt', 1 => 'Đã nhập hàng', 2 => 'Đã hủy'];
+            $status = $request->input('status', []);
+            $statusLabels = array_map(function ($value) use ($statusValues) {
+                return $statusValues[$value];
+            }, $status);
+            array_push($string, ['label' => 'Trạng thái:', 'values' => $statusLabels, 'class' => 'status']);
+        }
+
+        //Name
+        $name = [];
+        if (!empty($request->name)) {
+            $name = $request->input('name', []);
+            array_push($string, ['label' => 'Người tạo:', 'values' => $name, 'class' => 'name']);
+        }
+        //Đến ngày
+        $date = [];
+        if (!empty($request->trip_start) && !empty($request->trip_end)) {
+            $trip_start = $request->input('trip_start');
+            $trip_end = $request->input('trip_end');
+            $date[] = [$trip_start, $trip_end];
+        }
+
+        //Search
+        $keywords = null;
+        if (!empty($request->keywords)) {
+            $keywords = $request->keywords;
+        }
+
+        $sortType = $request->input('sort-type');
+        $sortBy = $request->input('sort-by');
+        $allowSort = ['asc', 'desc'];
+        if (!empty($sortType) && in_array($sortType, $allowSort)) {
+            if ($sortType == 'desc') {
+                $sortType = 'asc';
+            } else {
+                $sortType = 'desc';
+            }
+        } else {
+            $sortType = 'asc';
+        }
+
         $productIds = array();
         $order = Orders::orderByDesc('id')->get();
         foreach ($order as $value) {
             array_push($productIds, $value->id);
         }
-        $orders = User::join('orders', 'users.id', '=', 'orders.users_id')
-            ->whereIn('users.id', $productIds)
-            ->orderByDesc('orders.id')
-            ->paginate(10);
+        $orders = $orders = $this->orders->getAllOrders($filters, $status, $provide_namearr, $name, $date, $keywords, $sortBy, $sortType);
+        // dd($orders);
         $product = DB::table('productorders')
             ->join('orders', 'productorders.order_id', '=', 'orders.id')
             ->whereIn('orders.id', $productIds)->get();
-        return view('tables.order.insertProduct', compact('orders', 'product'));
+        $ordersNameAndProvide = Orders::leftjoin('provides', 'orders.provide_id', '=', 'provides.id')
+            ->leftjoin('users', 'orders.users_id', '=', 'users.id')->get();
+        return view('tables.order.insertProduct', compact('orders', 'product','sortType', 'string', 'ordersNameAndProvide', 'provides'));
     }
 
     /**

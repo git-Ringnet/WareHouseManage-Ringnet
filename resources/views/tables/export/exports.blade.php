@@ -38,7 +38,8 @@
                                 value="{{ request()->keywords }}">
                             <span class="search-icon"><i class="fas fa-search"></i></span>
                         </div>
-                        <div class="col-2">
+                        <div class="col-2 d-none">
+                  <button type="submit" class="btn btn-primary btn-block">Tìm kiếm</button>
 
                         </div>
                         <a class="btn ml-auto btn-delete-filter" href="{{ route('exports.index') }}"><span><svg
@@ -59,13 +60,61 @@
                                     fill="#555555" />
                             </svg>
                         </div>
-                        <div class="filter-results">
+                        <?php
+                        session_start();
+                        
+                        $fullUrl = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+                        if ($fullUrl === route('exports.index')) {
+                            // Xử lý khi route hiện tại bằng route('data.index')
+                            unset($_SESSION['labels']); // Xóa session
+                        }
+                        if (!isset($_SESSION['labels'])) {
+                            $_SESSION['labels'] = [];
+                        }
+                        
+                        // Lấy mảng labels từ nguồn dữ liệu hoặc quá trình xử lý khác
+                        $labelsToAdd = [];
+                        foreach ($string as $item) {
+                            $labelsToAdd[] = $item['label'];
+                        }
+                        
+                        $deleteItem = request()->delete_item;
+                        // var_dump($deleteItem);
+                        // echo '<br>';
+                        if (($key = array_search($deleteItem, $_SESSION['labels'])) !== false) {
+                            unset($_SESSION['labels'][$key]);
+                        }
+                        // Kiểm tra từng giá trị trong mảng labelsToAdd và thêm vào cuối mảng nếu giá trị đó chưa tồn tại trong mảng labels
+                        foreach ($labelsToAdd as $label) {
+                            if (!in_array($label, $_SESSION['labels'])) {
+                                $_SESSION['labels'][] = $label; // Thêm vào cuối mảng
+                            }
+                        }
+                        
+                        // Đánh số vị trí cho từng phần tử trong mảng session
+                        $numberedLabels = array_values($_SESSION['labels']);
+                        // var_dump(request()->delete_item);
+                        
+                        // var_dump($_SESSION['labels']);
+                        ?>
+                        <div class="filter-results d-flex">
+                            <input id="delete-item-input" type="hidden" name="delete_item" value="">
                             @foreach ($string as $item)
-                                <span class="filter-group">
+
+                                <span class="filter-group"
+                                                                    style="order: 
+                                            @php
+                                $index = array_search($item['label'], $numberedLabels);
+                                                if ($index !== false) {
+                                                    echo $index + 1;
+                                                } else {
+                                                    echo 0;
+                                                } @endphp">
                                     {{ $item['label'] }}
                                     <span class="filter-values">{{ implode(', ', $item['values']) }}</span>
-                                    <a class="delete-item delete-btn-{{ $item['class'] }}"><svg width="24"
-                                            height="24" viewBox="0 0 24 24" fill="none"
+                                    <a class="delete-item delete-btn-{{ $item['class'] }}"
+                                        onclick="updateDeleteItemValue('{{ $item['label'] }}')">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path d="M18 18L6 6" stroke="#555555" stroke-width="1.5"
                                                 stroke-linecap="round" stroke-linejoin="round" />
@@ -153,7 +202,7 @@
                             <div class="block-options" id="guest-options" style="display:none">
                                 <div class="wrap w-100">
                                     <div class="heading-title py-3 px-2">
-                                        <h5>Mã đơn hàng:</h5>
+                                        <h5>Khách hàng:</h5>
                                     </div>
                                     <div class="input-group px-2">
                                         <label class="title" for="">Chứa kí tự</label>
@@ -254,9 +303,9 @@
                                     <div class="input-group pt-2 justify-content-around">
                                         <select class="comparison_operator" name="comparison_operator"
                                             style="width: 40%">
-                                            <option value=">=">>=</option>
-                                            <option value="<=">
-                                                <=< /option>
+                                            <option value=">=" {{ request('comparison_operator') === '>=' ? 'selected' : '' }}>>=</option>
+                                            <option value="<=" {{ request('comparison_operator') === '<=' ? 'selected' : '' }}>
+                                                <=</option>
                                         </select>
                                         <input class="w-50 input-quantity sum-input" type="number" name="sum"
                                             value="{{ request()->sum }}" placeholder="Số lượng">
@@ -389,7 +438,7 @@
                                 </tbody>
                             </table>
                             <div class="paginator mt-4 d-flex justify-content-end">
-                                {{ $export->links() }}
+                                {{ $export->appends(request()->except('page'))->links() }}
                             </div>
                         </div>
                         <!-- /.card-body -->
@@ -578,6 +627,9 @@
     $('.delete-filter').on('click', function() {
         localStorage.clear();
     });
+    function updateDeleteItemValue(label) {
+        document.getElementById('delete-item-input').value = label;
+    }
 </script>
 </body>
 

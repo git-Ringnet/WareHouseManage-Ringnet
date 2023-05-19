@@ -23,7 +23,8 @@
                             <input type="search" name="keywords" class="form-control" value="{{request()->keywords}}"
                                 placeholder="Tìm kiếm đơn vị, đại diện hoặc email">
                         </div>
-                        <div class="col-2">
+                        <div class="col-2 d-none">
+                  <button type="submit" class="btn btn-primary btn-block">Tìm kiếm</button>
                             
                         </div>
                         <a class="btn ml-auto btn-delete-filter" href="{{route('guests.index')}}"><span><svg width="24"
