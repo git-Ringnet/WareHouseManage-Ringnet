@@ -17,7 +17,6 @@ class ExportSeeder extends Seeder
     {
         DB::table('exports')->insert([
             [
-                'product_id' => '1',
                 'guest_id' => '1',
                 'user_id' => 1,
                 'total' => 12000000,

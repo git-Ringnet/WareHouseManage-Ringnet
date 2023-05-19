@@ -36,7 +36,7 @@
                                 placeholder="Tìm kiếm đơn vị, đại diện hoặc email">
                         </div>
                         <div class="col-2">
-                            
+                            <button type="submit" class="btn btn-primary btn-block">Tìm kiếm</button>
                         </div>
                         <a class="btn ml-auto btn-delete-filter" href="{{route('guests.index')}}"><span><svg width="24"
                             height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -291,15 +291,6 @@
                                         <td>{{ $item->guest_email }}</td>
                                         <td>
                                             <select class="p-1 px-2 status-select" style="border: 1px solid #D6D6D6; <?php if ($item->guest_status == 1) {
-                                        <tr>
-                                            <td>{{ $item->id }}</td>
-                                            <td>{{ $item->guest_name }}</td>
-                                            <td>{{ $item->guest_represent }}</td>
-                                            <td>{{ $item->guest_phone }}</td>
-                                            <td>{{ $item->guest_email }}</td>
-                                            <td>
-                                                <select class="p-1 px-2 status-select"
-                                                    style="border: 1px solid #D6D6D6; <?php if ($item->guest_status == 1) {
                                                         echo 'color:#09BD3C;';
                                                     } else {
                                                         echo 'color:#D6D6D6';
@@ -310,14 +301,6 @@
                                                     } ?>>Active</option>
                                                 <option value="0" <?php if ($item->guest_status == 0) {
                                                     echo 'selected';
-                                                    ?>"
-                                                    id="{{ $item->id }}" name="status-select">
-                                                    <option value="1" <?php if ($item->guest_status == 1) {
-                                                        echo 'selected';
-                                                    } ?>>Active</option>
-                                                    <option value="0" <?php if ($item->guest_status == 0) {
-                                                        echo 'selected';
->>>>>>> export-ver2
                                                     } ?>>Disable</option>
                                             </select>
                                         </td>

@@ -16,7 +16,7 @@ class Exports extends Model
         $exports = DB::table($this->table)
             ->leftJoin('guests', 'exports.guest_id', '=', 'guests.id')
             ->leftJoin('users', 'exports.user_id', '=', 'users.id')
-            ->select('product_id', 'exports.id', 'guests.guest_represent', 'users.name', 'exports.total', 'exports.updated_at', 'export_status');
+            ->select('exports.id', 'guests.guest_represent', 'users.name', 'exports.total', 'exports.updated_at', 'export_status');
         // Các điều kiện tìm kiếm và lọc dữ liệu ở đây
 
         if (!empty($filter)) {
