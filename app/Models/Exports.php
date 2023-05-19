@@ -52,4 +52,10 @@ class Exports extends Model
         $exports = $exports->paginate(10);
         return $exports;
     }
+    protected $fillable = [
+        'guest_id',
+        'user_id',
+        'total',
+        'export_status',
+    ];
 }

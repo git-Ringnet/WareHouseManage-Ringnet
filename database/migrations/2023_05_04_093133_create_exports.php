@@ -15,10 +15,9 @@ return new class extends Migration
     {
         Schema::create('exports', function (Blueprint $table) {
             $table->id()->autoIncrement();
-            $table->integer('product_id');
             $table->integer('guest_id');
             $table->integer('user_id');
-            $table->integer('total');
+            $table->bigInteger('total');
             $table->integer('export_status');
             $table->timestamps();
         });

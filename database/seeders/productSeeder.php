@@ -22,6 +22,7 @@ class ProductSeeder extends Seeder
                 'product_trademark' => 'CO,CQ',
                 'product_qty' => 3,
                 'product_price' => 4000000,
+                'product_unit' => 'Cái',
             ],
             [
                 'id' => 2,
@@ -31,6 +32,7 @@ class ProductSeeder extends Seeder
                 'product_trademark' => '',
                 'product_qty' => 4,
                 'product_price' => 3750000,
+                'product_unit' => 'Cái',
             ],
             [
                 'id' => 3,
@@ -40,6 +42,7 @@ class ProductSeeder extends Seeder
                 'product_trademark' => '',
                 'product_qty' => 8,
                 'product_price' => 3500000,
+                'product_unit' => 'Cái',
             ],
             [
                 'id' => 4,
@@ -49,6 +52,7 @@ class ProductSeeder extends Seeder
                 'product_trademark' => 'CO,CQ',
                 'product_qty' => 3,
                 'product_price' => 4000000,
+                'product_unit' => 'Cái',
             ],
             [
                 'id' => 5,
@@ -58,6 +62,7 @@ class ProductSeeder extends Seeder
                 'product_trademark' => 'CO,CQ',
                 'product_qty' => 3,
                 'product_price' => 4000000,
+                'product_unit' => 'Cái',
             ],
             [
                 'id' => 6,
@@ -67,6 +72,7 @@ class ProductSeeder extends Seeder
                 'product_trademark' => 'CO,CQ',
                 'product_qty' => 3,
                 'product_price' => 4000000,
+                'product_unit' => 'Cái',
             ],
             [
                 'id' => 7,
@@ -76,6 +82,7 @@ class ProductSeeder extends Seeder
                 'product_trademark' => 'CO,CQ',
                 'product_qty' => 3,
                 'product_price' => 4000000,
+                'product_unit' => 'Cái',
             ],
             [
                 'id' => 8,
@@ -85,6 +92,7 @@ class ProductSeeder extends Seeder
                 'product_trademark' => 'CO,CQ',
                 'product_qty' => 3,
                 'product_price' => 4000000,
+                'product_unit' => 'Cái',
             ],
             [
                 'id' => 9,
@@ -94,6 +102,7 @@ class ProductSeeder extends Seeder
                 'product_trademark' => 'CO,CQ',
                 'product_qty' => 3,
                 'product_price' => 4000000,
+                'product_unit' => 'Cái',
             ],
             [
                 'id' => 10,
@@ -103,6 +112,7 @@ class ProductSeeder extends Seeder
                 'product_trademark' => 'CO,CQ',
                 'product_qty' => 3,
                 'product_price' => 4000000,
+                'product_unit' => 'Cái',
             ],
             [
                 'id' => 11,
@@ -112,6 +122,7 @@ class ProductSeeder extends Seeder
                 'product_trademark' => 'CO,CQ',
                 'product_qty' => 3,
                 'product_price' => 4000000,
+                'product_unit' => 'Cái',
             ],
             [
                 'id' => 12,
@@ -121,6 +132,7 @@ class ProductSeeder extends Seeder
                 'product_trademark' => 'CO,CQ',
                 'product_qty' => 3,
                 'product_price' => 4000000,
+                'product_unit' => 'Cái',
             ],
             [
                 'id' => 13,
@@ -130,6 +142,7 @@ class ProductSeeder extends Seeder
                 'product_trademark' => 'CO,CQ',
                 'product_qty' => 3,
                 'product_price' => 4000000,
+                'product_unit' => 'Cái',
             ],
             [
                 'id' => 14,
@@ -139,6 +152,7 @@ class ProductSeeder extends Seeder
                 'product_trademark' => 'CO,CQ',
                 'product_qty' => 3,
                 'product_price' => 4000000,
+                'product_unit' => 'Cái',
             ],
             [
                 'id' => 15,
@@ -148,6 +162,7 @@ class ProductSeeder extends Seeder
                 'product_trademark' => 'CO,CQ',
                 'product_qty' => 3,
                 'product_price' => 4000000,
+                'product_unit' => 'Cái',
             ],
         ]);
     }
