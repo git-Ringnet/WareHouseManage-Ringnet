@@ -560,7 +560,7 @@
         inputElement.value = value;
     });
     //tính thành tiền của sản phẩm
-    $(document).on('input', '.quantity-input, [name^="product_price"]', function() {
+    $(document).on('input', '.quantity-input, [name^="product_price"], .product_tax', function() {
         // Lấy giá trị từ trường số lượng (product_qty)
         var productQty = parseInt($(this).closest('tr').find('.quantity-input').val());
 
@@ -570,16 +570,22 @@
             productPrice += parseFloat($(this).val());
         });
 
-        // Kiểm tra xem productQty và productPrice có phải là số hợp lệ không
-        if (!isNaN(productQty) && !isNaN(productPrice)) {
+        // Lấy giá trị từ trường thuế (product_tax)
+        var taxValue = parseFloat($(this).closest('tr').find('.product_tax').val());
+
+        // Kiểm tra xem productQty, productPrice và taxValue có phải là số hợp lệ không
+        if (!isNaN(productQty) && !isNaN(productPrice) && !isNaN(taxValue)) {
             // Thực hiện phép tính
             var totalAmount = productQty * productPrice;
+            var taxAmount = (productQty * productPrice * taxValue) / 100;
 
             // Hiển thị kết quả
             $(this).closest('tr').find('.total-amount').text(totalAmount);
+            $(this).closest('tr').find('.product_tax').text(taxAmount);
 
-            // Tính toán lại tổng thành tiền
+            // Tính toán lại tổng thành tiền và tổng thuế
             calculateTotalAmount();
+            calculateTotalTax();
         }
     });
 
@@ -597,23 +603,6 @@
         // Hiển thị tổng total-amount-sum
         $('#total-amount-sum').text(totalAmount);
     }
-    $(document).on('input', '.product_tax', function() {
-        // Lấy giá trị từ trường thuế
-        var taxValue = parseFloat($(this).val());
-        // Lấy giá trị từ trường số lượng (product_qty)
-        var productQty = parseInt($(this).closest('tr').find('.quantity-input').val());
-        // Lấy giá trị từ trường giá sản phẩm (product_price)
-        var productPrice = parseFloat($(this).closest('tr').find('[name^="product_price"]').val());
-        // Kiểm tra xem taxValue, productQty và productPrice có phải là số hợp lệ không
-        if (!isNaN(taxValue) && !isNaN(productQty) && !isNaN(productPrice)) {
-            // Tính toán tổng thuế cho hàng hiện tại
-            var taxAmount = (productQty * productPrice * taxValue) / 100;
-            // Hiển thị kết quả thuế cho hàng hiện tại
-            $(this).closest('tr').find('.product_tax').text(taxAmount);
-            // Tính toán lại tổng thuế
-            calculateTotalTax();
-        }
-    });
 
     function calculateTotalTax() {
         var totalTax = 0;
@@ -629,9 +618,8 @@
         // Hiển thị tổng totalTax
         $('#product-tax').text(totalTax);
     }
-    //tính tổng cộng 
-    
-
+    //tính tổng cộng
+     
     //hàm kiểm tra submit
     function validateAndSubmit(event) {
         var formGuest = $('#form-guest');

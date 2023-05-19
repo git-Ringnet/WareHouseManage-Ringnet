@@ -96,33 +96,34 @@ class ExportController extends Controller
                             return redirect()->route('exports.index')->with('danger', 'Chưa thêm sản phẩm!');
                         } else if ($request->product_qty == null) {
                             return redirect()->route('exports.index')->with('danger', 'Chưa nhập số lượng!');
-                        } else {
-                            $export = new Exports();
-                            $export->guest_id = $request->id;
-                            $export->user_id = Auth::user()->id;
-                            $export->total = $request->totalValue;
-                            $export->export_status = 1;
-                            $export->save();
                         }
                         //bảng product export
                         for ($i = 0; $i < count($productIDs); $i++) {
                             $productID = $productIDs[$i];
                             $productQty = $productQtys[$i];
-
-                            $nameProduct = Product::where('id', $productID)->value('product_name');
-
-                            $proExport = new productExports();
-                            $proExport->products_id = $request->products_id[$i];
-                            $proExport->product_id = $productID;
-                            $proExport->export_id = $export->id;
-                            $proExport->product_name = $nameProduct;
-                            $proExport->product_unit = $request->product_unit[$i];
-                            $proExport->product_qty = $productQty;
-                            $proExport->product_price = $request->product_price[$i];
-                            $proExport->product_note = $request->product_note[$i];
-                            $proExport->product_tax = $request->product_tax[$i];
-                            $proExport->product_total = $request->totalValue;
-                            $proExport->save();
+                            if ($productID == null || $request->products_id[$i] == null || $request->product_note[$i] == null || $request->product_price[$i] == null || $productQty == null || $request->product_tax[$i] == null) {
+                                return redirect()->route('exports.index')->with('danger', 'Nhập chưa đầy đủ thông tin sản phẩm!');
+                            } else {
+                                $export = new Exports();
+                                $export->guest_id = $request->id;
+                                $export->user_id = Auth::user()->id;
+                                $export->total = $request->totalValue;
+                                $export->export_status = 1;
+                                $export->save();
+                                $nameProduct = Product::where('id', $productID)->value('product_name');
+                                $proExport = new productExports();
+                                $proExport->products_id = $request->products_id[$i];
+                                $proExport->product_id = $productID;
+                                $proExport->export_id = $export->id;
+                                $proExport->product_name = $nameProduct;
+                                $proExport->product_unit = $request->product_unit[$i];
+                                $proExport->product_qty = $productQty;
+                                $proExport->product_price = $request->product_price[$i];
+                                $proExport->product_note = $request->product_note[$i];
+                                $proExport->product_tax = $request->product_tax[$i];
+                                $proExport->product_total = $request->totalValue;
+                                $proExport->save();
+                            }
                         }
                         return redirect()->route('exports.index')->with('msg', 'Tạo đơn thành công!');
                     }
