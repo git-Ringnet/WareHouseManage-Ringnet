@@ -44,14 +44,14 @@
             <td>{{$va->getProvide->provide_name}}</td>
             <td>{{$va->updated_at}}</td>
             <td>{{$va->name}}</td>
-            <td>{{$va->total}}</td>
+            <td>{{number_format($va->total)}}</td>
             <td>
               @if($va->order_status == 0)
-              <span class="p-2 bg-warning">Chờ duyệt</span>
+              <span class="p-2 bg-warning rounded">Chờ duyệt</span>
               @elseif($va->order_status == 1)
-              <span class="p-2 bg-success">Đã nhập hàng</span>
+              <span class="p-2 bg-success rounded">Đã nhập hàng</span>
               @elseif($va->order_status == 2)
-              <span class="p-2 bg-danger">Đã hủy</span>
+              <span class="p-2 bg-danger rounded">Đã hủy</span>
               @endif
             </td>
             <td class="d-flex justify-content-between">
@@ -80,7 +80,7 @@
               <p>{{$item->product_qty}}</p>
             </td>
             <td><span>Tổng tiên</span>
-              <p>{{$item->product_qty * $item->product_price}}</p>
+              <p>{{number_format($item->product_qty * $item->product_price)}}</p>
             </td>
             <td></td>
             @endif
