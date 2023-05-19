@@ -304,15 +304,15 @@
                             <table id="example2" class="table table-bordered table-hover">
                                 <thead>
                                     <tr>
-                                        <input type="hidden" id="sortByInput" name="sort-by" value="product_id">
+                                        <input type="hidden" id="sortByInput" name="sort-by" value="id">
                                         <input type="hidden" id="sortTypeInput" name="sort-type"
                                             value="{{ $sortType }}">
                                         <th scope="col">
                                             <span class="d-flex">
-                                                <a href="#" class="sort-link" data-sort-by="product_id"
+                                                <a href="#" class="sort-link" data-sort-by="id"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Mã đơn hàng</button></a>
-                                                <div class="icon" id="icon-product_id"></div>
+                                                <div class="icon" id="icon-id"></div>
                                             </span>
                                         </th>
                                         <th scope="col">

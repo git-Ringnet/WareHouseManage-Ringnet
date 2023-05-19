@@ -36,7 +36,7 @@ class Exports extends Model
         // dd($exports = $exports->wherebetween('exports.updated_at', $date));
         if (!empty($keywords)) {
             $exports = $exports->where(function ($query) use ($keywords) {
-                $query->orWhere('exports.product_id', 'like', '%' . $keywords . '%');
+                $query->orWhere('exports.id', 'like', '%' . $keywords . '%');
                 $query->orWhere('guests.guest_represent', 'like', '%' . $keywords . '%');
                 $query->orWhere('users.name', 'like', '%' . $keywords . '%');
             });

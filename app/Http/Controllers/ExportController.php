@@ -33,7 +33,7 @@ class ExportController extends Controller
         //Mã đơn
         if (!empty($request->id)) {
             $id = $request->id;
-            array_push($filters, ['exports.product_id', 'like', '%' . $id . '%']);
+            array_push($filters, ['exports.id', 'like', '%' . $id . '%']);
             $nameArr = explode(' ', $id);
             array_push($string, ['label' => 'Mã đơn hàng:', 'values' => $nameArr, 'class' => 'id']);
         }
