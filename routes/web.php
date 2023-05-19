@@ -34,7 +34,6 @@ Route::prefix('admin')->name('admin.')->middleware('permission:admin')->group(fu
     Route::get('updatestatus', [UsersController::class, 'updateStatus'])->name('update');
 });
 
-
 //nha cung cap
 Route::resource('provides', provideController::class)->middleware('permission:Manager');
 Route::get('/update-status', [provideController::class, 'updateStatus'])->name('update');

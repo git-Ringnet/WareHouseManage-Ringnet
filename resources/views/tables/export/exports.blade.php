@@ -356,7 +356,7 @@
                                 <tbody>
                                     @foreach ($export as $value)
                                     <tr>
-                                        <td>{{ $value->product_id }}</td>
+                                        <td>{{ $value->product_id }}</td> 
                                         <td>{{ $value->guest_represent }}</td>
                                         <td>{{ $value->updated_at }}</td>
                                         <td>{{ $value->name }}</td>
