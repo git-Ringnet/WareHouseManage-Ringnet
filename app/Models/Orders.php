@@ -25,6 +25,7 @@ class Orders extends Model
 
         $orders = Orders::join('users', 'users.id', '=', 'orders.users_id')
         ->leftJoin('provides', 'provides.id', '=', 'orders.provide_id')
+        ->select('orders.id', 'provides.provide_name', 'users.name', 'orders.total', 'orders.updated_at', 'order_status')
         ->whereIn('users.id', $productIds);
         
         // Các điều kiện tìm kiếm và lọc dữ liệu ở đây
