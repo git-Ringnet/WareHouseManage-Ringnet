@@ -21,13 +21,10 @@ class Orders extends Model
         foreach ($order as $value) {
             array_push($productIds, $value->id);
         }
-                // dd($order);
-
         $orders = Orders::join('users', 'users.id', '=', 'orders.users_id')
         ->leftJoin('provides', 'provides.id', '=', 'orders.provide_id')
         ->select('orders.id', 'provides.provide_name', 'users.name', 'orders.total', 'orders.updated_at', 'order_status')
-        ->whereIn('users.id', $productIds);
-        
+        ->whereIn('orders.id', $productIds);
         // Các điều kiện tìm kiếm và lọc dữ liệu ở đây
 
         if (!empty($filter)) {
@@ -66,7 +63,7 @@ class Orders extends Model
 
         }
 
-        $orders = $orders->orderBy('orders.created_at', 'asc')->paginate(10);
+        $orders = $orders->orderBy('orders.id', 'desc')->paginate(10);
         return $orders;
     }
     // public function getProvide()
