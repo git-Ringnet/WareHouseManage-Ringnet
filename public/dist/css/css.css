@@ -106,12 +106,13 @@ li {
     border-bottom-left-radius: 8px !important;
 }
 
-.scrollbar,.ks-cboxtags-trademark {
+.scrollbar,.ks-cboxtags-trademark,.ks-cboxtags-category,.ks-cboxtags-provide_name {
     overflow-y: auto;
     scrollbar-width: thin;
+    max-height: 180px !important;
+    height: auto;
     /* ẩn thanh cuộn trên các trình duyệt mới */
     scrollbar-color: #999999 #f0f0f0;
-    height: 180px !important;
     /* màu của thanh cuộn */
 }
 
