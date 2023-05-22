@@ -190,7 +190,7 @@
                             <div class="block-options" id="id-options" style="display:none">
                                 <div class="wrap w-100">
                                     <div class="heading-title py-3 px-2">
-                                        <h5>Tên:</h5>
+                                        <h5>Tên sản phẩm:</h5>
                                     </div>
                                     <div class="input-group px-2">
                                         <label class="title" for="">Chứa kí tự</label>

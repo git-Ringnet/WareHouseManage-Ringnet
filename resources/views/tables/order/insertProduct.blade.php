@@ -93,7 +93,11 @@ $index = array_search($item['label'], $numberedLabels);
                                             echo 0;
                                         } @endphp">
                                         {{ $item['label'] }}
-                                        <span class="filter-values">{{ implode(', ', $item['values']) }}</span>
+                                        @if ($item['label'] === 'Chỉnh sửa cuối:')
+                                     {{ $item['values'][0] }} đến {{ $item['values'][1] }}
+                                    @else
+                                    <span class="filter-values">{{ implode(', ', $item['values']) }}</span>
+                                    @endif
                                         <a class="delete-item delete-btn-{{ $item['class'] }}"
                                             onclick="updateDeleteItemValue('{{ $item['label'] }}')">
                                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -193,6 +197,10 @@ $index = array_search($item['label'], $numberedLabels);
                                         <div class="heading-title py-3 px-2">
                                             <h5>Nhà cung cấp:</h5>
                                         </div>
+                                        <div class="search-container px-2 mt-1">
+                                            <input type="text" placeholder="Tìm thuộc tính lọc" id="myInput-provides" class="input-search pr-4" onkeyup="filterProvides()">
+                                            <span class="search-icon"><i class="fas fa-search"></i></span>
+                                        </div>
                                         <div
                                             class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
                                             <a class="cursor select-all-provide_name mr-auto">Chọn tất cả</a>
@@ -224,12 +232,16 @@ $index = array_search($item['label'], $numberedLabels);
                                         <div class="heading-title py-3 px-2">
                                             <h5>Trạng thái:</h5>
                                         </div>
+                                        <div class="search-container px-2 mt-1">
+                                            <input type="text" placeholder="Tìm thuộc tính lọc" id="myInput-status" class="input-search pr-4" onkeyup="filterStatus()">
+                                            <span class="search-icon"><i class="fas fa-search"></i></span>
+                                        </div>
                                         <div
                                             class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
                                             <a class="cursor select-all mr-auto">Chọn tất cả</a>
                                             <a class="cursor deselect-all">Hủy chọn</a>
                                         </div>
-                                        <ul class="ks-cboxtags p-0 m-0 px-2">
+                                        <ul class="ks-cboxtags-status p-0 m-0 px-2">
                                           <li>
                                             <input type="checkbox" id="status_active" {{ in_array(0, $status) ? 'checked' : '' }}
                                               name="status[]" value="0">
@@ -259,6 +271,10 @@ $index = array_search($item['label'], $numberedLabels);
                                     <div class="wrap w-100">
                                         <div class="heading-title py-3 px-2">
                                             <h5>Người tạo:</h5>
+                                        </div>
+                                        <div class="search-container px-2 mt-1">
+                                            <input type="text" placeholder="Tìm thuộc tính lọc" id="myInput-creator" class="input-search pr-4" onkeyup="filterCreator()">
+                                            <span class="search-icon"><i class="fas fa-search"></i></span>
                                         </div>
                                         <div
                                             class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
@@ -330,10 +346,10 @@ $index = array_search($item['label'], $numberedLabels);
                                         <div class="input-group pt-2 justify-content-around">
                                             <label for="start">Từ ngày:</label>
                                             <input type="date" id="start" name="trip_start"
-                                                value="{{ request()->start }}" min="2018-01-01" max="2050-12-31">
+                                                value="{{ request()->trip_start }}" min="2018-01-01" max="2050-12-31">
                                             <label for="start">Đến ngày:</label>
                                             <input type="date" id="end" name="trip_end"
-                                                value="{{ request()->end }}" min="2018-01-01" max="2050-12-31">
+                                                value="{{ request()->trip_end }}" min="2018-01-01" max="2050-12-31">
                                         </div>
                                     </div>
                                     <div class="d-flex justify-contents-center align-items-baseline px-2">
@@ -412,7 +428,6 @@ $index = array_search($item['label'], $numberedLabels);
                         @foreach ($orders as $va)
                             <tr>
                                 <td><input type="checkbox"></td>
-                                {{-- Sửa id và update_at cho mị mấy con lợn Việt commit --}}
                                 <td>{{ $va->id }}</td>
                                 <td>{{ $va->provide_name }}</td>
                                 <td>{{ $va->updated_at }}</td>
@@ -564,6 +579,12 @@ $index = array_search($item['label'], $numberedLabels);
             });
         });
         $(document).ready(function() {
+            $('.filter-results').on('click', '.delete-btn-provide_name', function() {
+                $('.deselect-all-provide_name').click();
+                document.getElementById('search-filter').submit();
+            });
+        });
+        $(document).ready(function() {
             $('.filter-results').on('click', '.delete-btn-name', function() {
                 $('.deselect-all-creator').click();
                 document.getElementById('search-filter').submit();
@@ -584,6 +605,13 @@ $index = array_search($item['label'], $numberedLabels);
         $(document).ready(function() {
             $('.filter-results').on('click', '.delete-btn-sum', function() {
                 $('.sum-input').val('');
+                document.getElementById('search-filter').submit();
+            });
+        });
+        $(document).ready(function() {
+            $('.filter-results').on('click', '.delete-btn-date', function() {
+                $('#start').val('');
+                $('#end').val('');
                 document.getElementById('search-filter').submit();
             });
         });
@@ -609,6 +637,49 @@ $index = array_search($item['label'], $numberedLabels);
                 }
             });
         }
+
+        function filterProvides() {
+        var input = $("#myInput-provides");
+        var filter = input.val().toUpperCase();
+        var buttons = $(".ks-cboxtags-provide_name li");
+
+        buttons.each(function() {
+            var text = $(this).text();
+            if (text.toUpperCase().indexOf(filter) > -1) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    }
+    function filterCreator() {
+        var input = $("#myInput-creator");
+        var filter = input.val().toUpperCase();
+        var buttons = $(".ks-cboxtags-name li");
+
+        buttons.each(function() {
+            var text = $(this).text();
+            if (text.toUpperCase().indexOf(filter) > -1) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    }
+    function filterStatus() {
+        var input = $("#myInput-status");
+        var filter = input.val().toUpperCase();
+        var buttons = $(".ks-cboxtags-status li");
+
+        buttons.each(function() {
+            var text = $(this).text();
+            if (text.toUpperCase().indexOf(filter) > -1) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    }
 
 
         //Sort

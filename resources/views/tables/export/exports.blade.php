@@ -111,7 +111,11 @@
                                                     echo 0;
                                                 } @endphp">
                                     {{ $item['label'] }}
+                                    @if ($item['label'] === 'Chỉnh sửa cuối:')
+                                     {{ $item['values'][0] }} đến {{ $item['values'][1] }}
+                                    @else
                                     <span class="filter-values">{{ implode(', ', $item['values']) }}</span>
+                                    @endif
                                     <a class="delete-item delete-btn-{{ $item['class'] }}"
                                         onclick="updateDeleteItemValue('{{ $item['label'] }}')">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -222,12 +226,16 @@
                                     <div class="heading-title py-3 px-2">
                                         <h5>Trạng thái:</h5>
                                     </div>
+                                    <div class="search-container px-2 mt-1">
+                                        <input type="text" placeholder="Tìm thuộc tính lọc" id="myInput-status" class="input-search pr-4" onkeyup="filterStatus()">
+                                        <span class="search-icon"><i class="fas fa-search"></i></span>
+                                    </div>
                                     <div
                                         class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
                                         <a class="cursor select-all mr-auto">Chọn tất cả</a>
                                         <a class="cursor deselect-all">Hủy chọn</a>
                                     </div>
-                                    <ul class="ks-cboxtags p-0 m-0 px-2">
+                                    <ul class="ks-cboxtags-status p-0 m-0 px-2">
                                         <li>
                                             <input type="checkbox" id="status_active"
                                                 {{ in_array(0, $status) ? 'checked' : '' }} name="status[]"
@@ -326,10 +334,10 @@
                                     <div class="input-group pt-2 justify-content-around">
                                         <label for="start">Từ ngày:</label>
                                         <input type="date" id="start" name="trip_start"
-                                            value="{{ request()->start }}" min="2018-01-01" max="2050-12-31">
+                                            value="{{ request()->trip_start }}" min="2018-01-01" max="2050-12-31">
                                         <label for="start">Đến ngày:</label>
                                         <input type="date" id="end" name="trip_end"
-                                            value="{{ request()->end }}" min="2018-01-01" max="2050-12-31">
+                                            value="{{ request()->trip_end }}" min="2018-01-01" max="2050-12-31">
                                     </div>
                                 </div>
                                 <div class="d-flex justify-contents-center align-items-baseline px-2">
@@ -560,6 +568,13 @@
             document.getElementById('search-filter').submit();
         });
     });
+    $(document).ready(function() {
+            $('.filter-results').on('click', '.delete-btn-date', function() {
+                $('#start').val('');
+                $('#end').val('');
+                document.getElementById('search-filter').submit();
+            });
+        });
 
 
     //Xử lí tìm kiếm bộ lọc tổng
@@ -577,6 +592,21 @@
             }
         });
     }
+    function filterStatus() {
+        var input = $("#myInput-status");
+        var filter = input.val().toUpperCase();
+        var buttons = $(".ks-cboxtags-status li");
+
+        buttons.each(function() {
+            var text = $(this).text();
+            if (text.toUpperCase().indexOf(filter) > -1) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    }
+
 
 
     //Sort

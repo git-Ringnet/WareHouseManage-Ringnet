@@ -89,6 +89,8 @@ class AddProductController extends Controller
             $trip_start = $request->input('trip_start');
             $trip_end = $request->input('trip_end');
             $date[] = [$trip_start, $trip_end];
+            $datearr = ['label' => 'Chỉnh sửa cuối:', 'values' => [$trip_start, $trip_end], 'class' => 'date'];
+            array_push($string, $datearr);
         }
 
         //Search
