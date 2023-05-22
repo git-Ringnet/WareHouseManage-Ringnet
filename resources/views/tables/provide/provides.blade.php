@@ -303,7 +303,7 @@
                                                 <i class="fas fa-pencil-alt"></i>
                                                 Edit
                                             </a>
-                                            <form action="{{ route('provides.destroy', $item->id) }}" method="POST"
+                                            <form onclick="return confirm('Are you sure?')" action="{{ route('provides.destroy', $item->id) }}" method="POST"
                                                 class="d-inline">
                                                 @csrf
                                                 @method('DELETE')

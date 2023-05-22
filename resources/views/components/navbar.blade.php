@@ -1,6 +1,7 @@
 {{-- Kiểm tra xem đã đăng nhập chưa --}}
 @if (Auth::guest())
-    <?php header('Location: ' . route('login')); exit; ?>
+    <?php header('Location: ' . route('login'));
+    exit(); ?>
 @endif
 <!DOCTYPE html>
 <html lang="en">
@@ -130,7 +131,8 @@ if (strpos($current_url, 'exports') !== false) {
             <!-- Left navbar links -->
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i
+                            class="fas fa-bars"></i></a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
                     <a href="#" class="nav-link">Home</a>
@@ -261,27 +263,27 @@ if (strpos($current_url, 'exports') !== false) {
                 </li>
                 <li class="nav-item">
                     @if (Route::has('login'))
-                    @auth
-                    <div class="dropdown">
-                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                            {{ Auth::user()->name }}
-                            <span class="caret"></span></button>
-                        <ul class="dropdown-menu">
-                            <li><a href="{{ route('profile.show') }}"> {{ __('Profile') }}
-                                </a></li>
-                            <li>
-                                <form method="POST" action="{{ route('logout') }}" x-data>
-                                    @csrf
-                                    <button class="btn btn-primary" type="submit">
-                                        {{ __('Log Out') }}
-                                    </button>
-                            </li>
-                            </form>
-                        </ul>
-                    </div>
-                    @else
-                    <a href="{{ route('login') }}" class="text-sm text-gray-700 underline">Đăng nhập</a>
-                    @endauth
+                        @auth
+                            <div class="dropdown">
+                                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                                    {{ Auth::user()->name }}
+                                    <span class="caret"></span></button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="{{ route('profile.show') }}"> {{ __('Profile') }}
+                                        </a></li>
+                                    <li>
+                                        <form method="POST" action="{{ route('logout') }}" x-data>
+                                            @csrf
+                                            <button class="btn btn-primary" type="submit">
+                                                {{ __('Log Out') }}
+                                            </button>
+                                    </li>
+                                    </form>
+                                </ul>
+                            </div>
+                        @else
+                            <a href="{{ route('login') }}" class="text-sm text-gray-700 underline">Đăng nhập</a>
+                        @endauth
                     @endif
                 </li>
 
@@ -331,7 +333,7 @@ if (strpos($current_url, 'exports') !== false) {
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{asset('./insertProduct')}}" class="nav-link <?php echo $insert_class; ?>">
+                            <a href="{{ asset('./insertProduct') }}" class="nav-link <?php echo $insert_class; ?>">
                                 <i class="nav-icon fas fa-table"></i>
                                 <p>
                                     Nhập hàng
@@ -378,14 +380,15 @@ if (strpos($current_url, 'exports') !== false) {
         </aside>
         <div class="main-header">
             @if (Session::has('msg'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ Session::get('msg') }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ Session::get('msg') }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
             @endif
         </div>
+        <div class="main-header">
             @if (Session::has('danger'))
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     {{ Session::get('danger') }}
@@ -394,4 +397,4 @@ if (strpos($current_url, 'exports') !== false) {
                     </button>
                 </div>
             @endif
- 
+        </div>

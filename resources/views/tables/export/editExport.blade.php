@@ -246,49 +246,51 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                            <tr id="dynamic-row-1">
-                                <td><input type="checkbox"></td>
-                                <td>1</td>
-                                <td>
-                                    <select id="maProduct" class="p-1 pr-5" name="products_id[]">
-                                        <option value="{{ $products->id }}">{{ $products->products_code }}</option>
-                                    </select>
-                                </td>
-                                <td>
-                                    <select class="child-select p-1 pr-5" name="product_id[]">
-                                        <option value="{{ $productExport->product_id }}">
-                                            {{ $productExport->product_name }}</option>
-                                    </select>
-                                </td>
-                                <td>
-                                    <input type="text" id="product_unit" class="product_unit"
-                                        value="{{ $productExport->product_unit }}" name="product_unit[]"
-                                        required="">
-                                </td>
-                                <td>
-                                    <input type="number" id="product_qty" class="quantity-input"
-                                        value="{{ $productExport->product_qty }}" name="product_qty[]"
-                                        required="">
-                                </td>
-                                <td>
-                                    <input type="number" id="product_price" name="product_price[]"
-                                        value="{{ $productExport->product_price }}" required="">
-                                </td>
-                                <td>
-                                    <input type="text" id="" name="product_note[]"
-                                        value="{{ $productExport->product_note }}">
-                                </td>
-                                <td>
-                                    <input type="number" id="product_tax" class="product_tax" name="product_tax[]"
-                                        required="" value="{{ $productExport->product_tax }}">
-                                </td>
-                                <td><span class="px-5 total-amount">0</span></td>
-                                <td><img src="../../dist/img/icon/list.png"></td>
-                                <td><img src="../../dist/img/icon/Group.png"></td>
-                                <td><img src="../../dist/img/icon/vector.png"></td>
-                            </tr>
-                            </tr>
+                            @foreach ($productExport as $value)
+                                <tr id="dynamic-row-1">
+                                    <td><input type="checkbox"></td>
+                                    <td>1</td>
+                                    <td>
+                                        <select id="maProduct" class="p-1 pr-5" name="products_id[]">
+                                            <option value="{{ $products->id }}">{{ $products->products_code }}
+                                            </option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="child-select p-1 pr-5" name="product_id[]">
+                                            <option value="{{ $value->product_id }}">
+                                                {{ $value->product_name }}</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" id="product_unit" class="product_unit"
+                                            value="{{ $productExport->product_unit }}" name="product_unit[]"
+                                            required="">
+                                    </td>
+                                    <td>
+                                        <input type="number" id="product_qty" class="quantity-input"
+                                            value="{{ $productExport->product_qty }}" name="product_qty[]"
+                                            required="">
+                                    </td>
+                                    <td>
+                                        <input type="number" id="product_price" name="product_price[]"
+                                            value="{{ $productExport->product_price }}" required="">
+                                    </td>
+                                    <td>
+                                        <input type="text" id="" name="product_note[]"
+                                            value="{{ $productExport->product_note }}">
+                                    </td>
+                                    <td>
+                                        <input type="number" id="product_tax" class="product_tax"
+                                            name="product_tax[]" required=""
+                                            value="{{ $productExport->product_tax }}">
+                                    </td>
+                                    <td><span class="px-5 total-amount">0</span></td>
+                                    <td><img src="../../dist/img/icon/list.png"></td>
+                                    <td><img src="../../dist/img/icon/Group.png"></td>
+                                    <td><img src="../../dist/img/icon/vector.png"></td>
+                                </tr>
+                            @endforeach
                             <tr id="dynamic-fields"></tr>
                             <tr>
                                 <td></td>
