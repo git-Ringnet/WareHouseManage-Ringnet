@@ -11,8 +11,8 @@
                             <span><b>Đơn hàng mới</b></span>
                         </div>
                         <div class="mt-3">
-                            {{-- <a href="#" class="btn btn-danger text-white">Chốt đơn</a>
-                            <a href="#" class="btn btn-secondary ml-4">Hủy đơn</a> --}}
+                            <a href="#" class="btn btn-danger text-white">Chốt đơn</a>
+                            <a href="#" class="btn btn-secondary ml-4">Hủy đơn</a>
                             <a href="#" class="btn border border-secondary ml-4">Xuất file</a>
                             <a href="#" class="btn border border-secondary ml-4">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -89,17 +89,15 @@
                             <span style="z-index: 99">
                                 <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="15.6667" cy="15.667" r="13" fill="#09BD3C" />
                                     <path fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M16 5C9.92487 5 5 9.92487 5 16C5 22.0751 9.92487 27 16 27C22.0751 27 27 22.0751 27 16C27 9.92487 22.0751 5 16 5ZM3 16C3 8.8203 8.8203 3 16 3C23.1797 3 29 8.8203 29 16C29 23.1797 23.1797 29 16 29C8.8203 29 3 23.1797 3 16Z"
-                                        fill="#D6D6D6" />
-                                    <path
-                                        d="M22.1578 15.9997C22.1578 19.4006 19.4008 22.1576 15.9999 22.1576C12.599 22.1576 9.84204 19.4006 9.84204 15.9997C9.84204 12.5988 12.599 9.8418 15.9999 9.8418C19.4008 9.8418 22.1578 12.5988 22.1578 15.9997Z"
-                                        fill="#D6D6D6" />
+                                        d="M22.1072 12.2929C22.4977 12.6834 22.4977 13.3166 22.1072 13.7071L15.4405 20.3738C15.05 20.7643 14.4168 20.7643 14.0263 20.3738L10.0263 16.3738C9.63577 15.9832 9.63577 15.3501 10.0263 14.9596C10.4168 14.569 11.05 14.569 11.4405 14.9596L14.7334 18.2525L20.693 12.2929C21.0835 11.9024 21.7166 11.9024 22.1072 12.2929Z"
+                                        fill="white" />
                                 </svg>
                                 <p class="text-center p-0 m-0">
                                     <svg width="6" height="6" viewBox="0 0 6 6" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
-                                        <circle cx="3" cy="3" r="3" fill="#D6D6D6" />
+                                        <circle cx="3" cy="3" r="3" fill="#09BD3C" />
                                     </svg>
                                 </p>
                             </span>
@@ -137,6 +135,96 @@
                 @csrf
                 {{-- Form thông tin khách hàng --}}
                 <section id="data-container" class="container-fluid bg-white"></section>
+                <section class="container-fluid bg-white" id="form-edit">
+                    <div id="">
+                        <div class="border-bottom p-3 d-flex justify-content-between">
+                            <b>Thông tin khách hàng</b>
+                            <button id="btn-customer" class="btn btn-primary">
+                                <img src="../../dist/img/icon/Union.png">
+                                <span>Lưu thông tin</span></button>
+                        </div>
+                        <div class="row p-3">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <input type="text" hidden class="form-control" id="id" name="id"
+                                        value="{{ $guest->id }}" required>
+                                    <label for="congty">Công ty:</label>
+                                    <input type="text" class="form-control" id="guest_name"
+                                        placeholder="Nhập thông tin" name="guest_name"
+                                        value="{{ $guest->guest_name }}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Địa chỉ xuất hóa đơn:</label>
+                                    <input type="text" class="form-control" placeholder="Nhập thông tin"
+                                        id="guest_addressInvoice" name="guest_addressInvoice"
+                                        value="{{ $guest->guest_addressInvoice }}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Mã số thuế:</label>
+                                    <input type="text" class="form-control" id="guest_code"
+                                        placeholder="Nhập thông tin" name="guest_code"
+                                        value="{{ $guest->guest_code }}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Địa chỉ giao hàng:</label>
+                                    <input type="text" class="form-control" id="guest_addressDeliver"
+                                        placeholder="Nhập thông tin" name="guest_addressDeliver"
+                                        value="{{ $guest->guest_addressDeliver }}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Người nhận hàng:</label>
+                                    <input type="text" class="form-control" id="guest_receiver"
+                                        placeholder="Nhập thông tin" name="guest_receiver"
+                                        value="{{ $guest->guest_receiver }}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">SĐT người nhận:</label>
+                                    <input type="text" class="form-control" id="guest_phoneReceiver"
+                                        placeholder="Nhập thông tin" name="guest_phoneReceiver"
+                                        value="{{ $guest->guest_phoneReceiver }}">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="email">Người đại diện:</label>
+                                    <input type="text" class="form-control" id="guest_represent"
+                                        placeholder="Nhập thông tin" name="guest_represent"
+                                        value="{{ $guest->guest_represent }}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email:</label>
+                                    <input type="email" class="form-control" id="guest_email"
+                                        placeholder="Nhập thông tin" name="guest_email"
+                                        value="{{ $guest->guest_email }}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Số điện thoại:</label>
+                                    <input type="text" class="form-control" id="guest_phone"
+                                        placeholder="Nhập thông tin" name="guest_phone"
+                                        value="{{ $guest->guest_phone }}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Hình thức thanh toán:</label>
+                                    <input type="text" class="form-control" id="guest_pay"
+                                        placeholder="Nhập thông tin" name="guest_pay"
+                                        value="{{ $guest->guest_pay }}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Điều kiện thanh toán:</label>
+                                    <input type="text" class="form-control" id="guest_payTerm"
+                                        placeholder="Nhập thông tin" name="guest_payTerm"
+                                        value="{{ $guest->guest_payTerm }}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Ghi chú:</label>
+                                    <input type="text" class="form-control" id="guest_note"
+                                        placeholder="Nhập thông tin" name="guest_note"
+                                        value="{{ $guest->guest_note }}">
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                </section>
                 {{-- Bảng thêm sản phẩm --}}
                 <div class="mt-4" style="overflow-x: scroll;">
                     <table class="table">
@@ -158,6 +246,49 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <tr>
+                            <tr id="dynamic-row-1">
+                                <td><input type="checkbox"></td>
+                                <td>1</td>
+                                <td>
+                                    <select id="maProduct" class="p-1 pr-5" name="products_id[]">
+                                        <option value="{{ $products->id }}">{{ $products->products_code }}</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="child-select p-1 pr-5" name="product_id[]">
+                                        <option value="{{ $productExport->product_id }}">
+                                            {{ $productExport->product_name }}</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="text" id="product_unit" class="product_unit"
+                                        value="{{ $productExport->product_unit }}" name="product_unit[]"
+                                        required="">
+                                </td>
+                                <td>
+                                    <input type="number" id="product_qty" class="quantity-input"
+                                        value="{{ $productExport->product_qty }}" name="product_qty[]"
+                                        required="">
+                                </td>
+                                <td>
+                                    <input type="number" id="product_price" name="product_price[]"
+                                        value="{{ $productExport->product_price }}" required="">
+                                </td>
+                                <td>
+                                    <input type="text" id="" name="product_note[]"
+                                        value="{{ $productExport->product_note }}">
+                                </td>
+                                <td>
+                                    <input type="number" id="product_tax" class="product_tax" name="product_tax[]"
+                                        required="" value="{{ $productExport->product_tax }}">
+                                </td>
+                                <td><span class="px-5 total-amount">0</span></td>
+                                <td><img src="../../dist/img/icon/list.png"></td>
+                                <td><img src="../../dist/img/icon/Group.png"></td>
+                                <td><img src="../../dist/img/icon/vector.png"></td>
+                            </tr>
+                            </tr>
                             <tr id="dynamic-fields"></tr>
                             <tr>
                                 <td></td>
@@ -219,12 +350,12 @@
             '<div class="border-bottom p-3 d-flex justify-content-between">' +
             '<b>Thông tin khách hàng</b>' +
             '<button id="btn-addCustomer" class="btn btn-primary">' +
-            '<img src="../dist/img/icon/Union.png">' +
+            '<img src="../../dist/img/icon/Union.png">' +
             '<span>Lưu thông tin</span></button></div>' +
             '<div class="row p-3">' +
             '<div class="col-sm-6">' +
             '<div class="form-group">' +
-            '<input type="text" hidden class="form-control" name="id" value="{{ (int) $guest_id->id }}">' +
+            '<input type="text" hidden class="form-control" name="id" value="">' +
             '<label for="congty">Công ty:</label>' +
             '<input type="text" class="form-control" id="guest_name" placeholder="Nhập thông tin" name="guest_name" value="" required>' +
             '</div>' + '<div class="form-group">' +
@@ -278,9 +409,7 @@
             });
             const TenInput = $("<td>" +
                 "<select id='maProduct' class='p-1 pr-5' name='products_id[]'>" +
-                '@foreach ($products as $value)' +
-                "<option value='{{ $value->id }}'>{{ $value->products_code }}</option>" +
-                '@endforeach' +
+                "<option value=''></option>" +
                 "</select>"
             );
             const ProInput = $("<td>" +
@@ -301,9 +430,9 @@
                 "<input type='number' id='product_tax' class='product_tax' name='product_tax[]' required>" +
                 "</td>");
             const thanhTienInput = $("<td><span class='px-5 total-amount'>0</span></td>");
-            const sn = $("<td><img src='../dist/img/icon/list.png'></td>");
-            const info = $("<td><img src='../dist/img/icon/Group.png'></td>");
-            const deleteBtn = $("<td><img src='../dist/img/icon/vector.png'></td>", {
+            const sn = $("<td><img src='../../dist/img/icon/list.png'></td>");
+            const info = $("<td><img src='../../dist/img/icon/Group.png'></td>");
+            const deleteBtn = $("<td><img src='../../dist/img/icon/vector.png'></td>", {
                 "class": "delete-row-btn"
             });
             deleteBtn.click(function() {
@@ -345,6 +474,7 @@
         $('.search-info').click(function() {
             var idCustomer = $(this).attr('id');
             $('#radio1').prop('checked', true);
+            $('#form-edit').remove();
             $.ajax({
                 url: '{{ route('searchExport') }}',
                 type: 'GET',
@@ -357,7 +487,7 @@
                         '<div class="border-bottom p-3 d-flex justify-content-between">' +
                         '<b>Thông tin khách hàng</b>' +
                         '<button id="btn-customer" class="btn btn-primary">' +
-                        '<img src="../dist/img/icon/Union.png">' +
+                        '<img src="../../dist/img/icon/Union.png">' +
                         '<span>Lưu thông tin</span></button></div>' +
                         '<div class="row p-3">' +
                         '<div class="col-sm-6">' +
@@ -560,34 +690,46 @@
         inputElement.value = value;
     });
     //tính thành tiền của sản phẩm
-    $(document).on('input', '.quantity-input, [name^="product_price"], .product_tax', function() {
-        // Lấy giá trị từ trường số lượng (product_qty)
-        var productQty = parseInt($(this).closest('tr').find('.quantity-input').val());
+    $(document).ready(function() {
+        calculateTotals();
+    });
 
-        // Lấy giá trị từ trường giá sản phẩm (product_price)
-        var productPrice = 0;
-        $(this).closest('tr').find('[name^="product_price"]').each(function() {
-            productPrice += parseFloat($(this).val());
+    $(document).on('input', '.quantity-input, [name^="product_price"], .product_tax', function() {
+        calculateTotals();
+    });
+
+    function calculateTotals() {
+        var totalAmount = 0;
+        var totalTax = 0;
+
+        // Lặp qua từng hàng
+        $('tr').each(function() {
+            var productQty = parseInt($(this).find('.quantity-input').val());
+            var productPrice = 0;
+            var taxValue = parseFloat($(this).find('.product_tax').val());
+
+            $(this).find('[name^="product_price"]').each(function() {
+                productPrice += parseFloat($(this).val());
+            });
+
+            if (!isNaN(productQty) && !isNaN(productPrice) && !isNaN(taxValue)) {
+                var rowTotal = productQty * productPrice;
+                var rowTax = (productQty * productPrice * taxValue) / 100;
+
+                // Hiển thị kết quả
+                $(this).find('.total-amount').text(rowTotal);
+                $(this).find('.product_tax').text(rowTax);
+
+                // Cộng dồn vào tổng totalAmount và totalTax
+                totalAmount += rowTotal;
+                totalTax += rowTax;
+            }
         });
 
-        // Lấy giá trị từ trường thuế (product_tax)
-        var taxValue = parseFloat($(this).closest('tr').find('.product_tax').val());
-
-        // Kiểm tra xem productQty, productPrice và taxValue có phải là số hợp lệ không
-        if (!isNaN(productQty) && !isNaN(productPrice) && !isNaN(taxValue)) {
-            // Thực hiện phép tính
-            var totalAmount = productQty * productPrice;
-            var taxAmount = (productQty * productPrice * taxValue) / 100;
-
-            // Hiển thị kết quả
-            $(this).closest('tr').find('.total-amount').text(totalAmount);
-            $(this).closest('tr').find('.product_tax').text(taxAmount);
-
-            // Tính toán lại tổng thành tiền và tổng thuế
-            calculateTotalAmount();
-            calculateTotalTax();
-        }
-    });
+        // Hiển thị tổng totalAmount và totalTax
+        $('#total-amount-sum').text(totalAmount);
+        $('#product-tax').text(totalTax);
+    }
 
     function calculateTotalAmount() {
         var totalAmount = 0;
@@ -618,8 +760,9 @@
         // Hiển thị tổng totalTax
         $('#product-tax').text(totalTax);
     }
+
     //tính tổng cộng
-     
+
     //hàm kiểm tra submit
     function validateAndSubmit(event) {
         var formGuest = $('#form-guest');

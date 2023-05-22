@@ -23,7 +23,8 @@
                                 name="keywords" class="pr-4 input-search w-100" value="{{ request()->keywords }}">
                             <span class="search-icon"><i class="fas fa-search"></i></span>
                         </div>
-                        <div class="col-2">
+                        <div class="col-2 d-none">
+                  <button type="submit" class="btn btn-primary btn-block">Tìm kiếm</button>
 
                         </div>
                         <a class="btn ml-auto btn-delete-filter" href="{{ route('data.index') }}"><span><svg
@@ -595,7 +596,7 @@
                                 </tbody>
                             </table>
                             <div class="paginator mt-4 d-flex justify-content-end">
-                                {{ $products->links() }}
+                                {{ $products->appends(request()->except('page'))->links() }}
                             </div>
                         </div>
                     </div>
