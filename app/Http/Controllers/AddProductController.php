@@ -115,8 +115,7 @@ class AddProductController extends Controller
         foreach ($order as $value) {
             array_push($productIds, $value->id);
         }
-        $orders = $orders = $this->orders->getAllOrders($filters, $status, $provide_namearr, $name, $date, $keywords, $sortBy, $sortType);
-        // dd($orders);
+        $orders = $this->orders->getAllOrders($filters, $status, $provide_namearr, $name, $date, $keywords, $sortBy, $sortType);
         $product = DB::table('productorders')
             ->join('orders', 'productorders.order_id', '=', 'orders.id')
             ->whereIn('orders.id', $productIds)->get();
@@ -672,5 +671,16 @@ class AddProductController extends Controller
             return redirect()->route('insertProduct.index')->with('section', 'Sản phẩm đã được duyệt không thể hủy');
         }
         return redirect()->route('insertProduct.index')->with('section', 'Đã hủy đơn');
+    }
+
+    // Xóa đơn hàng AJAX
+    public function deleteOrder(Request $request)
+    {
+        if(isset($request->list_id)){
+            $list = $request->list_id;
+            Orders::whereIn('id',$list)->delete();
+            return response()->json(['success' => true,'msg'=>'Delete Success', 'ids' => $list] );
+        }
+        return response()->json(['success' => false,'msg'=>'Not fount'] );
     }
 }

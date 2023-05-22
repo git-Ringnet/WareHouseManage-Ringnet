@@ -1,5 +1,4 @@
 <x-navbar></x-navbar>
-@if(Auth::check() != null)
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
@@ -170,7 +169,6 @@
   </section>
   <!-- /.content -->
 </div>
-@endif
 <script>
   $(document).on('input', '[name^="product_qty"], [name^="product_price"]', function() {
     var productQty = parseInt($(this).closest('tr').find('[name^="product_qty"]').val());
