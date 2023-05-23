@@ -346,4 +346,22 @@ class ProductsController extends Controller
         $products->save();
         return redirect()->route('data.index');
     }
+
+    // Xóa sản phẩm cha AJAX
+    public function deleteProducts(Request $request)
+    {
+        if (isset($request->list_id)) {
+            $list = $request->list_id;
+            $check = Products::whereIn('id', $list)->get();
+            foreach ($check as $value) {
+                if ($value->inventory == 0) {
+                    $value->delete();
+                } else {
+                    return response()->json(['success' => false, 'msg' => 'Còn sản phẩm con']);
+                }
+            }
+            return response()->json(['success' => true, 'msg' => 'Xóa sản phẩm thành công', 'ids' => $list]);
+        }
+        return response()->json(['success' => false, 'msg' => 'Không tìn thấy sản phẩm cần xóa']);
+    }
 }

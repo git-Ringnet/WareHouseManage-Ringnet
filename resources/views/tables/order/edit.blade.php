@@ -215,7 +215,7 @@
                           @foreach($seri as $se)
                           @if($pro->id == $se->product_id)
                           <div class="delete d-flex justify-content-between">
-                            <input required type="text" name="product_SN{{$stt}}[]" value="{{$se->serinumber}}">
+                            <input required type="text" name="product_SN{{$stt}}[]" value="{{$se->serinumber}}" onpaste="handlePaste(this)">
                             <div class="deleteRow1">
                               <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
                                 <path fill-rule="evenodd" clip-rule="evenodd" d="M14.0606 6.66675C13.6589 6.66675 13.3333 6.99236 13.3333 7.39402C13.3333 7.79568 13.6589 8.12129 14.0606 8.12129H17.9394C18.341 8.12129 18.6667 7.79568 18.6667 7.39402C18.6667 6.99236 18.341 6.66675 17.9394 6.66675H14.0606ZM8 10.3031C8 9.90143 8.32561 9.57582 8.72727 9.57582H10.1818H21.8182H23.2727C23.6744 9.57582 24 9.90143 24 10.3031C24 10.7048 23.6744 11.0304 23.2727 11.0304H22.5455V22.6667C22.5455 24.2819 21.2158 25.5758 19.6179 25.5758H12.3452C11.9637 25.5755 11.5854 25.4997 11.2333 25.3528C10.8812 25.2059 10.5617 24.9908 10.2931 24.7199C10.0244 24.449 9.81206 24.1276 9.66816 23.7743C9.52463 23.4219 9.45204 23.0447 9.45455 22.6642V11.0304H8.72727C8.32561 11.0304 8 10.7048 8 10.3031ZM10.9091 22.6723V11.0304H21.0909V22.6667C21.0909 23.4623 20.4288 24.1213 19.6179 24.1213H12.3458C12.1562 24.1211 11.9684 24.0834 11.7934 24.0104C11.6183 23.9374 11.4595 23.8304 11.3259 23.6958C11.1924 23.5611 11.0868 23.4013 11.0153 23.2257C10.9437 23.05 10.9076 22.8619 10.9091 22.6723ZM17.9394 13.4546C18.3411 13.4546 18.6667 13.7802 18.6667 14.1819V20.9698C18.6667 21.3714 18.3411 21.6971 17.9394 21.6971C17.5377 21.6971 17.2121 21.3714 17.2121 20.9698V14.1819C17.2121 13.7802 17.5377 13.4546 17.9394 13.4546ZM14.7879 14.1819C14.7879 13.7802 14.4623 13.4546 14.0606 13.4546C13.6589 13.4546 13.3333 13.7802 13.3333 14.1819V20.9698C13.3333 21.3714 13.6589 21.6971 14.0606 21.6971C14.4623 21.6971 14.7879 21.3714 14.7879 20.9698V14.1819Z" fill="#555555" />
@@ -251,6 +251,38 @@
 </div>
 
 <script>
+  function handlePaste(input) {
+    var rowCount = $(input).attr('name').match(/\d+/)[0];
+    var clipboardData = event.clipboardData || window.clipboardData;
+    var pastedData = clipboardData.getData('Text');
+    var rows = pastedData.trim().split('\n');
+    var parent_div = $('.div_value' + rowCount);
+
+    for (var i = 0; i < rows.length; i++) {
+      var rowData = rows[i].trim();
+      if (rowData === '') {
+        continue;
+      }
+      var newInput = document.createElement('input');
+      const div = document.createElement("div");
+      const divDelete = document.createElement("div");
+      newInput.type = 'text';
+      newInput.name = 'product_SN' + rowCount + '[]';
+
+      divDelete.className = 'deleteRow1';
+      divDelete.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.0606 6.66675C13.6589 6.66675 13.3333 6.99236 13.3333 7.39402C13.3333 7.79568 13.6589 8.12129 14.0606 8.12129H17.9394C18.341 8.12129 18.6667 7.79568 18.6667 7.39402C18.6667 6.99236 18.341 6.66675 17.9394 6.66675H14.0606ZM8 10.3031C8 9.90143 8.32561 9.57582 8.72727 9.57582H10.1818H21.8182H23.2727C23.6744 9.57582 24 9.90143 24 10.3031C24 10.7048 23.6744 11.0304 23.2727 11.0304H22.5455V22.6667C22.5455 24.2819 21.2158 25.5758 19.6179 25.5758H12.3452C11.9637 25.5755 11.5854 25.4997 11.2333 25.3528C10.8812 25.2059 10.5617 24.9908 10.2931 24.7199C10.0244 24.449 9.81206 24.1276 9.66816 23.7743C9.52463 23.4219 9.45204 23.0447 9.45455 22.6642V11.0304H8.72727C8.32561 11.0304 8 10.7048 8 10.3031ZM10.9091 22.6723V11.0304H21.0909V22.6667C21.0909 23.4623 20.4288 24.1213 19.6179 24.1213H12.3458C12.1562 24.1211 11.9684 24.0834 11.7934 24.0104C11.6183 23.9374 11.4595 23.8304 11.3259 23.6958C11.1924 23.5611 11.0868 23.4013 11.0153 23.2257C10.9437 23.05 10.9076 22.8619 10.9091 22.6723ZM17.9394 13.4546C18.3411 13.4546 18.6667 13.7802 18.6667 14.1819V20.9698C18.6667 21.3714 18.3411 21.6971 17.9394 21.6971C17.5377 21.6971 17.2121 21.3714 17.2121 20.9698V14.1819C17.2121 13.7802 17.5377 13.4546 17.9394 13.4546ZM14.7879 14.1819C14.7879 13.7802 14.4623 13.4546 14.0606 13.4546C13.6589 13.4546 13.3333 13.7802 13.3333 14.1819V20.9698C13.3333 21.3714 13.6589 21.6971 14.0606 21.6971C14.4623 21.6971 14.7879 21.3714 14.7879 20.9698V14.1819Z" fill="#555555"/></svg>';
+
+      div.className = 'delete d-flex justify-content-between';
+
+      div.appendChild(newInput);
+      div.appendChild(divDelete);
+
+      newInput.value = rows[i].trim();
+      parent_div[0].appendChild(div);
+    }
+    $(input).closest('div').remove();
+  }
+
   $(document).on('input', '[name^="product_qty"], [name^="product_price"]', function() {
     var productQty = parseInt($(this).closest('tr').find('[name^="product_qty"]').val());
     var productPrice = 0;
@@ -348,6 +380,75 @@
     });
   }
 
+  // Kiểm tra dữ liệu trước khi submit
+  $(document).on('submit', '#form_submit', function(e) {
+    e.preventDefault();
+    var error = false;
+    if (rowCount < 1) {
+      error = true;
+      alert('Vui lòng nhập ít nhất 1 sản phẩm');
+    }
+    $('input[name="product_name[]"]').each(function() {
+      if ($(this).val() === '') {
+        alert('Vui lòng nhập tên sản phẩm')
+      }
+    });
+    $('input[name^="product_total[]"]').each(function() {
+      if ($(this).val() === '') {
+        alert('Tổng tiền không hợp lệ')
+        error = true;
+      } else if (isNaN($(this).val())) {
+        error = true;
+        alert('Tổng tiền phải là số')
+      }
+    })
+    $('input[name="product_qty[]"]').each(function() {
+      if ($(this).val() === '') {
+        alert('Vui lòng nhập số lượng sản phẩm')
+        error = true;
+      } else if (isNaN($(this).val())) {
+        error = true;
+        alert('Số lượng phải là số')
+      }
+    });
+
+    $('input[name="product_price[]"]').each(function() {
+      if ($(this).val() === '') {
+        alert('Vui lòng nhập giá sản phẩm')
+        error = true;
+      } else if (isNaN($(this).val())) {
+        alert('Giá phải là số');
+        error = true;
+      }
+    });
+
+    $('input[name="product_SN[]"]').each(function() {
+      if ($(this).val() === '') {
+        alert('Vui lòng nhập seri number');
+        error = true;
+      }
+    });
+
+    $('input[name^="product_qty[]"]').each(function(index) {
+      var qty = $(this).val();
+      var sn_count = $('input[name="product_SN' + index + '[]"]').length;
+      if (qty != sn_count) {
+        error = true;
+        alert('Số lượng và seri number không hợp lệ');
+      }
+    });
+    if ($('#provide_id').val().trim() == '' && $('#radio1').prop('checked') == true) {
+      error = true;
+      alert('Vui lòng chọn nhà cung cấp');
+    }
+    if (error) {
+      return false;
+    }
+    updateProductSN();
+    $(this).off('submit');
+    this.submit();
+  });
+
   var rowCount = $('tbody tr').length;
   var last = "<?php echo $lastId; ?>";
   $('.addRow').on('click', function() {
@@ -390,7 +491,7 @@
       '<div class="modal-body">' +
       '<div class="div_value' + rowCount + '">' +
       '<div class="delete d-flex justify-content-between">' +
-      '<input type="text" name="product_SN' + rowCount + '[]">' +
+      '<input type="text" name="product_SN' + rowCount + '[]" onpaste="handlePaste(this)">' +
       '<div class="deleteRow1"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.0606 6.66675C13.6589 6.66675 13.3333 6.99236 13.3333 7.39402C13.3333 7.79568 13.6589 8.12129 14.0606 8.12129H17.9394C18.341 8.12129 18.6667 7.79568 18.6667 7.39402C18.6667 6.99236 18.341 6.66675 17.9394 6.66675H14.0606ZM8 10.3031C8 9.90143 8.32561 9.57582 8.72727 9.57582H10.1818H21.8182H23.2727C23.6744 9.57582 24 9.90143 24 10.3031C24 10.7048 23.6744 11.0304 23.2727 11.0304H22.5455V22.6667C22.5455 24.2819 21.2158 25.5758 19.6179 25.5758H12.3452C11.9637 25.5755 11.5854 25.4997 11.2333 25.3528C10.8812 25.2059 10.5617 24.9908 10.2931 24.7199C10.0244 24.449 9.81206 24.1276 9.66816 23.7743C9.52463 23.4219 9.45204 23.0447 9.45455 22.6642V11.0304H8.72727C8.32561 11.0304 8 10.7048 8 10.3031ZM10.9091 22.6723V11.0304H21.0909V22.6667C21.0909 23.4623 20.4288 24.1213 19.6179 24.1213H12.3458C12.1562 24.1211 11.9684 24.0834 11.7934 24.0104C11.6183 23.9374 11.4595 23.8304 11.3259 23.6958C11.1924 23.5611 11.0868 23.4013 11.0153 23.2257C10.9437 23.05 10.9076 22.8619 10.9091 22.6723ZM17.9394 13.4546C18.3411 13.4546 18.6667 13.7802 18.6667 14.1819V20.9698C18.6667 21.3714 18.3411 21.6971 17.9394 21.6971C17.5377 21.6971 17.2121 21.3714 17.2121 20.9698V14.1819C17.2121 13.7802 17.5377 13.4546 17.9394 13.4546ZM14.7879 14.1819C14.7879 13.7802 14.4623 13.4546 14.0606 13.4546C13.6589 13.4546 13.3333 13.7802 13.3333 14.1819V20.9698C13.3333 21.3714 13.6589 21.6971 14.0606 21.6971C14.4623 21.6971 14.7879 21.3714 14.7879 20.9698V14.1819Z" fill="#555555"/></svg></div>' +
       '</div>' +
       '</div>' +
@@ -411,6 +512,7 @@
         var newDiv = document.createElement("input");
         newDiv.setAttribute("type", "text");
         newDiv.setAttribute("name", "product_SN" + i + "[]");
+        newDiv.setAttribute('onpaste', 'handlePaste(this)')
         const div = document.createElement("div");
         const divDelete = document.createElement("div");
         divDelete.setAttribute('class', 'deleteRow1');
@@ -433,8 +535,16 @@
       var newDiv = document.createElement("input");
       newDiv.setAttribute("type", "text");
       newDiv.setAttribute("name", "product_SN" + i + "[]");
+      newDiv.setAttribute('onpaste', 'handlePaste(this)');
+      const div = document.createElement("div");
+      const divDelete = document.createElement("div");
+      divDelete.setAttribute('class', 'deleteRow1');
+      divDelete.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.0606 6.66675C13.6589 6.66675 13.3333 6.99236 13.3333 7.39402C13.3333 7.79568 13.6589 8.12129 14.0606 8.12129H17.9394C18.341 8.12129 18.6667 7.79568 18.6667 7.39402C18.6667 6.99236 18.341 6.66675 17.9394 6.66675H14.0606ZM8 10.3031C8 9.90143 8.32561 9.57582 8.72727 9.57582H10.1818H21.8182H23.2727C23.6744 9.57582 24 9.90143 24 10.3031C24 10.7048 23.6744 11.0304 23.2727 11.0304H22.5455V22.6667C22.5455 24.2819 21.2158 25.5758 19.6179 25.5758H12.3452C11.9637 25.5755 11.5854 25.4997 11.2333 25.3528C10.8812 25.2059 10.5617 24.9908 10.2931 24.7199C10.0244 24.449 9.81206 24.1276 9.66816 23.7743C9.52463 23.4219 9.45204 23.0447 9.45455 22.6642V11.0304H8.72727C8.32561 11.0304 8 10.7048 8 10.3031ZM10.9091 22.6723V11.0304H21.0909V22.6667C21.0909 23.4623 20.4288 24.1213 19.6179 24.1213H12.3458C12.1562 24.1211 11.9684 24.0834 11.7934 24.0104C11.6183 23.9374 11.4595 23.8304 11.3259 23.6958C11.1924 23.5611 11.0868 23.4013 11.0153 23.2257C10.9437 23.05 10.9076 22.8619 10.9091 22.6723ZM17.9394 13.4546C18.3411 13.4546 18.6667 13.7802 18.6667 14.1819V20.9698C18.6667 21.3714 18.3411 21.6971 17.9394 21.6971C17.5377 21.6971 17.2121 21.3714 17.2121 20.9698V14.1819C17.2121 13.7802 17.5377 13.4546 17.9394 13.4546ZM14.7879 14.1819C14.7879 13.7802 14.4623 13.4546 14.0606 13.4546C13.6589 13.4546 13.3333 13.7802 13.3333 14.1819V20.9698C13.3333 21.3714 13.6589 21.6971 14.0606 21.6971C14.4623 21.6971 14.7879 21.3714 14.7879 20.9698V14.1819Z" fill="#555555"/></svg>';
+      div.setAttribute('class', 'delete d-flex justify-content-between');
+      div.appendChild(newDiv);
+      div.appendChild(divDelete);
       var div_value1 = document.querySelector('.div_value' + i);
-      div_value1.appendChild(newDiv);
+      div_value1.appendChild(div);
     });
   }
 
@@ -529,75 +639,6 @@
     var div = $(this).parent('div');
     $(div).remove();
   })
-
-  // Kiểm tra dữ liệu trước khi submit
-  $(document).on('submit', '#form_submit', function(e) {
-    e.preventDefault();
-    var error = false;
-    if (rowCount < 1) {
-      alert('Vui lòng nhập ít nhất 1 sản phẩm');
-      error = true;
-    }
-    $('input[name="product_name[]"]').each(function() {
-      if ($(this).val() === '') {
-        alert('Vui lòng nhập tên sản phẩm')
-      }
-    });
-    $('input[name^="product_total[]"]').each(function() {
-      if ($(this).val() === '') {
-        alert('Tổng tiền không hợp lệ')
-        error = true;
-      } else if (isNaN($(this).val())) {
-        error = true;
-        alert('Tổng tiền phải là số')
-      }
-    })
-    $('input[name="product_qty[]"]').each(function() {
-      if ($(this).val() === '') {
-        alert('Vui lòng nhập số lượng sản phẩm')
-        error = true;
-      } else if (isNaN($(this).val())) {
-        error = true;
-        alert('Số lượng phải là số')
-      }
-    });
-
-    $('input[name="product_price[]"]').each(function() {
-      if ($(this).val() === '') {
-        alert('Vui lòng nhập giá sản phẩm')
-        error = true;
-      } else if (isNaN($(this).val())) {
-        alert('Giá phải là số');
-        error = true;
-      }
-    });
-
-    $('input[name="product_SN[]"]').each(function() {
-      if ($(this).val() === '') {
-        alert('Vui lòng nhập seri number');
-        error = true;
-      }
-    });
-
-    $('input[name^="product_qty[]"]').each(function(index) {
-      var qty = $(this).val();
-      var sn_count = $('input[name="product_SN' + index + '[]"]').length;
-      if (qty != sn_count) {
-        error = true;
-        alert('Số lượng và seri number không hợp lệ');
-      }
-    });
-    if ($('#provide_id').val().trim() == '' && $('#radio1').prop('checked') == true) {
-      error = true;
-      alert('Vui lòng chọn nhà cung cấp');
-    }
-    if (error) {
-      return false;
-    }
-    updateProductSN();
-    $(this).off('submit');
-    this.submit();
-  });
 </script>
 </body>
 
