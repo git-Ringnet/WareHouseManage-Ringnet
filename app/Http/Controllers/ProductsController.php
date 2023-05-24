@@ -364,4 +364,26 @@ class ProductsController extends Controller
         }
         return response()->json(['success' => false, 'msg' => 'Không tìn thấy sản phẩm cần xóa']);
     }
+
+
+    // Sửa sản phẩm con
+    public function editProduct($id)
+    {
+        $pro = Product::findOrFail($id);
+        $select = Products::all();
+        return view('tables.products.editproduct',compact('pro','select'));
+    }
+    public function updateProduct(Request $request, $id)
+    {
+        $pro = Product::find($id);
+        $pro->products_id = $request->product_code;
+        $pro->product_name = $request->product_name;
+        $pro->product_category = $request->product_type;
+        $pro->product_unit = $request->product_unit;
+        $pro->product_trademark = $request->product_trademark;
+        $pro->product_price = $request->product_price;
+        $pro->tax = $request->product_tax;
+        $pro->save();
+        return redirect()->route('data.index');
+    }
 }

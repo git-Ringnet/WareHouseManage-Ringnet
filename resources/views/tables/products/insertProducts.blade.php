@@ -42,11 +42,11 @@
                       <div class="col-md-3">
                         <div class="product_name">
                           <h5>Tên sản phẩm</h5>
-                          <input type="text" name="products_name" class="w-100 p-1">
+                          <input required type="text" name="products_name" class="w-100 p-1">
                         </div>
                         <div class="product_code">
                           <h5>Mã sản phẩm</h5>
-                          <input type="text" name="products_code" class="w-100 p-1">
+                          <input required type="text" name="products_code" class="w-100 p-1">
                         </div>
                         <div class="product_id">
                           <h5>ID</h5>
@@ -64,11 +64,11 @@
                         </div>
                         <div class="product_trademark">
                           <h5>Thương hiệu</h5>
-                          <input type="text" name="products_trademark" class="w-100 p-1">
+                          <input required type="text" name="products_trademark" class="w-100 p-1">
                         </div>
                         <div class="product_unit">
                           <h5>Đơn vị</h5>
-                          <input type="text" name="products_unit" class="w-100 p-1">
+                          <input required type="text" name="products_unit" class="w-100 p-1">
                         </div>
                       </div>
                       <div class="col-md-4">
