@@ -19,20 +19,15 @@
                 <form class="w-100" action="" method="get" id='search-filter'>
                     <div class="row">
                         <div class="col-5">
-                            <input type="text" placeholder="Tìm kiếm theo mã sản phẩm hoặc tên sản phẩm"
-                                name="keywords" class="pr-4 input-search w-100" value="{{ request()->keywords }}">
+                            <input type="text" placeholder="Tìm kiếm theo mã sản phẩm hoặc tên sản phẩm" name="keywords" class="pr-4 input-search w-100" value="{{ request()->keywords }}">
                             <span class="search-icon"><i class="fas fa-search"></i></span>
                         </div>
                         <div class="col-2 d-none">
-                  <button type="submit" class="btn btn-primary btn-block">Tìm kiếm</button>
+                            <button type="submit" class="btn btn-primary btn-block">Tìm kiếm</button>
 
                         </div>
-                        <a class="btn ml-auto btn-delete-filter" href="{{ route('data.index') }}"><span><svg
-                                    width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M6 5.4643C6 5.34116 6.04863 5.22306 6.13518 5.13599C6.22174 5.04892 6.33913 5 6.46154 5H17.5385C17.6609 5 17.7783 5.04892 17.8648 5.13599C17.9514 5.22306 18 5.34116 18 5.4643V7.32149C18 7.43599 17.9579 7.54645 17.8818 7.63164L13.8462 12.1428V16.6075C13.8461 16.7049 13.8156 16.7998 13.7589 16.8788C13.7022 16.9578 13.6223 17.0168 13.5305 17.0476L10.7612 17.9762C10.6919 17.9994 10.618 18.0058 10.5458 17.9947C10.4735 17.9836 10.4049 17.9554 10.3456 17.9124C10.2863 17.8695 10.238 17.8129 10.2047 17.7475C10.1713 17.682 10.1539 17.6096 10.1538 17.5361V12.1428L6.11815 7.63164C6.0421 7.54645 6.00002 7.43599 6 7.32149V5.4643Z"
-                                        fill="#555555" />
+                        <a class="btn ml-auto btn-delete-filter" href="{{ route('data.index') }}"><span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M6 5.4643C6 5.34116 6.04863 5.22306 6.13518 5.13599C6.22174 5.04892 6.33913 5 6.46154 5H17.5385C17.6609 5 17.7783 5.04892 17.8648 5.13599C17.9514 5.22306 18 5.34116 18 5.4643V7.32149C18 7.43599 17.9579 7.54645 17.8818 7.63164L13.8462 12.1428V16.6075C13.8461 16.7049 13.8156 16.7998 13.7589 16.8788C13.7022 16.9578 13.6223 17.0168 13.5305 17.0476L10.7612 17.9762C10.6919 17.9994 10.618 18.0058 10.5458 17.9947C10.4735 17.9836 10.4049 17.9554 10.3456 17.9124C10.2863 17.8695 10.238 17.8129 10.2047 17.7475C10.1713 17.682 10.1539 17.6096 10.1538 17.5361V12.1428L6.11815 7.63164C6.0421 7.54645 6.00002 7.43599 6 7.32149V5.4643Z" fill="#555555" />
                                 </svg>
                             </span>Tắt bộ lọc</a>
                     </div>
@@ -44,7 +39,7 @@
                         </div>
                         <?php
                         session_start();
-                        
+
                         $fullUrl = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
                         if ($fullUrl === route('data.index')) {
                             // Xử lý khi route hiện tại bằng route('data.index')
@@ -53,13 +48,13 @@
                         if (!isset($_SESSION['labels'])) {
                             $_SESSION['labels'] = [];
                         }
-                        
+
                         // Lấy mảng labels từ nguồn dữ liệu hoặc quá trình xử lý khác
                         $labelsToAdd = [];
                         foreach ($string as $item) {
                             $labelsToAdd[] = $item['label'];
                         }
-                        
+
                         $deleteItem = request()->delete_item;
                         // var_dump($deleteItem);
                         // echo '<br>';
@@ -72,11 +67,11 @@
                                 $_SESSION['labels'][] = $label; // Thêm vào cuối mảng
                             }
                         }
-                        
+
                         // Đánh số vị trí cho từng phần tử trong mảng session
                         $numberedLabels = array_values($_SESSION['labels']);
                         // var_dump(request()->delete_item);
-                        
+
                         // var_dump($_SESSION['labels']);
                         ?>
 
@@ -84,8 +79,7 @@
                             <input id="delete-item-input" type="hidden" name="delete_item" value="">
                             @foreach ($string as $item)
 
-                                <span class="filter-group"
-                                                                    style="order: 
+                            <span class="filter-group" style="order: 
                                             @php
                                 $index = array_search($item['label'], $numberedLabels);
                                                 if ($index !== false) {
@@ -93,19 +87,15 @@
                                                 } else {
                                                     echo 0;
                                                 } @endphp">
-                                    {{ $item['label'] }}
-                                    <span class="filter-values">{{ implode(', ', $item['values']) }}</span>
-                                    <a class="delete-item delete-btn-{{ $item['class'] }}"
-                                        onclick="updateDeleteItemValue('{{ $item['label'] }}')">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M18 18L6 6" stroke="#555555" stroke-width="1.5"
-                                                stroke-linecap="round" stroke-linejoin="round" />
-                                            <path d="M18 6L6 18" stroke="#555555" stroke-width="1.5"
-                                                stroke-linecap="round" stroke-linejoin="round" />
-                                        </svg>
-                                    </a>
-                                </span>
+                                {{ $item['label'] }}
+                                <span class="filter-values">{{ implode(', ', $item['values']) }}</span>
+                                <a class="delete-item delete-btn-{{ $item['class'] }}" onclick="updateDeleteItemValue('{{ $item['label'] }}')">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M18 18L6 6" stroke="#555555" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M18 6L6 18" stroke="#555555" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </a>
+                            </span>
                             @endforeach
                         </div>
 
@@ -194,9 +184,7 @@
                                     </div>
                                     <div class="input-group px-2">
                                         <label class="title" for="">Chứa kí tự</label>
-                                        <input type="search" name="products_name"
-                                            class="form-control  products_name-input"
-                                            value="{{ request()->products_name }}" placeholder="Nhập thông tin..">
+                                        <input type="search" name="products_name" class="form-control  products_name-input" value="{{ request()->products_name }}" placeholder="Nhập thông tin..">
                                     </div>
                                 </div>
                                 <div class="d-flex justify-contents-center align-items-baseline px-2">
@@ -213,8 +201,7 @@
                                     <div class="input-group px-2">
                                         <label class="title" for="">Chứa kí tự</label>
 
-                                        <input type="search" name="code" class="form-control code-input"
-                                            value="{{ request()->code }}" placeholder="Nhập thông tin..">
+                                        <input type="search" name="code" class="form-control code-input" value="{{ request()->code }}" placeholder="Nhập thông tin..">
                                     </div>
                                 </div>
                                 <div class="d-flex justify-contents-center align-items-baseline px-2">
@@ -238,21 +225,15 @@
                                     </div>
                                     <ul class="ks-cboxtags-status p-0 m-0 px-2">
                                         <li>
-                                            <input type="checkbox" id="status_active"
-                                                {{ in_array(2, $status) ? 'checked' : '' }} name="status[]"
-                                                value="2">
+                                            <input type="checkbox" id="status_active" {{ in_array(2, $status) ? 'checked' : '' }} name="status[]" value="2">
                                             <label for="status_active">Sẵn hàng</label>
                                         </li>
                                         <li>
-                                            <input type="checkbox" id="status_inactive"
-                                                {{ in_array(1, $status) ? 'checked' : '' }} name="status[]"
-                                                value="1">
+                                            <input type="checkbox" id="status_inactive" {{ in_array(1, $status) ? 'checked' : '' }} name="status[]" value="1">
                                             <label for="status_inactive">Gần hết</label>
                                         </li>
                                         <li>
-                                            <input type="checkbox" id="status_inactive"
-                                                {{ in_array(0, $status) ? 'checked' : '' }} name="status[]"
-                                                value="0">
+                                            <input type="checkbox" id="status_inactive" {{ in_array(0, $status) ? 'checked' : '' }} name="status[]" value="0">
                                             <label for="status_inactive">Hết hàng</label>
                                         </li>
                                     </ul>
@@ -279,21 +260,18 @@
                                     <ul class="ks-cboxtags-category p-0 m-0 px-2">
 
                                         @if (!empty($categories))
-                                            @foreach ($categories as $category)
-                                                <li>
-                                                    <input type="checkbox" id="roles_active"
-                                                        {{ in_array($category->id, $categoryarr) ? 'checked' : '' }}
-                                                        name="categoryarr[]" value="{{ $category->id }}">
-                                                    <label for="roles_active">{{ $category->category_name }}</label>
-                                                </li>
-                                            @endforeach
+                                        @foreach ($categories as $category)
+                                        <li>
+                                            <input type="checkbox" id="roles_active" {{ in_array($category->id, $categoryarr) ? 'checked' : '' }} name="categoryarr[]" value="{{ $category->id }}">
+                                            <label for="roles_active">{{ $category->category_name }}</label>
+                                        </li>
+                                        @endforeach
                                         @endif
                                     </ul>
                                     <div class="d-flex justify-contents-center align-items-baseline px-2">
                                         <button type="submit" class="btn btn-primary btn-block mr-2">Xác
                                             Nhận</button>
-                                        <button type="button" id="cancel-category"
-                                            class="btn btn-secondary btn-block">Hủy</button>
+                                        <button type="button" id="cancel-category" class="btn btn-secondary btn-block">Hủy</button>
                                     </div>
                                 </div>
                             </div>
@@ -313,31 +291,26 @@
                                     </div>
                                     <ul class="ks-cboxtags-trademark p-0 m-0 px-2">
                                         @if (!empty($trademarks))
-                                            @php
-                                                $seenValues = [];
-                                            @endphp
-                                            @foreach ($trademarks as $value)
-                                                @if (!in_array($value->products_trademark, $seenValues))
-                                                    <li>
-                                                        <input type="checkbox" id="trademark_active"
-                                                            {{ in_array($value->products_trademark, $trademarkarr) ? 'checked' : '' }}
-                                                            name="trademarkarr[]"
-                                                            value="{{ $value->products_trademark }}">
-                                                        <label id="trademark_value"
-                                                            for="trademark_active">{{ $value->products_trademark }}</label>
-                                                    </li>
-                                                    @php
-                                                        $seenValues[] = $value->products_trademark;
-                                                    @endphp
-                                                @endif
-                                            @endforeach
+                                        @php
+                                        $seenValues = [];
+                                        @endphp
+                                        @foreach ($trademarks as $value)
+                                        @if (!in_array($value->products_trademark, $seenValues))
+                                        <li>
+                                            <input type="checkbox" id="trademark_active" {{ in_array($value->products_trademark, $trademarkarr) ? 'checked' : '' }} name="trademarkarr[]" value="{{ $value->products_trademark }}">
+                                            <label id="trademark_value" for="trademark_active">{{ $value->products_trademark }}</label>
+                                        </li>
+                                        @php
+                                        $seenValues[] = $value->products_trademark;
+                                        @endphp
+                                        @endif
+                                        @endforeach
                                         @endif
                                     </ul>
                                     <div class="d-flex justify-contents-center align-items-baseline px-2">
                                         <button type="submit" class="btn btn-primary btn-block mr-2">Xác
                                             Nhận</button>
-                                        <button type="button" id="cancel-trademark"
-                                            class="btn btn-secondary btn-block">Hủy</button>
+                                        <button type="button" id="cancel-trademark" class="btn btn-secondary btn-block">Hủy</button>
                                     </div>
                                 </div>
                             </div>
@@ -350,10 +323,10 @@
                                     <div class="input-group pt-2 justify-content-around">
                                         <select class="comparison_operator" name="comparison_operator" style="width: 40%">
                                             <option value=">=" {{ request('comparison_operator') === '>=' ? 'selected' : '' }}>>=</option>
-                                            <option value="<=" {{ request('comparison_operator') === '<=' ? 'selected' : '' }}><=</option>
+                                            <option value="<=" {{ request('comparison_operator') === '<=' ? 'selected' : '' }}>
+                                                <=< /option>
                                         </select>
-                                        <input class="w-50 quantity-input" type="number" name="quantity"
-                                            value="{{ request()->quantity }}" placeholder="Số lượng">
+                                        <input class="w-50 quantity-input" type="number" name="quantity" value="{{ request()->quantity }}" placeholder="Số lượng">
                                     </div>
                                 </div>
                                 <div class="d-flex justify-contents-center align-items-baseline px-2">
@@ -371,10 +344,9 @@
                                         <select class="avg_operator" name="avg_operator" style="width: 40%">
                                             <option value=">=" {{ request('avg_operator') === '>=' ? 'selected' : '' }}>>=</option>
                                             <option value="<=" {{ request('avg_operator') === '<=' ? 'selected' : '' }}>
-                                                <=</option>
+                                                <=< /option>
                                         </select>
-                                        <input class="w-50 avg-input" type="number" name="avg"
-                                            value="{{ request()->avg }}" placeholder="Nhập giá trị">
+                                        <input class="w-50 avg-input" type="number" name="avg" value="{{ request()->avg }}" placeholder="Nhập giá trị">
                                     </div>
                                 </div>
                                 <div class="d-flex justify-contents-center align-items-baseline px-2">
@@ -389,14 +361,12 @@
                                         <h5>Trị tồn kho:</h5>
                                     </div>
                                     <div class="input-group pt-2 justify-content-around">
-                                        <select class="price_inven_operator" name="price_inven_operator"
-                                            style="width: 40%">
-                                            <option value=">="{{ request('price_inven_operator') === '>=' ? 'selected' : '' }}>>=</option>
+                                        <select class="price_inven_operator" name="price_inven_operator" style="width: 40%">
+                                            <option value=">=" {{ request('price_inven_operator') === '>=' ? 'selected' : '' }}>>=</option>
                                             <option value="<=" {{ request('price_inven_operator') === '<=' ? 'selected' : '' }}>
-                                                <=</option>
+                                                <=< /option>
                                         </select>
-                                        <input class="w-50 price_inven-input" type="number" name="price_inven"
-                                            value="{{ request()->price_inven }}" placeholder="Nhập giá trị">
+                                        <input class="w-50 price_inven-input" type="number" name="price_inven" value="{{ request()->price_inven }}" placeholder="Nhập giá trị">
                                     </div>
                                 </div>
                                 <div class="d-flex justify-contents-center align-items-baseline px-2">
@@ -422,80 +392,66 @@
                                 <thead>
                                     <tr>
                                         <input type="hidden" id="sortByInput" name="sort-by" value="id">
-                                        <input type="hidden" id="sortTypeInput" name="sort-type"
-                                            value="{{ $sortType }}">
+                                        <input type="hidden" id="sortTypeInput" name="sort-type" value="{{ $sortType }}">
                                         <th scope="col">
                                             <span class="d-flex">
-                                                <a href="#" class="sort-link" data-sort-by="id"
-                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
-                                                        type="submit">ID</button></a>
+                                                <input type="checkbox" id="checkall">
+                                            </span>
+                                        </th>
+                                        <th scope="col">
+                                            <span class="d-flex">
+                                                <a href="#" class="sort-link" data-sort-by="id" data-sort-type="{{ $sortType }}"><button class="btn-sort" type="submit">ID</button></a>
                                                 <div class="icon" id="icon-id"></div>
                                             </span>
                                         </th>
                                         <th scope="col">
                                             <span class="d-flex">
-                                                <a href="#" class="sort-link" data-sort-by="products_code"
-                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
-                                                        type="submit">Mã sản phẩm</button></a>
+                                                <a href="#" class="sort-link" data-sort-by="products_code" data-sort-type="{{ $sortType }}"><button class="btn-sort" type="submit">Mã sản phẩm</button></a>
                                                 <div class="icon" id="icon-products_code"></div>
                                             </span>
                                         </th>
                                         <th scope="col">
                                             <span class="d-flex">
-                                                <a href="#" class="sort-link" data-sort-by="products_name"
-                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
-                                                        type="submit">Tên sản phẩm</button></a>
+                                                <a href="#" class="sort-link" data-sort-by="products_name" data-sort-type="{{ $sortType }}"><button class="btn-sort" type="submit">Tên sản phẩm</button></a>
 
                                                 <div class="icon" id="icon-products_name"></div>
                                             </span>
                                         </th>
                                         <th scope="col">
                                             <span class="d-flex">
-                                                <a href="#" class="sort-link" data-sort-by="ID_category"
-                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
-                                                        type="submit">Danh mục</button></a>
+                                                <a href="#" class="sort-link" data-sort-by="ID_category" data-sort-type="{{ $sortType }}"><button class="btn-sort" type="submit">Danh mục</button></a>
                                                 <div class="icon" id="icon-ID_category"></div>
                                             </span>
                                         </th>
                                         <th scope="col">
                                             <span class="d-flex">
-                                                <a href="#" class="sort-link" data-sort-by="products_trademark"
-                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
-                                                        type="submit">Thương hiệu</button></a>
+                                                <a href="#" class="sort-link" data-sort-by="products_trademark" data-sort-type="{{ $sortType }}"><button class="btn-sort" type="submit">Thương hiệu</button></a>
                                                 <div class="icon" id="icon-products_trademark"></div>
                                             </span>
                                         </th>
                                         <th scope="col">
                                             <span class="d-flex">
-                                                <a href="#" class="sort-link" data-sort-by="inventory"
-                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
-                                                        type="submit">Tồn kho</button></a>
+                                                <a href="#" class="sort-link" data-sort-by="inventory" data-sort-type="{{ $sortType }}"><button class="btn-sort" type="submit">Tồn kho</button></a>
 
                                                 <div class="icon" id="icon-inventory"></div>
                                             </span>
                                         </th>
                                         <th scope="col">
                                             <span class="d-flex">
-                                                <a href="#" class="sort-link" data-sort-by="price_avg"
-                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
-                                                        type="submit">Trị trung bình</button></a>
+                                                <a href="#" class="sort-link" data-sort-by="price_avg" data-sort-type="{{ $sortType }}"><button class="btn-sort" type="submit">Trị trung bình</button></a>
 
                                                 <div class="icon" id="icon-price_avg"></div>
                                             </span>
                                         </th>
                                         <th scope="col">
                                             <span class="d-flex">
-                                                <a href="#" class="sort-link" data-sort-by="price_inventory"
-                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
-                                                        type="submit">Trị tồn kho</button></a>
+                                                <a href="#" class="sort-link" data-sort-by="price_inventory" data-sort-type="{{ $sortType }}"><button class="btn-sort" type="submit">Trị tồn kho</button></a>
                                                 <div class="icon" id="icon-price_inventory"></div>
                                             </span>
                                         </th>
                                         <th scope="col">
                                             <span class="d-flex">
-                                                <a href="#" class="sort-link" data-sort-by="inventory"
-                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
-                                                        type="submit">Trạng thái</button></a>
+                                                <a href="#" class="sort-link" data-sort-by="inventory" data-sort-type="{{ $sortType }}"><button class="btn-sort" type="submit">Trạng thái</button></a>
                                                 <div class="icon" id="icon-status_inventory"></div>
                                             </span>
                                         </th>
@@ -506,107 +462,158 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($products as $value)
-                                        <tr>
-                                            <td scope="row">{{ $value->id }}</td>
-                                            <th><a
-                                                    href="{{ route('data.show', $value->id) }}">{{ $value->products_code }}</a>
-                                            </th>
-                                            <td>{{ $value->products_name }}</td>
-                                            <td>
-                                                <select class="product_category" name="product_category"
-                                                    id="{{ $value->id }}">
-                                                    @foreach ($categories as $va)
-                                                        <option value="{{ $va->id }}"
-                                                            {{ $va->id == $value->ID_category ? 'selected' : '' }}>
-                                                            {{ $va->category_name }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </td>
-                                            <td>{{ $value->products_trademark }}</td>
-                                            <td>
-                                                @if ($value->inventory == 0)
-                                                    0
-                                                @else
-                                                    {{ $value->inventory }}
-                                                @endif
+                                    <tr class="{{$value->id}}">
+                                        <td><input type="checkbox" name="ids[]" class="cb-element" value="{{$value->id}}"></td>
+                                        <td scope="row">{{ $value->id }}</td>
+                                        <th>
+                                            <!-- <a href="{{ route('data.show', $value->id) }}"> -->
+                                                {{ $value->products_code }}
+                                            <!-- </a> -->
+                                        </th>
+                                        <td>{{ $value->products_name }}</td>
+                                        <td>
+                                            <select class="product_category" name="product_category" id="{{ $value->id }}">
+                                                @foreach ($categories as $va)
+                                                <option value="{{ $va->id }}" {{ $va->id == $value->ID_category ? 'selected' : '' }}>
+                                                    {{ $va->category_name }}
+                                                </option>
+                                                @endforeach
+                                            </select>
+                                        </td>
+                                        <td>{{ $value->products_trademark }}</td>
+                                        <td>
+                                            @if ($value->inventory == 0)
+                                            0
+                                            @else
+                                            {{ $value->inventory }}
+                                            @endif
 
-                                            </td>
-                                            <td>{{ number_format($value->price_avg) }}</td>
-                                            <td>{{ number_format($value->price_inventory) }}</td>
-                                            <td class="p-0 text-center">
-                                                @if ($value->inventory == 0)
-                                                    <div class="py-1 rounded mt-3 pb-1 bg-danger">
-                                                        <span class="text-light">Hết hàng</span>
-                                                    </div>
-                                                @elseif($value->inventory < 5)
-                                                    <div class="py-1 rounded mt-3 pb-1 bg-warning">
-                                                        <span class="text-light">Gần hết</span>
-                                                    </div>
-                                                @else
-                                                    <div class="py-1 rounded mt-3 pb-1 bg-success">
-                                                        <span class="text-light">Sẵn hàng</span>
-                                                    </div>
-                                                @endif
-                                            </td>
-                                            <td>
-                                                <div class="icon">
-                                                    <a href="{{ route('data.edit', $value->id) }}">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="32"
-                                                            height="32" viewBox="0 0 32 32" fill="none">
-                                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                                d="M18.7832 6.79483C18.987 6.71027 19.2056 6.66675 19.4263 6.66675C19.6471 6.66675 19.8656 6.71027 20.0695 6.79483C20.2734 6.87938 20.4586 7.00331 20.6146 7.15952L21.9607 8.50563C22.1169 8.66165 22.2408 8.84693 22.3253 9.05087C22.4099 9.25482 22.4534 9.47342 22.4534 9.69419C22.4534 9.91495 22.4099 10.1336 22.3253 10.3375C22.2408 10.5414 22.1169 10.7267 21.9607 10.8827L20.2809 12.5626C20.2711 12.5736 20.2609 12.5844 20.2503 12.595C20.2397 12.6056 20.2289 12.6158 20.2178 12.6256L11.5607 21.2827C11.4257 21.4177 11.2426 21.4936 11.0516 21.4936H8.34644C7.94881 21.4936 7.62647 21.1712 7.62647 20.7736V18.0684C7.62647 17.8775 7.70233 17.6943 7.83737 17.5593L16.4889 8.9086C16.5003 8.89532 16.5124 8.88235 16.525 8.86973C16.5376 8.8571 16.5506 8.84504 16.5639 8.83354L18.2381 7.15952C18.394 7.00352 18.5795 6.8793 18.7832 6.79483ZM17.0354 10.3984L9.06641 18.3667V20.0536H10.7534L18.7221 12.085L17.0354 10.3984ZM19.7402 11.0668L18.0537 9.38022L19.2572 8.17685C19.2794 8.15461 19.3057 8.13696 19.3348 8.12493C19.3638 8.11289 19.3949 8.10669 19.4263 8.10669C19.4578 8.10669 19.4889 8.11289 19.5179 8.12493C19.5469 8.13697 19.5737 8.15504 19.5959 8.17728L20.9428 9.52411C20.9651 9.5464 20.9831 9.57315 20.9951 9.60228C21.0072 9.63141 21.0134 9.66264 21.0134 9.69419C21.0134 9.72573 21.0072 9.75696 20.9951 9.78609C20.9831 9.81522 20.9651 9.84197 20.9428 9.86426L19.7402 11.0668ZM6.6665 24.6134C6.6665 24.2158 6.98885 23.8935 7.38648 23.8935H24.6658C25.0634 23.8935 25.3858 24.2158 25.3858 24.6134C25.3858 25.0111 25.0634 25.3334 24.6658 25.3334H7.38648C6.98885 25.3334 6.6665 25.0111 6.6665 24.6134Z"
-                                                                fill="#555555" />
-                                                        </svg>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div id="dropdown_item{{ $value->id }}" data-toggle="collapse"
-                                                    data-target="#product-details-<?php echo $value->id; ?>">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="32"
-                                                        height="32" viewBox="0 0 32 32" fill="none">
-                                                        <rect width="32" height="32" rx="4"
-                                                            fill="white" />
-                                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                                            d="M22.3582 19.6917C21.9471 20.1028 21.2806 20.1028 20.8695 19.6917L15.9998 14.822L11.1301 19.6917C10.719 20.1028 10.0526 20.1028 9.64148 19.6917C9.2304 19.2806 9.2304 18.6141 9.64148 18.203L15.2555 12.589C15.6666 12.1779 16.3331 12.1779 16.7442 12.589L22.3582 18.203C22.7693 18.6141 22.7693 19.2806 22.3582 19.6917Z"
-                                                            fill="#555555" />
-                                                    </svg>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        @foreach ($product as $item)
-                                            <tr id="product-details-{{ $value->id }}" class="collapse">
-                                                @if ($value->id == $item->products_id)
-                                                    <td>{{ $value->id }} - {{ $item->id }}</td>
-                                                    <td>{{ $value->products_code }}</td>
-                                                    <td>{{ $item->product_name }}</td>
-                                                    <td>
-                                                        <p>Loại hàng</p>{{ $item->product_category }}
-                                                    </td>
-                                                    <td>{{ $item->product_trademark }}</td>
-                                                    <td>{{ $item->product_qty }}</td>
-                                                    <td>{{ number_format($item->product_price) }}</td>
-                                                    <td>{{ number_format($item->total) }}</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                @endif
-                                            </tr>
-                                        @endforeach
-                                    @endforeach
-                                </tbody>
-                            </table>
-                            <div class="paginator mt-4 d-flex justify-content-end">
-                                {{ $products->appends(request()->except('page'))->links() }}
+                                        </td>
+                                        <td>{{ number_format($value->price_avg) }}</td>
+                                        <td>{{ number_format($value->price_inventory) }}</td>
+                                        <td class="p-0 text-center">
+                                            @if ($value->inventory == 0)
+                                            <div class="py-1 rounded mt-3 pb-1 bg-danger">
+                                                <span class="text-light">Hết hàng</span>
+                                            </div>
+                                            @elseif($value->inventory < 5) <div class="py-1 rounded mt-3 pb-1 bg-warning">
+                                                <span class="text-light">Gần hết</span>
+                        </div>
+                        @else
+                        <div class="py-1 rounded mt-3 pb-1 bg-success">
+                            <span class="text-light">Sẵn hàng</span>
+                        </div>
+                        @endif
+                        </td>
+                        <td>
+                            <div class="icon">
+                                <a href="{{ route('data.edit', $value->id) }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M18.7832 6.79483C18.987 6.71027 19.2056 6.66675 19.4263 6.66675C19.6471 6.66675 19.8656 6.71027 20.0695 6.79483C20.2734 6.87938 20.4586 7.00331 20.6146 7.15952L21.9607 8.50563C22.1169 8.66165 22.2408 8.84693 22.3253 9.05087C22.4099 9.25482 22.4534 9.47342 22.4534 9.69419C22.4534 9.91495 22.4099 10.1336 22.3253 10.3375C22.2408 10.5414 22.1169 10.7267 21.9607 10.8827L20.2809 12.5626C20.2711 12.5736 20.2609 12.5844 20.2503 12.595C20.2397 12.6056 20.2289 12.6158 20.2178 12.6256L11.5607 21.2827C11.4257 21.4177 11.2426 21.4936 11.0516 21.4936H8.34644C7.94881 21.4936 7.62647 21.1712 7.62647 20.7736V18.0684C7.62647 17.8775 7.70233 17.6943 7.83737 17.5593L16.4889 8.9086C16.5003 8.89532 16.5124 8.88235 16.525 8.86973C16.5376 8.8571 16.5506 8.84504 16.5639 8.83354L18.2381 7.15952C18.394 7.00352 18.5795 6.8793 18.7832 6.79483ZM17.0354 10.3984L9.06641 18.3667V20.0536H10.7534L18.7221 12.085L17.0354 10.3984ZM19.7402 11.0668L18.0537 9.38022L19.2572 8.17685C19.2794 8.15461 19.3057 8.13696 19.3348 8.12493C19.3638 8.11289 19.3949 8.10669 19.4263 8.10669C19.4578 8.10669 19.4889 8.11289 19.5179 8.12493C19.5469 8.13697 19.5737 8.15504 19.5959 8.17728L20.9428 9.52411C20.9651 9.5464 20.9831 9.57315 20.9951 9.60228C21.0072 9.63141 21.0134 9.66264 21.0134 9.69419C21.0134 9.72573 21.0072 9.75696 20.9951 9.78609C20.9831 9.81522 20.9651 9.84197 20.9428 9.86426L19.7402 11.0668ZM6.6665 24.6134C6.6665 24.2158 6.98885 23.8935 7.38648 23.8935H24.6658C25.0634 23.8935 25.3858 24.2158 25.3858 24.6134C25.3858 25.0111 25.0634 25.3334 24.6658 25.3334H7.38648C6.98885 25.3334 6.6665 25.0111 6.6665 24.6134Z" fill="#555555" />
+                                    </svg>
+                                </a>
                             </div>
+                        </td>
+                        <td>
+                            <div id="dropdown_item{{ $value->id }}" data-toggle="collapse" data-target="#product-details-<?php echo $value->id; ?>">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                                    <rect width="32" height="32" rx="4" fill="white" />
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M22.3582 19.6917C21.9471 20.1028 21.2806 20.1028 20.8695 19.6917L15.9998 14.822L11.1301 19.6917C10.719 20.1028 10.0526 20.1028 9.64148 19.6917C9.2304 19.2806 9.2304 18.6141 9.64148 18.203L15.2555 12.589C15.6666 12.1779 16.3331 12.1779 16.7442 12.589L22.3582 18.203C22.7693 18.6141 22.7693 19.2806 22.3582 19.6917Z" fill="#555555" />
+                                </svg>
+                            </div>
+                        </td>
+                        </tr>
+                        @foreach ($product as $item)
+                        <tr id="product-details-{{ $value->id }}" class="collapse">
+                            @if ($value->id == $item->products_id)
+                            <td></td>
+                            <td>{{ $value->id }} - {{ $item->id }}</td>
+                            <td>{{ $value->products_code }}</td>
+                            <td>{{ $item->product_name }}</td>
+                            <td>
+                                <p>Loại hàng</p>{{ $item->product_category }}
+                            </td>
+                            <td>{{ $item->product_trademark }}</td>
+                            <td>{{ $item->product_qty }}</td>
+                            <td>{{ number_format($item->product_price) }}</td>
+                            <td>{{ number_format($item->total) }}</td>
+                            <td></td>
+                            <td>
+                                <form action="{{route('editProduct',$item->id)}}" method="post">
+                                    @csrf
+                                    @method('PUT')
+                                    <button type="submit" style="background: transparent; border:none;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M18.7832 6.79483C18.987 6.71027 19.2056 6.66675 19.4263 6.66675C19.6471 6.66675 19.8656 6.71027 20.0695 6.79483C20.2734 6.87938 20.4586 7.00331 20.6146 7.15952L21.9607 8.50563C22.1169 8.66165 22.2408 8.84693 22.3253 9.05087C22.4099 9.25482 22.4534 9.47342 22.4534 9.69419C22.4534 9.91495 22.4099 10.1336 22.3253 10.3375C22.2408 10.5414 22.1169 10.7267 21.9607 10.8827L20.2809 12.5626C20.2711 12.5736 20.2609 12.5844 20.2503 12.595C20.2397 12.6056 20.2289 12.6158 20.2178 12.6256L11.5607 21.2827C11.4257 21.4177 11.2426 21.4936 11.0516 21.4936H8.34644C7.94881 21.4936 7.62647 21.1712 7.62647 20.7736V18.0684C7.62647 17.8775 7.70233 17.6943 7.83737 17.5593L16.4889 8.9086C16.5003 8.89532 16.5124 8.88235 16.525 8.86973C16.5376 8.8571 16.5506 8.84504 16.5639 8.83354L18.2381 7.15952C18.394 7.00352 18.5795 6.8793 18.7832 6.79483ZM17.0354 10.3984L9.06641 18.3667V20.0536H10.7534L18.7221 12.085L17.0354 10.3984ZM19.7402 11.0668L18.0537 9.38022L19.2572 8.17685C19.2794 8.15461 19.3057 8.13696 19.3348 8.12493C19.3638 8.11289 19.3949 8.10669 19.4263 8.10669C19.4578 8.10669 19.4889 8.11289 19.5179 8.12493C19.5469 8.13697 19.5737 8.15504 19.5959 8.17728L20.9428 9.52411C20.9651 9.5464 20.9831 9.57315 20.9951 9.60228C21.0072 9.63141 21.0134 9.66264 21.0134 9.69419C21.0134 9.72573 21.0072 9.75696 20.9951 9.78609C20.9831 9.81522 20.9651 9.84197 20.9428 9.86426L19.7402 11.0668ZM6.6665 24.6134C6.6665 24.2158 6.98885 23.8935 7.38648 23.8935H24.6658C25.0634 23.8935 25.3858 24.2158 25.3858 24.6134C25.3858 25.0111 25.0634 25.3334 24.6658 25.3334H7.38648C6.98885 25.3334 6.6665 25.0111 6.6665 24.6134Z" fill="#555555"></path>
+                                        </svg>
+                                    </button>
+
+                                </form>
+
+                            </td>
+                            @endif
+                        </tr>
+                        @endforeach
+                        @endforeach
+                        </tbody>
+                        </table>
+                        <button type="submit" id="deleteProducts" class="btn btn-danger mt-3">Xóa nhiều</button>
+                        <div class="paginator mt-4 d-flex justify-content-end">
+                            {{ $products->appends(request()->except('page'))->links() }}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+</div>
+</section>
 </div>
 
 <script>
+    // Checkbox
+    $('#checkall').change(function() {
+        $('.cb-element').prop('checked', this.checked);
+    });
+
+    $('.cb-element').change(function() {
+        if ($('.cb-element:checked').length == $('.cb-element').length) {
+            $('#checkall').prop('checked', true);
+        } else {
+            $('#checkall').prop('checked', false);
+        }
+    });
+
+    $(document).on('click', '#deleteProducts', function(e) {
+        e.preventDefault();
+        const list_id = [];
+        $('input[name="ids[]"]').each(function() {
+            if ($(this).is(':checked')) {
+                var value = $(this).val();
+                list_id.push(value);
+
+            }
+        });
+        $.ajax({
+            url: "{{ route('deleteProducts') }}",
+            type: "get",
+            data: {
+                list_id: list_id,
+            },
+            success: function(data) {
+                console.log(data);
+                if (data.success == true) {
+                    var id = data.ids;
+                    for (let i = 0; i < id.length; i++) {
+                        $('.' + id[i]).remove();
+                    }
+                } else {
+                    alert(data.msg);
+                }
+            }
+        })
+    })
+
+
     $('.product_category').change(function() {
         var product_id = $(this).attr('id');
         var category_id = $(this).val();

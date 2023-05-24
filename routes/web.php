@@ -1,4 +1,5 @@
 <?php
+
 use App\Http\Controllers\AddProductController;
 use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\ExportController;
@@ -54,19 +55,23 @@ Route::get('nameProducts', [ExportController::class, 'nameProduct'])->name('name
 //lấy thông tin sản phẩm từ tên sản phẩm
 Route::get('getProduct', [ExportController::class, 'getProduct'])->name('getProduct');
 
-//
-Route::resource('data',ProductsController::class);
-Route::get('/insertProducts',[ProductsController::class,'insertProducts'])->name('insertProducts');
-Route::POST('/storeProducts',[ProductsController::class,'storeProducts'])->name('storeProducts');
-Route::get('/data_edit',[ProductsController::class,'edit_ajax'])->name('ajax');
-Route::get('/data_show',[ProductsController::class,'show_ajax'])->name('show_ajax');
-Route::get('/show_provide',[AddProductController::class,'show_provide'])->name('show_provide');
-Route::get('/update_provide',[AddProductController::class,'update_provide'])->name('update_provide');
-Route::resource('insertProduct',AddProductController::class);
-Route::POST('/addBillEdit',[AddProductController::class,'addBillEdit'])->name('addBillEdit');
-Route::post('/insertProductP',[AddProductController::class,'addBill'])->name('addBill');
-Route::put('/deleteBill/{id?}',[AddProductController::class,'deleteBill'])->name('deleteBill');
-Route::get('/deleteOrder',[AddProductController::class,'deleteOrder'])->name('deleteOrder');
+Route::resource('data', ProductsController::class);
+Route::get('/insertProducts', [ProductsController::class, 'insertProducts'])->name('insertProducts');
+Route::POST('/storeProducts', [ProductsController::class, 'storeProducts'])->name('storeProducts');
+Route::get('/data_edit', [ProductsController::class, 'edit_ajax'])->name('ajax');
+Route::get('/data_show', [ProductsController::class, 'show_ajax'])->name('show_ajax');
+Route::get('/deleteProducts', [ProductsController::class, 'deleteProducts'])->name('deleteProducts');
+Route::PUT('/editProduct/{id}',[ProductsController::class,'editProduct'])->name('editProduct');
+Route::PUT('/updateProduct/{id}',[ProductsController::class,'updateProduct'])->name('updateProduct');
+
+
+Route::get('/show_provide', [AddProductController::class, 'show_provide'])->name('show_provide');
+Route::get('/update_provide', [AddProductController::class, 'update_provide'])->name('update_provide');
+Route::resource('insertProduct', AddProductController::class);
+Route::POST('/addBillEdit', [AddProductController::class, 'addBillEdit'])->name('addBillEdit');
+Route::post('/insertProductP', [AddProductController::class, 'addBill'])->name('addBill');
+Route::put('/deleteBill/{id?}', [AddProductController::class, 'deleteBill'])->name('deleteBill');
+Route::get('/deleteOrder', [AddProductController::class, 'deleteOrder'])->name('deleteOrder');
 Route::get('/simple', function () {
     return view('tables.simple');
 });

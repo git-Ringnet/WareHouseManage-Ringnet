@@ -65,22 +65,21 @@
 
                         // Đánh số vị trí cho từng phần tử trong mảng session
                         $numberedLabels = array_values($_SESSION['labels']);
-
                         ?>
                         <div class="filter-results d-flex">
                             <input id="delete-item-input" type="hidden" name="delete_item" value="">
                             @foreach ($string as $item)
                             <span class="filter-group" style="order: 
-                                    @php
-$index = array_search($item['label'], $numberedLabels);
-                                        if ($index !== false) {
-                                            echo $index + 1;
-                                        } else {
-                                            echo 0;
-                                        } @endphp">
+                                    <?php
+                                    $index = array_search($item['label'], $numberedLabels);
+                                    if ($index !== false) {
+                                        echo $index + 1;
+                                    } else {
+                                        echo 0;
+                                    } ?>">
                                 {{ $item['label'] }}
                                 <span class="filter-values">{{ implode(', ', $item['values']) }}</span>
-                                <a class="delete-item delete-btn-{{ $item['class'] }}" onclick="updateDeleteItemValue('{{ $item['label'] }}')">
+                                <a class="delete-item delete-btn-{{ $item['class'] }}" onclick='updateDeleteItemValue("{{ $item["label"] }}")'>
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M18 18L6 6" stroke="#555555" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                                         <path d="M18 6L6 18" stroke="#555555" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -400,7 +399,7 @@ $index = array_search($item['label'], $numberedLabels);
                     @endforeach
                 </tbody>
             </table>
-            <button type="submit" name="deleteOrder" id="deleteOrder">Xóa nhiều</button>
+            <button type="submit" name="deleteOrder" id="deleteOrder" class="btn btn-danger">Xóa nhiều</button>
             <div class="paginator mt-4 d-flex justify-content-end">
                 {{ $orders->appends(request()->except('page'))->links() }}
             </div>
@@ -420,7 +419,6 @@ $index = array_search($item['label'], $numberedLabels);
 
             }
         });
-        console.log(list_id);
         $.ajax({
             url: "{{ route('deleteOrder') }}",
             type: "get",

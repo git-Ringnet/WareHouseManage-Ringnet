@@ -52,7 +52,7 @@
                         </div>
                         <div class="product_id">
                           <h4>ID</h4>
-                          <input type="text" name="products_id" value="{{$products->id}}" readonly>
+                          <input type="text" name="products_id" value="{{$products->id}}" readonly style="background: #D6D6D6;">
                         </div>
                       </div>
                       <div class="col-md-3">

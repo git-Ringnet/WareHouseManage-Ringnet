@@ -465,56 +465,6 @@ class AddProductController extends Controller
             return redirect()->route('insertProduct.index')->with('section', 'Đơn hàng đã được duyệt trước đó');
         }
 
-        // $updateOrder = Orders::find($order->id);
-        // if ($updateOrder->order_status == 0) {
-        //     $product_id = $request->product_id;
-        //     $products_id = $request->products_id;
-        //     $product_name = $request->product_name;
-        //     $product_category = $request->product_category;
-        //     $product_unit = $request->product_unit;
-        //     $product_trademark = $request->product_trademark;
-        //     $product_qty = $request->product_qty;
-        //     $product_price = $request->product_price;
-        //     $product_tax = $request->product_tax;
-        //     $product_total = $request->product_total;
-        //     for ($i = 0; $i < count($product_name); $i++) {
-        //         $check = Product::where('product_name', $product_name[$i])->where('product_category', $product_category[$i])->first();
-        //         $serinumbers = Serinumbers::where('product_id', $product_id[$i])->get();
-        //         if ($check == NULL) {
-        //             $pro = new Product();
-        //             $pro->products_id = $products_id[$i];
-        //             $pro->product_name = $product_name[$i];
-        //             $pro->product_category = $product_category[$i];
-        //             $pro->product_unit = $product_unit[$i];
-        //             $pro->product_trademark = $product_trademark[$i];
-        //             $pro->product_qty = $product_qty[$i];
-        //             $pro->product_price = $product_price[$i];
-        //             // $pro->product_tax = $product_tax[$i];
-        //             $pro->total = $product_total[$i];
-        //             $pro->save();
-        //             foreach ($serinumbers as $serinumber) {
-        //                 $serinumber->product_id = $pro->id;
-        //                 $serinumber->seri_status = 1;
-        //                 $serinumber->save();
-        //             }
-        //         } else {
-        //             $updateProduct = Product::findOrFail($check->id);
-        //             $updateProduct->product_qty += $product_qty[$i];
-        //             $updateProduct->save();
-        //             $serinumbers = Serinumbers::where('product_id', $product_id[$i])->get();
-        //             foreach ($serinumbers as $serinumber) {
-        //                 $serinumber->product_id = $updateProduct->id;
-        //                 $serinumber->seri_status = 1;
-        //                 $serinumber->save();
-        //             }
-        //         }
-        //     }
-        //     // update lại bảng 
-        //     $updateOrder->order_status = 1;
-        //     $updateOrder->save();
-        // } else {
-        //     return redirect()->route('insertProduct.index')->with('section', 'Đơn hàng đã được duyệt');
-        // }
         return redirect()->route('insertProduct.index')->with('section', 'Duyệt nhanh đơn hàng thành công');
     }
 
@@ -601,6 +551,7 @@ class AddProductController extends Controller
                     $pro->product_name = $product_name[$i];
                     $pro->product_category = $product_category[$i];
                     $pro->product_unit = $product_unit[$i];
+                    // $pro->product_unit = count($product_SN);
                     $pro->product_trademark = $product_trademark[$i];
                     $pro->product_qty = $product_qty[$i];
                     $pro->product_price = $product_price[$i];
