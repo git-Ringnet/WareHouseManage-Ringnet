@@ -465,7 +465,10 @@
                                     <tr class="{{$value->id}}">
                                         <td><input type="checkbox" name="ids[]" class="cb-element" value="{{$value->id}}"></td>
                                         <td scope="row">{{ $value->id }}</td>
-                                        <th><a href="{{ route('data.show', $value->id) }}">{{ $value->products_code }}</a>
+                                        <th>
+                                            <!-- <a href="{{ route('data.show', $value->id) }}"> -->
+                                                {{ $value->products_code }}
+                                            <!-- </a> -->
                                         </th>
                                         <td>{{ $value->products_name }}</td>
                                         <td>

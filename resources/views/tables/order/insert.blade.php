@@ -170,7 +170,6 @@
   <!-- /.content -->
 </div>
 <script>
-
   $(document).on('input', '.quantity-input, [name^="product_price"], .product_tax', function() {
     var productQty = parseInt($(this).closest('tr').find('.quantity-input').val());
     var productPrice = 0;
@@ -185,6 +184,10 @@
     if (!isNaN(productQty) && !isNaN(productPrice) && !isNaN(taxValue)) {
       var totalAmount = productQty * productPrice;
       var taxAmount = (productQty * productPrice * taxValue) / 100;
+
+      // if (productQty == 0 || productPrice == 0) {
+      //   totalAmount = 0;
+      // }
 
       $(this).closest('tr').find('[name^="product_total"]').val(totalAmount);
       $(this).closest('tr').find('.product_tax').text(taxAmount);
