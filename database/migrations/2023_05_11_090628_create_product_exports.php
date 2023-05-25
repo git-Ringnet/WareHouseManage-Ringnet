@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('product_unit');
             $table->integer('product_qty');
             $table->bigInteger('product_price');
-            $table->string('product_note');
+            $table->string('product_note')->nullable();
             $table->integer('product_tax');
             $table->bigInteger('product_total');
             $table->timestamps();

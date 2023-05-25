@@ -45,6 +45,14 @@
                                     <input type="email" class="form-control" name="provide_email" placeholder="Enter provide email" required>
                                 </div>
                                 <div class="form-group">
+                                    <label for="pwd">Provide address:</label>
+                                    <input type="text" class="form-control" name="provide_address" placeholder="Enter provide address" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="pwd">Provide code:</label>
+                                    <input type="text" class="form-control" name="provide_code" placeholder="Enter provide code" required>
+                                </div>
+                                <div class="form-group">
                                     <label for="pwd">Provide status:</label>
                                     <select name="provide_status" class="form-control">
                                         <option value="1">Active</option>

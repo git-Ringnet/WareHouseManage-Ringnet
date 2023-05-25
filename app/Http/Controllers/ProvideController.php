@@ -111,9 +111,11 @@ class ProvideController extends Controller
             'provide_represent' => $request->provide_represent,
             'provide_phone' => $request->provide_phone,
             'provide_email' => $request->provide_email,
+            'provide_address' => $request->provide_address,
+            'provide_code' => $request->provide_code,
             'provide_status' => $request->provide_status,
         ]);
-        return redirect()->route('provides.index')->with('successA', 'Thêm nhà cung cấp thành công!');
+        return redirect()->route('provides.index')->with('msg', 'Thêm nhà cung cấp thành công!');
     }
 
     /**
@@ -150,7 +152,7 @@ class ProvideController extends Controller
     {
         $provides = Provides::find($id);
         $provides->update($request->all());
-        return redirect()->route('provides.index')->with('successU', 'Cập nhật thành công!');
+        return redirect()->route('provides.index')->with('msg', 'Cập nhật thành công!');
     }
 
     /**
@@ -162,7 +164,7 @@ class ProvideController extends Controller
     public function destroy($id)
     {
         $provides = Provides::destroy($id);
-        return redirect()->route('provides.index')->with('successD', 'Xóa thành công!');
+        return redirect()->route('provides.index')->with('msg', 'Xóa thành công!');
     }
     public function updateStatus(Request $request)
     {
