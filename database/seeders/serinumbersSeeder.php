@@ -14,9 +14,9 @@ class SerinumbersSeeder extends Seeder
     public function run()
     {
         DB::table('serinumbers')->insert([
-            ['id' => 1, 'serinumber' => "SP01-01",'product_id' => 1,'seri_status' => 1],
-            ['id' => 2, 'serinumber' => "SP01-02",'product_id'=>1,'seri_status' => 1],
-            ['id' => 3, 'serinumber' => "SP01-03",'product_id'=>1,'seri_status' => 1],
+            ['id' => 1, 'serinumber' => "SP01-01",'product_id' => 1,'seri_status' => 2],
+            ['id' => 2, 'serinumber' => "SP01-02",'product_id'=>1,'seri_status' => 2],
+            ['id' => 3, 'serinumber' => "SP01-03",'product_id'=>1,'seri_status' => 2],
             ['id' => 4, 'serinumber' => "SP02-01",'product_id'=>2,'seri_status'=> 1],
             ['id' => 5, 'serinumber' => "SP02-02",'product_id'=>2,'seri_status'=> 1],
             ['id' => 6, 'serinumber' => "SP02-03",'product_id'=>2,'seri_status' => 1],
@@ -30,6 +30,7 @@ class SerinumbersSeeder extends Seeder
             ['id' => 14, 'serinumber' => "SP05-02",'product_id'=>5,'seri_status' => 1],
             ['id' => 15, 'serinumber' => "SP05-02",'product_id'=>5,'seri_status' => 1],
             ['id' => 16, 'serinumber' => "SP06-01",'product_id'=>6,'seri_status' => 1],
+            ['id' => 17, 'serinumber' => "SP01-04",'product_id'=>1,'seri_status' => 1],
         ]);
     }
 }

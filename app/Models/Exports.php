@@ -52,6 +52,11 @@ class Exports extends Model
         $exports = $exports->paginate(10);
         return $exports;
     }
+    public function productExports()
+    {
+        return $this->hasMany(ProductExports::class, 'export_id');
+    }
+
     protected $fillable = [
         'guest_id',
         'user_id',

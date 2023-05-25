@@ -19,7 +19,7 @@ class ExportSeeder extends Seeder
             [
                 'guest_id' => '1',
                 'user_id' => 1,
-                'total' => 12000000,
+                'total' => 13200000,
                 'export_status' => 2,
                 'created_at' => now(),
                 'updated_at' => now(),

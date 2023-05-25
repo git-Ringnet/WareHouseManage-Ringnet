@@ -15,20 +15,39 @@
                     </ol>
                 </div>
             </div>
-            <a href="{{ route('exports.create') }}">
-                <button type="button" class="btn btn-primary d-flex align-items-center">
-                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" clip-rule="evenodd"
-                            d="M6 0C6.38791 -1.97352e-08 6.70237 0.314463 6.70237 0.702373L6.70237 11.2976C6.70237 11.6855 6.38791 12 6 12C5.61209 12 5.29763 11.6855 5.29763 11.2976V0.702373C5.29763 0.314463 5.61209 -1.97352e-08 6 0Z"
-                            fill="white" />
-                        <path fill-rule="evenodd" clip-rule="evenodd"
-                            d="M12 6C12 6.38791 11.6855 6.70237 11.2976 6.70237H0.702373C0.314463 6.70237 -1.38146e-07 6.38791 0 6C-5.13115e-07 5.61209 0.314463 5.29763 0.702373 5.29763H11.2976C11.6855 5.29763 12 5.61209 12 6Z"
-                            fill="white" />
-                    </svg>
-                    <span class="ml-2">Tạo đơn</span>
-                </button>
-            </a>
+            <div style="width: 20%;">
+                <div class="d-flex justify-content-between">
+                    <a href="{{ route('exports.create') }}">
+                        <button type="button" class="btn btn-primary d-flex align-items-center">
+                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M6 0C6.38791 -1.97352e-08 6.70237 0.314463 6.70237 0.702373L6.70237 11.2976C6.70237 11.6855 6.38791 12 6 12C5.61209 12 5.29763 11.6855 5.29763 11.2976V0.702373C5.29763 0.314463 5.61209 -1.97352e-08 6 0Z"
+                                    fill="white" />
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M12 6C12 6.38791 11.6855 6.70237 11.2976 6.70237H0.702373C0.314463 6.70237 -1.38146e-07 6.38791 0 6C-5.13115e-07 5.61209 0.314463 5.29763 0.702373 5.29763H11.2976C11.6855 5.29763 12 5.61209 12 6Z"
+                                    fill="white" />
+                            </svg>
+                            <span class="ml-2">Tạo đơn</span>
+                        </button>
+                    </a>
+                    <a href="#">
+                        <button type="button" class="btn bg-transparent border-primary d-flex align-items-center">
+                            <svg width="14" height="18" viewBox="0 0 14 18" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M10.0003 5.80078H11.5001C11.8979 5.80078 12.2794 5.95881 12.5607 6.24009C12.842 6.52137 13 6.90285 13 7.30063V15.1008C13 15.4986 12.842 15.8801 12.5607 16.1614C12.2794 16.4426 11.8979 16.6007 11.5001 16.6007H2.49986C2.10207 16.6007 1.72058 16.4426 1.4393 16.1614C1.15802 15.8801 1 15.4986 1 15.1008V7.30063C1 6.90285 1.15802 6.52137 1.4393 6.24009C1.72058 5.95881 2.10207 5.80078 2.49986 5.80078H3.99972"
+                                    stroke="#0095F6" stroke-linecap="round" stroke-linejoin="round" />
+                                <path d="M3.99976 9.39941L6.99948 12.3991L10.0003 9.39941" stroke="#0095F6"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                                <path d="M7.00055 1V11.7999" stroke="#0095F6" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                            <span class="ml-2 text-primary">Xuất excel</span>
+                        </button>
+                    </a>
+                </div>
+            </div>
             <div class="row m-auto filter pt-2">
                 <form class="w-100" action="" method="get" id='search-filter'>
                     <div class="row">

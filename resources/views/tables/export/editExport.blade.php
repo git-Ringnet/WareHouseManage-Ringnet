@@ -11,8 +11,10 @@
                             <span><b>Đơn hàng mới</b></span>
                         </div>
                         <div class="mt-3">
-                            <a href="#" class="btn btn-danger text-white">Chốt đơn</a>
-                            <a href="#" class="btn btn-secondary ml-4">Hủy đơn</a>
+                            @if ($exports->export_status == 1)
+                                <a href="#" class="btn btn-danger text-white">Chốt đơn</a>
+                                <a href="#" class="btn btn-secondary ml-4">Hủy đơn</a>
+                            @endif
                             <a href="#" class="btn border border-secondary ml-4">Xuất file</a>
                             <a href="#" class="btn border border-secondary ml-4">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -27,44 +29,48 @@
                                 In báo giá
                             </a>
                         </div>
-                        <div class="mt-4">
-                            <div class="d-flex">
-                                <input type="radio" name="options" id="radio1" checked>
-                                <span class="ml-1">Khách hàng cũ</span>
-                                <input type="radio" name="options" id="radio2" style="margin-left: 40px;">
-                                <span class="ml-1">Khách hàng mới</span>
-                            </div>
-                        </div>
-                        <div class="mt-3">
-                            <div class="input-group mb-1 position-relative">
-                                <input type="text" class="form-control" placeholder="Nhập thông tin khách hàng"
-                                    aria-label="Username" aria-describedby="basic-addon1" id="myInput"
-                                    autocomplete="off">
-                                <div class="position-absolute" style="right: 5px;top: 17%;">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                            d="M15.1835 7.36853C13.0254 5.21049 9.52656 5.21049 7.36853 7.36853C5.21049 9.52656 5.21049 13.0254 7.36853 15.1835C9.52656 17.3415 13.0254 17.3415 15.1835 15.1835C17.3415 13.0254 17.3415 9.52656 15.1835 7.36853ZM16.2441 6.30787C13.5003 3.56404 9.05169 3.56404 6.30787 6.30787C3.56404 9.05169 3.56404 13.5003 6.30787 16.2441C9.05169 18.988 13.5003 18.988 16.2441 16.2441C18.988 13.5003 18.988 9.05169 16.2441 6.30787Z"
-                                            fill="#555555" />
-                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                            d="M15.1796 15.1796C15.4725 14.8867 15.9474 14.8867 16.2403 15.1796L19.5303 18.4696C19.8232 18.7625 19.8232 19.2374 19.5303 19.5303C19.2374 19.8232 18.7625 19.8232 18.4696 19.5303L15.1796 16.2403C14.8867 15.9474 14.8867 15.4725 15.1796 15.1796Z"
-                                            fill="#555555" />
-                                    </svg>
+                        @if ($exports->export_status == 1)
+                            <div class="mt-4">
+                                <div class="d-flex">
+                                    <input type="radio" name="options" id="radio1" checked>
+                                    <span class="ml-1">Khách hàng cũ</span>
+                                    <input type="radio" name="options" id="radio2" style="margin-left: 40px;">
+                                    <span class="ml-1">Khách hàng mới</span>
                                 </div>
                             </div>
-                            <ul id="myUL" class="bg-white position-absolute w-100 rounded shadow"
-                                style="z-index: 99;">
-                                @foreach ($customer as $item)
-                                    <li>
-                                        <a href="#"
-                                            class="text-dark d-flex justify-content-between p-2 search-info"
-                                            id="{{ $item->id }}" name="search-info">
-                                            <span>{{ $item->guest_represent }}</span>
-                                            <span class="mr-5">{{ $item->guest_name }}</span>
-                                        </a>
-                                    </li>
-                                @endforeach
-                            </ul>
+                        @endif
+                        <div class="mt-3">
+                            @if ($exports->export_status == 1)
+                                <div class="input-group mb-1 position-relative">
+                                    <input type="text" class="form-control" placeholder="Nhập thông tin khách hàng"
+                                        aria-label="Username" aria-describedby="basic-addon1" id="myInput"
+                                        autocomplete="off">
+                                    <div class="position-absolute" style="right: 5px;top: 17%;">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M15.1835 7.36853C13.0254 5.21049 9.52656 5.21049 7.36853 7.36853C5.21049 9.52656 5.21049 13.0254 7.36853 15.1835C9.52656 17.3415 13.0254 17.3415 15.1835 15.1835C17.3415 13.0254 17.3415 9.52656 15.1835 7.36853ZM16.2441 6.30787C13.5003 3.56404 9.05169 3.56404 6.30787 6.30787C3.56404 9.05169 3.56404 13.5003 6.30787 16.2441C9.05169 18.988 13.5003 18.988 16.2441 16.2441C18.988 13.5003 18.988 9.05169 16.2441 6.30787Z"
+                                                fill="#555555" />
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M15.1796 15.1796C15.4725 14.8867 15.9474 14.8867 16.2403 15.1796L19.5303 18.4696C19.8232 18.7625 19.8232 19.2374 19.5303 19.5303C19.2374 19.8232 18.7625 19.8232 18.4696 19.5303L15.1796 16.2403C14.8867 15.9474 14.8867 15.4725 15.1796 15.1796Z"
+                                                fill="#555555" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                <ul id="myUL" class="bg-white position-absolute w-100 rounded shadow"
+                                    style="z-index: 99;">
+                                    @foreach ($customer as $item)
+                                        <li>
+                                            <a href="#"
+                                                class="text-dark d-flex justify-content-between p-2 search-info"
+                                                id="{{ $item->id }}" name="search-info">
+                                                <span>{{ $item->guest_represent }}</span>
+                                                <span class="mr-5">{{ $item->guest_name }}</span>
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -101,19 +107,35 @@
                                     </svg>
                                 </p>
                             </span>
-                            <span style="z-index: 99">
-                                <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M16 5C9.92487 5 5 9.92487 5 16C5 22.0751 9.92487 27 16 27C22.0751 27 27 22.0751 27 16C27 9.92487 22.0751 5 16 5ZM3 16C3 8.8203 8.8203 3 16 3C23.1797 3 29 8.8203 29 16C29 23.1797 23.1797 29 16 29C8.8203 29 3 23.1797 3 16Z"
-                                        fill="#D6D6D6" />
-                                    <path
-                                        d="M22.1578 15.9997C22.1578 19.4006 19.4008 22.1576 15.9999 22.1576C12.599 22.1576 9.84204 19.4006 9.84204 15.9997C9.84204 12.5988 12.599 9.8418 15.9999 9.8418C19.4008 9.8418 22.1578 12.5988 22.1578 15.9997Z"
-                                        fill="#D6D6D6" />
-                                </svg>
-                                <p class="p-0 m-0"></p>
-
-                            </span>
+                            @if ($exports->export_status == 1)
+                                <span style="z-index: 99">
+                                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                            d="M16 5C9.92487 5 5 9.92487 5 16C5 22.0751 9.92487 27 16 27C22.0751 27 27 22.0751 27 16C27 9.92487 22.0751 5 16 5ZM3 16C3 8.8203 8.8203 3 16 3C23.1797 3 29 8.8203 29 16C29 23.1797 23.1797 29 16 29C8.8203 29 3 23.1797 3 16Z"
+                                            fill="#D6D6D6" />
+                                        <path
+                                            d="M22.1578 15.9997C22.1578 19.4006 19.4008 22.1576 15.9999 22.1576C12.599 22.1576 9.84204 19.4006 9.84204 15.9997C9.84204 12.5988 12.599 9.8418 15.9999 9.8418C19.4008 9.8418 22.1578 12.5988 22.1578 15.9997Z"
+                                            fill="#D6D6D6" />
+                                    </svg>
+                                </span>
+                            @elseif($exports->export_status == 2)
+                                <span style="z-index: 99">
+                                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="15.6667" cy="15.667" r="13" fill="#09BD3C" />
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                            d="M22.1072 12.2929C22.4977 12.6834 22.4977 13.3166 22.1072 13.7071L15.4405 20.3738C15.05 20.7643 14.4168 20.7643 14.0263 20.3738L10.0263 16.3738C9.63577 15.9832 9.63577 15.3501 10.0263 14.9596C10.4168 14.569 11.05 14.569 11.4405 14.9596L14.7334 18.2525L20.693 12.2929C21.0835 11.9024 21.7166 11.9024 22.1072 12.2929Z"
+                                            fill="white" />
+                                    </svg>
+                                    <p class="text-center p-0 m-0">
+                                        <svg width="6" height="6" viewBox="0 0 6 6" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <circle cx="3" cy="3" r="3" fill="#09BD3C" />
+                                        </svg>
+                                    </p>
+                                </span>
+                            @endif
                         </div>
                         <div class="position-absolute" style="top: 32px; z-index: 0;left: 17px">
                             <svg height="4" viewBox="0 0 364 3" fill="none" style="width: 95%"
@@ -131,17 +153,20 @@
                 </div>
             </div>
 
-            <form action="{{ route('exports.store') }}" method="POST" id="export_form">
+            <form action="{{ route('exports.update', $exports->id) }}" method="POST" id="export_form">
                 @csrf
+                @method('PUT')
                 {{-- Form thông tin khách hàng --}}
                 <section id="data-container" class="container-fluid bg-white"></section>
                 <section class="container-fluid bg-white" id="form-edit">
-                    <div id="">
+                    <div id="form-guest">
                         <div class="border-bottom p-3 d-flex justify-content-between">
                             <b>Thông tin khách hàng</b>
-                            <button id="btn-customer" class="btn btn-primary">
-                                <img src="../../dist/img/icon/Union.png">
-                                <span>Lưu thông tin</span></button>
+                            @if ($exports->export_status == 1)
+                                <button id="btn-customer" class="btn btn-primary">
+                                    <img src="../../dist/img/icon/Union.png">
+                                    <span>Lưu thông tin</span></button>
+                            @endif
                         </div>
                         <div class="row p-3">
                             <div class="col-sm-6">
@@ -246,59 +271,66 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($productExport as $value)
-                                <tr id="dynamic-row-1">
+                            @foreach ($productExport as $index => $value_export)
+                                <tr id="dynamic-row-{{ $index }}">
                                     <td><input type="checkbox"></td>
                                     <td>1</td>
                                     <td>
                                         <select id="maProduct" class="p-1 pr-5" name="products_id[]">
-                                            <option value="{{ $products->id }}">{{ $products->products_code }}
-                                            </option>
+                                            @foreach ($product_code as $value_code)
+                                                <option value="{{ $value_code->id }}"
+                                                    @if ($value_export->products_id == $value_code->id) selected @endif>
+                                                    {{ $value_code->products_code }}</option>
+                                            @endforeach
                                         </select>
                                     </td>
                                     <td>
                                         <select class="child-select p-1 pr-5" name="product_id[]">
-                                            <option value="{{ $value->product_id }}">
-                                                {{ $value->product_name }}</option>
+                                            <option value="{{ $value_export->product_id }}">
+                                                {{ $value_export->product_name }}</option>
                                         </select>
                                     </td>
                                     <td>
                                         <input type="text" id="product_unit" class="product_unit"
-                                            value="{{ $productExport->product_unit }}" name="product_unit[]"
+                                            value="{{ $value_export->product_unit }}" name="product_unit[]"
                                             required="">
                                     </td>
                                     <td>
                                         <input type="number" id="product_qty" class="quantity-input"
-                                            value="{{ $productExport->product_qty }}" name="product_qty[]"
+                                            value="{{ $value_export->product_qty }}" name="product_qty[]"
                                             required="">
                                     </td>
                                     <td>
                                         <input type="number" id="product_price" name="product_price[]"
-                                            value="{{ $productExport->product_price }}" required="">
+                                            value="{{ $value_export->product_price }}" required="">
                                     </td>
                                     <td>
                                         <input type="text" id="" name="product_note[]"
-                                            value="{{ $productExport->product_note }}">
+                                            value="{{ $value_export->product_note }}">
                                     </td>
                                     <td>
                                         <input type="number" id="product_tax" class="product_tax"
                                             name="product_tax[]" required=""
-                                            value="{{ $productExport->product_tax }}">
+                                            value="{{ $value_export->product_tax }}">
                                     </td>
                                     <td><span class="px-5 total-amount">0</span></td>
                                     <td><img src="../../dist/img/icon/list.png"></td>
                                     <td><img src="../../dist/img/icon/Group.png"></td>
-                                    <td><img src="../../dist/img/icon/vector.png"></td>
+                                    <td @if ($exports->export_status == 1) class="delete-row-btn" @endif>
+                                        <img src="../../dist/img/icon/vector.png">
+                                    </td>
                                 </tr>
                             @endforeach
-                            <tr id="dynamic-fields"></tr>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td>
-                                    <span class="btn btn-secondary" id="add-field-btn">Thêm sản phẩm</span>
-                                </td>
-                            </tr>
+                            @if ($exports->export_status == 1)
+                                <tr id="dynamic-fields"></tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                        <span class="btn btn-secondary" id="add-field-btn">Thêm sản phẩm</span>
+                                    </td>
+                                </tr>
+                            @endif
                         </tbody>
                     </table>
                 </div>
@@ -324,17 +356,19 @@
                             </div>
                             <div class="d-flex justify-content-between mt-2">
                                 <span class="text-lg"><b>Tổng cộng:</b></span>
-                                <span><b id="spanValue" data-value="0">{{ number_format(0) }}</b></span>
-                                <input type="text" hidden name="totalValue" value="" id="inputValue">
+                                <span><b id="grand-total" data-value="0">{{ number_format(0) }}</b></span>
+                                <input type="text" hidden name="totalValue" value="" id="total">
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="text-center mt-4">
-                    <button type="submit" name="action" class="btn btn-primary mr-1"
-                        onclick="validateAndSubmit(event)">Lưu</button>
-                    <a href="{{ route('exports.index') }}"><span class="btn border-secondary ml-1">Hủy</span></a>
-                </div>
+                @if ($exports->export_status == 1)
+                    <div class="text-center mt-4">
+                        <button type="submit" name="action" class="btn btn-primary mr-1"
+                            onclick="validateAndSubmit(event)">Lưu</button>
+                        <a href="{{ route('exports.index') }}"><span class="btn border-secondary ml-1">Hủy</span></a>
+                    </div>
+                @endif
             </form>
         </div>
     </section>
@@ -411,7 +445,9 @@
             });
             const TenInput = $("<td>" +
                 "<select id='maProduct' class='p-1 pr-5' name='products_id[]'>" +
-                "<option value=''></option>" +
+                '@foreach ($product_code as $value)' +
+                "<option value='{{ $value->id }}'>{{ $value->products_code }}</option>" +
+                '@endforeach' +
                 "</select>"
             );
             const ProInput = $("<td>" +
@@ -439,6 +475,7 @@
             });
             deleteBtn.click(function() {
                 $(this).closest("tr").remove();
+                calculateGrandTotal();
             });
             newRow.append(checkbox, MaInput, TenInput, ProInput, dvtInput, slInput,
                 giaInput, ghichuInput, thueInput, thanhTienInput, sn, info, deleteBtn);
@@ -447,8 +484,16 @@
         });
         //xóa sản phẩm
         $(document).on("click", ".delete-row-btn", function() {
-            $(this).closest("tr").remove();
+            var grandTotal = parseFloat($('#grand-total').attr('data-value'));
+            var deletedAmount = parseFloat($(this).closest('tr').find('.total-amount').text());
+            $(this).closest('tr').remove();
+            var newGrandTotal = grandTotal - deletedAmount;
+            $('#grand-total').text(newGrandTotal.toFixed(2));
+            $('#grand-total').attr('data-value', newGrandTotal.toFixed(2));
+            calculateGrandTotal();
+            calculateTotals();
         });
+
         //hiện danh sách khách hàng khi click trường tìm kiếm
         $("#myUL").hide();
         $("#myInput").on("click", function() {
@@ -550,7 +595,6 @@
             });
         });
     });
-    //lấy tên sản phẩm từ mã sản phẩm
     //cập nhật thông tin khách hàng
     $(document).on('click', '#btn-customer', function(e) {
         e.preventDefault();
@@ -680,22 +724,15 @@
     $(document).on('blur', '.quantity-input', function() {
         var input = $(this);
         var quantity = input.val();
-        if (isNaN(quantity) || quantity <= 0) {
+        if (quantity <= 0) {
+            input.val('');
             alert('Số lượng không hợp lệ');
         }
-    });
-    //gán tổng số tiền vào input
-    document.addEventListener('DOMContentLoaded', function() {
-        var spanElement = document.getElementById('spanValue');
-        var inputElement = document.getElementById('inputValue');
-        var value = spanElement.getAttribute('data-value');
-        inputElement.value = value;
     });
     //tính thành tiền của sản phẩm
     $(document).ready(function() {
         calculateTotals();
     });
-
     $(document).on('input', '.quantity-input, [name^="product_price"], .product_tax', function() {
         calculateTotals();
     });
@@ -731,39 +768,19 @@
         // Hiển thị tổng totalAmount và totalTax
         $('#total-amount-sum').text(totalAmount);
         $('#product-tax').text(totalTax);
+
+        // Tính tổng thành tiền và thuế
+        calculateGrandTotal(totalAmount, totalTax);
     }
 
-    function calculateTotalAmount() {
-        var totalAmount = 0;
-        // Lặp qua từng hàng
-        $('tr').each(function() {
-            var rowTotal = parseFloat($(this).find('.total-amount').text());
-            // Kiểm tra xem rowTotal có phải là một số hợp lệ không
-            if (!isNaN(rowTotal)) {
-                // Cộng dồn vào tổng totalAmount
-                totalAmount += rowTotal;
-            }
-        });
-        // Hiển thị tổng total-amount-sum
-        $('#total-amount-sum').text(totalAmount);
-    }
+    function calculateGrandTotal(totalAmount, totalTax) {
+        var grandTotal = totalAmount + totalTax;
+        $('#grand-total').text(grandTotal.toFixed(2));
 
-    function calculateTotalTax() {
-        var totalTax = 0;
-        // Lặp qua từng hàng
-        $('tr').each(function() {
-            var rowTax = parseFloat($(this).find('.product_tax').text());
-            // Kiểm tra xem rowTax có phải là một số hợp lệ không
-            if (!isNaN(rowTax)) {
-                // Cộng dồn vào tổng totalTax
-                totalTax += rowTax;
-            }
-        });
-        // Hiển thị tổng totalTax
-        $('#product-tax').text(totalTax);
+        // Cập nhật giá trị data-value
+        $('#grand-total').attr('data-value', grandTotal.toFixed(2));
+        $('#total').val(grandTotal.toFixed(2));
     }
-
-    //tính tổng cộng
 
     //hàm kiểm tra submit
     function validateAndSubmit(event) {
