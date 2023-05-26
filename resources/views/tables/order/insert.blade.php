@@ -1,4 +1,6 @@
-<x-navbar></x-navbar>
+<x-navbar :title="$title"></x-navbar>
+@if(Auth::check() != null)
+>>>>>>> Stashed changes
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
@@ -110,7 +112,7 @@
 
       <section class="content">
         <div class="container-fluid" style="overflow-x: scroll;">
-          <table class="table table-bordered table-hover">
+          <table class="table table-hover">
             <thead>
               <tr>
                 <td><input type="checkbox"></td>

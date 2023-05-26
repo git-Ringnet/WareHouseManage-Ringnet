@@ -123,7 +123,8 @@ class AddProductController extends Controller
             ->whereIn('orders.id', $productIds)->get();
         $ordersNameAndProvide = Orders::leftjoin('provides', 'orders.provide_id', '=', 'provides.id')
             ->leftjoin('users', 'orders.users_id', '=', 'users.id')->get();
-        return view('tables.order.insertProduct', compact('orders', 'product','sortType', 'string', 'ordersNameAndProvide', 'provides'));
+        $title = 'Nhập hàng';
+        return view('tables.order.insertProduct', compact('orders', 'product','sortType', 'string', 'ordersNameAndProvide', 'provides','title'));
     }
 
     /**
@@ -137,7 +138,8 @@ class AddProductController extends Controller
         $products = Products::all();
         $lastId = DB::table('productorders')->latest('id')->value('id');
         $las = DB::table('productorders')->get()->last()->id;
-        return view('tables.order.insert', compact('provide', 'products', 'lastId'));
+        $title = 'Tạo đơn nhập hàng';
+        return view('tables.order.insert', compact('provide', 'products', 'lastId','title'));
     }
 
     /**
@@ -245,7 +247,10 @@ class AddProductController extends Controller
         $seri =  DB::table('serinumbers')
             ->join('productorders', 'serinumbers.product_id', '=', 'productorders.id')
             ->whereIn('productorders.id', $productIds)->get();
-        return view('tables.order.edit', compact('provide', 'order', 'product_order', 'provide_order', 'lastId', 'products', 'seri'));
+
+        $title = 'Chỉnh sửa đơn nhập hàng';
+        
+        return view('tables.order.edit', compact('provide', 'order', 'product_order', 'provide_order', 'lastId', 'products', 'seri','title'));
     }
 
     /**

@@ -19,7 +19,7 @@ class UsersTableSeeder extends Seeder
         DB::table('users')->insert([
             [
                 'name' => 'Admin',
-                'email' => 'admin@ringnet.com',
+                'email' => 'admin@ringnet.vn',
                 'password' => bcrypt('Ringnet@123'),
                 'roleid' => 1,
                 'created_at' => now(),
@@ -27,7 +27,7 @@ class UsersTableSeeder extends Seeder
             ],
             [
                 'name' => 'Manager',
-                'email' => 'manager@ringnet.com',
+                'email' => 'manager@ringnet.vn',
                 'password' => bcrypt('Ringnet@123'),
                 'roleid' => 2,
                 'created_at' => now(),
@@ -35,7 +35,7 @@ class UsersTableSeeder extends Seeder
             ],
             [
                 'name' => 'Sale',
-                'email' => 'sale@ringnet.com',
+                'email' => 'sale@ringnet.vn',
                 'password' => bcrypt('Ringnet@123'),
                 'roleid' => 3,
                 'created_at' => now(),

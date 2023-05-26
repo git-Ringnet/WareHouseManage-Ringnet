@@ -1,4 +1,4 @@
-<x-navbar></x-navbar>
+<x-navbar :title="$title"></x-navbar>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -48,7 +48,7 @@
                         </span>Tắt bộ lọc</a>
                     </div>
                     <div class="row d-flex justify-contents-center align-items-center mr-auto pt-2">
-                        <div class="icon-filter mr-3 ml-1">
+                        <div class="icon-filter mr-3 ml-3">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path
@@ -93,7 +93,7 @@
                         
                         // var_dump($_SESSION['labels']);
                         ?>
-                        <div class="filter-results d-flex">
+                        <div class="row filter-results d-flex">
                             <input id="delete-item-input" type="hidden" name="delete_item" value="">
                             @foreach ($string as $item)
                                 <span class="filter-group" style="order: @php
@@ -271,7 +271,7 @@
                     <div class="card">
                         <!-- /.card-header -->
                         <div class="card-body">
-                            <table id="example2" class="table table-bordered table-hover">
+                            <table id="example2" class="table table-hover">
                                 <thead>
                                     <tr>
                                         <input type="hidden" id="sortByInput" name="sort-by" value="id">
@@ -369,11 +369,12 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                            <div class="paginator mt-4 d-flex justify-content-end">
-                                {{ $guests->appends(request()->except('page'))->links() }}
-                            </div>
+                         
                         </div>
                         <!-- /.card-body -->
+                    </div>
+                    <div class="paginator mt-4 d-flex justify-content-end">
+                        {{ $guests->appends(request()->except('page'))->links() }}
                     </div>
                 </div>
                 <!-- /.col -->

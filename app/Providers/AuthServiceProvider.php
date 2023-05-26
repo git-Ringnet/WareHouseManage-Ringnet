@@ -27,16 +27,30 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
-
         Gate::define('isAdmin', function ($user) {
-            return $user->roleid === 1;
+            return $user->roleid == 1;
         });
         Gate::define('isSale', function ($user) {
-            return $user->roleid === 3;
+            return $user->roleid == 3;
         });
         Gate::define('isManager', function ($user) {
-            return $user->roleid === 2;
+            return $user->roleid == 2;
         });
-        //
+        //Quyền khách hàng
+        Gate::define('view-guests', function ($user) {
+            return $user->roleid == 1 || $user->roleid == 3;
+        });
+        //Quyền nhà cung cấp
+        Gate::define('view-provides', function ($user) {
+            return $user->roleid == 1 || $user->roleid == 2;
+        });
+        //Quyền đơn xuất
+        Gate::define('view-exports', function ($user) {
+            return $user->roleid == 1 || $user->roleid == 3;
+        });
+        //Quyền đơn nhập
+        Gate::define('view-orders', function ($user) {
+            return $user->roleid == 1 || $user->roleid == 2;
+        });
     }
 }

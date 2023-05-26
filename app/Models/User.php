@@ -109,7 +109,7 @@ class User extends Authenticatable
             });
         }
 
-        if(!empty($orderBy) && !empty($orderType)) {
+        if (!empty($orderBy) && !empty($orderType)) {
             $users = $users->orderBy($orderBy, $orderType);
         }
         // dd($users);
@@ -130,6 +130,11 @@ class User extends Authenticatable
     }
     public function getProvide()
     {
-        return $this->hasOne(Provides::class,'id','provide_id');
+        return $this->hasOne(Provides::class, 'id', 'provide_id');
     }
+    public function roles()
+    {
+        return $this->belongsToMany(Roles::class, 'user_role', 'user_id', 'role_id');
+    }
+
 }

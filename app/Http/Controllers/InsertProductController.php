@@ -15,7 +15,8 @@ class InsertProductController extends Controller
      */
     public function index()
     {
-        return view('tables.order.insertProduct');
+        $title = 'Sản phẩm';
+        return view('tables.order.insertProduct',compact('title'));
     }
 
     /**
@@ -25,9 +26,10 @@ class InsertProductController extends Controller
      */
     public function create()
     {
+        $title = 'Thêm sản phẩm';
         $provide = Provides::all();
         $products = Products::all();
-        return view('tables.order.insert',compact('provide','products'));
+        return view('tables.order.insert',compact('provide','products','title'));
     }
 
     /**

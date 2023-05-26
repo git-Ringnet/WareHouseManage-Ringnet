@@ -85,7 +85,9 @@ class ProvideController extends Controller
              $keywords = $request->keywords;
          }
          $provides = $this->provides->getAllProvides($filters,$name, $represent, $phonenumber, $email, $status, $keywords, $sortByArr);
-         return view('tables.provide.provides', compact('provides', 'sortType', 'string'));
+        $title = 'Nhà cung cấp';
+         return view('tables.provide.provides', compact('provides', 'sortType', 'string','title'));
+
     }
 
     /**
@@ -95,7 +97,8 @@ class ProvideController extends Controller
      */
     public function create()
     {
-        return view('tables.provide.addProvide');
+        $title = 'Tạo nhà cung cấp';
+        return view('tables.provide.addProvide',compact('title'));
     }
 
     /**
@@ -138,7 +141,8 @@ class ProvideController extends Controller
     public function edit($id)
     {
         $provides = Provides::find($id);
-        return view('tables.provide.editProvide', compact('provides'));
+        $title = 'Chỉnh sửa nhà cung cấp';
+        return view('tables.provide.editProvide', compact('provides','title'));
     }
 
     /**

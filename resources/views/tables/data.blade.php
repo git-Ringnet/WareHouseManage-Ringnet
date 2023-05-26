@@ -1,4 +1,4 @@
-<x-navbar></x-navbar>
+<x-navbar :title="$title"></x-navbar>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -36,7 +36,7 @@
                         </span>Tắt bộ lọc</a>
                     </div>
                     <div class="row d-flex justify-contents-center align-items-center mr-auto pt-2">
-                        <div class="icon-filter mr-3 ml-1">
+                        <div class="icon-filter mr-3 ml-3">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path
@@ -191,7 +191,7 @@
                             <h3 class="card-title">DataTable with minimal features & hover style</h3>
                         </div>
                         <div class="card-body">
-                            <table id="example2" class="table table-bordered table-hover">
+                            <table id="example2" class="table table-hover">
                                 <thead>
                                     <tr>
                                         <th scope="col" style="width:7%;">#</th>
@@ -236,15 +236,15 @@
                                             <td>{{ number_format($value->price_inventory) }}</td>
                                             <td class="p-0 text-center">
                                                 @if ($value->inventory == 0)
-                                                    <div class="py-1 rounded mt-3 pb-1 bg-danger">
+                                                    <div class="py-1 rounded pb-1 bg-danger">
                                                         <span class="text-light">Hết hàng</span>
                                                     </div>
                                                 @elseif($value->inventory < 5)
-                                                    <div class="py-1 rounded mt-3 pb-1 bg-warning">
+                                                    <div class="py-1 rounded pb-1 bg-warning">
                                                         <span class="text-light">Gần hết</span>
                                                     </div>
                                                 @else
-                                                    <div class="py-1 rounded mt-3 pb-1 bg-success">
+                                                    <div class="py-1 rounded pb-1 bg-success">
                                                         <span class="text-light">Sẵn hàng</span>
                                                     </div>
                                                 @endif
@@ -322,14 +322,14 @@
                                         <td>{{ number_format($value->total_sum) }}</td>
                                         <td class="p-0 text-center">
                                             @if ($value->qty_sum == 0)
-                                            <div class="py-1 rounded mt-3 pb-1 bg-danger">
+                                            <div class="py-1 rounded pb-1 bg-danger">
                                                 <span class="text-light">Hết hàng</span>
                                             </div>
-                                            @elseif($value->qty_sum < 5) <div class="py-1 rounded mt-3 pb-1 bg-warning">
+                                            @elseif($value->qty_sum < 5) <div class="py-1 rounded pb-1 bg-warning">
                                                 <span class="text-light">Gần hết</span>
                         </div>
                         @else
-                        <div class="py-1 rounded mt-3 pb-1 bg-success">
+                        <div class="py-1 rounded pb-1 bg-success">
                             <span class="text-light">Sẵn hàng</span>
                         </div>
                         @endif

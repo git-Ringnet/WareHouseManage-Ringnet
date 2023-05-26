@@ -1,4 +1,4 @@
-<x-navbar></x-navbar>
+<x-navbar :title="$title"></x-navbar>
 <div class="content-wrapper">
     <section class="content">
         <div class="container-fluid position-relative">
