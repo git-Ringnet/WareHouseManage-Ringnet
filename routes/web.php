@@ -36,15 +36,15 @@ Route::prefix('admin')->name('admin.')->middleware('permission:admin')->group(fu
 });
 
 //nha cung cap
-Route::resource('provides', provideController::class)->middleware('permission:Manager');
+Route::resource('provides', provideController::class)->middleware('permission:admin,manager');
 Route::get('/update-status', [provideController::class, 'updateStatus'])->name('update');
 
 //khach hang
-Route::resource('guests', GuestsController::class);
+Route::resource('guests', GuestsController::class)->middleware('permission:admin,sale');
 Route::get('/updatestatus', [GuestsController::class, 'updateStatus'])->name('updateKH');
 
 //xuat hang
-Route::resource('exports', ExportController::class);
+Route::resource('exports', ExportController::class)->middleware('permission:admin,sale');
 Route::get('/searchExport', [ExportController::class, 'searchExport'])->name('searchExport');
 //cap nhat thong tin khach hang
 Route::get('/customers', [ExportController::class, 'updateCustomer'])->name('updateCustomer');
@@ -67,7 +67,7 @@ Route::PUT('/updateProduct/{id}',[ProductsController::class,'updateProduct'])->n
 
 Route::get('/show_provide', [AddProductController::class, 'show_provide'])->name('show_provide');
 Route::get('/update_provide', [AddProductController::class, 'update_provide'])->name('update_provide');
-Route::resource('insertProduct', AddProductController::class);
+Route::resource('insertProduct', AddProductController::class)->middleware('permission:admin,manager');
 Route::POST('/addBillEdit', [AddProductController::class, 'addBillEdit'])->name('addBillEdit');
 Route::post('/insertProductP', [AddProductController::class, 'addBill'])->name('addBill');
 Route::put('/deleteBill/{id?}', [AddProductController::class, 'deleteBill'])->name('deleteBill');
