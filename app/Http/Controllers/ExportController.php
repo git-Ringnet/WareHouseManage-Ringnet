@@ -460,7 +460,7 @@ class ExportController extends Controller
     }
     public function nameProduct(Request $request)
     {
-        $data = $request->all();
+        $data = $request->all();                    
         $product = Product::where('products_id', $data['idProducts'])->get();
         return response()->json($product);
     }

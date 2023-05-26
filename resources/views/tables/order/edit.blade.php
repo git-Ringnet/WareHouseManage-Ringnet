@@ -1,6 +1,4 @@
 <x-navbar :title="$title"></x-navbar>
-@if(Auth::check() != null)
->>>>>>> Stashed changes
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
   <div class="container-fluid">
