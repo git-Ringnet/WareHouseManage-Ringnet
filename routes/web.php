@@ -64,7 +64,6 @@ Route::get('/deleteProducts', [ProductsController::class, 'deleteProducts'])->na
 Route::PUT('/editProduct/{id}',[ProductsController::class,'editProduct'])->name('editProduct');
 Route::PUT('/updateProduct/{id}',[ProductsController::class,'updateProduct'])->name('updateProduct');
 
-
 Route::get('/show_provide', [AddProductController::class, 'show_provide'])->name('show_provide');
 Route::get('/update_provide', [AddProductController::class, 'update_provide'])->name('update_provide');
 Route::resource('insertProduct', AddProductController::class)->middleware('permission:admin,manager');
