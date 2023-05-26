@@ -188,11 +188,11 @@
                 <td> <input required type="text" name="product_name[]" value="{{$pro->product_name}}"> </td>
                 <td> <input required type="text" name="product_category[]" value=" {{$pro->product_category}}"> </td>
                 <td> <input required type="text" name="product_unit[]" value="  {{$pro->product_unit}}"> </td>
-                <td> <input required type="text" name="product_trademark[]" value=" {{$pro->product_trademark}}"> </td>
                 <td> <input required type="number" name="product_qty[]" value="{{$pro->product_qty}}" class="quantity-input"> </td>
                 <td> <input required type="number" name="product_price[]" value="{{$pro->product_price}}"> </td>
                 <td> <input required type="number" name="product_tax[]" value="{{$pro->product_tax}}" class="product_tax"></td>
                 <td> <input readonly type="text" name="product_total[]" value="{{$pro->product_total}}"></td>
+                <td> <input required type="text" name="product_trademark[]" value=" {{$pro->product_trademark}}"> </td>
                 <td>
                   <button name="btn_add_SN[]" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal{{$stt}}" style="background: transparent; border:none;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
@@ -513,11 +513,11 @@
       '<td><input required type="text" name="product_name[]"></td>' +
       '<td><input required type="text" name="product_category[]"></td>' +
       '<td><input required type="text" name="product_unit[]"></td>' +
-      '<td><input required type="text" name="product_trademark[]"></td>' +
       '<td><input required type="text" name="product_qty[]" class="quantity-input"></td>' +
       '<td><input required type="text" name="product_price[]"></td>' +
       '<td><input required type="text" name="product_tax[]" class="product_tax"></td>' +
       '<td><input readonly type="text" name="product_total[]"></td>' +
+      '<td><input required type="text" name="product_trademark[]"></td>' +
       '<td>' +
       '<button name="btn_add_SN[]" type="button" data-toggle="modal" data-target="#exampleModal' + rowCount + '" style="background: transparent; border:none;">' +
       '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">' +
