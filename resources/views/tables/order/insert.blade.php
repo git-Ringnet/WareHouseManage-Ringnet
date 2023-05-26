@@ -164,6 +164,7 @@
           </div>
         </div>
         <button style="bottom: 0;" type="submit" name="action" class="btn btn-primary position-sticky" value="AddProduct">Lưu</button>
+        <a href="{{route('insertProduct.index')}}" class="btn btn-light position-sticky">Hủy</a>
     </form>
   </div>
   </section>
@@ -178,7 +179,6 @@
       $(this).find('th:first').text(index + 1);
     });
   }
-
 
   document.getElementById('import_file').addEventListener('change', function(event) {
     updateRowNumbers();
@@ -209,7 +209,7 @@
           '<td><input required type="text" name="product_name[]" value="' + titlesValue + '"></td>' +
           '<td><input required type="text" name="product_category[]"></td>' +
           '<td><input required type="text" name="product_unit[]"></td>' +
-          '<td><input required type="number" name="product_qty[]" class="quantity-input" value="'+numberssValue+'"></td>' +
+          '<td><input required type="number" name="product_qty[]" class="quantity-input" value="' + numberssValue + '"></td>' +
           '<td><input required type="number" name="product_price[]"></td>' +
           '<td><input required type="number" name="product_tax[]" class="product_tax"></td>' +
           '<td><input readonly type="text" name="product_total[]"></td>' +
@@ -728,7 +728,7 @@
   $(document).on('click', '#form_quick', function(e) {
     e.preventDefault();
   });
-  // $(document).on('click', '#import_file', function(e) {
+  // $(document).on('click', '#Cancel', function(e) {
   //   e.preventDefault();
   // })
 </script>
