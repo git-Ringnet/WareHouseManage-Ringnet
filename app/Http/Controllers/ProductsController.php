@@ -176,6 +176,7 @@ class ProductsController extends Controller
                 DB::raw('SUM(product.product_qty * product.product_price) as total')
             )
             ->get();
+
         return view('tables.products.data', compact('products', 'categories', 'product', 'string', 'sortType', 'trademarks'));
     }
 
@@ -371,19 +372,29 @@ class ProductsController extends Controller
     {
         $pro = Product::findOrFail($id);
         $select = Products::all();
-        return view('tables.products.editproduct',compact('pro','select'));
+        return view('tables.products.editproduct', compact('pro', 'select'));
     }
     public function updateProduct(Request $request, $id)
     {
-        $pro = Product::find($id);
-        $pro->products_id = $request->product_code;
-        $pro->product_name = $request->product_name;
-        $pro->product_category = $request->product_type;
-        $pro->product_unit = $request->product_unit;
-        $pro->product_trademark = $request->product_trademark;
-        $pro->product_price = $request->product_price;
-        $pro->tax = $request->product_tax;
-        $pro->save();
+        $product = Product::find($id);
+        $product->product_name = $request->product_name;
+        $product->product_category = $request->product_type;
+        $product->product_unit = $request->product_unit;
+        $product->product_trademark = $request->product_trademark;
+        $product->product_price = $request->product_price;
+        $product->tax = $request->product_tax;
+        $product->total = ($request->product_price * $product->product_qty);
+        $product->save();
+      
+        // Recalculate average price and inventory
+        $updatePrice = Product::where('products_id', $product->products_id)->get();
+        $relatedProduct = Products::findOrFail($product->products_id);
+        $relatedProduct->price_inventory = 0;
+        foreach ($updatePrice as $up) {
+            $relatedProduct->price_inventory += $up->total;
+            $relatedProduct->price_avg = ($relatedProduct->price_inventory / $relatedProduct->inventory);
+        }
+        $relatedProduct->save();
         return redirect()->route('data.index');
     }
 }

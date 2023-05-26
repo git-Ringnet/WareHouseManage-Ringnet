@@ -23,6 +23,8 @@ class ProductSeeder extends Seeder
                 'product_qty' => 3,
                 'product_price' => 4000000,
                 'product_unit' => 'Cái',
+                'tax' => 0,
+                'total' => 13500000
             ],
             [
                 'id' => 2,
@@ -33,6 +35,8 @@ class ProductSeeder extends Seeder
                 'product_qty' => 4,
                 'product_price' => 3750000,
                 'product_unit' => 'Cái',
+                'tax' => 0,
+                'total' => 15000000
             ],
             [
                 'id' => 3,
@@ -43,6 +47,8 @@ class ProductSeeder extends Seeder
                 'product_qty' => 8,
                 'product_price' => 3500000,
                 'product_unit' => 'Cái',
+                'tax' => 8,
+                'total' => 28000000
             ],
             [
                 'id' => 4,
@@ -53,6 +59,8 @@ class ProductSeeder extends Seeder
                 'product_qty' => 3,
                 'product_price' => 4000000,
                 'product_unit' => 'Cái',
+                'tax' => 0,
+                'total' => 12000000
             ],
             [
                 'id' => 5,
@@ -63,6 +71,8 @@ class ProductSeeder extends Seeder
                 'product_qty' => 3,
                 'product_price' => 4000000,
                 'product_unit' => 'Cái',
+                'tax' => 10,
+                'total' => 12000000
             ],
             [
                 'id' => 6,
@@ -73,6 +83,9 @@ class ProductSeeder extends Seeder
                 'product_qty' => 3,
                 'product_price' => 4000000,
                 'product_unit' => 'Cái',
+                'tax' => 0,
+                'total' => 12000000
+
             ],
             [
                 'id' => 7,
@@ -83,6 +96,8 @@ class ProductSeeder extends Seeder
                 'product_qty' => 3,
                 'product_price' => 4000000,
                 'product_unit' => 'Cái',
+                'tax' => 0,
+                'total' => 12000000
             ],
             [
                 'id' => 8,
@@ -93,6 +108,8 @@ class ProductSeeder extends Seeder
                 'product_qty' => 3,
                 'product_price' => 4000000,
                 'product_unit' => 'Cái',
+                'tax'=> 10,
+                'total'=> 12000000
             ],
             [
                 'id' => 9,
@@ -103,6 +120,8 @@ class ProductSeeder extends Seeder
                 'product_qty' => 3,
                 'product_price' => 4000000,
                 'product_unit' => 'Cái',
+                'tax' => 8,
+                'total' => 12000000
             ],
             [
                 'id' => 10,
@@ -113,6 +132,8 @@ class ProductSeeder extends Seeder
                 'product_qty' => 3,
                 'product_price' => 4000000,
                 'product_unit' => 'Cái',
+                'tax'=> 0,
+                'total' => 12000000
             ],
             [
                 'id' => 11,
@@ -123,6 +144,8 @@ class ProductSeeder extends Seeder
                 'product_qty' => 3,
                 'product_price' => 4000000,
                 'product_unit' => 'Cái',
+                'tax'=> 10,
+                'total' => 12000000
             ],
             [
                 'id' => 12,
@@ -133,6 +156,8 @@ class ProductSeeder extends Seeder
                 'product_qty' => 3,
                 'product_price' => 4000000,
                 'product_unit' => 'Cái',
+                'tax' => 10,
+                'total' => 12000000
             ],
             [
                 'id' => 13,
@@ -143,6 +168,8 @@ class ProductSeeder extends Seeder
                 'product_qty' => 3,
                 'product_price' => 4000000,
                 'product_unit' => 'Cái',
+                'tax' => 0,
+                'total' => 12000000
             ],
             [
                 'id' => 14,
@@ -153,6 +180,8 @@ class ProductSeeder extends Seeder
                 'product_qty' => 3,
                 'product_price' => 4000000,
                 'product_unit' => 'Cái',
+                'tax' => 10,
+                'total' => 12000000
             ],
             [
                 'id' => 15,
@@ -163,6 +192,8 @@ class ProductSeeder extends Seeder
                 'product_qty' => 3,
                 'product_price' => 4000000,
                 'product_unit' => 'Cái',
+                'tax' => 10,
+                'total' => 12000000
             ],
         ]);
     }

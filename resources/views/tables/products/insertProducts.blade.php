@@ -42,21 +42,21 @@
                       <div class="col-md-3">
                         <div class="product_name">
                           <h5>Tên sản phẩm</h5>
-                          <input required type="text" name="products_name" class="w-100 p-1">
+                          <input required type="text" name="products_name" class="w-100 p-1 form-control">
                         </div>
                         <div class="product_code">
                           <h5>Mã sản phẩm</h5>
-                          <input required type="text" name="products_code" class="w-100 p-1">
+                          <input required type="text" name="products_code" class="w-100 p-1 form-control">
                         </div>
                         <div class="product_id">
                           <h5>ID</h5>
-                          <input type="text" name="products_id" readonly class="w-100 p-1">
+                          <input type="text" name="products_id" readonly class="w-100 p-1 form-control">
                         </div>
                       </div>
                       <div class="col-md-3">
                         <div class="product_category">
                           <h5>Danh mục</h5>
-                          <select name="product_category" id="" class="w-100" style="height: 35.56px;">
+                          <select name="product_category" id="" class="w-100 form-control" style="height: 35.56px;">
                             @foreach($cate as $va)
                             <option value="{{$va->id}}">{{$va->category_name}}</option>
                             @endforeach
@@ -64,16 +64,16 @@
                         </div>
                         <div class="product_trademark">
                           <h5>Thương hiệu</h5>
-                          <input required type="text" name="products_trademark" class="w-100 p-1">
+                          <input required type="text" name="products_trademark" class="w-100 p-1 form-control">
                         </div>
                         <div class="product_unit">
                           <h5>Đơn vị</h5>
-                          <input required type="text" name="products_unit" class="w-100 p-1">
+                          <input required type="text" name="products_unit" class="w-100 p-1 form-control">
                         </div>
                       </div>
                       <div class="col-md-4">
                         <h5>Mô tả</h5>
-                        <textarea name="products_description" id="" cols="30" rows="7" class="w-100"></textarea>
+                        <textarea name="products_description" id="" cols="30" rows="7" class="w-100 form-control"></textarea>
                       </div>
                       <div class="col-md-2"></div>
                     </div>

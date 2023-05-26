@@ -38,11 +38,12 @@
                 <div class="col-sm-6">
                   <div class="form-group">
                     <label for="congty">Mã sản phẩm:</label>
-                    <select class="form-control" name="product_code" id="product_code">
+                    <input type="text" readonly class="form-control" value="{{$pro->getNameProducts->products_code}}">
+                    <!-- <select class="form-control" name="product_code" id="product_code">
                       @foreach($select as $va)
                       <option value="{{$va->id}}" {{ ( $va->id == $pro->products_id) ? 'selected' : '' }}>{{$va->products_code}}</option>
                       @endforeach
-                    </select>
+                    </select> -->
                   </div>
                   <div class="form-group">
                     <label>Tên sản phẩm</label>
