@@ -376,7 +376,8 @@ class ProductsController extends Controller
     {
         $pro = Product::findOrFail($id);
         $select = Products::all();
-        return view('tables.products.editproduct', compact('pro', 'select'));
+        $title = 'Chỉnh sửa sản phẩm';
+        return view('tables.products.editproduct', compact('pro', 'select','title'));
     }
     public function updateProduct(Request $request, $id)
     {
@@ -399,6 +400,7 @@ class ProductsController extends Controller
             $relatedProduct->price_avg = ($relatedProduct->price_inventory / $relatedProduct->inventory);
         }
         $relatedProduct->save();
+      
         return redirect()->route('data.index');
     }
 }
