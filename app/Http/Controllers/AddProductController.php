@@ -118,12 +118,16 @@ class AddProductController extends Controller
             array_push($productIds, $value->id);
         }
         $orders = $this->orders->getAllOrders($filters, $status, $provide_namearr, $name, $date, $keywords, $sortBy, $sortType);
-        $product = DB::table('productorders')
+        // $product = DB::table('productorders')
+        //     ->join('orders', 'productorders.order_id', '=', 'orders.id')
+        //     ->whereIn('orders.id', $productIds)->get();
+        $product = ProductOrders::with('getCodeProduct')
             ->join('orders', 'productorders.order_id', '=', 'orders.id')
-            ->whereIn('orders.id', $productIds)->get();
+            ->whereIn('orders.id', $productIds)
+            ->get();
         $ordersNameAndProvide = Orders::leftjoin('provides', 'orders.provide_id', '=', 'provides.id')
             ->leftjoin('users', 'orders.users_id', '=', 'users.id')->get();
-        return view('tables.order.insertProduct', compact('orders', 'product','sortType', 'string', 'ordersNameAndProvide', 'provides'));
+        return view('tables.order.insertProduct', compact('orders', 'product', 'sortType', 'string', 'ordersNameAndProvide', 'provides'));
     }
 
     /**
@@ -341,16 +345,18 @@ class AddProductController extends Controller
     public function addBill(Request $request)
     {
         $new_provide = new Provides();
-        if($request->provide_name_new != null && $request->provide_address_new != null && $request->provide_code_new != null &&
-        $request->provide_represent_new != null && $request->provide_email_new != null && $request->provide_phone_new != null){
-           $new_provide->provide_name = $request->provide_name_new;
-           $new_provide->provide_represent = $request->provide_represent_new;
-           $new_provide->provide_phone = $request->provide_phone_new;
-           $new_provide->provide_email = $request->provide_email_new;
-           $new_provide->provide_status = 1;
-           $new_provide->provide_address = $request->provide_address_new;
-           $new_provide->provide_code = $request->provide_code_new;
-           $new_provide->save();
+        if (
+            $request->provide_name_new != null && $request->provide_address_new != null && $request->provide_code_new != null &&
+            $request->provide_represent_new != null && $request->provide_email_new != null && $request->provide_phone_new != null
+        ) {
+            $new_provide->provide_name = $request->provide_name_new;
+            $new_provide->provide_represent = $request->provide_represent_new;
+            $new_provide->provide_phone = $request->provide_phone_new;
+            $new_provide->provide_email = $request->provide_email_new;
+            $new_provide->provide_status = 1;
+            $new_provide->provide_address = $request->provide_address_new;
+            $new_provide->provide_code = $request->provide_code_new;
+            $new_provide->save();
         }
         // Thêm sản phẩm vào bảng Orders
         $order = new Orders();
@@ -629,11 +635,11 @@ class AddProductController extends Controller
     // Xóa đơn hàng AJAX
     public function deleteOrder(Request $request)
     {
-        if(isset($request->list_id)){
+        if (isset($request->list_id)) {
             $list = $request->list_id;
-            Orders::whereIn('id',$list)->delete();
-            return response()->json(['success' => true,'msg'=>'Delete Success', 'ids' => $list] );
+            Orders::whereIn('id', $list)->delete();
+            return response()->json(['success' => true, 'msg' => 'Delete Success', 'ids' => $list]);
         }
-        return response()->json(['success' => false,'msg'=>'Not fount'] );
+        return response()->json(['success' => false, 'msg' => 'Not fount']);
     }
 }

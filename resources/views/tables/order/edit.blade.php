@@ -23,7 +23,7 @@
                 <div class="mt-3">
                   @if(Auth::user()->id == $order->users_id)
                   <button class="btn btn-danger text-white" id="add_bill">Duyệt đơn</button>
-                  <a href="#" class="btn btn-secondary ml-4">Hủy đơn</a>
+                  <a href="#" class="btn btn-secondary ml-4" id="deleteBill">Hủy đơn</a>
                   <a href="#" class="btn border border-secondary ml-4">In đơn hàng</a>
                   @endif
                 </div>

@@ -176,6 +176,7 @@ class ProductsController extends Controller
                 DB::raw('SUM(product.product_qty * product.product_price) as total')
             )
             ->get();
+
         return view('tables.products.data', compact('products', 'categories', 'product', 'string', 'sortType', 'trademarks'));
     }
 
@@ -376,7 +377,7 @@ class ProductsController extends Controller
     public function updateProduct(Request $request, $id)
     {
         $pro = Product::find($id);
-        $pro->products_id = $request->product_code;
+        // $pro->products_id = $request->product_code;
         $pro->product_name = $request->product_name;
         $pro->product_category = $request->product_type;
         $pro->product_unit = $request->product_unit;
