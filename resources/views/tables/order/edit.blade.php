@@ -260,6 +260,7 @@
         <a href="javascript:;" class="btn btn-info addRow">Thêm sản phẩm</a>
         <a href="javascript:;" class="btn btn-primary addBillEdit">Lưu</a>
         @endif
+        <a href="{{route('insertProduct.index')}}" class="btn btn-light">Hủy</a>
       </section>
       <div class="container">
         <div class="row position-relative">
