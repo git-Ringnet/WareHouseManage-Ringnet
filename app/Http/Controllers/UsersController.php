@@ -91,15 +91,16 @@ class UsersController extends Controller
         }
 
         $usersList = $this->users->getAllUsers($filters,$name, $phonenumber, $email, $status, $roles, $keywords, $sortBy, $sortType);
-        return view('admin/userslist', compact('title', 'usersList', 'sortType', 'allRoles', 'string'));
+        $title = 'Nhân viên';
+        return view('admin.userslist', compact('title', 'usersList', 'sortType', 'allRoles', 'string','title'));
     }
 
 
     public function add()
     {
         $roles = new Roles;
-
-        return view('admin/adduser')->with('roles', $roles->getAll());
+        $title = 'Thêm nhân viên';
+        return view('admin/adduser',compact('title'))->with('roles', $roles->getAll());
     }
     public function addUser(UserRequest $request)
     {
@@ -125,7 +126,8 @@ class UsersController extends Controller
         $userDetail = User::find($id);
         $roles = new Roles;
         // dd($id);
-        return view('admin/edituser', ['useredit' => $user], compact('userDetail'))->with('roles', $roles->getAll());
+        $title = 'Chỉnh sửa sản phẩm';
+        return view('admin/edituser', ['useredit' => $user], compact('userDetail','title'))->with('roles', $roles->getAll());
     }
     public function editUser(UserRequest $request)
     {

@@ -1,4 +1,4 @@
-<x-navbar></x-navbar>
+<x-navbar :title="$title"></x-navbar>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
@@ -471,7 +471,7 @@
             </div>
             <!-- ./card-header -->
             <div class="card-body">
-              <table class="table table-bordered table-hover">
+              <table class="table table-hover">
                 <thead>
                   <tr>
                     <th>#</th>

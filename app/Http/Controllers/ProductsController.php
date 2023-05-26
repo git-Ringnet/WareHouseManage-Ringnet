@@ -108,7 +108,7 @@ class ProductsController extends Controller
 
         //Status
         if (!empty($request->status)) {
-            $statusValues = [0 => 'Hết hàng', 1 => 'Gần hết', 2 => 'Sẵn hàng'];
+            $statusValues = ['0' => 'Hết hàng', '1' => 'Gần hết', '2' => 'Sẵn hàng'];
             $status = $request->input('status', []);
             $statusLabels = array_map(function ($value) use ($statusValues) {
                 return $statusValues[$value];
@@ -177,7 +177,8 @@ class ProductsController extends Controller
             )
             ->get();
 
-        return view('tables.products.data', compact('products', 'categories', 'product', 'string', 'sortType', 'trademarks'));
+            $title = 'Sản phẩm';
+        return view('tables.products.data', compact('products', 'categories', 'product', 'string', 'sortType', 'trademarks','title'));
     }
 
     /**
@@ -248,7 +249,8 @@ class ProductsController extends Controller
     {
         $products = Products::findOrFail($id);
         $provide = Provides::all();
-        return view('tables.products.test', compact('products', 'provide'));
+        $title = 'Sản phẩm';
+        return view('tables.products.test', compact('products', 'provide','title'));
     }
 
     /**
@@ -261,7 +263,8 @@ class ProductsController extends Controller
     {
         $products = Products::findOrFail($id);
         $cate = Category::all();
-        return view('tables.products.edit_products', compact('products', 'cate'));
+        $title = 'Chỉnh sửa sản phẩm';
+        return view('tables.products.edit_products', compact('products', 'cate','title'));
     }
 
     /**
@@ -322,7 +325,8 @@ class ProductsController extends Controller
     public function insertProducts()
     {
         $cate = Category::all();
-        return view('tables.products.insertProducts', compact('cate'));
+        $title = 'Thêm sản phẩm';
+        return view('tables.products.insertProducts', compact('cate','title'));
     }
     public function storeProducts(Request $request)
     {

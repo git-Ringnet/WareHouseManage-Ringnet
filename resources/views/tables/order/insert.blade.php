@@ -1,4 +1,6 @@
-<x-navbar></x-navbar>
+<x-navbar :title="$title"></x-navbar>
+@if(Auth::check() != null)
+
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
@@ -27,7 +29,7 @@
             </div>
             <div class="mt-3">
               <div class="input-group mb-1 position-relative">
-                <input type="text" class="form-control" placeholder="Nhập thông tin nhà cung cấp" aria-label="Username" aria-describedby="basic-addon1" id="myInput" autocomplete="off">
+                <input type="text" class="form-control" placeholder="Nhập thông tin khách hàng" aria-label="Username" aria-describedby="basic-addon1" id="myInput" autocomplete="off">
                 <div class="position-absolute" style="right: 5px;top: 17%;">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd" clip-rule="evenodd" d="M15.1835 7.36853C13.0254 5.21049 9.52656 5.21049 7.36853 7.36853C5.21049 9.52656 5.21049 13.0254 7.36853 15.1835C9.52656 17.3415 13.0254 17.3415 15.1835 15.1835C17.3415 13.0254 17.3415 9.52656 15.1835 7.36853ZM16.2441 6.30787C13.5003 3.56404 9.05169 3.56404 6.30787 6.30787C3.56404 9.05169 3.56404 13.5003 6.30787 16.2441C9.05169 18.988 13.5003 18.988 16.2441 16.2441C18.988 13.5003 18.988 9.05169 16.2441 6.30787Z" fill="#555555" />
@@ -110,7 +112,9 @@
 
       <section class="content">
         <div class="container-fluid" style="overflow-x: scroll;">
-          <table class="table table-bordered table-hover" id="inputContainer">
+
+          <table class="table table-hover" id="inputContainer">
+
             <thead>
               <tr>
                 <td><input type="checkbox"></td>

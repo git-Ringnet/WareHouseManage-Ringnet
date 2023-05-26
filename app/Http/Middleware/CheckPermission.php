@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Roles;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,22 +17,16 @@ class CheckPermission
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closure $next, string $role)
+    public function handle(Request $request, Closure $next, ...$roles)
     {
         $user = Auth::user();
         if (!empty($user)) {
-            if ($role == 'admin' && $user->roleid != 1) {
-                return redirect()->back();
-                abort(code: 403);
-            }
-            if ($role == 'sale' && $user->roleid != 2) {
-                abort(code: 403);
-            }
-            if ($role == 'manager' && $user->roleid != 3) {
-                abort(code: 403);
+            $userRole = Roles::where('id', $user->roleid)->value('shortname');
+            // dd($userRole);
+            if (!in_array($userRole, $roles)) {
+                abort(403);
             }
         }
-
         return $next($request);
     }
 }

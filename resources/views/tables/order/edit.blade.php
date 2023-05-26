@@ -1,4 +1,6 @@
-<x-navbar></x-navbar>
+<x-navbar :title="$title"></x-navbar>
+@if(Auth::check() != null)
+>>>>>>> Stashed changes
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
   <div class="container-fluid">
@@ -163,7 +165,7 @@
       <!-- Main content -->
       <section class="content">
         <div style="overflow-x: scroll;" class="container-fluid">
-          <table class="table table-bordered table-hover">
+          <table class="table table-hover">
             <thead>
               <tr>
                 <td>Mã đơn</td>

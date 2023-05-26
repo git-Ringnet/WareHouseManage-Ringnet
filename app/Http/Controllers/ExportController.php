@@ -102,7 +102,8 @@ class ExportController extends Controller
         $exports = Exports::leftjoin('guests', 'exports.guest_id', '=', 'guests.id')
             ->leftjoin('users', 'exports.user_id', '=', 'users.id')->get();
         $export = $this->exports->getAllExports($filters, $status, $name, $date, $keywords, $sortBy, $sortType);
-        return view('tables.export.exports', compact('export', 'exports', 'sortType', 'string'));
+        $title = 'Xuất hàng';
+        return view('tables.export.exports', compact('export', 'exports', 'sortType', 'string','title'));
     }
 
     /**
@@ -116,7 +117,8 @@ class ExportController extends Controller
         $customer = Guests::all();
         $guest_id = DB::table('guests')->select('id')->orderBy('id', 'DESC')->first();
         (int)$guest_id->id += 1;
-        return view('tables.export.addExport', compact('customer', 'products', 'guest_id'));
+        $title = 'Tạo đơn xuất hàng';
+        return view('tables.export.addExport', compact('customer', 'products', 'guest_id','title'));
     }
 
     /**
@@ -232,12 +234,12 @@ class ExportController extends Controller
         $exports = Exports::find($id);
         $guest = Guests::find($exports->guest_id);
         $customer = Guests::all();
-        $productExport = productExports::join('exports', 'product_exports.export_id', '=', 'exports.id')
-            ->join('products', 'products.id', 'product_exports.products_id')
-            ->where('export_id', $id)
-            ->get();
-        $product_code = Products::all();
-        return view('tables.export.editExport', compact('exports', 'guest', 'productExport', 'customer', 'product_code'));
+
+        $user = User::find($exports->user_id);
+        $productExport = productExports::find($exports->id);
+        $products = Products::find($productExport->products_id);
+        $title = 'Chỉnh sửa đôn xuất hàng';
+        return view('tables.export.editExport', compact('exports','guest','user','productExport','products','customer','title'));
     }
 
     /**

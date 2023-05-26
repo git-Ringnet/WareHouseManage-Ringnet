@@ -91,7 +91,8 @@ class GuestsController extends Controller
             $keywords = $request->keywords;
         }
         $guests = $this->guests->getAllguests($filters, $name, $represent, $phonenumber, $email, $status, $keywords, $sortByArr);
-        return view('tables.guest.guests', compact('guests', 'sortType', 'string'));
+        $title = 'Khách hàng';
+        return view('tables.guest.guests', compact('guests', 'sortType', 'string','title'));
     }
 
     /**
@@ -101,7 +102,8 @@ class GuestsController extends Controller
      */
     public function create()
     {
-        return view('tables.guest.addGuest');
+        $title = 'Thêm khách hàng';
+        return view('tables.guest.addGuest',compact('title'));
     }
 
     /**
@@ -141,8 +143,9 @@ class GuestsController extends Controller
      */
     public function edit($id)
     {
+        $title = 'Chỉnh sửa khách hàng';
         $guests = Guests::find($id);
-        return view('tables.guest.editGuest', compact('guests'));
+        return view('tables.guest.editGuest', compact('guests','title'));
     }
 
     /**
