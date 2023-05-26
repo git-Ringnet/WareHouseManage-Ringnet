@@ -36,16 +36,15 @@ Route::prefix('admin')->name('admin.')->middleware('permission:admin')->group(fu
 });
 
 //nha cung cap
-Route::resource('provides', ProvideController::class)->middleware('permission:admin,manager');
-
+Route::resource('provides', provideController::class)->middleware('permission:Manager');
 Route::get('/update-status', [provideController::class, 'updateStatus'])->name('update');
 
 //khach hang
-Route::resource('guests', GuestsController::class)->middleware('permission:admin,sale');
+Route::resource('guests', GuestsController::class);
 Route::get('/updatestatus', [GuestsController::class, 'updateStatus'])->name('updateKH');
 
 //xuat hang
-Route::resource('exports', ExportController::class)->middleware('permission:admin,sale');
+Route::resource('exports', ExportController::class);
 Route::get('/searchExport', [ExportController::class, 'searchExport'])->name('searchExport');
 //cap nhat thong tin khach hang
 Route::get('/customers', [ExportController::class, 'updateCustomer'])->name('updateCustomer');
@@ -56,23 +55,23 @@ Route::get('nameProducts', [ExportController::class, 'nameProduct'])->name('name
 //lấy thông tin sản phẩm từ tên sản phẩm
 Route::get('getProduct', [ExportController::class, 'getProduct'])->name('getProduct');
 
-
-//
-Route::resource('data',ProductsController::class);
-Route::get('/insertProducts',[ProductsController::class,'insertProducts'])->middleware('permission:admin,manager')->name('insertProducts');
-Route::POST('/storeProducts',[ProductsController::class,'storeProducts'])->name('storeProducts');
-Route::get('/data_edit',[ProductsController::class,'edit_ajax'])->name('ajax');
-Route::get('/data_show',[ProductsController::class,'show_ajax'])->name('show_ajax');
-Route::get('/show_provide',[AddProductController::class,'show_provide'])->name('show_provide');
-Route::get('/update_provide',[AddProductController::class,'update_provide'])->name('update_provide');
-Route::resource('insertProduct',AddProductController::class);
-Route::POST('/addBillEdit',[AddProductController::class,'addBillEdit'])->name('addBillEdit');
-Route::post('/insertProductP',[AddProductController::class,'addBill'])->name('addBill');
-Route::put('/deleteBill/{id?}',[AddProductController::class,'deleteBill'])->name('deleteBill');
+Route::resource('data', ProductsController::class);
+Route::get('/insertProducts', [ProductsController::class, 'insertProducts'])->name('insertProducts');
+Route::POST('/storeProducts', [ProductsController::class, 'storeProducts'])->name('storeProducts');
+Route::get('/data_edit', [ProductsController::class, 'edit_ajax'])->name('ajax');
+Route::get('/data_show', [ProductsController::class, 'show_ajax'])->name('show_ajax');
 Route::get('/deleteProducts', [ProductsController::class, 'deleteProducts'])->name('deleteProducts');
 Route::PUT('/editProduct/{id}',[ProductsController::class,'editProduct'])->name('editProduct');
 Route::PUT('/updateProduct/{id}',[ProductsController::class,'updateProduct'])->name('updateProduct');
 
+
+Route::get('/show_provide', [AddProductController::class, 'show_provide'])->name('show_provide');
+Route::get('/update_provide', [AddProductController::class, 'update_provide'])->name('update_provide');
+Route::resource('insertProduct', AddProductController::class);
+Route::POST('/addBillEdit', [AddProductController::class, 'addBillEdit'])->name('addBillEdit');
+Route::post('/insertProductP', [AddProductController::class, 'addBill'])->name('addBill');
+Route::put('/deleteBill/{id?}', [AddProductController::class, 'deleteBill'])->name('deleteBill');
+Route::get('/deleteOrder', [AddProductController::class, 'deleteOrder'])->name('deleteOrder');
 Route::get('/simple', function () {
     return view('tables.simple');
 });
