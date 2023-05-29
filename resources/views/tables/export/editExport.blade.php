@@ -1,4 +1,4 @@
-<x-navbar :title="$title"></x-navbar>
+<x-navbar></x-navbar>
 <div class="content-wrapper">
     <section class="content">
         <div class="container-fluid position-relative">
@@ -271,10 +271,11 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <?php $stt = 1; ?>
                             @foreach ($productExport as $index => $value_export)
                                 <tr id="dynamic-row-{{ $index }}">
                                     <td><input type="checkbox"></td>
-                                    <td>1</td>
+                                    <td><?php echo $stt++; ?></td>
                                     <td>
                                         <select id="maProduct" class="p-1 pr-5" name="products_id[]">
                                             @foreach ($product_code as $value_code)
@@ -434,7 +435,6 @@
     //add sản phẩm
     $(document).ready(function() {
         let fieldCounter = 1;
-
         $("#add-field-btn").click(function() {
             const newRow = $("<tr>", {
                 "id": `dynamic-row-${fieldCounter}`
@@ -444,7 +444,7 @@
                 "text": `${fieldCounter}`
             });
             const TenInput = $("<td>" +
-                "<select id='maProduct' class='p-1 pr-5' name='products_id[]'>" +
+                "<select id='maProduct' class='p-1 pr-5 maProduct' name='products_id[]'>" +
                 '@foreach ($product_code as $value)' +
                 "<option value='{{ $value->id }}'>{{ $value->products_code }}</option>" +
                 '@endforeach' +
@@ -675,18 +675,22 @@
     })
     //lấy thông tin sản phẩm từ mã sản phẩm
     $(document).ready(function() {
-        $(document).on('change', '#maProduct', function() {
+        //lấy thông tin sản phẩm từ mã sản phẩm
+        var selectedProductNames = [];
+        $(document).on('change', '.maProduct', function() {
+            var row = $(this).closest('tr');
+            var childSelect = row.find('.child-select');
             var idProducts = $(this).val();
-            var childSelect = $(this).closest('tr').find('.child-select');
+
             if (idProducts) {
                 $.ajax({
                     url: "{{ route('nameProduct') }}",
-                    type: "get",
+                    type: "GET",
                     data: {
                         idProducts: idProducts,
+                        selectedProductIds: selectedProductNames
                     },
                     success: function(response) {
-                        // Update the child select with the new options
                         childSelect.empty();
                         childSelect.append('<option value="">Lựa chọn sản phẩm</option>');
                         $.each(response, function(index, product) {
@@ -694,29 +698,64 @@
                                 `<option value="${product.id}">${product.product_name}</option>`
                             );
                         });
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle errors (if any)
+                        console.log(error);
                     }
                 });
             } else {
-                // Clear the child select if no parent is selected
                 childSelect.empty();
                 childSelect.append('<option value="">Lựa chọn sản phẩm</option>');
             }
         });
-    });
-    //lấy thông tin sản phẩm con từ tên sản phẩm con
-    $(document).on('change', '.child-select', function() {
-        var idProduct = $(this).val();
-        var productUnitElement = $(this).closest('tr').find('.product_unit');
-        if (idProduct) {
-            $.ajax({
-                url: "{{ route('getProduct') }}",
-                type: "get",
-                data: {
-                    idProduct: idProduct,
-                },
-                success: function(response) {
-                    productUnitElement.val(response.product_unit);
-                },
+        //lấy thông tin sản phẩm con từ tên sản phẩm con
+        $(document).on('change', '.child-select', function() {
+            var selectedName = $(this).val();
+            var row = $(this).closest('tr');
+
+            var idProduct = $(this).val();
+            var productUnitElement = $(this).closest('tr').find('.product_unit');
+            if (idProduct) {
+                $.ajax({
+                    url: "{{ route('getProduct') }}",
+                    type: "get",
+                    data: {
+                        idProduct: idProduct,
+                    },
+                    success: function(response) {
+                        productUnitElement.val(response.product_unit);
+                    },
+                });
+            }
+
+            // Check if the selected product name is already in use
+            if (selectedProductNames.includes(selectedName)) {
+                $(this).val('');
+            } else {
+                selectedProductNames.push(selectedName);
+            }
+
+            // Hide the selected product name from other child select options
+            hideSelectedProductNames(row);
+        });
+
+        // Function to hide selected product names from other child select options
+        function hideSelectedProductNames(row) {
+            var selectedNames = row.find('.child-select').map(function() {
+                return $(this).val();
+            }).get();
+
+            row.find('.child-select').each(function() {
+                var currentName = $(this).val();
+                $(this).find('option').each(function() {
+                    if ($(this).val() !== currentName && selectedNames.includes($(this)
+                            .val())) {
+                        $(this).hide();
+                    } else {
+                        $(this).show();
+                    }
+                });
             });
         }
     });

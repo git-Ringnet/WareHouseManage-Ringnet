@@ -103,7 +103,7 @@ class ExportController extends Controller
             ->leftjoin('users', 'exports.user_id', '=', 'users.id')->get();
         $export = $this->exports->getAllExports($filters, $status, $name, $date, $keywords, $sortBy, $sortType);
         $title = 'Xuất hàng';
-        return view('tables.export.exports', compact('export', 'exports', 'sortType', 'string','title'));
+        return view('tables.export.exports', compact('export', 'exports', 'sortType', 'string', 'title'));
     }
 
     /**
@@ -118,7 +118,7 @@ class ExportController extends Controller
         $guest_id = DB::table('guests')->select('id')->orderBy('id', 'DESC')->first();
         (int)$guest_id->id += 1;
         $title = 'Tạo đơn xuất hàng';
-        return view('tables.export.addExport', compact('customer', 'products', 'guest_id','title'));
+        return view('tables.export.addExport', compact('customer', 'products', 'guest_id', 'title'));
     }
 
     /**
@@ -234,12 +234,13 @@ class ExportController extends Controller
         $exports = Exports::find($id);
         $guest = Guests::find($exports->guest_id);
         $customer = Guests::all();
-
-        $user = User::find($exports->user_id);
-        $productExport = productExports::find($exports->id);
-        $products = Products::find($productExport->products_id);
-        $title = 'Chỉnh sửa đôn xuất hàng';
-        return view('tables.export.editExport', compact('exports','guest','user','productExport','products','customer','title'));
+        $productExport = productExports::join('exports', 'product_exports.export_id', '=', 'exports.id')
+            ->join('products', 'products.id', 'product_exports.products_id')
+            ->where('export_id', $id)
+            ->get();
+        $product_code = Products::all();
+        $title = 'Chỉnh sửa đơn xuất hàng';
+        return view('tables.export.editExport', compact('exports', 'guest', 'productExport', 'product_code', 'customer', 'title'));
     }
 
     /**
@@ -458,12 +459,27 @@ class ExportController extends Controller
         $guest->guest_note = $data['guest_note'];
         $guest->save();
     }
+
     public function nameProduct(Request $request)
     {
-        $data = $request->all();                    
-        $product = Product::where('products_id', $data['idProducts'])->get();
-        return response()->json($product);
+        $data = $request->all();
+        $selectedProductIds = $data['selectedProductIds'] ?? [];
+
+        // Retrieve the parent product ID from the request data
+        $parentId = $data['idProducts'];
+
+        // Retrieve the selected product names based on the selected product IDs
+        $selectedProductNames = Product::whereIn('id', $selectedProductIds)->pluck('product_name')->toArray();
+
+        // Retrieve the child products excluding the selected product IDs and names
+        $products = Product::where('products_id', $parentId)
+            ->whereNotIn('id', $selectedProductIds)
+            ->whereNotIn('product_name', $selectedProductNames)
+            ->get();
+
+        return response()->json($products);
     }
+
     public function getProduct(Request $request)
     {
         $data = $request->all();
