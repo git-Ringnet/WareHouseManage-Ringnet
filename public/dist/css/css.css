@@ -240,15 +240,47 @@ table {
 
 td,
 th {
-    box-shadow: inset 0px -1px 0px #DDE0E5;
     vertical-align: middle !important;
 }
-tbody tr{
+
+tbody tr {
     background-color: #E9ECEF;
 }
-.product-details{
+
+.product-details {
     background-color: #ffff;
 }
-.content-wrapper .card{
-    /* background:none; */
+
+.dropdown-item-active[aria-expanded="true"] {
+    background-color: #fff;
+    border-radius: 4px;
+    width: 32px;
+    height: 32px;
+    text-align: center;
+}
+
+td {
+    font-size: 0.875rem;
+}
+
+.product-details.collapse {
+    height: 0;
+    overflow: hidden;
+    transition: height 0.3s ease;
+}
+
+.product-details.collapse.show {
+    height: auto;
+}
+
+.dropdownitem svg {
+    cursor: pointer;
+}
+
+td p {
+    font-size: 0.75rem;
+}
+* {
+    font-family: 'Inter';
+    font-style: normal;
 }

@@ -6,13 +6,10 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1><a href="{{ route('insertProducts') }}" class="btn btn-primary">Thêm</a></h1>
-                </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">DataTables</li>
-                    </ol>
+                    <h1><a href="{{ route('insertProducts') }}" class="btn btn-primary"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M12 6C12.3879 6 12.7024 6.31446 12.7024 6.70237L12.7024 17.2976C12.7024 17.6855 12.3879 18 12 18C11.6121 18 11.2976 17.6855 11.2976 17.2976V6.70237C11.2976 6.31446 11.6121 6 12 6Z" fill="#fff"></path>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M18 12C18 12.3879 17.6855 12.7024 17.2976 12.7024H6.70237C6.31446 12.7024 6 12.3879 6 12C6 11.6121 6.31446 11.2976 6.70237 11.2976H17.2976C17.6855 11.2976 18 11.6121 18 12Z" fill="#fff"></path>
+                    </svg>Thêm sản phẩm</a></h1>
                 </div>
             </div>
             <div class="row m-auto filter pt-2">
@@ -388,75 +385,75 @@
                             <h3 class="card-title"></h3>
                         </div>
                         <div class="card-body">
-                            <table id="example2" class="table table-bordered table-hover">
+                            <table id="example2" class="table table-hover">
                                 <thead>
                                     <tr>
                                         <input type="hidden" id="sortByInput" name="sort-by" value="id">
                                         <input type="hidden" id="sortTypeInput" name="sort-type" value="{{ $sortType }}">
-                                        <th scope="col">
+                                        <th scope="col" style="width:2%">
                                             <span class="d-flex">
                                                 <input type="checkbox" id="checkall">
                                             </span>
                                         </th>
-                                        <th scope="col">
+                                        <th scope="col" style="width:2%">
                                             <span class="d-flex">
                                                 <a href="#" class="sort-link" data-sort-by="id" data-sort-type="{{ $sortType }}"><button class="btn-sort" type="submit">ID</button></a>
                                                 <div class="icon" id="icon-id"></div>
                                             </span>
                                         </th>
-                                        <th scope="col">
+                                        <th scope="col" style="width:10%">
                                             <span class="d-flex">
                                                 <a href="#" class="sort-link" data-sort-by="products_code" data-sort-type="{{ $sortType }}"><button class="btn-sort" type="submit">Mã sản phẩm</button></a>
                                                 <div class="icon" id="icon-products_code"></div>
                                             </span>
                                         </th>
-                                        <th scope="col">
+                                        <th scope="col" style="width:20%">
                                             <span class="d-flex">
                                                 <a href="#" class="sort-link" data-sort-by="products_name" data-sort-type="{{ $sortType }}"><button class="btn-sort" type="submit">Tên sản phẩm</button></a>
 
                                                 <div class="icon" id="icon-products_name"></div>
                                             </span>
                                         </th>
-                                        <th scope="col">
+                                        <th scope="col" style="width:10%">
                                             <span class="d-flex">
                                                 <a href="#" class="sort-link" data-sort-by="ID_category" data-sort-type="{{ $sortType }}"><button class="btn-sort" type="submit">Danh mục</button></a>
                                                 <div class="icon" id="icon-ID_category"></div>
                                             </span>
                                         </th>
-                                        <th scope="col">
+                                        <th scope="col" style="width:10%">
                                             <span class="d-flex">
                                                 <a href="#" class="sort-link" data-sort-by="products_trademark" data-sort-type="{{ $sortType }}"><button class="btn-sort" type="submit">Thương hiệu</button></a>
                                                 <div class="icon" id="icon-products_trademark"></div>
                                             </span>
                                         </th>
-                                        <th scope="col">
+                                        <th scope="col" style="width:10%">
                                             <span class="d-flex">
                                                 <a href="#" class="sort-link" data-sort-by="inventory" data-sort-type="{{ $sortType }}"><button class="btn-sort" type="submit">Tồn kho</button></a>
 
                                                 <div class="icon" id="icon-inventory"></div>
                                             </span>
                                         </th>
-                                        <th scope="col">
+                                        <th scope="col" style="width:10%">
                                             <span class="d-flex">
                                                 <a href="#" class="sort-link" data-sort-by="price_avg" data-sort-type="{{ $sortType }}"><button class="btn-sort" type="submit">Trị trung bình</button></a>
 
                                                 <div class="icon" id="icon-price_avg"></div>
                                             </span>
                                         </th>
-                                        <th scope="col">
+                                        <th scope="col" style="width:10%">
                                             <span class="d-flex">
                                                 <a href="#" class="sort-link" data-sort-by="price_inventory" data-sort-type="{{ $sortType }}"><button class="btn-sort" type="submit">Trị tồn kho</button></a>
                                                 <div class="icon" id="icon-price_inventory"></div>
                                             </span>
                                         </th>
-                                        <th scope="col">
+                                        <th scope="col" style="width:10%">
                                             <span class="d-flex">
                                                 <a href="#" class="sort-link" data-sort-by="inventory" data-sort-type="{{ $sortType }}"><button class="btn-sort" type="submit">Trạng thái</button></a>
-                                                <div class="icon" id="icon-status_inventory"></div>
+                                                <div class="icon" id="icon-status_"></div>
                                             </span>
                                         </th>
                                         <th scope="col">Action</th>
-                                        <th></th>
+                                        <th scope="col"></th>
                                     </tr>
                                     </form>
                                 </thead>
@@ -465,11 +462,11 @@
                                     <tr class="{{$value->id}}">
                                         <td><input type="checkbox" name="ids[]" class="cb-element" value="{{$value->id}}"></td>
                                         <td scope="row">{{ $value->id }}</td>
-                                        <th>
+                                        <td>
                                             <!-- <a href="{{ route('data.show', $value->id) }}"> -->
                                                 {{ $value->products_code }}
                                             <!-- </a> -->
-                                        </th>
+                                        </td>
                                         <td>{{ $value->products_name }}</td>
                                         <td>
                                             <select class="product_category" name="product_category" id="{{ $value->id }}">
@@ -480,8 +477,8 @@
                                                 @endforeach
                                             </select>
                                         </td>
-                                        <td>{{ $value->products_trademark }}</td>
-                                        <td>
+                                        <td class="text-left">{{ $value->products_trademark }}</td>
+                                        <td class="text-right">
                                             @if ($value->inventory == 0)
                                             0
                                             @else
@@ -489,23 +486,23 @@
                                             @endif
 
                                         </td>
-                                        <td>{{ number_format($value->price_avg) }}</td>
-                                        <td>{{ number_format($value->price_inventory) }}</td>
+                                        <td class="text-right">{{ number_format($value->price_avg) }}</td>
+                                        <td class="text-right">{{ number_format($value->price_inventory) }}</td>
                                         <td class="p-0 text-center">
                                             @if ($value->inventory == 0)
-                                            <div class="py-1 rounded mt-3 pb-1 bg-danger">
+                                            <div class="py-1 rounded  pb-1 bg-danger">
                                                 <span class="text-light">Hết hàng</span>
                                             </div>
-                                            @elseif($value->inventory < 5) <div class="py-1 rounded mt-3 pb-1 bg-warning">
+                                            @elseif($value->inventory < 5) <div class="py-1 rounded  pb-1 bg-warning">
                                                 <span class="text-light">Gần hết</span>
                         </div>
                         @else
-                        <div class="py-1 rounded mt-3 pb-1 bg-success">
+                        <div class="py-1 rounded  pb-1 bg-success">
                             <span class="text-light">Sẵn hàng</span>
                         </div>
                         @endif
                         </td>
-                        <td>
+                        <td class="text-center">
                             <div class="icon">
                                 <a href="{{ route('data.edit', $value->id) }}">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
@@ -515,16 +512,19 @@
                             </div>
                         </td>
                         <td>
-                            <div id="dropdown_item{{ $value->id }}" data-toggle="collapse" data-target="#product-details-<?php echo $value->id; ?>">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                            <div id="dropdown_item{{ $value->id }}" data-toggle="collapse" class="dropdownitem" data-target="#product-details-<?php echo $value->id; ?>">
+                                {{-- <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
                                     <rect width="32" height="32" rx="4" fill="white" />
                                     <path fill-rule="evenodd" clip-rule="evenodd" d="M22.3582 19.6917C21.9471 20.1028 21.2806 20.1028 20.8695 19.6917L15.9998 14.822L11.1301 19.6917C10.719 20.1028 10.0526 20.1028 9.64148 19.6917C9.2304 19.2806 9.2304 18.6141 9.64148 18.203L15.2555 12.589C15.6666 12.1779 16.3331 12.1779 16.7442 12.589L22.3582 18.203C22.7693 18.6141 22.7693 19.2806 22.3582 19.6917Z" fill="#555555" />
-                                </svg>
+                                </svg> --}}
+                                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M9.6418 12.3083C10.0529 11.8972 10.7194 11.8972 11.1305 12.3083L16.0002 17.178L20.8699 12.3083C21.281 11.8972 21.9474 11.8972 22.3585 12.3083C22.7696 12.7194 22.7696 13.3859 22.3585 13.797L16.7445 19.411C16.3334 19.8221 15.6669 19.8221 15.2558 19.411L9.6418 13.797C9.23073 13.3859 9.23073 12.7194 9.6418 12.3083Z" fill="#555555"/>
+                                    </svg>                
                             </div>
                         </td>
                         </tr>
                         @foreach ($product as $item)
-                        <tr id="product-details-{{ $value->id }}" class="collapse">
+                        <tr id="product-details-{{ $value->id }}" class="collapse product-details">
                             @if ($value->id == $item->products_id)
                             <td></td>
                             <td>{{ $value->id }} - {{ $item->id }}</td>
@@ -534,9 +534,9 @@
                                 <p>Loại hàng</p>{{ $item->product_category }}
                             </td>
                             <td>{{ $item->product_trademark }}</td>
-                            <td>{{ $item->product_qty }}</td>
-                            <td>{{ number_format($item->product_price) }}</td>
-                            <td>{{ number_format($item->total) }}</td>
+                            <td class="text-right"><p>Tồn kho</p>{{ $item->product_qty }}</td>
+                            <td class="text-right"><p>Đơn giá nhập</p>{{ number_format($item->product_price) }}</td>
+                            <td class="text-right"><p>Trị tồn kho</p>{{ number_format($item->total) }}</td>
                             <td></td>
                             <td>
                                 <form action="{{route('editProduct',$item->id)}}" method="post">
@@ -549,19 +549,19 @@
                                     </button>
 
                                 </form>
-
                             </td>
+                            <td></td>
                             @endif
                         </tr>
                         @endforeach
                         @endforeach
                         </tbody>
                         </table>
-                        <button type="submit" id="deleteProducts" class="btn btn-danger mt-3">Xóa nhiều</button>
-                        <div class="paginator mt-4 d-flex justify-content-end">
-                            {{ $products->appends(request()->except('page'))->links() }}
-                        </div>
                     </div>
+                </div>
+                <button type="submit" id="deleteProducts" class="btn btn-danger">Xóa nhiều</button>
+                <div class="paginator mt-4 d-flex justify-content-end">
+                    {{ $products->appends(request()->except('page'))->links() }}
                 </div>
             </div>
         </div>
@@ -913,6 +913,32 @@
     function updateDeleteItemValue(label) {
         document.getElementById('delete-item-input').value = label;
     }
+
+    var dropdownItems = $('[id^="dropdown_item"]');
+        dropdownItems.each(function() {
+        $(this).on('click', function() {
+            var isActive = $(this).hasClass('dropdown-item-active');
+            var svgElement = $(this).find('svg');
+            var parentElement = $(this).parent().parent();
+            console.log(parentElement);
+            if (isActive) {
+            $(this).removeClass('dropdown-item-active');
+            parentElement.css('background', '#E9ECEF');
+            svgElement.css({
+                transform: 'rotate(0deg)',
+                transition: 'transform 0.3s ease'
+            });
+            }
+            if (!isActive) {
+            $(this).addClass('dropdown-item-active');
+            parentElement.css('background', '#ADB5BD');
+            svgElement.css({
+                transform: 'rotate(180deg)',
+                transition: 'transform 0.3s ease'
+            });
+            }
+        });
+        });
 </script>
 </body>
 
