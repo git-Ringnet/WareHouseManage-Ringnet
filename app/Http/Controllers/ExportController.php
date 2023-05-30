@@ -27,7 +27,6 @@ class ExportController extends Controller
     }
     public function index(Request $request)
     {
-
         $string = array();
         $filters = [];
         $status = [];
@@ -103,7 +102,7 @@ class ExportController extends Controller
             ->leftjoin('users', 'exports.user_id', '=', 'users.id')->get();
         $export = $this->exports->getAllExports($filters, $status, $name, $date, $keywords, $sortBy, $sortType);
         $title = 'Xuất hàng';
-        return view('tables.export.exports', compact('export', 'exports', 'sortType', 'string','title'));
+        return view('tables.export.exports', compact('export', 'exports', 'sortType', 'string', 'title'));
     }
 
     /**
@@ -118,7 +117,7 @@ class ExportController extends Controller
         $guest_id = DB::table('guests')->select('id')->orderBy('id', 'DESC')->first();
         (int)$guest_id->id += 1;
         $title = 'Tạo đơn xuất hàng';
-        return view('tables.export.addExport', compact('customer', 'products', 'guest_id','title'));
+        return view('tables.export.addExport', compact('customer', 'products', 'guest_id', 'title'));
     }
 
     /**
@@ -234,12 +233,13 @@ class ExportController extends Controller
         $exports = Exports::find($id);
         $guest = Guests::find($exports->guest_id);
         $customer = Guests::all();
-
-        $user = User::find($exports->user_id);
-        $productExport = productExports::find($exports->id);
-        $products = Products::find($productExport->products_id);
-        $title = 'Chỉnh sửa đôn xuất hàng';
-        return view('tables.export.editExport', compact('exports','guest','user','productExport','products','customer','title'));
+        $productExport = productExports::join('exports', 'product_exports.export_id', '=', 'exports.id')
+            ->join('products', 'products.id', 'product_exports.products_id')
+            ->where('export_id', $id)
+            ->get();
+        $product_code = Products::all();
+        $title = 'Chỉnh sửa đơn xuất hàng';
+        return view('tables.export.editExport', compact('exports', 'guest', 'productExport', 'product_code', 'customer', 'title'));
     }
 
     /**
@@ -258,136 +258,283 @@ class ExportController extends Controller
         $totalQtyNeeded = 0;
         $serinumbersToUpdate = [];
 
-        // Lấy danh sách sản phẩm đã tồn tại trong xuất hàng
-        if ($exports->productExports != null) {
-            foreach ($exports->productExports as $productExport) {
-                $existingProductIDs[] = $productExport->product_id;
-            }
-        }
+        if ($request->has('submitBtn')) {
+            $action = $request->input('submitBtn');
+            if ($action === 'action1') {
+                // Lấy danh sách sản phẩm đã tồn tại trong xuất hàng
+                if ($exports->productExports != null) {
+                    foreach ($exports->productExports as $productExport) {
+                        $existingProductIDs[] = $productExport->product_id;
+                    }
+                }
+                if ($productIDs != null) {
+                    // Cập nhật thông tin sản phẩm đang tồn tại
+                    for ($i = 0; $i < count($productIDs); $i++) {
+                        $productID = $productIDs[$i];
+                        $productQty = $productQtys[$i];
+                        $nameProduct = Product::where('id', $productID)->value('product_name');
+                        if (in_array($productID, $existingProductIDs)) {
+                            $proExport = ProductExports::where('export_id', $id)
+                                ->where('product_id', $productID)
+                                ->first();
+                            // Kiểm tra số lượng sản phẩm mới được cập nhật
+                            $availableQty = $this->getAvailableProductQty($productID) + $proExport->product_qty - $productQty;
 
-        if ($productIDs != null) {
-            // Cập nhật thông tin sản phẩm đang tồn tại
-            for ($i = 0; $i < count($productIDs); $i++) {
-                $productID = $productIDs[$i];
-                $productQty = $productQtys[$i];
-                $nameProduct = Product::where('id', $productID)->value('product_name');
+                            if ($availableQty < 0) {
+                                return redirect()->route('exports.index')->with('danger', 'Vượt quá số lượng cho sản phẩm ' . $nameProduct . '!');
+                            }
+                            // Cập nhật seri_status khi số lượng sản phẩm tăng hoặc giảm
+                            if ($productQty > $proExport->product_qty) {
+                                $serinumbersToUpdate = Serinumbers::where('product_id', $productID)
+                                    ->where('seri_status', 1)
+                                    ->limit($productQty - $proExport->product_qty)
+                                    ->get();
 
-                if (in_array($productID, $existingProductIDs)) {
-                    $proExport = ProductExports::where('export_id', $id)
-                        ->where('product_id', $productID)
-                        ->first();
+                                foreach ($serinumbersToUpdate as $serinumber) {
+                                    $serinumber->seri_status = 2;
+                                    $serinumber->save();
+                                }
+                            } elseif ($productQty < $proExport->product_qty) {
+                                $serinumbersToUpdate = Serinumbers::where('product_id', $productID)
+                                    ->where('seri_status', 2)
+                                    ->limit($proExport->product_qty - $productQty)
+                                    ->get();
 
-                    // Kiểm tra số lượng sản phẩm mới được cập nhật
-                    $availableQty = $this->getAvailableProductQty($productID) + $proExport->product_qty - $productQty;
+                                foreach ($serinumbersToUpdate as $serinumber) {
+                                    $serinumber->seri_status = 1;
+                                    $serinumber->save();
+                                }
+                            }
 
-                    if ($availableQty < 0) {
-                        return redirect()->route('exports.index')->with('danger', 'Vượt quá số lượng cho sản phẩm ' . $nameProduct . '!');
+                            $proExport->products_id = $request->products_id[$i];
+                            $proExport->product_unit = $request->product_unit[$i];
+                            $proExport->product_qty = $productQty;
+                            $proExport->product_price = $request->product_price[$i];
+                            $proExport->product_note = $request->product_note[$i];
+                            $proExport->product_tax = $request->product_tax[$i];
+                            $proExport->product_total = $request->totalValue;
+                            $proExport->save();
+                        } else {
+                            // Kiểm tra số lượng sản phẩm mới được thêm
+                            $availableQty = $this->getAvailableProductQty($productID);
+
+                            if ($productQty > $availableQty) {
+                                return redirect()->route('exports.index')->with('danger', 'Vượt quá số lượng cho sản phẩm ' . $nameProduct . '!');
+                            }
+
+                            $proExport = new ProductExports();
+                            $proExport->products_id = $request->products_id[$i];
+                            $proExport->product_id = $productID;
+                            $proExport->export_id = $exports->id;
+                            $proExport->product_name = $nameProduct;
+                            $proExport->product_unit = $request->product_unit[$i];
+                            $proExport->product_qty = $productQty;
+                            $proExport->product_price = $request->product_price[$i];
+                            $proExport->product_note = $request->product_note[$i];
+                            $proExport->product_tax = $request->product_tax[$i];
+                            $proExport->product_total = $request->totalValue;
+                            $proExport->save();
+
+                            // Cập nhật seri_status bằng 2 cho sản phẩm mới
+                            $serinumbersToUpdate = Serinumbers::where('product_id', $productID)
+                                ->where('seri_status', 1)
+                                ->limit($productQty)
+                                ->get();
+
+                            foreach ($serinumbersToUpdate as $serinumber) {
+                                $serinumber->seri_status = 2;
+                                $serinumber->save();
+                            }
+                        }
+
+                        $totalQtyNeeded += $productQty;
                     }
 
-                    // Cập nhật seri_status khi số lượng sản phẩm tăng hoặc giảm
-                    if ($productQty > $proExport->product_qty) {
-                        $serinumbersToUpdate = Serinumbers::where('product_id', $productID)
-                            ->where('seri_status', 1)
-                            ->limit($productQty - $proExport->product_qty)
-                            ->get();
+                    // Xóa các sản phẩm đã bị xóa
+                    $productExportsToDelete = ProductExports::where('export_id', $exports->id)
+                        ->whereNotIn('product_id', $productIDs)
+                        ->get();
 
-                        foreach ($serinumbersToUpdate as $serinumber) {
-                            $serinumber->seri_status = 2;
-                            $serinumber->save();
-                        }
-                    } elseif ($productQty < $proExport->product_qty) {
-                        $serinumbersToUpdate = Serinumbers::where('product_id', $productID)
+                    foreach ($productExportsToDelete as $productExport) {
+                        // Cập nhật seri_status thành 1 cho sản phẩm bị xóa
+                        $serinumbersToUpdate = Serinumbers::where('product_id', $productExport->product_id)
                             ->where('seri_status', 2)
-                            ->limit($proExport->product_qty - $productQty)
+                            ->limit($productExport->product_qty)
                             ->get();
 
                         foreach ($serinumbersToUpdate as $serinumber) {
                             $serinumber->seri_status = 1;
                             $serinumber->save();
                         }
+
+                        // Xóa sản phẩm
+                        $productExport->delete();
                     }
 
-                    $proExport->products_id = $request->products_id[$i];
-                    $proExport->product_unit = $request->product_unit[$i];
-                    $proExport->product_qty = $productQty;
-                    $proExport->product_price = $request->product_price[$i];
-                    $proExport->product_note = $request->product_note[$i];
-                    $proExport->product_tax = $request->product_tax[$i];
-                    $proExport->product_total = $request->totalValue;
-                    $proExport->save();
+                    // Kiểm tra số lượng tổng cần thiết
+                    $availableQtyTotal = $this->getAvailableProductQtyTotal();
+
+                    if ($totalQtyNeeded > $availableQtyTotal) {
+                        return redirect()->route('exports.index')->with('danger', 'Vượt quá tổng số lượng sản phẩm!');
+                    }
+
+                    $exports->guest_id = $request->id;
+                    $exports->user_id = Auth::user()->id;
+                    $exports->total = $request->totalValue;
+                    $exports->export_status = 2;
+                    $exports->save();
+                    //xóa seri_status = 2
+                    Serinumbers::where('seri_status', 2)
+                        ->whereIn('product_id', $productIDs)
+                        ->delete();
+                    return redirect()->route('exports.index')->with('msg', 'Chốt đơn thành công!');
                 } else {
-                    // Kiểm tra số lượng sản phẩm mới được thêm
-                    $availableQty = $this->getAvailableProductQty($productID);
+                    return redirect()->route('exports.index')->with('danger', 'Chưa được thêm sản phẩm nào!');
+                }
+            } elseif ($action === 'action2') {
+                Serinumbers::whereIn('product_id', $productIDs)
+                    ->where('seri_status', 2)
+                    ->update(['seri_status' => 1]);
 
-                    if ($productQty > $availableQty) {
-                        return redirect()->route('exports.index')->with('danger', 'Vượt quá số lượng cho sản phẩm ' . $nameProduct . '!');
+                // Cập nhật trạng thái và tổng giá trị của export
+                $exports->export_status = 0;
+                $exports->total = $request->totalValue;
+                $exports->save();
+
+                return redirect()->route('exports.index')->with('msg', 'Hủy đơn thành công!');
+            } elseif ($action === 'action3') {
+                // Lấy danh sách sản phẩm đã tồn tại trong xuất hàng
+                if ($exports->productExports != null) {
+                    foreach ($exports->productExports as $productExport) {
+                        $existingProductIDs[] = $productExport->product_id;
+                    }
+                }
+
+                if ($productIDs != null) {
+                    // Cập nhật thông tin sản phẩm đang tồn tại
+                    for ($i = 0; $i < count($productIDs); $i++) {
+                        $productID = $productIDs[$i];
+                        $productQty = $productQtys[$i];
+                        $nameProduct = Product::where('id', $productID)->value('product_name');
+
+                        if (in_array($productID, $existingProductIDs)) {
+                            $proExport = ProductExports::where('export_id', $id)
+                                ->where('product_id', $productID)
+                                ->first();
+
+                            // Kiểm tra số lượng sản phẩm mới được cập nhật
+                            $availableQty = $this->getAvailableProductQty($productID) + $proExport->product_qty - $productQty;
+
+                            if ($availableQty < 0) {
+                                return redirect()->route('exports.index')->with('danger', 'Vượt quá số lượng cho sản phẩm ' . $nameProduct . '!');
+                            }
+
+                            // Cập nhật seri_status khi số lượng sản phẩm tăng hoặc giảm
+                            if ($productQty > $proExport->product_qty) {
+                                $serinumbersToUpdate = Serinumbers::where('product_id', $productID)
+                                    ->where('seri_status', 1)
+                                    ->limit($productQty - $proExport->product_qty)
+                                    ->get();
+
+                                foreach ($serinumbersToUpdate as $serinumber) {
+                                    $serinumber->seri_status = 2;
+                                    $serinumber->save();
+                                }
+                            } elseif ($productQty < $proExport->product_qty) {
+                                $serinumbersToUpdate = Serinumbers::where('product_id', $productID)
+                                    ->where('seri_status', 2)
+                                    ->limit($proExport->product_qty - $productQty)
+                                    ->get();
+
+                                foreach ($serinumbersToUpdate as $serinumber) {
+                                    $serinumber->seri_status = 1;
+                                    $serinumber->save();
+                                }
+                            }
+
+                            $proExport->products_id = $request->products_id[$i];
+                            $proExport->product_unit = $request->product_unit[$i];
+                            $proExport->product_qty = $productQty;
+                            $proExport->product_price = $request->product_price[$i];
+                            $proExport->product_note = $request->product_note[$i];
+                            $proExport->product_tax = $request->product_tax[$i];
+                            $proExport->product_total = $request->totalValue;
+                            $proExport->save();
+                        } else {
+                            // Kiểm tra số lượng sản phẩm mới được thêm
+                            $availableQty = $this->getAvailableProductQty($productID);
+
+                            if ($productQty > $availableQty) {
+                                return redirect()->route('exports.index')->with('danger', 'Vượt quá số lượng cho sản phẩm ' . $nameProduct . '!');
+                            }
+
+                            $proExport = new ProductExports();
+                            $proExport->products_id = $request->products_id[$i];
+                            $proExport->product_id = $productID;
+                            $proExport->export_id = $exports->id;
+                            $proExport->product_name = $nameProduct;
+                            $proExport->product_unit = $request->product_unit[$i];
+                            $proExport->product_qty = $productQty;
+                            $proExport->product_price = $request->product_price[$i];
+                            $proExport->product_note = $request->product_note[$i];
+                            $proExport->product_tax = $request->product_tax[$i];
+                            $proExport->product_total = $request->totalValue;
+                            $proExport->save();
+
+                            // Cập nhật seri_status bằng 2 cho sản phẩm mới
+                            $serinumbersToUpdate = Serinumbers::where('product_id', $productID)
+                                ->where('seri_status', 1)
+                                ->limit($productQty)
+                                ->get();
+
+                            foreach ($serinumbersToUpdate as $serinumber) {
+                                $serinumber->seri_status = 2;
+                                $serinumber->save();
+                            }
+                        }
+
+                        $totalQtyNeeded += $productQty;
                     }
 
-                    $proExport = new ProductExports();
-                    $proExport->products_id = $request->products_id[$i];
-                    $proExport->product_id = $productID;
-                    $proExport->export_id = $exports->id;
-                    $proExport->product_name = $nameProduct;
-                    $proExport->product_unit = $request->product_unit[$i];
-                    $proExport->product_qty = $productQty;
-                    $proExport->product_price = $request->product_price[$i];
-                    $proExport->product_note = $request->product_note[$i];
-                    $proExport->product_tax = $request->product_tax[$i];
-                    $proExport->product_total = $request->totalValue;
-                    $proExport->save();
-
-                    // Cập nhật seri_status bằng 2 cho sản phẩm mới
-                    $serinumbersToUpdate = Serinumbers::where('product_id', $productID)
-                        ->where('seri_status', 1)
-                        ->limit($productQty)
+                    // Xóa các sản phẩm đã bị xóa
+                    $productExportsToDelete = ProductExports::where('export_id', $exports->id)
+                        ->whereNotIn('product_id', $productIDs)
                         ->get();
 
-                    foreach ($serinumbersToUpdate as $serinumber) {
-                        $serinumber->seri_status = 2;
-                        $serinumber->save();
+                    foreach ($productExportsToDelete as $productExport) {
+                        // Cập nhật seri_status thành 1 cho sản phẩm bị xóa
+                        $serinumbersToUpdate = Serinumbers::where('product_id', $productExport->product_id)
+                            ->where('seri_status', 2)
+                            ->limit($productExport->product_qty)
+                            ->get();
+
+                        foreach ($serinumbersToUpdate as $serinumber) {
+                            $serinumber->seri_status = 1;
+                            $serinumber->save();
+                        }
+
+                        // Xóa sản phẩm
+                        $productExport->delete();
                     }
+
+                    // Kiểm tra số lượng tổng cần thiết
+                    $availableQtyTotal = $this->getAvailableProductQtyTotal();
+
+                    if ($totalQtyNeeded > $availableQtyTotal) {
+                        return redirect()->route('exports.index')->with('danger', 'Vượt quá tổng số lượng sản phẩm!');
+                    }
+
+                    $exports->guest_id = $request->id;
+                    $exports->user_id = Auth::user()->id;
+                    $exports->total = $request->totalValue;
+                    $exports->export_status = 1;
+                    $exports->save();
+
+                    return redirect()->route('exports.index')->with('msg', 'Cập nhật thành công!');
+                } else {
+                    return redirect()->route('exports.index')->with('danger', 'Chưa được thêm sản phẩm nào!');
                 }
-
-                $totalQtyNeeded += $productQty;
             }
-
-            // Xóa các sản phẩm đã bị xóa
-            $productExportsToDelete = ProductExports::where('export_id', $exports->id)
-                ->whereNotIn('product_id', $productIDs)
-                ->get();
-
-            foreach ($productExportsToDelete as $productExport) {
-                // Cập nhật seri_status thành 1 cho sản phẩm bị xóa
-                $serinumbersToUpdate = Serinumbers::where('product_id', $productExport->product_id)
-                    ->where('seri_status', 2)
-                    ->limit($productExport->product_qty)
-                    ->get();
-
-                foreach ($serinumbersToUpdate as $serinumber) {
-                    $serinumber->seri_status = 1;
-                    $serinumber->save();
-                }
-
-                // Xóa sản phẩm
-                $productExport->delete();
-            }
-
-            // Kiểm tra số lượng tổng cần thiết
-            $availableQtyTotal = $this->getAvailableProductQtyTotal();
-
-            if ($totalQtyNeeded > $availableQtyTotal) {
-                return redirect()->route('exports.index')->with('danger', 'Vượt quá tổng số lượng sản phẩm!');
-            }
-
-            $exports->guest_id = $request->id;
-            $exports->user_id = Auth::user()->id;
-            $exports->total = $request->totalValue;
-            $exports->export_status = 1;
-            $exports->save();
-
-            return redirect()->route('exports.index')->with('msg', 'Cập nhật thành công!');
-        } else {
-            return redirect()->route('exports.index')->with('danger', 'Chưa được thêm sản phẩm nào!');
         }
     }
 
@@ -458,12 +605,27 @@ class ExportController extends Controller
         $guest->guest_note = $data['guest_note'];
         $guest->save();
     }
+
     public function nameProduct(Request $request)
     {
-        $data = $request->all();                    
-        $product = Product::where('products_id', $data['idProducts'])->get();
-        return response()->json($product);
+        $data = $request->all();
+        $selectedProductIds = $data['selectedProductIds'] ?? [];
+
+        // Retrieve the parent product ID from the request data
+        $parentId = $data['idProducts'];
+
+        // Retrieve the selected product names based on the selected product IDs
+        $selectedProductNames = Product::whereIn('id', $selectedProductIds)->pluck('product_name')->toArray();
+
+        // Retrieve the child products excluding the selected product IDs and names
+        $products = Product::where('products_id', $parentId)
+            ->whereNotIn('id', $selectedProductIds)
+            ->whereNotIn('product_name', $selectedProductNames)
+            ->get();
+
+        return response()->json($products);
     }
+
     public function getProduct(Request $request)
     {
         $data = $request->all();

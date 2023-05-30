@@ -267,8 +267,20 @@
     //add sản phẩm
     $(document).ready(function() {
         let fieldCounter = 1;
-
+        let isFirstClick = true;
         $("#add-field-btn").click(function() {
+            if (!isFirstClick) {
+                var maProduct = $('.maProduct:last').val();
+                var productUnit = $('.product_unit:last').val();
+                var productQty = $('.quantity-input:last').val();
+                var productPrice = $('.product_price:last').val();
+                var productTax = $('.product_tax:last').val();
+                if (!maProduct || !productUnit || !productQty || !productPrice || !productTax) {
+                    alert('Vui lòng nhập đủ thông tin sản phẩm.');
+                    return;
+                }
+            }
+            // Tạo các phần tử HTML mới
             const newRow = $("<tr>", {
                 "id": `dynamic-row-${fieldCounter}`
             });
@@ -277,7 +289,7 @@
                 "text": `${fieldCounter}`
             });
             const TenInput = $("<td>" +
-                "<select id='maProduct' class='p-1 pr-5' name='products_id[]'>" +
+                "<select id='maProduct' class='p-1 pr-5 maProduct' name='products_id[]'>" +
                 '@foreach ($products as $value)' +
                 "<option value='{{ $value->id }}'>{{ $value->products_code }}</option>" +
                 '@endforeach' +
@@ -295,7 +307,8 @@
                 "<td><input type='number' id='product_qty' class='quantity-input' name='product_qty[]' required></td>"
             );
             const giaInput = $(
-                "<td><input type='number' id='product_price' name='product_price[]' required></td>");
+                "<td><input type='number' class='product_price' id='product_price' name='product_price[]' required></td>"
+            );
             const ghichuInput = $("<td><input type='text' id='' name='product_note[]'></td>");
             const thueInput = $("<td>" +
                 "<input type='number' id='product_tax' class='product_tax' name='product_tax[]' required>" +
@@ -306,16 +319,23 @@
             const deleteBtn = $("<td><img src='../dist/img/icon/vector.png'></td>", {
                 "class": "delete-row-btn"
             });
+
             deleteBtn.click(function() {
                 $(this).closest("tr").remove();
                 calculateTotalAmount();
                 calculateGrandTotal();
             });
+
+            // Gắn các phần tử vào hàng mới
             newRow.append(checkbox, MaInput, TenInput, ProInput, dvtInput, slInput,
                 giaInput, ghichuInput, thueInput, thanhTienInput, sn, info, deleteBtn);
             $("#dynamic-fields").before(newRow);
+
+            // Tăng giá trị fieldCounter
             fieldCounter++;
+            isFirstClick = false;
         });
+
         //hiện danh sách khách hàng khi click trường tìm kiếm
         $("#myUL").hide();
         $("#myInput").on("click", function() {
@@ -494,20 +514,23 @@
             }
         })
     })
-    //lấy thông tin sản phẩm từ mã sản phẩm
     $(document).ready(function() {
-        $(document).on('change', '#maProduct', function() {
+        //lấy thông tin sản phẩm từ mã sản phẩm
+        var selectedProductNames = [];
+        $(document).on('change', '.maProduct', function() {
+            var row = $(this).closest('tr');
+            var childSelect = row.find('.child-select');
             var idProducts = $(this).val();
-            var childSelect = $(this).closest('tr').find('.child-select');
+
             if (idProducts) {
                 $.ajax({
                     url: "{{ route('nameProduct') }}",
-                    type: "get",
+                    type: "GET",
                     data: {
                         idProducts: idProducts,
+                        selectedProductIds: selectedProductNames
                     },
                     success: function(response) {
-                        // Update the child select with the new options
                         childSelect.empty();
                         childSelect.append('<option value="">Lựa chọn sản phẩm</option>');
                         $.each(response, function(index, product) {
@@ -515,29 +538,64 @@
                                 `<option value="${product.id}">${product.product_name}</option>`
                             );
                         });
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle errors (if any)
+                        console.log(error);
                     }
                 });
             } else {
-                // Clear the child select if no parent is selected
                 childSelect.empty();
                 childSelect.append('<option value="">Lựa chọn sản phẩm</option>');
             }
         });
-    });
-    //lấy thông tin sản phẩm con từ tên sản phẩm con
-    $(document).on('change', '.child-select', function() {
-        var idProduct = $(this).val();
-        var productUnitElement = $(this).closest('tr').find('.product_unit');
-        if (idProduct) {
-            $.ajax({
-                url: "{{ route('getProduct') }}",
-                type: "get",
-                data: {
-                    idProduct: idProduct,
-                },
-                success: function(response) {
-                    productUnitElement.val(response.product_unit);
-                },
+        //lấy thông tin sản phẩm con từ tên sản phẩm con
+        $(document).on('change', '.child-select', function() {
+            var selectedName = $(this).val();
+            var row = $(this).closest('tr');
+
+            var idProduct = $(this).val();
+            var productUnitElement = $(this).closest('tr').find('.product_unit');
+            if (idProduct) {
+                $.ajax({
+                    url: "{{ route('getProduct') }}",
+                    type: "get",
+                    data: {
+                        idProduct: idProduct,
+                    },
+                    success: function(response) {
+                        productUnitElement.val(response.product_unit);
+                    },
+                });
+            }
+
+            // Check if the selected product name is already in use
+            if (selectedProductNames.includes(selectedName)) {
+                $(this).val('');
+            } else {
+                selectedProductNames.push(selectedName);
+            }
+
+            // Hide the selected product name from other child select options
+            hideSelectedProductNames(row);
+        });
+
+        // Function to hide selected product names from other child select options
+        function hideSelectedProductNames(row) {
+            var selectedNames = row.find('.child-select').map(function() {
+                return $(this).val();
+            }).get();
+
+            row.find('.child-select').each(function() {
+                var currentName = $(this).val();
+                $(this).find('option').each(function() {
+                    if ($(this).val() !== currentName && selectedNames.includes($(this)
+                            .val())) {
+                        $(this).hide();
+                    } else {
+                        $(this).show();
+                    }
+                });
             });
         }
     });
@@ -614,7 +672,6 @@
         $('#grand-total').attr('data-value', grandTotal.toFixed(2));
         $('#total').val(grandTotal.toFixed(2));
     }
-
     //hàm kiểm tra submit
     function validateAndSubmit(event) {
         var formGuest = $('#form-guest');
