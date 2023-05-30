@@ -222,7 +222,7 @@ nav.main-header.navbar.navbar-expand.navbar-white.navbar-light {
 
 .content-wrapper {
     background-color: #E9ECEF;
-    padding-top: 4%;
+    padding-top: 55px;
 }
 
 /* Main content */
@@ -280,7 +280,27 @@ td {
 td p {
     font-size: 0.75rem;
 }
+
 * {
-    font-family: 'Inter';
+    font-family: 'Inter', sans-serif;
     font-style: normal;
+}
+
+.card {
+    overflow-x: scroll;
+}
+
+.navbar-nav .title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333333;
+}
+
+.nav-item p {
+    font-weight: 500;
+}
+
+.dropdown-menu {
+    left: auto;
+    right: 0;
 }
