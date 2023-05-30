@@ -8,12 +8,6 @@
                 <div class="col-sm-6">
                     <h1><a href="{{route('insertProducts')}}" class="btn btn-primary">Thêm</a></h1>
                 </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">DataTables</li>
-                    </ol>
-                </div>
             </div>
             @can('manage-user')
             <div class="row m-auto filter pt-2">
