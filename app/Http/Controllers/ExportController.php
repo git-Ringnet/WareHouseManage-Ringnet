@@ -34,14 +34,14 @@ class ExportController extends Controller
         if (!empty($request->id)) {
             $id = $request->id;
             array_push($filters, ['exports.id', 'like', '%' . $id . '%']);
-            $nameArr = explode(' ', $id);
+            $nameArr = explode(',.@', $id);
             array_push($string, ['label' => 'Mã đơn hàng:', 'values' => $nameArr, 'class' => 'id']);
         }
         //Khách hàng
         if (!empty($request->guest)) {
             $guest = $request->guest;
             array_push($filters, ['guests.guest_represent', 'like', '%' . $guest . '%']);
-            $nameArr = explode(' ', $guest);
+            $nameArr = explode(',.@', $guest);
             array_push($string, ['label' => 'Khách hàng:', 'values' => $nameArr, 'class' => 'guest']);
         }
 
@@ -50,7 +50,7 @@ class ExportController extends Controller
             $sum = $request->input('sum');
             $comparison_operator = $request->input('comparison_operator');
             $filters[] = ['exports.total', $comparison_operator, $sum];
-            $inventoryArray = explode(' ', $sum);
+            $inventoryArray = explode(',.@', $sum);
             array_push($string, ['label' => 'Tổng tiền' . $comparison_operator, 'values' => $inventoryArray, 'class' => 'sum']);
         }
 

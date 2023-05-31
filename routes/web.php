@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AddProductController;
 use App\Http\Controllers\AjaxController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\GuestsController;
 use App\Http\Controllers\InsertProductController;
@@ -76,15 +77,14 @@ Route::get('/deleteOrder', [AddProductController::class, 'deleteOrder'])->name('
 Route::get('/simple', function () {
     return view('tables.simple');
 });
+Route::get('index', [DashboardController::class, 'index']);
 
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified'
 ])->group(function () {
-    Route::get('/', function () {
-        return view('index');
-    })->name('dashboard');
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 });
 //chuyen trang
 Route::get('/{name?}', function ($name = "index") {

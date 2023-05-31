@@ -352,3 +352,64 @@ td p {
     right: 0;
 >>>>>>> origin/main
 }
+
+.box .small-box {
+    border-radius: 24px;
+    color: #ffff;
+    margin-top: 20px;
+}
+
+.box .inner .total {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.box .inner a {
+    font-size: .75rem;
+    font-weight: 500;
+    color: #ffff;
+}
+
+.box .small-box>.inner {
+    padding: 15px 5px 15px 25px;
+    text-align: left;
+}
+
+.box .title-box {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #333333;
+    position: absolute;
+    top: 10px;
+    left: 15px;
+}
+
+.content .container .box {
+    padding: 3rem 6rem 1.5rem 6rem;
+    border-radius: 16px;
+    position: relative;
+}
+
+.box-details .total-tilte{
+    color: #656565;
+    font-size: 1.125rem;
+    font-weight: 400;
+}
+.box-details .total{
+    color: #1E1E1E;
+    font-size: 2.125rem;
+    font-weight: 700;
+}
+.box-details p{
+    color: #ADADAD;
+    font-size: 1rem;
+    font-weight: 500;
+}
+.box-details .inner{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.box-details .small-box{
+    border-radius: 16px;
+}

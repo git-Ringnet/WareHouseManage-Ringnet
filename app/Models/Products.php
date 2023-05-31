@@ -90,4 +90,27 @@ class Products extends Model
 
         return $products;
     }
+    public function allProducts(){
+        $products = DB::table($this->table)->get();
+        return $products;
+    }
+    public function productsNearEnd(){
+        $products = DB::table($this->table);
+        $products = $products->whereBetween('inventory', [0, 5])->get();
+        return $products;
+    }
+    public function productsStock(){
+        $products = DB::table($this->table);
+        $products = $products->where('inventory', '>', 5)->get();
+        return $products;
+    }
+    public function productsEnd(){
+        $products = DB::table($this->table);
+        $products = $products->where('inventory', '=', 0)->get();
+        return $products;
+    }
+    public function sumTotalInventory(){
+        $totalSum = DB::table($this->table)->sum('price_inventory');
+        return $totalSum;
+    }
 }

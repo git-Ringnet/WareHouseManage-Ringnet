@@ -101,7 +101,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     echo 0;
                                                 } @endphp">
                                     {{ $item['label'] }}
-                                    <span class="filter-values">{{ implode(', ', $item['values']) }}</span>
+                                    <span class="filter-values">{{ implode(',', $item['values']) }}</span>
                                     <a class="delete-item delete-btn-{{ $item['class'] }}"
                                         onclick="updateDeleteItemValue('{{ $item['label'] }}')">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -246,7 +246,7 @@ $index = array_search($item['label'], $numberedLabels);
                                     </div>
                                     <div class="search-container px-2 mt-1">
                                         <input type="text" placeholder="Tìm thuộc tính lọc" id="myInput-status"
-                                            class="pr-4 input-search" onkeyup="filterStatus()">
+                                            class="pr-4 w-100 input-search" onkeyup="filterStatus()">
                                         <span class="search-icon"><i class="fas fa-search"></i></span>
                                     </div>
                                     <div
@@ -289,7 +289,7 @@ $index = array_search($item['label'], $numberedLabels);
                                     </div>
                                     <div class="search-container px-2 mt-1">
                                         <input type="text" placeholder="Tìm thuộc tính lọc" id="myInput-category"
-                                            class="pr-4" onkeyup="filterCategory()">
+                                            class="pr-4 w-100" onkeyup="filterCategory()">
                                         <span class="search-icon"><i class="fas fa-search"></i></span>
                                     </div>
                                     <div
@@ -326,7 +326,7 @@ $index = array_search($item['label'], $numberedLabels);
                                     </div>
                                     <div class="search-container px-2 mt-1">
                                         <input type="text" placeholder="Tìm thuộc tính lọc" id="myInput-trademark"
-                                            class="pr-4" onkeyup="filterTrademark()">
+                                            class="pr-4 w-100" onkeyup="filterTrademark()">
                                         <span class="search-icon"><i class="fas fa-search"></i></span>
                                     </div>
                                     <div

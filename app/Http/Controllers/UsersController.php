@@ -34,19 +34,19 @@ class UsersController extends Controller
         $name = '';
         if (!empty($request->name)) {
             $name = $request->name;
-            $nameArr = explode(' ', $name);
+            $nameArr = explode(',.@', $name);
             array_push($string, ['label' => 'Tên nhân viên:', 'values' => $nameArr, 'class' => 'name']);
         }
         $phonenumber = '';
         if (!empty($request->phonenumber)) {
             $phonenumber = $request->phonenumber;
-            $nameArr = explode(' ', $phonenumber);
+            $nameArr = explode(',.@', $phonenumber);
             array_push($string, ['label' => 'Số điện thoại:', 'values' => $nameArr, 'class' => 'phonenumber']);
         }
         $email = '';
         if (!empty($request->email)) {
             $email = $request->email;
-            $nameArr = explode(' ', $email);
+            $nameArr = explode(',.@', $email);
             array_push($string, ['label' => 'Email:', 'values' => $nameArr, 'class' => 'email']);
         }
 

@@ -62,21 +62,21 @@ class ProductsController extends Controller
 
         if (!empty($request->id)) {
             $id = $request->input('id');
-            $idArray = explode(' ', $id);
+            $idArray = explode(',.@', $id);
             array_push($string, ['label' => 'ID:', 'values' => $idArray, 'class' => 'id']);
         }
         $code = null;
 
         if (!empty($request->code)) {
             $code = $request->code;
-            $codeArr = explode(' ', $code);
+            $codeArr = explode(',.@', $code);
             array_push($string, ['label' => 'Mã sản phẩm:', 'values' => $codeArr, 'class' => 'code']);
         }
         $products_name = null;
 
         if (!empty($request->products_name)) {
             $products_name = $request->products_name;
-            $products_namearr = explode(' ', $products_name);
+            $products_namearr = explode(',.@', $products_name);
             array_push($string, ['label' => 'Tên sản phẩm:', 'values' => $products_namearr, 'class' => 'products_name']);
         }
 
@@ -85,7 +85,7 @@ class ProductsController extends Controller
             $quantity = $request->input('quantity');
             $comparison_operator = $request->input('comparison_operator');
             $filters[] = ['products.inventory', $comparison_operator, $quantity];
-            $inventoryArray = explode(' ', $quantity);
+            $inventoryArray = explode(',.@', $quantity);
             array_push($string, ['label' => 'Tồn kho ' . $comparison_operator, 'values' => $inventoryArray, 'class' => 'quantity']);
         }
         // var_dump($request->comparison_operator);
@@ -94,7 +94,7 @@ class ProductsController extends Controller
             $avg = $request->avg;
             $operator = $request->avg_operator;
             array_push($filters, ['products.price_avg', $operator, $avg]);
-            $avgArray = explode(' ', $avg);
+            $avgArray = explode(',.@', $avg);
             array_push($string, ['label' => 'Trị trung bình ' . $operator, 'values' => $avgArray, 'class' => 'avg']);
         }
         // // Trị tồn kho
@@ -102,7 +102,7 @@ class ProductsController extends Controller
             $price_inven = $request->price_inven;
             $operator = $request->price_inven_operator;
             $filters[] = ['products.price_inventory', $operator, $price_inven];
-            $price_invenArray = explode(' ', $price_inven);
+            $price_invenArray = explode(',.@', $price_inven);
             array_push($string, ['label' => 'Trị tồn kho ' . $operator, 'values' => $price_invenArray, 'class' => 'price_inven']);
         }
 

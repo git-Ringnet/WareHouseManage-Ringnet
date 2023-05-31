@@ -56,11 +56,18 @@ class Exports extends Model
     {
         return $this->hasMany(ProductExports::class, 'export_id');
     }
-
+    public function allExports(){
+        $exports = DB::table($this->table)->get();
+        return $exports;
+    }
     protected $fillable = [
         'guest_id',
         'user_id',
         'total',
         'export_status',
     ];
+    public function sumTotalExports(){
+        $totalSum = DB::table($this->table)->sum('total');
+        return $totalSum;
+    }
 }

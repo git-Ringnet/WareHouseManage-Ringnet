@@ -234,7 +234,7 @@ $index = array_search($item['label'], $numberedLabels);
                                     </div>
                                     <div class="search-container px-2 mt-1">
                                         <input type="text" placeholder="Tìm thuộc tính lọc" id="myInput-status"
-                                            class="input-search pr-4" onkeyup="filterStatus()">
+                                            class="input-search w-100 pr-4" onkeyup="filterStatus()">
                                         <span class="search-icon"><i class="fas fa-search"></i></span>
                                     </div>
                                     <div
