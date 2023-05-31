@@ -5,11 +5,20 @@
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
-                <div class="col-sm-6">
-                    <a href="{{ route('admin.add') }}" class="btn btn-primary">
-                        Thêm nhân viên
-                    </a>
-                </div>
+                <a href="{{ route('admin.add') }}">
+                    <button type="button" class="btn btn-primary d-flex align-items-center">
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M6 0C6.38791 -1.97352e-08 6.70237 0.314463 6.70237 0.702373L6.70237 11.2976C6.70237 11.6855 6.38791 12 6 12C5.61209 12 5.29763 11.6855 5.29763 11.2976V0.702373C5.29763 0.314463 5.61209 -1.97352e-08 6 0Z"
+                                fill="white" />
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M12 6C12 6.38791 11.6855 6.70237 11.2976 6.70237H0.702373C0.314463 6.70237 -1.38146e-07 6.38791 0 6C-5.13115e-07 5.61209 0.314463 5.29763 0.702373 5.29763H11.2976C11.6855 5.29763 12 5.61209 12 6Z"
+                                fill="white" />
+                        </svg>
+                        <span class="ml-2">Thêm nhân viên</span>
+                    </button>
+                </a>
             </div>
             <div class="row m-auto filter">
                 <form class="w-100" action="" method="get" id='search-filter'>
@@ -92,7 +101,7 @@ $index = array_search($item['label'], $numberedLabels);
                                     <span class="filter-values">{{ implode(', ', $item['values']) }}</span>
                                     <a class="delete-item delete-btn-{{ $item['class'] }}"
                                         onclick="updateDeleteItemValue('{{ $item['label'] }}')">
-                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path d="M18 18L6 6" stroke="#555555" stroke-width="1.5"
                                                 stroke-linecap="round" stroke-linejoin="round" />

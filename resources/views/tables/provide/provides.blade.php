@@ -5,16 +5,6 @@
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1>Provides</h1>
-                </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="{{ asset('index') }}">Home</a></li>
-                        <li class="breadcrumb-item active">Provides</li>
-                    </ol>
-                </div>
-            </div>
             <a href="{{ route('provides.create') }}">
                 <button type="button" class="btn btn-primary d-flex align-items-center">
                     <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -28,6 +18,7 @@
                     <span class="ml-2">Thêm nhà cung cấp</span>
                 </button>
             </a>
+        </div>
             <div class="row m-auto filter pt-2">
                 <form class="w-100" action="" method="get" id='search-filter'>
                     <div class="row">
