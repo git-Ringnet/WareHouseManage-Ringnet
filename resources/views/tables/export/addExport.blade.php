@@ -227,12 +227,13 @@
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="productModalLabel">Thông tin sản phẩm</h5>
+                            <h5 class="modal-title" id="productModalLabel">Danh sách Serial Number</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
+                            
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
@@ -499,10 +500,6 @@
                 isFirstClick = true;
             });
 
-            sn.click(function() {
-
-            });
-
             info.click(function() {
                 var productCode = $(this).closest('tr').find('.maProduct option:selected')
                     .text();
@@ -526,7 +523,6 @@
                     '<b>Giá bán: </b>' + giaBan + '<br>' + '<b>Ghi chú: </b>' + ghiChu +
                     '<br>' + '<b>Thuế:</b> ' + thue + '<br>' + '<b>Thành tiền:</b> ' +
                     thanhTien);
-                $('#productModal').modal('show');
             });
 
             // Gắn các phần tử vào hàng mới
@@ -561,6 +557,37 @@
             });
         });
     });
+    //lấy S/N
+    $(document).ready(function() {
+        $(document).on('input', '#product_qty', function() {
+            var qty = $(this).val();
+            var productCode = $(this).closest('tr').find('.maProduct').val();
+
+            $.ajax({
+                url: "{{ route('getSN') }}",
+                method: 'GET',
+                data: {
+                    qty: qty,
+                    productCode: productCode,
+                },
+                success: function(response) {
+                    var modalBody = $('#snModal').find('.modal-body');
+                    modalBody.empty();
+                    var snList = $('<ul>');
+                    response.forEach(function(sn) {
+                        var snItem = $('<li>').text(sn.serinumber);
+                        snList.append(snItem);
+                    });
+                    modalBody.append(snList);
+                    $('#snModal').modal('show');
+                },
+                error: function(xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });
+    });
+
     //hiển thị thông tin khách hàng
     $(document).ready(function() {
         $('.search-info').click(function() {
@@ -907,27 +934,6 @@
     function toggleDiv() {
         window.print();
     }
-    //lấy S/N
-    $(document).ready(function() {
-        $('#product_qty').on('input', function() {
-            var qty = $(this).val();
-            var productCode = $(this).closest('tr').find('.maProduct').val();
-            $.ajax({
-                url: "{{ route('getSN') }}",
-                method: 'GET',
-                data: {
-                    qty: qty,
-                    productCode: productCode,
-                },
-                success: function(response) {
-                    console.log(response);
-                },
-                error: function(xhr, status, error) {
-                    console.error(error);
-                }
-            });
-        });
-    });
 </script>
 </body>
 
