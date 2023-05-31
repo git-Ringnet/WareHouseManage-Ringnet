@@ -54,6 +54,8 @@ Route::get('addguest', [ExportController::class, 'addCustomer'])->name('addCusto
 Route::get('nameProducts', [ExportController::class, 'nameProduct'])->name('nameProduct');
 //lấy thông tin sản phẩm từ tên sản phẩm
 Route::get('getProduct', [ExportController::class, 'getProduct'])->name('getProduct');
+//lấy thông tin SN của sản phẩm con
+Route::get('getSNproduct', [ExportController::class, 'getSN'])->name('getSN');
 
 Route::resource('data', ProductsController::class);
 Route::get('/insertProducts', [ProductsController::class, 'insertProducts'])->name('insertProducts');

@@ -267,22 +267,29 @@ class ExportController extends Controller
                         $existingProductIDs[] = $productExport->product_id;
                     }
                 }
+
                 if ($productIDs != null) {
                     // Cập nhật thông tin sản phẩm đang tồn tại
                     for ($i = 0; $i < count($productIDs); $i++) {
                         $productID = $productIDs[$i];
                         $productQty = $productQtys[$i];
                         $nameProduct = Product::where('id', $productID)->value('product_name');
+
                         if (in_array($productID, $existingProductIDs)) {
                             $proExport = ProductExports::where('export_id', $id)
                                 ->where('product_id', $productID)
                                 ->first();
+
+                            // Lấy số lượng hiện tại của sản phẩm
+                            $currentQty = Product::where('id', $productID)->value('product_qty');
+
                             // Kiểm tra số lượng sản phẩm mới được cập nhật
-                            $availableQty = $this->getAvailableProductQty($productID) + $proExport->product_qty - $productQty;
+                            $availableQty = $currentQty + $proExport->product_qty - $productQty;
 
                             if ($availableQty < 0) {
                                 return redirect()->route('exports.index')->with('danger', 'Vượt quá số lượng cho sản phẩm ' . $nameProduct . '!');
                             }
+
                             // Cập nhật seri_status khi số lượng sản phẩm tăng hoặc giảm
                             if ($productQty > $proExport->product_qty) {
                                 $serinumbersToUpdate = Serinumbers::where('product_id', $productID)
@@ -306,6 +313,7 @@ class ExportController extends Controller
                                 }
                             }
 
+                            // Cập nhật thông tin sản phẩm
                             $proExport->products_id = $request->products_id[$i];
                             $proExport->product_unit = $request->product_unit[$i];
                             $proExport->product_qty = $productQty;
@@ -316,9 +324,9 @@ class ExportController extends Controller
                             $proExport->save();
                         } else {
                             // Kiểm tra số lượng sản phẩm mới được thêm
-                            $availableQty = $this->getAvailableProductQty($productID);
+                            $currentQty = Product::where('id', $productID)->value('product_qty');
 
-                            if ($productQty > $availableQty) {
+                            if ($productQty > $currentQty) {
                                 return redirect()->route('exports.index')->with('danger', 'Vượt quá số lượng cho sản phẩm ' . $nameProduct . '!');
                             }
 
@@ -371,6 +379,13 @@ class ExportController extends Controller
                         $productExport->delete();
                     }
 
+                    // Giảm số lượng của sản phẩm trong bảng product
+                    for ($i = 0; $i < count($productIDs); $i++) {
+                        $productID = $productIDs[$i];
+                        $productQty = $productQtys[$i];        
+                        Product::where('id', $productID)->decrement('product_qty', $productQty);
+                    }
+
                     // Kiểm tra số lượng tổng cần thiết
                     $availableQtyTotal = $this->getAvailableProductQtyTotal();
 
@@ -383,10 +398,12 @@ class ExportController extends Controller
                     $exports->total = $request->totalValue;
                     $exports->export_status = 2;
                     $exports->save();
-                    //xóa seri_status = 2
+
+                    // Xóa các serinumbers có seri_status = 2
                     Serinumbers::where('seri_status', 2)
                         ->whereIn('product_id', $productIDs)
                         ->delete();
+
                     return redirect()->route('exports.index')->with('msg', 'Chốt đơn thành công!');
                 } else {
                     return redirect()->route('exports.index')->with('danger', 'Chưa được thêm sản phẩm nào!');
@@ -631,5 +648,12 @@ class ExportController extends Controller
         $data = $request->all();
         $product = Product::findOrFail($data['idProduct']);
         return response()->json($product);
+    }
+
+    public function getSN(Request $request)
+    {
+        $data = $request->all();
+        $sn = Serinumbers::where('product_id',$data['productCode'])->limit($data['qty'])->get();
+        return response()->json($sn);
     }
 }
