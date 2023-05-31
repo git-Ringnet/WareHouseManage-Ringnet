@@ -128,7 +128,7 @@ class AddProductController extends Controller
         $ordersNameAndProvide = Orders::leftjoin('provides', 'orders.provide_id', '=', 'provides.id')
             ->leftjoin('users', 'orders.users_id', '=', 'users.id')->get();
         $title = 'Nhập hàng';
-        return view('tables.order.insertProduct', compact('orders', 'product', 'sortType', 'string', 'ordersNameAndProvide', 'provides', 'title'));
+        return view('tables.order.insertProduct', compact('orders', 'product','sortType', 'string', 'ordersNameAndProvide', 'provides','title'));
     }
 
     /**
@@ -143,7 +143,7 @@ class AddProductController extends Controller
         $lastId = DB::table('productorders')->latest('id')->value('id');
         $las = DB::table('productorders')->get()->last()->id;
         $title = 'Tạo đơn nhập hàng';
-        return view('tables.order.insert', compact('provide', 'products', 'lastId', 'title'));
+        return view('tables.order.insert', compact('provide', 'products', 'lastId','title'));
     }
 
     /**
@@ -253,8 +253,8 @@ class AddProductController extends Controller
             ->whereIn('productorders.id', $productIds)->get();
 
         $title = 'Chỉnh sửa đơn nhập hàng';
-
-        return view('tables.order.edit', compact('provide', 'order', 'product_order', 'provide_order', 'lastId', 'products', 'seri', 'title'));
+        
+        return view('tables.order.edit', compact('provide', 'order', 'product_order', 'provide_order', 'lastId', 'products', 'seri','title'));
     }
 
     /**
@@ -643,46 +643,8 @@ class AddProductController extends Controller
         if (isset($request->list_id)) {
             $list = $request->list_id;
             Orders::whereIn('id', $list)->delete();
-            return response()->json(['success' => true, 'msg' => 'Xóa đơn hàng thành công', 'ids' => $list]);
-        }
-        return response()->json(['success' => false, 'msg' => 'Không tìm thấy đơn hàng cần xóa']);
-    }
-    public function cancelBill(Request $request)
-    {
-        if (isset($request->list_id)) {
-            $list = $request->list_id;
-            $listOrder = Orders::whereIn('id', $list)->get();
-            foreach ($listOrder as $value) {
-                if($value->order_status != 1){
-                    $value->order_status = 2;
-                    $value->save();
-                }
-            }
-            return response()->json(['success' => true, 'msg' => 'Hủy Đơn Hàng thành công']);
+            return response()->json(['success' => true, 'msg' => 'Delete Success', 'ids' => $list]);
         }
         return response()->json(['success' => false, 'msg' => 'Not fount']);
-    }
-
-    public function confirmBill(Request $request)
-    {
-        if (isset($request->list_id)) {
-            $list = $request->list_id;
-            $listOrder = Orders::whereIn('id', $list)->get();
-            foreach ($listOrder as $value) {
-                if($value->order_status == 0){
-                    $product = ProductOrders::where('order_id',$value->id)->get();
-                }
-            }
-            return response()->json(['success' => true, 'msg' => 'Hủy Đơn Hàng thành công']);
-        }
-        return response()->json(['success' => false, 'msg' => 'Not fount']);
-    }
-
-    public function showProduct(Request $request)
-    {
-        if (isset($request->id)) {
-            $pro = Product::where('products_id',$request->id)->get();
-            return $pro;
-        }
     }
 }

@@ -402,8 +402,6 @@
                 </tbody>
             </table>
             <button type="submit" name="deleteOrder" id="deleteOrder" class="btn btn-danger">Xóa nhiều</button>
-            <button type="submit" name="cancelBill" id="cancelBill" class="btn btn-danger">Hủy đơn hàng nhanh</button>
-            <button type="submit" name="confirmBill" id="confirmBill" class="btn btn-primary">Duyệt đơn nhanh</button>
             <div class="paginator mt-4 d-flex justify-content-end">
                 {{ $orders->appends(request()->except('page'))->links() }}
             </div>
@@ -412,51 +410,6 @@
     <!-- /.content -->
 </div>
 <script>
-    // AJAX duyệt đơn nhanh
-    $(document).on('click','#confirmBill',function(e){
-        e.preventDefault();
-        const list_id = [];
-        $('input[name="ids[]"]').each(function() {
-            if ($(this).is(':checked')) {
-                var value = $(this).val();
-                list_id.push(value);
-            }
-        });
-        $.ajax({
-            url: "{{ route('confirmBill') }}",
-            type: "get",
-            data: {
-                list_id: list_id,
-            },
-            success: function(data) {
-               location.reload();
-            }
-        })
-    })
-
-
-    // AJAX Hủy bill
-    $(document).on('click','#cancelBill',function(e){
-        e.preventDefault();
-        const list_id = [];
-        $('input[name="ids[]"]').each(function() {
-            if ($(this).is(':checked')) {
-                var value = $(this).val();
-                list_id.push(value);
-            }
-        });
-        $.ajax({
-            url: "{{ route('cancelBill') }}",
-            type: "get",
-            data: {
-                list_id: list_id,
-            },
-            success: function(data) {
-               location.reload();
-            }
-        })
-    })
-
     // AJAX Xóa Order by Order_id
     $(document).on('click', '#deleteOrder', function(e) {
         e.preventDefault();
@@ -465,6 +418,7 @@
             if ($(this).is(':checked')) {
                 var value = $(this).val();
                 list_id.push(value);
+
             }
         });
         $.ajax({
@@ -629,6 +583,7 @@
             }
         });
     }
+
 
     //Sort
     $(document).ready(function() {
