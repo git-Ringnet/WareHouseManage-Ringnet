@@ -457,7 +457,6 @@ $index = array_search($item['label'], $numberedLabels);
                                     @endforeach
                                 </tbody>
                             </table>
-
                         </div>
                         <!-- /.card-body -->
                     </div>
