@@ -220,8 +220,13 @@ nav.main-header.navbar.navbar-expand.navbar-white.navbar-light {
 }
 
 .content-wrapper {
+<<<<<<< HEAD
     background-color: #e9ecef;
     padding-top: 4%;
+=======
+    background-color: #E9ECEF;
+    padding-top: 55px;
+>>>>>>> origin/main
 }
 
 /* Main content */
@@ -239,6 +244,7 @@ table {
 
 td,
 th {
+<<<<<<< HEAD
     box-shadow: inset 0px -1px 0px #dde0e5;
     vertical-align: middle !important;
 }
@@ -280,4 +286,69 @@ tbody tr {
     .export-add {
         display: none;
     }
+=======
+    vertical-align: middle !important;
+}
+
+tbody tr {
+    background-color: #E9ECEF;
+}
+
+.product-details {
+    background-color: #ffff;
+}
+
+.dropdown-item-active[aria-expanded="true"] {
+    background-color: #fff;
+    border-radius: 4px;
+    width: 32px;
+    height: 32px;
+    text-align: center;
+}
+
+td {
+    font-size: 0.875rem;
+}
+
+.product-details.collapse {
+    height: 0;
+    overflow: hidden;
+    transition: height 0.3s ease;
+}
+
+.product-details.collapse.show {
+    height: auto;
+}
+
+.dropdownitem svg {
+    cursor: pointer;
+}
+
+td p {
+    font-size: 0.75rem;
+}
+
+* {
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+}
+
+.card {
+    overflow-x: scroll;
+}
+
+.navbar-nav .title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333333;
+}
+
+.nav-item p {
+    font-weight: 500;
+}
+
+.dropdown-menu {
+    left: auto;
+    right: 0;
+>>>>>>> origin/main
 }
