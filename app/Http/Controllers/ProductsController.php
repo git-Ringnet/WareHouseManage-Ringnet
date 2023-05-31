@@ -264,7 +264,8 @@ class ProductsController extends Controller
         $products = Products::findOrFail($id);
         $cate = Category::all();
         $title = 'Chỉnh sửa sản phẩm';
-        return view('tables.products.edit_products', compact('products', 'cate','title'));
+        $listProduct = Product::where('products_id',$products->id)->get();
+        return view('tables.products.edit_products', compact('products', 'cate','title','listProduct'));
     }
 
     /**
@@ -358,16 +359,20 @@ class ProductsController extends Controller
         if (isset($request->list_id)) {
             $list = $request->list_id;
             $check = Products::whereIn('id', $list)->get();
+            $hasProductWithInventory = false; 
             foreach ($check as $value) {
                 if ($value->inventory == 0) {
                     $value->delete();
                 } else {
-                    return response()->json(['success' => false, 'msg' => 'Còn sản phẩm con']);
+                    $hasProductWithInventory = true; 
                 }
+            }
+            if ($hasProductWithInventory) {
+                return response()->json(['success' => false, 'msg' => 'Còn sản phẩm còn']);
             }
             return response()->json(['success' => true, 'msg' => 'Xóa sản phẩm thành công', 'ids' => $list]);
         }
-        return response()->json(['success' => false, 'msg' => 'Không tìn thấy sản phẩm cần xóa']);
+        return response()->json(['success' => false, 'msg' => 'Không tìm thấy sản phẩm cần xóa']);
     }
 
 
