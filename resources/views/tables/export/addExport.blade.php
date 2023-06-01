@@ -233,7 +233,7 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            
+
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
@@ -484,7 +484,7 @@
                 "</td>");
             const thanhTienInput = $("<td><span class='px-5 total-amount'>0</span></td>");
             const sn = $(
-                "<td data-toggle='modal' data-target='#snModal'><img src='../dist/img/icon/list.png'></td>"
+                "<td data-toggle='modal' data-target='#snModal' class='sn'><img src='../dist/img/icon/list.png'></td>"
             );
             const info = $(
                 "<td data-toggle='modal' data-target='#productModal'><img src='../dist/img/icon/Group.png'></td>"
@@ -492,14 +492,44 @@
             const deleteBtn = $("<td><img src='../dist/img/icon/vector.png'></td>", {
                 "class": "delete-row-btn"
             });
-
+            //Xóa sản phẩm
             deleteBtn.click(function() {
                 $(this).closest("tr").remove();
                 calculateTotalAmount();
                 calculateGrandTotal();
                 isFirstClick = true;
             });
-
+            //lấy S/N
+            sn.click(function() {
+                var qty = $(this).closest('tr').find('.quantity-input').val();
+                var productCode = $(this).closest('tr').find('.productName').val();
+                console.log(productCode);
+                $.ajax({
+                    url: "{{ route('getSN') }}",
+                    method: 'GET',
+                    data: {
+                        qty: qty,
+                        productCode: productCode,
+                    },
+                    success: function(response) {
+                        var modalBody = $('#snModal').find(
+                            '.modal-body');
+                        modalBody.empty();
+                        var snList = $('<ul>');
+                        response.forEach(function(sn) {
+                            var snItem = $('<li>').text(sn
+                                .serinumber);
+                            snList.append(snItem);
+                        });
+                        modalBody.append(snList);
+                        $('#snModal').modal('show');
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+            });
+            //xem thông tin sản phẩm
             info.click(function() {
                 var productCode = $(this).closest('tr').find('.maProduct option:selected')
                     .text();
@@ -524,12 +554,10 @@
                     '<br>' + '<b>Thuế:</b> ' + thue + '<br>' + '<b>Thành tiền:</b> ' +
                     thanhTien);
             });
-
             // Gắn các phần tử vào hàng mới
             newRow.append(checkbox, MaInput, TenInput, ProInput, dvtInput, slInput,
                 giaInput, ghichuInput, thueInput, thanhTienInput, sn, info, deleteBtn);
             $("#dynamic-fields").before(newRow);
-
             // Tăng giá trị fieldCounter
             fieldCounter++;
             isFirstClick = false;
@@ -557,37 +585,6 @@
             });
         });
     });
-    //lấy S/N
-    $(document).ready(function() {
-        $(document).on('input', '#product_qty', function() {
-            var qty = $(this).val();
-            var productCode = $(this).closest('tr').find('.maProduct').val();
-
-            $.ajax({
-                url: "{{ route('getSN') }}",
-                method: 'GET',
-                data: {
-                    qty: qty,
-                    productCode: productCode,
-                },
-                success: function(response) {
-                    var modalBody = $('#snModal').find('.modal-body');
-                    modalBody.empty();
-                    var snList = $('<ul>');
-                    response.forEach(function(sn) {
-                        var snItem = $('<li>').text(sn.serinumber);
-                        snList.append(snItem);
-                    });
-                    modalBody.append(snList);
-                    $('#snModal').modal('show');
-                },
-                error: function(xhr, status, error) {
-                    console.error(error);
-                }
-            });
-        });
-    });
-
     //hiển thị thông tin khách hàng
     $(document).ready(function() {
         $('.search-info').click(function() {

@@ -189,8 +189,6 @@
                         </div>
                     </div>
                 </div>
-
-
                 @csrf
                 @method('PUT')
                 {{-- Form thông tin khách hàng --}}
@@ -314,6 +312,7 @@
                                     <td><input type="checkbox"></td>
                                     <td><?php echo $stt++; ?></td>
                                     <td>
+                                        @if($exports->export_status == 1)
                                         <select id="maProduct" class="p-1 pr-5" name="products_id[]">
                                             @foreach ($product_code as $value_code)
                                                 <option value="{{ $value_code->id }}"
@@ -321,6 +320,14 @@
                                                     {{ $value_code->products_code }}</option>
                                             @endforeach
                                         </select>
+                                        @endif
+                                        @if($exports->export_status == 2)
+                                        <select id="maProduct" class="p-1 pr-5" name="products_id[]">
+                                            <option value="{{ $value_export->id }}">
+                                                {{ $value_export->products_code }}
+                                            </option>
+                                        </select>
+                                        @endif
                                     </td>
                                     <td>
                                         <select class="child-select p-1 pr-5" name="product_id[]">
