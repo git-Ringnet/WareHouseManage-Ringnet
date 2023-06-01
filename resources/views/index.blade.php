@@ -75,7 +75,7 @@
                 <div class="container-fluid">
                     <!-- Small boxes (Stat box) -->
                     <div class="row container box-details justify-content-center pt-4 px-2 m-0">
-                        <div class="col-lg-4 col-6 mr-lg-3">
+                        <div class="col-lg-5 col-6 mr-lg-3">
                             <!-- small box -->
                             <div class="small-box bg-light pt-2">
                                 <div class="inner">
@@ -105,7 +105,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-4 col-6 ml-lg-3">
+                        <div class="col-lg-5 col-6 ml-lg-3">
                           <!-- small box -->
                           <div class="small-box bg-light pt-2">
                               <div class="inner">
@@ -138,7 +138,7 @@
                         
                     </div>
                     <div class="row container box-details justify-content-center pt-2 px-2 m-0">
-                      <div class="col-lg-4 col-6 mr-lg-3">
+                      <div class="col-lg-5 col-6 mr-lg-3">
                           <!-- small box -->
                           <div class="small-box bg-light pt-2">
                               <div class="inner">
@@ -168,7 +168,7 @@
                               </div>
                           </div>
                       </div>
-                      <div class="col-lg-4 col-6 ml-lg-3">
+                      <div class="col-lg-5 col-6 ml-lg-3">
                         <!-- small box -->
                         <div class="small-box bg-light pt-2">
                             <div class="inner">
@@ -199,7 +199,7 @@
                         </div>
                     </div>
                     <div class="row container box-details justify-content-center pt-2 px-2 m-0">
-                      <div class="col-lg-4 col-6 mr-lg-3">
+                      <div class="col-lg-5 col-6 mr-lg-3">
                           <!-- small box -->
                           <div class="small-box bg-light pt-2">
                               <div class="inner">
