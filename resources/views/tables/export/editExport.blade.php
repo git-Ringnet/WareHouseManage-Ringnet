@@ -312,21 +312,21 @@
                                     <td><input type="checkbox"></td>
                                     <td><?php echo $stt++; ?></td>
                                     <td>
-                                        @if($exports->export_status == 1)
-                                        <select id="maProduct" class="p-1 pr-5" name="products_id[]">
-                                            @foreach ($product_code as $value_code)
-                                                <option value="{{ $value_code->id }}"
-                                                    @if ($value_export->products_id == $value_code->id) selected @endif>
-                                                    {{ $value_code->products_code }}</option>
-                                            @endforeach
-                                        </select>
+                                        @if ($exports->export_status == 1)
+                                            <select id="maProduct" class="p-1 pr-5 maProduct" name="products_id[]">
+                                                @foreach ($product_code as $value_code)
+                                                    <option value="{{ $value_code->id }}"
+                                                        @if ($value_export->products_id == $value_code->id) selected @endif>
+                                                        {{ $value_code->products_code }}</option>
+                                                @endforeach
+                                            </select>
                                         @endif
-                                        @if($exports->export_status == 2)
-                                        <select id="maProduct" class="p-1 pr-5" name="products_id[]">
-                                            <option value="{{ $value_export->id }}">
-                                                {{ $value_export->products_code }}
-                                            </option>
-                                        </select>
+                                        @if ($exports->export_status == 2)
+                                            <select class="p-1 pr-5 maProduct" name="products_id[]">
+                                                <option value="{{ $value_export->id }}">
+                                                    {{ $value_export->products_code }}
+                                                </option>
+                                            </select>
                                         @endif
                                     </td>
                                     <td>
@@ -416,6 +416,45 @@
                 @endif
             </div>
         </form>
+        {{-- Modal Product --}}
+        <div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="productModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="productModalLabel">Thông tin sản phẩm</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{-- Modal S/N --}}
+        <div class="modal fade" id="snModal" tabindex="-1" role="dialog" aria-labelledby="productModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="productModalLabel">Danh sách Serial Number</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 </div>
 <script>
@@ -489,14 +528,14 @@
             });
             const TenInput = $("<td>" +
                 "<select id='maProduct' class='p-1 pr-5 maProduct' name='products_id[]'>" +
-                '@foreach ($product_code as $value)' +
                 "<option value=''>Lựa chọn sản phẩm</option>" +
+                '@foreach ($product_code as $value)' +
                 "<option value='{{ $value->id }}'>{{ $value->products_code }}</option>" +
                 '@endforeach' +
                 "</select>"
             );
             const ProInput = $("<td>" +
-                "<select class='child-select p-1 pr-5' name='product_id[]'>" +
+                "<select class='child-select p-1 pr-5 productName' name='product_id[]'>" +
                 "<option value=''>Lựa chọn sản phẩm</option>" +
                 "</select>" +
                 "</td>");
@@ -513,14 +552,73 @@
                 "<input type='number' id='product_tax' class='product_tax' name='product_tax[]' required>" +
                 "</td>");
             const thanhTienInput = $("<td><span class='px-5 total-amount'>0</span></td>");
-            const sn = $("<td><img src='../../dist/img/icon/list.png'></td>");
-            const info = $("<td><img src='../../dist/img/icon/Group.png'></td>");
+            const sn = $(
+                "<td data-toggle='modal' data-target='#snModal' class='sn'><img src='../../dist/img/icon/list.png'></td>"
+            );
+            const info = $(
+                "<td data-toggle='modal' data-target='#productModal'><img src='../../dist/img/icon/Group.png'></td>"
+            );
             const deleteBtn = $("<td><img src='../../dist/img/icon/vector.png'></td>", {
                 "class": "delete-row-btn"
             });
             deleteBtn.click(function() {
                 $(this).closest("tr").remove();
                 calculateGrandTotal();
+            });
+            //lấy S/N
+            sn.click(function() {
+                var qty = $(this).closest('tr').find('.quantity-input').val();
+                var productCode = $(this).closest('tr').find('.productName').val();
+                console.log(productCode);
+                $.ajax({
+                    url: "{{ route('getSN') }}",
+                    method: 'GET',
+                    data: {
+                        qty: qty,
+                        productCode: productCode,
+                    },
+                    success: function(response) {
+                        var modalBody = $('#snModal').find(
+                            '.modal-body');
+                        modalBody.empty();
+                        var snList = $('<ul>');
+                        response.forEach(function(sn) {
+                            var snItem = $('<li>').text(sn
+                                .serinumber);
+                            snList.append(snItem);
+                        });
+                        modalBody.append(snList);
+                        $('#snModal').modal('show');
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+            });
+            //xem thông tin sản phẩm
+            info.click(function() {
+                var productCode = $(this).closest('tr').find('.maProduct option:selected')
+                    .text();
+                var productName = $(this).closest('tr').find('.productName option:selected')
+                    .text();
+                var dvt = $(this).closest('tr').find('.product_unit').val();
+                var soluong = $(this).closest('tr').find('.quantity-input')
+                    .val();
+                var giaBan = $(this).closest('tr').find('.product_price')
+                    .val();
+                var ghiChu = $(this).closest('tr').find('.note_product')
+                    .val();
+                var thue = $(this).closest('tr').find('.product_tax')
+                    .val();
+                var thanhTien = $(this).closest('tr').find('.total-amount')
+                    .text();
+                $('#productModal').find('.modal-body').html('<b>Mã sản phẩm:</b> ' +
+                    productCode +
+                    '<br>' + '<b>Tên sản phẩm:</b> ' + productName + '<br>' +
+                    '<b>ĐVT:</b> ' + dvt + '<br>' + '<b>Số lượng: </b>' + soluong + '<br>' +
+                    '<b>Giá bán: </b>' + giaBan + '<br>' + '<b>Ghi chú: </b>' + ghiChu +
+                    '<br>' + '<b>Thuế:</b> ' + thue + '<br>' + '<b>Thành tiền:</b> ' +
+                    thanhTien);
             });
             newRow.append(checkbox, MaInput, TenInput, ProInput, dvtInput, slInput,
                 giaInput, ghichuInput, thueInput, thanhTienInput, sn, info, deleteBtn);
