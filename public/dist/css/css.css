@@ -413,3 +413,10 @@ td p {
 .box-details .small-box{
     border-radius: 16px;
 }
+.show {
+    display: block !important;
+}
+
+.dropdown-values {
+    display: none;
+}
