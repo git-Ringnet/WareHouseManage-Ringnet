@@ -118,9 +118,6 @@ class AddProductController extends Controller
             array_push($productIds, $value->id);
         }
         $orders = $this->orders->getAllOrders($filters, $status, $provide_namearr, $name, $date, $keywords, $sortBy, $sortType);
-        // $product = DB::table('productorders')
-        //     ->join('orders', 'productorders.order_id', '=', 'orders.id')
-        //     ->whereIn('orders.id', $productIds)->get();
         $product = ProductOrders::with('getCodeProduct')
             ->join('orders', 'productorders.order_id', '=', 'orders.id')
             ->whereIn('orders.id', $productIds)
