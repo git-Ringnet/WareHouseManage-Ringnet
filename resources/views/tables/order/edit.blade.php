@@ -170,11 +170,11 @@
                 <td>Thông tin sản phẩm</td>
                 <td>Loại hàng</td>
                 <td>Đơn vị tính</td>
-                <td>Thương hiệu</td>
                 <td>Số lượng</td>
                 <td>Giá nhập</td>
                 <td>Thuế</td>
                 <td>Thành tiền</td>
+                <td>Ghi chú</td>
                 <td>SN</td>
                 <td></td>
               </tr>
