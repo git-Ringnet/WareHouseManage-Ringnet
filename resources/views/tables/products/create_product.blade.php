@@ -34,7 +34,7 @@
                     <div class="col-md-3">
                       <div class="product_name">
                         <h4>Tên sản phẩm</h4>
-                        <input type="text" value="{{$products->products_name}}">
+                        <input type="text" value="{{$products->products_name}}" class="form-control">
                       </div>
                       <div class="product_code">
                         <h4>Mã sản phẩm</h4>

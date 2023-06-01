@@ -74,6 +74,11 @@ Route::POST('/addBillEdit', [AddProductController::class, 'addBillEdit'])->name(
 Route::post('/insertProductP', [AddProductController::class, 'addBill'])->name('addBill');
 Route::put('/deleteBill/{id?}', [AddProductController::class, 'deleteBill'])->name('deleteBill');
 Route::get('/deleteOrder', [AddProductController::class, 'deleteOrder'])->name('deleteOrder');
+Route::get('/cancelBill',[AddProductController::class,'cancelBill'])->name('cancelBill');
+Route::get('/confirmBill',[AddProductController::class,'confirmBill'])->name('confirmBill');
+Route::get('/showProduct',[AddProductController::class,'showProduct'])->name('showProduct');
+
+
 Route::get('/simple', function () {
     return view('tables.simple');
 });
