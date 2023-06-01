@@ -177,8 +177,8 @@ class ProductsController extends Controller
             )
             ->get();
 
-            $title = 'Sản phẩm';
-        return view('tables.products.data', compact('products', 'categories', 'product', 'string', 'sortType', 'trademarks','title'));
+        $title = 'Sản phẩm';
+        return view('tables.products.data', compact('products', 'categories', 'product', 'string', 'sortType', 'trademarks', 'title'));
     }
 
     /**
@@ -250,7 +250,7 @@ class ProductsController extends Controller
         $products = Products::findOrFail($id);
         $provide = Provides::all();
         $title = 'Sản phẩm';
-        return view('tables.products.test', compact('products', 'provide','title'));
+        return view('tables.products.test', compact('products', 'provide', 'title'));
     }
 
     /**
@@ -264,8 +264,8 @@ class ProductsController extends Controller
         $products = Products::findOrFail($id);
         $cate = Category::all();
         $title = 'Chỉnh sửa sản phẩm';
-        $listProduct = Product::where('products_id',$products->id)->get();
-        return view('tables.products.edit_products', compact('products', 'cate','title','listProduct'));
+        $listProduct = Product::where('products_id', $products->id)->paginate(5);
+        return view('tables.products.edit_products', compact('products', 'cate', 'title', 'listProduct'));
     }
 
     /**
@@ -282,12 +282,13 @@ class ProductsController extends Controller
         $get_image = $request->file('products_img');
         if ($get_image) {
             $get_name_image = $get_image->getClientOriginalName();
-            $name_image = current(explode('.', $get_name_image));
-            $new_image =  $get_name_image;
+            $name_image = pathinfo($get_name_image, PATHINFO_FILENAME);
+            $extension = $get_image->getClientOriginalExtension();
+            $new_image = $name_image . '.' . $extension;
             $get_image->move('../public/dist/img', $new_image);
-            $products->products_image = $name_image;
+            $products->products_image =  $new_image;
         } else {
-            $products->products_image = $products->products_image;
+            $products->products_image = "";
         }
 
         $products->products_code = $request->get('products_code');
@@ -327,7 +328,7 @@ class ProductsController extends Controller
     {
         $cate = Category::all();
         $title = 'Thêm sản phẩm';
-        return view('tables.products.insertProducts', compact('cate','title'));
+        return view('tables.products.insertProducts', compact('cate', 'title'));
     }
     public function storeProducts(Request $request)
     {
@@ -336,12 +337,14 @@ class ProductsController extends Controller
         if ($get_image) {
             $get_name_image = $get_image->getClientOriginalName();
             $name_image = current(explode('.', $get_name_image));
-            $new_image =  $get_name_image;
+            $extension = $get_image->getClientOriginalExtension();
+            $new_image = $name_image . '.' . $extension;
             $get_image->move('../public/dist/img', $new_image);
-            $products->products_image = $name_image;
+            $products->products_image = $new_image;
         } else {
             $products->products_image = "";
         }
+
         $products->products_code = $request->products_code;
         $products->products_name = $request->products_name;
         $products->ID_category = $request->product_category;
@@ -359,12 +362,12 @@ class ProductsController extends Controller
         if (isset($request->list_id)) {
             $list = $request->list_id;
             $check = Products::whereIn('id', $list)->get();
-            $hasProductWithInventory = false; 
+            $hasProductWithInventory = false;
             foreach ($check as $value) {
                 if ($value->inventory == 0) {
                     $value->delete();
                 } else {
-                    $hasProductWithInventory = true; 
+                    $hasProductWithInventory = true;
                 }
             }
             if ($hasProductWithInventory) {
@@ -382,7 +385,7 @@ class ProductsController extends Controller
         $pro = Product::findOrFail($id);
         $select = Products::all();
         $title = 'Chỉnh sửa sản phẩm';
-        return view('tables.products.editproduct', compact('pro', 'select','title'));
+        return view('tables.products.editproduct', compact('pro', 'select', 'title'));
     }
     public function updateProduct(Request $request, $id)
     {
@@ -395,7 +398,7 @@ class ProductsController extends Controller
         $product->tax = $request->product_tax;
         $product->total = ($request->product_price * $product->product_qty);
         $product->save();
-      
+
         // Recalculate average price and inventory
         $updatePrice = Product::where('products_id', $product->products_id)->get();
         $relatedProduct = Products::findOrFail($product->products_id);
@@ -405,7 +408,7 @@ class ProductsController extends Controller
             $relatedProduct->price_avg = ($relatedProduct->price_inventory / $relatedProduct->inventory);
         }
         $relatedProduct->save();
-      
+
         return redirect()->route('data.index');
     }
 }

@@ -196,7 +196,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="text-center mt-4">
+                <div class="text-center mt-4 btn-fixed">
                     <button type="submit" name="action" class="btn btn-primary mr-1"
                         onclick="validateAndSubmit(event)">Lưu</button>
                     <a href="{{ route('exports.index') }}"><span class="btn border-secondary ml-1">Hủy</span></a>

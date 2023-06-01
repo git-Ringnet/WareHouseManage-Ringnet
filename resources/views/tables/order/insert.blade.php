@@ -180,7 +180,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="d-flex justify-content-center">
+                <div class="d-flex justify-content-center btn-fixed">
                     <button style="bottom: 0;" type="submit" name="action" class="btn btn-primary mr-2" value="AddProduct">Lưu</button>
                     <a href="{{ route('insertProduct.index') }}" class="btn btn-light" onclick="return confirm('Bạn có muốn quay lại ?');">Hủy</a>
                 </div>
