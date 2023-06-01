@@ -87,15 +87,20 @@
                                                 } else {
                                                     echo 0;
                                                 } @endphp">
-                                {{ $item['label'] }}
-                                <span class="filter-values">{{ implode(', ', $item['values']) }}</span>
-                                <a class="delete-item delete-btn-{{ $item['class'] }}" onclick="updateDeleteItemValue('{{ $item['label'] }}')">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M18 18L6 6" stroke="#555555" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                        <path d="M18 6L6 18" stroke="#555555" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg>
-                                </a>
-                            </span>
+
+                                    {{ $item['label'] }}
+                                    <span class="filter-values">{{ implode(',', $item['values']) }}</span>
+                                    <a class="delete-item delete-btn-{{ $item['class'] }}"
+                                        onclick="updateDeleteItemValue('{{ $item['label'] }}')">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M18 18L6 6" stroke="#555555" stroke-width="1.5"
+                                                stroke-linecap="round" stroke-linejoin="round" />
+                                            <path d="M18 6L6 18" stroke="#555555" stroke-width="1.5"
+                                                stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </a>
+                                </span>
                             @endforeach
                         </div>
 
@@ -216,7 +221,8 @@
                                         <h5>Trạng thái:</h5>
                                     </div>
                                     <div class="search-container px-2 mt-1">
-                                        <input type="text" placeholder="Tìm thuộc tính lọc" id="myInput-status" class="pr-4 input-search" onkeyup="filterStatus()">
+                                        <input type="text" placeholder="Tìm thuộc tính lọc" id="myInput-status"
+                                            class="pr-4 w-100 input-search" onkeyup="filterStatus()">
                                         <span class="search-icon"><i class="fas fa-search"></i></span>
                                     </div>
                                     <div class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
@@ -250,7 +256,8 @@
                                         <h5>Danh mục:</h5>
                                     </div>
                                     <div class="search-container px-2 mt-1">
-                                        <input type="text" placeholder="Tìm thuộc tính lọc" id="myInput-category" class="pr-4" onkeyup="filterCategory()">
+                                        <input type="text" placeholder="Tìm thuộc tính lọc" id="myInput-category"
+                                            class="pr-4 w-100" onkeyup="filterCategory()">
                                         <span class="search-icon"><i class="fas fa-search"></i></span>
                                     </div>
                                     <div class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
@@ -282,7 +289,8 @@
                                         <h5>Thương hiệu</h5>
                                     </div>
                                     <div class="search-container px-2 mt-1">
-                                        <input type="text" placeholder="Tìm thuộc tính lọc" id="myInput-trademark" class="pr-4" onkeyup="filterTrademark()">
+                                        <input type="text" placeholder="Tìm thuộc tính lọc" id="myInput-trademark"
+                                            class="pr-4 w-100" onkeyup="filterTrademark()">
                                         <span class="search-icon"><i class="fas fa-search"></i></span>
                                     </div>
                                     <div class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">

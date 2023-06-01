@@ -21,12 +21,12 @@ li {
     border-radius: 8px 8px 0px 0px;
 }
 
-.select-checkbox>.cursor {
+.select-checkbox > .cursor {
     cursor: pointer;
 }
 
 .filter-group {
-    background: #DEE2E6;
+    background: #dee2e6;
     border-radius: 8px;
     padding: 8px 16px;
     margin-right: 5px;
@@ -37,7 +37,7 @@ li {
 
 .btn-filter,
 .btn-delete-filter {
-    background: #FFFFFF;
+    background: #ffffff;
     border-radius: 8px;
 }
 
@@ -71,7 +71,7 @@ li {
 .input-quantity,
 .input-search {
     padding: 5px 10px;
-    border: 1px solid #D6D6D6;
+    border: 1px solid #d6d6d6;
     border-radius: 5px;
 }
 
@@ -162,19 +162,19 @@ nav.main-header.navbar.navbar-expand.navbar-white.navbar-light {
 /* .nav-item:hover svg{
     fill: #EBEFFF !important;
 } */
-.sidebar-dark-primary .nav-sidebar>.nav-item>.nav-link.active,
-.sidebar-light-primary .nav-sidebar>.nav-item>.nav-link.active {
-    background-color: #EBEFFF;
-    color: #0095F6;
+.sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link.active,
+.sidebar-light-primary .nav-sidebar > .nav-item > .nav-link.active {
+    background-color: #ebefff;
+    color: #0095f6;
     box-shadow: none;
     border-left: 4px solid !important;
     border-radius: 0;
 }
 
-.sidebar-light-primary .nav-sidebar>.nav-item>.nav-link:hover {
-    background-color: #EBEFFF;
+.sidebar-light-primary .nav-sidebar > .nav-item > .nav-link:hover {
+    background-color: #ebefff;
     border-radius: 0;
-    color: #0095F6;
+    color: #0095f6;
     box-shadow: none;
     border-left: 4px solid !important;
     transition: border-left 0.2s ease-in-out;
@@ -185,28 +185,27 @@ nav.main-header.navbar.navbar-expand.navbar-white.navbar-light {
 }
 
 .nav-link:hover .stroke path {
-    stroke: #0095F6;
+    stroke: #0095f6;
 }
 
 .nav-link:hover .fill path {
-    fill: #0095F6;
+    fill: #0095f6;
 }
 
 .nav-link.active .stroke path {
-    stroke: #0095F6;
+    stroke: #0095f6;
 }
 
 .nav-link.active .fill path {
-    fill: #0095F6;
+    fill: #0095f6;
 }
 
 .main-sidebar,
 .main-sidebar::before {
-    transition: margin-left .5s ease-in-out;
+    transition: margin-left 0.5s ease-in-out;
 }
 
 @media (min-width: 992px) {
-
     .sidebar-mini.sidebar-collapse .content-wrapper,
     .sidebar-mini.sidebar-collapse .main-footer,
     .sidebar-mini.sidebar-collapse .main-header {
@@ -221,8 +220,13 @@ nav.main-header.navbar.navbar-expand.navbar-white.navbar-light {
 }
 
 .content-wrapper {
+<<<<<<< HEAD
+    background-color: #e9ecef;
+    padding-top: 4%;
+=======
     background-color: #E9ECEF;
     padding-top: 55px;
+>>>>>>> origin/main
 }
 
 /* Main content */
@@ -240,6 +244,49 @@ table {
 
 td,
 th {
+<<<<<<< HEAD
+    box-shadow: inset 0px -1px 0px #dde0e5;
+    vertical-align: middle !important;
+}
+tbody tr {
+    background-color: #e9ecef;
+}
+.product-details {
+    background-color: #ffff;
+}
+.content-wrapper .card {
+    /* background:none; */
+}
+/*EXPORTS ADD*/
+#print-price table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#print-price td,
+#print-price th {
+    border: 2px solid #000000;
+    text-align: left;
+    padding: 8px;
+}
+#print-price ul {
+    padding: 0;
+    list-style: none;
+}
+#print-price {
+    display: none;
+}
+@media print {
+    #print-price {
+        display: block;
+    }
+    #btn-print {
+        display: none;
+    }
+    .export-add {
+        display: none;
+    }
+=======
     vertical-align: middle !important;
 }
 
@@ -303,4 +350,66 @@ td p {
 .dropdown-menu {
     left: auto;
     right: 0;
+>>>>>>> origin/main
+}
+
+.box .small-box {
+    border-radius: 24px;
+    color: #ffff;
+    margin-top: 20px;
+}
+
+.box .inner .total {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.box .inner a {
+    font-size: .75rem;
+    font-weight: 500;
+    color: #ffff;
+}
+
+.box .small-box>.inner {
+    padding: 15px 5px 15px 25px;
+    text-align: left;
+}
+
+.box .title-box {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #333333;
+    position: absolute;
+    top: 10px;
+    left: 15px;
+}
+
+.content .container .box {
+    padding: 3rem 6rem 1.5rem 6rem;
+    border-radius: 16px;
+    position: relative;
+}
+
+.box-details .total-tilte{
+    color: #656565;
+    font-size: 1.125rem;
+    font-weight: 400;
+}
+.box-details .total{
+    color: #1E1E1E;
+    font-size: 2.125rem;
+    font-weight: 700;
+}
+.box-details p{
+    color: #ADADAD;
+    font-size: 1rem;
+    font-weight: 500;
+}
+.box-details .inner{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.box-details .small-box{
+    border-radius: 16px;
 }
