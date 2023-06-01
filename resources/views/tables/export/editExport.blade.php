@@ -171,15 +171,15 @@
                                     </span>
                                 @endif
                             </div>
-                            @if($exports->export_status != 0)
-                            <div class="position-absolute" style="top: 32px; z-index: 0;left: 17px">
-                                <svg height="4" viewBox="0 0 364 3" fill="none" style="width: 95%"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <line x1="0.999268" y1="1.50098" x2="363.001" y2="1.50098"
-                                        stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                </svg>
-                            </div>
+                            @if ($exports->export_status != 0)
+                                <div class="position-absolute" style="top: 32px; z-index: 0;left: 17px">
+                                    <svg height="4" viewBox="0 0 364 3" fill="none" style="width: 95%"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <line x1="0.999268" y1="1.50098" x2="363.001" y2="1.50098"
+                                            stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round" />
+                                    </svg>
+                                </div>
                             @endif
                             <div class="justify-content-between d-flex">
                                 <b>Tạo đơn</b>
@@ -483,6 +483,7 @@
             const TenInput = $("<td>" +
                 "<select id='maProduct' class='p-1 pr-5 maProduct' name='products_id[]'>" +
                 '@foreach ($product_code as $value)' +
+                "<option value=''>Lựa chọn sản phẩm</option>" +
                 "<option value='{{ $value->id }}'>{{ $value->products_code }}</option>" +
                 '@endforeach' +
                 "</select>"

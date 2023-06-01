@@ -234,7 +234,7 @@ $index = array_search($item['label'], $numberedLabels);
                                     </div>
                                     <div class="search-container px-2 mt-1">
                                         <input type="text" placeholder="Tìm thuộc tính lọc" id="myInput-status"
-                                            class="input-search pr-4" onkeyup="filterStatus()">
+                                            class="input-search w-100 pr-4" onkeyup="filterStatus()">
                                         <span class="search-icon"><i class="fas fa-search"></i></span>
                                     </div>
                                     <div
@@ -457,7 +457,6 @@ $index = array_search($item['label'], $numberedLabels);
                                     @endforeach
                                 </tbody>
                             </table>
-
                         </div>
                         <!-- /.card-body -->
                     </div>
@@ -677,11 +676,9 @@ $index = array_search($item['label'], $numberedLabels);
     }
     //xuất excel
     function exportToExcel() {
-        // Lấy dữ liệu từ bảng HTML
         var table = document.getElementById('example2');
         var tableData = [];
 
-        // Lấy dữ liệu từ các hàng và cột trong bảng
         for (var i = 0, row; row = table.rows[i]; i++) {
             var rowData = [];
             for (var j = 0, cell; cell = row.cells[j]; j++) {
@@ -690,16 +687,10 @@ $index = array_search($item['label'], $numberedLabels);
             tableData.push(rowData);
         }
 
-        // Tạo workbook mới
         var wb = XLSX.utils.book_new();
-
-        // Tạo worksheet từ dữ liệu bảng
         var ws = XLSX.utils.aoa_to_sheet(tableData);
-
-        // Thêm worksheet vào workbook
         XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
 
-        // Xuất file Excel
         var wbout = XLSX.write(wb, {
             bookType: 'xlsx',
             type: 'array'
@@ -712,15 +703,13 @@ $index = array_search($item['label'], $numberedLabels);
             type: 'application/octet-stream'
         });
         var url = URL.createObjectURL(blob);
-
         var a = document.createElement('a');
+
         a.href = url;
         a.download = filename;
         a.click();
 
-        setTimeout(function() {
-            URL.revokeObjectURL(url);
-        }, 0);
+        URL.revokeObjectURL(url);
     }
 </script>
 </body>

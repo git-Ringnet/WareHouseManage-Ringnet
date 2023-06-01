@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AddProductController;
 use App\Http\Controllers\AjaxController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\GuestsController;
 use App\Http\Controllers\InsertProductController;
@@ -54,6 +55,8 @@ Route::get('addguest', [ExportController::class, 'addCustomer'])->name('addCusto
 Route::get('nameProducts', [ExportController::class, 'nameProduct'])->name('nameProduct');
 //lấy thông tin sản phẩm từ tên sản phẩm
 Route::get('getProduct', [ExportController::class, 'getProduct'])->name('getProduct');
+//lấy thông tin SN của sản phẩm con
+Route::get('getSN', [ExportController::class, 'getSN'])->name('getSN');
 
 Route::resource('data', ProductsController::class);
 Route::get('/insertProducts', [ProductsController::class, 'insertProducts'])->name('insertProducts');
@@ -74,15 +77,14 @@ Route::get('/deleteOrder', [AddProductController::class, 'deleteOrder'])->name('
 Route::get('/simple', function () {
     return view('tables.simple');
 });
+Route::get('index', [DashboardController::class, 'index']);
 
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified'
 ])->group(function () {
-    Route::get('/', function () {
-        return view('index');
-    })->name('dashboard');
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 });
 //chuyen trang
 Route::get('/{name?}', function ($name = "index") {
