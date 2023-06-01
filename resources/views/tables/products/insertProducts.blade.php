@@ -76,6 +76,7 @@
                 </table>
               </div>
               <button type="submit" class="btn btn-primary">Thêm</button>
+              <a href="{{route('data.index')}}" class="btn btn-default" onclick="return confirm('Bạn có muốn rời khỏi trang ?');">Hủy</a>
             </form>
           </div>
         </div>
