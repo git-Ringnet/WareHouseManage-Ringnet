@@ -14,7 +14,7 @@
                             {{-- <a href="#" class="btn btn-danger text-white">Chốt đơn</a>
                             <a href="#" class="btn btn-secondary ml-4">Hủy đơn</a> --}}
                             <a href="#" class="btn border border-secondary ml-4">Xuất file</a>
-                            <button class="btn border border-secondary ml-4" onclick="toggleDiv(event)">
+                            <button class="btn border border-secondary ml-4" onclick="toggleDiv()">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path
@@ -138,7 +138,7 @@
                 <section id="data-container" class="container-fluid bg-white"></section>
                 {{-- Bảng thêm sản phẩm --}}
                 <div class="mt-4" style="overflow-x: scroll;">
-                    <table class="table">
+                    <table class="table" id="sourceTable">
                         <thead class="bg-white border-0 rounded-top">
                             <tr>
                                 <th><input type="checkbox"></th>
@@ -158,6 +158,8 @@
                         </thead>
                         <tbody>
                             <tr id="dynamic-fields"></tr>
+                        </tbody>
+                        <tfoot>
                             <tr>
                                 <td></td>
                                 <td></td>
@@ -165,7 +167,7 @@
                                     <span class="btn btn-secondary" id="add-field-btn">Thêm sản phẩm</span>
                                 </td>
                             </tr>
-                        </tbody>
+                        </tfoot>
                     </table>
                 </div>
                 <div class="row position-relative">
@@ -196,7 +198,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="text-center mt-4 btn-fixed">
+                <div class="text-center mt-4">
                     <button type="submit" name="action" class="btn btn-primary mr-1"
                         onclick="validateAndSubmit(event)">Lưu</button>
                     <a href="{{ route('exports.index') }}"><span class="btn border-secondary ml-1">Hủy</span></a>
@@ -305,51 +307,57 @@
         </div>
     </div>
     <div class="container">
-        <table>
-            <tr>
-                <th class="text-center">P/N</th>
-                <th class="text-center">CHI TIẾT CẤU HÌNH KỸ THUẬT</th>
-                <th class="text-center">SL</th>
-                <th class="text-center">ĐƠN GIÁ</th>
-                <th class="text-center">THÀNH TIỀN</th>
-            </tr>
-            <tr>
-                <td class="text-center">1</td>
-                <td>Cisco Catalyst 9800-CL Wireless Controller for Cloud</td>
-                <td class="text-center">3</td>
-                <td class="text-right">5,600,000</td>
-                <td class="text-right">16,800,000</td>
-            </tr>
-            <tr>
-                <td class="text-center">2</td>
-                <td>Thiết bị quản lý không dây Cisco Catalyst 9800-CL</td>
-                <td class="text-center">4</td>
-                <td class="text-right">4,750,000</td>
-                <td class="text-right">19,000,000</td>
-            </tr>
-            <tr>
-                <td colspan="4" class="text-center">
-                    <b style="color: #EC212D;">Tổng cộng tiền hàng:</b>
-                </td>
-                <td style="color: #EC212D;" class="text-right"><b>35,800,000</b></td>
-            </tr>
-            <tr>
-                <td colspan="4" class="text-center" style="color: #EC212D;">
-                    <b>Thuế VAT 10%:</b>
-                </td>
-                <td style="color: #EC212D;" class="text-right"><b>3,580,000</b></td>
-            </tr>
-            <tr>
-                <td colspan="4" class="text-center"><b style="color: #EC212D;">Thành tiền:</b></td>
-                <td style="color: #EC212D;" class="text-right"><b>39,380,000</b></td>
-            </tr>
-            <tr>
-                <td colspan="5" class="text-center">
-                    <b>(Bằng chữ: Ba mươi chín triệu ba trăm tám mươi
-                        ngàn đồng chẵn).
-                    </b>
-                </td>
-            </tr>
+        <table id="destinationTable">
+            <thead>
+                <tr>
+                    <th class="text-center">P/N</th>
+                    <th class="text-center">CHI TIẾT CẤU HÌNH KỸ THUẬT</th>
+                    <th class="text-center">SL</th>
+                    <th class="text-center">ĐƠN GIÁ</th>
+                    <th class="text-center">THÀNH TIỀN</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-center">1</td>
+                    <td>Cisco Catalyst 9800-CL Wireless Controller for Cloud</td>
+                    <td class="text-center">3</td>
+                    <td class="text-right">5,600,000</td>
+                    <td class="text-right">16,800,000</td>
+                </tr>
+                <tr>
+                    <td class="text-center">2</td>
+                    <td>Thiết bị quản lý không dây Cisco Catalyst 9800-CL</td>
+                    <td class="text-center">4</td>
+                    <td class="text-right">4,750,000</td>
+                    <td class="text-right">19,000,000</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4" class="text-center">
+                        <b style="color: #EC212D;">Tổng cộng tiền hàng:</b>
+                    </td>
+                    <td style="color: #EC212D;" class="text-right"><b>35,800,000</b></td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="text-center" style="color: #EC212D;">
+                        <b>Thuế VAT 10%:</b>
+                    </td>
+                    <td style="color: #EC212D;" class="text-right"><b>3,580,000</b></td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="text-center"><b style="color: #EC212D;">Thành tiền:</b></td>
+                    <td style="color: #EC212D;" class="text-right"><b>39,380,000</b></td>
+                </tr>
+                <tr>
+                    <td colspan="5" class="text-center">
+                        <b>(Bằng chữ: Ba mươi chín triệu ba trăm tám mươi
+                            ngàn đồng chẵn).
+                        </b>
+                    </td>
+                </tr>
+            </tfoot>
         </table>
         <div class="mt-4">
             <p class="p-0 m-0"><b><u><i>*Ghi chú:</i></u></b></p>
@@ -914,8 +922,16 @@
                     return false; // Dừng vòng lặp nếu có trường không hợp lệ
                 }
             });
-
-            if (isValid) {
+            var maProduct = $('.maProduct:last').val();
+            var productUnit = $('.product_unit:last').val();
+            var productQty = $('.quantity-input:last').val();
+            var productPrice = $('.product_price:last').val();
+            var productTax = $('.product_tax:last').val();
+            if (!maProduct || !productUnit || !productQty || !productPrice || !productTax) {
+                alert('Vui lòng nhập đủ thông tin sản phẩm.');
+                return;
+            }
+            else if (isValid) {
                 $('#export_form').submit();
                 $('#btn-addCustomer').click();
             } else {
@@ -929,6 +945,57 @@
     }
     //in báo giá
     function toggleDiv() {
+        var sourceTable = document.getElementById('sourceTable');
+        var destinationTable = document.getElementById('destinationTable');
+
+        // Clear the content of the destination table
+        destinationTable.innerHTML = '';
+
+        // Clone the <thead> section from the source table
+        var sourceHeader = sourceTable.querySelector('thead');
+        var destinationHeader = sourceHeader.cloneNode(true);
+        destinationTable.appendChild(destinationHeader);
+
+        // Get the rows from the source table
+        var rows = sourceTable.tBodies[0].rows;
+
+        // Clone the data rows from the source table to the destination table
+        for (var i = 0; i < rows.length; i++) {
+            var row = document.createElement('tr');
+
+            // Get the <select> element from the source table
+            var selectElement = rows[i].querySelector('select');
+
+            // Check if a <select> element exists
+            if (selectElement) {
+                // Get the selected option from the <select> element
+                var selectedOption = selectElement.value;
+
+                // Create a new <td> element for the selected option
+                var cell1 = document.createElement('td');
+                cell1.textContent = selectedOption;
+
+                // Clone the other cells in the row
+                var cell2 = rows[i].cells[2].cloneNode(true); // Column "Mã sản phẩm"
+                var cell3 = rows[i].cells[3].cloneNode(true); // Column "Tên sản phẩm"
+                var cell4 = rows[i].cells[5].cloneNode(true); // Column "Số lượng"
+                var cell5 = rows[i].cells[6].cloneNode(true); // Column "Giá bán"
+                var cell6 = rows[i].cells[9].cloneNode(true); // Column "Thành tiền"
+
+                // Append the cells to the row
+                row.appendChild(cell1);
+                row.appendChild(cell2);
+                row.appendChild(cell3);
+                row.appendChild(cell4);
+                row.appendChild(cell5);
+                row.appendChild(cell6);
+
+                // Append the row to the destination table
+                destinationTable.tBodies[0].appendChild(row);
+            }
+        }
+
+        // Print the content
         window.print();
     }
 </script>

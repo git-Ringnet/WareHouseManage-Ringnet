@@ -203,16 +203,15 @@ if (strpos($current_url, 'exports') !== false) {
                                         {{ __('Manage Account') }}
                                     </div>
                                     <hr>
-                                    <a class="px-4 text-sm"
-                                        href="{{ route('profile.show') }}"> {{ __('Profile') }}
+                                    <a class="px-4 text-sm" href="{{ route('profile.show') }}"> {{ __('Profile') }}
                                     </a>
-                                        <form class="px-4" method="POST" action="{{ route('logout') }}" x-data>
-                                            @csrf
-                                            <button class="btn btn-primary text-sm" type="submit">
-                                                {{ __('Log Out') }}
-                                            </button>
-                                        </form>
-                         
+                                    <form class="px-4" method="POST" action="{{ route('logout') }}" x-data>
+                                        @csrf
+                                        <button class="btn btn-primary text-sm" type="submit">
+                                            {{ __('Log Out') }}
+                                        </button>
+                                    </form>
+
                                 </div>
                             </div>
         </div>
@@ -427,21 +426,21 @@ if (strpos($current_url, 'exports') !== false) {
     </aside>
     <div class="main-header">
         @if (Session::has('msg'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <div class="alert alert-success alert-dismissible fade show" role="alert" style="z-index: 999999;">
                 {{ Session::get('msg') }}
-
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
         @endif
     </div>
-
-    @if (Session::has('danger'))
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            {{ Session::get('danger') }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    @endif
+    <div class="main-header">
+        @if (Session::has('danger'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert" style="z-index: 999999;">
+                {{ Session::get('danger') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        @endif
+    </div>

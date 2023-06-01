@@ -5,7 +5,7 @@
             <div class="container-fluid position-relative">
                 <div class="row">
                     <div class="col-sm-6">
-                        <div class="w-75">
+                        <div class="w-100">
                             <div class="">
                                 <span>Xuất hàng</span>
                                 <span>/</span>
@@ -408,7 +408,7 @@
                     </div>
                 </div>
                 @if ($exports->export_status == 1)
-                    <div class="text-center mt-4 btn-fixed">
+                    <div class="text-center mt-4">
                         <button type="submit" value="action3" name="submitBtn" class="btn btn-primary mr-1"
                             onclick="validateAndSubmit(event)">Lưu</button>
                         <a href="{{ route('exports.index') }}"><span class="btn border-secondary ml-1">Hủy</span></a>
