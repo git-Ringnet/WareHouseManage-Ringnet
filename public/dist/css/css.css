@@ -420,3 +420,7 @@ td p {
 .dropdown-values {
     display: none;
 }
+
+#list_modal .modal-dialog {
+    max-width: 1200px !important;
+}

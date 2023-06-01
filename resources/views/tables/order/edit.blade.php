@@ -186,17 +186,17 @@
               <tr>
                 <input type="hidden" name="product_id[]" value="{{$pro->product_id}}">
                 <td><input type="checkbox"></td>
-                <td> <input readonly type="text" name='products_id[]' value="{{$pro->products_id}}"></td>
+                <td> <input readonly type="text" name='products_id[]' value="{{$pro->products_id}}" placeholder="{{$pro->getCodeProduct->products_code}}"></td>
                 <td> <input required type="text" name="product_name[]" value="{{$pro->product_name}}"> </td>
-                <td> <input required type="text" name="product_category[]" value=" {{$pro->product_category}}"> </td>
-                <td> <input required type="text" name="product_unit[]" value="  {{$pro->product_unit}}"> </td>
+                <td> <input required type="text" name="product_category[]" value="{{$pro->product_category}}"> </td>
+                <td> <input required type="text" name="product_unit[]" value="{{$pro->product_unit}}"> </td>
                 <td> <input required type="number" name="product_qty[]" value="{{$pro->product_qty}}" class="quantity-input"> </td>
                 <td> <input required type="number" name="product_price[]" value="{{$pro->product_price}}"> </td>
                 <td> <input required type="number" name="product_tax[]" value="{{$pro->product_tax}}" class="product_tax"></td>
                 <td> <input readonly type="text" name="product_total[]" value="{{$pro->product_total}}"></td>
                 <td> <input required type="text" name="product_trademark[]" value=" {{$pro->product_trademark}}"> </td>
                 <td>
-                  <button name="btn_add_SN[]" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal{{$stt}}" style="background: transparent; border:none;">
+                  <button class="exampleModal" name="btn_add_SN[]" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal{{$stt}}" style="background: transparent; border:none;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
                       <rect width="32" height="32" rx="4" fill="white" />
                       <path fill-rule="evenodd" clip-rule="evenodd" d="M11.9062 10.643C11.9062 10.2092 12.258 9.85742 12.6919 9.85742H24.2189C24.6528 9.85742 25.0045 10.2092 25.0045 10.643C25.0045 11.0769 24.6528 11.4286 24.2189 11.4286H12.6919C12.258 11.4286 11.9062 11.0769 11.9062 10.643Z" fill="#0095F6" />
@@ -216,47 +216,79 @@
               </tr>
               <?php $stt++; ?>
               @endforeach
-              <div id="list_modal">
-                <?php $stt = 0; ?>
-                @foreach($product_order as $pro)
-                <div class="modal fade" id="exampleModal{{$stt}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">'
-                  <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-                      <div class="modal-body">
-                        <div class="div_value{{$stt}}">
-                          @foreach($seri as $se)
-                          @if($pro->id == $se->product_id)
-                          <div class="delete d-flex justify-content-between">
-                            <input required type="text" name="product_SN{{$stt}}[]" value="{{$se->serinumber}}" onpaste="handlePaste(this)">
-                            <div class="deleteRow1">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
-                                <path fill-rule="evenodd" clip-rule="evenodd" d="M14.0606 6.66675C13.6589 6.66675 13.3333 6.99236 13.3333 7.39402C13.3333 7.79568 13.6589 8.12129 14.0606 8.12129H17.9394C18.341 8.12129 18.6667 7.79568 18.6667 7.39402C18.6667 6.99236 18.341 6.66675 17.9394 6.66675H14.0606ZM8 10.3031C8 9.90143 8.32561 9.57582 8.72727 9.57582H10.1818H21.8182H23.2727C23.6744 9.57582 24 9.90143 24 10.3031C24 10.7048 23.6744 11.0304 23.2727 11.0304H22.5455V22.6667C22.5455 24.2819 21.2158 25.5758 19.6179 25.5758H12.3452C11.9637 25.5755 11.5854 25.4997 11.2333 25.3528C10.8812 25.2059 10.5617 24.9908 10.2931 24.7199C10.0244 24.449 9.81206 24.1276 9.66816 23.7743C9.52463 23.4219 9.45204 23.0447 9.45455 22.6642V11.0304H8.72727C8.32561 11.0304 8 10.7048 8 10.3031ZM10.9091 22.6723V11.0304H21.0909V22.6667C21.0909 23.4623 20.4288 24.1213 19.6179 24.1213H12.3458C12.1562 24.1211 11.9684 24.0834 11.7934 24.0104C11.6183 23.9374 11.4595 23.8304 11.3259 23.6958C11.1924 23.5611 11.0868 23.4013 11.0153 23.2257C10.9437 23.05 10.9076 22.8619 10.9091 22.6723ZM17.9394 13.4546C18.3411 13.4546 18.6667 13.7802 18.6667 14.1819V20.9698C18.6667 21.3714 18.3411 21.6971 17.9394 21.6971C17.5377 21.6971 17.2121 21.3714 17.2121 20.9698V14.1819C17.2121 13.7802 17.5377 13.4546 17.9394 13.4546ZM14.7879 14.1819C14.7879 13.7802 14.4623 13.4546 14.0606 13.4546C13.6589 13.4546 13.3333 13.7802 13.3333 14.1819V20.9698C13.3333 21.3714 13.6589 21.6971 14.0606 21.6971C14.4623 21.6971 14.7879 21.3714 14.7879 20.9698V14.1819Z" fill="#555555" />
-                              </svg>
-                            </div>
-                          </div>
-                          @endif
-                          @endforeach
-                        </div>
-                        <div class="AddSN btn btn-secondary" style="border:1px solid gray;">Thêm dòng</div>
-                      </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Save</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <?php $stt++; ?>
-                @endforeach
-              </div>
             </tbody>
           </table>
         </div>
+        <div id="list_modal">
+          <?php $stt = 0; ?>
+          @foreach($product_order as $pro)
+          <div class="modal fade" id="exampleModal{{$stt}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">'
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header align-items-center">
+                  <div>
+                    <h5 class="modal-title" id="exampleModalLabel">Serial Number</h5>
+                    <p>Thông tin chi tiết về số S/N của mỗi sản phẩm </p>
+                  </div>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <td>ID</td>
+                        <td>Mã sản phẩm</td>
+                        <td>Tên sản phẩm</td>
+                        <td>Loại hàng</td>
+                        <td>Số lượng sản phẩm</td>
+                        <td>Số lượng S/N</td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>{{$stt}}</td>
+                        <td class="code_product"></td>
+                        <td class="name_product"></td>
+                        <td class="type_product"></td>
+                        <td class="qty_product"></td>
+                        <td id="SNCount">1</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <h3>Thông tin Serial Number </h3>
+                  <div class="d-flex" style="background:#E9ECEF; padding:10px 10px;"> <input type="checkbox" class="mr-5"> <span class="mr-5">STT</span> <span class="mr-5">Serial Number</span> </div>
+                  <div class="div_value{{$stt}}" style="padding:10px;">
+                    @foreach($seri as $se)
+                    @if($pro->id == $se->product_id)
+                    <div class="delete d-flex justify-content-between">
+                      <div>
+                        <input class="mr-5" type="checkbox" id="checkbox_{{$stt}}">
+                        <span class="mr-5">1</span>
+                        <input required type="text" name="product_SN{{$stt}}[]" value="{{$se->serinumber}}" onpaste="handlePaste(this)">
+                      </div>
+                      <div class="deleteRow1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                          <path fill-rule="evenodd" clip-rule="evenodd" d="M14.0606 6.66675C13.6589 6.66675 13.3333 6.99236 13.3333 7.39402C13.3333 7.79568 13.6589 8.12129 14.0606 8.12129H17.9394C18.341 8.12129 18.6667 7.79568 18.6667 7.39402C18.6667 6.99236 18.341 6.66675 17.9394 6.66675H14.0606ZM8 10.3031C8 9.90143 8.32561 9.57582 8.72727 9.57582H10.1818H21.8182H23.2727C23.6744 9.57582 24 9.90143 24 10.3031C24 10.7048 23.6744 11.0304 23.2727 11.0304H22.5455V22.6667C22.5455 24.2819 21.2158 25.5758 19.6179 25.5758H12.3452C11.9637 25.5755 11.5854 25.4997 11.2333 25.3528C10.8812 25.2059 10.5617 24.9908 10.2931 24.7199C10.0244 24.449 9.81206 24.1276 9.66816 23.7743C9.52463 23.4219 9.45204 23.0447 9.45455 22.6642V11.0304H8.72727C8.32561 11.0304 8 10.7048 8 10.3031ZM10.9091 22.6723V11.0304H21.0909V22.6667C21.0909 23.4623 20.4288 24.1213 19.6179 24.1213H12.3458C12.1562 24.1211 11.9684 24.0834 11.7934 24.0104C11.6183 23.9374 11.4595 23.8304 11.3259 23.6958C11.1924 23.5611 11.0868 23.4013 11.0153 23.2257C10.9437 23.05 10.9076 22.8619 10.9091 22.6723ZM17.9394 13.4546C18.3411 13.4546 18.6667 13.7802 18.6667 14.1819V20.9698C18.6667 21.3714 18.3411 21.6971 17.9394 21.6971C17.5377 21.6971 17.2121 21.3714 17.2121 20.9698V14.1819C17.2121 13.7802 17.5377 13.4546 17.9394 13.4546ZM14.7879 14.1819C14.7879 13.7802 14.4623 13.4546 14.0606 13.4546C13.6589 13.4546 13.3333 13.7802 13.3333 14.1819V20.9698C13.3333 21.3714 13.6589 21.6971 14.0606 21.6971C14.4623 21.6971 14.7879 21.3714 14.7879 20.9698V14.1819Z" fill="#555555" />
+                        </svg>
+                      </div>
+                    </div>
+                    @endif
+                    @endforeach
+                  </div>
+                  <div class="AddSN btn btn-secondary" style="border:1px solid gray;">Thêm dòng</div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Save</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <?php $stt++; ?>
+          @endforeach
+        </div>
+
 
         @if(Auth::user()->id == $order->users_id)
         <a href="javascript:;" class="btn btn-info addRow">Thêm sản phẩm</a>
@@ -535,50 +567,98 @@
       '<td><a href="javascript:;" class="deleteRow"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.0606 6.66675C13.6589 6.66675 13.3333 6.99236 13.3333 7.39402C13.3333 7.79568 13.6589 8.12129 14.0606 8.12129H17.9394C18.341 8.12129 18.6667 7.79568 18.6667 7.39402C18.6667 6.99236 18.341 6.66675 17.9394 6.66675H14.0606ZM8 10.3031C8 9.90143 8.32561 9.57582 8.72727 9.57582H10.1818H21.8182H23.2727C23.6744 9.57582 24 9.90143 24 10.3031C24 10.7048 23.6744 11.0304 23.2727 11.0304H22.5455V22.6667C22.5455 24.2819 21.2158 25.5758 19.6179 25.5758H12.3452C11.9637 25.5755 11.5854 25.4997 11.2333 25.3528C10.8812 25.2059 10.5617 24.9908 10.2931 24.7199C10.0244 24.449 9.81206 24.1276 9.66816 23.7743C9.52463 23.4219 9.45204 23.0447 9.45455 22.6642V11.0304H8.72727C8.32561 11.0304 8 10.7048 8 10.3031ZM10.9091 22.6723V11.0304H21.0909V22.6667C21.0909 23.4623 20.4288 24.1213 19.6179 24.1213H12.3458C12.1562 24.1211 11.9684 24.0834 11.7934 24.0104C11.6183 23.9374 11.4595 23.8304 11.3259 23.6958C11.1924 23.5611 11.0868 23.4013 11.0153 23.2257C10.9437 23.05 10.9076 22.8619 10.9091 22.6723ZM17.9394 13.4546C18.3411 13.4546 18.6667 13.7802 18.6667 14.1819V20.9698C18.6667 21.3714 18.3411 21.6971 17.9394 21.6971C17.5377 21.6971 17.2121 21.3714 17.2121 20.9698V14.1819C17.2121 13.7802 17.5377 13.4546 17.9394 13.4546ZM14.7879 14.1819C14.7879 13.7802 14.4623 13.4546 14.0606 13.4546C13.6589 13.4546 13.3333 13.7802 13.3333 14.1819V20.9698C13.3333 21.3714 13.6589 21.6971 14.0606 21.6971C14.4623 21.6971 14.7879 21.3714 14.7879 20.9698V14.1819Z" fill="#555555"/></svg></a></td>' +
       '</tr>';
     $('tbody').append(tr);
-    var modal = '<div class="modal fade" id="exampleModal' + rowCount + '" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">' +
-      '<div class="modal-dialog" role="document">' +
-      '<div class="modal-content">' +
-      '<div class="modal-header">' +
-      '<h5 class="modal-title" id="exampleModalLabel">Modal title</h5>' +
-      '<button type="button" class="close" data-dismiss="modal" aria-label="Close">' +
-      '<span aria-hidden="true">&times;</span>' +
-      '</button>' +
-      '</div>' +
-      '<div class="modal-body">' +
-      '<div class="div_value' + rowCount + '">' +
-      '<div class="delete d-flex justify-content-between">' +
-      '<input type="text" name="product_SN' + rowCount + '[]" onpaste="handlePaste(this)">' +
-      '<div class="deleteRow1"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.0606 6.66675C13.6589 6.66675 13.3333 6.99236 13.3333 7.39402C13.3333 7.79568 13.6589 8.12129 14.0606 8.12129H17.9394C18.341 8.12129 18.6667 7.79568 18.6667 7.39402C18.6667 6.99236 18.341 6.66675 17.9394 6.66675H14.0606ZM8 10.3031C8 9.90143 8.32561 9.57582 8.72727 9.57582H10.1818H21.8182H23.2727C23.6744 9.57582 24 9.90143 24 10.3031C24 10.7048 23.6744 11.0304 23.2727 11.0304H22.5455V22.6667C22.5455 24.2819 21.2158 25.5758 19.6179 25.5758H12.3452C11.9637 25.5755 11.5854 25.4997 11.2333 25.3528C10.8812 25.2059 10.5617 24.9908 10.2931 24.7199C10.0244 24.449 9.81206 24.1276 9.66816 23.7743C9.52463 23.4219 9.45204 23.0447 9.45455 22.6642V11.0304H8.72727C8.32561 11.0304 8 10.7048 8 10.3031ZM10.9091 22.6723V11.0304H21.0909V22.6667C21.0909 23.4623 20.4288 24.1213 19.6179 24.1213H12.3458C12.1562 24.1211 11.9684 24.0834 11.7934 24.0104C11.6183 23.9374 11.4595 23.8304 11.3259 23.6958C11.1924 23.5611 11.0868 23.4013 11.0153 23.2257C10.9437 23.05 10.9076 22.8619 10.9091 22.6723ZM17.9394 13.4546C18.3411 13.4546 18.6667 13.7802 18.6667 14.1819V20.9698C18.6667 21.3714 18.3411 21.6971 17.9394 21.6971C17.5377 21.6971 17.2121 21.3714 17.2121 20.9698V14.1819C17.2121 13.7802 17.5377 13.4546 17.9394 13.4546ZM14.7879 14.1819C14.7879 13.7802 14.4623 13.4546 14.0606 13.4546C13.6589 13.4546 13.3333 13.7802 13.3333 14.1819V20.9698C13.3333 21.3714 13.6589 21.6971 14.0606 21.6971C14.4623 21.6971 14.7879 21.3714 14.7879 20.9698V14.1819Z" fill="#555555"/></svg></div>' +
-      '</div>' +
-      '</div>' +
-      '<div class="AddSN btn btn-secondary" style="border:1px solid gray;">Thêm dòng</div>' +
-      '</div>' +
-      '<div class="modal-footer">' +
-      '<button type="button" class="btn btn-secondary" data-dismiss="modal">Save</button>' +
-      '</div>' +
-      '</div>' +
-      '</div>' +
-      '</div>'
+    var modal = '<div class="modal fade" id="exampleModal' + rowCount +
+            '" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">' +
+            '<div class="modal-dialog" role="document">' +
+            '<div class="modal-content">' +
+            '<div class="modal-header align-items-center">' +
+            '<div> ' +
+            '<h5 class="modal-title" id="exampleModalLabel">Serial Number</h5>' +
+            '<p>Thông tin chi tiết về số S/N của mỗi sản phẩm </p>' +
+            '</div>' +
+            '<button type="button" class="close" data-dismiss="modal" aria-label="Close">' +
+            '<span aria-hidden="true">&times;</span>' +
+            '</button>' +
+            '</div>' +
+            '<div class="modal-body">' +
+            ' <table class="table table-hover"> ' +
+            '<thead> ' +
+            '<tr>' +
+            '<td>ID</td>' +
+            '<td>Mã sản phẩm</td>' +
+            '<td>Tên sản phẩm</td>' +
+            '<td>Loại hàng</td>' +
+            '<td>Số lượng sản phẩm</td>' +
+            '<td>Số lượng S/N</td>' +
+            '</tr>' +
+            '</thead>' +
+            '<tbody>' +
+            '<tr>' +
+            '<td>' + rowCount + '</td>' +
+            '<td class="code_product"></td>' +
+            '<td class="name_product"></td>' +
+            '<td class="type_product"></td>' +
+            '<td class="qty_product"></td>' +
+            '<td id="SNCount">1</td>' +
+            '</tr>' +
+            '</tbody>' +
+            '</table>' +
+            '<h3>Thông tin Serial Number </h3>' +
+            '<div class="d-flex" style="background:#E9ECEF; padding:10px 10px;">  <input type="checkbox" class="mr-5"> <span class="mr-5">STT</span> <span class="mr-5">Serial Number</span> </div>' +
+            '<div class="div_value' + rowCount + '" style="padding:10px;">' +
+            '<div class="delete d-flex justify-content-between">' +
+            '<div>' +
+            '<input class="mr-5" type="checkbox" id="checkbox_1">' +
+            '<span class="mr-5" >1</span>' +
+            '<input class="mr-5" required type="text" name="product_SN' + rowCount + '[]" onpaste="handlePaste(this)">' +
+            '</div>' +
+            '<div class="deleteRow1"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.0606 6.66675C13.6589 6.66675 13.3333 6.99236 13.3333 7.39402C13.3333 7.79568 13.6589 8.12129 14.0606 8.12129H17.9394C18.341 8.12129 18.6667 7.79568 18.6667 7.39402C18.6667 6.99236 18.341 6.66675 17.9394 6.66675H14.0606ZM8 10.3031C8 9.90143 8.32561 9.57582 8.72727 9.57582H10.1818H21.8182H23.2727C23.6744 9.57582 24 9.90143 24 10.3031C24 10.7048 23.6744 11.0304 23.2727 11.0304H22.5455V22.6667C22.5455 24.2819 21.2158 25.5758 19.6179 25.5758H12.3452C11.9637 25.5755 11.5854 25.4997 11.2333 25.3528C10.8812 25.2059 10.5617 24.9908 10.2931 24.7199C10.0244 24.449 9.81206 24.1276 9.66816 23.7743C9.52463 23.4219 9.45204 23.0447 9.45455 22.6642V11.0304H8.72727C8.32561 11.0304 8 10.7048 8 10.3031ZM10.9091 22.6723V11.0304H21.0909V22.6667C21.0909 23.4623 20.4288 24.1213 19.6179 24.1213H12.3458C12.1562 24.1211 11.9684 24.0834 11.7934 24.0104C11.6183 23.9374 11.4595 23.8304 11.3259 23.6958C11.1924 23.5611 11.0868 23.4013 11.0153 23.2257C10.9437 23.05 10.9076 22.8619 10.9091 22.6723ZM17.9394 13.4546C18.3411 13.4546 18.6667 13.7802 18.6667 14.1819V20.9698C18.6667 21.3714 18.3411 21.6971 17.9394 21.6971C17.5377 21.6971 17.2121 21.3714 17.2121 20.9698V14.1819C17.2121 13.7802 17.5377 13.4546 17.9394 13.4546ZM14.7879 14.1819C14.7879 13.7802 14.4623 13.4546 14.0606 13.4546C13.6589 13.4546 13.3333 13.7802 13.3333 14.1819V20.9698C13.3333 21.3714 13.6589 21.6971 14.0606 21.6971C14.4623 21.6971 14.7879 21.3714 14.7879 20.9698V14.1819Z" fill="#555555"/></svg></div>' +
+            '</div>' +
+            '</div>' +
+            '<div class="AddSN btn btn-secondary" style="border:1px solid gray;">Thêm dòng</div>' +
+            '<div class="btn btn-danger ml-2" id="deleteSNS"> Xóa SN </div>' +
+            '</div>' +
+            '<div class="modal-footer">' +
+            '<button type="button" class="btn btn-secondary" data-dismiss="modal">Save</button>' +
+            '</div>' +
+            '</div>' +
+            '</div>' +
+            '</div>'
     $('#list_modal').append(modal);
 
-    var addSNBtns = $('.AddSN')
-    for (let i = rowCount; i < addSNBtns.length; i++) {
+    var addSNBtns = $('.AddSN');
+    for (let i = 0; i < addSNBtns.length; i++) {
       $(addSNBtns[i]).off('click').on('click', function() {
         var newDiv = document.createElement("input");
+        var checkbox = document.createElement("input");
+        var stt = document.createElement("span");
+        var div1 = document.createElement("div");
+        stt.setAttribute("class", "mr-5");
+        checkbox.setAttribute("type", "checkbox");
+        checkbox.setAttribute("class", "mr-5");
         newDiv.setAttribute("type", "text");
         newDiv.setAttribute("name", "product_SN" + i + "[]");
-        newDiv.setAttribute('onpaste', 'handlePaste(this)')
+        newDiv.setAttribute('onpaste', 'handlePaste(this)');
+        newDiv.setAttribute("class", "mr-5");
         const div = document.createElement("div");
         const divDelete = document.createElement("div");
         divDelete.setAttribute('class', 'deleteRow1');
-        divDelete.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.0606 6.66675C13.6589 6.66675 13.3333 6.99236 13.3333 7.39402C13.3333 7.79568 13.6589 8.12129 14.0606 8.12129H17.9394C18.341 8.12129 18.6667 7.79568 18.6667 7.39402C18.6667 6.99236 18.341 6.66675 17.9394 6.66675H14.0606ZM8 10.3031C8 9.90143 8.32561 9.57582 8.72727 9.57582H10.1818H21.8182H23.2727C23.6744 9.57582 24 9.90143 24 10.3031C24 10.7048 23.6744 11.0304 23.2727 11.0304H22.5455V22.6667C22.5455 24.2819 21.2158 25.5758 19.6179 25.5758H12.3452C11.9637 25.5755 11.5854 25.4997 11.2333 25.3528C10.8812 25.2059 10.5617 24.9908 10.2931 24.7199C10.0244 24.449 9.81206 24.1276 9.66816 23.7743C9.52463 23.4219 9.45204 23.0447 9.45455 22.6642V11.0304H8.72727C8.32561 11.0304 8 10.7048 8 10.3031ZM10.9091 22.6723V11.0304H21.0909V22.6667C21.0909 23.4623 20.4288 24.1213 19.6179 24.1213H12.3458C12.1562 24.1211 11.9684 24.0834 11.7934 24.0104C11.6183 23.9374 11.4595 23.8304 11.3259 23.6958C11.1924 23.5611 11.0868 23.4013 11.0153 23.2257C10.9437 23.05 10.9076 22.8619 10.9091 22.6723ZM17.9394 13.4546C18.3411 13.4546 18.6667 13.7802 18.6667 14.1819V20.9698C18.6667 21.3714 18.3411 21.6971 17.9394 21.6971C17.5377 21.6971 17.2121 21.3714 17.2121 20.9698V14.1819C17.2121 13.7802 17.5377 13.4546 17.9394 13.4546ZM14.7879 14.1819C14.7879 13.7802 14.4623 13.4546 14.0606 13.4546C13.6589 13.4546 13.3333 13.7802 13.3333 14.1819V20.9698C13.3333 21.3714 13.6589 21.6971 14.0606 21.6971C14.4623 21.6971 14.7879 21.3714 14.7879 20.9698V14.1819Z" fill="#555555"/></svg>';
+        divDelete.innerHTML =
+          '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.0606 6.66675C13.6589 6.66675 13.3333 6.99236 13.3333 7.39402C13.3333 7.79568 13.6589 8.12129 14.0606 8.12129H17.9394C18.341 8.12129 18.6667 7.79568 18.6667 7.39402C18.6667 6.99236 18.341 6.66675 17.9394 6.66675H14.0606ZM8 10.3031C8 9.90143 8.32561 9.57582 8.72727 9.57582H10.1818H21.8182H23.2727C23.6744 9.57582 24 9.90143 24 10.3031C24 10.7048 23.6744 11.0304 23.2727 11.0304H22.5455V22.6667C22.5455 24.2819 21.2158 25.5758 19.6179 25.5758H12.3452C11.9637 25.5755 11.5854 25.4997 11.2333 25.3528C10.8812 25.2059 10.5617 24.9908 10.2931 24.7199C10.0244 24.449 9.81206 24.1276 9.66816 23.7743C9.52463 23.4219 9.45204 23.0447 9.45455 22.6642V11.0304H8.72727C8.32561 11.0304 8 10.7048 8 10.3031ZM10.9091 22.6723V11.0304H21.0909V22.6667C21.0909 23.4623 20.4288 24.1213 19.6179 24.1213H12.3458C12.1562 24.1211 11.9684 24.0834 11.7934 24.0104C11.6183 23.9374 11.4595 23.8304 11.3259 23.6958C11.1924 23.5611 11.0868 23.4013 11.0153 23.2257C10.9437 23.05 10.9076 22.8619 10.9091 22.6723ZM17.9394 13.4546C18.3411 13.4546 18.6667 13.7802 18.6667 14.1819V20.9698C18.6667 21.3714 18.3411 21.6971 17.9394 21.6971C17.5377 21.6971 17.2121 21.3714 17.2121 20.9698V14.1819C17.2121 13.7802 17.5377 13.4546 17.9394 13.4546ZM14.7879 14.1819C14.7879 13.7802 14.4623 13.4546 14.0606 13.4546C13.6589 13.4546 13.3333 13.7802 13.3333 14.1819V20.9698C13.3333 21.3714 13.6589 21.6971 14.0606 21.6971C14.4623 21.6971 14.7879 21.3714 14.7879 20.9698V14.1819Z" fill="#555555"/></svg>';
         div.setAttribute('class', 'delete d-flex justify-content-between');
-        div.appendChild(newDiv);
+        div1.appendChild(checkbox);
+        div1.appendChild(stt);
+        div1.appendChild(newDiv);
+        div.appendChild(div1);
         div.appendChild(divDelete);
         var div_value1 = document.querySelector('.div_value' + i);
-        if (div_value1) {
-          div_value1.appendChild(div);
-        }
+        div_value1.style.padding = '10px';
+        div_value1.appendChild(div);
+        var checkboxes = document.querySelectorAll('.div_value' + i + ' input[type="checkbox"]');
+        var checkboxCount = checkboxes.length;
+        stt.innerHTML = checkboxCount;
+        checkbox.setAttribute("id", "checkbox_" + checkboxCount);
+        $('#SNCount').text(checkboxCount);
       });
     }
     rowCount++;
@@ -597,6 +677,7 @@
     for (let k = 0; k < info.length; k++) {
       info[k].addEventListener('click', function() {
         var productCode = $(this).closest('tr').find('.list_products option:selected').text();
+        console.log(productCode);
         var productName = $(this).closest('tr').find('[name^="product_name"]').val();
         var productType = $(this).closest('tr').find('[name^="product_category"]').val();
         var productQty = $(this).closest('tr').find('[name^="product_qty"]').val();
@@ -607,6 +688,20 @@
       })
     }
   });
+
+  var info = document.querySelectorAll('.exampleModal');
+  for (let k = 0; k < info.length; k++) {
+    info[k].addEventListener('click', function() {
+      var productCode = $(this).closest('tr').find('[name^="products_id"]').attr('placeholder');
+      var productName = $(this).closest('tr').find('[name^="product_name"]').val();
+      var productType = $(this).closest('tr').find('[name^="product_category"]').val();
+      var productQty = $(this).closest('tr').find('[name^="product_qty"]').val();
+      $('.code_product').text(productCode);
+      $('.name_product').text(productName);
+      $('.type_product').text(productType);
+      $('.qty_product').text(productQty);
+    })
+  }
 
   // Hiển thị sản phẩm con 
   $(document).on('change', '.list_products', function(e) {
@@ -667,18 +762,35 @@
   for (let i = 0; i < addSNBtns.length; i++) {
     $(addSNBtns[i]).off('click').on('click', function() {
       var newDiv = document.createElement("input");
+      var checkbox = document.createElement("input");
+      var stt = document.createElement("span");
+      var div1 = document.createElement("div");
+      stt.setAttribute("class", "mr-5");
+      checkbox.setAttribute("type", "checkbox");
+      checkbox.setAttribute("class", "mr-5");
       newDiv.setAttribute("type", "text");
       newDiv.setAttribute("name", "product_SN" + i + "[]");
       newDiv.setAttribute('onpaste', 'handlePaste(this)');
+      // newDiv.setAttribute("class", "mr-5");
       const div = document.createElement("div");
       const divDelete = document.createElement("div");
       divDelete.setAttribute('class', 'deleteRow1');
-      divDelete.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.0606 6.66675C13.6589 6.66675 13.3333 6.99236 13.3333 7.39402C13.3333 7.79568 13.6589 8.12129 14.0606 8.12129H17.9394C18.341 8.12129 18.6667 7.79568 18.6667 7.39402C18.6667 6.99236 18.341 6.66675 17.9394 6.66675H14.0606ZM8 10.3031C8 9.90143 8.32561 9.57582 8.72727 9.57582H10.1818H21.8182H23.2727C23.6744 9.57582 24 9.90143 24 10.3031C24 10.7048 23.6744 11.0304 23.2727 11.0304H22.5455V22.6667C22.5455 24.2819 21.2158 25.5758 19.6179 25.5758H12.3452C11.9637 25.5755 11.5854 25.4997 11.2333 25.3528C10.8812 25.2059 10.5617 24.9908 10.2931 24.7199C10.0244 24.449 9.81206 24.1276 9.66816 23.7743C9.52463 23.4219 9.45204 23.0447 9.45455 22.6642V11.0304H8.72727C8.32561 11.0304 8 10.7048 8 10.3031ZM10.9091 22.6723V11.0304H21.0909V22.6667C21.0909 23.4623 20.4288 24.1213 19.6179 24.1213H12.3458C12.1562 24.1211 11.9684 24.0834 11.7934 24.0104C11.6183 23.9374 11.4595 23.8304 11.3259 23.6958C11.1924 23.5611 11.0868 23.4013 11.0153 23.2257C10.9437 23.05 10.9076 22.8619 10.9091 22.6723ZM17.9394 13.4546C18.3411 13.4546 18.6667 13.7802 18.6667 14.1819V20.9698C18.6667 21.3714 18.3411 21.6971 17.9394 21.6971C17.5377 21.6971 17.2121 21.3714 17.2121 20.9698V14.1819C17.2121 13.7802 17.5377 13.4546 17.9394 13.4546ZM14.7879 14.1819C14.7879 13.7802 14.4623 13.4546 14.0606 13.4546C13.6589 13.4546 13.3333 13.7802 13.3333 14.1819V20.9698C13.3333 21.3714 13.6589 21.6971 14.0606 21.6971C14.4623 21.6971 14.7879 21.3714 14.7879 20.9698V14.1819Z" fill="#555555"/></svg>';
+      divDelete.innerHTML =
+        '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.0606 6.66675C13.6589 6.66675 13.3333 6.99236 13.3333 7.39402C13.3333 7.79568 13.6589 8.12129 14.0606 8.12129H17.9394C18.341 8.12129 18.6667 7.79568 18.6667 7.39402C18.6667 6.99236 18.341 6.66675 17.9394 6.66675H14.0606ZM8 10.3031C8 9.90143 8.32561 9.57582 8.72727 9.57582H10.1818H21.8182H23.2727C23.6744 9.57582 24 9.90143 24 10.3031C24 10.7048 23.6744 11.0304 23.2727 11.0304H22.5455V22.6667C22.5455 24.2819 21.2158 25.5758 19.6179 25.5758H12.3452C11.9637 25.5755 11.5854 25.4997 11.2333 25.3528C10.8812 25.2059 10.5617 24.9908 10.2931 24.7199C10.0244 24.449 9.81206 24.1276 9.66816 23.7743C9.52463 23.4219 9.45204 23.0447 9.45455 22.6642V11.0304H8.72727C8.32561 11.0304 8 10.7048 8 10.3031ZM10.9091 22.6723V11.0304H21.0909V22.6667C21.0909 23.4623 20.4288 24.1213 19.6179 24.1213H12.3458C12.1562 24.1211 11.9684 24.0834 11.7934 24.0104C11.6183 23.9374 11.4595 23.8304 11.3259 23.6958C11.1924 23.5611 11.0868 23.4013 11.0153 23.2257C10.9437 23.05 10.9076 22.8619 10.9091 22.6723ZM17.9394 13.4546C18.3411 13.4546 18.6667 13.7802 18.6667 14.1819V20.9698C18.6667 21.3714 18.3411 21.6971 17.9394 21.6971C17.5377 21.6971 17.2121 21.3714 17.2121 20.9698V14.1819C17.2121 13.7802 17.5377 13.4546 17.9394 13.4546ZM14.7879 14.1819C14.7879 13.7802 14.4623 13.4546 14.0606 13.4546C13.6589 13.4546 13.3333 13.7802 13.3333 14.1819V20.9698C13.3333 21.3714 13.6589 21.6971 14.0606 21.6971C14.4623 21.6971 14.7879 21.3714 14.7879 20.9698V14.1819Z" fill="#555555"/></svg>';
       div.setAttribute('class', 'delete d-flex justify-content-between');
-      div.appendChild(newDiv);
+      div1.appendChild(checkbox);
+      div1.appendChild(stt);
+      div1.appendChild(newDiv);
+      div.appendChild(div1);
       div.appendChild(divDelete);
       var div_value1 = document.querySelector('.div_value' + i);
+      div_value1.style.padding = '10px';
       div_value1.appendChild(div);
+      var checkboxes = document.querySelectorAll('.div_value' + i + ' input[type="checkbox"]');
+      var checkboxCount = checkboxes.length;
+      stt.innerHTML = checkboxCount;
+      checkbox.setAttribute("id", "checkbox_" + checkboxCount);
+      $('#SNCount').text(checkboxCount);
     });
   }
 
@@ -740,6 +852,7 @@
       }
     });
   })
+
   // Ajax thay đổi thông tin khách hàng
   $(document).on('click', '#btn-addProvide', function(e) {
     e.preventDefault();
