@@ -18,7 +18,7 @@ class CreateProducts extends Migration
             $table->string('products_image')->nullable();
             $table->string('products_code');
             $table->string('products_name');
-            $table->integer('ID_category');
+            $table->string('ID_category');
             $table->string('products_trademark');
             $table->text('products_description')->nullable();
             $table->integer('inventory')->nullable();

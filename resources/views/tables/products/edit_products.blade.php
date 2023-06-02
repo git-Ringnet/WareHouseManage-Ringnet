@@ -80,13 +80,7 @@
                                     <div class="col-md-3">
                                         <div class="product_category">
                                             <div class="title-edit-item">Danh mục</div>
-                                            <select name="product_category" id="" class="form-control mb-4">
-                                                @foreach ($cate as $va)
-                                                    <option value="{{ $va->id }}"
-                                                        {{ $va->id == $products->getCategory->id ? 'selected' : '' }}>
-                                                        {{ $va->category_name }}</option>
-                                                @endforeach
-                                            </select>
+                                            <input required type="text" name="product_category" class="form-control mb-4" value="{{$products->ID_category}}">
                                         </div>
                                         <div class="product_trademark">
                                             <div class="title-edit-item">Thương hiệu</div>

@@ -82,14 +82,7 @@
                                     <div class="col-md-3">
                                         <div class="product_category">
                                           <div class="title-edit-item">Danh mục</div>
-
-                                            <select name="product_category" id="" class="w-100 form-control mb-4"
-                                                style="height: 35.56px;">
-                                                @foreach ($cate as $va)
-                                                    <option value="{{ $va->id }}">{{ $va->category_name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
+                                            <input type="text" name="product_category" class="w-100 form-control mb-4">
                                         </div>
                                         <div class="product_trademark">
                                           <div class="title-edit-item">Thương hiệu</div>

@@ -558,15 +558,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             </td>
                                             <td>{{ $value->products_name }}</td>
                                             <td>
-                                                <select class="product_category" name="product_category"
-                                                    id="{{ $value->id }}">
-                                                    @foreach ($categories as $va)
-                                                        <option value="{{ $va->id }}"
-                                                            {{ $va->id == $value->ID_category ? 'selected' : '' }}>
-                                                            {{ $va->category_name }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
+                                                {{$value->ID_category}}
                                             </td>
                                             <td class="text-left">{{ $value->products_trademark }}</td>
                                             <td class="text-right">
