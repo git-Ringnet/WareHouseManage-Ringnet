@@ -730,7 +730,7 @@
             for (let i = 0; i < list_search.length; i++) {
                 list_search[i].addEventListener('click', function() {
                     var div_show = document.querySelectorAll('.dropdown-values');
-                    div_show[i].classList.add("show");
+                    div_show[i].classList.add("show1");
                 });
             }
         }
@@ -771,7 +771,7 @@
                         var op = '<li onclick="setValueOfInput(this)">' + item.product_name + '</li>';
                         childSelect.append(op);
                     });
-                    childSelect.addClass("show");
+                    childSelect.addClass("show1");
                 }
             });
         }
@@ -780,7 +780,7 @@
     // Ẩn danh sách sản phẩm con khi click ra ngoài
     $(document).click(function(event) {
         if (!$(event.target).closest(".search_product").length) {
-            $(".dropdown-values").removeClass("show");
+            $(".dropdown-values").removeClass("show1");
         }
     });
 
@@ -802,7 +802,7 @@
         var row = $(e).closest('tr');
         var productNameInput = row.find('input[name="product_name[]"]');
         productNameInput.val(selectedProductName);
-        $(".dropdown-values").removeClass("show");
+        $(".dropdown-values").removeClass("show1");
     }
 
     // Hàm xử lý paste cột từ file excel

@@ -115,9 +115,8 @@ class ExportController extends Controller
         $products = Products::all();
         $customer = Guests::all();
         $guest_id = DB::table('guests')->select('id')->orderBy('id', 'DESC')->first();
-        (int)$guest_id->id += 1;
         $title = 'Tạo đơn xuất hàng';
-        return view('tables.export.addExport', compact('customer', 'products', 'guest_id', 'title'));
+        return view('tables.export.addExport', compact('customer', 'products', 'title'));
     }
 
     /**
@@ -612,6 +611,20 @@ class ExportController extends Controller
     public function addCustomer(Request $request)
     {
         $data = $request->all();
+
+        // Kiểm tra xem dữ liệu đã tồn tại trong cơ sở dữ liệu hay chưa
+        $existingCustomer = Guests::where('guest_name', $data['guest_name'])
+            ->where('guest_email', $data['guest_email'])
+            ->where('guest_addressInvoice', $data['guest_addressInvoice'])
+            ->where('guest_code', $data['guest_code'])
+            ->first();
+
+        if ($existingCustomer) {
+            // Dữ liệu đã tồn tại, trả về thông báo
+            return response()->json(['message' => 'Thông tin khách hàng đã có trong hệ thống']);
+        }
+
+        // Tạo mới bản ghi khách hàng
         $guest = new Guests();
         $guest->guest_name = $data['guest_name'];
         $guest->guest_addressInvoice = $data['guest_addressInvoice'];
@@ -627,6 +640,9 @@ class ExportController extends Controller
         $guest->guest_payTerm = $data['guest_payTerm'];
         $guest->guest_note = $data['guest_note'];
         $guest->save();
+
+        // Trả về giá trị id của khách hàng vừa lưu
+        return response()->json(['id' => $guest->id]);
     }
 
     public function nameProduct(Request $request)

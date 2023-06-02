@@ -399,7 +399,7 @@
             '<div class="row p-3">' +
             '<div class="col-sm-6">' +
             '<div class="form-group">' +
-            '<input type="text" hidden class="form-control" name="id" value="{{ (int) $guest_id->id }}">' +
+            '<input type="text" hidden class="form-control" name="id" value="">' +
             '<label for="congty">Công ty:</label>' +
             '<input type="text" class="form-control" id="guest_name" placeholder="Nhập thông tin" name="guest_name" value="" required>' +
             '</div>' + '<div class="form-group">' +
@@ -746,6 +746,7 @@
             },
             success: function(data) {
                 alert('Thêm thông tin thành công');
+                $('#form-guest input[name="id"]').val(data.id);
             }
         })
     })
@@ -911,6 +912,18 @@
     function validateAndSubmit(event) {
         var formGuest = $('#form-guest');
 
+        var maProduct = $('.maProduct:last').val();
+        var productUnit = $('.product_unit:last').val();
+        var productQty = $('.quantity-input:last').val();
+        var productPrice = $('.product_price:last').val();
+        var productTax = $('.product_tax:last').val();
+
+        if (!maProduct || !productUnit || !productQty || !productPrice || !productTax) {
+            alert('Vui lòng nhập đủ thông tin sản phẩm.');
+            event.preventDefault();
+            return;
+        }
+
         if (formGuest.length) {
             var requiredInputs = formGuest.find(':input[required]');
             var isValid = true;
@@ -930,8 +943,7 @@
             if (!maProduct || !productUnit || !productQty || !productPrice || !productTax) {
                 alert('Vui lòng nhập đủ thông tin sản phẩm.');
                 return;
-            }
-            else if (isValid) {
+            } else if (isValid) {
                 $('#export_form').submit();
                 $('#btn-addCustomer').click();
             } else {
