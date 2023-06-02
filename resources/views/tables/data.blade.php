@@ -3,7 +3,7 @@
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-        <div class="container-fluid">
+        <div class="container-fluided">
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1><a href="{{route('insertProducts')}}" class="btn btn-primary">Thêm</a></h1>
@@ -29,7 +29,7 @@
                           </svg>
                         </span>Tắt bộ lọc</a>
                     </div>
-                    <div class="row d-flex justify-contents-center align-items-center mr-auto pt-2">
+                    <div class="row d-flex justify-contents-center align-items-center mr-auto row-filter my-3">
                         <div class="icon-filter mr-3 ml-3">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -172,12 +172,12 @@
                 </form>
             </div>
             @endcan
-        </div><!-- /.container-fluid -->
+        </div><!-- /.container-fluided -->
     </section>
 
     <!-- Main content -->
     <section class="content">
-        <div class="container-fluid">
+        <div class="container-fluided">
             <div class="row">
                 <div class="col-12">
                     <div class="card">

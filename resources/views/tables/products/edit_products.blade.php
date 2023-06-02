@@ -1,17 +1,21 @@
 <x-navbar :title="$title"></x-navbar>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
+    <div class="breadcrumb">
+        <span>Sản phẩm</span>
+        <span>/</span>
+        <span><b>Chỉnh sửa sản phẩm</b></span>
+    </div>
     <!-- Content Header (Page header) -->
     <section class="content-header">
-        <div class="container-fluid">
+        <div class="container-fluided">
             <div class="row mb-2">
             </div>
-        </div><!-- /.container-fluid -->
+        </div><!-- /.container-fluided -->
     </section>
 
     <!-- Main content -->
     <section class="content">
-        <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
                     <form action="{{ route('data.update', $products->id) }}" method="post" enctype="multipart/form-data">
@@ -93,7 +97,7 @@
                                                 value="{{ $products->products_unit }}" class="form-control mb-4">
                                         </div>
                                     </div>
-                                    <div class="col-md-6 pr-3">
+                                    <div class="col-md-6">
                                         <div class="title-edit-item">Mô tả</div>
                                         <textarea name="products_description" id="" placeholder="Nhập mô tả của sản phẩm" cols="30"
                                             rows="8" class="form-control">{{ $products->products_description }}</textarea>

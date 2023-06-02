@@ -113,7 +113,7 @@ class User extends Authenticatable
             $users = $users->orderBy($orderBy, $orderType);
         }
         // dd($users);
-        $users = $users->paginate(5);
+        $users = $users->paginate(8);
         return $users;
     }
     public function addUser($data)

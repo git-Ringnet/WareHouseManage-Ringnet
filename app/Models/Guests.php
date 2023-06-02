@@ -74,7 +74,7 @@ class Guests extends Model
             });
         }
         // dd($guests);
-        $guests = $guests->orderBy('id', 'asc')->paginate(5);
+        $guests = $guests->orderBy('id', 'asc')->paginate(8);
         return $guests;
     }
 }

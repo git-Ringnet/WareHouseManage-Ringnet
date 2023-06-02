@@ -2,7 +2,7 @@
 <div class="content-wrapper">
     <section class="content">
         <form action="{{ route('exports.update', $exports->id) }}" method="POST" id="export_form">
-            <div class="container-fluid position-relative">
+            <div class="container-fluided position-relative">
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="w-100">
@@ -192,8 +192,8 @@
                 @csrf
                 @method('PUT')
                 {{-- Form thông tin khách hàng --}}
-                <section id="data-container" class="container-fluid bg-white"></section>
-                <section class="container-fluid bg-white" id="form-edit">
+                <section id="data-container" class="container-fluided bg-white"></section>
+                <section class="container-fluided bg-white" id="form-edit">
                     <div id="form-guest">
                         <div class="border-bottom p-3 d-flex justify-content-between">
                             <b>Thông tin khách hàng</b>
@@ -286,7 +286,7 @@
                         <div>
                 </section>
                 {{-- Bảng thêm sản phẩm --}}
-                <div class="mt-4" style="overflow-x: scroll;">
+                <div class="mt-4" style="overflow-x: auto;">
                     <table class="table">
                         <thead class="bg-white border-0 rounded-top">
                             <tr>
