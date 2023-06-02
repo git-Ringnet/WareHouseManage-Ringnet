@@ -1,7 +1,7 @@
 <x-navbar :title="$title"></x-navbar>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
-  <div class="container-fluid">
+  <div class="container-fluided">
     <!-- Content Header (Page header) -->
     @if(Session::has('session'))
     {{Session::get('session')}}
@@ -11,7 +11,7 @@
       @method('PUT')
       <input type="hidden" name="order_id" value="{{$order->id}}">
       <section class="content-header">
-        <div class="container-fluid">
+        <div class="container-fluided">
           <div class="row">
             <div class="col-sm-6">
               <div class="w-75">
@@ -110,7 +110,7 @@
               </div>
             </div>
           </div>
-        </div><!-- /.container-fluid -->
+        </div><!-- /.container-fluided -->
       </section>
       <section id="infor_provide" class="bg-white">
         <div class="border-bottom p-3 d-flex justify-content-between">
@@ -162,7 +162,7 @@
       </section>
       <!-- Main content -->
       <section class="content">
-        <div style="overflow-x: scroll;" class="container-fluid">
+        <div style="overflow-x: auto;" class="container-fluided">
           <table class="table table-hover">
             <thead>
               <tr>

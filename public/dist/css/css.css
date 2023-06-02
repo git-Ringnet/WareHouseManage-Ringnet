@@ -221,8 +221,11 @@ nav.main-header.navbar.navbar-expand.navbar-white.navbar-light {
 
 .content-wrapper {
     background-color: #E9ECEF;
-    padding-top: 55px;
-    height: 100vh;
+    padding: 112px 24px 0 24px;
+    height: 100%;
+    max-height: auto;
+    min-height: 100vh !important;
+    position: relative;
 }
 
 /* Main content */
@@ -327,10 +330,6 @@ td p {
     font-style: normal;
 }
 
-.card {
-    overflow-x: scroll;
-}
-
 .navbar-nav .title {
     font-size: 1.5rem;
     font-weight: bold;
@@ -414,7 +413,7 @@ td p {
 .title-edit {
     font-size: 1.125rem;
     font-weight: 600;
-    
+    padding-bottom: 12px;
 }
 
 .title-edit-item {
@@ -438,6 +437,7 @@ td p {
     background: #F5F5F5;
     border: 1px dashed #D6D6D6;
     border-radius: 8px;
+    width: 75%;
 }
 
 .file-upload-btn {
@@ -538,4 +538,40 @@ td p {
 #form-guest .form-group label, #form_submit .form-group label{
     width: 50%;
     font-size: 14px;
+}
+/* Filter */
+.btn-filter #dropdown-menu{
+    left: -10px !important;
+}
+.content-header{
+    padding: 15px 0 0 0;
+}
+.content{
+    padding: 0 !important;
+}
+.card {
+    overflow-x: auto;
+    scrollbar-width: thin;
+    max-width: 100%;
+    width: 100vw;
+    /* ẩn thanh cuộn trên các trình duyệt mới */
+    scrollbar-color: #999999 #f0f0f0;
+    /* màu của thanh cuộn */
+    box-shadow: none;
+}
+.btn-primary{
+    background-color: #0095F6;
+    border-color: #0095F6;
+}
+.breadcrumb{
+    position: absolute;
+    top: 50px;
+    left: 10px;
+}
+.btn {
+    border-radius: 8px;
+}
+.border-primary{
+    border-color:#0095F6 !important;
+    color: #0095F6 !important;
 }

@@ -3,8 +3,8 @@
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
+        <div class="container-fluided">
+            <div class="row row mb-1 m-0">
             <a href="{{ route('provides.create') }}">
                 <button type="button" class="btn btn-primary d-flex align-items-center">
                     <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -21,10 +21,11 @@
         </div>
             <div class="row m-auto filter pt-2">
                 <form class="w-100" action="" method="get" id='search-filter'>
-                    <div class="row">
+                    <div class="row mr-0">
                         <div class="col-5">
                             <input type="search" name="keywords" class="form-control" value="{{request()->keywords}}"
                                 placeholder="Tìm kiếm đơn vị, đại diện hoặc email">
+                                <span class="search-icon"><i class="fas fa-search"></i></span>
                         </div>
                         <div class="col-2 d-none">
                   <button type="submit" class="btn btn-primary btn-block">Tìm kiếm</button>
@@ -38,7 +39,7 @@
                           </svg>
                         </span>Tắt bộ lọc</a>
                     </div>
-                    <div class="row d-flex justify-contents-center align-items-center mr-auto pt-2">
+                    <div class="row d-flex justify-contents-center align-items-center mr-auto row-filter my-3">
                         <?php
                         session_start();
                         
@@ -244,12 +245,12 @@
                             </div>
                         </div>
                     </div>
-            </div><!-- /.container-fluid -->
+            </div><!-- /.container-fluided -->
     </section>
 
     <!-- Main content -->
     <section class="content">
-        <div class="container-fluid">
+        <div class="container-fluided">
             <div class="row">
                 <div class="col-12">
                     <div class="card">
@@ -365,7 +366,7 @@
             </div>
             <!-- /.row -->
         </div>
-        <!-- /.container-fluid -->
+        <!-- /.container-fluided -->
     </section>
     <!-- /.content -->
 </div>

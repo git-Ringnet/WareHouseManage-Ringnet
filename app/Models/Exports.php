@@ -49,7 +49,7 @@ class Exports extends Model
             $exports = $exports->orderBy($orderBy, $orderType);
         }
 
-        $exports = $exports->paginate(10);
+        $exports = $exports->paginate(8);
         return $exports;
     }
     public function productExports()
