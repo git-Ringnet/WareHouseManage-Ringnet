@@ -3,8 +3,8 @@
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
+        <div class="container-fluided">
+            <div class="row mb-1 m-0">
                 <a href="{{ route('insertProducts') }}">
                     <button type="button" class="btn btn-primary d-flex align-items-center">
                         <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
@@ -22,10 +22,10 @@
             </div>
             <div class="row m-auto filter pt-2">
                 <form class="w-100" action="" method="get" id='search-filter'>
-                    <div class="row">
+                    <div class="row mr-0">
                         <div class="col-5">
                             <input type="text" placeholder="Tìm kiếm theo mã sản phẩm hoặc tên sản phẩm"
-                                name="keywords" class="pr-4 input-search w-100" value="{{ request()->keywords }}">
+                                name="keywords" class="pr-4 input-search w-100 form-control" value="{{ request()->keywords }}">
                             <span class="search-icon"><i class="fas fa-search"></i></span>
                         </div>
                         <div class="col-2 d-none">
@@ -41,7 +41,7 @@
                                 </svg>
                             </span>Tắt bộ lọc</a>
                     </div>
-                    <div class="row d-flex justify-contents-center align-items-center mr-auto pt-2">
+                    <div class="row d-flex justify-contents-center align-items-center mr-auto row-filter my-3">
                         <div class="icon-filter mr-3 ml-1">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -442,7 +442,7 @@ $index = array_search($item['label'], $numberedLabels);
                             </div>
                         </div>
                     </div>
-            </div><!-- /.container-fluid -->
+            </div><!-- /.container-fluided -->
     </section>
     <!-- Main content -->
     <section class="content">
@@ -507,7 +507,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             </span>
                                         </th>
                                         <th scope="col">
-                                            <span class="d-flex">
+                                            <span class="d-flex justify-content-end">
                                                 <a href="#" class="sort-link" data-sort-by="inventory"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Tồn kho</button></a>

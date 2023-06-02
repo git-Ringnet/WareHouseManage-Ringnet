@@ -3,9 +3,9 @@
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-        <div class="container-fluid">
+        <div class="container-fluided">
             <div style="width: 20%;">
-                <div class="d-flex justify-content-between">
+                <div class="d-flex mb-1">
                     <a href="{{ route('exports.create') }}">
                         <button type="button" class="btn btn-primary d-flex align-items-center">
                             <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
@@ -20,7 +20,7 @@
                             <span class="ml-2">Tạo đơn</span>
                         </button>
                     </a>
-                    <button type="button" onclick="exportToExcel()"
+                    <button style="margin-left:24px" type="button" onclick="exportToExcel()"
                         class="btn bg-transparent border-primary d-flex align-items-center">
                         <svg width="14" height="18" viewBox="0 0 14 18" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
@@ -32,13 +32,13 @@
                             <path d="M7.00055 1V11.7999" stroke="#0095F6" stroke-linecap="round"
                                 stroke-linejoin="round" />
                         </svg>
-                        <span class="ml-2 text-primary">Xuất excel</span>
+                        <span class="ml-2">Xuất excel</span>
                     </button>
                 </div>
             </div>
             <div class="row m-auto filter pt-2">
                 <form class="w-100" action="" method="get" id='search-filter'>
-                    <div class="row">
+                    <div class="row  mr-0">
                         <div class="col-5">
                             <input type="text" placeholder="Tìm kiếm theo mã sản phẩm hoặc tên sản phẩm"
                                 name="keywords" class="pr-4 form-control input-search w-100"
@@ -58,7 +58,7 @@
                                 </svg>
                             </span>Tắt bộ lọc</a>
                     </div>
-                    <div class="row d-flex justify-contents-center align-items-center mr-auto pt-2">
+                    <div class="row d-flex justify-contents-center align-items-center mr-auto row-filter my-3">
                         <?php
                         session_start();
                         
@@ -357,12 +357,12 @@ $index = array_search($item['label'], $numberedLabels);
                                 </div>
                             </div>
                         </div>
-                    </div><!-- /.container-fluid -->
+                    </div><!-- /.container-fluided -->
     </section>
 
     <!-- Main content -->
     <section class="content">
-        <div class="container-fluid">
+        <div class="container-fluided">
             <div class="row">
                 <div class="col-12">
                     <div class="card">
@@ -468,7 +468,7 @@ $index = array_search($item['label'], $numberedLabels);
             </div>
             <!-- /.row -->
         </div>
-        <!-- /.container-fluid -->
+        <!-- /.container-fluided -->
     </section>
     <!-- /.content -->
 </div>

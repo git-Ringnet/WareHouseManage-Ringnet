@@ -126,7 +126,7 @@ class UsersController extends Controller
         $userDetail = User::find($id);
         $roles = new Roles;
         // dd($id);
-        $title = 'Chỉnh sửa sản phẩm';
+        $title = 'Chỉnh sửa nhân viên';
         return view('admin/edituser', ['useredit' => $user], compact('userDetail','title'))->with('roles', $roles->getAll());
     }
     public function editUser(UserRequest $request)

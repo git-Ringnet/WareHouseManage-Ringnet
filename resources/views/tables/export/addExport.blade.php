@@ -1,7 +1,7 @@
 <x-navbar :title="$title"></x-navbar>
 <div class="content-wrapper export-add">
     <section class="content">
-        <div class="container-fluid position-relative">
+        <div class="container-fluided position-relative">
             <div class="row">
                 <div class="col-sm-6">
                     <div class="w-75">
@@ -135,9 +135,9 @@
             <form action="{{ route('exports.store') }}" method="POST" id="export_form">
                 @csrf
                 {{-- Form thông tin khách hàng --}}
-                <section id="data-container" class="container-fluid bg-white"></section>
+                <section id="data-container" class="container-fluided bg-white"></section>
                 {{-- Bảng thêm sản phẩm --}}
-                <div class="mt-4" style="overflow-x: scroll;">
+                <div class="mt-4" style="overflow-x: auto;">
                     <table class="table" id="sourceTable">
                         <thead class="bg-white border-0 rounded-top">
                             <tr>

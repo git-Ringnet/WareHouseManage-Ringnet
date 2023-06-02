@@ -1,14 +1,19 @@
 <x-navbar :title="$title"></x-navbar>
 <!-- Content Wrapper. Contains page content -->
+
 <div class="content-wrapper">
+    <div class="breadcrumb">
+        <span>Sản phẩm</span>
+        <span>/</span>
+        <span><b>Tạo sản phẩm mới</b></span>
+    </div>
     <!-- Content Header (Page header) -->
     <section class="content-header">
-        <div class="container-fluid">
+        <div class="container-fluided">
             <div class="row mb-2">
             </div>
-        </div><!-- /.container-fluid -->
+        </div><!-- /.container-fluided -->
     </section>
-
     <!-- Main content -->
     <section class="content">
             <div class="row">
@@ -94,7 +99,7 @@
                                                 class="w-100 p-1 form-control mb-4">
                                         </div>
                                     </div>
-                                    <div class="col-md-6 pr-3">
+                                    <div class="col-md-6">
                                         <div class="title-edit-item">Mô tả</div>
                                         <textarea name="products_description" id="" placeholder="Nhập mô tả của sản phẩm" cols="30" rows="8"
                                             class="form-control mb-4"></textarea>

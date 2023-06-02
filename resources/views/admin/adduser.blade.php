@@ -3,15 +3,15 @@
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
   <section class="content-header">
-    <div class="container-fluid">
+    <div class="container-fluided">
       <div class="row mb-2">
       </div>
-    </div><!-- /.container-fluid -->
+    </div><!-- /.container-fluided -->
   </section>
 
   <!-- Main content -->
   <section class="content">
-    <div class="container-fluid">
+    <div class="container-fluided">
       <div class="row">
         <div class="col-12">
           <div class="card">
@@ -38,14 +38,14 @@
                   @enderror
                 </div>
                 <div class="mb-3">
-                  <label for="">Password</label>
+                  <label for="">Mật khẩu</label>
                   <input type="password" class="form-control" name="password" placeholder="Mật khẩu">
                   @error('password')
                   <span style="color:red">{{$message}}</span>
                   @enderror
                 </div>
                 <div class="mb-3">
-                  <label for="">Role</label>
+                  <label for="">Vai trò</label>
                   <select class="form-control" name="role" id="">
                     <option value="0">Chọn chức vụ</option>
                     @foreach($roles as $role)
@@ -57,7 +57,7 @@
                   @enderror
                 </div>
                 <div class="mb-3">
-                  <label for="">Phone</label>
+                  <label for="">Số điện thoại</label>
                   <input type="number" class="form-control" name="phonenumber" placeholder="Số điện thoại" value="{{old('phonenumber')}}">
                   @error('phonenumber')
                   <span style="color:red">{{$message}}</span>
@@ -66,12 +66,14 @@
                 <div class="form-group">
                   <label for="pwd">Trạng thái:</label>
                   <select name="status" class="form-control">
-                      <option value="0">Active</option>
-                      <option value="1">Disable</option>
+                      <option value="1">Active</option>
+                      <option value="0">Disable</option>
                   </select>
               </div>
-                <button type="submit" class="btn btn-primary">Thêm nhân viên</button>
-                <a href="{{route('admin.userslist')}}" class="btn btn-warning">Quay lại</a>
+              <div class="btn-fixed">
+                <button type="submit" class="btn btn-primary">Thêm</button>
+                <a href="{{route('admin.userslist')}}" class="btn btn-default">Quay lại</a>
+              </div>
               </form>
             </div>
             <!-- /.card-body -->
@@ -81,7 +83,7 @@
       </div>
       <!-- /.row -->
     </div>
-    <!-- /.container-fluid -->
+    <!-- /.container-fluided -->
   </section>
   <!-- /.content -->
 </div>
