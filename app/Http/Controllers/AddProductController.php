@@ -138,7 +138,7 @@ class AddProductController extends Controller
         $provide = Provides::all();
         $products = Products::all();
         $lastId = DB::table('productorders')->latest('id')->value('id');
-        $las = DB::table('productorders')->get()->last()->id;
+        // $las = DB::table('productorders')->get()->last()->id;
         $title = 'Tạo đơn nhập hàng';
         return view('tables.order.insert', compact('provide', 'products', 'lastId', 'title'));
     }

@@ -7,7 +7,7 @@
     @endif
     <section class="content-header">
         <div class="container-fluid">
-            <a href="{{ route('insertProduct.create') }}">
+            <a href="{{ route('insertProduct.create') }}" >
                 <div class="btn btn-primary">Tạo đơn</div>
             </a>
             <div class="btn">Xuất Excel</div>

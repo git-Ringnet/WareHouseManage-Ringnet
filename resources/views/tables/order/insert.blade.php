@@ -212,19 +212,24 @@
             var xmlContent = e.target.result;
             var parser = new DOMParser();
             var xmlDoc = parser.parseFromString(xmlContent, 'text/xml');
-            var titles = xmlDoc.getElementsByTagName('THHDVu');
-            var number = xmlDoc.getElementsByTagName('SLuong');
+            var THHDVu = xmlDoc.getElementsByTagName('THHDVu');
+            var SLuong = xmlDoc.getElementsByTagName('SLuong');
+            var DVTinh = xmlDoc.getElementsByTagName('DVTinh');
+            var DGia = xmlDoc.getElementsByTagName('DGia');
             $('tbody tr').remove();
 
             // Tạo các ô input mới và đặt giá trị của chúng
-            for (var i = 0; i < titles.length; i++) {
-                var titlesValue = titles[i].textContent;
-                var numberssValue = number[i].textContent;
+            for (var i = 0; i < THHDVu.length; i++) {
+                var titlesValue = THHDVu[i].textContent;
+                var numberssValue = SLuong[i].textContent;
+                var typeValue = DVTinh[i].textContent;
+                var price = DGia[i].textContent;
                 var tr = '<tr>' +
                     '<input type="hidden" name="product_id[]" value="' + last + '">' +
                     '<td scope="row"><input type="checkbox" id=' + rowCount + '" class="cb-element"></td>' +
                     '<td>' +
                     '<select name="products_id[]">' +
+                    '<option value="">Lựa chọn mã sản phẩm</option>'+
                     '@foreach ($products as $va)' +
                     '<option value="{{ $va->id }}">{{ $va->products_code }}</option>' +
                     '@endforeach' +
@@ -233,10 +238,10 @@
                     '<td><input required type="text" name="product_name[]" value="' + titlesValue +
                     '"></td>' +
                     '<td><input required type="text" name="product_category[]"></td>' +
-                    '<td><input required type="text" name="product_unit[]"></td>' +
+                    '<td><input required type="text" name="product_unit[]" value="'+typeValue+'"></td>' +
                     '<td><input required type="number" name="product_qty[]" class="quantity-input" value="' +
                     numberssValue + '"></td>' +
-                    '<td><input required type="number" name="product_price[]"></td>' +
+                    '<td><input required type="number" name="product_price[]" value="'+price+'"></td>' +
                     '<td><input required type="number" name="product_tax[]" class="product_tax"></td>' +
                     '<td><input readonly type="text" name="product_total[]"></td>' +
                     '<td><input required type="text" name="product_trademark[]"></td>' +
@@ -439,7 +444,7 @@
             '<input required type="text" class="form-control" id="provide_address_new" placeholder="Nhập thông tin" name="provide_address_new" value="">' +
             '</div>' + '<div class="form-group">' +
             '<label for="email">Mã số thuế:</label>' +
-            '<input required type="text" class="form-control" id="provide_code_new" placeholder="Nhập thông tin" name="provide_code_new" value="">' +
+            '<input required type="number" class="form-control" id="provide_code_new" placeholder="Nhập thông tin" name="provide_code_new" value="">' +
             '</div>' + '<div class="form-group">' +
             '</div>' + '</div>' + '<div class="col-sm-6">' +
             '<div class="form-group">' +
@@ -450,7 +455,7 @@
             '<input required type="email" class="form-control" id="provide_email_new" placeholder="Nhập thông tin" name="provide_email_new" value="">' +
             '</div>' + '<div class="form-group">' +
             '<label for="email">Số điện thoại:</label>' +
-            '<input required type="text" class="form-control" id="provide_phone_new" placeholder="Nhập thông tin" name="provide_phone_new" value="">' +
+            '<input required type="number" class="form-control" id="provide_phone_new" placeholder="Nhập thông tin" name="provide_phone_new" value="">' +
             '</div>' + '<div class="form-group">' +
             '</div>' + '<div class="form-group">' +
             '</div>' + '<div class="form-group">' +
@@ -941,6 +946,7 @@
         }
         $('input[name="product_name[]"]').each(function() {
             if ($(this).val() === '') {
+                error = true;
                 alert('Vui lòng nhập tên sản phẩm')
             }
         });
@@ -1006,9 +1012,16 @@
         this.submit();
     });
 
+    // Prevent form submit when click 'Mẫu nhập nhanh'
     $(document).on('click', '#form_quick', function(e) {
         e.preventDefault();
     });
+
+    // Thêm nhanh nhà cung cấp
+    $(document).on('click','#btn-addCustomer',function(e){
+        e.preventDefault();
+        alert('thêm nhà cung cấp');
+    })
 </script>
 @endif
 </body>
