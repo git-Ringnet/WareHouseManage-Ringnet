@@ -392,7 +392,7 @@
                                             </span>
                                         </th>
                                         <th scope="col">
-                                            <span class="d-flex">
+                                            <span class="d-flex float-right">
                                                 <a href="#" class="sort-link" data-sort-by="total"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Tổng tiền</button></a>
@@ -400,14 +400,14 @@
                                             </span>
                                         </th>
                                         <th scope="col">
-                                            <span class="d-flex">
+                                            <span class="d-flex justify-content-center">
                                                 <a href="#" class="sort-link" data-sort-by="order_status"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Trạng thái</button></a>
                                                 <div class="icon" id="icon-export_status"></div>
                                             </span>
                                         </th>
-                                        <th></th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -420,8 +420,8 @@
                                             <td>{{ $va->provide_name }}</td>
                                             <td>{{ $va->updated_at }}</td>
                                             <td>{{ $va->name }}</td>
-                                            <td>{{ number_format($va->total) }}</td>
-                                            <td>
+                                            <td class="text-right">{{ number_format($va->total) }}</td>
+                                            <td class="text-center">
                                                 @if ($va->order_status == 0)
                                                     <span class="p-2 bg-warning rounded">Chờ duyệt</span>
                                                 @elseif($va->order_status == 1)
@@ -432,6 +432,7 @@
                                             </td>
                                             <td class="d-flex justify-content-between">
                                                 <div class="edit">
+                                                    @if(Auth::user()->name == $va->name || Auth::user()->can('isAdmin'))
                                                     <a href="{{ route('insertProduct.edit', $va->id) }}">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="32"
                                                             height="32" viewBox="0 0 32 32" fill="none">
@@ -440,6 +441,22 @@
                                                                 fill="#555555" />
                                                         </svg>
                                                     </a>
+                                                    @else
+                                                    <a href="{{ route('insertProduct.edit', $va->id) }}">
+                                                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M18.6775 10.6226V5.91937C18.6775 5.50358 18.5123 5.10482 18.2183 4.81081C17.9243 4.5168 17.5255 4.35162 17.1097 4.35162H6.91937C6.50358 4.35162 6.10482 4.5168 5.81081 4.81081C5.5168 5.10482 5.35162 5.50358 5.35162 5.91937V16.8936C5.35162 17.3094 5.5168 17.7082 5.81081 18.0022C6.10482 18.2962 6.50358 18.4614 6.91937 18.4614H10.8387" stroke="#555555" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                                            <path d="M10.2509 13.7581H10.8388" stroke="#555555" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                                            <path d="M10.2509 10.6226H13.1904" stroke="#555555" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                                            <path d="M10.2509 7.58511H15.542" stroke="#555555" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                                            <path d="M8.29115 8.11423C8.40743 8.11423 8.52109 8.07975 8.61778 8.01515C8.71446 7.95055 8.78981 7.85873 8.83431 7.7513C8.8788 7.64388 8.89045 7.52567 8.86776 7.41163C8.84508 7.29758 8.78909 7.19283 8.70687 7.11061C8.62465 7.02839 8.51989 6.9724 8.40585 6.94971C8.29181 6.92703 8.1736 6.93867 8.06617 6.98317C7.95875 7.02766 7.86693 7.10302 7.80233 7.1997C7.73773 7.29638 7.70325 7.41004 7.70325 7.52632C7.70325 7.68224 7.76519 7.83178 7.87544 7.94203C7.98569 8.05229 8.13523 8.11423 8.29115 8.11423Z" fill="#555555"/>
+                                                            <path d="M8.29115 11.2497C8.40743 11.2497 8.52109 11.2152 8.61778 11.1506C8.71446 11.086 8.78981 10.9942 8.83431 10.8868C8.8788 10.7794 8.89045 10.6612 8.86776 10.5471C8.84508 10.4331 8.78909 10.3283 8.70687 10.2461C8.62465 10.1639 8.51989 10.1079 8.40585 10.0852C8.29181 10.0625 8.1736 10.0742 8.06617 10.1187C7.95875 10.1632 7.86693 10.2385 7.80233 10.3352C7.73773 10.4319 7.70325 10.5455 7.70325 10.6618C7.70325 10.8177 7.76519 10.9673 7.87544 11.0775C7.98569 11.1878 8.13523 11.2497 8.29115 11.2497Z" fill="#555555"/>
+                                                            <path d="M8.29115 14.3069C8.40743 14.3069 8.52109 14.2724 8.61778 14.2078C8.71446 14.1432 8.78981 14.0514 8.83431 13.9439C8.8788 13.8365 8.89045 13.7183 8.86776 13.6043C8.84508 13.4902 8.78909 13.3855 8.70687 13.3032C8.62465 13.221 8.51989 13.165 8.40585 13.1423C8.29181 13.1197 8.1736 13.1313 8.06617 13.1758C7.95875 13.2203 7.86693 13.2956 7.80233 13.3923C7.73773 13.489 7.70325 13.6027 7.70325 13.7189C7.70325 13.8749 7.76519 14.0244 7.87544 14.1347C7.98569 14.2449 8.13523 14.3069 8.29115 14.3069Z" fill="#555555"/>
+                                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M18.2246 13.1819C16.996 11.9533 15.004 11.9533 13.7754 13.1819C12.5468 14.4105 12.5468 16.4025 13.7754 17.6311C15.004 18.8597 16.996 18.8597 18.2246 17.6311C19.4532 16.4025 19.4532 14.4105 18.2246 13.1819ZM18.8284 12.5781C17.2663 11.016 14.7337 11.016 13.1716 12.5781C11.6095 14.1402 11.6095 16.6728 13.1716 18.2349C14.7337 19.797 17.2663 19.797 18.8284 18.2349C20.3905 16.6728 20.3905 14.1402 18.8284 12.5781Z" fill="#555555"/>
+                                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M18.1376 18.1376C18.321 17.9541 18.6184 17.9541 18.8019 18.1376L20.8624 20.1981C21.0459 20.3816 21.0459 20.679 20.8624 20.8624C20.679 21.0459 20.3816 21.0459 20.1981 20.8624L18.1376 18.8019C17.9541 18.6184 17.9541 18.321 18.1376 18.1376Z" fill="#555555"/>
+                                                            </svg>
+                                                            
+                                                    </a>
+                                                    @endif
                                                 </div>
                                                 <div id="dropdown_item{{ $va->id }}" data-toggle="collapse"
                                                     data-target="#product-details-<?php echo $va->id; ?>">
@@ -453,22 +470,22 @@
                                             </td>
                                         </tr>
                                         @foreach ($product as $item)
-                                            <tr id="product-details-{{ $va->id }}" class="collapse">
+                                            <tr id="product-details-{{ $va->id }}" class="product-details collapse">
                                                 @if ($va->id == $item->id)
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>
-                                                    <td><span>{{ $item->product_name }}</span>
-                                                        <p>{{ $item->getCodeProduct->products_code }}</p>
+                                                    <td><p>{{ $item->product_name }}</p>
+                                                        {{ $item->getCodeProduct->products_code }}
                                                     </td>
-                                                    <td><span>Số lượng</span>
-                                                        <p>{{ $item->product_qty }}</p>
+                                                    <td><p>Số lượng</p>
+                                                        {{ $item->product_qty }}
                                                     </td>
-                                                    <td><span>Tổng tiên</span>
-                                                        <p>{{ number_format($item->product_qty * $item->product_price) }}
-                                                        </p>
+                                                    <td class="text-right"><p>Tổng tiền</p>{{ number_format($item->product_qty * $item->product_price) }}
                                                     </td>
                                                     <td></td>
+                                                    <td></td>
+                                                    
                                                 @endif
                                             </tr>
                                         @endforeach
@@ -765,6 +782,31 @@
     function updateDeleteItemValue(label) {
         document.getElementById('delete-item-input').value = label;
     }
+    var dropdownItems = $('[id^="dropdown_item"]');
+    dropdownItems.each(function() {
+        $(this).on('click', function() {
+            var isActive = $(this).hasClass('dropdown-item-active');
+            var svgElement = $(this).find('svg');
+            var parentElement = $(this).parent().parent();
+            console.log(parentElement);
+            if (isActive) {
+                $(this).removeClass('dropdown-item-active');
+                parentElement.css('background', '#E9ECEF');
+                svgElement.css({
+                    transform: 'rotate(0deg)',
+                    transition: 'transform 0.3s ease'
+                });
+            }
+            if (!isActive) {
+                $(this).addClass('dropdown-item-active');
+                parentElement.css('background', '#ADB5BD');
+                svgElement.css({
+                    transform: 'rotate(180deg)',
+                    transition: 'transform 0.3s ease'
+                });
+            }
+        });
+    });
 </script>
 </body>
 

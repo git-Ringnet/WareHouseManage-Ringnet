@@ -259,8 +259,10 @@
         </div>
 
         @if(Auth::user()->id == $order->users_id || Auth::user()->can('isAdmin'))
+        @if($order->order_status != 1)
         <a href="javascript:;" class="btn btn-info addRow">Thêm sản phẩm</a>
         <a href="javascript:;" class="btn btn-primary addBillEdit">Lưu</a>
+        @endif
         @endif
         <a href="{{route('insertProduct.index')}}" class="btn btn-light">Hủy</a>
       </section>

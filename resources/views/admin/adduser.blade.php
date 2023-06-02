@@ -20,7 +20,7 @@
             <div class="alert alert-danger">Dữ liệu nhập vào không đúng</div>
             @endif
 
-            <div class="card-body">
+            <div class="card-body p-3">
               <form action="" method="post">
                 @csrf
                 <div class="mb-3">

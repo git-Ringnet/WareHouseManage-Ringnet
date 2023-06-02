@@ -222,6 +222,7 @@ nav.main-header.navbar.navbar-expand.navbar-white.navbar-light {
 .content-wrapper {
     background-color: #E9ECEF;
     padding-top: 55px;
+    height: 100vh;
 }
 
 /* Main content */
@@ -421,12 +422,13 @@ td p {
     font-size: 0.813rem;
     font-weight: 600;
 }
-.details-products .form-control{
+.details-products .form-control,
+.form-control.mb-4{
     border-radius: 8px;
 }
 .btn-fixed{
     position: fixed;
-    bottom: 10%;
+    bottom: 5%;
     z-index: 8;
     left: 50%;
 }
