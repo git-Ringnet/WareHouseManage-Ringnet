@@ -1,7 +1,7 @@
 <x-navbar :title="$title"></x-navbar>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
-  <div class="container-fluided">
+  <div class="container-fluid">
     <!-- Content Header (Page header) -->
     @if(Session::has('session'))
     {{Session::get('session')}}
@@ -11,7 +11,7 @@
       @method('PUT')
       <input type="hidden" name="order_id" value="{{$order->id}}">
       <section class="content-header">
-        <div class="container-fluided">
+        <div class="container-fluid">
           <div class="row">
             <div class="col-sm-6">
               <div class="w-75">
@@ -110,7 +110,7 @@
               </div>
             </div>
           </div>
-        </div><!-- /.container-fluided -->
+        </div><!-- /.container-fluid -->
       </section>
       <section id="infor_provide" class="bg-white">
         <div class="border-bottom p-3 d-flex justify-content-between">
@@ -121,7 +121,7 @@
           @endif
         </div>
         <input type="hidden" name="provide_id" value="{{$provide_order[0]->id}}" id="provide_id">
-        <div class="row p-3">
+        <div class="row">
           <div class="col-sm-6">
             <div class="form-group">
               <label for="congty">Công ty:</label>
@@ -162,8 +162,8 @@
       </section>
       <!-- Main content -->
       <section class="content">
-        <div style="overflow-x: auto;" class="container-fluided">
-          <table class="table table-hover">
+        <div style="overflow-x: scroll;" class="container-fluid">
+          <table class="table table-hover" id="inputContainer">
             <thead>
               <tr>
                 <td><input type="checkbox"></td>
@@ -235,7 +235,7 @@
                   </button>
                 </div>
                 <div class="modal-body">
-                  <table class="table table-hover">
+                  <table class="table table-hover table_list_order">
                     <thead>
                       <tr>
                         <td>ID</td>
@@ -253,27 +253,36 @@
                         <td class="name_product"></td>
                         <td class="type_product"></td>
                         <td class="qty_product"></td>
-                        <td id="SNCount">1</td>
+                        <td class="SNCount">1</td>
                       </tr>
                     </tbody>
                   </table>
                   <h3>Thông tin Serial Number </h3>
-                  <div class="d-flex" style="background:#E9ECEF; padding:10px 10px;"> <input type="checkbox" class="mr-5"> <span class="mr-5">STT</span> <span class="mr-5">Serial Number</span> </div>
-                  <div class="div_value{{$stt}}" style="padding:10px;">
+                  <div class="div_value{{$stt}}">
                     @foreach($seri as $se)
                     @if($pro->id == $se->product_id)
-                    <div class="delete d-flex justify-content-between">
-                      <div>
-                        <input class="mr-5" type="checkbox" id="checkbox_{{$stt}}">
-                        <span class="mr-5">1</span>
-                        <input required type="text" name="product_SN{{$stt}}[]" value="{{$se->serinumber}}" onpaste="handlePaste(this)">
-                      </div>
-                      <div class="deleteRow1">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
-                          <path fill-rule="evenodd" clip-rule="evenodd" d="M14.0606 6.66675C13.6589 6.66675 13.3333 6.99236 13.3333 7.39402C13.3333 7.79568 13.6589 8.12129 14.0606 8.12129H17.9394C18.341 8.12129 18.6667 7.79568 18.6667 7.39402C18.6667 6.99236 18.341 6.66675 17.9394 6.66675H14.0606ZM8 10.3031C8 9.90143 8.32561 9.57582 8.72727 9.57582H10.1818H21.8182H23.2727C23.6744 9.57582 24 9.90143 24 10.3031C24 10.7048 23.6744 11.0304 23.2727 11.0304H22.5455V22.6667C22.5455 24.2819 21.2158 25.5758 19.6179 25.5758H12.3452C11.9637 25.5755 11.5854 25.4997 11.2333 25.3528C10.8812 25.2059 10.5617 24.9908 10.2931 24.7199C10.0244 24.449 9.81206 24.1276 9.66816 23.7743C9.52463 23.4219 9.45204 23.0447 9.45455 22.6642V11.0304H8.72727C8.32561 11.0304 8 10.7048 8 10.3031ZM10.9091 22.6723V11.0304H21.0909V22.6667C21.0909 23.4623 20.4288 24.1213 19.6179 24.1213H12.3458C12.1562 24.1211 11.9684 24.0834 11.7934 24.0104C11.6183 23.9374 11.4595 23.8304 11.3259 23.6958C11.1924 23.5611 11.0868 23.4013 11.0153 23.2257C10.9437 23.05 10.9076 22.8619 10.9091 22.6723ZM17.9394 13.4546C18.3411 13.4546 18.6667 13.7802 18.6667 14.1819V20.9698C18.6667 21.3714 18.3411 21.6971 17.9394 21.6971C17.5377 21.6971 17.2121 21.3714 17.2121 20.9698V14.1819C17.2121 13.7802 17.5377 13.4546 17.9394 13.4546ZM14.7879 14.1819C14.7879 13.7802 14.4623 13.4546 14.0606 13.4546C13.6589 13.4546 13.3333 13.7802 13.3333 14.1819V20.9698C13.3333 21.3714 13.6589 21.6971 14.0606 21.6971C14.4623 21.6971 14.7879 21.3714 14.7879 20.9698V14.1819Z" fill="#555555" />
-                        </svg>
-                      </div>
-                    </div>
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <td style="width:5%;"><input type="checkbox" class="mr-5"></td>
+                          <td style="width:5%;"><span class="mr-5">STT</span></td>
+                          <td><span class="mr-5">Serial Number</span></td>
+                          <td style="width:3%;"></td>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td><input class="mr-5" type="checkbox" id="checkbox_{{$stt}}"></td>
+                          <td><span class="mr-5">1</span></td>
+                          <td><input required type="text" name="product_SN{{$stt}}[]" value="{{$se->serinumber}}" onpaste="handlePaste(this)"></td>
+                          <td class="deleteRow1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                              <path fill-rule="evenodd" clip-rule="evenodd" d="M14.0606 6.66675C13.6589 6.66675 13.3333 6.99236 13.3333 7.39402C13.3333 7.79568 13.6589 8.12129 14.0606 8.12129H17.9394C18.341 8.12129 18.6667 7.79568 18.6667 7.39402C18.6667 6.99236 18.341 6.66675 17.9394 6.66675H14.0606ZM8 10.3031C8 9.90143 8.32561 9.57582 8.72727 9.57582H10.1818H21.8182H23.2727C23.6744 9.57582 24 9.90143 24 10.3031C24 10.7048 23.6744 11.0304 23.2727 11.0304H22.5455V22.6667C22.5455 24.2819 21.2158 25.5758 19.6179 25.5758H12.3452C11.9637 25.5755 11.5854 25.4997 11.2333 25.3528C10.8812 25.2059 10.5617 24.9908 10.2931 24.7199C10.0244 24.449 9.81206 24.1276 9.66816 23.7743C9.52463 23.4219 9.45204 23.0447 9.45455 22.6642V11.0304H8.72727C8.32561 11.0304 8 10.7048 8 10.3031ZM10.9091 22.6723V11.0304H21.0909V22.6667C21.0909 23.4623 20.4288 24.1213 19.6179 24.1213H12.3458C12.1562 24.1211 11.9684 24.0834 11.7934 24.0104C11.6183 23.9374 11.4595 23.8304 11.3259 23.6958C11.1924 23.5611 11.0868 23.4013 11.0153 23.2257C10.9437 23.05 10.9076 22.8619 10.9091 22.6723ZM17.9394 13.4546C18.3411 13.4546 18.6667 13.7802 18.6667 14.1819V20.9698C18.6667 21.3714 18.3411 21.6971 17.9394 21.6971C17.5377 21.6971 17.2121 21.3714 17.2121 20.9698V14.1819C17.2121 13.7802 17.5377 13.4546 17.9394 13.4546ZM14.7879 14.1819C14.7879 13.7802 14.4623 13.4546 14.0606 13.4546C13.6589 13.4546 13.3333 13.7802 13.3333 14.1819V20.9698C13.3333 21.3714 13.6589 21.6971 14.0606 21.6971C14.4623 21.6971 14.7879 21.3714 14.7879 20.9698V14.1819Z" fill="#555555" />
+                            </svg>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
                     @endif
                     @endforeach
                   </div>
@@ -288,8 +297,6 @@
           <?php $stt++; ?>
           @endforeach
         </div>
-
-
         @if(Auth::user()->id == $order->users_id || Auth::user()->can('isAdmin'))
         @if($order->order_status != 1)
         <a href="javascript:;" class="btn btn-info addRow">Thêm sản phẩm</a>
@@ -338,32 +345,47 @@
     var clipboardData = event.clipboardData || window.clipboardData;
     var pastedData = clipboardData.getData('Text');
     var rows = pastedData.trim().split('\n');
-    var parent_div = $('.div_value' + rowCount);
-
+    var parent_div = $('.div_value' + rowCount + ' table tbody');
     for (var i = 0; i < rows.length; i++) {
       var rowData = rows[i].trim();
       if (rowData === '') {
         continue;
       }
-      var newInput = document.createElement('input');
-      const div = document.createElement("div");
-      const divDelete = document.createElement("div");
-      newInput.type = 'text';
-      newInput.name = 'product_SN' + rowCount + '[]';
-
-      divDelete.className = 'deleteRow1';
-      divDelete.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.0606 6.66675C13.6589 6.66675 13.3333 6.99236 13.3333 7.39402C13.3333 7.79568 13.6589 8.12129 14.0606 8.12129H17.9394C18.341 8.12129 18.6667 7.79568 18.6667 7.39402C18.6667 6.99236 18.341 6.66675 17.9394 6.66675H14.0606ZM8 10.3031C8 9.90143 8.32561 9.57582 8.72727 9.57582H10.1818H21.8182H23.2727C23.6744 9.57582 24 9.90143 24 10.3031C24 10.7048 23.6744 11.0304 23.2727 11.0304H22.5455V22.6667C22.5455 24.2819 21.2158 25.5758 19.6179 25.5758H12.3452C11.9637 25.5755 11.5854 25.4997 11.2333 25.3528C10.8812 25.2059 10.5617 24.9908 10.2931 24.7199C10.0244 24.449 9.81206 24.1276 9.66816 23.7743C9.52463 23.4219 9.45204 23.0447 9.45455 22.6642V11.0304H8.72727C8.32561 11.0304 8 10.7048 8 10.3031ZM10.9091 22.6723V11.0304H21.0909V22.6667C21.0909 23.4623 20.4288 24.1213 19.6179 24.1213H12.3458C12.1562 24.1211 11.9684 24.0834 11.7934 24.0104C11.6183 23.9374 11.4595 23.8304 11.3259 23.6958C11.1924 23.5611 11.0868 23.4013 11.0153 23.2257C10.9437 23.05 10.9076 22.8619 10.9091 22.6723ZM17.9394 13.4546C18.3411 13.4546 18.6667 13.7802 18.6667 14.1819V20.9698C18.6667 21.3714 18.3411 21.6971 17.9394 21.6971C17.5377 21.6971 17.2121 21.3714 17.2121 20.9698V14.1819C17.2121 13.7802 17.5377 13.4546 17.9394 13.4546ZM14.7879 14.1819C14.7879 13.7802 14.4623 13.4546 14.0606 13.4546C13.6589 13.4546 13.3333 13.7802 13.3333 14.1819V20.9698C13.3333 21.3714 13.6589 21.6971 14.0606 21.6971C14.4623 21.6971 14.7879 21.3714 14.7879 20.9698V14.1819Z" fill="#555555"/></svg>';
-
-      div.className = 'delete d-flex justify-content-between';
-
-      div.appendChild(newInput);
-      div.appendChild(divDelete);
-
-      newInput.value = rows[i].trim();
-      parent_div[0].appendChild(div);
+      var newtr = document.createElement('tr');
+      var newtd1 = document.createElement('td');
+      var newtd2 = document.createElement('td');
+      var newtd3 = document.createElement('td');
+      var newtd4 = document.createElement('td');
+      var newDiv = document.createElement('input');
+      var checkbox = document.createElement("input");
+      var stt = document.createElement("span");
+      var div1 = document.createElement("div");
+      checkbox.setAttribute("type", "checkbox");
+      newtd1.append(checkbox);
+      newDiv.setAttribute("type", "text");
+      newDiv.setAttribute("name", "product_SN" + i + "[]");
+      newDiv.setAttribute("onpaste", "handlePaste(this)");
+      newtd3.append(newDiv);
+      newtd4.setAttribute('class', 'deleteRow1');
+      newtd4.innerHTML =
+        '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.0606 6.66675C13.6589 6.66675 13.3333 6.99236 13.3333 7.39402C13.3333 7.79568 13.6589 8.12129 14.0606 8.12129H17.9394C18.341 8.12129 18.6667 7.79568 18.6667 7.39402C18.6667 6.99236 18.341 6.66675 17.9394 6.66675H14.0606ZM8 10.3031C8 9.90143 8.32561 9.57582 8.72727 9.57582H10.1818H21.8182H23.2727C23.6744 9.57582 24 9.90143 24 10.3031C24 10.7048 23.6744 11.0304 23.2727 11.0304H22.5455V22.6667C22.5455 24.2819 21.2158 25.5758 19.6179 25.5758H12.3452C11.9637 25.5755 11.5854 25.4997 11.2333 25.3528C10.8812 25.2059 10.5617 24.9908 10.2931 24.7199C10.0244 24.449 9.81206 24.1276 9.66816 23.7743C9.52463 23.4219 9.45204 23.0447 9.45455 22.6642V11.0304H8.72727C8.32561 11.0304 8 10.7048 8 10.3031ZM10.9091 22.6723V11.0304H21.0909V22.6667C21.0909 23.4623 20.4288 24.1213 19.6179 24.1213H12.3458C12.1562 24.1211 11.9684 24.0834 11.7934 24.0104C11.6183 23.9374 11.4595 23.8304 11.3259 23.6958C11.1924 23.5611 11.0868 23.4013 11.0153 23.2257C10.9437 23.05 10.9076 22.8619 10.9091 22.6723ZM17.9394 13.4546C18.3411 13.4546 18.6667 13.7802 18.6667 14.1819V20.9698C18.6667 21.3714 18.3411 21.6971 17.9394 21.6971C17.5377 21.6971 17.2121 21.3714 17.2121 20.9698V14.1819C17.2121 13.7802 17.5377 13.4546 17.9394 13.4546ZM14.7879 14.1819C14.7879 13.7802 14.4623 13.4546 14.0606 13.4546C13.6589 13.4546 13.3333 13.7802 13.3333 14.1819V20.9698C13.3333 21.3714 13.6589 21.6971 14.0606 21.6971C14.4623 21.6971 14.7879 21.3714 14.7879 20.9698V14.1819Z" fill="#555555"/></svg>';
+      newtd2.appendChild(stt);
+      newtr.append(newtd1);
+      newtr.append(newtd2);
+      newtr.append(newtd3);
+      newtr.append(newtd4);
+      var checkboxes = document.querySelectorAll('.div_value' + rowCount + ' table tbody input[type="checkbox"]');
+      var checkboxCount = checkboxes.length;
+      stt.innerHTML = checkboxCount;
+      checkbox.setAttribute("id", "checkbox_" + checkboxCount);
+      $('.SNCount').text(checkboxCount);
+      newDiv.value = rows[i].trim();
+      parent_div[0].appendChild(newtr);
     }
-    $(input).closest('div').remove();
+    $(input).parent().parent().remove();
+    // $(input).closest('div').remove();
   }
+
   $(document).ready(function() {
     calculateTotals();
   })
@@ -421,6 +443,7 @@
     $('#form_submit').attr('action', deleteUrl);
     $('#form_submit').submit();
   });
+
   // Update productSN trước khi thêm dữ liệu
   function updateProductSN() {
     $('.modal-body').each(function(index) {
@@ -459,8 +482,8 @@
   });
 
   function updateRowNumbers() {
-    $('tbody tr').each(function(index) {
-      $(this).find('th:first').text(index + 1);
+    $('#table_SNS tbody tr').each(function(index) {
+      $(this).find('td').eq(1).text(index + 1);
     });
   }
 
@@ -533,7 +556,7 @@
     this.submit();
   });
 
-  var rowCount = $('tbody tr').length;
+  var rowCount = $('.table_list_order tbody tr').length;
   var last = "<?php echo $lastId; ?>";
   $('.addRow').on('click', function() {
     last++;
@@ -568,99 +591,105 @@
       '</td>' +
       '<td><a href="javascript:;" class="deleteRow"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.0606 6.66675C13.6589 6.66675 13.3333 6.99236 13.3333 7.39402C13.3333 7.79568 13.6589 8.12129 14.0606 8.12129H17.9394C18.341 8.12129 18.6667 7.79568 18.6667 7.39402C18.6667 6.99236 18.341 6.66675 17.9394 6.66675H14.0606ZM8 10.3031C8 9.90143 8.32561 9.57582 8.72727 9.57582H10.1818H21.8182H23.2727C23.6744 9.57582 24 9.90143 24 10.3031C24 10.7048 23.6744 11.0304 23.2727 11.0304H22.5455V22.6667C22.5455 24.2819 21.2158 25.5758 19.6179 25.5758H12.3452C11.9637 25.5755 11.5854 25.4997 11.2333 25.3528C10.8812 25.2059 10.5617 24.9908 10.2931 24.7199C10.0244 24.449 9.81206 24.1276 9.66816 23.7743C9.52463 23.4219 9.45204 23.0447 9.45455 22.6642V11.0304H8.72727C8.32561 11.0304 8 10.7048 8 10.3031ZM10.9091 22.6723V11.0304H21.0909V22.6667C21.0909 23.4623 20.4288 24.1213 19.6179 24.1213H12.3458C12.1562 24.1211 11.9684 24.0834 11.7934 24.0104C11.6183 23.9374 11.4595 23.8304 11.3259 23.6958C11.1924 23.5611 11.0868 23.4013 11.0153 23.2257C10.9437 23.05 10.9076 22.8619 10.9091 22.6723ZM17.9394 13.4546C18.3411 13.4546 18.6667 13.7802 18.6667 14.1819V20.9698C18.6667 21.3714 18.3411 21.6971 17.9394 21.6971C17.5377 21.6971 17.2121 21.3714 17.2121 20.9698V14.1819C17.2121 13.7802 17.5377 13.4546 17.9394 13.4546ZM14.7879 14.1819C14.7879 13.7802 14.4623 13.4546 14.0606 13.4546C13.6589 13.4546 13.3333 13.7802 13.3333 14.1819V20.9698C13.3333 21.3714 13.6589 21.6971 14.0606 21.6971C14.4623 21.6971 14.7879 21.3714 14.7879 20.9698V14.1819Z" fill="#555555"/></svg></a></td>' +
       '</tr>';
-    $('tbody').append(tr);
+    $('#inputContainer tbody').append(tr);
     var modal = '<div class="modal fade" id="exampleModal' + rowCount +
-            '" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">' +
-            '<div class="modal-dialog" role="document">' +
-            '<div class="modal-content">' +
-            '<div class="modal-header align-items-center">' +
-            '<div> ' +
-            '<h5 class="modal-title" id="exampleModalLabel">Serial Number</h5>' +
-            '<p>Thông tin chi tiết về số S/N của mỗi sản phẩm </p>' +
-            '</div>' +
-            '<button type="button" class="close" data-dismiss="modal" aria-label="Close">' +
-            '<span aria-hidden="true">&times;</span>' +
-            '</button>' +
-            '</div>' +
-            '<div class="modal-body">' +
-            ' <table class="table table-hover"> ' +
-            '<thead> ' +
-            '<tr>' +
-            '<td>ID</td>' +
-            '<td>Mã sản phẩm</td>' +
-            '<td>Tên sản phẩm</td>' +
-            '<td>Loại hàng</td>' +
-            '<td>Số lượng sản phẩm</td>' +
-            '<td>Số lượng S/N</td>' +
-            '</tr>' +
-            '</thead>' +
-            '<tbody>' +
-            '<tr>' +
-            '<td>' + rowCount + '</td>' +
-            '<td class="code_product"></td>' +
-            '<td class="name_product"></td>' +
-            '<td class="type_product"></td>' +
-            '<td class="qty_product"></td>' +
-            '<td id="SNCount">1</td>' +
-            '</tr>' +
-            '</tbody>' +
-            '</table>' +
-            '<h3>Thông tin Serial Number </h3>' +
-            '<div class="d-flex" style="background:#E9ECEF; padding:10px 10px;">  <input type="checkbox" class="mr-5"> <span class="mr-5">STT</span> <span class="mr-5">Serial Number</span> </div>' +
-            '<div class="div_value' + rowCount + '" style="padding:10px;">' +
-            '<div class="delete d-flex justify-content-between">' +
-            '<div>' +
-            '<input class="mr-5" type="checkbox" id="checkbox_1">' +
-            '<span class="mr-5" >1</span>' +
-            '<input class="mr-5" required type="text" name="product_SN' + rowCount + '[]" onpaste="handlePaste(this)">' +
-            '</div>' +
-            '<div class="deleteRow1"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.0606 6.66675C13.6589 6.66675 13.3333 6.99236 13.3333 7.39402C13.3333 7.79568 13.6589 8.12129 14.0606 8.12129H17.9394C18.341 8.12129 18.6667 7.79568 18.6667 7.39402C18.6667 6.99236 18.341 6.66675 17.9394 6.66675H14.0606ZM8 10.3031C8 9.90143 8.32561 9.57582 8.72727 9.57582H10.1818H21.8182H23.2727C23.6744 9.57582 24 9.90143 24 10.3031C24 10.7048 23.6744 11.0304 23.2727 11.0304H22.5455V22.6667C22.5455 24.2819 21.2158 25.5758 19.6179 25.5758H12.3452C11.9637 25.5755 11.5854 25.4997 11.2333 25.3528C10.8812 25.2059 10.5617 24.9908 10.2931 24.7199C10.0244 24.449 9.81206 24.1276 9.66816 23.7743C9.52463 23.4219 9.45204 23.0447 9.45455 22.6642V11.0304H8.72727C8.32561 11.0304 8 10.7048 8 10.3031ZM10.9091 22.6723V11.0304H21.0909V22.6667C21.0909 23.4623 20.4288 24.1213 19.6179 24.1213H12.3458C12.1562 24.1211 11.9684 24.0834 11.7934 24.0104C11.6183 23.9374 11.4595 23.8304 11.3259 23.6958C11.1924 23.5611 11.0868 23.4013 11.0153 23.2257C10.9437 23.05 10.9076 22.8619 10.9091 22.6723ZM17.9394 13.4546C18.3411 13.4546 18.6667 13.7802 18.6667 14.1819V20.9698C18.6667 21.3714 18.3411 21.6971 17.9394 21.6971C17.5377 21.6971 17.2121 21.3714 17.2121 20.9698V14.1819C17.2121 13.7802 17.5377 13.4546 17.9394 13.4546ZM14.7879 14.1819C14.7879 13.7802 14.4623 13.4546 14.0606 13.4546C13.6589 13.4546 13.3333 13.7802 13.3333 14.1819V20.9698C13.3333 21.3714 13.6589 21.6971 14.0606 21.6971C14.4623 21.6971 14.7879 21.3714 14.7879 20.9698V14.1819Z" fill="#555555"/></svg></div>' +
-            '</div>' +
-            '</div>' +
-            '<div class="AddSN btn btn-secondary" style="border:1px solid gray;">Thêm dòng</div>' +
-            '<div class="btn btn-danger ml-2" id="deleteSNS"> Xóa SN </div>' +
-            '</div>' +
-            '<div class="modal-footer">' +
-            '<button type="button" class="btn btn-secondary" data-dismiss="modal">Save</button>' +
-            '</div>' +
-            '</div>' +
-            '</div>' +
-            '</div>'
+      '" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">' +
+      '<div class="modal-dialog" role="document">' +
+      '<div class="modal-content">' +
+      '<div class="modal-header align-items-center">' +
+      '<div> ' +
+      '<h5 class="modal-title" id="exampleModalLabel">Serial Number</h5>' +
+      '<p>Thông tin chi tiết về số S/N của mỗi sản phẩm </p>' +
+      '</div>' +
+      '<button type="button" class="close" data-dismiss="modal" aria-label="Close">' +
+      '<span aria-hidden="true">&times;</span>' +
+      '</button>' +
+      '</div>' +
+      '<div class="modal-body">' +
+      ' <table class="table table-hover"> ' +
+      '<thead> ' +
+      '<tr>' +
+      '<td>ID</td>' +
+      '<td>Mã sản phẩm</td>' +
+      '<td>Tên sản phẩm</td>' +
+      '<td>Loại hàng</td>' +
+      '<td>Số lượng sản phẩm</td>' +
+      '<td>Số lượng S/N</td>' +
+      '</tr>' +
+      '</thead>' +
+      '<tbody>' +
+      '<tr>' +
+      '<td>' + rowCount + '</td>' +
+      '<td class="code_product"></td>' +
+      '<td class="name_product"></td>' +
+      '<td class="type_product"></td>' +
+      '<td class="qty_product"></td>' +
+      '<td class="SNCount">1</td>' +
+      '</tr>' +
+      '</tbody>' +
+      '</table>' +
+      '<h3>Thông tin Serial Number </h3>' +
+      '<div class="div_value' + rowCount + '" style="padding:10px;">' +
+      '<table class="table" id="table_SNS">' +
+      '<thead class="thead-light"> <tr> <td style="width:5%;"><input type="checkbox" ></td> <td style="width:5%;">STT</td> <td> Serial Number</td> <td style="width:3%;"></td> </tr> </thead>' +
+      '<tbody> ' +
+      '<tr>' +
+      '<td><input class="mr-5" type="checkbox" id="checkbox_1"> </td>' +
+      '<td><span class="mr-5" >1</span></td>' +
+      '<td><input class="mr-5" required type="text" name="product_SN' + rowCount + '[]" onpaste="handlePaste(this)"></td>' +
+      '<td class="deleteRow1"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.0606 6.66675C13.6589 6.66675 13.3333 6.99236 13.3333 7.39402C13.3333 7.79568 13.6589 8.12129 14.0606 8.12129H17.9394C18.341 8.12129 18.6667 7.79568 18.6667 7.39402C18.6667 6.99236 18.341 6.66675 17.9394 6.66675H14.0606ZM8 10.3031C8 9.90143 8.32561 9.57582 8.72727 9.57582H10.1818H21.8182H23.2727C23.6744 9.57582 24 9.90143 24 10.3031C24 10.7048 23.6744 11.0304 23.2727 11.0304H22.5455V22.6667C22.5455 24.2819 21.2158 25.5758 19.6179 25.5758H12.3452C11.9637 25.5755 11.5854 25.4997 11.2333 25.3528C10.8812 25.2059 10.5617 24.9908 10.2931 24.7199C10.0244 24.449 9.81206 24.1276 9.66816 23.7743C9.52463 23.4219 9.45204 23.0447 9.45455 22.6642V11.0304H8.72727C8.32561 11.0304 8 10.7048 8 10.3031ZM10.9091 22.6723V11.0304H21.0909V22.6667C21.0909 23.4623 20.4288 24.1213 19.6179 24.1213H12.3458C12.1562 24.1211 11.9684 24.0834 11.7934 24.0104C11.6183 23.9374 11.4595 23.8304 11.3259 23.6958C11.1924 23.5611 11.0868 23.4013 11.0153 23.2257C10.9437 23.05 10.9076 22.8619 10.9091 22.6723ZM17.9394 13.4546C18.3411 13.4546 18.6667 13.7802 18.6667 14.1819V20.9698C18.6667 21.3714 18.3411 21.6971 17.9394 21.6971C17.5377 21.6971 17.2121 21.3714 17.2121 20.9698V14.1819C17.2121 13.7802 17.5377 13.4546 17.9394 13.4546ZM14.7879 14.1819C14.7879 13.7802 14.4623 13.4546 14.0606 13.4546C13.6589 13.4546 13.3333 13.7802 13.3333 14.1819V20.9698C13.3333 21.3714 13.6589 21.6971 14.0606 21.6971C14.4623 21.6971 14.7879 21.3714 14.7879 20.9698V14.1819Z" fill="#555555"/></svg></td>' +
+      '</tr>' +
+      '</tbody>' +
+      '</table>' +
+      '</div>' +
+      '<div class="AddSN btn btn-secondary" style="border:1px solid gray;">Thêm dòng</div>' +
+      '<div class="btn btn-danger ml-2" id="deleteSNS"> Xóa SN </div>' +
+      '</div>' +
+      '<div class="modal-footer">' +
+      '<button type="button" class="btn btn-secondary" data-dismiss="modal">Save</button>' +
+      '</div>' +
+      '</div>' +
+      '</div>' +
+      '</div>'
     $('#list_modal').append(modal);
 
     var addSNBtns = $('.AddSN');
     for (let i = 0; i < addSNBtns.length; i++) {
       $(addSNBtns[i]).off('click').on('click', function() {
+        var newtr = document.createElement('tr');
+        var newtd1 = document.createElement('td');
+        var newtd2 = document.createElement('td');
+        var newtd3 = document.createElement('td');
+        var newtd = document.createElement('td');
+        var newtd4 = document.createElement('td');
         var newDiv = document.createElement("input");
         var checkbox = document.createElement("input");
         var stt = document.createElement("span");
         var div1 = document.createElement("div");
-        stt.setAttribute("class", "mr-5");
-        checkbox.setAttribute("type", "checkbox");
-        checkbox.setAttribute("class", "mr-5");
-        newDiv.setAttribute("type", "text");
-        newDiv.setAttribute("name", "product_SN" + i + "[]");
-        newDiv.setAttribute('onpaste', 'handlePaste(this)');
-        newDiv.setAttribute("class", "mr-5");
-        const div = document.createElement("div");
-        const divDelete = document.createElement("div");
-        divDelete.setAttribute('class', 'deleteRow1');
-        divDelete.innerHTML =
-          '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.0606 6.66675C13.6589 6.66675 13.3333 6.99236 13.3333 7.39402C13.3333 7.79568 13.6589 8.12129 14.0606 8.12129H17.9394C18.341 8.12129 18.6667 7.79568 18.6667 7.39402C18.6667 6.99236 18.341 6.66675 17.9394 6.66675H14.0606ZM8 10.3031C8 9.90143 8.32561 9.57582 8.72727 9.57582H10.1818H21.8182H23.2727C23.6744 9.57582 24 9.90143 24 10.3031C24 10.7048 23.6744 11.0304 23.2727 11.0304H22.5455V22.6667C22.5455 24.2819 21.2158 25.5758 19.6179 25.5758H12.3452C11.9637 25.5755 11.5854 25.4997 11.2333 25.3528C10.8812 25.2059 10.5617 24.9908 10.2931 24.7199C10.0244 24.449 9.81206 24.1276 9.66816 23.7743C9.52463 23.4219 9.45204 23.0447 9.45455 22.6642V11.0304H8.72727C8.32561 11.0304 8 10.7048 8 10.3031ZM10.9091 22.6723V11.0304H21.0909V22.6667C21.0909 23.4623 20.4288 24.1213 19.6179 24.1213H12.3458C12.1562 24.1211 11.9684 24.0834 11.7934 24.0104C11.6183 23.9374 11.4595 23.8304 11.3259 23.6958C11.1924 23.5611 11.0868 23.4013 11.0153 23.2257C10.9437 23.05 10.9076 22.8619 10.9091 22.6723ZM17.9394 13.4546C18.3411 13.4546 18.6667 13.7802 18.6667 14.1819V20.9698C18.6667 21.3714 18.3411 21.6971 17.9394 21.6971C17.5377 21.6971 17.2121 21.3714 17.2121 20.9698V14.1819C17.2121 13.7802 17.5377 13.4546 17.9394 13.4546ZM14.7879 14.1819C14.7879 13.7802 14.4623 13.4546 14.0606 13.4546C13.6589 13.4546 13.3333 13.7802 13.3333 14.1819V20.9698C13.3333 21.3714 13.6589 21.6971 14.0606 21.6971C14.4623 21.6971 14.7879 21.3714 14.7879 20.9698V14.1819Z" fill="#555555"/></svg>';
-        div.setAttribute('class', 'delete d-flex justify-content-between');
-        div1.appendChild(checkbox);
-        div1.appendChild(stt);
-        div1.appendChild(newDiv);
-        div.appendChild(div1);
-        div.appendChild(divDelete);
-        var div_value1 = document.querySelector('.div_value' + i);
-        div_value1.style.padding = '10px';
-        div_value1.appendChild(div);
+        var div = document.createElement("div");
+        var divDelete = document.createElement("div");
+        var div_value1 = document.querySelector('.div_value' + i + ' table tbody');
         var checkboxes = document.querySelectorAll('.div_value' + i + ' input[type="checkbox"]');
         var checkboxCount = checkboxes.length;
+        checkbox.setAttribute("type", "checkbox");
+        newtd1.append(checkbox);
+        newDiv.setAttribute("type", "text");
+        newDiv.setAttribute("name", "product_SN" + i + "[]");
+        newDiv.setAttribute("onpaste", "handlePaste(this)");
+        newtd3.append(newDiv);
+        newtd4.setAttribute('class', 'deleteRow1');
+        newtd4.innerHTML =
+          '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.0606 6.66675C13.6589 6.66675 13.3333 6.99236 13.3333 7.39402C13.3333 7.79568 13.6589 8.12129 14.0606 8.12129H17.9394C18.341 8.12129 18.6667 7.79568 18.6667 7.39402C18.6667 6.99236 18.341 6.66675 17.9394 6.66675H14.0606ZM8 10.3031C8 9.90143 8.32561 9.57582 8.72727 9.57582H10.1818H21.8182H23.2727C23.6744 9.57582 24 9.90143 24 10.3031C24 10.7048 23.6744 11.0304 23.2727 11.0304H22.5455V22.6667C22.5455 24.2819 21.2158 25.5758 19.6179 25.5758H12.3452C11.9637 25.5755 11.5854 25.4997 11.2333 25.3528C10.8812 25.2059 10.5617 24.9908 10.2931 24.7199C10.0244 24.449 9.81206 24.1276 9.66816 23.7743C9.52463 23.4219 9.45204 23.0447 9.45455 22.6642V11.0304H8.72727C8.32561 11.0304 8 10.7048 8 10.3031ZM10.9091 22.6723V11.0304H21.0909V22.6667C21.0909 23.4623 20.4288 24.1213 19.6179 24.1213H12.3458C12.1562 24.1211 11.9684 24.0834 11.7934 24.0104C11.6183 23.9374 11.4595 23.8304 11.3259 23.6958C11.1924 23.5611 11.0868 23.4013 11.0153 23.2257C10.9437 23.05 10.9076 22.8619 10.9091 22.6723ZM17.9394 13.4546C18.3411 13.4546 18.6667 13.7802 18.6667 14.1819V20.9698C18.6667 21.3714 18.3411 21.6971 17.9394 21.6971C17.5377 21.6971 17.2121 21.3714 17.2121 20.9698V14.1819C17.2121 13.7802 17.5377 13.4546 17.9394 13.4546ZM14.7879 14.1819C14.7879 13.7802 14.4623 13.4546 14.0606 13.4546C13.6589 13.4546 13.3333 13.7802 13.3333 14.1819V20.9698C13.3333 21.3714 13.6589 21.6971 14.0606 21.6971C14.4623 21.6971 14.7879 21.3714 14.7879 20.9698V14.1819Z" fill="#555555"/></svg>';
+        newtd2.appendChild(stt);
+        newtr.append(newtd1);
+        newtr.append(newtd2);
+        newtr.append(newtd3);
+        newtr.append(newtd4);
+        div_value1.appendChild(newtr);
         stt.innerHTML = checkboxCount;
         checkbox.setAttribute("id", "checkbox_" + checkboxCount);
-        $('#SNCount').text(checkboxCount);
+        console.log(document.querySelector('.div_value' + i).parentNode.querySelector('.SNCount'));
+        document.querySelector('.div_value' + i).parentNode.querySelector('.SNCount').textContent = checkboxCount;
       });
     }
     rowCount++;
@@ -679,7 +708,6 @@
     for (let k = 0; k < info.length; k++) {
       info[k].addEventListener('click', function() {
         var productCode = $(this).closest('tr').find('.list_products option:selected').text();
-        console.log(productCode);
         var productName = $(this).closest('tr').find('[name^="product_name"]').val();
         var productType = $(this).closest('tr').find('[name^="product_category"]').val();
         var productQty = $(this).closest('tr').find('[name^="product_qty"]').val();
@@ -690,6 +718,7 @@
       })
     }
   });
+
 
   var info = document.querySelectorAll('.exampleModal');
   for (let k = 0; k < info.length; k++) {
@@ -760,39 +789,42 @@
     $(".dropdown-values").removeClass("show");
   }
 
-  var addSNBtns = $('.AddSN')
+  var addSNBtns = $('.AddSN');
   for (let i = 0; i < addSNBtns.length; i++) {
     $(addSNBtns[i]).off('click').on('click', function() {
+      var newtr = document.createElement('tr');
+      var newtd1 = document.createElement('td');
+      var newtd2 = document.createElement('td');
+      var newtd3 = document.createElement('td');
+      var newtd = document.createElement('td');
+      var newtd4 = document.createElement('td');
       var newDiv = document.createElement("input");
       var checkbox = document.createElement("input");
       var stt = document.createElement("span");
       var div1 = document.createElement("div");
-      stt.setAttribute("class", "mr-5");
-      checkbox.setAttribute("type", "checkbox");
-      checkbox.setAttribute("class", "mr-5");
-      newDiv.setAttribute("type", "text");
-      newDiv.setAttribute("name", "product_SN" + i + "[]");
-      newDiv.setAttribute('onpaste', 'handlePaste(this)');
-      // newDiv.setAttribute("class", "mr-5");
-      const div = document.createElement("div");
-      const divDelete = document.createElement("div");
-      divDelete.setAttribute('class', 'deleteRow1');
-      divDelete.innerHTML =
-        '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.0606 6.66675C13.6589 6.66675 13.3333 6.99236 13.3333 7.39402C13.3333 7.79568 13.6589 8.12129 14.0606 8.12129H17.9394C18.341 8.12129 18.6667 7.79568 18.6667 7.39402C18.6667 6.99236 18.341 6.66675 17.9394 6.66675H14.0606ZM8 10.3031C8 9.90143 8.32561 9.57582 8.72727 9.57582H10.1818H21.8182H23.2727C23.6744 9.57582 24 9.90143 24 10.3031C24 10.7048 23.6744 11.0304 23.2727 11.0304H22.5455V22.6667C22.5455 24.2819 21.2158 25.5758 19.6179 25.5758H12.3452C11.9637 25.5755 11.5854 25.4997 11.2333 25.3528C10.8812 25.2059 10.5617 24.9908 10.2931 24.7199C10.0244 24.449 9.81206 24.1276 9.66816 23.7743C9.52463 23.4219 9.45204 23.0447 9.45455 22.6642V11.0304H8.72727C8.32561 11.0304 8 10.7048 8 10.3031ZM10.9091 22.6723V11.0304H21.0909V22.6667C21.0909 23.4623 20.4288 24.1213 19.6179 24.1213H12.3458C12.1562 24.1211 11.9684 24.0834 11.7934 24.0104C11.6183 23.9374 11.4595 23.8304 11.3259 23.6958C11.1924 23.5611 11.0868 23.4013 11.0153 23.2257C10.9437 23.05 10.9076 22.8619 10.9091 22.6723ZM17.9394 13.4546C18.3411 13.4546 18.6667 13.7802 18.6667 14.1819V20.9698C18.6667 21.3714 18.3411 21.6971 17.9394 21.6971C17.5377 21.6971 17.2121 21.3714 17.2121 20.9698V14.1819C17.2121 13.7802 17.5377 13.4546 17.9394 13.4546ZM14.7879 14.1819C14.7879 13.7802 14.4623 13.4546 14.0606 13.4546C13.6589 13.4546 13.3333 13.7802 13.3333 14.1819V20.9698C13.3333 21.3714 13.6589 21.6971 14.0606 21.6971C14.4623 21.6971 14.7879 21.3714 14.7879 20.9698V14.1819Z" fill="#555555"/></svg>';
-      div.setAttribute('class', 'delete d-flex justify-content-between');
-      div1.appendChild(checkbox);
-      div1.appendChild(stt);
-      div1.appendChild(newDiv);
-      div.appendChild(div1);
-      div.appendChild(divDelete);
-      var div_value1 = document.querySelector('.div_value' + i);
-      div_value1.style.padding = '10px';
-      div_value1.appendChild(div);
+      var div = document.createElement("div");
+      var divDelete = document.createElement("div");
+      var div_value1 = document.querySelector('.div_value' + i + ' table tbody');
       var checkboxes = document.querySelectorAll('.div_value' + i + ' input[type="checkbox"]');
       var checkboxCount = checkboxes.length;
+      checkbox.setAttribute("type", "checkbox");
+      newtd1.append(checkbox);
+      newDiv.setAttribute("type", "text");
+      newDiv.setAttribute("name", "product_SN" + i + "[]");
+      newDiv.setAttribute("onpaste", "handlePaste(this)");
+      newtd3.append(newDiv);
+      newtd4.setAttribute('class', 'deleteRow1');
+      newtd4.innerHTML =
+        '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.0606 6.66675C13.6589 6.66675 13.3333 6.99236 13.3333 7.39402C13.3333 7.79568 13.6589 8.12129 14.0606 8.12129H17.9394C18.341 8.12129 18.6667 7.79568 18.6667 7.39402C18.6667 6.99236 18.341 6.66675 17.9394 6.66675H14.0606ZM8 10.3031C8 9.90143 8.32561 9.57582 8.72727 9.57582H10.1818H21.8182H23.2727C23.6744 9.57582 24 9.90143 24 10.3031C24 10.7048 23.6744 11.0304 23.2727 11.0304H22.5455V22.6667C22.5455 24.2819 21.2158 25.5758 19.6179 25.5758H12.3452C11.9637 25.5755 11.5854 25.4997 11.2333 25.3528C10.8812 25.2059 10.5617 24.9908 10.2931 24.7199C10.0244 24.449 9.81206 24.1276 9.66816 23.7743C9.52463 23.4219 9.45204 23.0447 9.45455 22.6642V11.0304H8.72727C8.32561 11.0304 8 10.7048 8 10.3031ZM10.9091 22.6723V11.0304H21.0909V22.6667C21.0909 23.4623 20.4288 24.1213 19.6179 24.1213H12.3458C12.1562 24.1211 11.9684 24.0834 11.7934 24.0104C11.6183 23.9374 11.4595 23.8304 11.3259 23.6958C11.1924 23.5611 11.0868 23.4013 11.0153 23.2257C10.9437 23.05 10.9076 22.8619 10.9091 22.6723ZM17.9394 13.4546C18.3411 13.4546 18.6667 13.7802 18.6667 14.1819V20.9698C18.6667 21.3714 18.3411 21.6971 17.9394 21.6971C17.5377 21.6971 17.2121 21.3714 17.2121 20.9698V14.1819C17.2121 13.7802 17.5377 13.4546 17.9394 13.4546ZM14.7879 14.1819C14.7879 13.7802 14.4623 13.4546 14.0606 13.4546C13.6589 13.4546 13.3333 13.7802 13.3333 14.1819V20.9698C13.3333 21.3714 13.6589 21.6971 14.0606 21.6971C14.4623 21.6971 14.7879 21.3714 14.7879 20.9698V14.1819Z" fill="#555555"/></svg>';
+      newtd2.appendChild(stt);
+      newtr.append(newtd1);
+      newtr.append(newtd2);
+      newtr.append(newtd3);
+      newtr.append(newtd4);
+      div_value1.appendChild(newtr);
       stt.innerHTML = checkboxCount;
       checkbox.setAttribute("id", "checkbox_" + checkboxCount);
-      $('#SNCount').text(checkboxCount);
+      document.querySelector('.div_value' + i).parentNode.querySelector('.SNCount').textContent = checkboxCount;
     });
   }
 
@@ -886,8 +918,14 @@
 
   // Xóa hàng SN
   $(document).on('click', '.deleteRow1', function() {
-    var div = $(this).parent('div');
-    $(div).remove();
+    var div = $(this).parent('tr');
+    var parentTable = div.closest('table');
+    div.parent().parent().parent().parent().find('.SNCount').text(div.parent().find('input[type="checkbox"]').length - 1);
+    div.remove();
+    var remainingRows = parentTable.find('tbody tr');
+    remainingRows.each(function(index) {
+      $(this).find('td').eq(1).text(index + 1);
+    });
   })
 </script>
 </body>
