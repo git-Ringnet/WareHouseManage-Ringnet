@@ -19,7 +19,7 @@
                 <div class="col-12">
                     <div class="card">
                         <!-- /.card-header -->
-                        <div class="card-body">
+                        <div class="card-body p-3">
                             <form action="{{route('guests.store')}}" method="POST">
                                 @csrf
                                 <div class="form-group">

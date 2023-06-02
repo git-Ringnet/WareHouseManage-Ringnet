@@ -237,7 +237,7 @@ if (strpos($current_url, 'exports') !== false) {
                     data-accordion="false">
                     <li class="nav-item">
                         <a href="{{ asset('index') }}" class="nav-link <?php echo $index_class; ?>">
-                            <svg class="stroke" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            <svg class="stroke" width="32" height="24" viewBox="0 0 24 24" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path
                                     d="M3 11.7455V20C3 20.5523 3.44772 21 4 21H8.75C9.30229 21 9.75 20.5523 9.75 20V15.7692C9.75 15.2169 10.1977 14.7692 10.75 14.7692H13.25C13.8023 14.7692 14.25 15.2169 14.25 15.7692V20C14.25 20.5523 14.6977 21 15.25 21H20C20.5523 21 21 20.5523 21 20V11.7455C21 11.4664 20.8834 11.2 20.6783 11.0107L12.6783 3.6261C12.2952 3.27251 11.7048 3.27251 11.3217 3.6261L3.32172 11.0107C3.11664 11.2 3 11.4664 3 11.7455Z"
