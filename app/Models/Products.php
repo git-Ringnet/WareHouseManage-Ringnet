@@ -33,8 +33,6 @@ class Products extends Model
         //lấy tất cả products
         $products = DB::table($this->table)
             ->select('products.*');
-
-
         $orderBy = 'created_at';
         $orderType = 'desc';
         if (!empty($sortByArr) && is_array($sortByArr)) {
@@ -45,20 +43,24 @@ class Products extends Model
         }
         $products = $products->orderBy($orderBy, $orderType);
 
-        if (in_array("0", $status)) {
-            $products = $products->orWhere('inventory', '==', 0);
+        if (!empty($status)) {
+            $products = $products->where(function ($query) use ($status) {
+                if (in_array("0", $status)) {
+                    $query->orWhere('inventory', '=', 0);
+                }
+                if (in_array("1", $status)) {
+                    $query->orWhereBetween('inventory', [0, 5]);
+                }
+                if (in_array("2", $status)) {
+                    $query->orWhere('inventory', '>', 5);
+                }
+            });
         }
-        if (in_array("1", $status)) {
-            $products = $products->orWhereBetween('inventory', [1, 5]);
-        }
-        if (in_array("2", $status)) {
-            $products = $products->orWhere('inventory', '>', 5);
-        }
-        
+
         if (!empty($filters)) {
             $products = $products->where($filters);
         }
-     
+
         if (!empty($code)) {
             $products = $products->where(function ($query) use ($code) {
                 $query->orWhere('products_code', 'like', '%' . $code . '%');
@@ -83,8 +85,32 @@ class Products extends Model
             });
         }
 
-        // dd($products);
         $products = $products->orderBy('products.created_at', 'asc')->paginate(10);
+        // dd($products);
+
         return $products;
+    }
+    public function allProducts(){
+        $products = DB::table($this->table)->get();
+        return $products;
+    }
+    public function productsNearEnd(){
+        $products = DB::table($this->table);
+        $products = $products->whereBetween('inventory', [0, 5])->get();
+        return $products;
+    }
+    public function productsStock(){
+        $products = DB::table($this->table);
+        $products = $products->where('inventory', '>', 5)->get();
+        return $products;
+    }
+    public function productsEnd(){
+        $products = DB::table($this->table);
+        $products = $products->where('inventory', '=', 0)->get();
+        return $products;
+    }
+    public function sumTotalInventory(){
+        $totalSum = DB::table($this->table)->sum('price_inventory');
+        return $totalSum;
     }
 }

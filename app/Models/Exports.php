@@ -52,10 +52,22 @@ class Exports extends Model
         $exports = $exports->paginate(10);
         return $exports;
     }
+    public function productExports()
+    {
+        return $this->hasMany(ProductExports::class, 'export_id');
+    }
+    public function allExports(){
+        $exports = DB::table($this->table)->get();
+        return $exports;
+    }
     protected $fillable = [
         'guest_id',
         'user_id',
         'total',
         'export_status',
     ];
+    public function sumTotalExports(){
+        $totalSum = DB::table($this->table)->sum('total');
+        return $totalSum;
+    }
 }

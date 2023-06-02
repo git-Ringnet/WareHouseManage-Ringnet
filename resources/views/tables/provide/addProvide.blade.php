@@ -1,4 +1,4 @@
-<x-navbar></x-navbar>
+<x-navbar :title="$title"></x-navbar>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -7,12 +7,6 @@
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1>Add Provides</h1>
-                </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="{{ asset('index') }}">Home</a></li>
-                        <li class="breadcrumb-item active">Add Provides</li>
-                    </ol>
                 </div>
             </div>
         </div><!-- /.container-fluid -->
@@ -43,6 +37,14 @@
                                 <div class="form-group">
                                     <label for="pwd">Provide email:</label>
                                     <input type="email" class="form-control" name="provide_email" placeholder="Enter provide email" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="pwd">Provide address:</label>
+                                    <input type="text" class="form-control" name="provide_address" placeholder="Enter provide address" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="pwd">Provide code:</label>
+                                    <input type="text" class="form-control" name="provide_code" placeholder="Enter provide code" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="pwd">Provide status:</label>

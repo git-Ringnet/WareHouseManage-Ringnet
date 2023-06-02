@@ -1,4 +1,4 @@
-<x-navbar></x-navbar>
+<x-navbar :title="$title"></x-navbar>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
@@ -7,12 +7,6 @@
       <div class="row mb-2">
         <div class="col-sm-6">
           <h1>DataTables</h1>
-        </div>
-        <div class="col-sm-6">
-          <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">DataTables</li>
-          </ol>
         </div>
       </div>
     </div><!-- /.container-fluid -->
@@ -40,7 +34,7 @@
                     <div class="col-md-3">
                       <div class="product_name">
                         <h4>Tên sản phẩm</h4>
-                        <input type="text" value="{{$products->products_name}}">
+                        <input type="text" value="{{$products->products_name}}" class="form-control">
                       </div>
                       <div class="product_code">
                         <h4>Mã sản phẩm</h4>

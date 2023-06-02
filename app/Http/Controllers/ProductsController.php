@@ -62,21 +62,21 @@ class ProductsController extends Controller
 
         if (!empty($request->id)) {
             $id = $request->input('id');
-            $idArray = explode(' ', $id);
+            $idArray = explode(',.@', $id);
             array_push($string, ['label' => 'ID:', 'values' => $idArray, 'class' => 'id']);
         }
         $code = null;
 
         if (!empty($request->code)) {
             $code = $request->code;
-            $codeArr = explode(' ', $code);
+            $codeArr = explode(',.@', $code);
             array_push($string, ['label' => 'Mã sản phẩm:', 'values' => $codeArr, 'class' => 'code']);
         }
         $products_name = null;
 
         if (!empty($request->products_name)) {
             $products_name = $request->products_name;
-            $products_namearr = explode(' ', $products_name);
+            $products_namearr = explode(',.@', $products_name);
             array_push($string, ['label' => 'Tên sản phẩm:', 'values' => $products_namearr, 'class' => 'products_name']);
         }
 
@@ -85,7 +85,7 @@ class ProductsController extends Controller
             $quantity = $request->input('quantity');
             $comparison_operator = $request->input('comparison_operator');
             $filters[] = ['products.inventory', $comparison_operator, $quantity];
-            $inventoryArray = explode(' ', $quantity);
+            $inventoryArray = explode(',.@', $quantity);
             array_push($string, ['label' => 'Tồn kho ' . $comparison_operator, 'values' => $inventoryArray, 'class' => 'quantity']);
         }
         // var_dump($request->comparison_operator);
@@ -94,7 +94,7 @@ class ProductsController extends Controller
             $avg = $request->avg;
             $operator = $request->avg_operator;
             array_push($filters, ['products.price_avg', $operator, $avg]);
-            $avgArray = explode(' ', $avg);
+            $avgArray = explode(',.@', $avg);
             array_push($string, ['label' => 'Trị trung bình ' . $operator, 'values' => $avgArray, 'class' => 'avg']);
         }
         // // Trị tồn kho
@@ -102,13 +102,13 @@ class ProductsController extends Controller
             $price_inven = $request->price_inven;
             $operator = $request->price_inven_operator;
             $filters[] = ['products.price_inventory', $operator, $price_inven];
-            $price_invenArray = explode(' ', $price_inven);
+            $price_invenArray = explode(',.@', $price_inven);
             array_push($string, ['label' => 'Trị tồn kho ' . $operator, 'values' => $price_invenArray, 'class' => 'price_inven']);
         }
 
         //Status
         if (!empty($request->status)) {
-            $statusValues = [0 => 'Hết hàng', 1 => 'Gần hết', 2 => 'Sẵn hàng'];
+            $statusValues = ['0' => 'Hết hàng', '1' => 'Gần hết', '2' => 'Sẵn hàng'];
             $status = $request->input('status', []);
             $statusLabels = array_map(function ($value) use ($statusValues) {
                 return $statusValues[$value];
@@ -177,7 +177,8 @@ class ProductsController extends Controller
             )
             ->get();
 
-        return view('tables.products.data', compact('products', 'categories', 'product', 'string', 'sortType', 'trademarks'));
+            $title = 'Sản phẩm';
+        return view('tables.products.data', compact('products', 'categories', 'product', 'string', 'sortType', 'trademarks','title'));
     }
 
     /**
@@ -248,7 +249,8 @@ class ProductsController extends Controller
     {
         $products = Products::findOrFail($id);
         $provide = Provides::all();
-        return view('tables.products.test', compact('products', 'provide'));
+        $title = 'Sản phẩm';
+        return view('tables.products.test', compact('products', 'provide','title'));
     }
 
     /**
@@ -261,7 +263,9 @@ class ProductsController extends Controller
     {
         $products = Products::findOrFail($id);
         $cate = Category::all();
-        return view('tables.products.edit_products', compact('products', 'cate'));
+        $title = 'Chỉnh sửa sản phẩm';
+        $listProduct = Product::where('products_id',$products->id)->get();
+        return view('tables.products.edit_products', compact('products', 'cate','title','listProduct'));
     }
 
     /**
@@ -322,7 +326,8 @@ class ProductsController extends Controller
     public function insertProducts()
     {
         $cate = Category::all();
-        return view('tables.products.insertProducts', compact('cate'));
+        $title = 'Thêm sản phẩm';
+        return view('tables.products.insertProducts', compact('cate','title'));
     }
     public function storeProducts(Request $request)
     {
@@ -354,16 +359,20 @@ class ProductsController extends Controller
         if (isset($request->list_id)) {
             $list = $request->list_id;
             $check = Products::whereIn('id', $list)->get();
+            $hasProductWithInventory = false; 
             foreach ($check as $value) {
                 if ($value->inventory == 0) {
                     $value->delete();
                 } else {
-                    return response()->json(['success' => false, 'msg' => 'Còn sản phẩm con']);
+                    $hasProductWithInventory = true; 
                 }
+            }
+            if ($hasProductWithInventory) {
+                return response()->json(['success' => false, 'msg' => 'Còn sản phẩm còn']);
             }
             return response()->json(['success' => true, 'msg' => 'Xóa sản phẩm thành công', 'ids' => $list]);
         }
-        return response()->json(['success' => false, 'msg' => 'Không tìn thấy sản phẩm cần xóa']);
+        return response()->json(['success' => false, 'msg' => 'Không tìm thấy sản phẩm cần xóa']);
     }
 
 
@@ -372,7 +381,8 @@ class ProductsController extends Controller
     {
         $pro = Product::findOrFail($id);
         $select = Products::all();
-        return view('tables.products.editproduct', compact('pro', 'select'));
+        $title = 'Chỉnh sửa sản phẩm';
+        return view('tables.products.editproduct', compact('pro', 'select','title'));
     }
     public function updateProduct(Request $request, $id)
     {
@@ -395,6 +405,7 @@ class ProductsController extends Controller
             $relatedProduct->price_avg = ($relatedProduct->price_inventory / $relatedProduct->inventory);
         }
         $relatedProduct->save();
+      
         return redirect()->route('data.index');
     }
 }

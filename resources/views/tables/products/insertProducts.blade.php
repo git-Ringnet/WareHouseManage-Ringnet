@@ -1,4 +1,4 @@
-<x-navbar></x-navbar>
+<x-navbar :title="$title"></x-navbar>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
@@ -7,12 +7,6 @@
       <div class="row mb-2">
         <div class="col-sm-6">
           <h1>DataTables</h1>
-        </div>
-        <div class="col-sm-6">
-          <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">DataTables</li>
-          </ol>
         </div>
       </div>
     </div><!-- /.container-fluid -->
@@ -82,6 +76,7 @@
                 </table>
               </div>
               <button type="submit" class="btn btn-primary">Thêm</button>
+              <a href="{{route('data.index')}}" class="btn btn-default" onclick="return confirm('Bạn có muốn rời khỏi trang ?');">Hủy</a>
             </form>
           </div>
         </div>

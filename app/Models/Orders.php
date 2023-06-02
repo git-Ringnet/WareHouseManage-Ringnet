@@ -70,4 +70,13 @@ class Orders extends Model
     // {
     //     return $this->hasOne(Provides::class,'id','provide_id');
     // }
+    public function allOrders(){
+        $orders = DB::table($this->table)->get();
+        return $orders;
+    }
+    public function sumTotalOrders(){
+        $totalSum = DB::table($this->table)->sum('total');
+        return $totalSum;
+    }
+ 
 }

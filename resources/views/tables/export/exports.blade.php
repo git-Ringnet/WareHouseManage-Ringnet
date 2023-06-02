@@ -1,34 +1,41 @@
-<x-navbar></x-navbar>
+<x-navbar :title="$title"></x-navbar>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1>Exports</h1>
-                </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="{{ asset('index') }}">Home</a></li>
-                        <li class="breadcrumb-item active">Exports</li>
-                    </ol>
+            <div style="width: 20%;">
+                <div class="d-flex justify-content-between">
+                    <a href="{{ route('exports.create') }}">
+                        <button type="button" class="btn btn-primary d-flex align-items-center">
+                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M6 0C6.38791 -1.97352e-08 6.70237 0.314463 6.70237 0.702373L6.70237 11.2976C6.70237 11.6855 6.38791 12 6 12C5.61209 12 5.29763 11.6855 5.29763 11.2976V0.702373C5.29763 0.314463 5.61209 -1.97352e-08 6 0Z"
+                                    fill="white" />
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M12 6C12 6.38791 11.6855 6.70237 11.2976 6.70237H0.702373C0.314463 6.70237 -1.38146e-07 6.38791 0 6C-5.13115e-07 5.61209 0.314463 5.29763 0.702373 5.29763H11.2976C11.6855 5.29763 12 5.61209 12 6Z"
+                                    fill="white" />
+                            </svg>
+                            <span class="ml-2">Tạo đơn</span>
+                        </button>
+                    </a>
+                    <button type="button" onclick="exportToExcel()"
+                        class="btn bg-transparent border-primary d-flex align-items-center">
+                        <svg width="14" height="18" viewBox="0 0 14 18" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M10.0003 5.80078H11.5001C11.8979 5.80078 12.2794 5.95881 12.5607 6.24009C12.842 6.52137 13 6.90285 13 7.30063V15.1008C13 15.4986 12.842 15.8801 12.5607 16.1614C12.2794 16.4426 11.8979 16.6007 11.5001 16.6007H2.49986C2.10207 16.6007 1.72058 16.4426 1.4393 16.1614C1.15802 15.8801 1 15.4986 1 15.1008V7.30063C1 6.90285 1.15802 6.52137 1.4393 6.24009C1.72058 5.95881 2.10207 5.80078 2.49986 5.80078H3.99972"
+                                stroke="#0095F6" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M3.99976 9.39941L6.99948 12.3991L10.0003 9.39941" stroke="#0095F6"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M7.00055 1V11.7999" stroke="#0095F6" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                        <span class="ml-2 text-primary">Xuất excel</span>
+                    </button>
                 </div>
             </div>
-            <a href="{{ route('exports.create') }}">
-                <button type="button" class="btn btn-primary d-flex align-items-center">
-                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" clip-rule="evenodd"
-                            d="M6 0C6.38791 -1.97352e-08 6.70237 0.314463 6.70237 0.702373L6.70237 11.2976C6.70237 11.6855 6.38791 12 6 12C5.61209 12 5.29763 11.6855 5.29763 11.2976V0.702373C5.29763 0.314463 5.61209 -1.97352e-08 6 0Z"
-                            fill="white" />
-                        <path fill-rule="evenodd" clip-rule="evenodd"
-                            d="M12 6C12 6.38791 11.6855 6.70237 11.2976 6.70237H0.702373C0.314463 6.70237 -1.38146e-07 6.38791 0 6C-5.13115e-07 5.61209 0.314463 5.29763 0.702373 5.29763H11.2976C11.6855 5.29763 12 5.61209 12 6Z"
-                            fill="white" />
-                    </svg>
-                    <span class="ml-2">Tạo đơn</span>
-                </button>
-            </a>
             <div class="row m-auto filter pt-2">
                 <form class="w-100" action="" method="get" id='search-filter'>
                     <div class="row">
@@ -39,7 +46,7 @@
                             <span class="search-icon"><i class="fas fa-search"></i></span>
                         </div>
                         <div class="col-2 d-none">
-                  <button type="submit" class="btn btn-primary btn-block">Tìm kiếm</button>
+                            <button type="submit" class="btn btn-primary btn-block">Tìm kiếm</button>
 
                         </div>
                         <a class="btn ml-auto btn-delete-filter" href="{{ route('exports.index') }}"><span><svg
@@ -52,18 +59,10 @@
                             </span>Tắt bộ lọc</a>
                     </div>
                     <div class="row d-flex justify-contents-center align-items-center mr-auto pt-2">
-                        <div class="icon-filter mr-3 ml-1">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M8.66667 18C8.66667 17.7348 8.75446 17.4804 8.91074 17.2929C9.06702 17.1054 9.27899 17 9.5 17H14.5C14.721 17 14.933 17.1054 15.0893 17.2929C15.2455 17.4804 15.3333 17.7348 15.3333 18C15.3333 18.2652 15.2455 18.5196 15.0893 18.7071C14.933 18.8946 14.721 19 14.5 19H9.5C9.27899 19 9.06702 18.8946 8.91074 18.7071C8.75446 18.5196 8.66667 18.2652 8.66667 18ZM5.33333 12C5.33333 11.7348 5.42113 11.4804 5.57741 11.2929C5.73369 11.1054 5.94565 11 6.16667 11H17.8333C18.0543 11 18.2663 11.1054 18.4226 11.2929C18.5789 11.4804 18.6667 11.7348 18.6667 12C18.6667 12.2652 18.5789 12.5196 18.4226 12.7071C18.2663 12.8946 18.0543 13 17.8333 13H6.16667C5.94565 13 5.73369 12.8946 5.57741 12.7071C5.42113 12.5196 5.33333 12.2652 5.33333 12ZM2 6C2 5.73478 2.0878 5.48043 2.24408 5.29289C2.40036 5.10536 2.61232 5 2.83333 5H21.1667C21.3877 5 21.5996 5.10536 21.7559 5.29289C21.9122 5.48043 22 5.73478 22 6C22 6.26522 21.9122 6.51957 21.7559 6.70711C21.5996 6.89464 21.3877 7 21.1667 7H2.83333C2.61232 7 2.40036 6.89464 2.24408 6.70711C2.0878 6.51957 2 6.26522 2 6Z"
-                                    fill="#555555" />
-                            </svg>
-                        </div>
                         <?php
                         session_start();
                         
-                        $fullUrl = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+                        $fullUrl = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
                         if ($fullUrl === route('exports.index')) {
                             // Xử lý khi route hiện tại bằng route('data.index')
                             unset($_SESSION['labels']); // Xóa session
@@ -97,14 +96,21 @@
                         
                         // var_dump($_SESSION['labels']);
                         ?>
-                        <div class="filter-results d-flex">
+                        <div class="row filter-results d-flex">
+                            <div class="icon-filter mr-3 ml-3">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M8.66667 18C8.66667 17.7348 8.75446 17.4804 8.91074 17.2929C9.06702 17.1054 9.27899 17 9.5 17H14.5C14.721 17 14.933 17.1054 15.0893 17.2929C15.2455 17.4804 15.3333 17.7348 15.3333 18C15.3333 18.2652 15.2455 18.5196 15.0893 18.7071C14.933 18.8946 14.721 19 14.5 19H9.5C9.27899 19 9.06702 18.8946 8.91074 18.7071C8.75446 18.5196 8.66667 18.2652 8.66667 18ZM5.33333 12C5.33333 11.7348 5.42113 11.4804 5.57741 11.2929C5.73369 11.1054 5.94565 11 6.16667 11H17.8333C18.0543 11 18.2663 11.1054 18.4226 11.2929C18.5789 11.4804 18.6667 11.7348 18.6667 12C18.6667 12.2652 18.5789 12.5196 18.4226 12.7071C18.2663 12.8946 18.0543 13 17.8333 13H6.16667C5.94565 13 5.73369 12.8946 5.57741 12.7071C5.42113 12.5196 5.33333 12.2652 5.33333 12ZM2 6C2 5.73478 2.0878 5.48043 2.24408 5.29289C2.40036 5.10536 2.61232 5 2.83333 5H21.1667C21.3877 5 21.5996 5.10536 21.7559 5.29289C21.9122 5.48043 22 5.73478 22 6C22 6.26522 21.9122 6.51957 21.7559 6.70711C21.5996 6.89464 21.3877 7 21.1667 7H2.83333C2.61232 7 2.40036 6.89464 2.24408 6.70711C2.0878 6.51957 2 6.26522 2 6Z"
+                                        fill="#555555" />
+                                </svg>
+                            </div>
                             <input id="delete-item-input" type="hidden" name="delete_item" value="">
                             @foreach ($string as $item)
-
                                 <span class="filter-group"
-                                                                    style="order: 
+                                    style="order: 
                                             @php
-                                $index = array_search($item['label'], $numberedLabels);
+$index = array_search($item['label'], $numberedLabels);
                                                 if ($index !== false) {
                                                     echo $index + 1;
                                                 } else {
@@ -112,9 +118,9 @@
                                                 } @endphp">
                                     {{ $item['label'] }}
                                     @if ($item['label'] === 'Chỉnh sửa cuối:')
-                                     {{ $item['values'][0] }} đến {{ $item['values'][1] }}
+                                        {{ $item['values'][0] }} đến {{ $item['values'][1] }}
                                     @else
-                                    <span class="filter-values">{{ implode(', ', $item['values']) }}</span>
+                                        <span class="filter-values">{{ implode(', ', $item['values']) }}</span>
                                     @endif
                                     <a class="delete-item delete-btn-{{ $item['class'] }}"
                                         onclick="updateDeleteItemValue('{{ $item['label'] }}')">
@@ -227,7 +233,8 @@
                                         <h5>Trạng thái:</h5>
                                     </div>
                                     <div class="search-container px-2 mt-1">
-                                        <input type="text" placeholder="Tìm thuộc tính lọc" id="myInput-status" class="input-search pr-4" onkeyup="filterStatus()">
+                                        <input type="text" placeholder="Tìm thuộc tính lọc" id="myInput-status"
+                                            class="input-search w-100 pr-4" onkeyup="filterStatus()">
                                         <span class="search-icon"><i class="fas fa-search"></i></span>
                                     </div>
                                     <div
@@ -311,9 +318,12 @@
                                     <div class="input-group pt-2 justify-content-around">
                                         <select class="comparison_operator" name="comparison_operator"
                                             style="width: 40%">
-                                            <option value=">=" {{ request('comparison_operator') === '>=' ? 'selected' : '' }}>>=</option>
-                                            <option value="<=" {{ request('comparison_operator') === '<=' ? 'selected' : '' }}>
-                                                <=</option>
+                                            <option value=">="
+                                                {{ request('comparison_operator') === '>=' ? 'selected' : '' }}>>=
+                                            </option>
+                                            <option value="<="
+                                                {{ request('comparison_operator') === '<=' ? 'selected' : '' }}>
+                                                <=< /option>
                                         </select>
                                         <input class="w-50 input-quantity sum-input" type="number" name="sum"
                                             value="{{ request()->sum }}" placeholder="Số lượng">
@@ -358,7 +368,7 @@
                     <div class="card">
                         <!-- /.card-header -->
                         <div class="card-body">
-                            <table id="example2" class="table table-bordered table-hover">
+                            <table id="example2" class="table table-hover">
                                 <thead>
                                     <tr>
                                         <input type="hidden" id="sortByInput" name="sort-by" value="id">
@@ -447,11 +457,11 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                            <div class="paginator mt-4 d-flex justify-content-end">
-                                {{ $export->appends(request()->except('page'))->links() }}
-                            </div>
                         </div>
                         <!-- /.card-body -->
+                    </div>
+                    <div class="paginator mt-4 d-flex justify-content-end">
+                        {{ $export->appends(request()->except('page'))->links() }}
                     </div>
                 </div>
                 <!-- /.col -->
@@ -569,12 +579,12 @@
         });
     });
     $(document).ready(function() {
-            $('.filter-results').on('click', '.delete-btn-date', function() {
-                $('#start').val('');
-                $('#end').val('');
-                document.getElementById('search-filter').submit();
-            });
+        $('.filter-results').on('click', '.delete-btn-date', function() {
+            $('#start').val('');
+            $('#end').val('');
+            document.getElementById('search-filter').submit();
         });
+    });
 
 
     //Xử lí tìm kiếm bộ lọc tổng
@@ -592,6 +602,7 @@
             }
         });
     }
+
     function filterStatus() {
         var input = $("#myInput-status");
         var filter = input.val().toUpperCase();
@@ -659,8 +670,46 @@
     $('.delete-filter').on('click', function() {
         localStorage.clear();
     });
+
     function updateDeleteItemValue(label) {
         document.getElementById('delete-item-input').value = label;
+    }
+    //xuất excel
+    function exportToExcel() {
+        var table = document.getElementById('example2');
+        var tableData = [];
+
+        for (var i = 0, row; row = table.rows[i]; i++) {
+            var rowData = [];
+            for (var j = 0, cell; cell = row.cells[j]; j++) {
+                rowData.push(cell.innerText);
+            }
+            tableData.push(rowData);
+        }
+
+        var wb = XLSX.utils.book_new();
+        var ws = XLSX.utils.aoa_to_sheet(tableData);
+        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+        var wbout = XLSX.write(wb, {
+            bookType: 'xlsx',
+            type: 'array'
+        });
+        saveAsExcel(wbout, 'export.xlsx');
+    }
+
+    function saveAsExcel(data, filename) {
+        var blob = new Blob([data], {
+            type: 'application/octet-stream'
+        });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+
+        a.href = url;
+        a.download = filename;
+        a.click();
+
+        URL.revokeObjectURL(url);
     }
 </script>
 </body>

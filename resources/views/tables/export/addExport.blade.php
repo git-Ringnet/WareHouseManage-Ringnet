@@ -1,5 +1,5 @@
-<x-navbar></x-navbar>
-<div class="content-wrapper">
+<x-navbar :title="$title"></x-navbar>
+<div class="content-wrapper export-add">
     <section class="content">
         <div class="container-fluid position-relative">
             <div class="row">
@@ -14,7 +14,7 @@
                             {{-- <a href="#" class="btn btn-danger text-white">Chốt đơn</a>
                             <a href="#" class="btn btn-secondary ml-4">Hủy đơn</a> --}}
                             <a href="#" class="btn border border-secondary ml-4">Xuất file</a>
-                            <a href="#" class="btn border border-secondary ml-4">
+                            <button class="btn border border-secondary ml-4" onclick="toggleDiv(event)">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path
@@ -25,7 +25,7 @@
                                         fill="#555555" />
                                 </svg>
                                 In báo giá
-                            </a>
+                            </button>
                         </div>
                         <div class="mt-4">
                             <div class="d-flex">
@@ -132,7 +132,6 @@
                     </div>
                 </div>
             </div>
-
             <form action="{{ route('exports.store') }}" method="POST" id="export_form">
                 @csrf
                 {{-- Form thông tin khách hàng --}}
@@ -191,8 +190,8 @@
                             </div>
                             <div class="d-flex justify-content-between mt-2">
                                 <span class="text-lg"><b>Tổng cộng:</b></span>
-                                <span><b id="spanValue" data-value="0">{{ number_format(0) }}</b></span>
-                                <input type="text" hidden name="totalValue" value="" id="inputValue">
+                                <span><b id="grand-total" data-value="0">{{ number_format(0) }}</b></span>
+                                <input type="text" hidden name="totalValue" value="0" id="total">
                             </div>
                         </div>
                     </div>
@@ -203,8 +202,176 @@
                     <a href="{{ route('exports.index') }}"><span class="btn border-secondary ml-1">Hủy</span></a>
                 </div>
             </form>
+            {{-- Modal Product --}}
+            <div class="modal fade" id="productModal" tabindex="-1" role="dialog"
+                aria-labelledby="productModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="productModalLabel">Thông tin sản phẩm</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{-- Modal S/N --}}
+            <div class="modal fade" id="snModal" tabindex="-1" role="dialog"
+                aria-labelledby="productModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="productModalLabel">Danh sách Serial Number</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
+</div>
+<div id="print-price">
+    <div class="container">
+        <div class="text-center">
+            <img src='../dist/img/print/Print1.jpg' width="100%">
+        </div>
+        <div class="text-center my-4">
+            <h1><b>ĐƠN ĐẶT HÀNG</b></h1>
+        </div>
+        <div class="row">
+            <div class="col-md-9">
+                <div class>
+                    <span>Kính gửi:</span>
+                    <span><b>CÔNG TY THƯƠNG MẠI DỊCH VỤ ABC</b></span>
+                </div>
+                <div class>
+                    <span>Địa chỉ:</span>
+                    <span>38 Út Tịch, P4, Quận Tân Bình</span>
+                </div>
+                <div class>
+                    <span>MST:</span>
+                    <span>0123496575</span>
+                </div>
+                <div class>
+                    <span>
+                        Người liên hệ:
+                    </span>
+                    <span>
+                        <b>Trần Nguyễn Mai A</b>
+                    </span>
+                    <span>-</span>
+                    <span>Phone:</span>
+                    <span><b>0123496575</b></span>
+                </div>
+                <div class>
+                    <span><b><u><i>Kính gửi:</i></u></b></span>
+                    <span><b>Quý khách hàng</b></span>
+                    <p>Công ty Khang Yến trân trọng gởi đến quý khách
+                        hàng
+                        báo giá chi tiết sau:</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class>
+                    <span><i>Date:</i></span>
+                    <span><i>30/03/2023</i></span>
+                </div>
+                <div class>
+                    <span><i>From:</i></span>
+                    <span><i>Sale 1</i></span>
+                </div>
+                <div class>
+                    <span><i>Email:</i></span>
+                </div>
+                <div class>
+                    <span><i>Mobile:</i></span>
+                    <span><i>0934567814</i></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <table>
+            <tr>
+                <th class="text-center">P/N</th>
+                <th class="text-center">CHI TIẾT CẤU HÌNH KỸ THUẬT</th>
+                <th class="text-center">SL</th>
+                <th class="text-center">ĐƠN GIÁ</th>
+                <th class="text-center">THÀNH TIỀN</th>
+            </tr>
+            <tr>
+                <td class="text-center">1</td>
+                <td>Cisco Catalyst 9800-CL Wireless Controller for Cloud</td>
+                <td class="text-center">3</td>
+                <td class="text-right">5,600,000</td>
+                <td class="text-right">16,800,000</td>
+            </tr>
+            <tr>
+                <td class="text-center">2</td>
+                <td>Thiết bị quản lý không dây Cisco Catalyst 9800-CL</td>
+                <td class="text-center">4</td>
+                <td class="text-right">4,750,000</td>
+                <td class="text-right">19,000,000</td>
+            </tr>
+            <tr>
+                <td colspan="4" class="text-center">
+                    <b style="color: #EC212D;">Tổng cộng tiền hàng:</b>
+                </td>
+                <td style="color: #EC212D;" class="text-right"><b>35,800,000</b></td>
+            </tr>
+            <tr>
+                <td colspan="4" class="text-center" style="color: #EC212D;">
+                    <b>Thuế VAT 10%:</b>
+                </td>
+                <td style="color: #EC212D;" class="text-right"><b>3,580,000</b></td>
+            </tr>
+            <tr>
+                <td colspan="4" class="text-center"><b style="color: #EC212D;">Thành tiền:</b></td>
+                <td style="color: #EC212D;" class="text-right"><b>39,380,000</b></td>
+            </tr>
+            <tr>
+                <td colspan="5" class="text-center">
+                    <b>(Bằng chữ: Ba mươi chín triệu ba trăm tám mươi
+                        ngàn đồng chẵn).
+                    </b>
+                </td>
+            </tr>
+        </table>
+        <div class="mt-4">
+            <p class="p-0 m-0"><b><u><i>*Ghi chú:</i></u></b></p>
+            <ul>
+                <li>1. Bảng giá chào hàng này có giá trị trong vòng 15 ngày.</li>
+                <li>2. Giá trên đã bao gồm thuế VAT 10%.</li>
+                <li>3. Thời gian giao hàng: 01 ngày.</li>
+                <li>4. Hình thức thanh toán: Thanh toán 100% sau khi duyệt đặt hàng.</li>
+                <li>5. Phương thức thanh toán: Chuyển khoản.</li>
+                <li>6. Hàng đầy đủ CO, CQ.</li>
+            </ul>
+        </div>
+        <div class="p-4" style="border: 2px solid black;">
+            <div class="text-center"><b>Công ty TNHH Công Nghệ Khanh Yến</b></div>
+            <div class="text-center">Số tài khoản: 3334449988</div>
+            <div class="text-center">Tại: Ngân hàng ACB - CN Tây Sài Gòn</div>
+        </div>
+        <div class="d-flex justify-content-between p-5">
+            <span><b><i>Khách hàng xác nhận đặt hàng</i></b></span>
+            <span><b>Nhân viên</b></span>
+        </div>
+    </div>
 </div>
 <script>
     //form thong tin khach hang xuất hàng
@@ -267,8 +434,20 @@
     //add sản phẩm
     $(document).ready(function() {
         let fieldCounter = 1;
-
+        let isFirstClick = true;
         $("#add-field-btn").click(function() {
+            if (!isFirstClick) {
+                var maProduct = $('.maProduct:last').val();
+                var productUnit = $('.product_unit:last').val();
+                var productQty = $('.quantity-input:last').val();
+                var productPrice = $('.product_price:last').val();
+                var productTax = $('.product_tax:last').val();
+                if (!maProduct || !productUnit || !productQty || !productPrice || !productTax) {
+                    alert('Vui lòng nhập đủ thông tin sản phẩm.');
+                    return;
+                }
+            }
+            // Tạo các phần tử HTML mới
             const newRow = $("<tr>", {
                 "id": `dynamic-row-${fieldCounter}`
             });
@@ -277,14 +456,15 @@
                 "text": `${fieldCounter}`
             });
             const TenInput = $("<td>" +
-                "<select id='maProduct' class='p-1 pr-5' name='products_id[]'>" +
+                "<select id='maProduct' class='p-1 pr-5 maProduct' name='products_id[]'>" +
+                "<option value=''>Lựa chọn sản phẩm</option>" +
                 '@foreach ($products as $value)' +
                 "<option value='{{ $value->id }}'>{{ $value->products_code }}</option>" +
                 '@endforeach' +
                 "</select>"
             );
             const ProInput = $("<td>" +
-                "<select class='child-select p-1 pr-5' name='product_id[]'>" +
+                "<select class='child-select p-1 pr-5 productName' name='product_id[]'>" +
                 "<option value=''>Lựa chọn sản phẩm</option>" +
                 "</select>" +
                 "</td>");
@@ -295,29 +475,66 @@
                 "<td><input type='number' id='product_qty' class='quantity-input' name='product_qty[]' required></td>"
             );
             const giaInput = $(
-                "<td><input type='number' id='product_price' name='product_price[]' required></td>");
-            const ghichuInput = $("<td><input type='text' id='' name='product_note[]'></td>");
+                "<td><input type='number' class='product_price' id='product_price' name='product_price[]' required></td>"
+            );
+            const ghichuInput = $(
+                "<td><input type='text' class='note_product' name='product_note[]'></td>");
             const thueInput = $("<td>" +
                 "<input type='number' id='product_tax' class='product_tax' name='product_tax[]' required>" +
                 "</td>");
             const thanhTienInput = $("<td><span class='px-5 total-amount'>0</span></td>");
-            const sn = $("<td><img src='../dist/img/icon/list.png'></td>");
-            const info = $("<td><img src='../dist/img/icon/Group.png'></td>");
+            const sn = $(
+                "<td data-toggle='modal' data-target='#snModal'><img src='../dist/img/icon/list.png'></td>"
+            );
+            const info = $(
+                "<td data-toggle='modal' data-target='#productModal'><img src='../dist/img/icon/Group.png'></td>"
+            );
             const deleteBtn = $("<td><img src='../dist/img/icon/vector.png'></td>", {
                 "class": "delete-row-btn"
             });
+
             deleteBtn.click(function() {
                 $(this).closest("tr").remove();
+                calculateTotalAmount();
+                calculateGrandTotal();
+                isFirstClick = true;
             });
+
+            info.click(function() {
+                var productCode = $(this).closest('tr').find('.maProduct option:selected')
+                    .text();
+                var productName = $(this).closest('tr').find('.productName option:selected')
+                    .text();
+                var dvt = $(this).closest('tr').find('.product_unit').val();
+                var soluong = $(this).closest('tr').find('.quantity-input')
+                    .val();
+                var giaBan = $(this).closest('tr').find('.product_price')
+                    .val();
+                var ghiChu = $(this).closest('tr').find('.note_product')
+                    .val();
+                var thue = $(this).closest('tr').find('.product_tax')
+                    .val();
+                var thanhTien = $(this).closest('tr').find('.total-amount')
+                    .text();
+                $('#productModal').find('.modal-body').html('<b>Mã sản phẩm:</b> ' +
+                    productCode +
+                    '<br>' + '<b>Tên sản phẩm:</b> ' + productName + '<br>' +
+                    '<b>ĐVT:</b> ' + dvt + '<br>' + '<b>Số lượng: </b>' + soluong + '<br>' +
+                    '<b>Giá bán: </b>' + giaBan + '<br>' + '<b>Ghi chú: </b>' + ghiChu +
+                    '<br>' + '<b>Thuế:</b> ' + thue + '<br>' + '<b>Thành tiền:</b> ' +
+                    thanhTien);
+            });
+
+            // Gắn các phần tử vào hàng mới
             newRow.append(checkbox, MaInput, TenInput, ProInput, dvtInput, slInput,
                 giaInput, ghichuInput, thueInput, thanhTienInput, sn, info, deleteBtn);
             $("#dynamic-fields").before(newRow);
+
+            // Tăng giá trị fieldCounter
             fieldCounter++;
+            isFirstClick = false;
         });
-        //xóa sản phẩm
-        $(document).on("click", ".delete-row-btn", function() {
-            $(this).closest("tr").remove();
-        });
+
         //hiện danh sách khách hàng khi click trường tìm kiếm
         $("#myUL").hide();
         $("#myInput").on("click", function() {
@@ -340,6 +557,37 @@
             });
         });
     });
+    //lấy S/N
+    $(document).ready(function() {
+        $(document).on('input', '#product_qty', function() {
+            var qty = $(this).val();
+            var productCode = $(this).closest('tr').find('.maProduct').val();
+
+            $.ajax({
+                url: "{{ route('getSN') }}",
+                method: 'GET',
+                data: {
+                    qty: qty,
+                    productCode: productCode,
+                },
+                success: function(response) {
+                    var modalBody = $('#snModal').find('.modal-body');
+                    modalBody.empty();
+                    var snList = $('<ul>');
+                    response.forEach(function(sn) {
+                        var snItem = $('<li>').text(sn.serinumber);
+                        snList.append(snItem);
+                    });
+                    modalBody.append(snList);
+                    $('#snModal').modal('show');
+                },
+                error: function(xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });
+    });
+
     //hiển thị thông tin khách hàng
     $(document).ready(function() {
         $('.search-info').click(function() {
@@ -418,7 +666,6 @@
             });
         });
     });
-    //lấy tên sản phẩm từ mã sản phẩm
     //cập nhật thông tin khách hàng
     $(document).on('click', '#btn-customer', function(e) {
         e.preventDefault();
@@ -497,20 +744,23 @@
             }
         })
     })
-    //lấy thông tin sản phẩm từ mã sản phẩm
     $(document).ready(function() {
-        $(document).on('change', '#maProduct', function() {
+        //lấy thông tin sản phẩm từ mã sản phẩm
+        var selectedProductNames = [];
+        $(document).on('change', '.maProduct', function() {
+            var row = $(this).closest('tr');
+            var childSelect = row.find('.child-select');
             var idProducts = $(this).val();
-            var childSelect = $(this).closest('tr').find('.child-select');
+
             if (idProducts) {
                 $.ajax({
                     url: "{{ route('nameProduct') }}",
-                    type: "get",
+                    type: "GET",
                     data: {
                         idProducts: idProducts,
+                        selectedProductIds: selectedProductNames
                     },
                     success: function(response) {
-                        // Update the child select with the new options
                         childSelect.empty();
                         childSelect.append('<option value="">Lựa chọn sản phẩm</option>');
                         $.each(response, function(index, product) {
@@ -518,29 +768,64 @@
                                 `<option value="${product.id}">${product.product_name}</option>`
                             );
                         });
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle errors (if any)
+                        console.log(error);
                     }
                 });
             } else {
-                // Clear the child select if no parent is selected
                 childSelect.empty();
                 childSelect.append('<option value="">Lựa chọn sản phẩm</option>');
             }
         });
-    });
-    //lấy thông tin sản phẩm con từ tên sản phẩm con
-    $(document).on('change', '.child-select', function() {
-        var idProduct = $(this).val();
-        var productUnitElement = $(this).closest('tr').find('.product_unit');
-        if (idProduct) {
-            $.ajax({
-                url: "{{ route('getProduct') }}",
-                type: "get",
-                data: {
-                    idProduct: idProduct,
-                },
-                success: function(response) {
-                    productUnitElement.val(response.product_unit);
-                },
+        //lấy thông tin sản phẩm con từ tên sản phẩm con
+        $(document).on('change', '.child-select', function() {
+            var selectedName = $(this).val();
+            var row = $(this).closest('tr');
+
+            var idProduct = $(this).val();
+            var productUnitElement = $(this).closest('tr').find('.product_unit');
+            if (idProduct) {
+                $.ajax({
+                    url: "{{ route('getProduct') }}",
+                    type: "get",
+                    data: {
+                        idProduct: idProduct,
+                    },
+                    success: function(response) {
+                        productUnitElement.val(response.product_unit);
+                    },
+                });
+            }
+
+            // Check if the selected product name is already in use
+            if (selectedProductNames.includes(selectedName)) {
+                $(this).val('');
+            } else {
+                selectedProductNames.push(selectedName);
+            }
+
+            // Hide the selected product name from other child select options
+            hideSelectedProductNames(row);
+        });
+
+        // Function to hide selected product names from other child select options
+        function hideSelectedProductNames(row) {
+            var selectedNames = row.find('.child-select').map(function() {
+                return $(this).val();
+            }).get();
+
+            row.find('.child-select').each(function() {
+                var currentName = $(this).val();
+                $(this).find('option').each(function() {
+                    if ($(this).val() !== currentName && selectedNames.includes($(this)
+                            .val())) {
+                        $(this).hide();
+                    } else {
+                        $(this).show();
+                    }
+                });
             });
         }
     });
@@ -548,42 +833,30 @@
     $(document).on('blur', '.quantity-input', function() {
         var input = $(this);
         var quantity = input.val();
-        if (isNaN(quantity) || quantity <= 0) {
+        if (quantity < 0) {
+            input.val('');
             alert('Số lượng không hợp lệ');
         }
     });
-    //gán tổng số tiền vào input
-    document.addEventListener('DOMContentLoaded', function() {
-        var spanElement = document.getElementById('spanValue');
-        var inputElement = document.getElementById('inputValue');
-        var value = spanElement.getAttribute('data-value');
-        inputElement.value = value;
-    });
     //tính thành tiền của sản phẩm
     $(document).on('input', '.quantity-input, [name^="product_price"], .product_tax', function() {
-        // Lấy giá trị từ trường số lượng (product_qty)
         var productQty = parseInt($(this).closest('tr').find('.quantity-input').val());
-
-        // Lấy giá trị từ trường giá sản phẩm (product_price)
         var productPrice = 0;
+        var grandTotal = parseFloat($('#grand-total').text());
+        $('#grand-total').attr('data-value', grandTotal);
+        $('#inputValue').val(grandTotal);
         $(this).closest('tr').find('[name^="product_price"]').each(function() {
             productPrice += parseFloat($(this).val());
         });
-
-        // Lấy giá trị từ trường thuế (product_tax)
         var taxValue = parseFloat($(this).closest('tr').find('.product_tax').val());
 
-        // Kiểm tra xem productQty, productPrice và taxValue có phải là số hợp lệ không
         if (!isNaN(productQty) && !isNaN(productPrice) && !isNaN(taxValue)) {
-            // Thực hiện phép tính
             var totalAmount = productQty * productPrice;
             var taxAmount = (productQty * productPrice * taxValue) / 100;
 
-            // Hiển thị kết quả
             $(this).closest('tr').find('.total-amount').text(totalAmount);
             $(this).closest('tr').find('.product_tax').text(taxAmount);
 
-            // Tính toán lại tổng thành tiền và tổng thuế
             calculateTotalAmount();
             calculateTotalTax();
         }
@@ -591,35 +864,44 @@
 
     function calculateTotalAmount() {
         var totalAmount = 0;
-        // Lặp qua từng hàng
         $('tr').each(function() {
             var rowTotal = parseFloat($(this).find('.total-amount').text());
-            // Kiểm tra xem rowTotal có phải là một số hợp lệ không
             if (!isNaN(rowTotal)) {
-                // Cộng dồn vào tổng totalAmount
                 totalAmount += rowTotal;
             }
         });
-        // Hiển thị tổng total-amount-sum
         $('#total-amount-sum').text(totalAmount);
+
+        // Tính toán lại tổng thành tiền và tổng thuế
+        calculateTotalTax();
+        calculateGrandTotal();
     }
 
     function calculateTotalTax() {
         var totalTax = 0;
-        // Lặp qua từng hàng
         $('tr').each(function() {
             var rowTax = parseFloat($(this).find('.product_tax').text());
-            // Kiểm tra xem rowTax có phải là một số hợp lệ không
             if (!isNaN(rowTax)) {
-                // Cộng dồn vào tổng totalTax
                 totalTax += rowTax;
             }
         });
-        // Hiển thị tổng totalTax
         $('#product-tax').text(totalTax);
+
+        // Tính toán lại tổng thành tiền và tổng thuế
+        calculateGrandTotal();
     }
-    //tính tổng cộng
-     
+
+    function calculateGrandTotal() {
+        var totalAmount = parseFloat($('#total-amount-sum').text());
+        var totalTax = parseFloat($('#product-tax').text());
+
+        var grandTotal = totalAmount + totalTax;
+        $('#grand-total').text(grandTotal.toFixed(2));
+
+        // Cập nhật giá trị data-value
+        $('#grand-total').attr('data-value', grandTotal.toFixed(2));
+        $('#total').val(grandTotal.toFixed(2));
+    }
     //hàm kiểm tra submit
     function validateAndSubmit(event) {
         var formGuest = $('#form-guest');
@@ -647,6 +929,10 @@
             alert('Lỗi: Chưa chọn nhà cung cấp!');
             event.preventDefault();
         }
+    }
+    //in báo giá
+    function toggleDiv() {
+        window.print();
     }
 </script>
 </body>

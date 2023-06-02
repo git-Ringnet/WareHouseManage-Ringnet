@@ -1,4 +1,4 @@
-<x-navbar></x-navbar>
+<x-navbar :title="$title"></x-navbar>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
   <div class="container-fluid">
@@ -163,18 +163,19 @@
       <!-- Main content -->
       <section class="content">
         <div style="overflow-x: scroll;" class="container-fluid">
-          <table class="table table-bordered table-hover">
+          <table class="table table-hover">
             <thead>
               <tr>
+                <td><input type="checkbox"></td>
                 <td>Mã đơn</td>
                 <td>Thông tin sản phẩm</td>
                 <td>Loại hàng</td>
                 <td>Đơn vị tính</td>
-                <td>Thương hiệu</td>
                 <td>Số lượng</td>
                 <td>Giá nhập</td>
                 <td>Thuế</td>
                 <td>Thành tiền</td>
+                <td>Ghi chú</td>
                 <td>SN</td>
                 <td></td>
               </tr>
@@ -184,6 +185,7 @@
               @foreach($product_order as $pro)
               <tr>
                 <input type="hidden" name="product_id[]" value="{{$pro->product_id}}">
+                <td><input type="checkbox"></td>
                 <td> <input readonly type="text" name='products_id[]' value="{{$pro->products_id}}"></td>
                 <td> <input required type="text" name="product_name[]" value="{{$pro->product_name}}"> </td>
                 <td> <input required type="text" name="product_category[]" value=" {{$pro->product_category}}"> </td>
@@ -328,54 +330,54 @@
     }
     $(input).closest('div').remove();
   }
-  $(document).ready(function(){
+  $(document).ready(function() {
     calculateTotals();
   })
 
   $(document).on('input', '.quantity-input, [name^="product_price"], .product_tax', function() {
-        calculateTotals();
+    calculateTotals();
+  });
+
+  function calculateTotals() {
+    var totalAmount = 0;
+    var totalTax = 0;
+
+    // Lặp qua từng hàng
+    $('tr').each(function() {
+      var productQty = parseInt($(this).find('.quantity-input').val());
+      var productPrice = 0;
+      var taxValue = parseFloat($(this).find('.product_tax').val());
+
+      $(this).find('[name^="product_price"]').each(function() {
+        productPrice += parseFloat($(this).val());
+      });
+
+      if (!isNaN(productQty) && !isNaN(productPrice) && !isNaN(taxValue)) {
+        var rowTotal = productQty * productPrice;
+        var rowTax = (productQty * productPrice * taxValue) / 100;
+
+        // Hiển thị kết quả
+        $(this).find('[name^="product_total"]').val(rowTotal);
+        $(this).find('.product_tax').text(rowTax);
+
+        // Cộng dồn vào tổng totalAmount và totalTax
+        totalAmount += rowTotal;
+        totalTax += rowTax;
+      }
     });
 
-    function calculateTotals() {
-        var totalAmount = 0;
-        var totalTax = 0;
+    // Hiển thị tổng totalAmount và totalTax
+    $('#total-amount-sum').text(totalAmount);
+    $('#product-tax').text(totalTax);
 
-        // Lặp qua từng hàng
-        $('tr').each(function() {
-            var productQty = parseInt($(this).find('.quantity-input').val());
-            var productPrice = 0;
-            var taxValue = parseFloat($(this).find('.product_tax').val());
+    // Tính tổng thành tiền và thuế
+    calculateGrandTotal(totalAmount, totalTax);
+  }
 
-            $(this).find('[name^="product_price"]').each(function() {
-                productPrice += parseFloat($(this).val());
-            });
-
-            if (!isNaN(productQty) && !isNaN(productPrice) && !isNaN(taxValue)) {
-                var rowTotal = productQty * productPrice;
-                var rowTax = (productQty * productPrice * taxValue) / 100;
-
-                // Hiển thị kết quả
-                $(this).find('[name^="product_total"]').val(rowTotal);
-                $(this).find('.product_tax').text(rowTax);
-
-                // Cộng dồn vào tổng totalAmount và totalTax
-                totalAmount += rowTotal;
-                totalTax += rowTax;
-            }
-        });
-
-        // Hiển thị tổng totalAmount và totalTax
-        $('#total-amount-sum').text(totalAmount);
-        $('#product-tax').text(totalTax);
-
-        // Tính tổng thành tiền và thuế
-        calculateGrandTotal(totalAmount, totalTax);
-    }
-
-    function calculateGrandTotal(totalAmount, totalTax) {
-        var grandTotal = totalAmount + totalTax;
-        $('#grand-total').text(grandTotal.toFixed(2));
-    }
+  function calculateGrandTotal(totalAmount, totalTax) {
+    var grandTotal = totalAmount + totalTax;
+    $('#grand-total').text(grandTotal.toFixed(2));
+  }
 
   // Hủy đơn hàng
   $(document).on('click', '#deleteBill', function(e) {
@@ -504,37 +506,33 @@
     updateRowNumbers();
     var tr = '<tr>' +
       '<input type="hidden" name="product_id[]" value="' + last + '">' +
+      '<td scope="row"><input type="checkbox" id=' + rowCount + '" class="cb-element"></td>' +
       '<td>' +
-      '<select name="products_id[]">' +
-      '@foreach($products as $va)' +
-      '<option value="{{$va->id}}">{{$va->products_code}}</option>' +
+      '<select name="products_id[]" class="list_products">' +
+      '<option value="">Lựa chọn mã sản phẩm  </option> ' +
+      '@foreach ($products as $va)' +
+      '<option value="{{ $va->id }}">{{ $va->products_code }}</option>' +
       '@endforeach' +
       '</select> ' +
       '</td>' +
-      '<td><input required type="text" name="product_name[]"></td>' +
+      '<td>' +
+      '<input id="search" type="text" placeholder="Nhập thông tin sản phẩm" name="product_name[]" class="search_product" onkeyup="filterFunction()"> ' +
+      '<div id="dropdown-values" class="dropdown-values"><ul id="myUL1" class="myUL1 bg-white position-absolute rounded shadow" style="padding:0 10px; cursor:pointer;"> </ul>  </div>' +
+      '</td>' +
       '<td><input required type="text" name="product_category[]"></td>' +
       '<td><input required type="text" name="product_unit[]"></td>' +
-      '<td><input required type="text" name="product_qty[]" class="quantity-input"></td>' +
-      '<td><input required type="text" name="product_price[]"></td>' +
-      '<td><input required type="text" name="product_tax[]" class="product_tax"></td>' +
+      '<td><input required type="number" name="product_qty[]" class="quantity-input"></td>' +
+      '<td><input required type="number" name="product_price[]"></td>' +
+      '<td><input required type="number" name="product_tax[]" class="product_tax"></td>' +
       '<td><input readonly type="text" name="product_total[]"></td>' +
       '<td><input required type="text" name="product_trademark[]"></td>' +
       '<td>' +
-      '<button name="btn_add_SN[]" type="button" data-toggle="modal" data-target="#exampleModal' + rowCount + '" style="background: transparent; border:none;">' +
-      '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">' +
-      '<rect width="32" height="32" rx="4" fill="white" />' +
-      '<path fill-rule="evenodd" clip-rule="evenodd" d="M11.9062 10.643C11.9062 10.2092 12.258 9.85742 12.6919 9.85742H24.2189C24.6528 9.85742 25.0045 10.2092 25.0045 10.643C25.0045 11.0769 24.6528 11.4286 24.2189 11.4286H12.6919C12.258 11.4286 11.9062 11.0769 11.9062 10.643Z" fill="#0095F6" />' +
-      '<path fill-rule="evenodd" clip-rule="evenodd" d="M11.9062 16.4707C11.9062 16.0368 12.258 15.6851 12.6919 15.6851H24.2189C24.6528 15.6851 25.0045 16.0368 25.0045 16.4707C25.0045 16.9045 24.6528 17.2563 24.2189 17.2563H12.6919C12.258 17.2563 11.9062 16.9045 11.9062 16.4707Z" fill="#0095F6" />' +
-      '<path fill-rule="evenodd" clip-rule="evenodd" d="M11.9062 22.2978C11.9062 21.8639 12.258 21.5122 12.6919 21.5122H24.2189C24.6528 21.5122 25.0045 21.8639 25.0045 22.2978C25.0045 22.7317 24.6528 23.0834 24.2189 23.0834H12.6919C12.258 23.0834 11.9062 22.7317 11.9062 22.2978Z" fill="#0095F6" />' +
-      '<path fill-rule="evenodd" clip-rule="evenodd" d="M6.6665 10.6431C6.6665 9.91981 7.25282 9.3335 7.97607 9.3335C8.69932 9.3335 9.28563 9.91981 9.28563 10.6431C9.28563 11.3663 8.69932 11.9526 7.97607 11.9526C7.25282 11.9526 6.6665 11.3663 6.6665 10.6431ZM6.6665 16.4705C6.6665 15.7473 7.25282 15.161 7.97607 15.161C8.69932 15.161 9.28563 15.7473 9.28563 16.4705C9.28563 17.1938 8.69932 17.7801 7.97607 17.7801C7.25282 17.7801 6.6665 17.1938 6.6665 16.4705ZM7.97607 20.9884C7.25282 20.9884 6.6665 21.5747 6.6665 22.298C6.6665 23.0212 7.25282 23.6075 7.97607 23.6075C8.69932 23.6075 9.28563 23.0212 9.28563 22.298C9.28563 21.5747 8.69932 20.9884 7.97607 20.9884Z" fill="#0095F6" />' +
-      '</svg>' +
+      '<button class="exampleModal" name="btn_add_SN[]" type="button" data-toggle="modal" data-target="#exampleModal' +
+      rowCount + '" style="background:transparent; border:none;">' +
+      '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="4" fill="white"/><path fill-rule="evenodd" clip-rule="evenodd" d="M11.9062 10.643C11.9062 10.2092 12.258 9.85742 12.6919 9.85742H24.2189C24.6528 9.85742 25.0045 10.2092 25.0045 10.643C25.0045 11.0769 24.6528 11.4286 24.2189 11.4286H12.6919C12.258 11.4286 11.9062 11.0769 11.9062 10.643Z" fill="#0095F6"/><path fill-rule="evenodd" clip-rule="evenodd" d="M11.9062 16.4707C11.9062 16.0368 12.258 15.6851 12.6919 15.6851H24.2189C24.6528 15.6851 25.0045 16.0368 25.0045 16.4707C25.0045 16.9045 24.6528 17.2563 24.2189 17.2563H12.6919C12.258 17.2563 11.9062 16.9045 11.9062 16.4707Z" fill="#0095F6"/><path fill-rule="evenodd" clip-rule="evenodd" d="M11.9062 22.2978C11.9062 21.8639 12.258 21.5122 12.6919 21.5122H24.2189C24.6528 21.5122 25.0045 21.8639 25.0045 22.2978C25.0045 22.7317 24.6528 23.0834 24.2189 23.0834H12.6919C12.258 23.0834 11.9062 22.7317 11.9062 22.2978Z" fill="#0095F6"/><path fill-rule="evenodd" clip-rule="evenodd" d="M6.6665 10.6431C6.6665 9.91981 7.25282 9.3335 7.97607 9.3335C8.69932 9.3335 9.28563 9.91981 9.28563 10.6431C9.28563 11.3663 8.69932 11.9526 7.97607 11.9526C7.25282 11.9526 6.6665 11.3663 6.6665 10.6431ZM6.6665 16.4705C6.6665 15.7473 7.25282 15.161 7.97607 15.161C8.69932 15.161 9.28563 15.7473 9.28563 16.4705C9.28563 17.1938 8.69932 17.7801 7.97607 17.7801C7.25282 17.7801 6.6665 17.1938 6.6665 16.4705ZM7.97607 20.9884C7.25282 20.9884 6.6665 21.5747 6.6665 22.298C6.6665 23.0212 7.25282 23.6075 7.97607 23.6075C8.69932 23.6075 9.28563 23.0212 9.28563 22.298C9.28563 21.5747 8.69932 20.9884 7.97607 20.9884Z" fill="#0095F6"/></svg>' +
       '</button>' +
       '</td>' +
-      '<td><a href="javascript:;" class="deleteRow"> ' +
-      '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">' +
-      '<path fill-rule="evenodd" clip-rule="evenodd" d="M14.0606 6.66675C13.6589 6.66675 13.3333 6.99236 13.3333 7.39402C13.3333 7.79568 13.6589 8.12129 14.0606 8.12129H17.9394C18.341 8.12129 18.6667 7.79568 18.6667 7.39402C18.6667 6.99236 18.341 6.66675 17.9394 6.66675H14.0606ZM8 10.3031C8 9.90143 8.32561 9.57582 8.72727 9.57582H10.1818H21.8182H23.2727C23.6744 9.57582 24 9.90143 24 10.3031C24 10.7048 23.6744 11.0304 23.2727 11.0304H22.5455V22.6667C22.5455 24.2819 21.2158 25.5758 19.6179 25.5758H12.3452C11.9637 25.5755 11.5854 25.4997 11.2333 25.3528C10.8812 25.2059 10.5617 24.9908 10.2931 24.7199C10.0244 24.449 9.81206 24.1276 9.66816 23.7743C9.52463 23.4219 9.45204 23.0447 9.45455 22.6642V11.0304H8.72727C8.32561 11.0304 8 10.7048 8 10.3031ZM10.9091 22.6723V11.0304H21.0909V22.6667C21.0909 23.4623 20.4288 24.1213 19.6179 24.1213H12.3458C12.1562 24.1211 11.9684 24.0834 11.7934 24.0104C11.6183 23.9374 11.4595 23.8304 11.3259 23.6958C11.1924 23.5611 11.0868 23.4013 11.0153 23.2257C10.9437 23.05 10.9076 22.8619 10.9091 22.6723ZM17.9394 13.4546C18.3411 13.4546 18.6667 13.7802 18.6667 14.1819V20.9698C18.6667 21.3714 18.3411 21.6971 17.9394 21.6971C17.5377 21.6971 17.2121 21.3714 17.2121 20.9698V14.1819C17.2121 13.7802 17.5377 13.4546 17.9394 13.4546ZM14.7879 14.1819C14.7879 13.7802 14.4623 13.4546 14.0606 13.4546C13.6589 13.4546 13.3333 13.7802 13.3333 14.1819V20.9698C13.3333 21.3714 13.6589 21.6971 14.0606 21.6971C14.4623 21.6971 14.7879 21.3714 14.7879 20.9698V14.1819Z" fill="#555555" />' +
-      '</svg>' +
-      '</a></td>' +
+      '<td><a href="javascript:;" class="deleteRow"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.0606 6.66675C13.6589 6.66675 13.3333 6.99236 13.3333 7.39402C13.3333 7.79568 13.6589 8.12129 14.0606 8.12129H17.9394C18.341 8.12129 18.6667 7.79568 18.6667 7.39402C18.6667 6.99236 18.341 6.66675 17.9394 6.66675H14.0606ZM8 10.3031C8 9.90143 8.32561 9.57582 8.72727 9.57582H10.1818H21.8182H23.2727C23.6744 9.57582 24 9.90143 24 10.3031C24 10.7048 23.6744 11.0304 23.2727 11.0304H22.5455V22.6667C22.5455 24.2819 21.2158 25.5758 19.6179 25.5758H12.3452C11.9637 25.5755 11.5854 25.4997 11.2333 25.3528C10.8812 25.2059 10.5617 24.9908 10.2931 24.7199C10.0244 24.449 9.81206 24.1276 9.66816 23.7743C9.52463 23.4219 9.45204 23.0447 9.45455 22.6642V11.0304H8.72727C8.32561 11.0304 8 10.7048 8 10.3031ZM10.9091 22.6723V11.0304H21.0909V22.6667C21.0909 23.4623 20.4288 24.1213 19.6179 24.1213H12.3458C12.1562 24.1211 11.9684 24.0834 11.7934 24.0104C11.6183 23.9374 11.4595 23.8304 11.3259 23.6958C11.1924 23.5611 11.0868 23.4013 11.0153 23.2257C10.9437 23.05 10.9076 22.8619 10.9091 22.6723ZM17.9394 13.4546C18.3411 13.4546 18.6667 13.7802 18.6667 14.1819V20.9698C18.6667 21.3714 18.3411 21.6971 17.9394 21.6971C17.5377 21.6971 17.2121 21.3714 17.2121 20.9698V14.1819C17.2121 13.7802 17.5377 13.4546 17.9394 13.4546ZM14.7879 14.1819C14.7879 13.7802 14.4623 13.4546 14.0606 13.4546C13.6589 13.4546 13.3333 13.7802 13.3333 14.1819V20.9698C13.3333 21.3714 13.6589 21.6971 14.0606 21.6971C14.4623 21.6971 14.7879 21.3714 14.7879 20.9698V14.1819Z" fill="#555555"/></svg></a></td>' +
       '</tr>';
     $('tbody').append(tr);
     var modal = '<div class="modal fade" id="exampleModal' + rowCount + '" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">' +
@@ -584,7 +582,86 @@
       });
     }
     rowCount++;
+
+    var list_search = document.querySelectorAll('.search_product');
+    if (list_search) {
+      for (let i = 0; i < list_search.length; i++) {
+        list_search[i].addEventListener('click', function() {
+          var div_show = document.querySelectorAll('.dropdown-values');
+          div_show[i].classList.add("show");
+        });
+      }
+    }
+
+    var info = document.querySelectorAll('.exampleModal');
+    for (let k = 0; k < info.length; k++) {
+      info[k].addEventListener('click', function() {
+        var productCode = $(this).closest('tr').find('.list_products option:selected').text();
+        var productName = $(this).closest('tr').find('[name^="product_name"]').val();
+        var productType = $(this).closest('tr').find('[name^="product_category"]').val();
+        var productQty = $(this).closest('tr').find('[name^="product_qty"]').val();
+        $('.code_product').text(productCode);
+        $('.name_product').text(productName);
+        $('.type_product').text(productType);
+        $('.qty_product').text(productQty);
+      })
+    }
   });
+
+  // Hiển thị sản phẩm con 
+  $(document).on('change', '.list_products', function(e) {
+    e.preventDefault();
+    var id = $(this).val();
+    var row = $(this).closest('tr');
+    var childSelect = row.find('.myUL1');
+    var name = row.find('input[name="product_name[]"]');
+    name.val("");
+    if (id) {
+      $.ajax({
+        url: "{{ route('showProduct') }}",
+        type: "get",
+        data: {
+          id: id,
+        },
+        success: function(data) {
+          childSelect.empty();
+          data.forEach(function(item) {
+            var op = '<li onclick="setValueOfInput(this)">' + item.product_name + '</li>';
+            childSelect.append(op);
+          });
+          childSelect.addClass("show");
+        }
+      });
+    }
+  });
+
+  // Ẩn danh sách sản phẩm con khi click ra ngoài
+  $(document).click(function(event) {
+    if (!$(event.target).closest(".search_product").length) {
+      $(".dropdown-values").removeClass("show");
+    }
+  });
+
+  function filterFunction() {
+    var filter = $(".search_product").val().toUpperCase();
+    var a = $("#dropdown-values ul li");
+    a.each(function() {
+      var txtValue = $(this).text();
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        $(this).show();
+      } else {
+        $(this).hide();
+      }
+    });
+  }
+
+  function setValueOfInput(e) {
+    var selectedProductName = $(e).text();
+    var row = $(e).closest('tr');
+    var productNameInput = row.find('input[name="product_name[]"]');
+    productNameInput.val(selectedProductName);
+    $(".dropdown-values").removeClass("show");
+  }
 
   var addSNBtns = $('.AddSN')
   for (let i = 0; i < addSNBtns.length; i++) {
