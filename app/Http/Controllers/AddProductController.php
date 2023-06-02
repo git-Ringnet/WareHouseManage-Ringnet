@@ -240,7 +240,7 @@ class AddProductController extends Controller
         $provide = Provides::all();
         $products = Products::all();
         $lastId = DB::table('productorders')->latest('id')->value('id');
-        $product_order = DB::table('productorders')->where('order_id', $order->id)->get();
+        $product_order = ProductOrders::with('getCodeProduct')->where('order_id', $order->id)->get();
         $productIds = array();
         foreach ($product_order as $value) {
             array_push($productIds, $value->id);
