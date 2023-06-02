@@ -257,6 +257,7 @@ class ExportController extends Controller
         $existingProductIDs = [];
         $totalQtyNeeded = 0;
         $serinumbersToUpdate = [];
+        $products_id = $request->input('products_id');
 
         if ($request->has('submitBtn')) {
             $action = $request->input('submitBtn');
@@ -382,7 +383,7 @@ class ExportController extends Controller
                     // Giảm số lượng của sản phẩm trong bảng product
                     for ($i = 0; $i < count($productIDs); $i++) {
                         $productID = $productIDs[$i];
-                        $productQty = $productQtys[$i];        
+                        $productQty = $productQtys[$i];
                         Product::where('id', $productID)->decrement('product_qty', $productQty);
                     }
 
@@ -403,7 +404,12 @@ class ExportController extends Controller
                     Serinumbers::where('seri_status', 2)
                         ->whereIn('product_id', $productIDs)
                         ->delete();
-
+                    //cập nhật số lượng tồn kho sản phẩm cha
+                    $query = "UPDATE `products` 
+                        INNER JOIN `product` ON `products`.`id` = `product`.`products_id` 
+                        SET `products`.`inventory` = (SELECT SUM(`product`.`product_qty`) FROM `product` WHERE `product`.`products_id` = `products`.`id`) 
+                        WHERE `products`.`id` IN (" . implode(',', $products_id) . ")";
+                    DB::statement($query);
                     return redirect()->route('exports.index')->with('msg', 'Chốt đơn thành công!');
                 } else {
                     return redirect()->route('exports.index')->with('danger', 'Chưa được thêm sản phẩm nào!');
@@ -653,7 +659,7 @@ class ExportController extends Controller
     public function getSN(Request $request)
     {
         $data = $request->all();
-        $sn = Serinumbers::where('product_id',$data['productCode'])->limit($data['qty'])->get();
+        $sn = Serinumbers::where('product_id', $data['productCode'])->limit($data['qty'])->get();
         return response()->json($sn);
     }
 }

@@ -290,7 +290,7 @@
         </div>
 
 
-        @if(Auth::user()->id == $order->users_id)
+        @if(Auth::user()->id == $order->users_id || Auth::user()->can('isAdmin'))
         <a href="javascript:;" class="btn btn-info addRow">Thêm sản phẩm</a>
         <a href="javascript:;" class="btn btn-primary addBillEdit">Lưu</a>
         @endif
