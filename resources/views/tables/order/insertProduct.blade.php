@@ -144,7 +144,7 @@
                             </button>
                             <div class="dropdown-menu" id="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <div class="search-container px-2">
-                                    <input type="text" placeholder="Tìm thuộc tính lọc" id="myInput"
+                                    <input type="text" placeholder="Tìm kiếm" id="myInput"
                                         onkeyup="filterFunction()">
                                     <span class="search-icon"><i class="fas fa-search"></i></span>
                                 </div>
@@ -190,27 +190,32 @@
                         {{-- Tìm mã đơn hàng --}}
                         <div class="block-options" id="id-options" style="display:none">
                             <div class="wrap w-100">
-                                <div class="heading-title py-3 px-2">
-                                    <h5>Mã đơn hàng:</h5>
+                                <div class="heading-title title-wrap">
+                                    <h5>Mã đơn hàng</h5>
                                 </div>
-                                <div class="input-group px-2">
+                                <div class="input-group p-2">
                                     <label class="title" for="">Chứa kí tự</label>
                                     <input type="search" name="id" class="form-control id-input"
                                         value="{{ request()->id }}" placeholder="Nhập thông tin..">
                                 </div>
                             </div>
-                            <div class="d-flex justify-contents-center align-items-baseline px-2">
+                            <div class="d-flex justify-contents-center align-items-baseline p-2">
                                 <button type="submit" class="btn btn-primary btn-block mr-2">Xác
                                     Nhận</button>
                                 <button type="button" id="cancel-id"
-                                    class="btn btn-secondary btn-block">Hủy</button>
+                                    class="btn btn-default btn-block">Hủy</button>
                             </div>
                         </div>
                         {{-- Tìm nhà cung cấp --}}
                         <div class="block-options" id="provide_name-options" style="display:none">
                             <div class="wrap w-100">
-                                <div class="heading-title py-3 px-2">
-                                    <h5>Nhà cung cấp:</h5>
+                                <div class="heading-title title-wrap">
+                                    <h5>Nhà cung cấp</h5>
+                                </div>
+                                <div class="search-container px-2 mt-2">
+                                    <input type="text" placeholder="Tìm kiếm" id="myInput-provide-name"
+                                        class="pr-4 w-100 input-search" onkeyup="filterProvidename()">
+                                    <span class="search-icon"><i class="fas fa-search"></i></span>
                                 </div>
                                 <div
                                     class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
@@ -230,25 +235,30 @@
                                     @endif
                                 </ul>
                             </div>
-                            <div class="d-flex justify-contents-center align-items-baseline px-2">
+                            <div class="d-flex justify-contents-center align-items-baseline p-2">
                                 <button type="submit" class="btn btn-primary btn-block mr-2">Xác
                                     Nhận</button>
                                 <button type="button" id="cancel-provide_name"
-                                    class="btn btn-secondary btn-block">Hủy</button>
+                                    class="btn btn-default btn-block">Hủy</button>
                             </div>
                         </div>
                         {{-- Status --}}
                         <div class="block-options" id="status-options" style="display:none">
                             <div class="wrap w-100">
-                                <div class="heading-title py-3 px-2">
-                                    <h5>Trạng thái:</h5>
+                                <div class="heading-title title-wrap">
+                                    <h5>Trạng thái</h5>
+                                </div>
+                                <div class="search-container px-2 mt-2">
+                                    <input type="text" placeholder="Tìm kiếm" id="myInput-status"
+                                        class="pr-4 w-100 input-search" onkeyup="filterStatus()">
+                                    <span class="search-icon"><i class="fas fa-search"></i></span>
                                 </div>
                                 <div
                                     class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
                                     <a class="cursor select-all mr-auto">Chọn tất cả</a>
                                     <a class="cursor deselect-all">Hủy chọn</a>
                                 </div>
-                                <ul class="ks-cboxtags p-0 m-0 px-2">
+                                <ul class="ks-cboxtags-status p-0 m-0 px-2">
                                     <li>
                                         <input type="checkbox" id="status_active"
                                             {{ in_array(0, $status) ? 'checked' : '' }} name="status[]"
@@ -269,18 +279,23 @@
                                     </li>
                                 </ul>
                             </div>
-                            <div class="d-flex justify-contents-center align-items-baseline px-2">
+                            <div class="d-flex justify-contents-center align-items-baseline p-2">
                                 <button type="submit" class="btn btn-primary btn-block mr-2">Xác
                                     Nhận</button>
                                 <button type="button" id="cancel-status"
-                                    class="btn btn-secondary btn-block">Hủy</button>
+                                    class="btn btn-default btn-block">Hủy</button>
                             </div>
                         </div>
                         {{-- Creator --}}
                         <div class="block-options" id="creator-options" style="display:none">
                             <div class="wrap w-100">
-                                <div class="heading-title py-3 px-2">
-                                    <h5>Người tạo:</h5>
+                                <div class="heading-title title-wrap">
+                                    <h5>Người tạo</h5>
+                                </div>
+                                <div class="search-container px-2 mt-2">
+                                    <input type="text" placeholder="Tìm kiếm" id="myInput-creator"
+                                        class="pr-4 w-100 input-search" onkeyup="filterCreator()">
+                                    <span class="search-icon"><i class="fas fa-search"></i></span>
                                 </div>
                                 <div
                                     class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
@@ -307,21 +322,21 @@
                                         @endforeach
                                     @endif
                                 </ul>
-                                <div class="d-flex justify-contents-center align-items-baseline px-2">
+                                <div class="d-flex justify-contents-center align-items-baseline p-2">
                                     <button type="submit" class="btn btn-primary btn-block mr-2">Xác
                                         Nhận</button>
                                     <button type="button" id="cancel-creator"
-                                        class="btn btn-secondary btn-block">Hủy</button>
+                                        class="btn btn-default btn-block">Hủy</button>
                                 </div>
                             </div>
                         </div>
                         {{-- Tổng tiền --}}
                         <div class="block-options" id="sum-options" style="display:none">
                             <div class="wrap w-100">
-                                <div class="heading-title py-3 px-2">
-                                    <h5>Tổng tiền:</h5>
+                                <div class="heading-title title-wrap">
+                                    <h5>Tổng tiền</h5>
                                 </div>
-                                <div class="input-group pt-2 justify-content-around">
+                                <div class="input-group p-2 justify-content-around">
                                     <select class="comparison_operator" name="comparison_operator"
                                         style="width: 40%">
                                         <option value=">="
@@ -335,20 +350,20 @@
                                         value="{{ request()->sum }}" placeholder="Số lượng">
                                 </div>
                             </div>
-                            <div class="d-flex justify-contents-center align-items-baseline px-2">
+                            <div class="d-flex justify-contents-center align-items-baseline p-2">
                                 <button type="submit" class="btn btn-primary btn-block mr-2">Xác
                                     Nhận</button>
                                 <button type="button" id="cancel-sum"
-                                    class="btn btn-secondary btn-block">Hủy</button>
+                                    class="btn btn-default btn-block">Hủy</button>
                             </div>
                         </div>
                         {{-- Chỉnh sửa cuối --}}
                         <div class="block-options" id="update_at-options" style="display:none">
                             <div class="wrap w-100">
-                                <div class="heading-title py-3 px-2">
-                                    <h5>Chỉnh sửa cuối:</h5>
+                                <div class="heading-title title-wrap">
+                                    <h5>Chỉnh sửa cuối</h5>
                                 </div>
-                                <div class="input-group pt-2 justify-content-around">
+                                <div class="input-group p-2 justify-content-around">
                                     <label for="start">Từ ngày:</label>
                                     <input type="date" id="start" name="trip_start"
                                         value="{{ request()->start }}" min="2018-01-01" max="2050-12-31">
@@ -357,11 +372,11 @@
                                         value="{{ request()->end }}" min="2018-01-01" max="2050-12-31">
                                 </div>
                             </div>
-                            <div class="d-flex justify-contents-center align-items-baseline px-2">
+                            <div class="d-flex justify-contents-center align-items-baseline p-2">
                                 <button type="submit" class="btn btn-primary btn-block mr-2">Xác
                                     Nhận</button>
                                 <button type="button" id="cancel-update_at"
-                                    class="btn btn-secondary btn-block">Hủy</button>
+                                    class="btn btn-default btn-block">Hủy</button>
                             </div>
                         </div>
                     </div>
@@ -428,7 +443,7 @@
                                             <div class="icon" id="icon-export_status"></div>
                                         </span>
                                     </th>
-                                    <th>Action</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -887,6 +902,48 @@
         a.click();
 
         URL.revokeObjectURL(url);
+    }
+    function filterStatus() {
+        var input = $("#myInput-status");
+        var filter = input.val().toUpperCase();
+        var buttons = $(".ks-cboxtags-status li");
+
+        buttons.each(function() {
+            var text = $(this).text();
+            if (text.toUpperCase().indexOf(filter) > -1) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    }
+    function filterProvidename() {
+        var input = $("#myInput-provide-name");
+        var filter = input.val().toUpperCase();
+        var buttons = $(".ks-cboxtags-provide_name li");
+
+        buttons.each(function() {
+            var text = $(this).text();
+            if (text.toUpperCase().indexOf(filter) > -1) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    }
+    function filterCreator() {
+        var input = $("#myInput-creator");
+        var filter = input.val().toUpperCase();
+        var buttons = $(".ks-cboxtags-name li");
+
+        buttons.each(function() {
+            var text = $(this).text();
+            if (text.toUpperCase().indexOf(filter) > -1) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
     }
 </script>
 </body>

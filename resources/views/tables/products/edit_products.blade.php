@@ -106,9 +106,10 @@
                             </div>
                         </div>
                         </table>
-
                         <div class="btn-fixed">
+                            @if(Auth::user()->can('view-provides'))
                             <button type="submit" class="btn btn-primary">Lưu</button>
+                            @endif
                             <a href="{{ asset('./data') }}" class="btn btn-default">Hủy</a>
                         </div>
 

@@ -37,5 +37,6 @@ class DatabaseSeeder extends Seeder
 			// ExportSeeder::class,
             // productExportSeeder::class,
         ]);
+        
     }
 }
