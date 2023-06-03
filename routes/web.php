@@ -22,10 +22,6 @@ use App\Http\Controllers\provideController;
 |
 */
 
-Route::get('/', function () {
-    return view('index');
-});
-
 Route::prefix('admin')->name('admin.')->middleware('permission:admin')->group(function () {
     Route::get('userlist', [UsersController::class, 'show'])->name('userslist');
     Route::get('adduser', [UsersController::class, 'add'])->name('add');

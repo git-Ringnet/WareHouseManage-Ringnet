@@ -199,8 +199,7 @@
                     </div>
                 </div>
                 <div class="text-center mt-4">
-                    <button type="submit" name="action" class="btn btn-primary mr-1"
-                        onclick="validateAndSubmit(event)">Lưu</button>
+                    <button type="submit" name="action" class="btn btn-primary mr-1">Lưu</button>
                     <a href="{{ route('exports.index') }}"><span class="btn border-secondary ml-1">Hủy</span></a>
                 </div>
             </form>
@@ -382,6 +381,7 @@
     </div>
 </div>
 <script>
+    var customerInfoSaved = false;
     //form thong tin khach hang xuất hàng
     var radio1 = document.getElementById("radio1");
     var radio2 = document.getElementById("radio2");
@@ -390,7 +390,7 @@
     });
     $("#radio2").on("click", function() {
         $('#data-container').html(
-            '<div id="form-guest">' +
+            '<div id="form-guest" onsubmit="return validateAndSubmit(event)">' +
             '<div class="border-bottom p-3 d-flex justify-content-between">' +
             '<b>Thông tin khách hàng</b>' +
             '<button id="btn-addCustomer" class="btn btn-primary">' +
@@ -714,6 +714,10 @@
     //thêm thông tin khách hàng
     $(document).on('click', '#btn-addCustomer', function(e) {
         e.preventDefault();
+        saveCustomerInfo();
+    });
+    //hàm lưu thông tin khách hàng
+    function saveCustomerInfo() {
         var guest_name = $('#guest_name').val();
         var guest_addressInvoice = $('#guest_addressInvoice').val();
         var guest_code = $('#guest_code').val();
@@ -745,11 +749,17 @@
                 guest_note
             },
             success: function(data) {
-                alert('Thêm thông tin thành công');
-                $('#form-guest input[name="id"]').val(data.id);
+                if (data.hasOwnProperty('message')) {
+                    alert(data.message); // Hiển thị thông báo đã tồn tại
+                } else if (data.hasOwnProperty('id')) {
+                    alert('Thêm thông tin thành công');
+                    $('#form-guest input[name="id"]').val(data.id);
+                    customerInfoSaved = true;
+                }
             }
-        })
-    })
+        });
+    }
+
     $(document).ready(function() {
         //lấy thông tin sản phẩm từ mã sản phẩm
         var selectedProductNames = [];
@@ -908,7 +918,30 @@
         $('#grand-total').attr('data-value', grandTotal.toFixed(2));
         $('#total').val(grandTotal.toFixed(2));
     }
-    //hàm kiểm tra submit
+
+    // Hàm submit form xuất hàng
+    function submitExportForm() {
+        if (customerInfoSaved) {
+            // Chỉ submit form nếu thông tin khách hàng đã được lưu
+            $('#export_form').unbind('submit').submit();
+        }
+    }
+
+    // Hàm kiểm tra submit
+    $(document).on('submit', '#export_form', function(e) {
+        e.preventDefault();
+
+        // Kiểm tra xem đã thêm thông tin khách hàng hay chưa
+        var customerId = $('#form-guest input[name="id"]').val();
+        if (customerId === '') {
+            // Nếu chưa thêm thông tin khách hàng, lưu thông tin và submit form
+            saveCustomerInfo();
+        } else {
+            // Nếu đã thêm thông tin khách hàng, chỉ submit form
+            submitExportForm();
+        }
+    });
+
     function validateAndSubmit(event) {
         var formGuest = $('#form-guest');
 
