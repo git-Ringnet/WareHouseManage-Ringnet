@@ -1,249 +1,241 @@
 <x-navbar :title="$title"></x-navbar>
 <div class="content-wrapper export-add">
+    <div class="row">
+        <div class="col-sm-6 breadcrumb">
+            <span>Xuất hàng</span>
+            <span>/</span>
+            <span><b>Đơn hàng mới</b></span>
+        </div>
+        <div class="col-sm-6 position-absolute" style="top:63px;right:2%">
+            <div class="w-50 position-relative" style="float: right;">
+                <div class="justify-content-between d-flex">
+                    <span style="z-index: 99">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="15.6667" cy="15.667" r="13" fill="#09BD3C" />
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M22.1072 12.2929C22.4977 12.6834 22.4977 13.3166 22.1072 13.7071L15.4405 20.3738C15.05 20.7643 14.4168 20.7643 14.0263 20.3738L10.0263 16.3738C9.63577 15.9832 9.63577 15.3501 10.0263 14.9596C10.4168 14.569 11.05 14.569 11.4405 14.9596L14.7334 18.2525L20.693 12.2929C21.0835 11.9024 21.7166 11.9024 22.1072 12.2929Z"
+                                fill="white" />
+                        </svg>
+                        <p class="text-center p-0 m-0">
+                            <svg width="6" height="6" viewBox="0 0 6 6" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="3" cy="3" r="3" fill="#09BD3C" />
+                            </svg>
+                        </p>
+                    </span>
+                    <span style="z-index: 99">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M16 5C9.92487 5 5 9.92487 5 16C5 22.0751 9.92487 27 16 27C22.0751 27 27 22.0751 27 16C27 9.92487 22.0751 5 16 5ZM3 16C3 8.8203 8.8203 3 16 3C23.1797 3 29 8.8203 29 16C29 23.1797 23.1797 29 16 29C8.8203 29 3 23.1797 3 16Z"
+                                fill="#D6D6D6" />
+                            <path
+                                d="M22.1578 15.9997C22.1578 19.4006 19.4008 22.1576 15.9999 22.1576C12.599 22.1576 9.84204 19.4006 9.84204 15.9997C9.84204 12.5988 12.599 9.8418 15.9999 9.8418C19.4008 9.8418 22.1578 12.5988 22.1578 15.9997Z"
+                                fill="#D6D6D6" />
+                        </svg>
+                        <p class="text-center p-0 m-0">
+                            <svg width="6" height="6" viewBox="0 0 6 6" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="3" cy="3" r="3" fill="#D6D6D6" />
+                            </svg>
+                        </p>
+                    </span>
+                    <span style="z-index: 99">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M16 5C9.92487 5 5 9.92487 5 16C5 22.0751 9.92487 27 16 27C22.0751 27 27 22.0751 27 16C27 9.92487 22.0751 5 16 5ZM3 16C3 8.8203 8.8203 3 16 3C23.1797 3 29 8.8203 29 16C29 23.1797 23.1797 29 16 29C8.8203 29 3 23.1797 3 16Z"
+                                fill="#D6D6D6" />
+                            <path
+                                d="M22.1578 15.9997C22.1578 19.4006 19.4008 22.1576 15.9999 22.1576C12.599 22.1576 9.84204 19.4006 9.84204 15.9997C9.84204 12.5988 12.599 9.8418 15.9999 9.8418C19.4008 9.8418 22.1578 12.5988 22.1578 15.9997Z"
+                                fill="#D6D6D6" />
+                        </svg>
+                        <p class="p-0 m-0"></p>
+
+                    </span>
+                </div>
+                <div class="position-absolute" style="top: 32px; z-index: 0;left: 17px">
+                    <svg height="4" viewBox="0 0 364 3" fill="none" style="width: 95%"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <line x1="0.999268" y1="1.50098" x2="363.001" y2="1.50098" stroke="#FFFFFF"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </div>
+                <div class="justify-content-between d-flex">
+                    <b>Tạo đơn</b>
+                    <b>Đơn nháp</b>
+                    <b>Chốt đơn</b>
+                </div>
+            </div>
+        </div>
+    </div>
     <section class="content">
+        <div class="d-flex mb-1 action-don">
+            {{-- <a href="#" class="btn btn-danger text-white">Chốt đơn</a>
+            <a href="#" class="btn btn-secondary ml-4">Hủy đơn</a> --}}
+            <a href="#" class="btn border border-secondary">Xuất file</a>
+            <button class="btn border border-secondary ml-4" onclick="toggleDiv()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M9 5C8.46957 5 7.96086 5.21071 7.58579 5.58579C7.21071 5.96086 7 6.46957 7 7V8H17V7C17 6.46957 16.7893 5.96086 16.4142 5.58579C16.0391 5.21071 15.5304 5 15 5H9ZM15 13H9C8.73478 13 8.48043 13.1054 8.29289 13.2929C8.10536 13.4804 8 13.7348 8 14V17C8 17.2652 8.10536 17.5196 8.29289 17.7071C8.48043 17.8946 8.73478 18 9 18H15C15.2652 18 15.5196 17.8946 15.7071 17.7071C15.8946 17.5196 16 17.2652 16 17V14C16 13.7348 15.8946 13.4804 15.7071 13.2929C15.5196 13.1054 15.2652 13 15 13Z"
+                        fill="#555555" />
+                    <path
+                        d="M4 11C4 10.4696 4.21071 9.96086 4.58579 9.58579C4.96086 9.21071 5.46957 9 6 9H18C18.5304 9 19.0391 9.21071 19.4142 9.58579C19.7893 9.96086 20 10.4696 20 11V14C20 14.5304 19.7893 15.0391 19.4142 15.4142C19.0391 15.7893 18.5304 16 18 16H17V14C17 13.4696 16.7893 12.9609 16.4142 12.5858C16.0391 12.2107 15.5304 12 15 12H9C8.46957 12 7.96086 12.2107 7.58579 12.5858C7.21071 12.9609 7 13.4696 7 14V16H6C5.46957 16 4.96086 15.7893 4.58579 15.4142C4.21071 15.0391 4 14.5304 4 14V11ZM6.5 12C6.63261 12 6.75979 11.9473 6.85355 11.8536C6.94732 11.7598 7 11.6326 7 11.5C7 11.3674 6.94732 11.2402 6.85355 11.1464C6.75979 11.0527 6.63261 11 6.5 11C6.36739 11 6.24021 11.0527 6.14645 11.1464C6.05268 11.2402 6 11.3674 6 11.5C6 11.6326 6.05268 11.7598 6.14645 11.8536C6.24021 11.9473 6.36739 12 6.5 12Z"
+                        fill="#555555" />
+                </svg>
+                In báo giá
+            </button>
+        </div>
         <div class="container-fluided position-relative">
-            <div class="row">
-                <div class="col-sm-6">
+            <div class="row my-3">
+                <div class="col">
                     <div class="w-75">
-                        <div class="">
-                            <span>Xuất hàng</span>
-                            <span>/</span>
-                            <span><b>Đơn hàng mới</b></span>
+                        <div class="d-flex mb-2">
+                            <input type="radio" name="options" id="radio1" checked>
+                            <span class="ml-1">Khách hàng cũ</span>
+                            <input type="radio" name="options" id="radio2" style="margin-left: 40px;">
+                            <span class="ml-1">Khách hàng mới</span>
                         </div>
-                        <div class="mt-3">
-                            {{-- <a href="#" class="btn btn-danger text-white">Chốt đơn</a>
-                            <a href="#" class="btn btn-secondary ml-4">Hủy đơn</a> --}}
-                            <a href="#" class="btn border border-secondary ml-4">Xuất file</a>
-                            <button class="btn border border-secondary ml-4" onclick="toggleDiv()">
+                        <div class="input-group mb-1 position-relative w-50">
+                            <input type="text" class="form-control" placeholder="Nhập thông tin khách hàng"
+                                aria-label="Username" aria-describedby="basic-addon1" id="myInput"
+                                autocomplete="off">
+                            <div class="position-absolute" style="right: 5px;top: 17%;">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M9 5C8.46957 5 7.96086 5.21071 7.58579 5.58579C7.21071 5.96086 7 6.46957 7 7V8H17V7C17 6.46957 16.7893 5.96086 16.4142 5.58579C16.0391 5.21071 15.5304 5 15 5H9ZM15 13H9C8.73478 13 8.48043 13.1054 8.29289 13.2929C8.10536 13.4804 8 13.7348 8 14V17C8 17.2652 8.10536 17.5196 8.29289 17.7071C8.48043 17.8946 8.73478 18 9 18H15C15.2652 18 15.5196 17.8946 15.7071 17.7071C15.8946 17.5196 16 17.2652 16 17V14C16 13.7348 15.8946 13.4804 15.7071 13.2929C15.5196 13.1054 15.2652 13 15 13Z"
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M15.1835 7.36853C13.0254 5.21049 9.52656 5.21049 7.36853 7.36853C5.21049 9.52656 5.21049 13.0254 7.36853 15.1835C9.52656 17.3415 13.0254 17.3415 15.1835 15.1835C17.3415 13.0254 17.3415 9.52656 15.1835 7.36853ZM16.2441 6.30787C13.5003 3.56404 9.05169 3.56404 6.30787 6.30787C3.56404 9.05169 3.56404 13.5003 6.30787 16.2441C9.05169 18.988 13.5003 18.988 16.2441 16.2441C18.988 13.5003 18.988 9.05169 16.2441 6.30787Z"
                                         fill="#555555" />
-                                    <path
-                                        d="M4 11C4 10.4696 4.21071 9.96086 4.58579 9.58579C4.96086 9.21071 5.46957 9 6 9H18C18.5304 9 19.0391 9.21071 19.4142 9.58579C19.7893 9.96086 20 10.4696 20 11V14C20 14.5304 19.7893 15.0391 19.4142 15.4142C19.0391 15.7893 18.5304 16 18 16H17V14C17 13.4696 16.7893 12.9609 16.4142 12.5858C16.0391 12.2107 15.5304 12 15 12H9C8.46957 12 7.96086 12.2107 7.58579 12.5858C7.21071 12.9609 7 13.4696 7 14V16H6C5.46957 16 4.96086 15.7893 4.58579 15.4142C4.21071 15.0391 4 14.5304 4 14V11ZM6.5 12C6.63261 12 6.75979 11.9473 6.85355 11.8536C6.94732 11.7598 7 11.6326 7 11.5C7 11.3674 6.94732 11.2402 6.85355 11.1464C6.75979 11.0527 6.63261 11 6.5 11C6.36739 11 6.24021 11.0527 6.14645 11.1464C6.05268 11.2402 6 11.3674 6 11.5C6 11.6326 6.05268 11.7598 6.14645 11.8536C6.24021 11.9473 6.36739 12 6.5 12Z"
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M15.1796 15.1796C15.4725 14.8867 15.9474 14.8867 16.2403 15.1796L19.5303 18.4696C19.8232 18.7625 19.8232 19.2374 19.5303 19.5303C19.2374 19.8232 18.7625 19.8232 18.4696 19.5303L15.1796 16.2403C14.8867 15.9474 14.8867 15.4725 15.1796 15.1796Z"
                                         fill="#555555" />
                                 </svg>
-                                In báo giá
-                            </button>
-                        </div>
-                        <div class="mt-4">
-                            <div class="d-flex">
-                                <input type="radio" name="options" id="radio1" checked>
-                                <span class="ml-1">Khách hàng cũ</span>
-                                <input type="radio" name="options" id="radio2" style="margin-left: 40px;">
-                                <span class="ml-1">Khách hàng mới</span>
                             </div>
                         </div>
-                        <div class="mt-3">
-                            <div class="input-group mb-1 position-relative">
-                                <input type="text" class="form-control" placeholder="Nhập thông tin khách hàng"
-                                    aria-label="Username" aria-describedby="basic-addon1" id="myInput"
-                                    autocomplete="off">
-                                <div class="position-absolute" style="right: 5px;top: 17%;">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                            d="M15.1835 7.36853C13.0254 5.21049 9.52656 5.21049 7.36853 7.36853C5.21049 9.52656 5.21049 13.0254 7.36853 15.1835C9.52656 17.3415 13.0254 17.3415 15.1835 15.1835C17.3415 13.0254 17.3415 9.52656 15.1835 7.36853ZM16.2441 6.30787C13.5003 3.56404 9.05169 3.56404 6.30787 6.30787C3.56404 9.05169 3.56404 13.5003 6.30787 16.2441C9.05169 18.988 13.5003 18.988 16.2441 16.2441C18.988 13.5003 18.988 9.05169 16.2441 6.30787Z"
-                                            fill="#555555" />
-                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                            d="M15.1796 15.1796C15.4725 14.8867 15.9474 14.8867 16.2403 15.1796L19.5303 18.4696C19.8232 18.7625 19.8232 19.2374 19.5303 19.5303C19.2374 19.8232 18.7625 19.8232 18.4696 19.5303L15.1796 16.2403C14.8867 15.9474 14.8867 15.4725 15.1796 15.1796Z"
-                                            fill="#555555" />
-                                    </svg>
-                                </div>
-                            </div>
-                            <ul id="myUL" class="bg-white position-absolute w-100 rounded shadow"
-                                style="z-index: 99;">
-                                @foreach ($customer as $item)
-                                    <li>
-                                        <a href="#"
-                                            class="text-dark d-flex justify-content-between p-2 search-info"
-                                            id="{{ $item->id }}" name="search-info">
-                                            <span>{{ $item->guest_represent }}</span>
-                                            <span class="mr-5">{{ $item->guest_name }}</span>
-                                        </a>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="w-50 position-relative" style="float: right;">
-                        <div class="justify-content-between d-flex">
-                            <span style="z-index: 99">
-                                <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <circle cx="15.6667" cy="15.667" r="13" fill="#09BD3C" />
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M22.1072 12.2929C22.4977 12.6834 22.4977 13.3166 22.1072 13.7071L15.4405 20.3738C15.05 20.7643 14.4168 20.7643 14.0263 20.3738L10.0263 16.3738C9.63577 15.9832 9.63577 15.3501 10.0263 14.9596C10.4168 14.569 11.05 14.569 11.4405 14.9596L14.7334 18.2525L20.693 12.2929C21.0835 11.9024 21.7166 11.9024 22.1072 12.2929Z"
-                                        fill="white" />
-                                </svg>
-                                <p class="text-center p-0 m-0">
-                                    <svg width="6" height="6" viewBox="0 0 6 6" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <circle cx="3" cy="3" r="3" fill="#09BD3C" />
-                                    </svg>
-                                </p>
-                            </span>
-                            <span style="z-index: 99">
-                                <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M16 5C9.92487 5 5 9.92487 5 16C5 22.0751 9.92487 27 16 27C22.0751 27 27 22.0751 27 16C27 9.92487 22.0751 5 16 5ZM3 16C3 8.8203 8.8203 3 16 3C23.1797 3 29 8.8203 29 16C29 23.1797 23.1797 29 16 29C8.8203 29 3 23.1797 3 16Z"
-                                        fill="#D6D6D6" />
-                                    <path
-                                        d="M22.1578 15.9997C22.1578 19.4006 19.4008 22.1576 15.9999 22.1576C12.599 22.1576 9.84204 19.4006 9.84204 15.9997C9.84204 12.5988 12.599 9.8418 15.9999 9.8418C19.4008 9.8418 22.1578 12.5988 22.1578 15.9997Z"
-                                        fill="#D6D6D6" />
-                                </svg>
-                                <p class="text-center p-0 m-0">
-                                    <svg width="6" height="6" viewBox="0 0 6 6" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <circle cx="3" cy="3" r="3" fill="#D6D6D6" />
-                                    </svg>
-                                </p>
-                            </span>
-                            <span style="z-index: 99">
-                                <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M16 5C9.92487 5 5 9.92487 5 16C5 22.0751 9.92487 27 16 27C22.0751 27 27 22.0751 27 16C27 9.92487 22.0751 5 16 5ZM3 16C3 8.8203 8.8203 3 16 3C23.1797 3 29 8.8203 29 16C29 23.1797 23.1797 29 16 29C8.8203 29 3 23.1797 3 16Z"
-                                        fill="#D6D6D6" />
-                                    <path
-                                        d="M22.1578 15.9997C22.1578 19.4006 19.4008 22.1576 15.9999 22.1576C12.599 22.1576 9.84204 19.4006 9.84204 15.9997C9.84204 12.5988 12.599 9.8418 15.9999 9.8418C19.4008 9.8418 22.1578 12.5988 22.1578 15.9997Z"
-                                        fill="#D6D6D6" />
-                                </svg>
-                                <p class="p-0 m-0"></p>
-
-                            </span>
-                        </div>
-                        <div class="position-absolute" style="top: 32px; z-index: 0;left: 17px">
-                            <svg height="4" viewBox="0 0 364 3" fill="none" style="width: 95%"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <line x1="0.999268" y1="1.50098" x2="363.001" y2="1.50098" stroke="#FFFFFF"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                        </div>
-                        <div class="justify-content-between d-flex">
-                            <b>Tạo đơn</b>
-                            <b>Đơn nháp</b>
-                            <b>Chốt đơn</b>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <form action="{{ route('exports.store') }}" method="POST" id="export_form">
-                @csrf
-                {{-- Form thông tin khách hàng --}}
-                <section id="data-container" class="container-fluided bg-white"></section>
-                {{-- Bảng thêm sản phẩm --}}
-                <div class="mt-4" style="overflow-x: auto;">
-                    <table class="table" id="sourceTable">
-                        <thead class="bg-white border-0 rounded-top">
-                            <tr>
-                                <th><input type="checkbox"></th>
-                                <th>STT</th>
-                                <th>Mã sản phẩm</th>
-                                <th>Tên sản phẩm</th>
-                                <th>ĐVT</th>
-                                <th>Số lượng</th>
-                                <th>Giá bán</th>
-                                <th>Ghi chú</th>
-                                <th>Thuế</th>
-                                <th>Thành tiền</th>
-                                <th>S/N</th>
-                                <th></th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr id="dynamic-fields"></tr>
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td>
-                                    <span class="btn btn-secondary" id="add-field-btn">Thêm sản phẩm</span>
-                                </td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
-                <div class="row position-relative">
-                    <div class="col-sm-6"></div>
-                    <div class="col-sm-6">
-                        <div class="mt-4 w-50" style="float: right;">
-                            <div class="d-flex justify-content-between">
-                                <span><b>Giá trị trước thuế:</b></span>
-                                <span id="total-amount-sum">{{ number_format(0) }}</span>
-                            </div>
-                            <div class="d-flex justify-content-between mt-2">
-                                <span><b>Thuế VAT:</b></span>
-                                <span id="product-tax">{{ number_format(0) }}</span>
-                            </div>
-                            <div class="d-flex justify-content-between mt-2">
-                                <span class="text-primary">Giảm giá:</span>
-                                <span>0đ</span>
-                            </div>
-                            <div class="d-flex justify-content-between mt-2">
-                                <span class="text-primary">Phí vận chuyển:</span>
-                                <span>0đ</span>
-                            </div>
-                            <div class="d-flex justify-content-between mt-2">
-                                <span class="text-lg"><b>Tổng cộng:</b></span>
-                                <span><b id="grand-total" data-value="0">{{ number_format(0) }}</b></span>
-                                <input type="text" hidden name="totalValue" value="0" id="total">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="text-center mt-4">
-                    <button type="submit" name="action" class="btn btn-primary mr-1">Lưu</button>
-                    <a href="{{ route('exports.index') }}"><span class="btn border-secondary ml-1">Hủy</span></a>
-                </div>
-            </form>
-            {{-- Modal Product --}}
-            <div class="modal fade" id="productModal" tabindex="-1" role="dialog"
-                aria-labelledby="productModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="productModalLabel">Thông tin sản phẩm</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {{-- Modal S/N --}}
-            <div class="modal fade" id="snModal" tabindex="-1" role="dialog"
-                aria-labelledby="productModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="productModalLabel">Danh sách Serial Number</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                        </div>
+                        <ul id="myUL" class="bg-white position-absolute w-50 rounded shadow p-0"
+                            style="z-index: 99;">
+                            @foreach ($customer as $item)
+                                <li>
+                                    <a href="#" class="text-dark d-flex justify-content-between p-2 search-info"
+                                        id="{{ $item->id }}" name="search-info">
+                                        <span>{{ $item->guest_represent }}</span>
+                                        <span class="mr-5">{{ $item->guest_name }}</span>
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+        <form action="{{ route('exports.store') }}" method="POST" id="export_form">
+            @csrf
+            {{-- Form thông tin khách hàng --}}
+            <section id="data-container" class="container-fluided bg-white rounded"></section>
+            {{-- Bảng thêm sản phẩm --}}
+            <div class="mt-4" style="overflow-x: auto;">
+                <table class="table table-hover bg-white rounded" id="sourceTable">
+                    <thead class="bg-white border-0 rounded">
+                        <tr>
+                            <th><input type="checkbox"></th>
+                            <th>STT</th>
+                            <th>Mã sản phẩm</th>
+                            <th>Tên sản phẩm</th>
+                            <th>ĐVT</th>
+                            <th>Số lượng</th>
+                            <th>Giá bán</th>
+                            <th>Ghi chú</th>
+                            <th>Thuế</th>
+                            <th>Thành tiền</th>
+                            <th>S/N</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr id="dynamic-fields"></tr>
+                    </tbody>
+                </table>
+                <div class="mb-2"> <span class="btn btn-secondary" id="add-field-btn">Thêm sản phẩm</span>
+                </div>
+            </div>
+            <div class="row position-relative">
+                <div class="col-sm-6"></div>
+                <div class="col-sm-6">
+                    <div class="mt-4 w-50" style="float: right;">
+                        <div class="d-flex justify-content-between">
+                            <span><b>Giá trị trước thuế:</b></span>
+                            <span id="total-amount-sum">{{ number_format(0) }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mt-2">
+                            <span><b>Thuế VAT:</b></span>
+                            <span id="product-tax">{{ number_format(0) }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mt-2">
+                            <span class="text-primary">Giảm giá:</span>
+                            <span>0đ</span>
+                        </div>
+                        <div class="d-flex justify-content-between mt-2">
+                            <span class="text-primary">Phí vận chuyển:</span>
+                            <span>0đ</span>
+                        </div>
+                        <div class="d-flex justify-content-between mt-2">
+                            <span class="text-lg"><b>Tổng cộng:</b></span>
+                            <span><b id="grand-total" data-value="0">{{ number_format(0) }}</b></span>
+                            <input type="text" hidden name="totalValue" value="0" id="total">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <button type="submit" name="action" class="btn btn-primary mr-1"
+                    onclick="validateAndSubmit(event)">Lưu</button>
+                <a href="{{ route('exports.index') }}"><span class="btn border-secondary ml-1">Hủy</span></a>
+            </div>
+        </form>
+        {{-- Modal Product --}}
+        <div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="productModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="productModalLabel">Thông tin sản phẩm</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{-- Modal S/N --}}
+        <div class="modal fade" id="snModal" tabindex="-1" role="dialog" aria-labelledby="productModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="productModalLabel">Danh sách Serial Number</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+</section>
 </div>
 <div id="print-price">
     <div class="container">
@@ -391,11 +383,11 @@
     $("#radio2").on("click", function() {
         $('#data-container').html(
             '<div id="form-guest" onsubmit="return validateAndSubmit(event)">' +
-            '<div class="border-bottom p-3 d-flex justify-content-between">' +
+            '<div class="border-bottom p-3 d-flex justify-content-between align-items-center">' +
             '<b>Thông tin khách hàng</b>' +
-            '<button id="btn-addCustomer" class="btn btn-primary">' +
+            '<button id="btn-addCustomer" class="btn btn-primary d-flex align-items-center">' +
             '<img src="../dist/img/icon/Union.png">' +
-            '<span>Lưu thông tin</span></button></div>' +
+            '<span class="ml-1">Lưu thông tin</span></button></div>' +
             '<div class="row p-3">' +
             '<div class="col-sm-6">' +
             '<div class="form-group">' +
@@ -607,11 +599,11 @@
                 success: function(data) {
                     $('#data-container').html(
                         '<div id="form-guest">' +
-                        '<div class="border-bottom p-3 d-flex justify-content-between">' +
+                        '<div class="border-bottom p-3 d-flex justify-content-between align-items-center">' +
                         '<b>Thông tin khách hàng</b>' +
-                        '<button id="btn-customer" class="btn btn-primary">' +
+                        '<button id="btn-customer" class="btn btn-primary d-flex align-items-center">' +
                         '<img src="../dist/img/icon/Union.png">' +
-                        '<span>Lưu thông tin</span></button></div>' +
+                        '<span class="ml-1">Lưu thông tin</span></button></div>' +
                         '<div class="row p-3">' +
                         '<div class="col-sm-6">' +
                         '<div class="form-group">' +

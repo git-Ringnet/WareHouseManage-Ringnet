@@ -24,7 +24,7 @@
                 <form class="w-100" action="" method="get" id='search-filter'>
                     <div class="row">
                         <div class="col-5">
-                            <input type="search" name="keywords" class="form-control" value="{{ request()->keywords }}"
+                            <input type="text" name="keywords" class="form-control" value="{{ request()->keywords }}"
                                 placeholder="Tìm kiếm nhân viên">
                                 <span class="search-icon"><i class="fas fa-search"></i></span>
                         </div>
@@ -129,12 +129,19 @@ $index = array_search($item['label'], $numberedLabels);
                                         Thêm bộ lọc
                                     </span>
                                 </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <div class="dropdown-menu" id="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <div class="search-container px-2">
+                                        <input type="text" placeholder="Tìm kiếm" id="myInput"
+                                            onkeyup="filterFunction()">
+                                        <span class="search-icon"><i class="fas fa-search"></i></span>
+                                    </div>
+                                    <div class="scrollbar">
                                     <button class="dropdown-item" id="btn-name">Tên nhân viên</button>
                                     <button class="dropdown-item" id="btn-roles">Vai trò</button>
                                     <button class="dropdown-item" id="btn-phonenumber">Số điện thoại</button>
-                                    <button class="dropdown-item" id="btn-email">email</button>
+                                    <button class="dropdown-item" id="btn-email">Email</button>
                                     <button class="dropdown-item" id="btn-status">Trạng thái</button>
+                                    </div>
                                 </div>
                             </div>
                             <?php $status = [];
@@ -153,62 +160,62 @@ $index = array_search($item['label'], $numberedLabels);
                             {{-- Tìm tên nhân viên --}}
                             <div class="block-options" id="name-options" style="display:none">
                                 <div class="wrap w-100">
-                                    <div class="heading-title py-3 px-2">
-                                        <h5>Tên nhân viên:</h5>
+                                    <div class="heading-title title-wrap">
+                                        <h5>Tên nhân viên</h5>
                                     </div>
-                                    <div class="input-group px-2">
+                                    <div class="input-group p-2">
                                         <label class="title" for="">Chứa kí tự</label>
                                         <input type="search" name="name" class="form-control name-input"
                                             value="{{ request()->name }}" placeholder="Nhập thông tin..">
                                     </div>
                                 </div>
-                                <div class="d-flex justify-contents-center align-items-baseline px-2">
+                                <div class="d-flex justify-contents-center align-items-baseline p-2">
                                     <button type="submit" class="btn btn-primary btn-block mr-2">Xác Nhận</button>
                                     <button type="button" id="cancel-name"
-                                        class="btn btn-secondary btn-block">Hủy</button>
+                                        class="btn btn-default btn-block">Hủy</button>
                                 </div>
                             </div>
                             {{-- Tìm số điện thoại --}}
                             <div class="block-options" id="phonenumber-options" style="display:none">
                                 <div class="wrap w-100">
-                                    <div class="heading-title py-3 px-2">
-                                        <h5>Đơn vị:</h5>
+                                    <div class="heading-title title-wrap">
+                                        <h5>Đơn vị</h5>
                                     </div>
-                                    <div class="input-group px-2">
+                                    <div class="input-group p-2">
                                         <label class="title" for="">Chứa kí tự</label>
                                         <input type="number" name="phonenumber"
                                             class="form-control phonenumber-input"
                                             value="{{ request()->phonenumber }}" placeholder="Nhập thông tin..">
                                     </div>
                                 </div>
-                                <div class="d-flex justify-contents-center align-items-baseline px-2">
+                                <div class="d-flex justify-contents-center align-items-baseline p-2">
                                     <button type="submit" class="btn btn-primary btn-block mr-2">Xác Nhận</button>
                                     <button type="button" id="cancel-phonenumber"
-                                        class="btn btn-secondary btn-block">Hủy</button>
+                                        class="btn btn-default btn-block">Hủy</button>
                                 </div>
                             </div>
                             {{-- Tìm Email --}}
                             <div class="block-options" id="email-options" style="display:none">
                                 <div class="wrap w-100">
-                                    <div class="heading-title py-3 px-2">
-                                        <h5>Email:</h5>
+                                    <div class="heading-title title-wrap">
+                                        <h5>Email</h5>
                                     </div>
-                                    <div class="input-group px-2">
+                                    <div class="input-group p-2">
                                         <label class="title" for="">Chứa kí tự</label>
                                         <input type="search" name="email" class="form-control email-input"
                                             value="{{ request()->email }}" placeholder="Nhập thông tin..">
                                     </div>
                                 </div>
-                                <div class="d-flex justify-contents-center align-items-baseline px-2">
+                                <div class="d-flex justify-contents-center align-items-baseline p-2">
                                     <button type="submit" class="btn btn-primary btn-block mr-2">Xác Nhận</button>
                                     <button type="button" id="cancel-email"
-                                        class="btn btn-secondary btn-block">Hủy</button>
+                                        class="btn btn-default btn-block">Hủy</button>
                                 </div>
                             </div>
                             <div class="block-options" id="status-options" style="display:none">
                                 <div class="wrap w-100">
-                                    <div class="heading-title py-3 px-2">
-                                        <h5>Trạng thái:</h5>
+                                    <div class="heading-title title-wrap">
+                                        <h5>Trạng thái</h5>
                                     </div>
                                     <div
                                         class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
@@ -230,23 +237,28 @@ $index = array_search($item['label'], $numberedLabels);
                                         </li>
                                     </ul>
                                 </div>
-                                <div class="d-flex justify-contents-center align-items-baseline px-2">
+                                <div class="d-flex justify-contents-center align-items-baseline p-2">
                                     <button type="submit" class="btn btn-primary btn-block mr-2">Xác Nhận</button>
                                     <button type="button" id="cancel-status"
-                                        class="btn btn-secondary btn-block">Hủy</button>
+                                        class="btn btn-default btn-block">Hủy</button>
                                 </div>
                             </div>
                             <div class="block-options" id="role-options" style="display:none">
                                 <div class="wrap w-100">
-                                    <div class="heading-title py-3 px-2">
-                                        <h5>Vai trò:</h5>
+                                    <div class="heading-title title-wrap">
+                                        <h5>Vai trò</h5>
+                                    </div>
+                                    <div class="search-container px-2 mt-2">
+                                        <input type="text" placeholder="Tìm kiếm" id="myInput-roles"
+                                            class="pr-4 w-100 input-search" onkeyup="filterRoles()">
+                                        <span class="search-icon"><i class="fas fa-search"></i></span>
                                     </div>
                                     <div
                                         class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
                                         <a class="cursor select-all-roles mr-auto">Chọn tất cả</a>
                                         <a class="cursor deselect-all-roles">Hủy chọn</a>
                                     </div>
-                                    <ul class="ks-cboxtags p-0 m-0 px-2">
+                                    <ul class="ks-cboxtags-roles p-0 m-0 px-2">
                                         @if (!empty($allRoles))
                                             @foreach ($allRoles as $role)
                                                 <li>
@@ -258,11 +270,11 @@ $index = array_search($item['label'], $numberedLabels);
                                             @endforeach
                                         @endif
                                     </ul>
-                                    <div class="d-flex justify-contents-center align-items-baseline px-2">
+                                    <div class="d-flex justify-contents-center align-items-baseline p-2">
                                         <button type="submit" class="btn btn-primary btn-block mr-2">Xác
                                             Nhận</button>
                                         <button type="button" id="cancel-roles"
-                                            class="btn btn-secondary btn-block">Hủy</button>
+                                            class="btn btn-default btn-block">Hủy</button>
                                     </div>
                                 </div>
                             </div>
@@ -338,7 +350,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             </span>
                                         </th>
                                         </form>
-                                        <th>Action</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -375,6 +387,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                         enctype="multipart/form">
                                                         @csrf
                                                         <button type="submit" class="btn btn-info btn-sm">
+                                                    <i class="fas fa-pencil-alt"></i>
                                                             Edit</button>
                                                         <input type="hidden" name="id"
                                                             value="{{ $value->id }}" />
@@ -384,7 +397,8 @@ $index = array_search($item['label'], $numberedLabels);
                                                     action="{{ route('admin.delete') }}" method="get"
                                                     enctype="multipart/form">
                                                     @csrf
-                                                    <button type="submit" class="btn btn-danger btn-sm">
+                                                    <button type="submit" class="btn btn-danger ml-1 btn-sm">
+                                                        <i class="fa-solid fa-trash"></i>
                                                         Delete</button>
                                                     <input type="hidden" name="id"
                                                         value="{{ $value->id }}" />
@@ -582,6 +596,36 @@ $index = array_search($item['label'], $numberedLabels);
 
     function updateDeleteItemValue(label) {
         document.getElementById('delete-item-input').value = label;
+    }
+
+    //Xử lí tìm kiếm bộ lọc tổng
+    function filterFunction() {
+        var input = $("#myInput");
+        var filter = input.val().toUpperCase();
+        var buttons = $("#dropdown-menu button");
+
+        buttons.each(function() {
+            var text = $(this).text();
+            if (text.toUpperCase().indexOf(filter) > -1) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    }
+    function filterRoles() {
+        var input = $("#myInput-roles");
+        var filter = input.val().toUpperCase();
+        var buttons = $(".ks-cboxtags-roles li");
+
+        buttons.each(function() {
+            var text = $(this).text();
+            if (text.toUpperCase().indexOf(filter) > -1) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
     }
 </script>
 </body>

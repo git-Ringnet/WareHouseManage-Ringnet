@@ -71,7 +71,7 @@
                                     </span>
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <button class="dropdown-item" id="btn-status">Status</button>
+                                    <button class="dropdown-item" id="btn-status">Trạng thái</button>
                                     <button class="dropdown-item" id="btn-category">Category</button>
                                     <button class="dropdown-item" id="btn-quantity">Số lượng</button>
                                 </div>
@@ -93,8 +93,8 @@
                     ?>
                             <div class="block-options" id="status-options" style="display:none">
                                 <div class="wrap w-100">
-                                    <div class="heading-title py-3 px-2">
-                                        <h5>Trạng thái:</h5>
+                                    <div class="heading-title title-wrap">
+                                        <h5>Trạng thái</h5>
                                     </div>
                                     <div
                                         class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
@@ -114,16 +114,16 @@
                                         </li>
                                     </ul>
                                 </div>
-                                <div class="d-flex justify-contents-center align-items-baseline px-2">
+                                <div class="d-flex justify-contents-center align-items-baseline p-2">
                                     <button type="submit" class="btn btn-primary btn-block mr-2">Xác Nhận</button>
                                     <button type="button" id="cancel-status"
-                                        class="btn btn-secondary btn-block">Hủy</button>
+                                        class="btn btn-default btn-block">Hủy</button>
                                 </div>
                             </div>
                             <div class="block-options" id="category-options" style="display:none">
                                 <div class="wrap w-100">
-                                    <div class="heading-title py-3 px-2">
-                                        <h5>Vai trò:</h5>
+                                    <div class="heading-title title-wrap">
+                                        <h5>Vai trò</h5>
                                     </div>
                                     <div
                                         class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
@@ -142,19 +142,19 @@
                                         @endforeach
                                         @endif
                                     </ul>
-                                    <div class="d-flex justify-contents-center align-items-baseline px-2">
+                                    <div class="d-flex justify-contents-center align-items-baseline p-2">
                                         <button type="submit" class="btn btn-primary btn-block mr-2">Xác Nhận</button>
                                         <button type="button" id="cancel-category"
-                                            class="btn btn-secondary btn-block">Hủy</button>
+                                            class="btn btn-default btn-block">Hủy</button>
                                     </div>
                                 </div>
                             </div>
                             <div class="block-options" id="quantity-options" style="display:none">
                                 <div class="wrap w-100">
-                                    <div class="heading-title py-3 px-2">
-                                        <h5>Tồn kho:</h5>
+                                    <div class="heading-title title-wrap">
+                                        <h5>Tồn kho</h5>
                                     </div>
-                                    <div class="input-group pt-2 justify-content-around">
+                                    <div class="input-group p-2 justify-content-around">
                                         <select class="comparison_operator" name="comparison_operator" style="width: 40%">
                                           <option value=">=">>=</option>
                                           <option value="<="><=</option>
@@ -162,10 +162,10 @@
                                         <input class="w-50 quantity-input" type="number" name="quantity" placeholder="Số lượng">
                                       </div>
                                 </div>
-                                <div class="d-flex justify-contents-center align-items-baseline px-2">
+                                <div class="d-flex justify-contents-center align-items-baseline p-2">
                                     <button type="submit" class="btn btn-primary btn-block mr-2">Xác Nhận</button>
                                     <button type="button" id="cancel-quantity"
-                                        class="btn btn-secondary btn-block">Hủy</button>
+                                        class="btn btn-default btn-block">Hủy</button>
                                 </div>
                             </div>
                         </div>
@@ -197,7 +197,7 @@
                                         <th scope="col">Trị trung bình</th>
                                         <th scope="col">Trị tồn kho</th>
                                         <th scope="col">Trạng thái</th>
-                                        <th scope="col">Action</th>
+                                        <th scope="col"></th>
                                         <th scope=""></th>
                                     </tr>
                                 </thead>

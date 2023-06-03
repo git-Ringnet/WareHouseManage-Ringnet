@@ -23,7 +23,7 @@
                 <form class="w-100" action="" method="get" id='search-filter'>
                     <div class="row mr-0">
                         <div class="col-5">
-                            <input type="search" name="keywords" class="form-control" value="{{request()->keywords}}"
+                            <input type="text" name="keywords" class="form-control" value="{{request()->keywords}}"
                                 placeholder="Tìm kiếm đơn vị, đại diện hoặc email">
                                 <span class="search-icon"><i class="fas fa-search"></i></span>
                         </div>
@@ -126,13 +126,20 @@
                                         Thêm bộ lọc
                                     </span>
                                 </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <div class="dropdown-menu" id="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <div class="search-container px-2">
+                                        <input type="text" placeholder="Tìm kiếm" id="myInput"
+                                            onkeyup="filterFunction()">
+                                        <span class="search-icon"><i class="fas fa-search"></i></span>
+                                    </div>
+                                    <div class="scrollbar">
                                     <button class="dropdown-item" id="btn-name">Đơn vị</button>
                                     <button class="dropdown-item" id="btn-represent">Đại diện</button>
                                     <button class="dropdown-item" id="btn-phonenumber">Số điện thoại</button>
-                                    <button class="dropdown-item" id="btn-email">email</button>
-                                    <button class="dropdown-item" id="btn-status">Status</button>
+                                    <button class="dropdown-item" id="btn-email">Email</button>
+                                    <button class="dropdown-item" id="btn-status">Trạng thái</button>
                                 </div>
+                            </div>
                             </div>
                             <?php  $status = [];
                 if (isset(request()->status)) {
@@ -144,8 +151,8 @@
               ?>
                             <div class="block-options" id="status-options" style="display:none">
                                 <div class="wrap w-100">
-                                    <div class="heading-title py-3 px-2">
-                                        <h5>Trạng thái:</h5>
+                                    <div class="heading-title title-wrap">
+                                        <h5>Trạng thái</h5>
                                     </div>
                                     <div
                                         class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
@@ -165,82 +172,82 @@
                                         </li>
                                     </ul>
                                 </div>
-                                <div class="d-flex justify-contents-center align-items-baseline px-2">
+                                <div class="d-flex justify-contents-center align-items-baseline p-2">
                                     <button type="submit" class="btn btn-primary btn-block mr-2">Xác Nhận</button>
                                     <button type="button" id="cancel-status"
-                                        class="btn btn-secondary btn-block">Hủy</button>
+                                        class="btn btn-default btn-block">Hủy</button>
                                 </div>
                             </div>
                             {{-- Tìm đơn vị --}}
                             <div class="block-options" id="name-options" style="display:none">
                                 <div class="wrap w-100">
-                                    <div class="heading-title py-3 px-2">
-                                        <h5>Đơn vị:</h5>
+                                    <div class="heading-title title-wrap">
+                                        <h5>Đơn vị</h5>
                                     </div>
-                                    <div class="input-group px-2">
+                                    <div class="input-group p-2">
                                         <label class="title" for="">Chứa kí tự</label>
                                         <input type="search" name="name" class="form-control name-input"
                                             value="{{request()->name}}" placeholder="Nhập thông tin..">
                                     </div>
                                 </div>
-                                <div class="d-flex justify-contents-center align-items-baseline px-2">
+                                <div class="d-flex justify-contents-center align-items-baseline p-2">
                                     <button type="submit" class="btn btn-primary btn-block mr-2">Xác Nhận</button>
                                     <button type="button" id="cancel-name"
-                                        class="btn btn-secondary btn-block">Hủy</button>
+                                        class="btn btn-default btn-block">Hủy</button>
                                 </div>
                             </div>
                             {{-- Tìm đại diện --}}
                             <div class="block-options" id="represent-options" style="display:none">
                                 <div class="wrap w-100">
-                                    <div class="heading-title py-3 px-2">
-                                        <h5>Đại diện:</h5>
+                                    <div class="heading-title title-wrap">
+                                        <h5>Đại diện</h5>
                                     </div>
-                                    <div class="input-group px-2">
+                                    <div class="input-group p-2">
                                         <label class="title" for="">Chứa kí tự</label>
                                         <input type="search" name="represent" class="form-control represent-input"
                                             value="{{request()->represent}}" placeholder="Nhập thông tin..">
                                     </div>
                                 </div>
-                                <div class="d-flex justify-contents-center align-items-baseline px-2">
+                                <div class="d-flex justify-contents-center align-items-baseline p-2">
                                     <button type="submit" class="btn btn-primary btn-block mr-2">Xác Nhận</button>
                                     <button type="button" id="cancel-represent"
-                                        class="btn btn-secondary btn-block">Hủy</button>
+                                        class="btn btn-default btn-block">Hủy</button>
                                 </div>
                             </div>
                             {{-- Tìm số điện thoại --}}
                             <div class="block-options" id="phonenumber-options" style="display:none">
                                 <div class="wrap w-100">
-                                    <div class="heading-title py-3 px-2">
-                                        <h5>Số điện thoại:</h5>
+                                    <div class="heading-title title-wrap">
+                                        <h5>Số điện thoại</h5>
                                     </div>
-                                    <div class="input-group px-2">
+                                    <div class="input-group p-2">
                                         <label class="title" for="">Chứa kí tự</label>
                                         <input type="number" name="phonenumber" class="form-control phonenumber-input"
                                             value="{{request()->phonenumber}}" placeholder="Nhập thông tin..">
                                     </div>
                                 </div>
-                                <div class="d-flex justify-contents-center align-items-baseline px-2">
+                                <div class="d-flex justify-contents-center align-items-baseline p-2">
                                     <button type="submit" class="btn btn-primary btn-block mr-2">Xác Nhận</button>
                                     <button type="button" id="cancel-phonenumber"
-                                        class="btn btn-secondary btn-block">Hủy</button>
+                                        class="btn btn-default btn-block">Hủy</button>
                                 </div>
                             </div>
                             {{-- Tìm Email --}}
                             <div class="block-options" id="email-options" style="display:none">
                                 <div class="wrap w-100">
-                                    <div class="heading-title py-3 px-2">
-                                        <h5>Email:</h5>
+                                    <div class="heading-title title-wrap">
+                                        <h5>Email</h5>
                                     </div>
-                                    <div class="input-group px-2">
+                                    <div class="input-group p-2">
                                         <label class="title" for="">Chứa kí tự</label>
                                         <input type="search" name="email" class="form-control email-input"
                                             value="{{request()->email}}" placeholder="Nhập thông tin..">
                                     </div>
                                 </div>
-                                <div class="d-flex justify-contents-center align-items-baseline px-2">
+                                <div class="d-flex justify-contents-center align-items-baseline p-2">
                                     <button type="submit" class="btn btn-primary btn-block mr-2">Xác Nhận</button>
                                     <button type="button" id="cancel-email"
-                                        class="btn btn-secondary btn-block">Hủy</button>
+                                        class="btn btn-default btn-block">Hủy</button>
                                 </div>
                             </div>
                         </div>
@@ -309,7 +316,7 @@
                                                 <div class="icon" id="icon-provide_status"></div>
                                             </span>
                                         </th>
-                                        <th>Action</th>
+                                        <th></th>
                                     </tr>
                                     </form>
                                 </thead>
@@ -543,7 +550,22 @@ $(document).ready(function() {
 function updateDeleteItemValue(label) {
         document.getElementById('delete-item-input').value = label;
     }
+    function filterFunction() {
+        var input = $("#myInput");
+        var filter = input.val().toUpperCase();
+        var buttons = $("#dropdown-menu button");
+
+        buttons.each(function() {
+            var text = $(this).text();
+            if (text.toUpperCase().indexOf(filter) > -1) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    }
 </script>
+
 
 </body>
 

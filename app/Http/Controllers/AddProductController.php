@@ -213,7 +213,7 @@ class AddProductController extends Controller
                 $Seri->save();
             }
         }
-        return redirect()->route('insertProduct.index')->with('section', 'Tạo đơn nháp thành công');
+        return redirect()->route('insertProduct.index')->with('msg', 'Tạo đơn nháp thành công');
     }
 
     /**
@@ -249,7 +249,7 @@ class AddProductController extends Controller
             ->join('productorders', 'serinumbers.product_id', '=', 'productorders.id')
             ->whereIn('productorders.id', $productIds)->get();
 
-        $title = 'Chỉnh sửa đơn nhập hàng';
+        $title = 'Chi tiết đơn nhập hàng';
 
         return view('tables.order.edit', compact('provide', 'order', 'product_order', 'provide_order', 'lastId', 'products', 'seri', 'title'));
     }

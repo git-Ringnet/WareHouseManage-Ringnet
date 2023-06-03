@@ -150,7 +150,7 @@ $index = array_search($item['label'], $numberedLabels);
                                 </button>
                                 <div class="dropdown-menu" id="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                     <div class="search-container px-2">
-                                        <input type="text" placeholder="Tìm thuộc tính lọc" id="myInput"
+                                        <input type="text" placeholder="Tìm kiếm" id="myInput"
                                             onkeyup="filterFunction()">
                                         <span class="search-icon"><i class="fas fa-search"></i></span>
                                     </div>
@@ -190,47 +190,47 @@ $index = array_search($item['label'], $numberedLabels);
                             {{-- Tìm mã đơn hàng --}}
                             <div class="block-options" id="id-options" style="display:none">
                                 <div class="wrap w-100">
-                                    <div class="heading-title py-3 px-2">
-                                        <h5>Mã đơn hàng:</h5>
+                                    <div class="heading-title title-wrap">
+                                        <h5>Mã đơn hàng</h5>
                                     </div>
-                                    <div class="input-group px-2">
+                                    <div class="input-group p-2">
                                         <label class="title" for="">Chứa kí tự</label>
                                         <input type="search" name="id" class="form-control id-input"
                                             value="{{ request()->id }}" placeholder="Nhập thông tin..">
                                     </div>
                                 </div>
-                                <div class="d-flex justify-contents-center align-items-baseline px-2">
+                                <div class="d-flex justify-contents-center align-items-baseline p-2">
                                     <button type="submit" class="btn btn-primary btn-block mr-2">Xác Nhận</button>
                                     <button type="button" id="cancel-id"
-                                        class="btn btn-secondary btn-block">Hủy</button>
+                                        class="btn btn-default btn-block">Hủy</button>
                                 </div>
                             </div>
                             {{-- Tìm khách hàng --}}
                             <div class="block-options" id="guest-options" style="display:none">
                                 <div class="wrap w-100">
-                                    <div class="heading-title py-3 px-2">
-                                        <h5>Khách hàng:</h5>
+                                    <div class="heading-title title-wrap">
+                                        <h5>Khách hàng</h5>
                                     </div>
-                                    <div class="input-group px-2">
+                                    <div class="input-group p-2">
                                         <label class="title" for="">Chứa kí tự</label>
                                         <input type="search" name="guest" class="form-control guest-input"
                                             value="{{ request()->guest }}" placeholder="Nhập thông tin..">
                                     </div>
                                 </div>
-                                <div class="d-flex justify-contents-center align-items-baseline px-2">
+                                <div class="d-flex justify-contents-center align-items-baseline p-2">
                                     <button type="submit" class="btn btn-primary btn-block mr-2">Xác Nhận</button>
                                     <button type="button" id="cancel-guest"
-                                        class="btn btn-secondary btn-block">Hủy</button>
+                                        class="btn btn-default btn-block">Hủy</button>
                                 </div>
                             </div>
                             {{-- Status --}}
                             <div class="block-options" id="status-options" style="display:none">
                                 <div class="wrap w-100">
-                                    <div class="heading-title py-3 px-2">
-                                        <h5>Trạng thái:</h5>
+                                    <div class="heading-title title-wrap">
+                                        <h5>Trạng thái</h5>
                                     </div>
-                                    <div class="search-container px-2 mt-1">
-                                        <input type="text" placeholder="Tìm thuộc tính lọc" id="myInput-status"
+                                    <div class="search-container px-2 mt-2">
+                                        <input type="text" placeholder="Tìm kiếm" id="myInput-status"
                                             class="input-search w-100 pr-4" onkeyup="filterStatus()">
                                         <span class="search-icon"><i class="fas fa-search"></i></span>
                                     </div>
@@ -260,24 +260,29 @@ $index = array_search($item['label'], $numberedLabels);
                                         </li>
                                     </ul>
                                 </div>
-                                <div class="d-flex justify-contents-center align-items-baseline px-2">
+                                <div class="d-flex justify-contents-center align-items-baseline p-2">
                                     <button type="submit" class="btn btn-primary btn-block mr-2">Xác Nhận</button>
                                     <button type="button" id="cancel-status"
-                                        class="btn btn-secondary btn-block">Hủy</button>
+                                        class="btn btn-default btn-block">Hủy</button>
                                 </div>
                             </div>
                             {{-- Creator --}}
                             <div class="block-options" id="creator-options" style="display:none">
                                 <div class="wrap w-100">
-                                    <div class="heading-title py-3 px-2">
-                                        <h5>Người tạo:</h5>
+                                    <div class="heading-title title-wrap">
+                                        <h5>Người tạo</h5>
+                                    </div>
+                                    <div class="search-container px-2 mt-2">
+                                        <input type="text" placeholder="Tìm kiếm" id="myInput-creator"
+                                            class="pr-4 w-100 input-search" onkeyup="filterCreator()">
+                                        <span class="search-icon"><i class="fas fa-search"></i></span>
                                     </div>
                                     <div
                                         class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
                                         <a class="cursor select-all-creator mr-auto">Chọn tất cả</a>
                                         <a class="cursor deselect-all-creator">Hủy chọn</a>
                                     </div>
-                                    <ul class="ks-cboxtags-name p-0 m-0 px-2">
+                                    <ul class="ks-cboxtags-creator p-0 m-0 px-2">
                                         @if (!empty($exports))
                                             @php
                                                 $seenValues = [];
@@ -298,21 +303,21 @@ $index = array_search($item['label'], $numberedLabels);
                                             @endforeach
                                         @endif
                                     </ul>
-                                    <div class="d-flex justify-contents-center align-items-baseline px-2">
+                                    <div class="d-flex justify-contents-center align-items-baseline p-2">
                                         <button type="submit" class="btn btn-primary btn-block mr-2">Xác
                                             Nhận</button>
                                         <button type="button" id="cancel-creator"
-                                            class="btn btn-secondary btn-block">Hủy</button>
+                                            class="btn btn-default btn-block">Hủy</button>
                                     </div>
                                 </div>
                             </div>
                             {{-- Tổng tiền --}}
                             <div class="block-options" id="sum-options" style="display:none">
                                 <div class="wrap w-100">
-                                    <div class="heading-title py-3 px-2">
-                                        <h5>Tổng tiền:</h5>
+                                    <div class="heading-title title-wrap">
+                                        <h5>Tổng tiền</h5>
                                     </div>
-                                    <div class="input-group pt-2 justify-content-around">
+                                    <div class="input-group p-2 justify-content-around">
                                         <select class="comparison_operator" name="comparison_operator"
                                             style="width: 40%">
                                             <option value=">="
@@ -326,19 +331,19 @@ $index = array_search($item['label'], $numberedLabels);
                                             value="{{ request()->sum }}" placeholder="Số lượng">
                                     </div>
                                 </div>
-                                <div class="d-flex justify-contents-center align-items-baseline px-2">
+                                <div class="d-flex justify-contents-center align-items-baseline p-2">
                                     <button type="submit" class="btn btn-primary btn-block mr-2">Xác Nhận</button>
                                     <button type="button" id="cancel-sum"
-                                        class="btn btn-secondary btn-block">Hủy</button>
+                                        class="btn btn-default btn-block">Hủy</button>
                                 </div>
                             </div>
                             {{-- Chỉnh sửa cuối --}}
                             <div class="block-options" id="update_at-options" style="display:none">
                                 <div class="wrap w-100">
-                                    <div class="heading-title py-3 px-2">
-                                        <h5>Chỉnh sửa cuối:</h5>
+                                    <div class="heading-title title-wrap">
+                                        <h5>Chỉnh sửa cuối</h5>
                                     </div>
-                                    <div class="input-group pt-2 justify-content-around">
+                                    <div class="input-group p-2 justify-content-around">
                                         <label for="start">Từ ngày:</label>
                                         <input type="date" id="start" name="trip_start"
                                             value="{{ request()->trip_start }}" min="2018-01-01" max="2050-12-31">
@@ -347,10 +352,10 @@ $index = array_search($item['label'], $numberedLabels);
                                             value="{{ request()->trip_end }}" min="2018-01-01" max="2050-12-31">
                                     </div>
                                 </div>
-                                <div class="d-flex justify-contents-center align-items-baseline px-2">
+                                <div class="d-flex justify-contents-center align-items-baseline p-2">
                                     <button type="submit" class="btn btn-primary btn-block mr-2">Xác Nhận</button>
                                     <button type="button" id="cancel-update_at"
-                                        class="btn btn-secondary btn-block">Hủy</button>
+                                        class="btn btn-default btn-block">Hủy</button>
                                 </div>
                             </div>
                         </div>
@@ -441,6 +446,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 @endif
                                             </td>
                                             <td>
+                                                @if (Auth::user()->name == $value->name || Auth::user()->can('isAdmin'))
                                                 <a href="{{ route('exports.edit', $value->id) }}">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="32"
                                                         height="32" viewBox="0 0 32 32" fill="none">
@@ -449,6 +455,41 @@ $index = array_search($item['label'], $numberedLabels);
                                                             fill="#555555"></path>
                                                     </svg>
                                                 </a>
+                                                @else
+                                                <a href="{{ route('exports.edit', $value->id) }}">
+                                                    <svg width="32" height="32" viewBox="0 0 32 32"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path
+                                                        d="M18.6775 10.6226V5.91937C18.6775 5.50358 18.5123 5.10482 18.2183 4.81081C17.9243 4.5168 17.5255 4.35162 17.1097 4.35162H6.91937C6.50358 4.35162 6.10482 4.5168 5.81081 4.81081C5.5168 5.10482 5.35162 5.50358 5.35162 5.91937V16.8936C5.35162 17.3094 5.5168 17.7082 5.81081 18.0022C6.10482 18.2962 6.50358 18.4614 6.91937 18.4614H10.8387"
+                                                        stroke="#555555" stroke-width="1.5"
+                                                        stroke-linecap="round" stroke-linejoin="round" />
+                                                    <path d="M10.2509 13.7581H10.8388" stroke="#555555"
+                                                        stroke-width="1.5" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                    <path d="M10.2509 10.6226H13.1904" stroke="#555555"
+                                                        stroke-width="1.5" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                    <path d="M10.2509 7.58511H15.542" stroke="#555555"
+                                                        stroke-width="1.5" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                    <path
+                                                        d="M8.29115 8.11423C8.40743 8.11423 8.52109 8.07975 8.61778 8.01515C8.71446 7.95055 8.78981 7.85873 8.83431 7.7513C8.8788 7.64388 8.89045 7.52567 8.86776 7.41163C8.84508 7.29758 8.78909 7.19283 8.70687 7.11061C8.62465 7.02839 8.51989 6.9724 8.40585 6.94971C8.29181 6.92703 8.1736 6.93867 8.06617 6.98317C7.95875 7.02766 7.86693 7.10302 7.80233 7.1997C7.73773 7.29638 7.70325 7.41004 7.70325 7.52632C7.70325 7.68224 7.76519 7.83178 7.87544 7.94203C7.98569 8.05229 8.13523 8.11423 8.29115 8.11423Z"
+                                                        fill="#555555" />
+                                                    <path
+                                                        d="M8.29115 11.2497C8.40743 11.2497 8.52109 11.2152 8.61778 11.1506C8.71446 11.086 8.78981 10.9942 8.83431 10.8868C8.8788 10.7794 8.89045 10.6612 8.86776 10.5471C8.84508 10.4331 8.78909 10.3283 8.70687 10.2461C8.62465 10.1639 8.51989 10.1079 8.40585 10.0852C8.29181 10.0625 8.1736 10.0742 8.06617 10.1187C7.95875 10.1632 7.86693 10.2385 7.80233 10.3352C7.73773 10.4319 7.70325 10.5455 7.70325 10.6618C7.70325 10.8177 7.76519 10.9673 7.87544 11.0775C7.98569 11.1878 8.13523 11.2497 8.29115 11.2497Z"
+                                                        fill="#555555" />
+                                                    <path
+                                                        d="M8.29115 14.3069C8.40743 14.3069 8.52109 14.2724 8.61778 14.2078C8.71446 14.1432 8.78981 14.0514 8.83431 13.9439C8.8788 13.8365 8.89045 13.7183 8.86776 13.6043C8.84508 13.4902 8.78909 13.3855 8.70687 13.3032C8.62465 13.221 8.51989 13.165 8.40585 13.1423C8.29181 13.1197 8.1736 13.1313 8.06617 13.1758C7.95875 13.2203 7.86693 13.2956 7.80233 13.3923C7.73773 13.489 7.70325 13.6027 7.70325 13.7189C7.70325 13.8749 7.76519 14.0244 7.87544 14.1347C7.98569 14.2449 8.13523 14.3069 8.29115 14.3069Z"
+                                                        fill="#555555" />
+                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                        d="M18.2246 13.1819C16.996 11.9533 15.004 11.9533 13.7754 13.1819C12.5468 14.4105 12.5468 16.4025 13.7754 17.6311C15.004 18.8597 16.996 18.8597 18.2246 17.6311C19.4532 16.4025 19.4532 14.4105 18.2246 13.1819ZM18.8284 12.5781C17.2663 11.016 14.7337 11.016 13.1716 12.5781C11.6095 14.1402 11.6095 16.6728 13.1716 18.2349C14.7337 19.797 17.2663 19.797 18.8284 18.2349C20.3905 16.6728 20.3905 14.1402 18.8284 12.5781Z"
+                                                        fill="#555555" />
+                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                        d="M18.1376 18.1376C18.321 17.9541 18.6184 17.9541 18.8019 18.1376L20.8624 20.1981C21.0459 20.3816 21.0459 20.679 20.8624 20.8624C20.679 21.0459 20.3816 21.0459 20.1981 20.8624L18.1376 18.8019C17.9541 18.6184 17.9541 18.321 18.1376 18.1376Z"
+                                                        fill="#555555" />
+                                                </svg>
+                                                </a>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach
@@ -604,6 +645,20 @@ $index = array_search($item['label'], $numberedLabels);
         var input = $("#myInput-status");
         var filter = input.val().toUpperCase();
         var buttons = $(".ks-cboxtags-status li");
+
+        buttons.each(function() {
+            var text = $(this).text();
+            if (text.toUpperCase().indexOf(filter) > -1) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    }
+    function filterCreator() {
+        var input = $("#myInput-creator");
+        var filter = input.val().toUpperCase();
+        var buttons = $(".ks-cboxtags-creator li");
 
         buttons.each(function() {
             var text = $(this).text();
