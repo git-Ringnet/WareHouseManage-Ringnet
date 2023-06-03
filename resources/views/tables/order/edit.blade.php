@@ -112,6 +112,7 @@
           </div>
         </div><!-- /.container-fluid -->
       </section>
+      <div class="container-fluid">
       <section id="infor_provide" class="bg-white">
         <div class="border-bottom p-3 d-flex justify-content-between">
           <b>Thông tin nhà cung cấp</b>
@@ -160,6 +161,8 @@
           </div>
         </div>
       </section>
+      </div>
+     
       <!-- Main content -->
       <section class="content">
         <div style="overflow-x: scroll;" class="container-fluid">
@@ -194,7 +197,7 @@
                 <td> <input required type="number" name="product_price[]" value="{{$pro->product_price}}"> </td>
                 <td> <input required type="number" name="product_tax[]" value="{{$pro->product_tax}}" class="product_tax"></td>
                 <td> <input readonly type="text" name="product_total[]" value="{{$pro->product_total}}"></td>
-                <td> <input required type="text" name="product_trademark[]" value=" {{$pro->product_trademark}}"> </td>
+                <td> <input type="text" name="product_trademark[]" value=" {{$pro->product_trademark}}"> </td>
                 <td>
                   <button class="exampleModal" name="btn_add_SN[]" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal{{$stt}}" style="background: transparent; border:none;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
@@ -581,7 +584,7 @@
       '<td><input required type="number" name="product_price[]"></td>' +
       '<td><input required type="number" name="product_tax[]" class="product_tax"></td>' +
       '<td><input readonly type="text" name="product_total[]"></td>' +
-      '<td><input required type="text" name="product_trademark[]"></td>' +
+      '<td><input type="text" name="product_trademark[]"></td>' +
       '<td>' +
       '<button class="exampleModal" name="btn_add_SN[]" type="button" data-toggle="modal" data-target="#exampleModal' +
       rowCount + '" style="background:transparent; border:none;">' +
@@ -697,7 +700,7 @@
       for (let i = 0; i < list_search.length; i++) {
         list_search[i].addEventListener('click', function() {
           var div_show = document.querySelectorAll('.dropdown-values');
-          div_show[i].classList.add("show");
+          div_show[i].classList.add("show1");
         });
       }
     }
@@ -753,7 +756,7 @@
             var op = '<li onclick="setValueOfInput(this)">' + item.product_name + '</li>';
             childSelect.append(op);
           });
-          childSelect.addClass("show");
+          childSelect.addClass("show1");
         }
       });
     }
@@ -762,7 +765,7 @@
   // Ẩn danh sách sản phẩm con khi click ra ngoài
   $(document).click(function(event) {
     if (!$(event.target).closest(".search_product").length) {
-      $(".dropdown-values").removeClass("show");
+      $(".dropdown-values").removeClass("show1");
     }
   });
 
@@ -784,7 +787,7 @@
     var row = $(e).closest('tr');
     var productNameInput = row.find('input[name="product_name[]"]');
     productNameInput.val(selectedProductName);
-    $(".dropdown-values").removeClass("show");
+    $(".dropdown-values").removeClass("show1");
   }
 
   var addSNBtns = $('.AddSN');

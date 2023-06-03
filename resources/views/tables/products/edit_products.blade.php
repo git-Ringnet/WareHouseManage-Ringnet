@@ -75,11 +75,11 @@
                                             <input type="text" name="products_code"
                                                 value="{{ $products->products_code }}" class="form-control mb-4">
                                         </div>
-                                        <div class="product_id">
+                                        <!-- <div class="product_id">
                                             <div class="title-edit-item">ID</div>
                                             <input type="text" name="products_id" value="{{ $products->id }}"
                                                 readonly style="background: #D6D6D6;" class="form-control mb-4">
-                                        </div>
+                                        </div> -->
                                     </div>
                                     <div class="col-md-3">
                                         <div class="product_category">
@@ -91,11 +91,11 @@
                                             <input type="text" name="products_trademark"
                                                 value="{{ $products->products_trademark }}" class="form-control mb-4">
                                         </div>
-                                        <div class="product_unit">
+                                        <!-- <div class="product_unit">
                                             <div class="title-edit-item">Đơn vị</div>
                                             <input type="text" name="products_unit"
                                                 value="{{ $products->products_unit }}" class="form-control mb-4">
-                                        </div>
+                                        </div> -->
                                     </div>
                                     <div class="col-md-6">
                                         <div class="title-edit-item">Mô tả</div>
