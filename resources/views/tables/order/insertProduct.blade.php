@@ -1,91 +1,109 @@
 <x-navbar :title="$title"></x-navbar>
 <!-- Content Wrapper. Contains page content -->
-<div id="order_products">
-    <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
-        @if (Session::has('section'))
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    @if (Session::has('section'))
         {{ Session::get('section') }}
-        @endif
-
-        <section class="content-header">
-            <div class="d-flex items_action">
-                <a href="{{ route('insertProduct.create') }}">
-                    <button type="button" class="btn btn-primary d-flex align-items-center">
-                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M6 0C6.38791 -1.97352e-08 6.70237 0.314463 6.70237 0.702373L6.70237 11.2976C6.70237 11.6855 6.38791 12 6 12C5.61209 12 5.29763 11.6855 5.29763 11.2976V0.702373C5.29763 0.314463 5.61209 -1.97352e-08 6 0Z" fill="white" />
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M12 6C12 6.38791 11.6855 6.70237 11.2976 6.70237H0.702373C0.314463 6.70237 -1.38146e-07 6.38791 0 6C-5.13115e-07 5.61209 0.314463 5.29763 0.702373 5.29763H11.2976C11.6855 5.29763 12 5.61209 12 6Z" fill="white" />
-                        </svg>
-                        <span class="ml-2">Tạo đơn</span>
-                    </button>
-                </a>
-                <button type="button" onclick="exportToExcel()" class="btn bg-transparent border-primary d-flex align-items-center ml-4">
-                    <svg width="14" height="18" viewBox="0 0 14 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M10.0003 5.80078H11.5001C11.8979 5.80078 12.2794 5.95881 12.5607 6.24009C12.842 6.52137 13 6.90285 13 7.30063V15.1008C13 15.4986 12.842 15.8801 12.5607 16.1614C12.2794 16.4426 11.8979 16.6007 11.5001 16.6007H2.49986C2.10207 16.6007 1.72058 16.4426 1.4393 16.1614C1.15802 15.8801 1 15.4986 1 15.1008V7.30063C1 6.90285 1.15802 6.52137 1.4393 6.24009C1.72058 5.95881 2.10207 5.80078 2.49986 5.80078H3.99972" stroke="#0095F6" stroke-linecap="round" stroke-linejoin="round" />
-                        <path d="M3.99976 9.39941L6.99948 12.3991L10.0003 9.39941" stroke="#0095F6" stroke-linecap="round" stroke-linejoin="round" />
-                        <path d="M7.00055 1V11.7999" stroke="#0095F6" stroke-linecap="round" stroke-linejoin="round" />
+    @endif
+    <section class="content-header">
+        <div class="d-flex mb-1">
+            <a href="{{ route('insertProduct.create') }}">
+                <button type="button" class="btn btn-primary d-flex align-items-center">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M6 0C6.38791 -1.97352e-08 6.70237 0.314463 6.70237 0.702373L6.70237 11.2976C6.70237 11.6855 6.38791 12 6 12C5.61209 12 5.29763 11.6855 5.29763 11.2976V0.702373C5.29763 0.314463 5.61209 -1.97352e-08 6 0Z"
+                            fill="white" />
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M12 6C12 6.38791 11.6855 6.70237 11.2976 6.70237H0.702373C0.314463 6.70237 -1.38146e-07 6.38791 0 6C-5.13115e-07 5.61209 0.314463 5.29763 0.702373 5.29763H11.2976C11.6855 5.29763 12 5.61209 12 6Z"
+                            fill="white" />
                     </svg>
-                    <span class="ml-2">Xuất excel</span>
+                    <span class="ml-2">Tạo đơn</span>
                 </button>
-            </div>
-            <div class="row m-auto filter">
-                <form class="w-100" action="" method="get" id='search-filter'>
-                    <div class="row mr-0">
-                        <div class="col-5">
-                            <input type="text" placeholder="Tìm kiếm theo mã sản phẩm, nhà cung cấp hoặc tên người tạo" name="keywords" class="pr-4 form-control input-search w-100" value="{{ request()->keywords }}">
-                            <span class="search-icon"><i class="fas fa-search"></i></span>
-                        </div>
-                        <div class="col-2 d-none">
-                            <button type="submit" class="btn btn-primary btn-block">Tìm kiếm</button>
-                        </div>
-                        <a class="btn ml-auto btn-delete-filter" href="{{ route('insertProduct.index') }}"><span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M6 5.4643C6 5.34116 6.04863 5.22306 6.13518 5.13599C6.22174 5.04892 6.33913 5 6.46154 5H17.5385C17.6609 5 17.7783 5.04892 17.8648 5.13599C17.9514 5.22306 18 5.34116 18 5.4643V7.32149C18 7.43599 17.9579 7.54645 17.8818 7.63164L13.8462 12.1428V16.6075C13.8461 16.7049 13.8156 16.7998 13.7589 16.8788C13.7022 16.9578 13.6223 17.0168 13.5305 17.0476L10.7612 17.9762C10.6919 17.9994 10.618 18.0058 10.5458 17.9947C10.4735 17.9836 10.4049 17.9554 10.3456 17.9124C10.2863 17.8695 10.238 17.8129 10.2047 17.7475C10.1713 17.682 10.1539 17.6096 10.1538 17.5361V12.1428L6.11815 7.63164C6.0421 7.54645 6.00002 7.43599 6 7.32149V5.4643Z" fill="#555555" />
-                                </svg>
-                            </span>Tắt bộ lọc</a>
+            </a>
+            <button style="margin-left:24px" type="button" onclick="exportToExcel()"
+                class="btn bg-transparent border-primary d-flex align-items-center">
+                <svg width="14" height="18" viewBox="0 0 14 18" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M10.0003 5.80078H11.5001C11.8979 5.80078 12.2794 5.95881 12.5607 6.24009C12.842 6.52137 13 6.90285 13 7.30063V15.1008C13 15.4986 12.842 15.8801 12.5607 16.1614C12.2794 16.4426 11.8979 16.6007 11.5001 16.6007H2.49986C2.10207 16.6007 1.72058 16.4426 1.4393 16.1614C1.15802 15.8801 1 15.4986 1 15.1008V7.30063C1 6.90285 1.15802 6.52137 1.4393 6.24009C1.72058 5.95881 2.10207 5.80078 2.49986 5.80078H3.99972"
+                        stroke="#0095F6" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M3.99976 9.39941L6.99948 12.3991L10.0003 9.39941" stroke="#0095F6" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <path d="M7.00055 1V11.7999" stroke="#0095F6" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <span class="ml-2">Xuất excel</span>
+            </button>
+        </div>
+        <div class="row m-auto filter pt-2">
+            <form class="w-100" action="" method="get" id='search-filter'>
+                <div class="row mr-0">
+                    <div class="col-5">
+                        <input type="text" placeholder="Tìm kiếm theo mã sản phẩm, nhà cung cấp hoặc tên người tạo"
+                            name="keywords" class="pr-4 form-control input-search w-100"
+                            value="{{ request()->keywords }}">
+                        <span class="search-icon"><i class="fas fa-search"></i></span>
                     </div>
-                    <div class="row d-flex justify-contents-center align-items-center mr-auto row-filter">
-                        <div class="icon-filter mr-3 ml-1">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M8.66667 18C8.66667 17.7348 8.75446 17.4804 8.91074 17.2929C9.06702 17.1054 9.27899 17 9.5 17H14.5C14.721 17 14.933 17.1054 15.0893 17.2929C15.2455 17.4804 15.3333 17.7348 15.3333 18C15.3333 18.2652 15.2455 18.5196 15.0893 18.7071C14.933 18.8946 14.721 19 14.5 19H9.5C9.27899 19 9.06702 18.8946 8.91074 18.7071C8.75446 18.5196 8.66667 18.2652 8.66667 18ZM5.33333 12C5.33333 11.7348 5.42113 11.4804 5.57741 11.2929C5.73369 11.1054 5.94565 11 6.16667 11H17.8333C18.0543 11 18.2663 11.1054 18.4226 11.2929C18.5789 11.4804 18.6667 11.7348 18.6667 12C18.6667 12.2652 18.5789 12.5196 18.4226 12.7071C18.2663 12.8946 18.0543 13 17.8333 13H6.16667C5.94565 13 5.73369 12.8946 5.57741 12.7071C5.42113 12.5196 5.33333 12.2652 5.33333 12ZM2 6C2 5.73478 2.0878 5.48043 2.24408 5.29289C2.40036 5.10536 2.61232 5 2.83333 5H21.1667C21.3877 5 21.5996 5.10536 21.7559 5.29289C21.9122 5.48043 22 5.73478 22 6C22 6.26522 21.9122 6.51957 21.7559 6.70711C21.5996 6.89464 21.3877 7 21.1667 7H2.83333C2.61232 7 2.40036 6.89464 2.24408 6.70711C2.0878 6.51957 2 6.26522 2 6Z" fill="#555555" />
+                    <div class="col-2 d-none">
+                        <button type="submit" class="btn btn-primary btn-block">Tìm kiếm</button>
+                    </div>
+                    <a class="btn ml-auto btn-delete-filter" href="{{ route('insertProduct.index') }}"><span><svg
+                                width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M6 5.4643C6 5.34116 6.04863 5.22306 6.13518 5.13599C6.22174 5.04892 6.33913 5 6.46154 5H17.5385C17.6609 5 17.7783 5.04892 17.8648 5.13599C17.9514 5.22306 18 5.34116 18 5.4643V7.32149C18 7.43599 17.9579 7.54645 17.8818 7.63164L13.8462 12.1428V16.6075C13.8461 16.7049 13.8156 16.7998 13.7589 16.8788C13.7022 16.9578 13.6223 17.0168 13.5305 17.0476L10.7612 17.9762C10.6919 17.9994 10.618 18.0058 10.5458 17.9947C10.4735 17.9836 10.4049 17.9554 10.3456 17.9124C10.2863 17.8695 10.238 17.8129 10.2047 17.7475C10.1713 17.682 10.1539 17.6096 10.1538 17.5361V12.1428L6.11815 7.63164C6.0421 7.54645 6.00002 7.43599 6 7.32149V5.4643Z"
+                                    fill="#555555" />
                             </svg>
-                        </div>
-                        <?php
-                        session_start();
-
-                        $fullUrl = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-                        if ($fullUrl === route('insertProduct.index')) {
-                            // Xử lý khi route hiện tại bằng route('data.index')
-                            unset($_SESSION['labels']); // Xóa session
+                        </span>Tắt bộ lọc</a>
+                </div>
+                <div class="row d-flex justify-contents-center align-items-center mr-auto row-filter my-3">
+                    <div class="icon-filter mr-3 ml-1">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M8.66667 18C8.66667 17.7348 8.75446 17.4804 8.91074 17.2929C9.06702 17.1054 9.27899 17 9.5 17H14.5C14.721 17 14.933 17.1054 15.0893 17.2929C15.2455 17.4804 15.3333 17.7348 15.3333 18C15.3333 18.2652 15.2455 18.5196 15.0893 18.7071C14.933 18.8946 14.721 19 14.5 19H9.5C9.27899 19 9.06702 18.8946 8.91074 18.7071C8.75446 18.5196 8.66667 18.2652 8.66667 18ZM5.33333 12C5.33333 11.7348 5.42113 11.4804 5.57741 11.2929C5.73369 11.1054 5.94565 11 6.16667 11H17.8333C18.0543 11 18.2663 11.1054 18.4226 11.2929C18.5789 11.4804 18.6667 11.7348 18.6667 12C18.6667 12.2652 18.5789 12.5196 18.4226 12.7071C18.2663 12.8946 18.0543 13 17.8333 13H6.16667C5.94565 13 5.73369 12.8946 5.57741 12.7071C5.42113 12.5196 5.33333 12.2652 5.33333 12ZM2 6C2 5.73478 2.0878 5.48043 2.24408 5.29289C2.40036 5.10536 2.61232 5 2.83333 5H21.1667C21.3877 5 21.5996 5.10536 21.7559 5.29289C21.9122 5.48043 22 5.73478 22 6C22 6.26522 21.9122 6.51957 21.7559 6.70711C21.5996 6.89464 21.3877 7 21.1667 7H2.83333C2.61232 7 2.40036 6.89464 2.24408 6.70711C2.0878 6.51957 2 6.26522 2 6Z"
+                                fill="#555555" />
+                        </svg>
+                    </div>
+                    <?php
+                    session_start();
+                    
+                    $fullUrl = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+                    if ($fullUrl === route('insertProduct.index')) {
+                        // Xử lý khi route hiện tại bằng route('data.index')
+                        unset($_SESSION['labels']); // Xóa session
+                    }
+                    if (!isset($_SESSION['labels'])) {
+                        $_SESSION['labels'] = [];
+                    }
+                    
+                    // Lấy mảng labels từ nguồn dữ liệu hoặc quá trình xử lý khác
+                    $labelsToAdd = [];
+                    foreach ($string as $item) {
+                        $labelsToAdd[] = $item['label'];
+                    }
+                    
+                    $deleteItem = request()->delete_item;
+                    // var_dump($deleteItem);
+                    // echo '<br>';
+                    if (($key = array_search($deleteItem, $_SESSION['labels'])) !== false) {
+                        unset($_SESSION['labels'][$key]);
+                    }
+                    // Kiểm tra từng giá trị trong mảng labelsToAdd và thêm vào cuối mảng nếu giá trị đó chưa tồn tại trong mảng labels
+                    foreach ($labelsToAdd as $label) {
+                        if (!in_array($label, $_SESSION['labels'])) {
+                            $_SESSION['labels'][] = $label; // Thêm vào cuối mảng
                         }
-                        if (!isset($_SESSION['labels'])) {
-                            $_SESSION['labels'] = [];
-                        }
-
-                        // Lấy mảng labels từ nguồn dữ liệu hoặc quá trình xử lý khác
-                        $labelsToAdd = [];
-                        foreach ($string as $item) {
-                            $labelsToAdd[] = $item['label'];
-                        }
-
-                        $deleteItem = request()->delete_item;
-                        // var_dump($deleteItem);
-                        // echo '<br>';
-                        if (($key = array_search($deleteItem, $_SESSION['labels'])) !== false) {
-                            unset($_SESSION['labels'][$key]);
-                        }
-                        // Kiểm tra từng giá trị trong mảng labelsToAdd và thêm vào cuối mảng nếu giá trị đó chưa tồn tại trong mảng labels
-                        foreach ($labelsToAdd as $label) {
-                            if (!in_array($label, $_SESSION['labels'])) {
-                                $_SESSION['labels'][] = $label; // Thêm vào cuối mảng
-                            }
-                        }
-
-                        // Đánh số vị trí cho từng phần tử trong mảng session
-                        $numberedLabels = array_values($_SESSION['labels']);
-                        ?>
-                        <div class="filter-results d-flex">
-                            <input id="delete-item-input" type="hidden" name="delete_item" value="">
-                            @foreach ($string as $item)
-                            <span class="filter-group" style="order: 
+                    }
+                    
+                    // Đánh số vị trí cho từng phần tử trong mảng session
+                    $numberedLabels = array_values($_SESSION['labels']);
+                    ?>
+                    <div class="filter-results d-flex">
+                        <input id="delete-item-input" type="hidden" name="delete_item" value="">
+                        @foreach ($string as $item)
+                            <span class="filter-group"
+                                style="order: 
                                     <?php
                                     $index = array_search($item['label'], $numberedLabels);
                                     if ($index !== false) {
@@ -95,308 +113,345 @@
                                     } ?>">
                                 {{ $item['label'] }}
                                 <span class="filter-values">{{ implode(', ', $item['values']) }}</span>
-                                <a class="delete-item delete-btn-{{ $item['class'] }}" onclick="updateDeleteItemValue('{{ $item['label'] }}')">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M18 18L6 6" stroke="#555555" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                        <path d="M18 6L6 18" stroke="#555555" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                <a class="delete-item delete-btn-{{ $item['class'] }}"
+                                    onclick='updateDeleteItemValue("{{ $item['label'] }}")'>
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M18 18L6 6" stroke="#555555" stroke-width="1.5" stroke-linecap="round"
+                                            stroke-linejoin="round" />
+                                        <path d="M18 6L6 18" stroke="#555555" stroke-width="1.5" stroke-linecap="round"
+                                            stroke-linejoin="round" />
                                     </svg>
                                 </a>
                             </span>
-                            @endforeach
-                        </div>
-                        <div class="filter-options">
-                            <div class="dropdown">
-                                <button class="ml-2 btn btn-filter" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M12 6C12.3879 6 12.7024 6.31446 12.7024 6.70237L12.7024 17.2976C12.7024 17.6855 12.3879 18 12 18C11.6121 18 11.2976 17.6855 11.2976 17.2976V6.70237C11.2976 6.31446 11.6121 6 12 6Z" fill="#555555" />
-                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M18 12C18 12.3879 17.6855 12.7024 17.2976 12.7024H6.70237C6.31446 12.7024 6 12.3879 6 12C6 11.6121 6.31446 11.2976 6.70237 11.2976H17.2976C17.6855 11.2976 18 11.6121 18 12Z" fill="#555555" />
-                                        </svg>
-                                        Thêm bộ lọc
-                                    </span>
-                                </button>
-                                <div class="dropdown-menu" id="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <div class="search-container px-2">
-                                        <input type="text" placeholder="Tìm thuộc tính lọc" id="myInput" onkeyup="filterFunction()">
-                                        <span class="search-icon"><i class="fas fa-search"></i></span>
-                                    </div>
-                                    <button class="dropdown-item" id="btn-id">Mã đơn hàng</button>
-                                    <button class="dropdown-item" id="btn-provide_name">Nhà cung cấp</button>
-                                    <button class="dropdown-item" id="btn-update_at">Chỉnh sửa cuối</button>
-                                    <button class="dropdown-item" id="btn-creator">Người tạo</button>
-                                    <button class="dropdown-item" id="btn-sum">Tổng tiền</button>
-                                    <button class="dropdown-item" id="btn-status">Trạng thái</button>
+                        @endforeach
+                    </div>
+                    <div class="filter-options">
+                        <div class="dropdown">
+                            <button class="ml-2 btn btn-filter" type="button" id="dropdownMenuButton"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span><svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                            d="M12 6C12.3879 6 12.7024 6.31446 12.7024 6.70237L12.7024 17.2976C12.7024 17.6855 12.3879 18 12 18C11.6121 18 11.2976 17.6855 11.2976 17.2976V6.70237C11.2976 6.31446 11.6121 6 12 6Z"
+                                            fill="#555555" />
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                            d="M18 12C18 12.3879 17.6855 12.7024 17.2976 12.7024H6.70237C6.31446 12.7024 6 12.3879 6 12C6 11.6121 6.31446 11.2976 6.70237 11.2976H17.2976C17.6855 11.2976 18 11.6121 18 12Z"
+                                            fill="#555555" />
+                                    </svg>
+                                    Thêm bộ lọc
+                                </span>
+                            </button>
+                            <div class="dropdown-menu" id="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <div class="search-container px-2">
+                                    <input type="text" placeholder="Tìm kiếm" id="myInput"
+                                        onkeyup="filterFunction()">
+                                    <span class="search-icon"><i class="fas fa-search"></i></span>
                                 </div>
+                                <button class="dropdown-item" id="btn-id">Mã đơn hàng</button>
+                                <button class="dropdown-item" id="btn-provide_name">Nhà cung cấp</button>
+                                <button class="dropdown-item" id="btn-update_at">Chỉnh sửa cuối</button>
+                                <button class="dropdown-item" id="btn-creator">Người tạo</button>
+                                <button class="dropdown-item" id="btn-sum">Tổng tiền</button>
+                                <button class="dropdown-item" id="btn-status">Trạng thái</button>
                             </div>
-                            <?php $status = [];
-                            if (isset(request()->status)) {
-                                $status = request()->status;
-                            } else {
-                                $status = [];
-                            }
-
+                        </div>
+                        <?php $status = [];
+                        if (isset(request()->status)) {
+                            $status = request()->status;
+                        } else {
+                            $status = [];
+                        }
+                        
+                        $name = [];
+                        if (isset(request()->name)) {
+                            $name = request()->name;
+                        } else {
                             $name = [];
-                            if (isset(request()->name)) {
-                                $name = request()->name;
-                            } else {
-                                $name = [];
-                            }
+                        }
+                        $provide_namearr = [];
+                        if (isset(request()->provide_namearr)) {
+                            $provide_namearr = request()->provide_namearr;
+                        } else {
                             $provide_namearr = [];
-                            if (isset(request()->provide_namearr)) {
-                                $provide_namearr = request()->provide_namearr;
-                            } else {
-                                $provide_namearr = [];
-                            }
+                        }
+                        $comparison_operator = null;
+                        $sum = null;
+                        //Tổng tiền
+                        if (isset(request()->comparison_operator) && isset(request()->sum)) {
+                            $comparison_operator = request()->comparison_operator;
+                            $sum = request()->sum;
+                        } else {
                             $comparison_operator = null;
                             $sum = null;
-                            //Tổng tiền
-                            if (isset(request()->comparison_operator) && isset(request()->sum)) {
-                                $comparison_operator = request()->comparison_operator;
-                                $sum = request()->sum;
-                            } else {
-                                $comparison_operator = null;
-                                $sum = null;
-                            }
-                            ?>
+                        }
+                        ?>
 
-                            {{-- Tìm mã đơn hàng --}}
-                            <div class="block-options" id="id-options" style="display:none">
-                                <div class="wrap w-100">
-                                    <div class="heading-title py-3 px-2">
-                                        <h5>Mã đơn hàng:</h5>
-                                    </div>
-                                    <div class="input-group px-2">
-                                        <label class="title" for="">Chứa kí tự</label>
-                                        <input type="search" name="id" class="form-control id-input" value="{{ request()->id }}" placeholder="Nhập thông tin..">
-                                    </div>
+                        {{-- Tìm mã đơn hàng --}}
+                        <div class="block-options" id="id-options" style="display:none">
+                            <div class="wrap w-100">
+                                <div class="heading-title title-wrap">
+                                    <h5>Mã đơn hàng</h5>
                                 </div>
-                                <div class="d-flex justify-contents-center align-items-baseline px-2">
-                                    <button type="submit" class="btn btn-primary btn-block mr-2">Xác
-                                        Nhận</button>
-                                    <button type="button" id="cancel-id" class="btn btn-secondary btn-block">Hủy</button>
+                                <div class="input-group p-2">
+                                    <label class="title" for="">Chứa kí tự</label>
+                                    <input type="search" name="id" class="form-control id-input"
+                                        value="{{ request()->id }}" placeholder="Nhập thông tin..">
                                 </div>
                             </div>
-                            {{-- Tìm nhà cung cấp --}}
-                            <div class="block-options" id="provide_name-options" style="display:none">
-                                <div class="wrap w-100">
-                                    <div class="heading-title py-3 px-2">
-                                        <h5>Nhà cung cấp:</h5>
-                                    </div>
-                                    <div class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
-                                        <a class="cursor select-all-provide_name mr-auto">Chọn tất cả</a>
-                                        <a class="cursor deselect-all-provide_name">Hủy chọn</a>
-                                    </div>
-                                    <ul class="ks-cboxtags-provide_name p-0 m-0 px-2">
-                                        @if (!empty($provides))
+                            <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                    Nhận</button>
+                                <button type="button" id="cancel-id"
+                                    class="btn btn-default btn-block">Hủy</button>
+                            </div>
+                        </div>
+                        {{-- Tìm nhà cung cấp --}}
+                        <div class="block-options" id="provide_name-options" style="display:none">
+                            <div class="wrap w-100">
+                                <div class="heading-title title-wrap">
+                                    <h5>Nhà cung cấp</h5>
+                                </div>
+                                <div class="search-container px-2 mt-2">
+                                    <input type="text" placeholder="Tìm kiếm" id="myInput-provide-name"
+                                        class="pr-4 w-100 input-search" onkeyup="filterProvidename()">
+                                    <span class="search-icon"><i class="fas fa-search"></i></span>
+                                </div>
+                                <div
+                                    class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
+                                    <a class="cursor select-all-provide_name mr-auto">Chọn tất cả</a>
+                                    <a class="cursor deselect-all-provide_name">Hủy chọn</a>
+                                </div>
+                                <ul class="ks-cboxtags-provide_name p-0 m-0 px-2">
+                                    @if (!empty($provides))
                                         @foreach ($provides as $value)
-                                        <li>
-                                            <input type="checkbox" id="roles_active" {{ in_array($value->id, $provide_namearr) ? 'checked' : '' }} name="provide_namearr[]" value="{{ $value->id }}">
-                                            <label for="roles_active">{{ $value->provide_name }}</label>
-                                        </li>
+                                            <li>
+                                                <input type="checkbox" id="roles_active"
+                                                    {{ in_array($value->id, $provide_namearr) ? 'checked' : '' }}
+                                                    name="provide_namearr[]" value="{{ $value->id }}">
+                                                <label for="roles_active">{{ $value->provide_name }}</label>
+                                            </li>
                                         @endforeach
-                                        @endif
-                                    </ul>
-                                </div>
-                                <div class="d-flex justify-contents-center align-items-baseline px-2">
-                                    <button type="submit" class="btn btn-primary btn-block mr-2">Xác
-                                        Nhận</button>
-                                    <button type="button" id="cancel-provide_name" class="btn btn-secondary btn-block">Hủy</button>
-                                </div>
+                                    @endif
+                                </ul>
                             </div>
-                            {{-- Status --}}
-                            <div class="block-options" id="status-options" style="display:none">
-                                <div class="wrap w-100">
-                                    <div class="heading-title py-3 px-2">
-                                        <h5>Trạng thái:</h5>
-                                    </div>
-                                    <div class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
-                                        <a class="cursor select-all mr-auto">Chọn tất cả</a>
-                                        <a class="cursor deselect-all">Hủy chọn</a>
-                                    </div>
-                                    <ul class="ks-cboxtags p-0 m-0 px-2">
-                                        <li>
-                                            <input type="checkbox" id="status_active" {{ in_array(0, $status) ? 'checked' : '' }} name="status[]" value="0">
-                                            <label for="status_active">Chờ duyệt</label>
-                                        </li>
-                                        <li>
-                                            <input type="checkbox" id="status_inactive" {{ in_array(1, $status) ? 'checked' : '' }} name="status[]" value="1">
-                                            <label for="status_inactive">Đã nhập hàng</label>
-                                        </li>
-                                        <li>
-                                            <input type="checkbox" id="status_inactive" {{ in_array(2, $status) ? 'checked' : '' }} name="status[]" value="2">
-                                            <label for="status_inactive">Đã hủy</label>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="d-flex justify-contents-center align-items-baseline px-2">
-                                    <button type="submit" class="btn btn-primary btn-block mr-2">Xác
-                                        Nhận</button>
-                                    <button type="button" id="cancel-status" class="btn btn-secondary btn-block">Hủy</button>
-                                </div>
+                            <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                    Nhận</button>
+                                <button type="button" id="cancel-provide_name"
+                                    class="btn btn-default btn-block">Hủy</button>
                             </div>
-                            {{-- Creator --}}
-                            <div class="block-options" id="creator-options" style="display:none">
-                                <div class="wrap w-100">
-                                    <div class="heading-title py-3 px-2">
-                                        <h5>Người tạo:</h5>
-                                    </div>
-                                    <div class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
-                                        <a class="cursor select-all-creator mr-auto">Chọn tất cả</a>
-                                        <a class="cursor deselect-all-creator">Hủy chọn</a>
-                                    </div>
-                                    <ul class="ks-cboxtags-name p-0 m-0 px-2">
-                                        @if (!empty($ordersNameAndProvide))
+                        </div>
+                        {{-- Status --}}
+                        <div class="block-options" id="status-options" style="display:none">
+                            <div class="wrap w-100">
+                                <div class="heading-title title-wrap">
+                                    <h5>Trạng thái</h5>
+                                </div>
+                                <div class="search-container px-2 mt-2">
+                                    <input type="text" placeholder="Tìm kiếm" id="myInput-status"
+                                        class="pr-4 w-100 input-search" onkeyup="filterStatus()">
+                                    <span class="search-icon"><i class="fas fa-search"></i></span>
+                                </div>
+                                <div
+                                    class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
+                                    <a class="cursor select-all mr-auto">Chọn tất cả</a>
+                                    <a class="cursor deselect-all">Hủy chọn</a>
+                                </div>
+                                <ul class="ks-cboxtags-status p-0 m-0 px-2">
+                                    <li>
+                                        <input type="checkbox" id="status_active"
+                                            {{ in_array(0, $status) ? 'checked' : '' }} name="status[]"
+                                            value="0">
+                                        <label for="status_active">Chờ duyệt</label>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" id="status_inactive"
+                                            {{ in_array(1, $status) ? 'checked' : '' }} name="status[]"
+                                            value="1">
+                                        <label for="status_inactive">Đã nhập hàng</label>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" id="status_inactive"
+                                            {{ in_array(2, $status) ? 'checked' : '' }} name="status[]"
+                                            value="2">
+                                        <label for="status_inactive">Đã hủy</label>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                    Nhận</button>
+                                <button type="button" id="cancel-status"
+                                    class="btn btn-default btn-block">Hủy</button>
+                            </div>
+                        </div>
+                        {{-- Creator --}}
+                        <div class="block-options" id="creator-options" style="display:none">
+                            <div class="wrap w-100">
+                                <div class="heading-title title-wrap">
+                                    <h5>Người tạo</h5>
+                                </div>
+                                <div class="search-container px-2 mt-2">
+                                    <input type="text" placeholder="Tìm kiếm" id="myInput-creator"
+                                        class="pr-4 w-100 input-search" onkeyup="filterCreator()">
+                                    <span class="search-icon"><i class="fas fa-search"></i></span>
+                                </div>
+                                <div
+                                    class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
+                                    <a class="cursor select-all-creator mr-auto">Chọn tất cả</a>
+                                    <a class="cursor deselect-all-creator">Hủy chọn</a>
+                                </div>
+                                <ul class="ks-cboxtags-name p-0 m-0 px-2">
+                                    @if (!empty($ordersNameAndProvide))
                                         @php
-                                        $seenValues = [];
+                                            $seenValues = [];
                                         @endphp
                                         @foreach ($ordersNameAndProvide as $value)
-                                        @if (!in_array($value->name, $seenValues))
-                                        <li>
-                                            <input type="checkbox" id="name_active" {{ in_array($value->name, $name) ? 'checked' : '' }} name="name[]" value="{{ $value->name }}">
-                                            <label id="name" for="name">{{ $value->name }}</label>
-                                        </li>
-                                        @php
-                                        $seenValues[] = $value->name;
-                                        @endphp
-                                        @endif
+                                            @if (!in_array($value->name, $seenValues))
+                                                <li>
+                                                    <input type="checkbox" id="name_active"
+                                                        {{ in_array($value->name, $name) ? 'checked' : '' }}
+                                                        name="name[]" value="{{ $value->name }}">
+                                                    <label id="name" for="name">{{ $value->name }}</label>
+                                                </li>
+                                                @php
+                                                    $seenValues[] = $value->name;
+                                                @endphp
+                                            @endif
                                         @endforeach
-                                        @endif
-                                    </ul>
-                                    <div class="d-flex justify-contents-center align-items-baseline px-2">
-                                        <button type="submit" class="btn btn-primary btn-block mr-2">Xác
-                                            Nhận</button>
-                                        <button type="button" id="cancel-creator" class="btn btn-secondary btn-block">Hủy</button>
-                                    </div>
-                                </div>
-                            </div>
-                            {{-- Tổng tiền --}}
-                            <div class="block-options" id="sum-options" style="display:none">
-                                <div class="wrap w-100">
-                                    <div class="heading-title py-3 px-2">
-                                        <h5>Tổng tiền:</h5>
-                                    </div>
-                                    <div class="input-group pt-2 justify-content-around">
-                                        <select class="comparison_operator" name="comparison_operator" style="width: 40%">
-                                            <option value=">=" {{ request('comparison_operator') === '>=' ? 'selected' : '' }}>>=
-                                            </option>
-                                            <option value="<=" {{ request('comparison_operator') === '<=' ? 'selected' : '' }}>
-                                                <=< /option>
-                                        </select>
-                                        <input class="w-50 input-quantity sum-input" type="number" name="sum" value="{{ request()->sum }}" placeholder="Số lượng">
-                                    </div>
-                                </div>
-                                <div class="d-flex justify-contents-center align-items-baseline px-2">
+                                    @endif
+                                </ul>
+                                <div class="d-flex justify-contents-center align-items-baseline p-2">
                                     <button type="submit" class="btn btn-primary btn-block mr-2">Xác
                                         Nhận</button>
-                                    <button type="button" id="cancel-sum" class="btn btn-secondary btn-block">Hủy</button>
-                                </div>
-                            </div>
-                            {{-- Chỉnh sửa cuối --}}
-                            <div class="block-options" id="update_at-options" style="display:none">
-                                <div class="wrap w-100">
-                                    <div class="heading-title py-3 px-2">
-                                        <h5>Chỉnh sửa cuối:</h5>
-                                    </div>
-                                    <div class="input-group pt-2 justify-content-around">
-                                        <label for="start">Từ ngày:</label>
-                                        <input type="date" id="start" name="trip_start" value="{{ request()->start }}" min="2018-01-01" max="2050-12-31">
-                                        <label for="start">Đến ngày:</label>
-                                        <input type="date" id="end" name="trip_end" value="{{ request()->end }}" min="2018-01-01" max="2050-12-31">
-                                    </div>
-                                </div>
-                                <div class="d-flex justify-contents-center align-items-baseline px-2">
-                                    <button type="submit" class="btn btn-primary btn-block mr-2">Xác
-                                        Nhận</button>
-                                    <button type="button" id="cancel-update_at" class="btn btn-secondary btn-block">Hủy</button>
+                                    <button type="button" id="cancel-creator"
+                                        class="btn btn-default btn-block">Hủy</button>
                                 </div>
                             </div>
                         </div>
-        </section>
-        <!-- Main content -->
-
-        <div class="order_content">
-            <section class="multiple_action">
-                <div class="row align-items-center">
-                    <div class="col-md-2"><span class="count_checkbox"></span></div>
-                    <div class="col-md-9 d-flex">
-                        <button id="deleteOrder" class="btn btn-light d-flex align-items-center" onclick="return confirm('Bạn có muốn xóa các đơn hàng đã chọn ?');">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
-                                <path fill-rule="evenodd" clip-rule="evenodd" d="M14.0606 6.66675C13.6589 6.66675 13.3333 6.99236 13.3333 7.39402C13.3333 7.79568 13.6589 8.12129 14.0606 8.12129H17.9394C18.341 8.12129 18.6667 7.79568 18.6667 7.39402C18.6667 6.99236 18.341 6.66675 17.9394 6.66675H14.0606ZM8 10.3031C8 9.90143 8.32561 9.57582 8.72727 9.57582H10.1818H21.8182H23.2727C23.6744 9.57582 24 9.90143 24 10.3031C24 10.7048 23.6744 11.0304 23.2727 11.0304H22.5455V22.6667C22.5455 24.2819 21.2158 25.5758 19.6179 25.5758H12.3452C11.9637 25.5755 11.5854 25.4997 11.2333 25.3528C10.8812 25.2059 10.5617 24.9908 10.2931 24.7199C10.0244 24.449 9.81206 24.1276 9.66816 23.7743C9.52463 23.4219 9.45204 23.0447 9.45455 22.6642V11.0304H8.72727C8.32561 11.0304 8 10.7048 8 10.3031ZM10.9091 22.6723V11.0304H21.0909V22.6667C21.0909 23.4623 20.4288 24.1213 19.6179 24.1213H12.3458C12.1562 24.1211 11.9684 24.0834 11.7934 24.0104C11.6183 23.9374 11.4595 23.8304 11.3259 23.6958C11.1924 23.5611 11.0868 23.4013 11.0153 23.2257C10.9437 23.05 10.9076 22.8619 10.9091 22.6723ZM17.9394 13.4546C18.3411 13.4546 18.6667 13.7802 18.6667 14.1819V20.9698C18.6667 21.3714 18.3411 21.6971 17.9394 21.6971C17.5377 21.6971 17.2121 21.3714 17.2121 20.9698V14.1819C17.2121 13.7802 17.5377 13.4546 17.9394 13.4546ZM14.7879 14.1819C14.7879 13.7802 14.4623 13.4546 14.0606 13.4546C13.6589 13.4546 13.3333 13.7802 13.3333 14.1819V20.9698C13.3333 21.3714 13.6589 21.6971 14.0606 21.6971C14.4623 21.6971 14.7879 21.3714 14.7879 20.9698V14.1819Z" fill="#555555"></path>
-                            </svg>
-                            <span class="ml-2">Xóa các đơn hàng đã chọn</span>
-                        </button>
-                        <button id="cancelBill" class="btn btn-light ml-4 d-flex align-items-center" onclick="return confirm('Bạn có muốn hủy các đơn hàng đã chọn ?');">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
-                                <path d="M13 13L1 1" stroke="#555555" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M13 1L1 13" stroke="#555555" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                            <span class="ml-2">Hủy đơn hàng đã chọn</span>
-                        </button>
+                        {{-- Tổng tiền --}}
+                        <div class="block-options" id="sum-options" style="display:none">
+                            <div class="wrap w-100">
+                                <div class="heading-title title-wrap">
+                                    <h5>Tổng tiền</h5>
+                                </div>
+                                <div class="input-group p-2 justify-content-around">
+                                    <select class="comparison_operator" name="comparison_operator"
+                                        style="width: 40%">
+                                        <option value=">="
+                                            {{ request('comparison_operator') === '>=' ? 'selected' : '' }}>>=
+                                        </option>
+                                        <option value="<="
+                                            {{ request('comparison_operator') === '<=' ? 'selected' : '' }}>
+                                            <=< /option>
+                                    </select>
+                                    <input class="w-50 input-quantity sum-input" type="number" name="sum"
+                                        value="{{ request()->sum }}" placeholder="Số lượng">
+                                </div>
+                            </div>
+                            <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                    Nhận</button>
+                                <button type="button" id="cancel-sum"
+                                    class="btn btn-default btn-block">Hủy</button>
+                            </div>
+                        </div>
+                        {{-- Chỉnh sửa cuối --}}
+                        <div class="block-options" id="update_at-options" style="display:none">
+                            <div class="wrap w-100">
+                                <div class="heading-title title-wrap">
+                                    <h5>Chỉnh sửa cuối</h5>
+                                </div>
+                                <div class="input-group p-2 justify-content-around">
+                                    <label for="start">Từ ngày:</label>
+                                    <input type="date" id="start" name="trip_start"
+                                        value="{{ request()->start }}" min="2018-01-01" max="2050-12-31">
+                                    <label for="start">Đến ngày:</label>
+                                    <input type="date" id="end" name="trip_end"
+                                        value="{{ request()->end }}" min="2018-01-01" max="2050-12-31">
+                                </div>
+                            </div>
+                            <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                    Nhận</button>
+                                <button type="button" id="cancel-update_at"
+                                    class="btn btn-default btn-block">Hủy</button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-md-1 d-flex justify-content-end cancal_action">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <path d="M18 18L6 6" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                            <path d="M18 6L6 18" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </div>
-                </div>
-            </section>
-        </div>
-        <section class="content">
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <!-- /.card-header -->
-                        <div class="card-body">
-                            <table id="example2" class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <input type="hidden" id="sortByInput" name="sort-by" value="id">
-                                        <input type="hidden" id="sortTypeInput" name="sort-type" value="{{ $sortType }}">
-                                        <th><input type="checkbox" name="all" id="checkall"></th>
-                                        <th scope="col">
-                                            <span class="d-flex">
-                                                <a href="#" class="sort-link" data-sort-by="id" data-sort-type="{{ $sortType }}"><button class="btn-sort" type="submit">Mã đơn</button></a>
-                                                <div class="icon" id="icon-id"></div>
-                                            </span>
-                                        </th>
-                                        <th scope="col">
-                                            <span class="d-flex">
-                                                <a href="#" class="sort-link" data-sort-by="provide_name" data-sort-type="{{ $sortType }}"><button class="btn-sort" type="submit">Nhà cung cấp</button></a>
-                                                <div class="icon" id="icon-provide_name"></div>
-                                            </span>
-                                        </th>
-                                        <th scope="col">
-                                            <span class="d-flex">
-                                                <a href="#" class="sort-link" data-sort-by="updated_at" data-sort-type="{{ $sortType }}"><button class="btn-sort" type="submit">Chỉnh sửa cuối</button></a>
-                                                <div class="icon" id="icon-updated_at"></div>
-                                            </span>
-                                        </th>
-                                        <th scope="col">
-                                            <span class="d-flex">
-                                                <a href="#" class="sort-link" data-sort-by="name" data-sort-type="{{ $sortType }}"><button class="btn-sort" type="submit">Người tạo</button></a>
-                                                <div class="icon" id="icon-name"></div>
-                                            </span>
-                                        </th>
-                                        <th scope="col">
-                                            <span class="d-flex float-right">
-                                                <a href="#" class="sort-link" data-sort-by="total" data-sort-type="{{ $sortType }}"><button class="btn-sort" type="submit">Tổng tiền</button></a>
-                                                <div class="icon" id="icon-total"></div>
-                                            </span>
-                                        </th>
-                                        <th scope="col">
-                                            <span class="d-flex justify-content-center">
-                                                <a href="#" class="sort-link" data-sort-by="order_status" data-sort-type="{{ $sortType }}"><button class="btn-sort" type="submit">Trạng thái</button></a>
-                                                <div class="icon" id="icon-export_status"></div>
-                                            </span>
-                                        </th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php $stt = 1; ?>
-                                    @foreach ($orders as $va)
+    </section>
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example2" class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <input type="hidden" id="sortByInput" name="sort-by" value="id">
+                                    <input type="hidden" id="sortTypeInput" name="sort-type"
+                                        value="{{ $sortType }}">
+                                    <th><input type="checkbox" name="all" id="checkall"></th>
+                                    <th scope="col">
+                                        <span class="d-flex">
+                                            <a href="#" class="sort-link" data-sort-by="id"
+                                                data-sort-type="{{ $sortType }}"><button class="btn-sort"
+                                                    type="submit">Mã đơn</button></a>
+                                            <div class="icon" id="icon-id"></div>
+                                        </span>
+                                    </th>
+                                    <th scope="col">
+                                        <span class="d-flex">
+                                            <a href="#" class="sort-link" data-sort-by="provide_name"
+                                                data-sort-type="{{ $sortType }}"><button class="btn-sort"
+                                                    type="submit">Nhà cung cấp</button></a>
+                                            <div class="icon" id="icon-provide_name"></div>
+                                        </span>
+                                    </th>
+                                    <th scope="col">
+                                        <span class="d-flex">
+                                            <a href="#" class="sort-link" data-sort-by="updated_at"
+                                                data-sort-type="{{ $sortType }}"><button class="btn-sort"
+                                                    type="submit">Chỉnh sửa cuối</button></a>
+                                            <div class="icon" id="icon-updated_at"></div>
+                                        </span>
+                                    </th>
+                                    <th scope="col">
+                                        <span class="d-flex">
+                                            <a href="#" class="sort-link" data-sort-by="name"
+                                                data-sort-type="{{ $sortType }}"><button class="btn-sort"
+                                                    type="submit">Người tạo</button></a>
+                                            <div class="icon" id="icon-name"></div>
+                                        </span>
+                                    </th>
+                                    <th scope="col">
+                                        <span class="d-flex float-right">
+                                            <a href="#" class="sort-link" data-sort-by="total"
+                                                data-sort-type="{{ $sortType }}"><button class="btn-sort"
+                                                    type="submit">Tổng tiền</button></a>
+                                            <div class="icon" id="icon-total"></div>
+                                        </span>
+                                    </th>
+                                    <th scope="col">
+                                        <span class="d-flex justify-content-center">
+                                            <a href="#" class="sort-link" data-sort-by="order_status"
+                                                data-sort-type="{{ $sortType }}"><button class="btn-sort"
+                                                    type="submit">Trạng thái</button></a>
+                                            <div class="icon" id="icon-export_status"></div>
+                                        </span>
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php $stt = 1; ?>
+                                @foreach ($orders as $va)
                                     <tr class="{{ $va->id }}">
-                                        <td><input type="checkbox" class="cb-element" name="ids[]" value="{{ $va->id }}"></td>
+                                        <td><input type="checkbox" class="cb-element" name="ids[]"
+                                                value="{{ $va->id }}"></td>
                                         <td>{{ $va->id }}</td>
                                         <td>{{ $va->provide_name }}</td>
                                         <td>{{ $va->updated_at }}</td>
@@ -404,82 +459,114 @@
                                         <td class="text-right">{{ number_format($va->total) }}</td>
                                         <td class="text-center">
                                             @if ($va->order_status == 0)
-                                            <span class="p-2 bg-warning rounded">Chờ duyệt</span>
+                                                <span class="p-2 bg-warning rounded">Chờ duyệt</span>
                                             @elseif($va->order_status == 1)
-                                            <span class="p-2 bg-success rounded">Đã nhập hàng</span>
+                                                <span class="p-2 bg-success rounded">Đã nhập hàng</span>
                                             @elseif($va->order_status == 2)
-                                            <span class="p-2 bg-danger rounded">Đã hủy</span>
+                                                <span class="p-2 bg-danger rounded">Đã hủy</span>
                                             @endif
                                         </td>
                                         <td class="d-flex justify-content-between">
                                             <div class="edit">
                                                 @if (Auth::user()->name == $va->name || Auth::user()->can('isAdmin'))
-                                                <a href="{{ route('insertProduct.edit', $va->id) }}">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
-                                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M18.7833 6.79458C18.9872 6.71003 19.2058 6.6665 19.4265 6.6665C19.6472 6.6665 19.8658 6.71003 20.0697 6.79458C20.2736 6.87914 20.4588 7.00306 20.6147 7.15927L21.9609 8.50539C22.117 8.66141 22.241 8.84668 22.3255 9.05063C22.41 9.25457 22.4536 9.47318 22.4536 9.69394C22.4536 9.9147 22.41 10.1333 22.3255 10.3373C22.241 10.5412 22.117 10.7265 21.9609 10.8825L20.281 12.5623C20.2712 12.5734 20.2611 12.5842 20.2505 12.5948C20.2399 12.6054 20.2291 12.6155 20.218 12.6253L11.5609 21.2825C11.4259 21.4175 11.2427 21.4933 11.0518 21.4933H8.34662C7.94899 21.4933 7.62665 21.171 7.62665 20.7734V18.0682C7.62665 17.8772 7.70251 17.6941 7.83755 17.5591L16.489 8.90836C16.5005 8.89507 16.5126 8.88211 16.5252 8.86949C16.5378 8.85686 16.5508 8.84479 16.5641 8.8333L18.2383 7.15927C18.3941 7.00328 18.5797 6.87905 18.7833 6.79458ZM17.0356 10.3981L9.0666 18.3664V20.0534H10.7536L18.7222 12.0847L17.0356 10.3981ZM19.7404 11.0665L18.0539 9.37997L19.2574 8.1766C19.2796 8.15436 19.3059 8.13672 19.3349 8.12468C19.364 8.11265 19.3951 8.10645 19.4265 8.10645C19.4579 8.10645 19.4891 8.11265 19.5181 8.12468C19.5471 8.13672 19.5739 8.1548 19.5961 8.17704L20.9429 9.52386C20.9653 9.54615 20.9832 9.57291 20.9953 9.60204C21.0074 9.63117 21.0136 9.6624 21.0136 9.69394C21.0136 9.72549 21.0074 9.75671 20.9953 9.78584C20.9832 9.81498 20.9653 9.84173 20.9429 9.86402L19.7404 11.0665ZM6.66669 24.6132C6.66669 24.2156 6.98903 23.8932 7.38666 23.8932H24.666C25.0636 23.8932 25.386 24.2156 25.386 24.6132C25.386 25.0108 25.0636 25.3332 24.666 25.3332H7.38666C6.98903 25.3332 6.66669 25.0108 6.66669 24.6132Z" fill="#555555" />
-                                                    </svg>
-                                                </a>
+                                                    <a href="{{ route('insertProduct.edit', $va->id) }}">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="32"
+                                                            height="32" viewBox="0 0 32 32" fill="none">
+                                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                d="M18.7833 6.79458C18.9872 6.71003 19.2058 6.6665 19.4265 6.6665C19.6472 6.6665 19.8658 6.71003 20.0697 6.79458C20.2736 6.87914 20.4588 7.00306 20.6147 7.15927L21.9609 8.50539C22.117 8.66141 22.241 8.84668 22.3255 9.05063C22.41 9.25457 22.4536 9.47318 22.4536 9.69394C22.4536 9.9147 22.41 10.1333 22.3255 10.3373C22.241 10.5412 22.117 10.7265 21.9609 10.8825L20.281 12.5623C20.2712 12.5734 20.2611 12.5842 20.2505 12.5948C20.2399 12.6054 20.2291 12.6155 20.218 12.6253L11.5609 21.2825C11.4259 21.4175 11.2427 21.4933 11.0518 21.4933H8.34662C7.94899 21.4933 7.62665 21.171 7.62665 20.7734V18.0682C7.62665 17.8772 7.70251 17.6941 7.83755 17.5591L16.489 8.90836C16.5005 8.89507 16.5126 8.88211 16.5252 8.86949C16.5378 8.85686 16.5508 8.84479 16.5641 8.8333L18.2383 7.15927C18.3941 7.00328 18.5797 6.87905 18.7833 6.79458ZM17.0356 10.3981L9.0666 18.3664V20.0534H10.7536L18.7222 12.0847L17.0356 10.3981ZM19.7404 11.0665L18.0539 9.37997L19.2574 8.1766C19.2796 8.15436 19.3059 8.13672 19.3349 8.12468C19.364 8.11265 19.3951 8.10645 19.4265 8.10645C19.4579 8.10645 19.4891 8.11265 19.5181 8.12468C19.5471 8.13672 19.5739 8.1548 19.5961 8.17704L20.9429 9.52386C20.9653 9.54615 20.9832 9.57291 20.9953 9.60204C21.0074 9.63117 21.0136 9.6624 21.0136 9.69394C21.0136 9.72549 21.0074 9.75671 20.9953 9.78584C20.9832 9.81498 20.9653 9.84173 20.9429 9.86402L19.7404 11.0665ZM6.66669 24.6132C6.66669 24.2156 6.98903 23.8932 7.38666 23.8932H24.666C25.0636 23.8932 25.386 24.2156 25.386 24.6132C25.386 25.0108 25.0636 25.3332 24.666 25.3332H7.38666C6.98903 25.3332 6.66669 25.0108 6.66669 24.6132Z"
+                                                                fill="#555555" />
+                                                        </svg>
+                                                    </a>
                                                 @else
-                                                <a href="{{ route('insertProduct.edit', $va->id) }}">
-                                                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M18.6775 10.6226V5.91937C18.6775 5.50358 18.5123 5.10482 18.2183 4.81081C17.9243 4.5168 17.5255 4.35162 17.1097 4.35162H6.91937C6.50358 4.35162 6.10482 4.5168 5.81081 4.81081C5.5168 5.10482 5.35162 5.50358 5.35162 5.91937V16.8936C5.35162 17.3094 5.5168 17.7082 5.81081 18.0022C6.10482 18.2962 6.50358 18.4614 6.91937 18.4614H10.8387" stroke="#555555" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                                        <path d="M10.2509 13.7581H10.8388" stroke="#555555" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                                        <path d="M10.2509 10.6226H13.1904" stroke="#555555" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                                        <path d="M10.2509 7.58511H15.542" stroke="#555555" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                                        <path d="M8.29115 8.11423C8.40743 8.11423 8.52109 8.07975 8.61778 8.01515C8.71446 7.95055 8.78981 7.85873 8.83431 7.7513C8.8788 7.64388 8.89045 7.52567 8.86776 7.41163C8.84508 7.29758 8.78909 7.19283 8.70687 7.11061C8.62465 7.02839 8.51989 6.9724 8.40585 6.94971C8.29181 6.92703 8.1736 6.93867 8.06617 6.98317C7.95875 7.02766 7.86693 7.10302 7.80233 7.1997C7.73773 7.29638 7.70325 7.41004 7.70325 7.52632C7.70325 7.68224 7.76519 7.83178 7.87544 7.94203C7.98569 8.05229 8.13523 8.11423 8.29115 8.11423Z" fill="#555555" />
-                                                        <path d="M8.29115 11.2497C8.40743 11.2497 8.52109 11.2152 8.61778 11.1506C8.71446 11.086 8.78981 10.9942 8.83431 10.8868C8.8788 10.7794 8.89045 10.6612 8.86776 10.5471C8.84508 10.4331 8.78909 10.3283 8.70687 10.2461C8.62465 10.1639 8.51989 10.1079 8.40585 10.0852C8.29181 10.0625 8.1736 10.0742 8.06617 10.1187C7.95875 10.1632 7.86693 10.2385 7.80233 10.3352C7.73773 10.4319 7.70325 10.5455 7.70325 10.6618C7.70325 10.8177 7.76519 10.9673 7.87544 11.0775C7.98569 11.1878 8.13523 11.2497 8.29115 11.2497Z" fill="#555555" />
-                                                        <path d="M8.29115 14.3069C8.40743 14.3069 8.52109 14.2724 8.61778 14.2078C8.71446 14.1432 8.78981 14.0514 8.83431 13.9439C8.8788 13.8365 8.89045 13.7183 8.86776 13.6043C8.84508 13.4902 8.78909 13.3855 8.70687 13.3032C8.62465 13.221 8.51989 13.165 8.40585 13.1423C8.29181 13.1197 8.1736 13.1313 8.06617 13.1758C7.95875 13.2203 7.86693 13.2956 7.80233 13.3923C7.73773 13.489 7.70325 13.6027 7.70325 13.7189C7.70325 13.8749 7.76519 14.0244 7.87544 14.1347C7.98569 14.2449 8.13523 14.3069 8.29115 14.3069Z" fill="#555555" />
-                                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M18.2246 13.1819C16.996 11.9533 15.004 11.9533 13.7754 13.1819C12.5468 14.4105 12.5468 16.4025 13.7754 17.6311C15.004 18.8597 16.996 18.8597 18.2246 17.6311C19.4532 16.4025 19.4532 14.4105 18.2246 13.1819ZM18.8284 12.5781C17.2663 11.016 14.7337 11.016 13.1716 12.5781C11.6095 14.1402 11.6095 16.6728 13.1716 18.2349C14.7337 19.797 17.2663 19.797 18.8284 18.2349C20.3905 16.6728 20.3905 14.1402 18.8284 12.5781Z" fill="#555555" />
-                                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M18.1376 18.1376C18.321 17.9541 18.6184 17.9541 18.8019 18.1376L20.8624 20.1981C21.0459 20.3816 21.0459 20.679 20.8624 20.8624C20.679 21.0459 20.3816 21.0459 20.1981 20.8624L18.1376 18.8019C17.9541 18.6184 17.9541 18.321 18.1376 18.1376Z" fill="#555555" />
-                                                    </svg>
-                                                </a>
+                                                    <a href="{{ route('insertProduct.edit', $va->id) }}">
+                                                        <svg width="32" height="32" viewBox="0 0 32 32"
+                                                            fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path
+                                                                d="M18.6775 10.6226V5.91937C18.6775 5.50358 18.5123 5.10482 18.2183 4.81081C17.9243 4.5168 17.5255 4.35162 17.1097 4.35162H6.91937C6.50358 4.35162 6.10482 4.5168 5.81081 4.81081C5.5168 5.10482 5.35162 5.50358 5.35162 5.91937V16.8936C5.35162 17.3094 5.5168 17.7082 5.81081 18.0022C6.10482 18.2962 6.50358 18.4614 6.91937 18.4614H10.8387"
+                                                                stroke="#555555" stroke-width="1.5"
+                                                                stroke-linecap="round" stroke-linejoin="round" />
+                                                            <path d="M10.2509 13.7581H10.8388" stroke="#555555"
+                                                                stroke-width="1.5" stroke-linecap="round"
+                                                                stroke-linejoin="round" />
+                                                            <path d="M10.2509 10.6226H13.1904" stroke="#555555"
+                                                                stroke-width="1.5" stroke-linecap="round"
+                                                                stroke-linejoin="round" />
+                                                            <path d="M10.2509 7.58511H15.542" stroke="#555555"
+                                                                stroke-width="1.5" stroke-linecap="round"
+                                                                stroke-linejoin="round" />
+                                                            <path
+                                                                d="M8.29115 8.11423C8.40743 8.11423 8.52109 8.07975 8.61778 8.01515C8.71446 7.95055 8.78981 7.85873 8.83431 7.7513C8.8788 7.64388 8.89045 7.52567 8.86776 7.41163C8.84508 7.29758 8.78909 7.19283 8.70687 7.11061C8.62465 7.02839 8.51989 6.9724 8.40585 6.94971C8.29181 6.92703 8.1736 6.93867 8.06617 6.98317C7.95875 7.02766 7.86693 7.10302 7.80233 7.1997C7.73773 7.29638 7.70325 7.41004 7.70325 7.52632C7.70325 7.68224 7.76519 7.83178 7.87544 7.94203C7.98569 8.05229 8.13523 8.11423 8.29115 8.11423Z"
+                                                                fill="#555555" />
+                                                            <path
+                                                                d="M8.29115 11.2497C8.40743 11.2497 8.52109 11.2152 8.61778 11.1506C8.71446 11.086 8.78981 10.9942 8.83431 10.8868C8.8788 10.7794 8.89045 10.6612 8.86776 10.5471C8.84508 10.4331 8.78909 10.3283 8.70687 10.2461C8.62465 10.1639 8.51989 10.1079 8.40585 10.0852C8.29181 10.0625 8.1736 10.0742 8.06617 10.1187C7.95875 10.1632 7.86693 10.2385 7.80233 10.3352C7.73773 10.4319 7.70325 10.5455 7.70325 10.6618C7.70325 10.8177 7.76519 10.9673 7.87544 11.0775C7.98569 11.1878 8.13523 11.2497 8.29115 11.2497Z"
+                                                                fill="#555555" />
+                                                            <path
+                                                                d="M8.29115 14.3069C8.40743 14.3069 8.52109 14.2724 8.61778 14.2078C8.71446 14.1432 8.78981 14.0514 8.83431 13.9439C8.8788 13.8365 8.89045 13.7183 8.86776 13.6043C8.84508 13.4902 8.78909 13.3855 8.70687 13.3032C8.62465 13.221 8.51989 13.165 8.40585 13.1423C8.29181 13.1197 8.1736 13.1313 8.06617 13.1758C7.95875 13.2203 7.86693 13.2956 7.80233 13.3923C7.73773 13.489 7.70325 13.6027 7.70325 13.7189C7.70325 13.8749 7.76519 14.0244 7.87544 14.1347C7.98569 14.2449 8.13523 14.3069 8.29115 14.3069Z"
+                                                                fill="#555555" />
+                                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                d="M18.2246 13.1819C16.996 11.9533 15.004 11.9533 13.7754 13.1819C12.5468 14.4105 12.5468 16.4025 13.7754 17.6311C15.004 18.8597 16.996 18.8597 18.2246 17.6311C19.4532 16.4025 19.4532 14.4105 18.2246 13.1819ZM18.8284 12.5781C17.2663 11.016 14.7337 11.016 13.1716 12.5781C11.6095 14.1402 11.6095 16.6728 13.1716 18.2349C14.7337 19.797 17.2663 19.797 18.8284 18.2349C20.3905 16.6728 20.3905 14.1402 18.8284 12.5781Z"
+                                                                fill="#555555" />
+                                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                d="M18.1376 18.1376C18.321 17.9541 18.6184 17.9541 18.8019 18.1376L20.8624 20.1981C21.0459 20.3816 21.0459 20.679 20.8624 20.8624C20.679 21.0459 20.3816 21.0459 20.1981 20.8624L18.1376 18.8019C17.9541 18.6184 17.9541 18.321 18.1376 18.1376Z"
+                                                                fill="#555555" />
+                                                        </svg>
+
+                                                    </a>
                                                 @endif
                                             </div>
-                                            <div id="dropdown_item{{ $va->id }}" data-toggle="collapse" data-target="#product-details-<?php echo $va->id; ?>">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
-                                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M9.64162 12.3083C10.0527 11.8972 10.7192 11.8972 11.1303 12.3083L16 17.178L20.8697 12.3083C21.2808 11.8972 21.9473 11.8972 22.3583 12.3083C22.7694 12.7194 22.7694 13.3859 22.3583 13.797L16.7443 19.411C16.3332 19.8221 15.6667 19.8221 15.2557 19.411L9.64162 13.797C9.23054 13.3859 9.23054 12.7194 9.64162 12.3083Z" fill="#555555" />
+                                            <div id="dropdown_item{{ $va->id }}" data-toggle="collapse"
+                                                data-target="#product-details-<?php echo $va->id; ?>">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                                                    viewBox="0 0 32 32" fill="none">
+                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                        d="M9.64162 12.3083C10.0527 11.8972 10.7192 11.8972 11.1303 12.3083L16 17.178L20.8697 12.3083C21.2808 11.8972 21.9473 11.8972 22.3583 12.3083C22.7694 12.7194 22.7694 13.3859 22.3583 13.797L16.7443 19.411C16.3332 19.8221 15.6667 19.8221 15.2557 19.411L9.64162 13.797C9.23054 13.3859 9.23054 12.7194 9.64162 12.3083Z"
+                                                        fill="#555555" />
                                                 </svg>
                                             </div>
                                         </td>
                                     </tr>
                                     @foreach ($product as $item)
-                                    <tr id="product-details-{{ $va->id }}" class="product-details collapse">
-                                        @if ($va->id == $item->id)
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td>
-                                            <p>{{ $item->product_name }}</p>
-                                            {{ $item->getCodeProduct->products_code }}
-                                        </td>
-                                        <td>
-                                            <p>Số lượng</p>
-                                            {{ $item->product_qty }}
-                                        </td>
-                                        <td class="text-right">
-                                            <p>Tổng tiền</p>
-                                            {{ number_format($item->product_qty * $item->product_price) }}
-                                        </td>
-                                        <td></td>
-                                        <td></td>
-                                        @endif
-                                    </tr>
+                                        <tr id="product-details-{{ $va->id }}"
+                                            class="product-details collapse">
+                                            @if ($va->id == $item->id)
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td>
+                                                    <p>{{ $item->product_name }}</p>
+                                                    {{ $item->getCodeProduct->products_code }}
+                                                </td>
+                                                <td>
+                                                    <p>Số lượng</p>
+                                                    {{ $item->product_qty }}
+                                                </td>
+                                                <td class="text-right">
+                                                    <p>Tổng tiền</p>
+                                                    {{ number_format($item->product_qty * $item->product_price) }}
+                                                </td>
+                                                <td></td>
+                                                <td></td>
+                                            @endif
+                                        </tr>
                                     @endforeach
                                     <?php $stt++; ?>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
-            <!-- <button type="submit" name="confirmBill" id="confirmBill" class="btn btn-primary">Duyệt đơn nhanh</button> -->
-            <div class="paginator mt-4 d-flex justify-content-end">
-                {{ $orders->appends(request()->except('page'))->links() }}
-            </div>
-        </section>
-        <!-- /.content -->
-    </div>
+        </div>
+        <button type="submit" name="deleteOrder" id="deleteOrder" class="btn btn-danger"
+            onclick="return confirm('Bạn có muốn xóa các sản phẩm đã chọn ?');">Xóa nhiều</button>
+        <button type="submit" name="cancelBill" id="cancelBill" class="btn btn-danger">Hủy đơn hàng
+            nhanh</button>
+        <!-- <button type="submit" name="confirmBill" id="confirmBill" class="btn btn-primary">Duyệt đơn nhanh</button> -->
+        <div class="paginator mt-4 d-flex justify-content-end">
+            {{ $orders->appends(request()->except('page'))->links() }}
+        </div>
+    </section>
+    <!-- /.content -->
 </div>
 <script>
     // AJAX duyệt đơn nhanh
@@ -557,32 +644,15 @@
     // Checkbox
     $('#checkall').change(function() {
         $('.cb-element').prop('checked', this.checked);
-        updateMultipleActionVisibility()
     });
 
     $('.cb-element').change(function() {
-        updateMultipleActionVisibility()
         if ($('.cb-element:checked').length == $('.cb-element').length) {
             $('#checkall').prop('checked', true);
         } else {
             $('#checkall').prop('checked', false);
         }
     });
-    $(document).on('click', '.cancal_action', function(e) {
-        e.preventDefault();
-        $('.cb-element:checked').prop('checked', false);
-        $('#checkall').prop('checked', false);
-        updateMultipleActionVisibility()
-    })
-
-    function updateMultipleActionVisibility() {
-        if ($('.cb-element:checked').length > 0) {
-            $('.multiple_action').show();
-            $('.count_checkbox').text('Đã chọn ' + $('.cb-element:checked').length);
-        } else {
-            $('.multiple_action').hide();
-        }
-    }
 
 
     $('#btn-update_at').click(function(event) {
