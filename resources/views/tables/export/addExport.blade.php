@@ -398,8 +398,8 @@
             '<label>Địa chỉ xuất hóa đơn:</label>' +
             '<input type="text" class="form-control" id="guest_addressInvoice" placeholder="Nhập thông tin" name="guest_addressInvoice" value="" required>' +
             '</div>' + '<div class="form-group">' +
-            '<label for="email">Mã số thuế:</label>' +
-            '<input type="text" class="form-control" id="guest_code" placeholder="Nhập thông tin" name="guest_code" value="" required>' +
+            '<label>Mã số thuế:</label>' +
+            '<input type="number" class="form-control" id="guest_code" placeholder="Nhập thông tin" name="guest_code" value="" required>' +
             '</div>' + '<div class="form-group">' +
             '<label for="email">Địa chỉ giao hàng:</label>' +
             '<input type="text" class="form-control" id="guest_addressDeliver" placeholder="Nhập thông tin" name="guest_addressDeliver" value="" required>' +
@@ -408,7 +408,7 @@
             '<input type="text" class="form-control" id="guest_receiver" placeholder="Nhập thông tin" name="guest_receiver" value="" required>' +
             '</div>' + '<div class="form-group">' +
             '<label for="email">SĐT người nhận:</label>' +
-            '<input type="text" class="form-control" id="guest_phoneReceiver" placeholder="Nhập thông tin" name="guest_phoneReceiver" value="" required>' +
+            '<input type="number" class="form-control" id="guest_phoneReceiver" placeholder="Nhập thông tin" name="guest_phoneReceiver" value="" required>' +
             '</div>' + '</div>' + '<div class="col-sm-6">' +
             '<div class="form-group">' +
             '<label for="email">Người đại diện:</label>' +
@@ -418,13 +418,18 @@
             '<input type="email" class="form-control" id="guest_email" placeholder="Nhập thông tin" name="guest_email" value="" required>' +
             '</div>' + '<div class="form-group">' +
             '<label for="email">Số điện thoại:</label>' +
-            '<input type="text" class="form-control" id="guest_phone" placeholder="Nhập thông tin" name="guest_phone" value="" required>' +
+            '<input type="number" class="form-control" id="guest_phone" placeholder="Nhập thông tin" name="guest_phone" value="" required>' +
             '</div>' + '<div class="form-group">' +
             ' <label for="email">Hình thức thanh toán:</label>' +
-            '<input type="text" class="form-control" id="guest_pay" placeholder="Nhập thông tin" name="guest_pay" value="" required>' +
+            '<select name="guest_pay" class="form-control" id="guest_pay">' +
+            '<option value="0">Chuyển khoản</option>' +
+            '<option value="1">Thanh toán bằng tiền mặt</option>' +
+            '</select>' +
             '</div>' + '<div class="form-group">' +
             '<label for="email">Điều kiện thanh toán:</label>' +
-            '<input type="text" class="form-control" id="guest_payTerm" placeholder="Nhập thông tin" name="guest_payTerm" value="" required>' +
+            '<select name="guest_payTerm" class="form-control" id="guest_payTerm">' +
+            '<option value="0">Biểu mẫu 15 ngày</option>' +
+            '</select>' +
             '</div>' + '<div class="form-group">' +
             '<label for="email">Ghi chú:</label>' +
             '<input type="text" class="form-control" id="guest_note" placeholder="Nhập thông tin" name="guest_note" value="" required>' +
@@ -618,7 +623,7 @@
                         data.guest_addressInvoice + '">' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">Mã số thuế:</label>' +
-                        '<input type="text" class="form-control" id="guest_code" placeholder="Nhập thông tin" name="guest_code" value="' +
+                        '<input type="number" class="form-control" id="guest_code" placeholder="Nhập thông tin" name="guest_code" value="' +
                         data.guest_code + '">' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">Địa chỉ giao hàng:</label>' +
@@ -630,7 +635,7 @@
                         data.guest_receiver + '">' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">SĐT người nhận:</label>' +
-                        '<input type="text" class="form-control" id="guest_phoneReceiver" placeholder="Nhập thông tin" name="guest_phoneReceiver" value="' +
+                        '<input type="number" class="form-control" id="guest_phoneReceiver" placeholder="Nhập thông tin" name="guest_phoneReceiver" value="' +
                         data.guest_phoneReceiver + '">' +
                         '</div>' + '</div>' + '<div class="col-sm-6">' +
                         '<div class="form-group">' +
@@ -643,16 +648,22 @@
                         data.guest_email + '" required>' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">Số điện thoại:</label>' +
-                        '<input type="text" class="form-control" id="guest_phone" placeholder="Nhập thông tin" name="guest_phone" value="' +
+                        '<input type="number" class="form-control" id="guest_phone" placeholder="Nhập thông tin" name="guest_phone" value="' +
                         data.guest_phone + '" required>' +
                         '</div>' + '<div class="form-group">' +
-                        ' <label for="email">Hình thức thanh toán:</label>' +
-                        '<input type="text" class="form-control" id="guest_pay" placeholder="Nhập thông tin" name="guest_pay" value="' +
-                        data.guest_pay + '">' +
+                        '<label for="email">Hình thức thanh toán:</label>' +
+                        '<select name="guest_pay" class="form-control" id="guest_pay">' +
+                        '<option value="0"' + (data.guest_pay == 0 ? ' selected' : '') +
+                        '>Chuyển khoản</option>' +
+                        '<option value="1"' + (data.guest_pay == 1 ? ' selected' : '') +
+                        '>Thanh toán bằng tiền mặt</option>' +
+                        '</select>' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">Điều kiện thanh toán:</label>' +
-                        '<input type="text" class="form-control" id="guest_payTerm" placeholder="Nhập thông tin" name="guest_payTerm" value="' +
-                        data.guest_payTerm + '">' +
+                        '<select name="guest_payTerm" class="form-control" id="guest_payTerm">' +
+                        '<option value="0"' + (data.guest_payTerm == 0 ? ' selected' :
+                            '') + '>Biểu mẫu 15 ngày</option>' +
+                        '</select>' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">Ghi chú:</label>' +
                         '<input type="text" class="form-control" id="guest_note" placeholder="Nhập thông tin" name="guest_note" value="' +
