@@ -388,6 +388,7 @@
             '<button id="btn-addCustomer" class="btn btn-primary d-flex align-items-center">' +
             '<img src="../dist/img/icon/Union.png">' +
             '<span class="ml-1">Lưu thông tin</span></button></div>' +
+            '<input type="hidden" name="click" id="click" value="">' +
             '<div class="row p-3">' +
             '<div class="col-sm-6">' +
             '<div class="form-group">' +
@@ -717,10 +718,8 @@
     //thêm thông tin khách hàng
     $(document).on('click', '#btn-addCustomer', function(e) {
         e.preventDefault();
-        saveCustomerInfo();
-    });
-    //hàm lưu thông tin khách hàng
-    function saveCustomerInfo() {
+        $('#click').val(1);
+        var click = $('#click').val();
         var guest_name = $('#guest_name').val();
         var guest_addressInvoice = $('#guest_addressInvoice').val();
         var guest_code = $('#guest_code').val();
@@ -749,7 +748,8 @@
                 guest_phone,
                 guest_pay,
                 guest_payTerm,
-                guest_note
+                guest_note,
+                click,
             },
             success: function(data) {
                 if (data.hasOwnProperty('message')) {
@@ -760,8 +760,8 @@
                     customerInfoSaved = true;
                 }
             }
-        });
-    }
+        })
+    })
 
     $(document).ready(function() {
         //lấy thông tin sản phẩm từ mã sản phẩm
@@ -922,43 +922,9 @@
         $('#total').val(grandTotal.toFixed(2));
     }
 
-    // Hàm submit form xuất hàng
-    function submitExportForm() {
-        if (customerInfoSaved) {
-            // Chỉ submit form nếu thông tin khách hàng đã được lưu
-            $('#export_form').unbind('submit').submit();
-        }
-    }
-
-    // Hàm kiểm tra submit
-    $(document).on('submit', '#export_form', function(e) {
-        e.preventDefault();
-
-        // Kiểm tra xem đã thêm thông tin khách hàng hay chưa
-        var customerId = $('#form-guest input[name="id"]').val();
-        if (customerId === '') {
-            // Nếu chưa thêm thông tin khách hàng, lưu thông tin và submit form
-            saveCustomerInfo();
-        } else {
-            // Nếu đã thêm thông tin khách hàng, chỉ submit form
-            submitExportForm();
-        }
-    });
-
+    //hàm kiểm tra
     function validateAndSubmit(event) {
         var formGuest = $('#form-guest');
-
-        var maProduct = $('.maProduct:last').val();
-        var productUnit = $('.product_unit:last').val();
-        var productQty = $('.quantity-input:last').val();
-        var productPrice = $('.product_price:last').val();
-        var productTax = $('.product_tax:last').val();
-
-        if (!maProduct || !productUnit || !productQty || !productPrice || !productTax) {
-            alert('Vui lòng nhập đủ thông tin sản phẩm.');
-            event.preventDefault();
-            return;
-        }
 
         if (formGuest.length) {
             var requiredInputs = formGuest.find(':input[required]');
@@ -971,17 +937,9 @@
                     return false; // Dừng vòng lặp nếu có trường không hợp lệ
                 }
             });
-            var maProduct = $('.maProduct:last').val();
-            var productUnit = $('.product_unit:last').val();
-            var productQty = $('.quantity-input:last').val();
-            var productPrice = $('.product_price:last').val();
-            var productTax = $('.product_tax:last').val();
-            if (!maProduct || !productUnit || !productQty || !productPrice || !productTax) {
-                alert('Vui lòng nhập đủ thông tin sản phẩm.');
-                return;
-            } else if (isValid) {
+
+            if (isValid) {
                 $('#export_form').submit();
-                $('#btn-addCustomer').click();
             } else {
                 alert('Lỗi: Vui lòng điền đầy đủ thông tin!');
                 event.preventDefault();
@@ -991,6 +949,7 @@
             event.preventDefault();
         }
     }
+
     //in báo giá
     function toggleDiv() {
         var sourceTable = document.getElementById('sourceTable');
