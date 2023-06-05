@@ -272,7 +272,7 @@
                         '<td><input required type="number" name="product_price[]" value="' + price + '"></td>' +
                         '<td><input required type="number" name="product_tax[]" class="product_tax"></td>' +
                         '<td><input readonly type="text" name="product_total[]"></td>' +
-                        '<td><input required type="text" name="product_trademark[]"></td>' +
+                        '<td><input type="text" name="product_trademark[]"></td>' +
                         '<td>' +
                         '<button class="exampleModal" name="btn_add_SN[]" type="button" data-toggle="modal" data-target="#exampleModal' +
                         rowCount + '" style="background:transparent; border:none;">' +
@@ -640,7 +640,7 @@
                 '<td><input required type="number" name="product_price[]"></td>' +
                 '<td><input required type="number" name="product_tax[]" class="product_tax"></td>' +
                 '<td><input readonly type="text" name="product_total[]"></td>' +
-                '<td><input required type="text" name="product_trademark[]"></td>' +
+                '<td><input type="text" name="product_trademark[]"></td>' +
                 '<td>' +
                 '<button class="exampleModal" name="btn_add_SN[]" type="button" data-toggle="modal" data-target="#exampleModal' +
                 rowCount + '" style="background:transparent; border:none;">' +

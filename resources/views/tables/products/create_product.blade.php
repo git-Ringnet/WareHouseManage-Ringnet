@@ -37,10 +37,10 @@
                         <h4>Mã sản phẩm</h4>
                         <input type="text" value="{{$products->products_code}}">
                       </div>
-                      <div class="product_id">
+                      <!-- <div class="product_id">
                         <h4>ID</h4>
                         <input type="text" value="{{$products->id}}">
-                      </div>
+                      </div> -->
                     </div>
                     <div class="col-md-3">
                       <div class="product_category">
@@ -51,10 +51,10 @@
                         <h4>Thương hiệu</h4>
                         <input type="text" value="{{$products->products_trademark}}">
                       </div>
-                      <div class="product_unit">
+                      <!-- <div class="product_unit">
                         <h4>Đơn vị</h4>
                         <input type="text" value="{{$products->products_unit}}">
-                      </div>
+                      </div> -->
                     </div>
                     <div class="col-md-4">
                       <h4>Mô tả</h4>

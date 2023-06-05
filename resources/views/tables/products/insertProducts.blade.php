@@ -74,12 +74,12 @@
                                             <input required type="text" name="products_code"
                                                 class="w-100 p-1 form-control mb-4">
                                         </div>
-                                        <div class="product_id">
+                                        <!-- <div class="product_id">
                                             <div class="title-edit-item">ID</div>
 
                                             <input type="text" name="products_id" readonly
                                                 class="w-100 p-1 form-control mb-4">
-                                        </div>
+                                        </div> -->
                                     </div>
                                     <div class="col-md-3">
                                         <div class="product_category">
@@ -92,12 +92,12 @@
                                             <input required type="text" name="products_trademark"
                                                 class="w-100 p-1 form-control mb-4">
                                         </div>
-                                        <div class="product_unit">
+                                        <!-- <div class="product_unit">
                                             <div class="title-edit-item">Đơn vị</div>
 
                                             <input required type="text" name="products_unit"
                                                 class="w-100 p-1 form-control mb-4">
-                                        </div>
+                                        </div> -->
                                     </div>
                                     <div class="col-md-6">
                                         <div class="title-edit-item">Mô tả</div>
