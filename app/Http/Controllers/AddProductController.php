@@ -153,18 +153,20 @@ class AddProductController extends Controller
     {
         // $data = $request->all();
         $new_provide = new Provides();
-        if (
-            $request->provide_name_new != null && $request->provide_address_new != null && $request->provide_code_new != null &&
-            $request->provide_represent_new != null && $request->provide_email_new != null && $request->provide_phone_new != null
-        ) {
-            $new_provide->provide_name = $request->provide_name_new;
-            $new_provide->provide_represent = $request->provide_represent_new;
-            $new_provide->provide_phone = $request->provide_phone_new;
-            $new_provide->provide_email = $request->provide_email_new;
-            $new_provide->provide_address = $request->provide_address_new;
-            $new_provide->provide_code = $request->provide_code_new;
-            $new_provide->provide_status = 1;
-            $new_provide->save();
+        if ($request['provide_id'] == null) {
+            if (
+                $request->provide_name_new != null && $request->provide_address_new != null && $request->provide_code_new != null &&
+                $request->provide_represent_new != null && $request->provide_email_new != null && $request->provide_phone_new != null
+            ) {
+                $new_provide->provide_name = $request->provide_name_new;
+                $new_provide->provide_represent = $request->provide_represent_new;
+                $new_provide->provide_phone = $request->provide_phone_new;
+                $new_provide->provide_email = $request->provide_email_new;
+                $new_provide->provide_address = $request->provide_address_new;
+                $new_provide->provide_code = $request->provide_code_new;
+                $new_provide->provide_status = 1;
+                $new_provide->save();
+            }
         }
         $product_id = $request->product_id;
         $products_id = $request->products_id;
@@ -650,7 +652,7 @@ class AddProductController extends Controller
             $list = $request->list_id;
             $listOrder = Orders::whereIn('id', $list)->get();
             foreach ($listOrder as $value) {
-                if($value->order_status != 1){
+                if ($value->order_status != 1) {
                     $value->order_status = 2;
                     $value->save();
                 }
@@ -666,8 +668,8 @@ class AddProductController extends Controller
             $list = $request->list_id;
             $listOrder = Orders::whereIn('id', $list)->get();
             foreach ($listOrder as $value) {
-                if($value->order_status == 0){
-                    $product = ProductOrders::where('order_id',$value->id)->get();
+                if ($value->order_status == 0) {
+                    $product = ProductOrders::where('order_id', $value->id)->get();
                 }
             }
             return response()->json(['success' => true, 'msg' => 'Hủy Đơn Hàng thành công']);
@@ -678,8 +680,23 @@ class AddProductController extends Controller
     public function showProduct(Request $request)
     {
         if (isset($request->id)) {
-            $pro = Product::where('products_id',$request->id)->get();
+            $pro = Product::where('products_id', $request->id)->get();
             return $pro;
         }
+    }
+    public function add_newProvide(Request $request)
+    {
+        $data = $request->all();
+        // var_dump($data);
+        $add_newProvide = new Provides();
+        $add_newProvide->provide_name = $data['provide_name'];
+        $add_newProvide->provide_represent = $data['provide_represent'];
+        $add_newProvide->provide_phone = $data['provide_phone'];
+        $add_newProvide->provide_email = $data['provide_email'];
+        $add_newProvide->provide_status = 1;
+        $add_newProvide->provide_address = $data['provide_address'];
+        $add_newProvide->provide_code = $data['provide_code'];
+        $add_newProvide->save();
+        return response()->json(['success' => true, 'msg' => 'Thêm mới nhà cung cấp thành công !', 'data' => $add_newProvide]);
     }
 }

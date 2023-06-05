@@ -460,7 +460,9 @@
                                     <td></td>
                                     <td>
                                         <p>{{ $item->product_name }}</p>
-                                        {{ $item->getCodeProduct->products_code }}
+                                        @if ($item && $item->getCodeProduct)
+                                        {{ $item->getCodeProduct->products_code == null ? "" : $item->getCodeProduct->products_code }}
+                                        @endif
                                     </td>
                                     <td>
                                         <p>Số lượng</p>
@@ -570,6 +572,7 @@
                         for (let i = 0; i < id.length; i++) {
                             $('.' + id[i]).remove();
                         }
+                        updateMultipleActionVisibility();
                     }
                 }
 
