@@ -31,7 +31,7 @@
                         <div class="col-2 d-none">
                             <button type="submit" class="btn btn-primary btn-block">Tìm kiếm</button>
                         </div>
-                        <a class="btn ml-auto btn-delete-filter" href="{{ route('guests.index') }}"><span><svg
+                        <a class="btn ml-auto btn-delete-filter btn-light" href="{{ route('guests.index') }}"><span><svg
                                     width="24" height="24" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path
@@ -40,9 +40,9 @@
                                 </svg>
                             </span>Tắt bộ lọc</a>
                     </div>
-                    <div class="row d-flex justify-contents-center align-items-center mr-auto row-filter my-3">
-                        <div class="row filter-results d-flex">
-                            <div class="icon-filter mr-3 ml-3">
+                    <div class="d-flex justify-contents-center align-items-center mr-auto row-filter my-3 m-0">
+                        <div class="row filter-results d-flex row m-0">
+                            <div class="icon-filter mr-3">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path
@@ -114,7 +114,7 @@ $index = array_search($item['label'], $numberedLabels);
                         </div>
                         <div class="filter-options">
                             <div class="dropdown">
-                                <button class="ml-2 btn btn-filter" type="button" id="dropdownMenuButton"
+                                <button class="btn btn-filter btn-light" type="button" id="dropdownMenuButton"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <span><svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">

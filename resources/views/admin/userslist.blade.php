@@ -26,13 +26,13 @@
                         <div class="col-5">
                             <input type="text" name="keywords" class="form-control" value="{{ request()->keywords }}"
                                 placeholder="Tìm kiếm nhân viên">
-                                <span class="search-icon"><i class="fas fa-search"></i></span>
+                            <span class="search-icon"><i class="fas fa-search"></i></span>
                         </div>
                         <div class="col-2 d-none">
                             <button type="submit" class="btn btn-primary btn-block">Tìm kiếm</button>
 
                         </div>
-                        <a class="btn ml-auto btn-delete-filter" href="{{ route('admin.userslist') }}"><span><svg
+                        <a class="btn ml-auto btn-light btn-delete-filter" href="{{ route('admin.userslist') }}"><span><svg
                                     width="24" height="24" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path
@@ -41,7 +41,15 @@
                                 </svg>
                             </span>Tắt bộ lọc</a>
                     </div>
-                    <div class="row d-flex justify-contents-center align-items-center mr-auto row-filter my-3">
+                    <div class="d-flex justify-contents-center align-items-center mr-auto row-filter my-3 m-0">
+                        <div class="icon-filter mr-3">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M8.66667 18C8.66667 17.7348 8.75446 17.4804 8.91074 17.2929C9.06702 17.1054 9.27899 17 9.5 17H14.5C14.721 17 14.933 17.1054 15.0893 17.2929C15.2455 17.4804 15.3333 17.7348 15.3333 18C15.3333 18.2652 15.2455 18.5196 15.0893 18.7071C14.933 18.8946 14.721 19 14.5 19H9.5C9.27899 19 9.06702 18.8946 8.91074 18.7071C8.75446 18.5196 8.66667 18.2652 8.66667 18ZM5.33333 12C5.33333 11.7348 5.42113 11.4804 5.57741 11.2929C5.73369 11.1054 5.94565 11 6.16667 11H17.8333C18.0543 11 18.2663 11.1054 18.4226 11.2929C18.5789 11.4804 18.6667 11.7348 18.6667 12C18.6667 12.2652 18.5789 12.5196 18.4226 12.7071C18.2663 12.8946 18.0543 13 17.8333 13H6.16667C5.94565 13 5.73369 12.8946 5.57741 12.7071C5.42113 12.5196 5.33333 12.2652 5.33333 12ZM2 6C2 5.73478 2.0878 5.48043 2.24408 5.29289C2.40036 5.10536 2.61232 5 2.83333 5H21.1667C21.3877 5 21.5996 5.10536 21.7559 5.29289C21.9122 5.48043 22 5.73478 22 6C22 6.26522 21.9122 6.51957 21.7559 6.70711C21.5996 6.89464 21.3877 7 21.1667 7H2.83333C2.61232 7 2.40036 6.89464 2.24408 6.70711C2.0878 6.51957 2 6.26522 2 6Z"
+                                    fill="#555555" />
+                            </svg>
+                        </div>
                         <?php
                         session_start();
                         
@@ -79,15 +87,7 @@
                         
                         // var_dump($_SESSION['labels']);
                         ?>
-                        <div class="row filter-results d-flex">
-                            <div class="icon-filter mr-3 ml-3">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M8.66667 18C8.66667 17.7348 8.75446 17.4804 8.91074 17.2929C9.06702 17.1054 9.27899 17 9.5 17H14.5C14.721 17 14.933 17.1054 15.0893 17.2929C15.2455 17.4804 15.3333 17.7348 15.3333 18C15.3333 18.2652 15.2455 18.5196 15.0893 18.7071C14.933 18.8946 14.721 19 14.5 19H9.5C9.27899 19 9.06702 18.8946 8.91074 18.7071C8.75446 18.5196 8.66667 18.2652 8.66667 18ZM5.33333 12C5.33333 11.7348 5.42113 11.4804 5.57741 11.2929C5.73369 11.1054 5.94565 11 6.16667 11H17.8333C18.0543 11 18.2663 11.1054 18.4226 11.2929C18.5789 11.4804 18.6667 11.7348 18.6667 12C18.6667 12.2652 18.5789 12.5196 18.4226 12.7071C18.2663 12.8946 18.0543 13 17.8333 13H6.16667C5.94565 13 5.73369 12.8946 5.57741 12.7071C5.42113 12.5196 5.33333 12.2652 5.33333 12ZM2 6C2 5.73478 2.0878 5.48043 2.24408 5.29289C2.40036 5.10536 2.61232 5 2.83333 5H21.1667C21.3877 5 21.5996 5.10536 21.7559 5.29289C21.9122 5.48043 22 5.73478 22 6C22 6.26522 21.9122 6.51957 21.7559 6.70711C21.5996 6.89464 21.3877 7 21.1667 7H2.83333C2.61232 7 2.40036 6.89464 2.24408 6.70711C2.0878 6.51957 2 6.26522 2 6Z"
-                                        fill="#555555" />
-                                </svg>
-                            </div>
+                        <div class="row filter-results d-flex row m-0">
                             <input id="delete-item-input" type="hidden" name="delete_item" value="">
                             @foreach ($string as $item)
                                 <span class="filter-group"
@@ -112,173 +112,184 @@ $index = array_search($item['label'], $numberedLabels);
                                     </a>
                                 </span>
                             @endforeach
-                        </div>
-                        <div class="filter-options">
-                            <div class="dropdown">
-                                <button class="ml-2 btn btn-filter" type="button" id="dropdownMenuButton"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span><svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M12 6C12.3879 6 12.7024 6.31446 12.7024 6.70237L12.7024 17.2976C12.7024 17.6855 12.3879 18 12 18C11.6121 18 11.2976 17.6855 11.2976 17.2976V6.70237C11.2976 6.31446 11.6121 6 12 6Z"
-                                                fill="#555555" />
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M18 12C18 12.3879 17.6855 12.7024 17.2976 12.7024H6.70237C6.31446 12.7024 6 12.3879 6 12C6 11.6121 6.31446 11.2976 6.70237 11.2976H17.2976C17.6855 11.2976 18 11.6121 18 12Z"
-                                                fill="#555555" />
-                                        </svg>
-                                        Thêm bộ lọc
-                                    </span>
-                                </button>
-                                <div class="dropdown-menu" id="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <div class="search-container px-2">
-                                        <input type="text" placeholder="Tìm kiếm" id="myInput"
-                                            onkeyup="filterFunction()">
-                                        <span class="search-icon"><i class="fas fa-search"></i></span>
+                            <div class="" style="order:999">
+                                <div class="filter-options">
+                                    <div class="dropdown">
+                                        <button class="btn btn-filter btn-light" type="button" id="dropdownMenuButton"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <span><svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                        d="M12 6C12.3879 6 12.7024 6.31446 12.7024 6.70237L12.7024 17.2976C12.7024 17.6855 12.3879 18 12 18C11.6121 18 11.2976 17.6855 11.2976 17.2976V6.70237C11.2976 6.31446 11.6121 6 12 6Z"
+                                                        fill="#555555" />
+                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                        d="M18 12C18 12.3879 17.6855 12.7024 17.2976 12.7024H6.70237C6.31446 12.7024 6 12.3879 6 12C6 11.6121 6.31446 11.2976 6.70237 11.2976H17.2976C17.6855 11.2976 18 11.6121 18 12Z"
+                                                        fill="#555555" />
+                                                </svg>
+                                                Thêm bộ lọc
+                                            </span>
+                                        </button>
+                                        <div class="dropdown-menu" id="dropdown-menu"
+                                            aria-labelledby="dropdownMenuButton">
+                                            <div class="search-container px-2">
+                                                <input type="text" placeholder="Tìm kiếm" id="myInput"
+                                                    onkeyup="filterFunction()">
+                                                <span class="search-icon"><i class="fas fa-search"></i></span>
+                                            </div>
+                                            <div class="scrollbar">
+                                                <button class="dropdown-item" id="btn-name">Tên nhân viên</button>
+                                                <button class="dropdown-item" id="btn-roles">Vai trò</button>
+                                                <button class="dropdown-item" id="btn-phonenumber">Số điện
+                                                    thoại</button>
+                                                <button class="dropdown-item" id="btn-email">Email</button>
+                                                <button class="dropdown-item" id="btn-status">Trạng thái</button>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="scrollbar">
-                                    <button class="dropdown-item" id="btn-name">Tên nhân viên</button>
-                                    <button class="dropdown-item" id="btn-roles">Vai trò</button>
-                                    <button class="dropdown-item" id="btn-phonenumber">Số điện thoại</button>
-                                    <button class="dropdown-item" id="btn-email">Email</button>
-                                    <button class="dropdown-item" id="btn-status">Trạng thái</button>
+                                    <?php $status = [];
+                                    $roles = [];
+                                    if (isset(request()->status)) {
+                                        $status = request()->status;
+                                    } else {
+                                        $status = [];
+                                    }
+                                    if (isset(request()->roles)) {
+                                        $roles = request()->roles;
+                                    } else {
+                                        $roles = [];
+                                    }
+                                    ?>
+                                    {{-- Tìm tên nhân viên --}}
+                                    <div class="block-options" id="name-options" style="display:none">
+                                        <div class="wrap w-100">
+                                            <div class="heading-title title-wrap">
+                                                <h5>Tên nhân viên</h5>
+                                            </div>
+                                            <div class="input-group p-2">
+                                                <label class="title" for="">Chứa kí tự</label>
+                                                <input type="search" name="name" class="form-control name-input"
+                                                    value="{{ request()->name }}" placeholder="Nhập thông tin..">
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                            <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                                Nhận</button>
+                                            <button type="button" id="cancel-name"
+                                                class="btn btn-default btn-block">Hủy</button>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                            <?php $status = [];
-                            $roles = [];
-                            if (isset(request()->status)) {
-                                $status = request()->status;
-                            } else {
-                                $status = [];
-                            }
-                            if (isset(request()->roles)) {
-                                $roles = request()->roles;
-                            } else {
-                                $roles = [];
-                            }
-                            ?>
-                            {{-- Tìm tên nhân viên --}}
-                            <div class="block-options" id="name-options" style="display:none">
-                                <div class="wrap w-100">
-                                    <div class="heading-title title-wrap">
-                                        <h5>Tên nhân viên</h5>
+                                    {{-- Tìm số điện thoại --}}
+                                    <div class="block-options" id="phonenumber-options" style="display:none">
+                                        <div class="wrap w-100">
+                                            <div class="heading-title title-wrap">
+                                                <h5>Đơn vị</h5>
+                                            </div>
+                                            <div class="input-group p-2">
+                                                <label class="title" for="">Chứa kí tự</label>
+                                                <input type="number" name="phonenumber"
+                                                    class="form-control phonenumber-input"
+                                                    value="{{ request()->phonenumber }}"
+                                                    placeholder="Nhập thông tin..">
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                            <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                                Nhận</button>
+                                            <button type="button" id="cancel-phonenumber"
+                                                class="btn btn-default btn-block">Hủy</button>
+                                        </div>
                                     </div>
-                                    <div class="input-group p-2">
-                                        <label class="title" for="">Chứa kí tự</label>
-                                        <input type="search" name="name" class="form-control name-input"
-                                            value="{{ request()->name }}" placeholder="Nhập thông tin..">
+                                    {{-- Tìm Email --}}
+                                    <div class="block-options" id="email-options" style="display:none">
+                                        <div class="wrap w-100">
+                                            <div class="heading-title title-wrap">
+                                                <h5>Email</h5>
+                                            </div>
+                                            <div class="input-group p-2">
+                                                <label class="title" for="">Chứa kí tự</label>
+                                                <input type="search" name="email" class="form-control email-input"
+                                                    value="{{ request()->email }}" placeholder="Nhập thông tin..">
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                            <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                                Nhận</button>
+                                            <button type="button" id="cancel-email"
+                                                class="btn btn-default btn-block">Hủy</button>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="d-flex justify-contents-center align-items-baseline p-2">
-                                    <button type="submit" class="btn btn-primary btn-block mr-2">Xác Nhận</button>
-                                    <button type="button" id="cancel-name"
-                                        class="btn btn-default btn-block">Hủy</button>
-                                </div>
-                            </div>
-                            {{-- Tìm số điện thoại --}}
-                            <div class="block-options" id="phonenumber-options" style="display:none">
-                                <div class="wrap w-100">
-                                    <div class="heading-title title-wrap">
-                                        <h5>Đơn vị</h5>
-                                    </div>
-                                    <div class="input-group p-2">
-                                        <label class="title" for="">Chứa kí tự</label>
-                                        <input type="number" name="phonenumber"
-                                            class="form-control phonenumber-input"
-                                            value="{{ request()->phonenumber }}" placeholder="Nhập thông tin..">
-                                    </div>
-                                </div>
-                                <div class="d-flex justify-contents-center align-items-baseline p-2">
-                                    <button type="submit" class="btn btn-primary btn-block mr-2">Xác Nhận</button>
-                                    <button type="button" id="cancel-phonenumber"
-                                        class="btn btn-default btn-block">Hủy</button>
-                                </div>
-                            </div>
-                            {{-- Tìm Email --}}
-                            <div class="block-options" id="email-options" style="display:none">
-                                <div class="wrap w-100">
-                                    <div class="heading-title title-wrap">
-                                        <h5>Email</h5>
-                                    </div>
-                                    <div class="input-group p-2">
-                                        <label class="title" for="">Chứa kí tự</label>
-                                        <input type="search" name="email" class="form-control email-input"
-                                            value="{{ request()->email }}" placeholder="Nhập thông tin..">
-                                    </div>
-                                </div>
-                                <div class="d-flex justify-contents-center align-items-baseline p-2">
-                                    <button type="submit" class="btn btn-primary btn-block mr-2">Xác Nhận</button>
-                                    <button type="button" id="cancel-email"
-                                        class="btn btn-default btn-block">Hủy</button>
-                                </div>
-                            </div>
-                            <div class="block-options" id="status-options" style="display:none">
-                                <div class="wrap w-100">
-                                    <div class="heading-title title-wrap">
-                                        <h5>Trạng thái</h5>
-                                    </div>
-                                    <div
-                                        class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
-                                        <a class="cursor select-all mr-auto">Chọn tất cả</a>
-                                        <a class="cursor deselect-all">Hủy chọn</a>
-                                    </div>
-                                    <ul class="ks-cboxtags p-0 m-0 px-2">
-                                        <li>
-                                            <input type="checkbox" id="status_active"
-                                                {{ in_array(1, $status) ? 'checked' : '' }} name="status[]"
-                                                value="1">
-                                            <label for="status_active">Active</label>
-                                        </li>
-                                        <li>
-                                            <input type="checkbox" id="status_inactive"
-                                                {{ in_array(0, $status) ? 'checked' : '' }} name="status[]"
-                                                value="0">
-                                            <label for="status_inactive">Disable</label>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="d-flex justify-contents-center align-items-baseline p-2">
-                                    <button type="submit" class="btn btn-primary btn-block mr-2">Xác Nhận</button>
-                                    <button type="button" id="cancel-status"
-                                        class="btn btn-default btn-block">Hủy</button>
-                                </div>
-                            </div>
-                            <div class="block-options" id="role-options" style="display:none">
-                                <div class="wrap w-100">
-                                    <div class="heading-title title-wrap">
-                                        <h5>Vai trò</h5>
-                                    </div>
-                                    <div class="search-container px-2 mt-2">
-                                        <input type="text" placeholder="Tìm kiếm" id="myInput-roles"
-                                            class="pr-4 w-100 input-search" onkeyup="filterRoles()">
-                                        <span class="search-icon"><i class="fas fa-search"></i></span>
-                                    </div>
-                                    <div
-                                        class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
-                                        <a class="cursor select-all-roles mr-auto">Chọn tất cả</a>
-                                        <a class="cursor deselect-all-roles">Hủy chọn</a>
-                                    </div>
-                                    <ul class="ks-cboxtags-roles p-0 m-0 px-2">
-                                        @if (!empty($allRoles))
-                                            @foreach ($allRoles as $role)
+                                    <div class="block-options" id="status-options" style="display:none">
+                                        <div class="wrap w-100">
+                                            <div class="heading-title title-wrap">
+                                                <h5>Trạng thái</h5>
+                                            </div>
+                                            <div
+                                                class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
+                                                <a class="cursor select-all mr-auto">Chọn tất cả</a>
+                                                <a class="cursor deselect-all">Hủy chọn</a>
+                                            </div>
+                                            <ul class="ks-cboxtags p-0 m-0 px-2">
                                                 <li>
-                                                    <input type="checkbox" id="roles_active"
-                                                        {{ in_array($role->id, $roles) ? 'checked' : '' }}
-                                                        name="roles[]" value="{{ $role->id }}">
-                                                    <label for="roles_active">{{ $role->name }}</label>
+                                                    <input type="checkbox" id="status_active"
+                                                        {{ in_array(1, $status) ? 'checked' : '' }} name="status[]"
+                                                        value="1">
+                                                    <label for="status_active">Active</label>
                                                 </li>
-                                            @endforeach
-                                        @endif
-                                    </ul>
-                                    <div class="d-flex justify-contents-center align-items-baseline p-2">
-                                        <button type="submit" class="btn btn-primary btn-block mr-2">Xác
-                                            Nhận</button>
-                                        <button type="button" id="cancel-roles"
-                                            class="btn btn-default btn-block">Hủy</button>
+                                                <li>
+                                                    <input type="checkbox" id="status_inactive"
+                                                        {{ in_array(0, $status) ? 'checked' : '' }} name="status[]"
+                                                        value="0">
+                                                    <label for="status_inactive">Disable</label>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                            <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                                Nhận</button>
+                                            <button type="button" id="cancel-status"
+                                                class="btn btn-default btn-block">Hủy</button>
+                                        </div>
+                                    </div>
+                                    <div class="block-options" id="role-options" style="display:none">
+                                        <div class="wrap w-100">
+                                            <div class="heading-title title-wrap">
+                                                <h5>Vai trò</h5>
+                                            </div>
+                                            <div class="search-container px-2 mt-2">
+                                                <input type="text" placeholder="Tìm kiếm" id="myInput-roles"
+                                                    class="pr-4 w-100 input-search" onkeyup="filterRoles()">
+                                                <span class="search-icon"><i class="fas fa-search"></i></span>
+                                            </div>
+                                            <div
+                                                class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
+                                                <a class="cursor select-all-roles mr-auto">Chọn tất cả</a>
+                                                <a class="cursor deselect-all-roles">Hủy chọn</a>
+                                            </div>
+                                            <ul class="ks-cboxtags-roles p-0 m-0 px-2">
+                                                @if (!empty($allRoles))
+                                                    @foreach ($allRoles as $role)
+                                                        <li>
+                                                            <input type="checkbox" id="roles_active"
+                                                                {{ in_array($role->id, $roles) ? 'checked' : '' }}
+                                                                name="roles[]" value="{{ $role->id }}">
+                                                            <label for="roles_active">{{ $role->name }}</label>
+                                                        </li>
+                                                    @endforeach
+                                                @endif
+                                            </ul>
+                                            <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                                <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                                    Nhận</button>
+                                                <button type="button" id="cancel-roles"
+                                                    class="btn btn-default btn-block">Hủy</button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+
                         {{--
         </form> --}}
                     </div>
@@ -387,7 +398,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                         enctype="multipart/form">
                                                         @csrf
                                                         <button type="submit" class="btn btn-info btn-sm">
-                                                    <i class="fas fa-pencil-alt"></i>
+                                                            <i class="fas fa-pencil-alt"></i>
                                                             Edit</button>
                                                         <input type="hidden" name="id"
                                                             value="{{ $value->id }}" />
@@ -613,6 +624,7 @@ $index = array_search($item['label'], $numberedLabels);
             }
         });
     }
+
     function filterRoles() {
         var input = $("#myInput-roles");
         var filter = input.val().toUpperCase();

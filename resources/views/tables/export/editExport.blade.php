@@ -119,11 +119,11 @@
             @if ($exports->export_status == 1)
                 <button type="submit" class="btn btn-danger text-white" name="submitBtn" value="action1">Chốt
                     đơn</button>
-                <button type="submit" class="btn btn-secondary ml-4" name="submitBtn" value="action2">Hủy
+                <button type="submit" class="btn btn-secondary mr-4" name="submitBtn" value="action2">Hủy
                     đơn</button>
             @endif
-            <a href="#" class="btn border border-secondary ml-4">Xuất file</a>
-            <a href="#" class="btn border border-secondary ml-4">
+            <a href="#" class="btn border border-secondary mr-4">Xuất file</a>
+            <a href="#" class="btn border border-secondary mr-4">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                     xmlns="http://www.w3.org/2000/svg">
                     <path
@@ -368,8 +368,9 @@
                     <div class="mb-2">
                         <span class="btn btn-secondary" id="add-field-btn">Thêm sản phẩm</span>
                     </div>
+                @endif
             </div>
-            @endif
+
 
 
             <div class="row position-relative">

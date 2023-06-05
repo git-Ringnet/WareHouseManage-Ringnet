@@ -2,23 +2,30 @@
 #section_products .multiple_action{
     background: #333333;
     border-radius: 4px;
-    padding: 10px 10px;
 }
-#section_products .multiple_action button{
-    padding: 0.5rem 1rem;
-}
-#section_products{
-    margin-top: 1.375rem;
-}
-#section_products .multiple_action .count_checkbox{
+
+#section_products .multiple_action .count_checkbox,.order_content .multiple_action .count_checkbox{
     font-size: 16px;
     font-weight: 600;
     color: #FFFFFF;
+    padding-left: 0.75rem;
+    text-align: center;
 }
 #section_products .multiple_action{
     display: none;
 }
-
+#section_products,.order_content{
+    position: relative;
+}
+.action::after {
+    content: "";
+    width: 1px;
+    background-color: #FFFFFF;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    margin-left: -5px;
+}
 
 /* Order */
 #order_products #items_action span{
@@ -31,22 +38,10 @@
 #order_products .row-filter{
     margin-top: 1.35rem ;
 }
-.multiple_action button{
-    padding: 7px 16px;
-}
 
 .order_content .multiple_action{
     background: #333333;
     border-radius: 4px;
-}
-.order_content .multiple_action .row{
-    padding: 10px 10px;
-}
-#order_products .multiple_action button{
-    padding: 0.5rem 1rem;
-}
-.order_content{
-    margin-top: 1.375rem;
 }
 .order_content .multiple_action .count_checkbox{
     font-size: 16px;
