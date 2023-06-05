@@ -92,7 +92,7 @@ class GuestsController extends Controller
         }
         $guests = $this->guests->getAllguests($filters, $name, $represent, $phonenumber, $email, $status, $keywords, $sortByArr);
         $title = 'Khách hàng';
-        return view('tables.guest.guests', compact('guests', 'sortType', 'string','title'));
+        return view('tables.guest.guests', compact('guests', 'sortType', 'string', 'title'));
     }
 
     /**
@@ -103,7 +103,7 @@ class GuestsController extends Controller
     public function create()
     {
         $title = 'Thêm khách hàng';
-        return view('tables.guest.addGuest',compact('title'));
+        return view('tables.guest.addGuest', compact('title'));
     }
 
     /**
@@ -120,6 +120,12 @@ class GuestsController extends Controller
             'guest_phone' => $request->guest_phone,
             'guest_email' => $request->guest_email,
             'guest_status' => $request->guest_status,
+            'guest_addressInvoice' => $request->guest_addressInvoice,
+            'guest_code' => $request->guest_code,
+            'guest_addressDeliver' => $request->uest_addressDeliver,
+            'guest_receiver' => $request->guest_receiver,
+            'guest_phoneReceiver' => $request->guest_phoneReceiver,
+            'guest_note' => $request->guest_note,
         ]);
         return redirect()->route('guests.index')->with('msg', 'Thêm khách hàng thành công!');
     }
@@ -145,7 +151,7 @@ class GuestsController extends Controller
     {
         $title = 'Chỉnh sửa khách hàng';
         $guests = Guests::find($id);
-        return view('tables.guest.editGuest', compact('guests','title'));
+        return view('tables.guest.editGuest', compact('guests', 'title'));
     }
 
     /**

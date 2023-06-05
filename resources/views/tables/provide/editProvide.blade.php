@@ -39,7 +39,15 @@
                                 <div class="form-group">
                                     <label for="pwd">Email:</label>
                                     <input type="email" class="form-control" value="{{ $provides->provide_email }}"
-                                        name="provide_email" placeholder="Nhập email" required>
+                                    pattern="/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/" name="provide_email" placeholder="Nhập email" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="pwd">Địa chỉ:</label>
+                                    <input type="text" class="form-control" value="{{ $provides->provide_address }}" name="provide_address" placeholder="Nhập địa chỉ" required="">
+                                </div>
+                                <div class="form-group">
+                                    <label for="pwd">Mã nhà cung cấp:</label>
+                                    <input type="text" class="form-control" name="provide_code" value="{{ $provides->provide_code }}" placeholder="Nhập mã nhà cung cấp" required="">
                                 </div>
                                 <div class="form-group">
                                     <label for="pwd">Trạng thái:</label>

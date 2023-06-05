@@ -362,7 +362,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     <i class="fas fa-pencil-alt"></i>
                                                     Edit
                                                 </a>
-                                                <form onclick="return confirm('Are you sure?')"
+                                                <form onclick="return confirm('Bạn có chắc chắn muốn xóa?')"
                                                     action="{{ route('guests.destroy', $item->id) }}" method="POST"
                                                     class="d-inline">
                                                     @csrf

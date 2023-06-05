@@ -70,68 +70,69 @@
             </div>
         </div>
     </div>
-    <section class="content">
-        <div class="d-flex mb-1 action-don">
-            {{-- <a href="#" class="btn btn-danger text-white">Chốt đơn</a>
-            <a href="#" class="btn btn-secondary ml-4">Hủy đơn</a> --}}
-            <a href="#" class="btn border border-secondary">Xuất file</a>
-            <button class="btn border border-secondary ml-4" onclick="toggleDiv()">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M9 5C8.46957 5 7.96086 5.21071 7.58579 5.58579C7.21071 5.96086 7 6.46957 7 7V8H17V7C17 6.46957 16.7893 5.96086 16.4142 5.58579C16.0391 5.21071 15.5304 5 15 5H9ZM15 13H9C8.73478 13 8.48043 13.1054 8.29289 13.2929C8.10536 13.4804 8 13.7348 8 14V17C8 17.2652 8.10536 17.5196 8.29289 17.7071C8.48043 17.8946 8.73478 18 9 18H15C15.2652 18 15.5196 17.8946 15.7071 17.7071C15.8946 17.5196 16 17.2652 16 17V14C16 13.7348 15.8946 13.4804 15.7071 13.2929C15.5196 13.1054 15.2652 13 15 13Z"
-                        fill="#555555" />
-                    <path
-                        d="M4 11C4 10.4696 4.21071 9.96086 4.58579 9.58579C4.96086 9.21071 5.46957 9 6 9H18C18.5304 9 19.0391 9.21071 19.4142 9.58579C19.7893 9.96086 20 10.4696 20 11V14C20 14.5304 19.7893 15.0391 19.4142 15.4142C19.0391 15.7893 18.5304 16 18 16H17V14C17 13.4696 16.7893 12.9609 16.4142 12.5858C16.0391 12.2107 15.5304 12 15 12H9C8.46957 12 7.96086 12.2107 7.58579 12.5858C7.21071 12.9609 7 13.4696 7 14V16H6C5.46957 16 4.96086 15.7893 4.58579 15.4142C4.21071 15.0391 4 14.5304 4 14V11ZM6.5 12C6.63261 12 6.75979 11.9473 6.85355 11.8536C6.94732 11.7598 7 11.6326 7 11.5C7 11.3674 6.94732 11.2402 6.85355 11.1464C6.75979 11.0527 6.63261 11 6.5 11C6.36739 11 6.24021 11.0527 6.14645 11.1464C6.05268 11.2402 6 11.3674 6 11.5C6 11.6326 6.05268 11.7598 6.14645 11.8536C6.24021 11.9473 6.36739 12 6.5 12Z"
-                        fill="#555555" />
-                </svg>
-                In báo giá
-            </button>
-        </div>
-        <div class="container-fluided position-relative">
-            <div class="row my-3">
-                <div class="col">
-                    <div class="w-75">
-                        <div class="d-flex mb-2">
-                            <input type="radio" name="options" id="radio1" checked>
-                            <span class="ml-1">Khách hàng cũ</span>
-                            <input type="radio" name="options" id="radio2" style="margin-left: 40px;">
-                            <span class="ml-1">Khách hàng mới</span>
-                        </div>
-                        <div class="input-group mb-1 position-relative w-50">
-                            <input type="text" class="form-control" placeholder="Nhập thông tin khách hàng"
-                                aria-label="Username" aria-describedby="basic-addon1" id="myInput"
-                                autocomplete="off">
-                            <div class="position-absolute" style="right: 5px;top: 17%;">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M15.1835 7.36853C13.0254 5.21049 9.52656 5.21049 7.36853 7.36853C5.21049 9.52656 5.21049 13.0254 7.36853 15.1835C9.52656 17.3415 13.0254 17.3415 15.1835 15.1835C17.3415 13.0254 17.3415 9.52656 15.1835 7.36853ZM16.2441 6.30787C13.5003 3.56404 9.05169 3.56404 6.30787 6.30787C3.56404 9.05169 3.56404 13.5003 6.30787 16.2441C9.05169 18.988 13.5003 18.988 16.2441 16.2441C18.988 13.5003 18.988 9.05169 16.2441 6.30787Z"
-                                        fill="#555555" />
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M15.1796 15.1796C15.4725 14.8867 15.9474 14.8867 16.2403 15.1796L19.5303 18.4696C19.8232 18.7625 19.8232 19.2374 19.5303 19.5303C19.2374 19.8232 18.7625 19.8232 18.4696 19.5303L15.1796 16.2403C14.8867 15.9474 14.8867 15.4725 15.1796 15.1796Z"
-                                        fill="#555555" />
-                                </svg>
+    <form action="{{ route('exports.store') }}" method="POST" id="export_form">
+        @csrf
+        <section class="content">
+            <div class="d-flex mb-1 action-don">
+                {{-- <a href="#" class="btn btn-danger text-white">Chốt đơn</a>
+                <a href="#" class="btn btn-secondary ml-4">Hủy đơn</a> --}}
+                <a href="#" class="btn border border-secondary">Xuất file</a>
+                <button class="btn border border-secondary ml-4" onclick="toggleDiv()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M9 5C8.46957 5 7.96086 5.21071 7.58579 5.58579C7.21071 5.96086 7 6.46957 7 7V8H17V7C17 6.46957 16.7893 5.96086 16.4142 5.58579C16.0391 5.21071 15.5304 5 15 5H9ZM15 13H9C8.73478 13 8.48043 13.1054 8.29289 13.2929C8.10536 13.4804 8 13.7348 8 14V17C8 17.2652 8.10536 17.5196 8.29289 17.7071C8.48043 17.8946 8.73478 18 9 18H15C15.2652 18 15.5196 17.8946 15.7071 17.7071C15.8946 17.5196 16 17.2652 16 17V14C16 13.7348 15.8946 13.4804 15.7071 13.2929C15.5196 13.1054 15.2652 13 15 13Z"
+                            fill="#555555" />
+                        <path
+                            d="M4 11C4 10.4696 4.21071 9.96086 4.58579 9.58579C4.96086 9.21071 5.46957 9 6 9H18C18.5304 9 19.0391 9.21071 19.4142 9.58579C19.7893 9.96086 20 10.4696 20 11V14C20 14.5304 19.7893 15.0391 19.4142 15.4142C19.0391 15.7893 18.5304 16 18 16H17V14C17 13.4696 16.7893 12.9609 16.4142 12.5858C16.0391 12.2107 15.5304 12 15 12H9C8.46957 12 7.96086 12.2107 7.58579 12.5858C7.21071 12.9609 7 13.4696 7 14V16H6C5.46957 16 4.96086 15.7893 4.58579 15.4142C4.21071 15.0391 4 14.5304 4 14V11ZM6.5 12C6.63261 12 6.75979 11.9473 6.85355 11.8536C6.94732 11.7598 7 11.6326 7 11.5C7 11.3674 6.94732 11.2402 6.85355 11.1464C6.75979 11.0527 6.63261 11 6.5 11C6.36739 11 6.24021 11.0527 6.14645 11.1464C6.05268 11.2402 6 11.3674 6 11.5C6 11.6326 6.05268 11.7598 6.14645 11.8536C6.24021 11.9473 6.36739 12 6.5 12Z"
+                            fill="#555555" />
+                    </svg>
+                    In báo giá
+                </button>
+            </div>
+            <div class="container-fluided position-relative">
+                <div class="row my-3">
+                    <div class="col">
+                        <div class="w-75">
+                            <div class="d-flex mb-2">
+                                <input type="radio" name="options" id="radio1" checked>
+                                <span class="ml-1">Khách hàng cũ</span>
+                                <input type="radio" name="options" id="radio2" style="margin-left: 40px;">
+                                <span class="ml-1">Khách hàng mới</span>
                             </div>
+                            <div class="input-group mb-1 position-relative w-50">
+                                <input type="text" class="form-control" placeholder="Nhập thông tin khách hàng"
+                                    aria-label="Username" aria-describedby="basic-addon1" id="myInput"
+                                    autocomplete="off">
+                                <div class="position-absolute" style="right: 5px;top: 17%;">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                            d="M15.1835 7.36853C13.0254 5.21049 9.52656 5.21049 7.36853 7.36853C5.21049 9.52656 5.21049 13.0254 7.36853 15.1835C9.52656 17.3415 13.0254 17.3415 15.1835 15.1835C17.3415 13.0254 17.3415 9.52656 15.1835 7.36853ZM16.2441 6.30787C13.5003 3.56404 9.05169 3.56404 6.30787 6.30787C3.56404 9.05169 3.56404 13.5003 6.30787 16.2441C9.05169 18.988 13.5003 18.988 16.2441 16.2441C18.988 13.5003 18.988 9.05169 16.2441 6.30787Z"
+                                            fill="#555555" />
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                            d="M15.1796 15.1796C15.4725 14.8867 15.9474 14.8867 16.2403 15.1796L19.5303 18.4696C19.8232 18.7625 19.8232 19.2374 19.5303 19.5303C19.2374 19.8232 18.7625 19.8232 18.4696 19.5303L15.1796 16.2403C14.8867 15.9474 14.8867 15.4725 15.1796 15.1796Z"
+                                            fill="#555555" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <ul id="myUL" class="bg-white position-absolute w-50 rounded shadow p-0"
+                                style="z-index: 99;">
+                                @foreach ($customer as $item)
+                                    <li>
+                                        <a href="#"
+                                            class="text-dark d-flex justify-content-between p-2 search-info"
+                                            id="{{ $item->id }}" name="search-info">
+                                            <span>{{ $item->guest_represent }}</span>
+                                            <span class="mr-5">{{ $item->guest_name }}</span>
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
                         </div>
-                        <ul id="myUL" class="bg-white position-absolute w-50 rounded shadow p-0"
-                            style="z-index: 99;">
-                            @foreach ($customer as $item)
-                                <li>
-                                    <a href="#" class="text-dark d-flex justify-content-between p-2 search-info"
-                                        id="{{ $item->id }}" name="search-info">
-                                        <span>{{ $item->guest_represent }}</span>
-                                        <span class="mr-5">{{ $item->guest_name }}</span>
-                                    </a>
-                                </li>
-                            @endforeach
-                        </ul>
                     </div>
                 </div>
             </div>
-        </div>
-        <form action="{{ route('exports.store') }}" method="POST" id="export_form">
-            @csrf
             {{-- Form thông tin khách hàng --}}
             <section id="data-container" class="container-fluided bg-white rounded"></section>
             {{-- Bảng thêm sản phẩm --}}
@@ -194,46 +195,47 @@
                     onclick="validateAndSubmit(event)">Lưu</button>
                 <a href="{{ route('exports.index') }}"><span class="btn border-secondary ml-1">Hủy</span></a>
             </div>
-        </form>
-        {{-- Modal Product --}}
-        <div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="productModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="productModalLabel">Thông tin sản phẩm</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+            {{-- Modal Product --}}
+            <div class="modal fade" id="productModal" tabindex="-1" role="dialog"
+                aria-labelledby="productModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="productModalLabel">Thông tin sản phẩm</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        {{-- Modal S/N --}}
-        <div class="modal fade" id="snModal" tabindex="-1" role="dialog" aria-labelledby="productModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="productModalLabel">Danh sách Serial Number</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
+            {{-- Modal S/N --}}
+            <div class="modal fade" id="snModal" tabindex="-1" role="dialog"
+                aria-labelledby="productModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="productModalLabel">Danh sách Serial Number</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
 
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
+    </form>
 </div>
 </section>
 </div>
@@ -373,7 +375,6 @@
     </div>
 </div>
 <script>
-    var customerInfoSaved = false;
     //form thong tin khach hang xuất hàng
     var radio1 = document.getElementById("radio1");
     var radio2 = document.getElementById("radio2");
@@ -382,10 +383,10 @@
     });
     $("#radio2").on("click", function() {
         $('#data-container').html(
-            '<div id="form-guest" onsubmit="return validateAndSubmit(event)">' +
+            '<div id="form-guest">' +
             '<div class="border-bottom p-3 d-flex justify-content-between align-items-center">' +
             '<b>Thông tin khách hàng</b>' +
-            '<button id="btn-addCustomer" class="btn btn-primary d-flex align-items-center">' +
+            '<button id="btn-addCustomer" type="submit" class="btn btn-primary d-flex align-items-center">' +
             '<img src="../dist/img/icon/Union.png">' +
             '<span class="ml-1">Lưu thông tin</span></button></div>' +
             '<input type="hidden" name="click" id="click" value="">' +
@@ -429,6 +430,7 @@
             '</div>' + '<div class="form-group">' +
             '<label for="email">Điều kiện thanh toán:</label>' +
             '<select name="guest_payTerm" class="form-control" id="guest_payTerm">' +
+            '<option value="">Chọn biểu mẫu</option>' +
             '<option value="0">Biểu mẫu 15 ngày</option>' +
             '</select>' +
             '</div>' + '<div class="form-group">' +
@@ -662,6 +664,7 @@
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">Điều kiện thanh toán:</label>' +
                         '<select name="guest_payTerm" class="form-control" id="guest_payTerm">' +
+                        '<option value="">Chọn biểu mẫu</option>' +
                         '<option value="0"' + (data.guest_payTerm == 0 ? ' selected' :
                             '') + '>Biểu mẫu 15 ngày</option>' +
                         '</select>' +
@@ -718,6 +721,12 @@
     //thêm thông tin khách hàng
     $(document).on('click', '#btn-addCustomer', function(e) {
         e.preventDefault();
+
+        var form = $('#export_form')[0];
+        if (!form.reportValidity()) {
+            return;
+        }
+
         $('#click').val(1);
         var click = $('#click').val();
         var guest_name = $('#guest_name').val();
@@ -757,7 +766,6 @@
                 } else if (data.hasOwnProperty('id')) {
                     alert('Thêm thông tin thành công');
                     $('#form-guest input[name="id"]').val(data.id);
-                    customerInfoSaved = true;
                 }
             }
         })

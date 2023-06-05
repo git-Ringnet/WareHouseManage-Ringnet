@@ -114,29 +114,31 @@
             </div>
         </div>
     </div>
-    <section class="content">
-        <div class="d-flex mb-1 action-don">
-            @if ($exports->export_status == 1)
-                <button type="submit" class="btn btn-danger text-white" name="submitBtn" value="action1">Chốt
-                    đơn</button>
-                <button type="submit" class="btn btn-secondary mr-4" name="submitBtn" value="action2">Hủy
-                    đơn</button>
-            @endif
-            <a href="#" class="btn border border-secondary mr-4">Xuất file</a>
-            <a href="#" class="btn border border-secondary mr-4">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M9 5C8.46957 5 7.96086 5.21071 7.58579 5.58579C7.21071 5.96086 7 6.46957 7 7V8H17V7C17 6.46957 16.7893 5.96086 16.4142 5.58579C16.0391 5.21071 15.5304 5 15 5H9ZM15 13H9C8.73478 13 8.48043 13.1054 8.29289 13.2929C8.10536 13.4804 8 13.7348 8 14V17C8 17.2652 8.10536 17.5196 8.29289 17.7071C8.48043 17.8946 8.73478 18 9 18H15C15.2652 18 15.5196 17.8946 15.7071 17.7071C15.8946 17.5196 16 17.2652 16 17V14C16 13.7348 15.8946 13.4804 15.7071 13.2929C15.5196 13.1054 15.2652 13 15 13Z"
-                        fill="#555555" />
-                    <path
-                        d="M4 11C4 10.4696 4.21071 9.96086 4.58579 9.58579C4.96086 9.21071 5.46957 9 6 9H18C18.5304 9 19.0391 9.21071 19.4142 9.58579C19.7893 9.96086 20 10.4696 20 11V14C20 14.5304 19.7893 15.0391 19.4142 15.4142C19.0391 15.7893 18.5304 16 18 16H17V14C17 13.4696 16.7893 12.9609 16.4142 12.5858C16.0391 12.2107 15.5304 12 15 12H9C8.46957 12 7.96086 12.2107 7.58579 12.5858C7.21071 12.9609 7 13.4696 7 14V16H6C5.46957 16 4.96086 15.7893 4.58579 15.4142C4.21071 15.0391 4 14.5304 4 14V11ZM6.5 12C6.63261 12 6.75979 11.9473 6.85355 11.8536C6.94732 11.7598 7 11.6326 7 11.5C7 11.3674 6.94732 11.2402 6.85355 11.1464C6.75979 11.0527 6.63261 11 6.5 11C6.36739 11 6.24021 11.0527 6.14645 11.1464C6.05268 11.2402 6 11.3674 6 11.5C6 11.6326 6.05268 11.7598 6.14645 11.8536C6.24021 11.9473 6.36739 12 6.5 12Z"
-                        fill="#555555" />
-                </svg>
-                In báo giá
-            </a>
-        </div>
-        <form action="{{ route('exports.update', $exports->id) }}" method="POST" id="export_form">
+    <form action="{{ route('exports.update', $exports->id) }}" method="POST" id="export_form">
+        @csrf
+        @method('PUT')
+        <section class="content">
+            <div class="d-flex mb-1 action-don">
+                @if ($exports->export_status == 1)
+                    <button type="submit" class="btn btn-danger text-white" name="submitBtn" value="action1">Chốt
+                        đơn</button>
+                    <button type="submit" class="btn btn-secondary mr-4" name="submitBtn" value="action2">Hủy
+                        đơn</button>
+                @endif
+                <a href="#" class="btn border border-secondary mr-4">Xuất file</a>
+                <a href="#" class="btn border border-secondary mr-4">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M9 5C8.46957 5 7.96086 5.21071 7.58579 5.58579C7.21071 5.96086 7 6.46957 7 7V8H17V7C17 6.46957 16.7893 5.96086 16.4142 5.58579C16.0391 5.21071 15.5304 5 15 5H9ZM15 13H9C8.73478 13 8.48043 13.1054 8.29289 13.2929C8.10536 13.4804 8 13.7348 8 14V17C8 17.2652 8.10536 17.5196 8.29289 17.7071C8.48043 17.8946 8.73478 18 9 18H15C15.2652 18 15.5196 17.8946 15.7071 17.7071C15.8946 17.5196 16 17.2652 16 17V14C16 13.7348 15.8946 13.4804 15.7071 13.2929C15.5196 13.1054 15.2652 13 15 13Z"
+                            fill="#555555" />
+                        <path
+                            d="M4 11C4 10.4696 4.21071 9.96086 4.58579 9.58579C4.96086 9.21071 5.46957 9 6 9H18C18.5304 9 19.0391 9.21071 19.4142 9.58579C19.7893 9.96086 20 10.4696 20 11V14C20 14.5304 19.7893 15.0391 19.4142 15.4142C19.0391 15.7893 18.5304 16 18 16H17V14C17 13.4696 16.7893 12.9609 16.4142 12.5858C16.0391 12.2107 15.5304 12 15 12H9C8.46957 12 7.96086 12.2107 7.58579 12.5858C7.21071 12.9609 7 13.4696 7 14V16H6C5.46957 16 4.96086 15.7893 4.58579 15.4142C4.21071 15.0391 4 14.5304 4 14V11ZM6.5 12C6.63261 12 6.75979 11.9473 6.85355 11.8536C6.94732 11.7598 7 11.6326 7 11.5C7 11.3674 6.94732 11.2402 6.85355 11.1464C6.75979 11.0527 6.63261 11 6.5 11C6.36739 11 6.24021 11.0527 6.14645 11.1464C6.05268 11.2402 6 11.3674 6 11.5C6 11.6326 6.05268 11.7598 6.14645 11.8536C6.24021 11.9473 6.36739 12 6.5 12Z"
+                            fill="#555555" />
+                    </svg>
+                    In báo giá
+                </a>
+            </div>
             <div class="container-fluided position-relative">
                 <div class="row my-3">
                     <div class="col">
@@ -186,8 +188,6 @@
                 </div>
 
             </div>
-            @csrf
-            @method('PUT')
             {{-- Form thông tin khách hàng --}}
             <section id="data-container" class="container-fluided bg-white rounded"></section>
             <section class="container-fluided bg-white rounded" id="form-edit">
@@ -370,9 +370,6 @@
                     </div>
                 @endif
             </div>
-
-
-
             <div class="row position-relative">
                 <div class="col-sm-6"></div>
                 <div class="col-sm-6">
@@ -410,7 +407,8 @@
                 @endif
                 <a href="{{ route('exports.index') }}"><span class="btn border-secondary ml-1">Hủy</span></a>
             </div>
-
+        </section>
+    </form>
 </div>
 </form>
 {{-- Modal Product --}}

@@ -33,7 +33,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="pwd">Email:</label>
-                                    <input type="email" class="form-control" name="provide_email" placeholder="Nhập email" required>
+                                    <input type="email" pattern="/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/" class="form-control" name="provide_email" placeholder="Nhập email" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="pwd">Địa chỉ:</label>

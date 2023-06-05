@@ -37,7 +37,7 @@
                 <form class="w-100" action="" method="get" id='search-filter'>
                     <div class="row  mr-0">
                         <div class="col-5">
-                            <input type="text" placeholder="Tìm kiếm theo mã sản phẩm hoặc tên sản phẩm"
+                            <input type="text" placeholder="Tìm kiếm theo mã đơn hàng hoặc tên khách hàng"
                                 name="keywords" class="pr-4 form-control input-search w-100"
                                 value="{{ request()->keywords }}">
                             <span class="search-icon"><i class="fas fa-search"></i></span>
@@ -436,7 +436,7 @@ $index = array_search($item['label'], $numberedLabels);
                                         <tr>
                                             <td>{{ $value->id }}</td>
                                             <td>{{ $value->guest_represent }}</td>
-                                            <td>{{ $value->updated_at }}</td>
+                                            <td>{{ date_format(new DateTime($value->updated_at), "d-m-Y") }}</td>
                                             <td>{{ $value->name }}</td>
                                             <td>{{ number_format($value->total) }}</td>
                                             <td>
