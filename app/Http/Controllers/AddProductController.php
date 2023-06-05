@@ -682,4 +682,19 @@ class AddProductController extends Controller
             return $pro;
         }
     }
+    public function add_newProvide(Request $request)
+    {
+        $data = $request->all();
+        // var_dump($data['provide_name']);
+        $add_newProdrovide = new Provides();
+        $add_newProdrovide->provide_name = $data['provide_name'];
+        $add_newProdrovide->provide_represent = $data['provide_represent'];
+        $add_newProdrovide->provide_phone = $data['provide_phone'];
+        $add_newProdrovide->provide_email = $data['provide_email'];
+        $add_newProdrovide->provide_status = 1;
+        $add_newProdrovide->provide_address = $data['provide_address'];
+        $add_newProdrovide->provide_code = $data['provide_code'];
+        $add_newProdrovide->save();
+        return response()->json(['success' => true, 'msg' => 'Thêm mới nhà cung cấp thành công !']);
+    }
 }

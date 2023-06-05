@@ -8,7 +8,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-sm-6">
-                        <div class="w-75">
+                        <div class="w-100">
                             <div>
                                 <span class="order_title">Nhập hàng</span>
                                 <span>/</span>
@@ -445,6 +445,7 @@
     });
 
     $("#radio2").on("click", function() {
+    $('#provide_id').val("");
         $('#infor_provide').html(
             '<div class="border-bottom p-3 d-flex justify-content-between">' +
             '<b>Thông tin nhà cung cấp</b>' +
@@ -1043,10 +1044,30 @@
         e.preventDefault();
     });
 
-    // Thêm nhanh nhà cung cấp
+    // AJAX Thêm nhanh nhà cung cấp
     $(document).on('click', '#btn-addCustomer', function(e) {
         e.preventDefault();
-        alert('thêm nhà cung cấp');
+        var provide_name = $('#provide_name_new').val();
+        var provide_address = $('#provide_address_new').val();
+        var provide_represent = $('#provide_represent_new').val();
+        var provide_email = $('#provide_email_new').val();
+        var provide_phone = $('#provide_phone_new').val();
+        var provide_code = $('#provide_code_new').val();
+        $.ajax({
+            url: "{{ route('add_newProvide') }}",
+            type: "get",
+            data: {
+                provide_name: provide_name,
+                provide_address: provide_address,
+                provide_represent: provide_represent,
+                provide_email: provide_email,
+                provide_phone: provide_phone,
+                provide_code: provide_code
+            },
+            success: function(data) {
+                console.log(data);
+            }
+        })
     })
 </script>
 @endif
