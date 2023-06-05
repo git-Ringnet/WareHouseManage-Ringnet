@@ -115,9 +115,8 @@ class ExportController extends Controller
         $products = Products::all();
         $customer = Guests::all();
         $guest_id = DB::table('guests')->select('id')->orderBy('id', 'DESC')->first();
-        (int)$guest_id->id += 1;
         $title = 'Tạo đơn xuất hàng';
-        return view('tables.export.addExport', compact('customer', 'products', 'guest_id', 'title'));
+        return view('tables.export.addExport', compact('customer', 'products', 'title'));
     }
 
     /**
@@ -131,7 +130,7 @@ class ExportController extends Controller
         if (Auth::check()) {
             $productIDs = $request->input('product_id');
             $productQtys = $request->input('product_qty');
-
+            $clickValue = $request->input('click');
             $totalQtyNeeded = 0;
 
             // Tính tổng số lượng cần thiết cho mỗi product_id
@@ -176,13 +175,40 @@ class ExportController extends Controller
                 if (!$hasEnoughQty) {
                     return redirect()->route('exports.index')->with('danger', 'Vượt quá số lượng!');
                 } else {
-                    // Tạo đơn xuất hàng
-                    $export = new Exports();
-                    $export->guest_id = $request->id;
-                    $export->user_id = Auth::user()->id;
-                    $export->total = $request->totalValue;
-                    $export->export_status = 1;
-                    $export->save();
+                    //thêm khách hàng
+                    if ($clickValue === null) {
+                        $guest = new Guests();
+                        $guest->guest_name = $request->guest_name;
+                        $guest->guest_addressInvoice = $request->guest_addressInvoice;
+                        $guest->guest_code = $request->guest_code;
+                        $guest->guest_addressDeliver = $request->guest_addressDeliver;
+                        $guest->guest_receiver = $request->guest_receiver;
+                        $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
+                        $guest->guest_represent = $request->guest_represent;
+                        $guest->guest_email = $request->guest_email;
+                        $guest->guest_status = 1;
+                        $guest->guest_phone = $request->guest_phone;
+                        $guest->guest_pay = $request->guest_pay;
+                        $guest->guest_payTerm = $request->guest_payTerm;
+                        $guest->guest_note = $request->guest_note;
+                        $guest->save();
+
+                        // Tạo đơn xuất hàng
+                        $export = new Exports();
+                        $export->guest_id = $guest->id;
+                        $export->user_id = Auth::user()->id;
+                        $export->total = $request->totalValue;
+                        $export->export_status = 1;
+                        $export->save();
+                    } else {
+                        // Tạo đơn xuất hàng
+                        $export = new Exports();
+                        $export->guest_id = $request->id;
+                        $export->user_id = Auth::user()->id;
+                        $export->total = $request->totalValue;
+                        $export->export_status = 1;
+                        $export->save();
+                    }
 
                     // Tạo các bản ghi trong bảng product export
                     for ($i = 0; $i < count($productIDs); $i++) {
@@ -612,21 +638,39 @@ class ExportController extends Controller
     public function addCustomer(Request $request)
     {
         $data = $request->all();
-        $guest = new Guests();
-        $guest->guest_name = $data['guest_name'];
-        $guest->guest_addressInvoice = $data['guest_addressInvoice'];
-        $guest->guest_code = $data['guest_code'];
-        $guest->guest_addressDeliver = $data['guest_addressDeliver'];
-        $guest->guest_receiver = $data['guest_receiver'];
-        $guest->guest_phoneReceiver = $data['guest_phoneReceiver'];
-        $guest->guest_represent = $data['guest_represent'];
-        $guest->guest_email = $data['guest_email'];
-        $guest->guest_status = 1;
-        $guest->guest_phone = $data['guest_phone'];
-        $guest->guest_pay = $data['guest_pay'];
-        $guest->guest_payTerm = $data['guest_payTerm'];
-        $guest->guest_note = $data['guest_note'];
-        $guest->save();
+        if ($data['click'] == 1) {
+            // Kiểm tra xem dữ liệu đã tồn tại trong cơ sở dữ liệu hay chưa
+            $existingCustomer = Guests::where('guest_name', $data['guest_name'])
+                ->where('guest_email', $data['guest_email'])
+                ->where('guest_addressInvoice', $data['guest_addressInvoice'])
+                ->where('guest_code', $data['guest_code'])
+                ->first();
+
+            if ($existingCustomer) {
+                // Dữ liệu đã tồn tại, trả về thông báo
+                return response()->json(['message' => 'Thông tin khách hàng đã có trong hệ thống']);
+            }
+
+            // Tạo mới bản ghi khách hàng
+            $guest = new Guests();
+            $guest->guest_name = $data['guest_name'];
+            $guest->guest_addressInvoice = $data['guest_addressInvoice'];
+            $guest->guest_code = $data['guest_code'];
+            $guest->guest_addressDeliver = $data['guest_addressDeliver'];
+            $guest->guest_receiver = $data['guest_receiver'];
+            $guest->guest_phoneReceiver = $data['guest_phoneReceiver'];
+            $guest->guest_represent = $data['guest_represent'];
+            $guest->guest_email = $data['guest_email'];
+            $guest->guest_status = 1;
+            $guest->guest_phone = $data['guest_phone'];
+            $guest->guest_pay = $data['guest_pay'];
+            $guest->guest_payTerm = $data['guest_payTerm'];
+            $guest->guest_note = $data['guest_note'];
+            $guest->save();
+
+            // Trả về giá trị id của khách hàng vừa lưu
+            return response()->json(['id' => $guest->id]);
+        }
     }
 
     public function nameProduct(Request $request)

@@ -26,10 +26,10 @@ class DatabaseSeeder extends Seeder
             // CategorySeeder::class,
             // DetailsSeeder::class,
             // GuestsSeeder::class,
-            // ProductSeeder::class,
-            // productsSeeder::class,
+            ProductSeeder::class,
+            productsSeeder::class,
             // ProvidesSeeder::class,
-            // SerinumbersSeeder::class,
+            SerinumbersSeeder::class,
             UsersTableSeeder::class,
             RolesTableSeeder::class,
             // OrdersSeeder::class,
@@ -37,5 +37,6 @@ class DatabaseSeeder extends Seeder
 			// ExportSeeder::class,
             // productExportSeeder::class,
         ]);
+        
     }
 }

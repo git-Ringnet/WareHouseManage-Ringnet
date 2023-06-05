@@ -76,6 +76,7 @@
                                         </div>
                                         <!-- <div class="product_id">
                                             <div class="title-edit-item">ID</div>
+
                                             <input type="text" name="products_id" readonly
                                                 class="w-100 p-1 form-control mb-4">
                                         </div> -->

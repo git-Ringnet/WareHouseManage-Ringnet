@@ -82,55 +82,6 @@
     <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
-<?php
-$current_url = $_SERVER['REQUEST_URI'];
-//index
-if (strpos($current_url, '') !== false) {
-    $index_class = 'active';
-}
-//products
-if (strpos($current_url, 'data') !== false) {
-    $products_class = 'active';
-    $index_class = '';
-} else {
-    $products_class = '';
-}
-//
-if (strpos($current_url, 'insertProduct') !== false) {
-    $insert_class = 'active';
-    $index_class = '';
-} else {
-    $insert_class = '';
-}
-//provides
-if (strpos($current_url, 'provides') !== false) {
-    $provides_class = 'active';
-    $index_class = '';
-} else {
-    $provides_class = '';
-}
-//guests
-if (strpos($current_url, 'guests') !== false) {
-    $guests_class = 'active';
-    $index_class = '';
-} else {
-    $guests_class = '';
-}
-//users
-if (strpos($current_url, 'admin') !== false) {
-    $user_class = 'active';
-    $index_class = '';
-} else {
-    $user_class = '';
-}
-//exports
-if (strpos($current_url, 'exports') !== false) {
-    $export_class = 'active';
-    $index_class = '';
-} else {
-    $export_class = '';
-}
-?>
 
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
@@ -237,7 +188,8 @@ if (strpos($current_url, 'exports') !== false) {
                 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                     data-accordion="false">
                     <li class="nav-item">
-                        <a href="{{ asset('index') }}" class="nav-link <?php echo $index_class; ?>">
+                        <a href="{{ route('dashboard') }}"
+                            class="nav-link {{ App\Helpers\Helper::isActiveRouteGroup('dashboard') }}">
                             <svg class="stroke" width="32" height="24" viewBox="0 0 24 24" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path
@@ -251,7 +203,8 @@ if (strpos($current_url, 'exports') !== false) {
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ asset('./data') }}" class="nav-link <?php echo $products_class; ?>">
+                        <a href="{{ route('data.index') }}"
+                            class="nav-link {{ App\Helpers\Helper::isActiveRouteGroup(['data.index', 'data.edit', 'editProduct', 'insertProducts']) }}">
                             <svg class="fill" width="32" height="32" viewBox="0 0 24 24" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" clip-rule="evenodd"
@@ -268,8 +221,9 @@ if (strpos($current_url, 'exports') !== false) {
                     </li>
                     @can('view-orders')
                         <li class="nav-item">
-                            <a href="{{ asset('./insertProduct') }}" class="nav-link <?php echo $insert_class; ?>">
-                                <svg class="stroke" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            <a href="{{ route('insertProduct.index') }}"
+                                class="nav-link {{ App\Helpers\Helper::isActiveRouteGroup(['insertProduct.index', 'insertProduct.create', 'insertProduct.edit']) }}">
+                                <svg class="stroke" width="32" height="24" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <g clip-path="url(#clip0_6062_36566)">
                                         <path
@@ -316,8 +270,9 @@ if (strpos($current_url, 'exports') !== false) {
                     @endcan
                     @can('view-exports')
                         <li class="nav-item">
-                            <a href="{{ asset('./exports') }}" class="nav-link <?php echo $export_class; ?>">
-                                <svg class="stroke" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            <a href="{{ route('exports.index') }}"
+                                class="nav-link {{ App\Helpers\Helper::isActiveRouteGroup('exports.index,exports.create,exports.edit') }}">
+                                <svg class="stroke" width="32" height="24" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <g clip-path="url(#clip0_6062_36566)">
                                         <path
@@ -364,8 +319,9 @@ if (strpos($current_url, 'exports') !== false) {
                     @endcan
                     @can('isAdmin')
                         <li class="nav-item">
-                            <a href="{{ route('admin.userslist') }}" class="nav-link <?php echo $user_class; ?>">
-                                <svg class="fill" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            <a href="{{ route('admin.userslist') }}"
+                                class="nav-link {{ App\Helpers\Helper::isActiveRouteGroup('admin.userslist,admin.add,admin.edit') }}">
+                                <svg class="fill" width="32" height="24" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd" clip-rule="evenodd"
                                         d="M12 3.75C9.81196 3.75 7.71354 4.61919 6.16637 6.16637C4.61919 7.71354 3.75 9.81196 3.75 12C3.75 14.188 4.61919 16.2865 6.16637 17.8336C7.71354 19.3808 9.81196 20.25 12 20.25C14.188 20.25 16.2865 19.3808 17.8336 17.8336C19.3808 16.2865 20.25 14.188 20.25 12C20.25 9.81196 19.3808 7.71354 17.8336 6.16637C16.2865 4.61919 14.188 3.75 12 3.75ZM5.10571 5.10571C6.93419 3.27723 9.41414 2.25 12 2.25C14.5859 2.25 17.0658 3.27723 18.8943 5.10571C20.7228 6.93419 21.75 9.41414 21.75 12C21.75 14.5859 20.7228 17.0658 18.8943 18.8943C17.0658 20.7228 14.5859 21.75 12 21.75C9.41414 21.75 6.93419 20.7228 5.10571 18.8943C3.27723 17.0658 2.25 14.5859 2.25 12C2.25 9.41414 3.27723 6.93419 5.10571 5.10571Z"
@@ -383,8 +339,9 @@ if (strpos($current_url, 'exports') !== false) {
                     @endcan
                     @can('view-provides')
                         <li class="nav-item">
-                            <a href="{{ asset('./provides') }}" class="nav-link <?php echo $provides_class; ?>">
-                                <svg class="fill" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            <a href="{{ route('provides.index') }}"
+                                class="nav-link {{ App\Helpers\Helper::isActiveRouteGroup('provides.index,provides.create,provides.edit') }}">
+                                <svg class="fill" width="32" height="24" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd" clip-rule="evenodd"
                                         d="M12 3.75C9.81196 3.75 7.71354 4.61919 6.16637 6.16637C4.61919 7.71354 3.75 9.81196 3.75 12C3.75 14.188 4.61919 16.2865 6.16637 17.8336C7.71354 19.3808 9.81196 20.25 12 20.25C14.188 20.25 16.2865 19.3808 17.8336 17.8336C19.3808 16.2865 20.25 14.188 20.25 12C20.25 9.81196 19.3808 7.71354 17.8336 6.16637C16.2865 4.61919 14.188 3.75 12 3.75ZM5.10571 5.10571C6.93419 3.27723 9.41414 2.25 12 2.25C14.5859 2.25 17.0658 3.27723 18.8943 5.10571C20.7228 6.93419 21.75 9.41414 21.75 12C21.75 14.5859 20.7228 17.0658 18.8943 18.8943C17.0658 20.7228 14.5859 21.75 12 21.75C9.41414 21.75 6.93419 20.7228 5.10571 18.8943C3.27723 17.0658 2.25 14.5859 2.25 12C2.25 9.41414 3.27723 6.93419 5.10571 5.10571Z"
@@ -402,8 +359,9 @@ if (strpos($current_url, 'exports') !== false) {
                     @endcan
                     @can('view-guests')
                         <li class="nav-item">
-                            <a href="{{ asset('./guests') }}" class="nav-link <?php echo $guests_class; ?>">
-                                <svg class="fill" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            <a href="{{ route('guests.index') }}"
+                                class="nav-link {{ App\Helpers\Helper::isActiveRouteGroup('guests.index,guests.create,guests.edit') }}">
+                                <svg class="fill" width="32" height="24" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd" clip-rule="evenodd"
                                         d="M12 3.75C9.81196 3.75 7.71354 4.61919 6.16637 6.16637C4.61919 7.71354 3.75 9.81196 3.75 12C3.75 14.188 4.61919 16.2865 6.16637 17.8336C7.71354 19.3808 9.81196 20.25 12 20.25C14.188 20.25 16.2865 19.3808 17.8336 17.8336C19.3808 16.2865 20.25 14.188 20.25 12C20.25 9.81196 19.3808 7.71354 17.8336 6.16637C16.2865 4.61919 14.188 3.75 12 3.75ZM5.10571 5.10571C6.93419 3.27723 9.41414 2.25 12 2.25C14.5859 2.25 17.0658 3.27723 18.8943 5.10571C20.7228 6.93419 21.75 9.41414 21.75 12C21.75 14.5859 20.7228 17.0658 18.8943 18.8943C17.0658 20.7228 14.5859 21.75 12 21.75C9.41414 21.75 6.93419 20.7228 5.10571 18.8943C3.27723 17.0658 2.25 14.5859 2.25 12C2.25 9.41414 3.27723 6.93419 5.10571 5.10571Z"

@@ -94,7 +94,7 @@
                                         <!-- <div class="product_unit">
                                             <div class="title-edit-item">Đơn vị</div>
                                             <input type="text" name="products_unit"
-                                                value="{{ $products->products_unit }}" class="form-control mb-4">
+                                                value="" class="form-control mb-4">
                                         </div> -->
                                     </div>
                                     <div class="col-md-6">
@@ -106,9 +106,10 @@
                             </div>
                         </div>
                         </table>
-
                         <div class="btn-fixed">
+                            @if(Auth::user()->can('view-provides'))
                             <button type="submit" class="btn btn-primary">Lưu</button>
+                            @endif
                             <a href="{{ asset('./data') }}" class="btn btn-default">Hủy</a>
                         </div>
 
