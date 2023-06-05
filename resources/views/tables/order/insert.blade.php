@@ -935,7 +935,7 @@
                 }
             })
         })
-
+        // Hiển thị danh sách nhà cung cấp cũ
         $('.search-info').click(function() {
             var provides_id = $(this).attr('id');
             $('#radio1').prop('checked', true);
@@ -985,6 +985,7 @@
                 }
             });
         })
+
         // Kiểm tra dữ liệu trước khi submit
         $(document).on('submit', '#form_submit', function(e) {
             e.preventDefault();
@@ -1069,7 +1070,28 @@
         // Thêm nhanh nhà cung cấp
         $(document).on('click', '#btn-addCustomer', function(e) {
             e.preventDefault();
-            alert('thêm nhà cung cấp');
+            var provide_name = $('#provide_name').val();
+            var provide_address = $('#provide_address').val();
+            var provide_represent = $('#provide_represent').val();
+            var provide_email = $('#provide_email').val();
+            var provide_phone = $('#provide_phone').val();
+            var provide_code = $('#provide_code').val();
+            $.ajax({
+                url: "{{ route('update_provide') }}",
+                type: "get",
+                data: {
+                    provides_id: provides_id,
+                    provide_name: provide_name,
+                    provide_address: provide_address,
+                    provide_represent: provide_represent,
+                    provide_email: provide_email,
+                    provide_phone: provide_phone,
+                    provide_code: provide_code
+                },
+                success: function(data) {
+                    alert('Lưu thông tin thành công');
+                }
+            })
         })
     </script>
 @endif

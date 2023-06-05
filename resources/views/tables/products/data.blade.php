@@ -697,14 +697,15 @@ $index = array_search($item['label'], $numberedLabels);
                 list_id: list_id,
             },
             success: function(data) {
-                console.log(data);
                 if (data.success == true) {
                     var id = data.ids;
                     for (let i = 0; i < id.length; i++) {
                         $('.' + id[i]).remove();
                     }
+                    updateMultipleActionVisibility();
                 } else {
                     alert(data.msg);
+                    location.reload();
                 }
             }
         })
