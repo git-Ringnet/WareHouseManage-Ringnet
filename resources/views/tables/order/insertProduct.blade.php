@@ -515,42 +515,6 @@ $index = array_search($item['label'], $numberedLabels);
                                             @elseif($va->order_status == 2)
                                                 <span class="p-2 bg-danger rounded">Đã hủy</span>
                                             @endif
-
-                                     /*   </div>
-                                        <div id="dropdown_item{{ $va->id }}" data-toggle="collapse" data-target="#product-details-<?php echo $va->id; ?>">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
-                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M9.64162 12.3083C10.0527 11.8972 10.7192 11.8972 11.1303 12.3083L16 17.178L20.8697 12.3083C21.2808 11.8972 21.9473 11.8972 22.3583 12.3083C22.7694 12.7194 22.7694 13.3859 22.3583 13.797L16.7443 19.411C16.3332 19.8221 15.6667 19.8221 15.2557 19.411L9.64162 13.797C9.23054 13.3859 9.23054 12.7194 9.64162 12.3083Z" fill="#555555" />
-                                            </svg>
-                                        </div>
-                                    </td>
-                                </tr>
-                                @foreach ($product as $item)
-                                <tr id="product-details-{{ $va->id }}" class="product-details collapse">
-                                    @if ($va->id == $item->id)
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>
-                                        <p>{{ $item->product_name }}</p>
-                                        @if ($item && $item->getCodeProduct)
-                                        {{ $item->getCodeProduct->products_code == null ? "" : $item->getCodeProduct->products_code }}
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <p>Số lượng</p>
-                                        {{ $item->product_qty }}
-                                    </td>
-                                    <td class="text-right">
-                                        <p>Tổng tiền</p>
-                                        {{ number_format($item->product_qty * $item->product_price) }}
-                                    </td>
-                                    <td></td>
-                                    <td></td>
-                                    @endif
-                                </tr>
-                                @endforeach
-                                <?php $stt++; ?>
-*/
                                         </td>
                                         <td class="d-flex justify-content-between">
                                             <div class="edit">
