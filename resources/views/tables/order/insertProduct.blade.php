@@ -585,10 +585,6 @@
                 </div>
             </div>
         </div>
-        <button type="submit" name="deleteOrder" id="deleteOrder" class="btn btn-danger"
-            onclick="return confirm('Bạn có muốn xóa các sản phẩm đã chọn ?');">Xóa nhiều</button>
-        <button type="submit" name="cancelBill" id="cancelBill" class="btn btn-danger">Hủy đơn hàng
-            nhanh</button>
         <!-- <button type="submit" name="confirmBill" id="confirmBill" class="btn btn-primary">Duyệt đơn nhanh</button> -->
         <div class="paginator mt-4 d-flex justify-content-end">
             {{ $orders->appends(request()->except('page'))->links() }}
