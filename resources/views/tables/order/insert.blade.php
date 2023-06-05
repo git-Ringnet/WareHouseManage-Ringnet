@@ -1070,17 +1070,37 @@
         // Thêm nhanh nhà cung cấp
         $(document).on('click', '#btn-addCustomer', function(e) {
             e.preventDefault();
-            var provide_name = $('#provide_name').val();
-            var provide_address = $('#provide_address').val();
-            var provide_represent = $('#provide_represent').val();
-            var provide_email = $('#provide_email').val();
-            var provide_phone = $('#provide_phone').val();
-            var provide_code = $('#provide_code').val();
-            $.ajax({
-                url: "{{ route('update_provide') }}",
+            var provide_name = $('#provide_name_new').val();
+            var provide_address = $('#provide_address_new').val();
+            var provide_represent = $('#provide_represent_new').val();
+            var provide_email = $('#provide_email_new').val();
+            var provide_phone = $('#provide_phone_new').val();
+            var provide_code = $('#provide_code_new').val();
+            var check = false;
+            if(provide_name == ""){
+                alert('Vui lòng nhập tên công ty');
+                check = true;
+            }else if(provide_address == ""){
+                alert('Vui lòng nhập địa chỉ xuất hóa đơn');
+                check = true;
+            }else if(provide_represent == ""){
+                alert('Vui lòng nhập người nhận hàng');
+                check = true;
+            }else if(provide_email == ""){
+                alert('Vui lòng nhập email');
+                check = true;
+            }else if(provide_phone == ""){
+                alert('Vui lòng nhập số điện thoại');
+                check = true;
+            }else if(provide_code == ""){
+                alert('Vui lòng nhập mã số thuế');
+                check = true;
+            }
+            if(check == false){
+                $.ajax({
+                url: "{{ route('add_newProvide') }}",
                 type: "get",
                 data: {
-                    provides_id: provides_id,
                     provide_name: provide_name,
                     provide_address: provide_address,
                     provide_represent: provide_represent,
@@ -1089,9 +1109,14 @@
                     provide_code: provide_code
                 },
                 success: function(data) {
-                    alert('Lưu thông tin thành công');
+                    if(data.success){
+                        alert(data.msg);
+                        $('#provide_id').val(data.data.id);
+                    }
                 }
             })
+            }
+          
         })
     </script>
 @endif
