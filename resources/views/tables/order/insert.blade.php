@@ -233,7 +233,6 @@
         }
 
         document.getElementById('import_file').addEventListener('change', function(event) {
-            // updateRowNumbers();
             var file = event.target.files[0];
             var reader = new FileReader();
             reader.onload = function(e) {
@@ -355,6 +354,7 @@
                 }
             };
             reader.readAsText(file);
+            chekckRow();
         });
 
 

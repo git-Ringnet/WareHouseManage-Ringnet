@@ -773,6 +773,7 @@
                 $('.qty_product').text(productQty);
             })
         }
+        chekckRow();
     });
 
 
@@ -897,6 +898,7 @@
         parentTr.remove();
         calculateTotals();
         updateRowNumbers();
+        chekckRow();
     });
 
     // AJAX hiển thị thông tin nhà cung cấp 
