@@ -69,8 +69,9 @@
                   <div class="form-group">
                   </div>
                 </div>
-              </div>'
+              </div>
               <button type="submit" class="btn btn-primary">Edit</button>
+              <a href="{{route('data.index')}}">Hủy</a>
             </form>
           </div>
         </div>
