@@ -337,7 +337,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             <span class="d-flex">
                                                 <a href="#" class="sort-link" data-sort-by="id"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
-                                                        type="submit">Mã nhân viên</button></a>
+                                                        type="submit">Mã nhà cung cấp</button></a>
                                                 <div class="icon" id="icon-id"></div>
                                             </span>
                                         </th>

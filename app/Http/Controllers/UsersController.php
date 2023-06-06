@@ -7,6 +7,8 @@ use App\Models\User;
 use App\Models\Roles;
 use \Illuminate\Support\Facades\DB;
 use App\Http\Requests\UserRequest;
+use App\Models\Exports;
+use App\Models\Orders;
 
 class UsersController extends Controller
 {
@@ -162,8 +164,15 @@ class UsersController extends Controller
     {
         if (isset($request->list_id)) {
             $list = $request->list_id;
-            User::whereIn('id', $list)->delete();
-            return response()->json(['success' => true, 'msg' => 'Xóa người dùng thành công', 'ids' => $list]);
+            $provide_exist = Orders::whereIn('users_id', $list)->first();
+            $guest_exist = Exports::whereIn('user_id', $list)->first();
+            if (!$provide_exist && !$guest_exist) {
+                User::whereIn('id', $list)->delete();
+                return response()->json(['success' => true, 'msg' => 'Xóa người dùng thành công', 'ids' => $list]);
+            }
+            else{
+                return response()->json(['success' => false, 'msg' => 'Xóa người dùng thất bại']);
+            }
         }
         return response()->json(['success' => false, 'msg' => 'Xóa người dùng thất bại']);
     }
@@ -173,9 +182,9 @@ class UsersController extends Controller
             $list = $request->list_id;
             $listOrder = User::whereIn('id', $list)->get();
             foreach ($listOrder as $value) {
-                    $value->status = 1;
-                    $value->save();
-                }
+                $value->status = 1;
+                $value->save();
+            }
             return response()->json(['success' => true, 'msg' => 'Thay đổi trạng thái người dùng thành công']);
         }
         return response()->json(['success' => false, 'msg' => 'Not fount']);
@@ -186,9 +195,9 @@ class UsersController extends Controller
             $list = $request->list_id;
             $listOrder = User::whereIn('id', $list)->get();
             foreach ($listOrder as $value) {
-                    $value->status = 0;
-                    $value->save();
-                }
+                $value->status = 0;
+                $value->save();
+            }
             return response()->json(['success' => true, 'msg' => 'Thay đổi trạng thái người dùng thành công']);
         }
         return response()->json(['success' => false, 'msg' => 'Not fount']);

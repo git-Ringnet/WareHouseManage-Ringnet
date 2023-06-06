@@ -476,7 +476,11 @@
             const ghichuInput = $(
                 "<td><input type='text' class='note_product' name='product_note[]'></td>");
             const thueInput = $("<td>" +
-                "<input type='number' id='product_tax' class='product_tax' name='product_tax[]' required>" +
+                "<select name='product_tax[]' class='product_tax p-1 pr-5' id='product_tax' required>" +
+                "<option value='0'>0%</option>" +
+                "<option value='8'>8%</option>" +
+                "<option value='10' >10%</option>" +
+                "</select>" +
                 "</td>");
             const thanhTienInput = $("<td><span class='px-5 total-amount'>0</span></td>");
             const sn = $(
@@ -851,76 +855,14 @@
         }
     });
     //tính thành tiền của sản phẩm
-    $(document).on('input', '.quantity-input, [name^="product_price"], .product_tax', function() {
-        var productQty = parseInt($(this).closest('tr').find('.quantity-input').val());
-        var productPrice = 0;
-        var grandTotal = parseFloat($('#grand-total').text());
-        $('#grand-total').attr('data-value', grandTotal);
-        $('#inputValue').val(grandTotal);
-        $(this).closest('tr').find('[name^="product_price"]').each(function() {
-            productPrice += parseFloat($(this).val());
-        });
-        var taxValue = parseFloat($(this).closest('tr').find('.product_tax').val());
-
-        if (!isNaN(productQty) && !isNaN(productPrice) && !isNaN(taxValue)) {
-            var totalAmount = productQty * productPrice;
-            var taxAmount = (productQty * productPrice * taxValue) / 100;
-
-            $(this).closest('tr').find('.total-amount').text(totalAmount);
-            $(this).closest('tr').find('.product_tax').text(taxAmount);
-
-            calculateTotalAmount();
-            calculateTotalTax();
-        }
-    });
-
-    function calculateTotalAmount() {
-        var totalAmount = 0;
-        $('tr').each(function() {
-            var rowTotal = parseFloat($(this).find('.total-amount').text());
-            if (!isNaN(rowTotal)) {
-                totalAmount += rowTotal;
-            }
-        });
-        $('#total-amount-sum').text(totalAmount);
-
-        // Tính toán lại tổng thành tiền và tổng thuế
-        calculateTotalTax();
-        calculateGrandTotal();
-    }
-
-    function calculateTotalTax() {
-        var totalTax = 0;
-        $('tr').each(function() {
-            var rowTax = parseFloat($(this).find('.product_tax').text());
-            if (!isNaN(rowTax)) {
-                totalTax += rowTax;
-            }
-        });
-        $('#product-tax').text(totalTax);
-
-        // Tính toán lại tổng thành tiền và tổng thuế
-        calculateGrandTotal();
-    }
-
-    function calculateGrandTotal() {
-        var totalAmount = parseFloat($('#total-amount-sum').text());
-        var totalTax = parseFloat($('#product-tax').text());
-
-        var grandTotal = totalAmount + totalTax;
-        $('#grand-total').text(grandTotal.toFixed(2));
-
-        // Cập nhật giá trị data-value
-        $('#grand-total').attr('data-value', grandTotal.toFixed(2));
-        $('#total').val(grandTotal.toFixed(2));
-    }
+    
 
     //hàm kiểm tra
     function validateAndSubmit(event) {
         var formGuest = $('#form-guest');
         var formProduct = $('#dynamic-row');
         if (formGuest.length) {
-            
+
         } else {
             alert('Lỗi: Chưa chọn nhà cung cấp!');
             event.preventDefault();

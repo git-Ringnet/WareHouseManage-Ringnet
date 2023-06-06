@@ -196,8 +196,13 @@ class GuestsController extends Controller
     {
         if (isset($request->list_id)) {
             $list = $request->list_id;
-            Guests::whereIn('id', $list)->delete();
-            return response()->json(['success' => true, 'msg' => 'Xóa nhà cung cấp thành công', 'ids' => $list]);
+            $guest_exist = Exports::whereIn('guest_id', $list)->first();
+            if (!$guest_exist) {
+                Guests::whereIn('id', $list)->delete();
+                return response()->json(['success' => true, 'msg' => 'Xóa nhà cung cấp thành công', 'ids' => $list]);
+            } else {
+                return response()->json(['success' => true, 'danger' => 'Không thể xóa, do có thông tin khách hàng trong đơn xuất hàng!', 'ids' => $list]);
+            }
         }
         return response()->json(['success' => false, 'msg' => 'Xóa nhà cung cấp thất bại']);
     }
@@ -207,9 +212,9 @@ class GuestsController extends Controller
             $list = $request->list_id;
             $listOrder = Guests::whereIn('id', $list)->get();
             foreach ($listOrder as $value) {
-                    $value->guest_status = 1;
-                    $value->save();
-                }
+                $value->guest_status = 1;
+                $value->save();
+            }
             return response()->json(['success' => true, 'msg' => 'Thay đổi trạng thái nhà cung cấp thành công']);
         }
         return response()->json(['success' => false, 'msg' => 'Not fount']);
@@ -220,9 +225,9 @@ class GuestsController extends Controller
             $list = $request->list_id;
             $listOrder = Guests::whereIn('id', $list)->get();
             foreach ($listOrder as $value) {
-                    $value->guest_status = 0;
-                    $value->save();
-                }
+                $value->guest_status = 0;
+                $value->save();
+            }
             return response()->json(['success' => true, 'msg' => 'Thay đổi trạng thái nhà cung cấp thành công']);
         }
         return response()->json(['success' => false, 'msg' => 'Not fount']);
