@@ -19,7 +19,7 @@
               <h3 class="card-title">Sản phẩm / Sửa sản phẩm</h3>
             </div>
             <!-- /.card-header -->
-            <form action="{{route('updateProduct',$pro->id)}}" method="post">
+            <form action="{{route('updateProduct',$pro->id)}}" method="post" id="form_submit">
               @csrf
               @method('PUT')
               <div class="border-bottom p-3 d-flex justify-content-between">

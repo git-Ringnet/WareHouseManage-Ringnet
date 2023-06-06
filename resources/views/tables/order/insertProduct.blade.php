@@ -528,7 +528,7 @@ $index = array_search($item['label'], $numberedLabels);
                                         </td>
                                         <td class="d-flex justify-content-between">
                                             <div class="edit">
-                                                @if($va->order_status == 0 && (Auth::user()->id == $va->users_id || Auth::user()->can('isAdmin')))
+                                                @if($va->order_status == 0 && (Auth::user()->name == $va->name || Auth::user()->can('isAdmin')))  
                                                     <a href="{{ route('insertProduct.edit', $va->id) }}">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="32"
                                                             height="32" viewBox="0 0 32 32" fill="none">
