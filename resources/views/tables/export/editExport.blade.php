@@ -186,7 +186,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
             {{-- Form thông tin khách hàng --}}
             <section id="data-container" class="container-fluided bg-white rounded"></section>
@@ -261,14 +260,25 @@
                             </div>
                             <div class="form-group">
                                 <label for="email">Hình thức thanh toán:</label>
-                                <input type="text" class="form-control" id="guest_pay"
-                                    placeholder="Nhập thông tin" name="guest_pay" value="{{ $guest->guest_pay }}">
+                                <select name="guest_pay" class="form-control" id="guest_pay">
+                                    <option value="0" <?php if ($guest->guest_pay == 0) {
+                                        echo 'selected';
+                                    } ?>>Chuyển khoản</option>
+                                    <option value="1" <?php if ($guest->guest_pay == 1) {
+                                        echo 'selected';
+                                    } ?>>Thanh toán bằng tiền mặt</option>
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label for="email">Điều kiện thanh toán:</label>
-                                <input type="text" class="form-control" id="guest_payTerm"
-                                    placeholder="Nhập thông tin" name="guest_payTerm"
-                                    value="{{ $guest->guest_payTerm }}">
+                                <select name="guest_payTerm" class="form-control" id="guest_payTerm">
+                                    <option value="" <?php if ($guest->guest_payTerm == Null) {
+                                        echo 'selected';
+                                    } ?>>Chọn biểu mẫu</option>
+                                    <option value="0" <?php if ($guest->guest_payTerm == 0) {
+                                        echo 'selected';
+                                    } ?>>Biểu mẫu 15 ngày</option>
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label for="email">Ghi chú:</label>
@@ -458,6 +468,7 @@
     var radio2 = document.getElementById("radio2");
     $("#radio1").on("click", function() {
         $('#data-container').empty();
+        $('#form-edit').show();
     });
     $("#radio2").on("click", function() {
         $('#data-container').html(
@@ -500,15 +511,22 @@
             '<input type="text" class="form-control" id="guest_phone" placeholder="Nhập thông tin" name="guest_phone" value="" required>' +
             '</div>' + '<div class="form-group">' +
             ' <label for="email">Hình thức thanh toán:</label>' +
-            '<input type="text" class="form-control" id="guest_pay" placeholder="Nhập thông tin" name="guest_pay" value="" required>' +
+            '<select name="guest_pay" class="form-control" id="guest_pay">' +
+            '<option value="0">Chuyển khoản</option>' +
+            '<option value="1">Thanh toán bằng tiền mặt</option>' +
+            '</select>' +
             '</div>' + '<div class="form-group">' +
             '<label for="email">Điều kiện thanh toán:</label>' +
-            '<input type="text" class="form-control" id="guest_payTerm" placeholder="Nhập thông tin" name="guest_payTerm" value="" required>' +
+            '<select name="guest_payTerm" class="form-control" id="guest_payTerm">' +
+            '<option value="">Chọn biểu mẫu</option>' +
+            '<option value="0">Biểu mẫu 15 ngày</option>' +
+            '</select>' +
             '</div>' + '<div class="form-group">' +
             '<label for="email">Ghi chú:</label>' +
             '<input type="text" class="form-control" id="guest_note" placeholder="Nhập thông tin" name="guest_note" value="" required>' +
             '</div></div></div></div>'
         );
+        $('#form-edit').hide();
     });
     //add sản phẩm
     $(document).ready(function() {
@@ -717,12 +735,19 @@
                         data.guest_phone + '" required>' +
                         '</div>' + '<div class="form-group">' +
                         ' <label for="email">Hình thức thanh toán:</label>' +
-                        '<input type="text" class="form-control" id="guest_pay" placeholder="Nhập thông tin" name="guest_pay" value="' +
-                        data.guest_pay + '">' +
+                        '<select name="guest_pay" class="form-control" id="guest_pay">' +
+                        '<option value="0"' + (data.guest_pay == 0 ? ' selected' : '') +
+                        '>Chuyển khoản</option>' +
+                        '<option value="1"' + (data.guest_pay == 1 ? ' selected' : '') +
+                        '>Thanh toán bằng tiền mặt</option>' +
+                        '</select>' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">Điều kiện thanh toán:</label>' +
-                        '<input type="text" class="form-control" id="guest_payTerm" placeholder="Nhập thông tin" name="guest_payTerm" value="' +
-                        data.guest_payTerm + '">' +
+                        '<select name="guest_payTerm" class="form-control" id="guest_payTerm">' +
+                        '<option value="">Chọn biểu mẫu</option>' +
+                        '<option value="0"' + (data.guest_payTerm == 0 ? ' selected' :
+                            '') + '>Biểu mẫu 15 ngày</option>' +
+                        '</select>' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">Ghi chú:</label>' +
                         '<input type="text" class="form-control" id="guest_note" placeholder="Nhập thông tin" name="guest_note" value="' +

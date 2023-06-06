@@ -52,7 +52,6 @@
                                 fill="#D6D6D6" />
                         </svg>
                         <p class="p-0 m-0"></p>
-
                     </span>
                 </div>
                 <div class="position-absolute" style="top: 32px; z-index: 0;left: 17px">
@@ -74,9 +73,10 @@
         @csrf
         <section class="content">
             <div class="d-flex mb-1 action-don">
-                {{-- <a href="#" class="btn btn-danger text-white">Chốt đơn</a>
-                <a href="#" class="btn btn-secondary ml-4">Hủy đơn</a> --}}
-                <a href="#" class="btn border border-secondary">Xuất file</a>
+                <button type="submit" class="btn btn-danger text-white" name="submitBtn" value="action1"
+                    onclick="validateAndSubmit(event)">Chốt đơn</button>
+                {{-- <a href="#" class="btn btn-secondary ml-4">Hủy đơn</a> --}}
+                <a href="#" class="btn border border-secondary ml-2">Xuất file</a>
                 <button class="btn border border-secondary ml-4" onclick="toggleDiv()">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
@@ -191,7 +191,7 @@
                 </div>
             </div>
             <div class="text-center mt-4">
-                <button type="submit" name="action" class="btn btn-primary mr-1"
+                <button type="submit" name="submitBtn" value="action2" class="btn btn-primary mr-1"
                     onclick="validateAndSubmit(event)">Lưu</button>
                 <a href="{{ route('exports.index') }}"><span class="btn border-secondary ml-1">Hủy</span></a>
             </div>
@@ -401,7 +401,7 @@
             '<input type="text" class="form-control" id="guest_addressInvoice" placeholder="Nhập thông tin" name="guest_addressInvoice" value="" required>' +
             '</div>' + '<div class="form-group">' +
             '<label>Mã số thuế:</label>' +
-            '<input type="number" class="form-control" id="guest_code" placeholder="Nhập thông tin" name="guest_code" value="" required>' +
+            '<input type="number" class="form-control" id="guest_code" inputmode="numeric" placeholder="Nhập thông tin" name="guest_code" value="" required>' +
             '</div>' + '<div class="form-group">' +
             '<label for="email">Địa chỉ giao hàng:</label>' +
             '<input type="text" class="form-control" id="guest_addressDeliver" placeholder="Nhập thông tin" name="guest_addressDeliver" value="" required>' +
@@ -442,19 +442,7 @@
     //add sản phẩm
     $(document).ready(function() {
         let fieldCounter = 1;
-        let isFirstClick = true;
         $("#add-field-btn").click(function() {
-            if (!isFirstClick) {
-                var maProduct = $('.maProduct:last').val();
-                var productUnit = $('.product_unit:last').val();
-                var productQty = $('.quantity-input:last').val();
-                var productPrice = $('.product_price:last').val();
-                var productTax = $('.product_tax:last').val();
-                if (!maProduct || !productUnit || !productQty || !productPrice || !productTax) {
-                    alert('Vui lòng nhập đủ thông tin sản phẩm.');
-                    return;
-                }
-            }
             // Tạo các phần tử HTML mới
             const newRow = $("<tr>", {
                 "id": `dynamic-row-${fieldCounter}`
@@ -464,7 +452,7 @@
                 "text": `${fieldCounter}`
             });
             const TenInput = $("<td>" +
-                "<select id='maProduct' class='p-1 pr-5 maProduct' name='products_id[]'>" +
+                "<select id='maProduct' class='p-1 pr-5 maProduct' required name='products_id[]'>" +
                 "<option value=''>Lựa chọn sản phẩm</option>" +
                 '@foreach ($products as $value)' +
                 "<option value='{{ $value->id }}'>{{ $value->products_code }}</option>" +
@@ -472,7 +460,7 @@
                 "</select>"
             );
             const ProInput = $("<td>" +
-                "<select class='child-select p-1 pr-5 productName' name='product_id[]'>" +
+                "<select class='child-select p-1 pr-5 productName' required name='product_id[]'>" +
                 "<option value=''>Lựa chọn sản phẩm</option>" +
                 "</select>" +
                 "</td>");
@@ -505,7 +493,6 @@
                 $(this).closest("tr").remove();
                 calculateTotalAmount();
                 calculateGrandTotal();
-                isFirstClick = true;
             });
             //lấy S/N
             sn.click(function() {
@@ -568,7 +555,6 @@
             $("#dynamic-fields").before(newRow);
             // Tăng giá trị fieldCounter
             fieldCounter++;
-            isFirstClick = false;
         });
 
         //hiện danh sách khách hàng khi click trường tìm kiếm
@@ -626,7 +612,7 @@
                         data.guest_addressInvoice + '">' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">Mã số thuế:</label>' +
-                        '<input type="number" class="form-control" id="guest_code" placeholder="Nhập thông tin" name="guest_code" value="' +
+                        '<input type="number" class="form-control" inputmode="numeric" id="guest_code" placeholder="Nhập thông tin" name="guest_code" value="' +
                         data.guest_code + '">' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">Địa chỉ giao hàng:</label>' +
@@ -726,7 +712,6 @@
         if (!form.reportValidity()) {
             return;
         }
-
         $('#click').val(1);
         var click = $('#click').val();
         var guest_name = $('#guest_name').val();
@@ -933,25 +918,9 @@
     //hàm kiểm tra
     function validateAndSubmit(event) {
         var formGuest = $('#form-guest');
-
+        var formProduct = $('#dynamic-row');
         if (formGuest.length) {
-            var requiredInputs = formGuest.find(':input[required]');
-            var isValid = true;
-
-            // Kiểm tra tất cả các trường required
-            requiredInputs.each(function() {
-                if (!$(this).val()) {
-                    isValid = false;
-                    return false; // Dừng vòng lặp nếu có trường không hợp lệ
-                }
-            });
-
-            if (isValid) {
-                $('#export_form').submit();
-            } else {
-                alert('Lỗi: Vui lòng điền đầy đủ thông tin!');
-                event.preventDefault();
-            }
+            
         } else {
             alert('Lỗi: Chưa chọn nhà cung cấp!');
             event.preventDefault();
