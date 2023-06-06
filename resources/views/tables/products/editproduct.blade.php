@@ -51,8 +51,8 @@
                 </div>
                 <div class="col-sm-6">
                   <div class="form-group">
-                    <label for="email">Thương hiệu</label>
-                    <input required type="text" class="form-control" id="product_trademark" name="product_trademark" value="{{$pro->product_trademark}}">
+                    <label for="email">Ghi chú</label>
+                    <input type="text" class="form-control" id="product_trademark" name="product_trademark" value="{{$pro->product_trademark}}">
                   </div>
                   <div class="form-group">
                     <label for="email">Số lượng</label>
