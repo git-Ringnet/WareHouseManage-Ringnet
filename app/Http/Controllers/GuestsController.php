@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Exports;
 use App\Models\Guests;
 use Illuminate\Http\Request;
 
@@ -176,8 +177,13 @@ class GuestsController extends Controller
      */
     public function destroy($id)
     {
-        $guests = Guests::destroy($id);
-        return redirect()->route('guests.index')->with('msg', 'Xóa thành công!');
+        $guest_exist = Exports::where('guest_id', $id)->first();
+        if (!$guest_exist) {
+            Guests::destroy($id);
+            return redirect()->route('guests.index')->with('msg', 'Xóa thành công!');
+        } else {
+            return redirect()->route('guests.index')->with('danger', 'Không thể xóa, do có thông tin khách hàng trong đơn xuất hàng!');
+        }
     }
     public function updateStatus(Request $request)
     {
