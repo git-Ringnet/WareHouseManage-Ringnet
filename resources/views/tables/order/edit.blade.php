@@ -524,12 +524,22 @@
             $(this).find('td').eq(1).text(index + 1);
         });
     }
+    function chekckRow(){
+            var rowLength = $('#inputContainer tbody tr').length;
+            console.log($('#inputContainer tbody tr').length);
+            if(rowLength < 1)
+            {
+               return false;
+            }else{
+                return true;
+            }
+        }
 
     // Kiểm tra dữ liệu trước khi submit
     $(document).on('submit', '#form_submit', function(e) {
         e.preventDefault();
         var error = false;
-        if (rowCount < 1) {
+        if (chekckRow() == false) {
             error = true;
             alert('Vui lòng nhập ít nhất 1 sản phẩm');
         }
