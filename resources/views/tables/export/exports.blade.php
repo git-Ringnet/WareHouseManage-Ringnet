@@ -510,7 +510,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 @endif
                                             </td>
                                             <td>
-                                                @if ($value->export_status != 2 && (Auth::user()->name == $value->name || Auth::user()->can('isAdmin')))
+                                                @if($value->export_status == 1 && (Auth::user()->name == $value->name || Auth::user()->can('isAdmin')))
                                                     <a href="{{ route('exports.edit', $value->id) }}">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="32"
                                                             height="32" viewBox="0 0 32 32" fill="none">
