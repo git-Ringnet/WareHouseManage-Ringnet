@@ -1,3 +1,4 @@
+
 <x-navbar :title="$title"></x-navbar>
 @if (Auth::check() != null)
     <!-- Content Wrapper. Contains page content -->
@@ -257,7 +258,7 @@
                         '<input type="hidden" name="product_id[]" value="' + last + '">' +
                         '<td scope="row"><input type="checkbox" id=' + rowCount + '" class="cb-element"></td>' +
                         '<td>' +
-                        '<select name="products_id[]">' +
+                        '<select name="products_id[]" class="list_products">' +
                         '<option value="">Lựa chọn mã sản phẩm</option>' +
                         '@foreach ($products as $va)' +
                         '<option value="{{ $va->id }}">{{ $va->products_code }}</option>' +
@@ -304,6 +305,7 @@
                         '<td>ID</td>' +
                         '<td>Mã sản phẩm</td>' +
                         '<td>Tên sản phẩm</td>' +
+                        '<td>Nhà cung cấp</td>'+
                         '<td>Loại hàng</td>' +
                         '<td>Số lượng sản phẩm</td>' +
                         '<td>Số lượng S/N</td>' +
@@ -314,6 +316,7 @@
                         '<td>' + rowCount + '</td>' +
                         '<td class="code_product"></td>' +
                         '<td class="name_product"></td>' +
+                        '<td class="provide_name"></td>'+
                         '<td class="type_product"></td>' +
                         '<td class="qty_product"></td>' +
                         '<td class="SNCount">1</td>' +
@@ -345,28 +348,10 @@
                         '</div>' +
                         '</div>'
                     $('#list_modal').append(modal);
-
-                   createInput();
-
-                    rowCount++;
-
-                    var info = document.querySelectorAll('.exampleModal');
-                    for (let k = 0; k < info.length; k++) {
-                        info[k].addEventListener('click', function() {
-                            var productCode = $(this).closest('tr').find(
-                                '.list_products option:selected').text();
-                            var productName = $(this).closest('tr').find('[name^="product_name"]')
-                                .val();
-                            var productType = $(this).closest('tr').find('[name^="product_category"]')
-                                .val();
-                            var productQty = $(this).closest('tr').find('[name^="product_qty"]').val();
-                            $('.code_product').text(productCode);
-                            $('.name_product').text(productName);
-                            $('.type_product').text(productType);
-                            $('.qty_product').text(productQty);
-                        })
-                    }
-
+                createInput();
+                rowCount++;
+                fillDataToModal();
+                
                 }
             };
             reader.readAsText(file);
@@ -488,14 +473,27 @@
             }
         });
 
+        function chekckRow(){
+            var rowLength = $('#inputContainer tbody tr').length;
+            console.log($('#inputContainer tbody tr').length);
+            if(rowLength < 1)
+            {
+               return false;
+            }else{
+                return true;
+            }
+        }
+
+
         var add_bill = document.getElementById('add_bill');
         add_bill.addEventListener('click', function(e) {
             e.preventDefault();
             var error = false;
-            if (rowCount < 1) {
+            if (chekckRow() == false) {
                 alert('Vui lòng nhập ít nhất 1 sản phẩm');
                 error = true;
             }
+
             $('input[name="product_name[]"]').each(function() {
                 if ($(this).val() === '') {
                     alert('Vui lòng nhập tên sản phẩm')
@@ -530,21 +528,18 @@
                 }
             });
 
-            $('input[name="product_SN[]"]').each(function() {
-                if ($(this).val() === '') {
-                    alert('Vui lòng nhập seri number');
-                    error = true;
-                }
-            });
-
             $('input[name^="product_qty[]"]').each(function(index) {
                 var qty = $(this).val();
                 var sn_count = $('input[name="product_SN' + index + '[]"]').length;
-                if (qty != sn_count) {
+                if($('input[name="product_SN'+index+'[]').val() == ""){
+                    error = true;
+                    alert('Vui lòng nhập seri number');
+                }else if (qty != sn_count) {
                     error = true;
                     alert('Số lượng và seri number không hợp lệ');
                 }
             });
+
             if ($('#provide_id').val().trim() == '' && $('#radio1').prop('checked') == true) {
                 error = true;
                 alert('Vui lòng chọn nhà cung cấp');
@@ -634,6 +629,7 @@
                 '<td>ID</td>' +
                 '<td>Mã sản phẩm</td>' +
                 '<td>Tên sản phẩm</td>' +
+                '<td>Nhà cung cấp</td>' +
                 '<td>Loại hàng</td>' +
                 '<td>Số lượng sản phẩm</td>' +
                 '<td>Số lượng S/N</td>' +
@@ -644,6 +640,7 @@
                 '<td>' + rowCount + '</td>' +
                 '<td class="code_product"></td>' +
                 '<td class="name_product"></td>' +
+                '<td class="provide_name"></td>' +
                 '<td class="type_product"></td>' +
                 '<td class="qty_product"></td>' +
                 '<td class="SNCount">1</td>' +
@@ -675,8 +672,8 @@
                 '</div>' +
                 '</div>'
             $('#list_modal').append(modal);
-            createInput()
-           
+            createInput();
+            chekckRow();
             $(document).on('click', '#deleteSNS', function() {
                 for (let i = 0; i <= addSNBtns.length; i++) {
                     $('.div_value' + i + ' input[type="checkbox"]:checked').parent().parent().remove();
@@ -692,7 +689,10 @@
                     });
                 }
             }
+            fillDataToModal();
+        });
 
+        function fillDataToModal(){
             var info = document.querySelectorAll('.exampleModal');
             for (let k = 0; k < info.length; k++) {
                 info[k].addEventListener('click', function() {
@@ -700,14 +700,18 @@
                     var productName = $(this).closest('tr').find('[name^="product_name"]').val();
                     var productType = $(this).closest('tr').find('[name^="product_category"]').val();
                     var productQty = $(this).closest('tr').find('[name^="product_qty"]').val();
+                    var provide_name = $('#provide_name').val();
+                    console.log(productCode);
                     $('.code_product').text(productCode);
                     $('.name_product').text(productName);
+                    $('.provide_name').text(provide_name);
                     $('.type_product').text(productType);
                     $('.qty_product').text(productQty);
                 })
             }
-        });
+        }
 
+        // Hàm tạo ra các input
         function createInput(){
             var addSNBtns = $('.AddSN');
             for (let i = 0; i <= addSNBtns.length; i++) {
@@ -751,7 +755,6 @@
                 });
             }
         }
-
 
         // Hiển thị sản phẩm con 
         $(document).on('change', '.list_products', function(e) {
@@ -879,6 +882,7 @@
             var targetId = $(this).closest('tr').find('button[name="btn_add_SN[]"]').attr('data-target');
             $(targetId).remove();
             parentTr.remove();
+            chekckRow();
             updateRowNumbers();
             calculateTotalAmount();
             calculateGrandTotal();
@@ -965,72 +969,67 @@
         $(document).on('submit', '#form_submit', function(e) {
             e.preventDefault();
             var error = false;
-            if (rowCount < 1) {
+            if (chekckRow() == false) {
                 alert('Vui lòng nhập ít nhất 1 sản phẩm');
                 error = true;
             }
-            $('input[name="product_name[]"]').each(function() {
-                if ($(this).val() === '') {
-                    error = true;
-                    alert('Vui lòng nhập tên sản phẩm')
-                }
-            });
             $('select[name="products_id[]"]').each(function() {
                 if ($(this).val() === "") {
                     error = true;
                     alert('Vui lòng chọn sản phẩm cần thêm');
                 }
             });
-            $('input[name^="product_total"]').each(function() {
-                if ($(this).val() === '') {
-                    alert('Tổng tiền không hợp lệ')
-                    error = true;
-                } else if (isNaN($(this).val())) {
-                    error = true;
-                    alert('Tổng tiền phải là số')
-                }
-            })
-            $('input[name="product_qty[]"]').each(function() {
-                if ($(this).val() === '') {
-                    alert('Vui lòng nhập số lượng sản phẩm')
-                    error = true;
-                } else if (isNaN($(this).val())) {
-                    error = true;
-                    alert('Số lượng phải là số')
-                }
-            });
-
-            $('input[name="product_price[]"]').each(function() {
-                if ($(this).val() === '') {
-                    alert('Vui lòng nhập giá sản phẩm')
-                    error = true;
-                } else if (isNaN($(this).val())) {
-                    alert('Giá phải là số');
-                    error = true;
-                }
-            });
-
-            $('input[name="product_SN[]"]').each(function() {
-                if ($(this).val() === '') {
-                    alert('Vui lòng nhập seri number');
-                    error = true;
-                }
-            });
-
             $('input[name^="product_qty[]"]').each(function(index) {
-                var qty = $(this).val();
-                var sn_count = $('input[name="product_SN' + index + '[]"]').length;
-                if (qty != sn_count) {
+            var qty = $(this).val();
+            var sn_count = $('input[name="product_SN' + index + '[]"]').length;
+                if($('input[name="product_SN' + index + '[]').val() == ""){
+                    error = true;
+                    alert('Vui lòng nhập seri number');
+                }else if (qty != sn_count) {
                     error = true;
                     alert('Số lượng và seri number không hợp lệ');
                 }
-                console.log(qty);
-                console.log(sn_count);
             });
             if ($('#provide_id').val().trim() == '' && $('#radio1').prop('checked') == true) {
                 error = true;
                 alert('Vui lòng chọn nhà cung cấp');
             }
+            // $('input[name="product_name[]"]').each(function() {
+            //     if ($(this).val() === '') {
+            //         error = true;
+            //         alert('Vui lòng nhập tên sản phẩm')
+            //     }
+            // });
+           
+            // $('input[name^="product_total"]').each(function() {
+            //     if ($(this).val() === '') {
+            //         alert('Tổng tiền không hợp lệ')
+            //         error = true;
+            //     } else if (isNaN($(this).val())) {
+            //         error = true;
+            //         alert('Tổng tiền phải là số')
+            //     }
+            // })
+            // $('input[name="product_qty[]"]').each(function() {
+            //     if ($(this).val() === '') {
+            //         alert('Vui lòng nhập số lượng sản phẩm')
+            //         error = true;
+            //     } else if (isNaN($(this).val())) {
+            //         error = true;
+            //         alert('Số lượng phải là số');
+            //     }
+            // });
+
+            // $('input[name="product_price[]"]').each(function() {
+            //     if ($(this).val() === '') {
+            //         alert('Vui lòng nhập giá sản phẩm')
+            //         error = true;
+            //     } else if (isNaN($(this).val())) {
+            //         alert('Giá phải là số');
+            //         error = true;
+            //     }
+            // });
+
             if (error) {
                 return false;
             }

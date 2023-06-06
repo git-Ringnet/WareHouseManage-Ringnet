@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Provides;
+use App\Models\Orders;
 use Illuminate\Http\Request;
 
 class ProvideController extends Controller
@@ -167,8 +168,14 @@ class ProvideController extends Controller
      */
     public function destroy($id)
     {
-        $provides = Provides::destroy($id);
-        return redirect()->route('provides.index')->with('msg', 'Xóa thành công!');
+        $delOrder = Orders::where('provide_id',$id)->first();
+        if($delOrder){
+            return redirect()->route('provides.index')->with('danger', 'Nhà cung cấp đang tồn tại trong đơn hàng');
+        }else{
+            $provides = Provides::destroy($id);
+            return redirect()->route('provides.index')->with('msg', 'Xóa thành công!');
+        }
+        
     }
     public function updateStatus(Request $request)
     {
