@@ -417,7 +417,7 @@
             '<input type="text" class="form-control" id="guest_represent" placeholder="Nhập thông tin" name="guest_represent" value="" required>' +
             '</div>' + '<div class="form-group">' +
             '<label for="email">Email:</label>' +
-            '<input type="email" class="form-control" id="guest_email" placeholder="Nhập thông tin" name="guest_email" value="" required>' +
+            '<input type="email" class="form-control" pattern="/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/" id="guest_email" placeholder="Nhập thông tin" name="guest_email" value="" required>' +
             '</div>' + '<div class="form-group">' +
             '<label for="email">Số điện thoại:</label>' +
             '<input type="number" class="form-control" id="guest_phone" placeholder="Nhập thông tin" name="guest_phone" value="" required>' +
@@ -468,7 +468,12 @@
                 "<td><input type='text' id='product_unit' class='product_unit' name='product_unit[]' required></td>"
             );
             const slInput = $(
-                "<td><input type='number' id='product_qty' class='quantity-input' name='product_qty[]' required></td>"
+                "<td>" +
+                "<div class='d-flex'>" +
+                "<input type='number' id='product_qty' class='quantity-input' name='product_qty[]' required>" +
+                "<input type='number' readonly class='quantity-exist' name='product_qty[]' required>" +
+                "</div>" +
+                "</td>"
             );
             const giaInput = $(
                 "<td><input type='number' class='product_price' id='product_price' name='product_price[]' required></td>"
@@ -637,7 +642,7 @@
                         data.guest_represent + '" required>' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">Email:</label>' +
-                        '<input type="email" class="form-control" id="guest_email" placeholder="Nhập thông tin" name="guest_email" value="' +
+                        '<input type="email" class="form-control" pattern="/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/" id="guest_email" placeholder="Nhập thông tin" name="guest_email" value="' +
                         data.guest_email + '" required>' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">Số điện thoại:</label>' +
@@ -802,6 +807,7 @@
 
             var idProduct = $(this).val();
             var productUnitElement = $(this).closest('tr').find('.product_unit');
+            var qty_exist = $(this).closest('tr').find('.quantity-exist');
             if (idProduct) {
                 $.ajax({
                     url: "{{ route('getProduct') }}",
@@ -811,6 +817,7 @@
                     },
                     success: function(response) {
                         productUnitElement.val(response.product_unit);
+                        qty_exist.val(response.product_qty);
                     },
                 });
             }
@@ -855,7 +862,64 @@
         }
     });
     //tính thành tiền của sản phẩm
-    
+    $(document).on('input', '.quantity-input, [name^="product_price"], .product_tax', function() {
+        var productQty = parseInt($(this).closest('tr').find('.quantity-input').val());
+        var productPrice = parseFloat($(this).closest('tr').find('.product_price').val());
+        var taxValue = parseFloat($(this).closest('tr').find('.product_tax').val());
+
+        if (!isNaN(productQty) && !isNaN(productPrice) && !isNaN(taxValue)) {
+            var totalAmount = productQty * productPrice;
+            var taxAmount = (totalAmount * taxValue) / 100;
+
+            $(this).closest('tr').find('.total-amount').text(totalAmount.toFixed(2));
+            $(this).closest('tr').find('.product_tax option:selected').text(taxAmount.toFixed(2));
+
+            calculateTotalAmount();
+            calculateTotalTax();
+        }
+    });
+
+    function calculateTotalAmount() {
+        var totalAmount = 0;
+        $('tr').each(function() {
+            var rowTotal = parseFloat($(this).find('.total-amount').text());
+            if (!isNaN(rowTotal)) {
+                totalAmount += rowTotal;
+            }
+        });
+        $('#total-amount-sum').text(totalAmount.toFixed(2));
+
+        // Recalculate total tax and grand total
+        calculateTotalTax();
+        calculateGrandTotal();
+    }
+
+    function calculateTotalTax() {
+        var totalTax = 0;
+        $('tr').each(function() {
+            var rowTax = parseFloat($(this).find('.product_tax option:selected').text());
+            if (!isNaN(rowTax)) {
+                totalTax += rowTax;
+            }
+        });
+        $('#product-tax').text(totalTax.toFixed(2));
+
+        // Recalculate total amount and grand total
+        calculateGrandTotal();
+    }
+
+    function calculateGrandTotal() {
+        var totalAmount = parseFloat($('#total-amount-sum').text());
+        var totalTax = parseFloat($('#product-tax').text());
+
+        var grandTotal = totalAmount + totalTax;
+        $('#grand-total').text(grandTotal.toFixed(2));
+
+        // Update data-value attribute
+        $('#grand-total').attr('data-value', grandTotal.toFixed(2));
+        $('#total').val(grandTotal.toFixed(2));
+    }
+
 
     //hàm kiểm tra
     function validateAndSubmit(event) {

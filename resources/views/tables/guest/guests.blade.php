@@ -328,7 +328,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             <span class="d-flex">
                                                 <a href="#" class="sort-link" data-sort-by="id"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
-                                                        type="submit">Mã nhân viên</button></a>
+                                                        type="submit">Mã khách hàng</button></a>
                                                 <div class="icon" id="icon-id"></div>
                                             </span>
                                         </th>
@@ -380,7 +380,7 @@ $index = array_search($item['label'], $numberedLabels);
                                     @foreach ($guests as $item)
                                         <tr>
                                             <td><input type="checkbox" class="cb-element" name="ids[]"
-                                                value="{{ $item->id }}"></td>
+                                                    value="{{ $item->id }}"></td>
                                             <td>{{ $item->id }}</td>
                                             <td>{{ $item->guest_name }}</td>
                                             <td>{{ $item->guest_represent }}</td>
@@ -616,9 +616,9 @@ $index = array_search($item['label'], $numberedLabels);
     }
 
 
-    
-        // AJAX disable user
-        $(document).on('click', '#disableStatusGuest', function(e) {
+
+    // AJAX disable user
+    $(document).on('click', '#disableStatusGuest', function(e) {
         e.preventDefault();
         if (myFunctionCancel()) {
             const list_id = [];
