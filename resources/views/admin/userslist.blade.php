@@ -523,10 +523,12 @@ $index = array_search($item['label'], $numberedLabels);
     });
     $('#cancel-name').click(function(event) {
         event.preventDefault();
+        $('.name-input').val('');
         $('#name-options').hide();
     });
     $('#btn-phonenumber').click(function(event) {
         event.preventDefault();
+        $('.phonenumber-input').val('');
         $('#phonenumber-options').toggle();
     });
     $('#cancel-phonenumber').click(function(event) {
@@ -539,6 +541,7 @@ $index = array_search($item['label'], $numberedLabels);
     });
     $('#cancel-email').click(function(event) {
         event.preventDefault();
+        $('.email-input').val('');
         $('#email-options').hide();
     });
 
@@ -569,10 +572,12 @@ $index = array_search($item['label'], $numberedLabels);
     });
     $('#cancel-status').click(function(event) {
         event.preventDefault();
+        $('#status-options input[type="checkbox"]').prop('checked', false);
         $('#status-options').hide();
     });
     $('#cancel-roles').click(function(event) {
         event.preventDefault();
+        $('#role-options input[type="checkbox"]').prop('checked', false);
         $('#role-options').hide();
     });
     $(document).ready(function() {

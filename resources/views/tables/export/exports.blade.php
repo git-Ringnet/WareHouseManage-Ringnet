@@ -332,7 +332,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('comparison_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
                                                 <input class="w-50 input-quantity sum-input" type="number"
                                                     name="sum" value="{{ request()->sum }}"
@@ -581,6 +581,8 @@ $index = array_search($item['label'], $numberedLabels);
     });
     $('#cancel-update_at').click(function(event) {
         event.preventDefault();
+        $('#start').val('');
+            $('#end').val('');
         $('#update_at-options').hide();
     });
     $('#btn-sum').click(function(event) {
@@ -589,6 +591,7 @@ $index = array_search($item['label'], $numberedLabels);
     });
     $('#cancel-sum').click(function(event) {
         event.preventDefault();
+        $('.sum-input').val('');
         $('#sum-options').hide();
     });
     $('#btn-creator').click(function(event) {
@@ -597,6 +600,7 @@ $index = array_search($item['label'], $numberedLabels);
     });
     $('#cancel-creator').click(function(event) {
         event.preventDefault();
+        $('#creator-options input[type="checkbox"]').prop('checked', false);
         $('#creator-options').hide();
     });
     $('#btn-status').click(function(event) {
@@ -605,6 +609,7 @@ $index = array_search($item['label'], $numberedLabels);
     });
     $('#cancel-status').click(function(event) {
         event.preventDefault();
+        $('#status-options input[type="checkbox"]').prop('checked', false);
         $('#status-options').hide();
     });
     $('#btn-id').click(function(event) {
@@ -613,6 +618,7 @@ $index = array_search($item['label'], $numberedLabels);
     });
     $('#cancel-id').click(function(event) {
         event.preventDefault();
+        $('.id-input').val('');
         $('#id-options').hide();
     });
 
@@ -622,6 +628,7 @@ $index = array_search($item['label'], $numberedLabels);
     });
     $('#cancel-guest').click(function(event) {
         event.preventDefault();
+        $('.guest-input').val('');
         $('#guest-options').hide();
     });
 

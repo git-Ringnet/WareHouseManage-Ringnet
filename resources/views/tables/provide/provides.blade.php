@@ -472,6 +472,7 @@ $index = array_search($item['label'], $numberedLabels);
 
         $('#cancel-status').click(function(event) {
             event.preventDefault();
+            $('#status-options input[type="checkbox"]').prop('checked', false);
             $('#status-options').hide();
         });
     });
@@ -481,6 +482,7 @@ $index = array_search($item['label'], $numberedLabels);
     });
     $('#cancel-name').click(function(event) {
         event.preventDefault();
+        $('.name-input').val('');
         $('#name-options').hide();
     });
     $('#btn-represent').click(function(event) {
@@ -489,6 +491,7 @@ $index = array_search($item['label'], $numberedLabels);
     });
     $('#cancel-represent').click(function(event) {
         event.preventDefault();
+        $('.represent-input').val('');
         $('#represent-options').hide();
     });
     $('#btn-phonenumber').click(function(event) {
@@ -497,6 +500,8 @@ $index = array_search($item['label'], $numberedLabels);
     });
     $('#cancel-phonenumber').click(function(event) {
         event.preventDefault();
+        $('.phonenumber-input').val('');
+
         $('#phonenumber-options').hide();
     });
     $('#btn-email').click(function(event) {
@@ -505,6 +510,7 @@ $index = array_search($item['label'], $numberedLabels);
     });
     $('#cancel-email').click(function(event) {
         event.preventDefault();
+        $('.email-input').val('');
         $('#email-options').hide();
     });
 

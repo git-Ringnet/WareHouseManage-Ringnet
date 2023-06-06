@@ -128,7 +128,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     echo 0;
                                                 } @endphp">
                                     {{ $item['label'] }}
-                                    <span class="filter-values">{{ implode(',', $item['values']) }}</span>
+                                    <span class="filter-values">{{ implode(', ', $item['values']) }}</span>
                                     <a class="delete-item delete-btn-{{ $item['class'] }}"
                                         onclick="updateDeleteItemValue('{{ $item['label'] }}')">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -435,7 +435,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                         {{ request('comparison_operator') === '<=' ? 'selected' : '' }}>
                                                         <=< /option>
                                                 </select>
-                                                <input class="w-50 quantity-input" type="number" name="quantity"
+                                                <input class="w-50 quantity-input input-so" type="number" name="quantity"
                                                     value="{{ request()->quantity }}" placeholder="Số lượng">
                                             </div>
                                         </div>
@@ -489,7 +489,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                         {{ request('price_inven_operator') === '<=' ? 'selected' : '' }}>
                                                         <=</option>
                                                 </select>
-                                                <input class="w-50 price_inven-input" type="number"
+                                                <input class="w-50 price_inven-input input-so" type="number"
                                                     name="price_inven" value="{{ request()->price_inven }}"
                                                     placeholder="Nhập giá trị">
                                             </div>
@@ -806,6 +806,20 @@ $index = array_search($item['label'], $numberedLabels);
 </div>
 
 <script>
+    
+    function checkBlockOptions() {
+  var blockOptions = document.getElementsByClassName("block-options");
+
+  for (var i = 0; i < blockOptions.length; i++) {
+    if (blockOptions[i].style.display === "none") {
+      var dropdownButton = document.getElementById("dropdownMenuButton");
+      dropdownButton.disabled = true;
+      break;
+    }
+  }
+}
+
+
     // Checkbox
     $('#checkall').change(function() {
         $('.cb-element').prop('checked', this.checked);
@@ -900,7 +914,6 @@ $index = array_search($item['label'], $numberedLabels);
         event.preventDefault();
         $('#status-options').toggle();
         $('#category-options').hide();
-
     });
     //Trademarks
     $('#btn-trademark').click(function(event) {
@@ -909,6 +922,7 @@ $index = array_search($item['label'], $numberedLabels);
     });
     $('#cancel-trademark').click(function(event) {
         event.preventDefault();
+        $('#trademark-options input[type="checkbox"]').prop('checked', false);
         $('#trademark-options').hide();
     });
 
@@ -918,6 +932,7 @@ $index = array_search($item['label'], $numberedLabels);
     });
     $('#cancel-id').click(function(event) {
         event.preventDefault();
+        $('.products_name-input').val('');
         $('#id-options').hide();
     });
     //Code
@@ -927,6 +942,7 @@ $index = array_search($item['label'], $numberedLabels);
     });
     $('#cancel-code').click(function(event) {
         event.preventDefault();
+        $('.code-input').val('');
         $('#code-options').hide();
     });
     $('#btn-price_inven').click(function(event) {
@@ -935,6 +951,7 @@ $index = array_search($item['label'], $numberedLabels);
     });
     $('#cancel-price_inven').click(function(event) {
         event.preventDefault();
+        $('.price_inven-input').val('');
         $('#price_inven-options').hide();
     });
     $('#btn-avg').click(function(event) {
@@ -943,6 +960,7 @@ $index = array_search($item['label'], $numberedLabels);
     });
     $('#cancel-avg').click(function(event) {
         event.preventDefault();
+        $('.avg-input').val('');
         $('#avg-options').hide();
     });
     $('#btn-quantity').click(function(event) {
@@ -951,6 +969,7 @@ $index = array_search($item['label'], $numberedLabels);
     });
     $('#cancel-quantity').click(function(event) {
         event.preventDefault();
+        $('.quantity-input').val('');
         $('#quantity-options').hide();
     });
     $('#btn-category').click(function(event) {
@@ -959,10 +978,12 @@ $index = array_search($item['label'], $numberedLabels);
     });
     $('#cancel-status').click(function(event) {
         event.preventDefault();
+        $('#status-options input[type="checkbox"]').prop('checked', false);
         $('#status-options').hide();
     });
     $('#cancel-category').click(function(event) {
         event.preventDefault();
+        $('#category-options input[type="checkbox"]').prop('checked', false);
         $('#category-options').hide();
     });
     $(document).ready(function() {
