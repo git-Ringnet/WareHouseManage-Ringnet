@@ -20,9 +20,6 @@ class UsersController extends Controller
     public function show(Request $request)
     {
         $title = "Danh sách người dùng";
-
-
-
         $allRoles = new Roles;
         $allRoles = $allRoles->getAll();
 
@@ -87,12 +84,12 @@ class UsersController extends Controller
                 $sortType = 'desc';
             }
         } else {
-            $sortType = 'asc';
+            $sortType = 'desc';
         }
 
-        $usersList = $this->users->getAllUsers($filters,$name, $phonenumber, $email, $status, $roles, $keywords, $sortBy, $sortType);
+        $usersList = $this->users->getAllUsers($filters, $name, $phonenumber, $email, $status, $roles, $keywords, $sortBy, $sortType);
         $title = 'Nhân viên';
-        return view('admin.userslist', compact('title', 'usersList', 'sortType', 'allRoles', 'string','title'));
+        return view('admin.userslist', compact('title', 'usersList', 'sortType', 'allRoles', 'string', 'title'));
     }
 
 
@@ -100,7 +97,7 @@ class UsersController extends Controller
     {
         $roles = new Roles;
         $title = 'Thêm nhân viên';
-        return view('admin/adduser',compact('title'))->with('roles', $roles->getAll());
+        return view('admin/adduser', compact('title'))->with('roles', $roles->getAll());
     }
     public function addUser(UserRequest $request)
     {
@@ -127,7 +124,7 @@ class UsersController extends Controller
         $roles = new Roles;
         // dd($id);
         $title = 'Chỉnh sửa nhân viên';
-        return view('admin/edituser', ['useredit' => $user], compact('userDetail','title'))->with('roles', $roles->getAll());
+        return view('admin/edituser', ['useredit' => $user], compact('userDetail', 'title'))->with('roles', $roles->getAll());
     }
     public function editUser(UserRequest $request)
     {
@@ -159,5 +156,41 @@ class UsersController extends Controller
         $user = User::findOrFail($data['idStatus']);
         $user->status = $data['newStatus'];
         $user->save();
+    }
+
+    public function deleteListUser(Request $request)
+    {
+        if (isset($request->list_id)) {
+            $list = $request->list_id;
+            User::whereIn('id', $list)->delete();
+            return response()->json(['success' => true, 'msg' => 'Xóa người dùng thành công', 'ids' => $list]);
+        }
+        return response()->json(['success' => false, 'msg' => 'Xóa người dùng thất bại']);
+    }
+    public function activeStatusUser(Request $request)
+    {
+        if (isset($request->list_id)) {
+            $list = $request->list_id;
+            $listOrder = User::whereIn('id', $list)->get();
+            foreach ($listOrder as $value) {
+                    $value->status = 1;
+                    $value->save();
+                }
+            return response()->json(['success' => true, 'msg' => 'Thay đổi trạng thái người dùng thành công']);
+        }
+        return response()->json(['success' => false, 'msg' => 'Not fount']);
+    }
+    public function disableStatusUser(Request $request)
+    {
+        if (isset($request->list_id)) {
+            $list = $request->list_id;
+            $listOrder = User::whereIn('id', $list)->get();
+            foreach ($listOrder as $value) {
+                    $value->status = 0;
+                    $value->save();
+                }
+            return response()->json(['success' => true, 'msg' => 'Thay đổi trạng thái người dùng thành công']);
+        }
+        return response()->json(['success' => false, 'msg' => 'Not fount']);
     }
 }

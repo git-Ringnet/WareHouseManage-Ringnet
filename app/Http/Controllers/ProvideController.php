@@ -184,4 +184,40 @@ class ProvideController extends Controller
         $provide->provide_status = $data['newStatus'];
         $provide->save();
     }
+
+    public function deleteListProvides(Request $request)
+    {
+        if (isset($request->list_id)) {
+            $list = $request->list_id;
+            Provides::whereIn('id', $list)->delete();
+            return response()->json(['success' => true, 'msg' => 'Xóa nhà cung cấp thành công', 'ids' => $list]);
+        }
+        return response()->json(['success' => false, 'msg' => 'Xóa nhà cung cấp thất bại']);
+    }
+    public function activeStatusProvide(Request $request)
+    {
+        if (isset($request->list_id)) {
+            $list = $request->list_id;
+            $listOrder = Provides::whereIn('id', $list)->get();
+            foreach ($listOrder as $value) {
+                    $value->provide_status = 1;
+                    $value->save();
+                }
+            return response()->json(['success' => true, 'msg' => 'Thay đổi trạng thái nhà cung cấp thành công']);
+        }
+        return response()->json(['success' => false, 'msg' => 'Not fount']);
+    }
+    public function disableStatusProvide(Request $request)
+    {
+        if (isset($request->list_id)) {
+            $list = $request->list_id;
+            $listOrder = Provides::whereIn('id', $list)->get();
+            foreach ($listOrder as $value) {
+                    $value->provide_status = 0;
+                    $value->save();
+                }
+            return response()->json(['success' => true, 'msg' => 'Thay đổi trạng thái nhà cung cấp thành công']);
+        }
+        return response()->json(['success' => false, 'msg' => 'Not fount']);
+    }
 }

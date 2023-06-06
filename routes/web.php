@@ -30,14 +30,23 @@ Route::prefix('admin')->name('admin.')->middleware('permission:admin')->group(fu
     Route::post('update', [UsersController::class, 'editUser'])->name('edituser');
     Route::get('delete', [UsersController::class, 'deleteUser'])->name('delete');
     Route::get('updatestatus', [UsersController::class, 'updateStatus'])->name('update');
+    Route::get('/deleteListUser', [UsersController::class, 'deleteListUser'])->name('deleteListUser');
+    Route::get('/activeStatusUser', [UsersController::class, 'activeStatusUser'])->name('activeStatusUser');
+    Route::get('/disableStatusUser', [UsersController::class, 'disableStatusUser'])->name('disableStatusUser');
 });
 
 //nha cung cap
 Route::resource('provides', provideController::class)->middleware('permission:admin,manager');
+Route::get('/deleteListProvides', [provideController::class, 'deleteListProvides'])->name('deleteListProvides');
+Route::get('/activeStatusProvide', [provideController::class, 'activeStatusProvide'])->name('activeStatusProvide');
+Route::get('/disableStatusProvide', [provideController::class, 'disableStatusProvide'])->name('disableStatusProvide');
 Route::get('/update-status', [provideController::class, 'updateStatus'])->name('update');
 
 //khach hang
 Route::resource('guests', GuestsController::class)->middleware('permission:admin,sale');
+Route::get('/deleteListGuest', [GuestsController::class, 'deleteListGuest'])->name('deleteListGuest');
+Route::get('/activeStatusGuest', [GuestsController::class, 'activeStatusGuest'])->name('activeStatusGuest');
+Route::get('/disableStatusGuest', [GuestsController::class, 'disableStatusGuest'])->name('disableStatusGuest');
 Route::get('/updatestatus', [GuestsController::class, 'updateStatus'])->name('updateKH');
 
 //xuat hang
@@ -53,6 +62,8 @@ Route::get('nameProducts', [ExportController::class, 'nameProduct'])->name('name
 Route::get('getProduct', [ExportController::class, 'getProduct'])->name('getProduct');
 //lấy thông tin SN của sản phẩm con
 Route::get('getSN', [ExportController::class, 'getSN'])->name('getSN');
+Route::get('/deleteExports', [ExportController::class, 'deleteExports'])->name('deleteExports');
+Route::get('/cancelBillExport', [ExportController::class, 'cancelBillExport'])->name('cancelBillExport');
 
 Route::resource('data', ProductsController::class);
 Route::get('/insertProducts', [ProductsController::class, 'insertProducts'])->name('insertProducts');
@@ -60,8 +71,8 @@ Route::POST('/storeProducts', [ProductsController::class, 'storeProducts'])->nam
 Route::get('/data_edit', [ProductsController::class, 'edit_ajax'])->name('ajax');
 Route::get('/data_show', [ProductsController::class, 'show_ajax'])->name('show_ajax');
 Route::get('/deleteProducts', [ProductsController::class, 'deleteProducts'])->name('deleteProducts');
-Route::PUT('/editProduct/{id}',[ProductsController::class,'editProduct'])->name('editProduct');
-Route::PUT('/updateProduct/{id}',[ProductsController::class,'updateProduct'])->name('updateProduct');
+Route::PUT('/editProduct/{id}', [ProductsController::class, 'editProduct'])->name('editProduct');
+Route::PUT('/updateProduct/{id}', [ProductsController::class, 'updateProduct'])->name('updateProduct');
 
 Route::get('/show_provide', [AddProductController::class, 'show_provide'])->name('show_provide');
 Route::get('/update_provide', [AddProductController::class, 'update_provide'])->name('update_provide');
@@ -70,10 +81,10 @@ Route::POST('/addBillEdit', [AddProductController::class, 'addBillEdit'])->name(
 Route::post('/insertProductP', [AddProductController::class, 'addBill'])->name('addBill');
 Route::put('/deleteBill/{id?}', [AddProductController::class, 'deleteBill'])->name('deleteBill');
 Route::get('/deleteOrder', [AddProductController::class, 'deleteOrder'])->name('deleteOrder');
-Route::get('/cancelBill',[AddProductController::class,'cancelBill'])->name('cancelBill');
-Route::get('/confirmBill',[AddProductController::class,'confirmBill'])->name('confirmBill');
-Route::get('/showProduct',[AddProductController::class,'showProduct'])->name('showProduct');
-Route::get('/add_newProvide',[AddProductController::class,'add_newProvide'])->name('add_newProvide');
+Route::get('/cancelBill', [AddProductController::class, 'cancelBill'])->name('cancelBill');
+Route::get('/confirmBill', [AddProductController::class, 'confirmBill'])->name('confirmBill');
+Route::get('/showProduct', [AddProductController::class, 'showProduct'])->name('showProduct');
+Route::get('/add_newProvide', [AddProductController::class, 'add_newProvide'])->name('add_newProvide');
 
 Route::get('/simple', function () {
     return view('tables.simple');

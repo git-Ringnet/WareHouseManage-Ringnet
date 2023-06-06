@@ -46,7 +46,9 @@
                                                     d="M17.4948 14.3081C17.3628 14.0695 17.0166 14.082 16.9015 14.3269L15.3987 17.5205C15.2578 17.82 14.9778 18.0303 14.6509 18.0823C14.324 18.1343 13.9926 18.0212 13.7657 17.7801L12.3324 16.2575C12.1834 16.0992 11.9243 16.1236 11.8076 16.3083C11.8076 16.3083 11.8077 16.3082 11.8076 16.3083L9.80248 19.4893C9.66248 19.7113 9.82099 20.0001 10.0845 20.0001H20.0739C20.3276 20.0001 20.4887 19.7274 20.3666 19.505L17.4948 14.3081ZM15.0917 13.4756C15.902 11.7527 18.3236 11.6747 19.2449 13.34L22.1171 18.5377C22.9757 20.0939 21.8493 22.0001 20.0739 22.0001H10.0845C8.24679 22.0001 7.13076 19.9768 8.11056 18.4228C8.11052 18.4229 8.1106 18.4228 8.11056 18.4228L10.1159 15.2415C10.9299 13.9516 12.743 13.7757 13.7887 14.8866C13.7886 14.8866 13.7887 14.8866 13.7887 14.8866L14.2147 15.3393L15.0917 13.4756C15.0917 13.4755 15.0917 13.4757 15.0917 13.4756Z"
                                                     fill="#1D1C20" />
                                             </svg>
+                                            @if(Auth::user()->can('view-provides'))
                                             <h3>Upload</h3>
+                                            @endif
                                         </div>
                                     </div>
                                     <input class="url-img" type="hidden" value="{{ asset('dist/img') }}/">
@@ -55,8 +57,10 @@
                                             src="{{ asset('dist/img') }}/{{ $products->products_image }}"
                                             alt="your image" />
                                         <div class="image-title-wrap">
+                                            @if(Auth::user()->can('view-provides'))
                                             <button type="button" onclick="removeUpload()"
                                                 class="remove-image btn btn-danger">Remove</button>
+                                                @endif
                                         </div>
                                     </div>
                                 </div>
@@ -68,12 +72,12 @@
                                         <div class="product_name">
                                             <div class="title-edit-item">Tên sản phẩm</div>
                                             <input type="text" name="products_name"
-                                                value="{{ $products->products_name }}" class="form-control mb-4">
+                                                value="{{ $products->products_name }}" @if(!Auth::user()->can('view-provides')) readonly @endif class="form-control mb-4">
                                         </div>
                                         <div class="product_code">
                                             <div class="title-edit-item">Mã sản phẩm</div>
                                             <input type="text" name="products_code"
-                                                value="{{ $products->products_code }}" class="form-control mb-4">
+                                                value="{{ $products->products_code }}" @if(!Auth::user()->can('view-provides')) readonly @endif class="form-control mb-4">
                                         </div>
                                         <!-- <div class="product_id">
                                             <div class="title-edit-item">ID</div>
@@ -84,12 +88,12 @@
                                     <div class="col-md-3">
                                         <div class="product_category">
                                             <div class="title-edit-item">Danh mục</div>
-                                            <input required type="text" name="product_category" class="form-control mb-4" value="{{$products->ID_category}}">
+                                            <input required type="text" name="product_category" @if(!Auth::user()->can('view-provides')) readonly @endif class="form-control mb-4" value="{{$products->ID_category}}">
                                         </div>
                                         <div class="product_trademark">
                                             <div class="title-edit-item">Thương hiệu</div>
                                             <input type="text" name="products_trademark"
-                                                value="{{ $products->products_trademark }}" class="form-control mb-4">
+                                                value="{{ $products->products_trademark }}" @if(!Auth::user()->can('view-provides')) readonly @endif class="form-control mb-4">
                                         </div>
                                         <!-- <div class="product_unit">
                                             <div class="title-edit-item">Đơn vị</div>
@@ -99,7 +103,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="title-edit-item">Mô tả</div>
-                                        <textarea name="products_description" id="" placeholder="Nhập mô tả của sản phẩm" cols="30"
+                                        <textarea name="products_description" id="" @if(!Auth::user()->can('view-provides')) readonly @endif placeholder="Nhập mô tả của sản phẩm" cols="30"
                                             rows="8" class="form-control">{{ $products->products_description }}</textarea>
                                     </div>
                                 </div>

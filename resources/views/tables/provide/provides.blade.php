@@ -274,6 +274,50 @@ $index = array_search($item['label'], $numberedLabels);
     </section>
 
     <!-- Main content -->
+    <div class="order_content">
+        <section class="multiple_action">
+            <div class="d-flex justify-content-between align-items-center">
+                <span class="count_checkbox mr-5"></span>
+                <div class="row action">
+                    <div class="btn-nhanvien my-2 mr-2">
+                        <button id="deleteListProvides" type="button"
+                            class="btn btn-group btn-light d-flex align-items-center">
+                            <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24"
+                                stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em"
+                                width="1em" xmlns="http://www.w3.org/2000/svg">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path
+                                    d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                                </path>
+                                <line x1="10" y1="11" x2="10" y2="17"></line>
+                                <line x1="14" y1="11" x2="14" y2="17"></line>
+                            </svg>
+                            <span>Xóa nhà cung cấp đã chọn</span>
+                        </button>
+                    </div>
+                    <div class="dropdown my-2">
+                        <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Thay đổi trạng thái
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <button id="activeStatusProvide" class="dropdown-item">Active</button>
+                            <button id="disableStatusProvide" class="dropdown-item">Disable</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="btn ml-auto cancal_action">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none">
+                        <path d="M18 18L6 6" stroke="white" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                        <path d="M18 6L6 18" stroke="white" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </div>
+            </div>
+        </section>
+    </div>
     <section class="content">
         <div class="container-fluided">
             <div class="row">
@@ -287,6 +331,8 @@ $index = array_search($item['label'], $numberedLabels);
                                         <input type="hidden" id="sortByInput" name="sort-by" value="id">
                                         <input type="hidden" id="sortTypeInput" name="sort-type"
                                             value="{{ $sortType }}">
+                                        <th><input type="checkbox" name="all" id="checkall"></th>
+
                                         <th>
                                             <span class="d-flex">
                                                 <a href="#" class="sort-link" data-sort-by="id"
@@ -342,6 +388,8 @@ $index = array_search($item['label'], $numberedLabels);
                                 <tbody>
                                     @foreach ($provides as $item)
                                         <tr>
+                                            <td><input type="checkbox" class="cb-element" name="ids[]"
+                                                value="{{ $item->id }}"></td>
                                             <td>{{ $item->id }}</td>
                                             <td>{{ $item->provide_name }}</td>
                                             <td>{{ $item->provide_represent }}</td>
@@ -592,9 +640,143 @@ $index = array_search($item['label'], $numberedLabels);
             }
         });
     }
+
+
+
+        // AJAX disable user
+        $(document).on('click', '#disableStatusProvide', function(e) {
+        e.preventDefault();
+        if (myFunctionCancel()) {
+            const list_id = [];
+            $('input[name="ids[]"]').each(function() {
+                if ($(this).is(':checked')) {
+                    var value = $(this).val();
+                    list_id.push(value);
+                }
+            });
+            $.ajax({
+                url: "{{ route('disableStatusProvide') }}",
+                type: "get",
+                data: {
+                    list_id: list_id,
+                },
+                success: function(data) {
+                    location.reload();
+                }
+            })
+        }
+    })
+    // AJAX disable user
+    $(document).on('click', '#activeStatusProvide', function(e) {
+            e.preventDefault();
+            if (myFunctionCancel()) {
+                const list_id = [];
+                $('input[name="ids[]"]').each(function() {
+                    if ($(this).is(':checked')) {
+                        var value = $(this).val();
+                        list_id.push(value);
+                    }
+                });
+                $.ajax({
+                    url: '{{ route('activeStatusProvide') }}',
+                    type: "GET",
+                    data: {
+                        list_id: list_id,
+                    },
+                    success: function(data) {
+                        location.reload();
+                    },
+                })
+            }
+        }
+
+    )
+
+    function myFunction() {
+        let text = "Bạn có muốn xóa nhân viên đã chọn không?";
+        if (confirm(text) == true) {
+            return true
+        } else {
+            return false
+        }
+
+    }
+
+    function myFunctionCancel() {
+        let text = "Bạn có chắc chắn thay đổi trạng thái đã chọn không?";
+        if (confirm(text) == true) {
+            return true
+        } else {
+            return false
+        }
+
+    }
+
+    // AJAX Xóa Exports
+    $(document).on('click', '#deleteListProvides', function(e) {
+        e.preventDefault();
+        if (myFunction()) {
+            const list_id = [];
+            $('input[name="ids[]"]').each(function() {
+                if ($(this).is(':checked')) {
+                    var value = $(this).val();
+                    list_id.push(value);
+                }
+            });
+            $.ajax({
+                url: "{{ route('deleteListProvides') }}",
+                type: "get",
+                data: {
+                    list_id: list_id,
+                },
+                success: function(data) {
+                    if (data.success == true) {
+                        var id = data.ids;
+                        for (let i = 0; i < id.length; i++) {
+                            $('.' + id[i]).remove();
+                        }
+                        updateMultipleActionVisibility();
+                        location.reload();
+                    }
+                }
+
+            })
+        }
+    })
+
+    // Checkbox
+    $('#checkall').change(function() {
+        $('.cb-element').prop('checked', this.checked);
+        updateMultipleActionVisibility();
+    });
+
+    $('.cb-element').change(function() {
+        updateMultipleActionVisibility();
+        if ($('.cb-element:checked').length == $('.cb-element').length) {
+            $('#checkall').prop('checked', true);
+        } else {
+            $('#checkall').prop('checked', false);
+        }
+    });
+
+
+    $(document).on('click', '.cancal_action', function(e) {
+        e.preventDefault();
+        $('.cb-element:checked').prop('checked', false);
+        $('#checkall').prop('checked', false);
+        updateMultipleActionVisibility()
+    })
+
+    function updateMultipleActionVisibility() {
+        if ($('.cb-element:checked').length > 0) {
+            $('.multiple_action').show();
+            $('.count_checkbox').text('Đã chọn ' + $('.cb-element:checked').length);
+        } else {
+            $('.multiple_action').hide();
+        }
+    }
+
 </script>
-
-
 </body>
 
 </html>

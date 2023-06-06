@@ -45,7 +45,7 @@ class ProductsController extends Controller
                 $sortType = 'desc';
             }
         } else {
-            $sortType = 'asc';
+            $sortType = 'desc';
         }
 
         $sortByArr = [
@@ -122,15 +122,10 @@ class ProductsController extends Controller
             $keywords = $request->keywords;
         }
 
-        $categories = Category::all();
         $categoryarr = [];
         if (!empty($request->categoryarr)) {
             $categoryarr = $request->input('categoryarr', []);
-            if (!empty($categoryarr)) {
-                $selectedCategory = Category::whereIn('id', $categoryarr)->get();
-                $selectedCategory = $selectedCategory->pluck('category_name')->toArray();
-            }
-            array_push($string, ['label' => 'Danh mục:', 'values' => $selectedCategory, 'class' => 'category']);
+            array_push($string, ['label' => 'Danh mục:', 'values' => $categoryarr, 'class' => 'category']);
         }
         // Thương hiệu
         $trademarkarr = [];
@@ -178,7 +173,7 @@ class ProductsController extends Controller
             ->get();
 
         $title = 'Sản phẩm';
-        return view('tables.products.data', compact('products', 'categories', 'product', 'string', 'sortType', 'trademarks', 'title'));
+        return view('tables.products.data', compact('products', 'product', 'string', 'sortType', 'trademarks', 'title'));
     }
 
     /**

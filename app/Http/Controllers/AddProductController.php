@@ -109,7 +109,7 @@ class AddProductController extends Controller
                 $sortType = 'desc';
             }
         } else {
-            $sortType = 'asc';
+            $sortType = 'desc';
         }
 
         $productIds = array();

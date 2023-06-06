@@ -96,7 +96,7 @@ class ExportController extends Controller
                 $sortType = 'desc';
             }
         } else {
-            $sortType = 'asc';
+            $sortType = 'desc';
         }
         $exports = Exports::leftjoin('guests', 'exports.guest_id', '=', 'guests.id')
             ->leftjoin('users', 'exports.user_id', '=', 'users.id')->get();
@@ -803,5 +803,32 @@ class ExportController extends Controller
         $data = $request->all();
         $sn = Serinumbers::where('product_id', $data['productCode'])->limit($data['qty'])->get();
         return response()->json($sn);
+    }
+
+
+    // Xóa đơn hàng AJAX
+    public function deleteExports(Request $request)
+    {
+        if (isset($request->list_id)) {
+            $list = $request->list_id;
+            Exports::whereIn('id', $list)->delete();
+            return response()->json(['success' => true, 'msg' => 'Xóa đơn hàng thành công', 'ids' => $list]);
+        }
+        return response()->json(['success' => false, 'msg' => 'Không tìm thấy đơn hàng cần xóa']);
+    }
+    public function cancelBillExport(Request $request)
+    {
+        if (isset($request->list_id)) {
+            $list = $request->list_id;
+            $listOrder = Exports::whereIn('id', $list)->get();
+            foreach ($listOrder as $value) {
+                if ($value->export_status != 2) {
+                    $value->export_status = 0;
+                    $value->save();
+                }
+            }
+            return response()->json(['success' => true, 'msg' => 'Hủy Đơn Hàng thành công']);
+        }
+        return response()->json(['success' => false, 'msg' => 'Not fount']);
     }
 }
