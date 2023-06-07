@@ -504,6 +504,7 @@ $index = array_search($item['label'], $numberedLabels);
                                         </span>
                                     </th>
                                     <th></th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -526,7 +527,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <span class="p-2 bg-danger rounded">Đã hủy</span>
                                             @endif
                                         </td>
-                                        <td class="d-flex justify-content-between">
+                                        <td class="text-center">
                                             <div class="edit">
                                                 @if($va->order_status == 0 && (Auth::user()->name == $va->name || Auth::user()->can('isAdmin')))  
                                                     <a href="{{ route('insertProduct.edit', $va->id) }}">
@@ -573,6 +574,8 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </a>
                                                 @endif
                                             </div>
+                                        </td>
+                                        <td class="text-center">
                                             <div id="dropdown_item{{ $va->id }}" data-toggle="collapse"
                                                 data-target="#product-details-<?php echo $va->id; ?>">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
@@ -603,6 +606,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     <p>Tổng tiền</p>
                                                     {{ number_format($item->product_qty * $item->product_price) }}
                                                 </td>
+                                                <td></td>
                                                 <td></td>
                                                 <td></td>
                                             @endif
