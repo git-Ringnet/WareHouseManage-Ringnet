@@ -267,10 +267,6 @@ class ProductsController extends Controller
         ->where('product.products_id',$products->id)
         ->distinct()
         ->paginate(8);
-        foreach($listProduct as $da){
-            var_dump($da);
-        }
-        die();
         return view('tables.products.edit_products', compact('products', 'cate', 'title', 'listProduct'));
     }
 
