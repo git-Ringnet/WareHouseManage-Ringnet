@@ -32,9 +32,9 @@
                             <button type="submit" class="btn btn-primary btn-block">Tìm kiếm</button>
 
                         </div>
-                        <a class="btn ml-auto btn-delete-filter btn-light" href="{{ route('provides.index') }}"><span><svg
-                                    width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
+                        <a class="btn ml-auto btn-delete-filter btn-light"
+                            href="{{ route('provides.index') }}"><span><svg width="24" height="24"
+                                    viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path
                                         d="M6 5.4643C6 5.34116 6.04863 5.22306 6.13518 5.13599C6.22174 5.04892 6.33913 5 6.46154 5H17.5385C17.6609 5 17.7783 5.04892 17.8648 5.13599C17.9514 5.22306 18 5.34116 18 5.4643V7.32149C18 7.43599 17.9579 7.54645 17.8818 7.63164L13.8462 12.1428V16.6075C13.8461 16.7049 13.8156 16.7998 13.7589 16.8788C13.7022 16.9578 13.6223 17.0168 13.5305 17.0476L10.7612 17.9762C10.6919 17.9994 10.618 18.0058 10.5458 17.9947C10.4735 17.9836 10.4049 17.9554 10.3456 17.9124C10.2863 17.8695 10.238 17.8129 10.2047 17.7475C10.1713 17.682 10.1539 17.6096 10.1538 17.5361V12.1428L6.11815 7.63164C6.0421 7.54645 6.00002 7.43599 6 7.32149V5.4643Z"
                                         fill="#555555" />
@@ -232,7 +232,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <h5>Số điện thoại</h5>
                                             </div>
                                             <div class="input-group p-2">
-                                                <label class="title" for="">Chứa kí tự</label>
+                                                <label class="title" for="">Nhập số điện thoại</label>
                                                 <input type="number" name="phonenumber"
                                                     class="form-control phonenumber-input"
                                                     value="{{ request()->phonenumber }}"
@@ -389,7 +389,7 @@ $index = array_search($item['label'], $numberedLabels);
                                     @foreach ($provides as $item)
                                         <tr>
                                             <td><input type="checkbox" class="cb-element" name="ids[]"
-                                                value="{{ $item->id }}"></td>
+                                                    value="{{ $item->id }}"></td>
                                             <td>{{ $item->id }}</td>
                                             <td>{{ $item->provide_name }}</td>
                                             <td>{{ $item->provide_represent }}</td>
@@ -468,48 +468,67 @@ $index = array_search($item['label'], $numberedLabels);
     });
     $('#btn-status').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
         $('#status-options').toggle();
 
         $('#cancel-status').click(function(event) {
             event.preventDefault();
+            $('.btn-filter').prop('disabled', false);
+
             $('#status-options input[type="checkbox"]').prop('checked', false);
             $('#status-options').hide();
         });
     });
     $('#btn-name').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
+
         $('#name-options').toggle();
     });
     $('#cancel-name').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
+
         $('.name-input').val('');
         $('#name-options').hide();
     });
     $('#btn-represent').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
+
         $('#represent-options').toggle();
     });
     $('#cancel-represent').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
+
         $('.represent-input').val('');
         $('#represent-options').hide();
     });
     $('#btn-phonenumber').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
+
         $('#phonenumber-options').toggle();
     });
     $('#cancel-phonenumber').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
+
         $('.phonenumber-input').val('');
 
         $('#phonenumber-options').hide();
     });
     $('#btn-email').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
+
         $('#email-options').toggle();
     });
     $('#cancel-email').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
+
         $('.email-input').val('');
         $('#email-options').hide();
     });
@@ -649,8 +668,8 @@ $index = array_search($item['label'], $numberedLabels);
 
 
 
-        // AJAX disable user
-        $(document).on('click', '#disableStatusProvide', function(e) {
+    // AJAX disable user
+    $(document).on('click', '#disableStatusProvide', function(e) {
         e.preventDefault();
         if (myFunctionCancel()) {
             const list_id = [];
@@ -781,7 +800,6 @@ $index = array_search($item['label'], $numberedLabels);
             $('.multiple_action').hide();
         }
     }
-
 </script>
 </body>
 

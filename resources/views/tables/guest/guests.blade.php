@@ -230,7 +230,7 @@ $index = array_search($item['label'], $numberedLabels);
                                         <h5>Số điện thoại</h5>
                                     </div>
                                     <div class="input-group p-2">
-                                        <label class="title" for="">Chứa kí tự</label>
+                                        <label class="title" for="">Nhập số điện thoại</label>
                                         <input type="number" name="phonenumber"
                                             class="form-control phonenumber-input"
                                             value="{{ request()->phonenumber }}" placeholder="Nhập thông tin..">
@@ -459,47 +459,62 @@ $index = array_search($item['label'], $numberedLabels);
     });
     $('#btn-status').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
         $('#status-options').toggle();
+    });
 
-        $('#cancel-status').click(function(event) {
-            event.preventDefault();
-            $('#status-options input[type="checkbox"]').prop('checked', false);
-            $('#status-options').hide();
-        });
+    $('#cancel-status').click(function(event) {
+        event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
+
+        $('#status-options input[type="checkbox"]').prop('checked', false);
+        $('#status-options').hide();
     });
     $('#btn-name').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
         $('#name-options').toggle();
     });
     $('#cancel-name').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
         $('.name-input').val('');
         $('#name-options').hide();
     });
     $('#btn-represent').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
+
         $('#represent-options').toggle();
     });
     $('#cancel-represent').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
+
         $('.represent-input').val('');
         $('#represent-options').hide();
     });
     $('#btn-phonenumber').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
+
         $('#phonenumber-options').toggle();
     });
     $('#cancel-phonenumber').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
+
         $('.phonenumber-input').val('');
         $('#phonenumber-options').hide();
     });
     $('#btn-email').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
         $('#email-options').toggle();
     });
     $('#cancel-email').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
         $('.email-input').val('');
         $('#email-options').hide();
     });
