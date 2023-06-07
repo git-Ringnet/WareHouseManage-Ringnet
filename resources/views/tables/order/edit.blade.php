@@ -177,8 +177,8 @@
                 <table class="table table-hover bg-white rounded" id="inputContainer">
                     <thead>
                         <tr>
-                            @if($order->order_status != 1)
-                            <th><input type="checkbox"></th>
+                            @if ($order->order_status == 0)
+                                <th><input type="checkbox"></th>
                             @endif
                             <th>Mã / Tên sản phẩm</th>
                             <th>Thông tin sản phẩm</th>
@@ -198,7 +198,7 @@
                         @foreach ($product_order as $pro)
                         <tr>
                             <input type="hidden" name="product_id[]" value="{{ $pro->product_id }}">
-                            @if($order->order_status != 1)
+                            @if($order->order_status == 0)
                             <td><input type="checkbox"></td>
                             @endif
                             <td>
@@ -242,7 +242,7 @@
                     </tbody>
                 </table>
                 @if (Auth::user()->id == $order->users_id || Auth::user()->can('isAdmin'))
-                @if ($order->order_status != 1)
+                @if ($order->order_status == 0)
                 <div class="mb-2"><a href="javascript:;" class="btn btn-secondary addRow">Thêm sản phẩm</a>
                 </div>
                 @endif

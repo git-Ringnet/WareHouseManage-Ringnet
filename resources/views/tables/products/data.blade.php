@@ -32,19 +32,22 @@
                         </svg>
                         <span>Xuất Excel</span>
                     </button>
-                    <button type="button" class="btn btn-outline-primary d-flex align-items-center">
-                        <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                            viewBox="0 0 24 24" fill="none">
-                            <path
-                                d="M8.99972 15.7998H7.49986C7.10207 15.7998 6.72058 15.6418 6.4393 15.3605C6.15802 15.0792 6 14.6977 6 14.3L6 6.49978C6 6.102 6.15802 5.7205 6.4393 5.43922C6.72058 5.15794 7.10207 4.99991 7.49986 4.99991L16.5001 4.99991C16.8979 4.99991 17.2794 5.15794 17.5607 5.43922C17.842 5.7205 18 6.102 18 6.49978V14.3C18 14.6977 17.842 15.0792 17.5607 15.3605C17.2794 15.6418 16.8979 15.7998 16.5001 15.7998H15.0003"
-                                stroke="#0095F6" stroke-linecap="round" stroke-linejoin="round" />
-                            <path d="M15.0002 12.2007L12.0005 9.20098L8.99969 12.2007" stroke="#0095F6"
-                                stroke-linecap="round" stroke-linejoin="round" />
-                            <path d="M11.9994 20.6003L11.9994 9.80045" stroke="#0095F6" stroke-linecap="round"
-                                stroke-linejoin="round" />
-                        </svg>
-                        <span>Nhập Excel</span>
-                    </button>
+                    <label class="btn btn-outline-primary btn-file mx-3 d-flex align-items-center">
+                        <div>
+                            <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none">
+                                <path
+                                    d="M8.99972 15.7999H7.49986C7.10207 15.7999 6.72058 15.6419 6.4393 15.3606C6.15802 15.0793 6 14.6979 6 14.3001L6 6.49991C6 6.10212 6.15802 5.72062 6.4393 5.43934C6.72058 5.15806 7.10207 5.00003 7.49986 5.00003L16.5001 5.00003C16.8979 5.00003 17.2794 5.15806 17.5607 5.43934C17.842 5.72062 18 6.10212 18 6.49991V14.3001C18 14.6979 17.842 15.0793 17.5607 15.3606C17.2794 15.6419 16.8979 15.7999 16.5001 15.7999H15.0003"
+                                    stroke="#0095F6" stroke-linecap="round" stroke-linejoin="round" />
+                                <path d="M15.0005 12.2006L12.0008 9.20092L8.99994 12.2006" stroke="#0095F6"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                                <path d="M11.9995 20.6003L11.9995 9.80045" stroke="#0095F6" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                        </div>
+                        <span>Nhập Excel</span> <input type="file" id="import_file" onchange="importExcel()">
+                    </label>
+
                 @endcan
             </div>
             <div class="row m-auto filter pt-2">
@@ -815,6 +818,89 @@ $index = array_search($item['label'], $numberedLabels);
 </div>
 
 <script>
+    // Xuất file excel
+    function exportToExcel() {
+        // Lấy dữ liệu từ bảng HTML
+        var table = document.getElementById("example2");
+
+        // Tạo một workbook mới
+        var wb = XLSX.utils.table_to_book(table);
+
+        // Chuyển đổi workbook thành dạng tệp Excel
+        var wbout = XLSX.write(wb, {
+            bookType: "xlsx",
+            type: "array"
+        });
+
+        // Tạo một Blob từ dữ liệu Excel
+        var blob = new Blob([wbout], {
+            type: "application/octet-stream"
+        });
+
+        // Tạo URL tạm thời và tải xuống tệp Excel
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement("a");
+        a.href = url;
+        a.download = "data.xlsx";
+        a.click();
+
+        // Giải phóng URL tạm thời
+        setTimeout(function() {
+            URL.revokeObjectURL(url);
+        }, 1000);
+    }
+
+    // Import file excel
+    function importExcel() {
+        var input = document.getElementById("import_file");
+        var file = input.files[0];
+        var reader = new FileReader();
+
+        reader.onload = function(e) {
+            var data = new Uint8Array(e.target.result);
+            var workbook = XLSX.read(data, {
+                type: "array"
+            });
+            var worksheet = workbook.Sheets[workbook.SheetNames[0]];
+            var jsonData = XLSX.utils.sheet_to_json(worksheet, {
+                header: 1
+            });
+
+            var formattedData = [];
+            var headers = jsonData[0];
+
+            for (var i = 1; i < jsonData.length; i++) {
+                var row = jsonData[i];
+                var formattedRow = {};
+                for (var j = 0; j < headers.length; j++) {
+                    var header = headers[j];
+                    formattedRow[header] = row[j];
+                }
+                formattedData.push(formattedRow);
+            }
+            var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            fetch("/import_products", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-Token": csrfToken
+                    },
+                    body: JSON.stringify(formattedData),
+                })
+                .then(function(response) {
+                    if (response.ok) {
+                        location.reload();
+                    } else {
+                        console.log("Có lỗi xảy ra trong quá trình import.");
+                    }
+                })
+                .catch(function(error) {
+                    console.log("Lỗi: " + error);
+                });
+        };
+        reader.readAsArrayBuffer(file);
+    }
+
     // Checkbox
     $('#checkall').change(function() {
         $('.cb-element').prop('checked', this.checked);
