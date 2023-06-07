@@ -370,7 +370,7 @@ class ProductsController extends Controller
                 }
             }
             if ($hasProductWithInventory) {
-                return response()->json(['success' => false, 'msg' => 'Còn sản phẩm còn']);
+                return response()->json(['success' => false, 'msg' => 'Còn sản phẩm con']);
             }
             return response()->json(['success' => true, 'msg' => 'Xóa sản phẩm thành công', 'ids' => $list]);
         }

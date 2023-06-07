@@ -70,7 +70,8 @@ li {
 #myInput-trademark,
 #myInput-category,
 .input-quantity,
-.input-search {
+.input-search,
+.input-so {
     padding: 5px 10px;
     border: 1px solid #d6d6d6;
     border-radius: 5px;
@@ -649,4 +650,17 @@ td p {
 .wrap label{
     font-weight: 500;
     font-size: 14px;
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+.filter-group span{
+    padding-left: 3px;
 }

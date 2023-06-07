@@ -347,7 +347,7 @@
                                 <td><?php echo $stt++; ?></td>
                                 <td>
                                     @if ($exports->export_status == 1)
-                                        <select id="maProduct" class="p-1 pr-5 maProduct form-control"
+                                        <select id="maProduct" class="p-1 maProduct form-control"
                                             name="products_id[]" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                                 echo 'disabled';
                                             } ?>>
@@ -359,7 +359,7 @@
                                         </select>
                                     @endif
                                     @if ($exports->export_status == 2)
-                                        <select class="p-1 pr-5 maProduct form-control" name="products_id[]"
+                                        <select class="p-1 maProduct form-control" name="products_id[]"
                                             <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                                 echo 'disabled';
                                             } ?>>
@@ -370,7 +370,7 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <select class="child-select p-1 pr-5 form-control" name="product_id[]"
+                                    <select class="child-select p-1 form-control" name="product_id[]"
                                         <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                             echo 'disabled';
                                         } ?>>

@@ -114,19 +114,19 @@ $index = array_search($item['label'], $numberedLabels);
                                                 } else {
                                                     echo 0;
                                                 } @endphp">
-                                {{ $item['label'] }}
-                                <span class="filter-values">{{ implode(',', $item['values']) }}</span>
-                                <a class="delete-item delete-btn-{{ $item['class'] }}"
-                                    onclick="updateDeleteItemValue('{{ $item['label'] }}')">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M18 18L6 6" stroke="#555555" stroke-width="1.5" stroke-linecap="round"
-                                            stroke-linejoin="round" />
-                                        <path d="M18 6L6 18" stroke="#555555" stroke-width="1.5" stroke-linecap="round"
-                                            stroke-linejoin="round" />
-                                    </svg>
-                                </a>
-                            </span>
+                                    {{ $item['label'] }}
+                                    <span class="filter-values">{{ implode(', ', $item['values']) }}</span>
+                                    <a class="delete-item delete-btn-{{ $item['class'] }}"
+                                        onclick="updateDeleteItemValue('{{ $item['label'] }}')">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M18 18L6 6" stroke="#555555" stroke-width="1.5"
+                                                stroke-linecap="round" stroke-linejoin="round" />
+                                            <path d="M18 6L6 18" stroke="#555555" stroke-width="1.5"
+                                                stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </a>
+                                </span>
                             @endforeach
                             <span class="" style="order: 999;">
                                 <div class="filter-options">
@@ -416,10 +416,11 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('comparison_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
-                                                <input class="w-50 quantity-input" type="number" name="quantity"
-                                                    value="{{ request()->quantity }}" placeholder="Số lượng">
+                                                <input class="w-50 quantity-input input-so" type="number"
+                                                    name="quantity" value="{{ request()->quantity }}"
+                                                    placeholder="Số lượng">
                                             </div>
                                         </div>
                                         <div class="d-flex justify-contents-center align-items-baseline p-2">
@@ -470,10 +471,11 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('price_inven_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
-                                                <input class="w-50 price_inven-input" type="number" name="price_inven"
-                                                    value="{{ request()->price_inven }}" placeholder="Nhập giá trị">
+                                                <input class="w-50 price_inven-input input-so" type="number"
+                                                    name="price_inven" value="{{ request()->price_inven }}"
+                                                    placeholder="Nhập giá trị">
                                             </div>
                                         </div>
                                         <div class="d-flex justify-contents-center align-items-baseline p-2">
@@ -668,67 +670,70 @@ $index = array_search($item['label'], $numberedLabels);
                                             @else
                                             {{ $value->inventory }}
                                             @endif
-
-                                        </td>
-                                        <td class="text-right">{{ number_format($value->price_avg) }}</td>
-                                        <td class="text-right">{{ number_format($value->price_inventory) }}</td>
-                                        <td class="p-0 text-center">
-                                            @if ($value->inventory == 0)
-                                            <div class="py-1 rounded  pb-1 bg-danger">
-                                                <span class="text-light">Hết hàng</span>
-                                            </div>
-                                            @elseif($value->inventory < 5) <div class="py-1 rounded  pb-1 bg-warning">
-                                                <span class="text-light">Gần hết</span>
-                        </div>
-                        @else
-                        <div class="py-1 rounded  pb-1 bg-success">
-                            <span class="text-light">Sẵn hàng</span>
-                        </div>
-                        @endif
-                        </td>
-                        <td class="text-center">
-                            <div class="icon">
-                                @if (Auth::user()->can('view-provides'))
-                                <a href="{{ route('data.edit', $value->id) }}">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"
-                                        fill="none">
-                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                            d="M18.7832 6.79483C18.987 6.71027 19.2056 6.66675 19.4263 6.66675C19.6471 6.66675 19.8656 6.71027 20.0695 6.79483C20.2734 6.87938 20.4586 7.00331 20.6146 7.15952L21.9607 8.50563C22.1169 8.66165 22.2408 8.84693 22.3253 9.05087C22.4099 9.25482 22.4534 9.47342 22.4534 9.69419C22.4534 9.91495 22.4099 10.1336 22.3253 10.3375C22.2408 10.5414 22.1169 10.7267 21.9607 10.8827L20.2809 12.5626C20.2711 12.5736 20.2609 12.5844 20.2503 12.595C20.2397 12.6056 20.2289 12.6158 20.2178 12.6256L11.5607 21.2827C11.4257 21.4177 11.2426 21.4936 11.0516 21.4936H8.34644C7.94881 21.4936 7.62647 21.1712 7.62647 20.7736V18.0684C7.62647 17.8775 7.70233 17.6943 7.83737 17.5593L16.4889 8.9086C16.5003 8.89532 16.5124 8.88235 16.525 8.86973C16.5376 8.8571 16.5506 8.84504 16.5639 8.83354L18.2381 7.15952C18.394 7.00352 18.5795 6.8793 18.7832 6.79483ZM17.0354 10.3984L9.06641 18.3667V20.0536H10.7534L18.7221 12.085L17.0354 10.3984ZM19.7402 11.0668L18.0537 9.38022L19.2572 8.17685C19.2794 8.15461 19.3057 8.13696 19.3348 8.12493C19.3638 8.11289 19.3949 8.10669 19.4263 8.10669C19.4578 8.10669 19.4889 8.11289 19.5179 8.12493C19.5469 8.13697 19.5737 8.15504 19.5959 8.17728L20.9428 9.52411C20.9651 9.5464 20.9831 9.57315 20.9951 9.60228C21.0072 9.63141 21.0134 9.66264 21.0134 9.69419C21.0134 9.72573 21.0072 9.75696 20.9951 9.78609C20.9831 9.81522 20.9651 9.84197 20.9428 9.86426L19.7402 11.0668ZM6.6665 24.6134C6.6665 24.2158 6.98885 23.8935 7.38648 23.8935H24.6658C25.0634 23.8935 25.3858 24.2158 25.3858 24.6134C25.3858 25.0111 25.0634 25.3334 24.6658 25.3334H7.38648C6.98885 25.3334 6.6665 25.0111 6.6665 24.6134Z"
-                                            fill="#555555" />
-                                    </svg>
-                                </a>
-                                @else
-                                <a href="{{ route('data.edit', $value->id) }}">
-                                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="M24.9033 14.1636V7.89258C24.9033 7.33819 24.6831 6.8065 24.2911 6.41449C23.8991 6.02248 23.3674 5.80225 22.813 5.80225H9.22583C8.67144 5.80225 8.13976 6.02248 7.74774 6.41449C7.35573 6.8065 7.1355 7.33819 7.1355 7.89258V22.5249C7.1355 23.0793 7.35573 23.611 7.74774 24.003C8.13976 24.395 8.67144 24.6152 9.22583 24.6152H14.4517"
-                                            stroke="#555555" stroke-width="1.5" stroke-linecap="round"
-                                            stroke-linejoin="round" />
-                                        <path d="M13.6678 18.3442H14.4517" stroke="#555555" stroke-width="1.5"
-                                            stroke-linecap="round" stroke-linejoin="round" />
-                                        <path d="M13.6678 14.1631H17.5872" stroke="#555555" stroke-width="1.5"
-                                            stroke-linecap="round" stroke-linejoin="round" />
-                                        <path d="M13.6678 10.1133H20.7227" stroke="#555555" stroke-width="1.5"
-                                            stroke-linecap="round" stroke-linejoin="round" />
-                                        <path
-                                            d="M11.0549 10.8187C11.2099 10.8187 11.3615 10.7727 11.4904 10.6866C11.6193 10.6005 11.7197 10.4781 11.7791 10.3348C11.8384 10.1916 11.8539 10.034 11.8237 9.88192C11.7934 9.72987 11.7188 9.59019 11.6092 9.48057C11.4995 9.37094 11.3599 9.29629 11.2078 9.26604C11.0557 9.23579 10.8981 9.25131 10.7549 9.31064C10.6117 9.36997 10.4892 9.47044 10.4031 9.59935C10.317 9.72826 10.271 9.87981 10.271 10.0349C10.271 10.2427 10.3536 10.4421 10.5006 10.5891C10.6476 10.7361 10.847 10.8187 11.0549 10.8187Z"
-                                            fill="#555555" />
-                                        <path
-                                            d="M11.0549 14.9994C11.2099 14.9994 11.3615 14.9534 11.4904 14.8673C11.6193 14.7811 11.7197 14.6587 11.7791 14.5155C11.8384 14.3723 11.8539 14.2146 11.8237 14.0626C11.7934 13.9105 11.7188 13.7709 11.6092 13.6612C11.4995 13.5516 11.3599 13.477 11.2078 13.4467C11.0557 13.4165 10.8981 13.432 10.7549 13.4913C10.6117 13.5506 10.4892 13.6511 10.4031 13.78C10.317 13.9089 10.271 14.0605 10.271 14.2155C10.271 14.4234 10.3536 14.6228 10.5006 14.7698C10.6476 14.9168 10.847 14.9994 11.0549 14.9994Z"
-                                            fill="#555555" />
-                                        <path
-                                            d="M11.0549 19.0756C11.2099 19.0756 11.3615 19.0296 11.4904 18.9435C11.6193 18.8573 11.7197 18.7349 11.7791 18.5917C11.8384 18.4484 11.8539 18.2908 11.8237 18.1388C11.7934 17.9867 11.7188 17.847 11.6092 17.7374C11.4995 17.6278 11.3599 17.5531 11.2078 17.5229C11.0557 17.4926 10.8981 17.5081 10.7549 17.5675C10.6117 17.6268 10.4892 17.7273 10.4031 17.8562C10.317 17.9851 10.271 18.1367 10.271 18.2917C10.271 18.4996 10.3536 18.699 10.5006 18.846C10.6476 18.993 10.847 19.0756 11.0549 19.0756Z"
-                                            fill="#555555" />
-                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                            d="M24.2994 17.5757C22.6613 15.9376 20.0054 15.9376 18.3672 17.5757C16.7291 19.2139 16.7291 21.8698 18.3672 23.5079C20.0054 25.1461 22.6613 25.1461 24.2994 23.5079C25.9376 21.8698 25.9376 19.2139 24.2994 17.5757ZM25.1046 16.7706C23.0218 14.6878 19.6449 14.6878 17.5621 16.7706C15.4793 18.8534 15.4793 22.2303 17.5621 24.3131C19.6449 26.3959 23.0218 26.3959 25.1046 24.3131C27.1874 22.2303 27.1874 18.8534 25.1046 16.7706Z"
-                                            fill="#555555" />
-                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                            d="M24.1834 24.1834C24.428 23.9389 24.8246 23.9389 25.0692 24.1834L27.8166 26.9308C28.0611 27.1754 28.0611 27.572 27.8166 27.8166C27.572 28.0611 27.1754 28.0611 26.9308 27.8166L24.1834 25.0692C23.9389 24.8246 23.9389 24.428 24.1834 24.1834Z"
-                                            fill="#555555" />
-                                    </svg>
-                                </a>
-                                @endif
+                                            </td>
+                                            <td class="text-right">{{ number_format($value->price_avg) }}</td>
+                                            <td class="text-right">{{ number_format($value->price_inventory) }}</td>
+                                            <td class="p-0 text-center">
+                                                @if ($value->inventory == 0)
+                                                    <div class="py-1 rounded  pb-1 bg-danger">
+                                                        <span class="text-light">Hết hàng</span>
+                                                    </div>
+                                                @elseif($value->inventory < 5)
+                                                    <div class="py-1 rounded  pb-1 bg-warning">
+                                                        <span class="text-light">Gần hết</span>
+                                                    </div>
+                                                @else
+                                                    <div class="py-1 rounded  pb-1 bg-success">
+                                                        <span class="text-light">Sẵn hàng</span>
+                                                    </div>
+                                                @endif
+                                            </td>
+                                            <td class="text-center">
+                                                <div class="icon">
+                                                    @if (Auth::user()->can('view-provides'))
+                                                        <a href="{{ route('data.edit', $value->id) }}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="32"
+                                                                height="32" viewBox="0 0 32 32" fill="none">
+                                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                    d="M18.7832 6.79483C18.987 6.71027 19.2056 6.66675 19.4263 6.66675C19.6471 6.66675 19.8656 6.71027 20.0695 6.79483C20.2734 6.87938 20.4586 7.00331 20.6146 7.15952L21.9607 8.50563C22.1169 8.66165 22.2408 8.84693 22.3253 9.05087C22.4099 9.25482 22.4534 9.47342 22.4534 9.69419C22.4534 9.91495 22.4099 10.1336 22.3253 10.3375C22.2408 10.5414 22.1169 10.7267 21.9607 10.8827L20.2809 12.5626C20.2711 12.5736 20.2609 12.5844 20.2503 12.595C20.2397 12.6056 20.2289 12.6158 20.2178 12.6256L11.5607 21.2827C11.4257 21.4177 11.2426 21.4936 11.0516 21.4936H8.34644C7.94881 21.4936 7.62647 21.1712 7.62647 20.7736V18.0684C7.62647 17.8775 7.70233 17.6943 7.83737 17.5593L16.4889 8.9086C16.5003 8.89532 16.5124 8.88235 16.525 8.86973C16.5376 8.8571 16.5506 8.84504 16.5639 8.83354L18.2381 7.15952C18.394 7.00352 18.5795 6.8793 18.7832 6.79483ZM17.0354 10.3984L9.06641 18.3667V20.0536H10.7534L18.7221 12.085L17.0354 10.3984ZM19.7402 11.0668L18.0537 9.38022L19.2572 8.17685C19.2794 8.15461 19.3057 8.13696 19.3348 8.12493C19.3638 8.11289 19.3949 8.10669 19.4263 8.10669C19.4578 8.10669 19.4889 8.11289 19.5179 8.12493C19.5469 8.13697 19.5737 8.15504 19.5959 8.17728L20.9428 9.52411C20.9651 9.5464 20.9831 9.57315 20.9951 9.60228C21.0072 9.63141 21.0134 9.66264 21.0134 9.69419C21.0134 9.72573 21.0072 9.75696 20.9951 9.78609C20.9831 9.81522 20.9651 9.84197 20.9428 9.86426L19.7402 11.0668ZM6.6665 24.6134C6.6665 24.2158 6.98885 23.8935 7.38648 23.8935H24.6658C25.0634 23.8935 25.3858 24.2158 25.3858 24.6134C25.3858 25.0111 25.0634 25.3334 24.6658 25.3334H7.38648C6.98885 25.3334 6.6665 25.0111 6.6665 24.6134Z"
+                                                                    fill="#555555" />
+                                                            </svg>
+                                                        </a>
+                                                    @else
+                                                        <a href="{{ route('data.edit', $value->id) }}">
+                                                            <svg width="32" height="32" viewBox="0 0 32 32"
+                                                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path
+                                                                    d="M24.9033 14.1636V7.89258C24.9033 7.33819 24.6831 6.8065 24.2911 6.41449C23.8991 6.02248 23.3674 5.80225 22.813 5.80225H9.22583C8.67144 5.80225 8.13976 6.02248 7.74774 6.41449C7.35573 6.8065 7.1355 7.33819 7.1355 7.89258V22.5249C7.1355 23.0793 7.35573 23.611 7.74774 24.003C8.13976 24.395 8.67144 24.6152 9.22583 24.6152H14.4517"
+                                                                    stroke="#555555" stroke-width="1.5"
+                                                                    stroke-linecap="round" stroke-linejoin="round" />
+                                                                <path d="M13.6678 18.3442H14.4517" stroke="#555555"
+                                                                    stroke-width="1.5" stroke-linecap="round"
+                                                                    stroke-linejoin="round" />
+                                                                <path d="M13.6678 14.1631H17.5872" stroke="#555555"
+                                                                    stroke-width="1.5" stroke-linecap="round"
+                                                                    stroke-linejoin="round" />
+                                                                <path d="M13.6678 10.1133H20.7227" stroke="#555555"
+                                                                    stroke-width="1.5" stroke-linecap="round"
+                                                                    stroke-linejoin="round" />
+                                                                <path
+                                                                    d="M11.0549 10.8187C11.2099 10.8187 11.3615 10.7727 11.4904 10.6866C11.6193 10.6005 11.7197 10.4781 11.7791 10.3348C11.8384 10.1916 11.8539 10.034 11.8237 9.88192C11.7934 9.72987 11.7188 9.59019 11.6092 9.48057C11.4995 9.37094 11.3599 9.29629 11.2078 9.26604C11.0557 9.23579 10.8981 9.25131 10.7549 9.31064C10.6117 9.36997 10.4892 9.47044 10.4031 9.59935C10.317 9.72826 10.271 9.87981 10.271 10.0349C10.271 10.2427 10.3536 10.4421 10.5006 10.5891C10.6476 10.7361 10.847 10.8187 11.0549 10.8187Z"
+                                                                    fill="#555555" />
+                                                                <path
+                                                                    d="M11.0549 14.9994C11.2099 14.9994 11.3615 14.9534 11.4904 14.8673C11.6193 14.7811 11.7197 14.6587 11.7791 14.5155C11.8384 14.3723 11.8539 14.2146 11.8237 14.0626C11.7934 13.9105 11.7188 13.7709 11.6092 13.6612C11.4995 13.5516 11.3599 13.477 11.2078 13.4467C11.0557 13.4165 10.8981 13.432 10.7549 13.4913C10.6117 13.5506 10.4892 13.6511 10.4031 13.78C10.317 13.9089 10.271 14.0605 10.271 14.2155C10.271 14.4234 10.3536 14.6228 10.5006 14.7698C10.6476 14.9168 10.847 14.9994 11.0549 14.9994Z"
+                                                                    fill="#555555" />
+                                                                <path
+                                                                    d="M11.0549 19.0756C11.2099 19.0756 11.3615 19.0296 11.4904 18.9435C11.6193 18.8573 11.7197 18.7349 11.7791 18.5917C11.8384 18.4484 11.8539 18.2908 11.8237 18.1388C11.7934 17.9867 11.7188 17.847 11.6092 17.7374C11.4995 17.6278 11.3599 17.5531 11.2078 17.5229C11.0557 17.4926 10.8981 17.5081 10.7549 17.5675C10.6117 17.6268 10.4892 17.7273 10.4031 17.8562C10.317 17.9851 10.271 18.1367 10.271 18.2917C10.271 18.4996 10.3536 18.699 10.5006 18.846C10.6476 18.993 10.847 19.0756 11.0549 19.0756Z"
+                                                                    fill="#555555" />
+                                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                    d="M24.2994 17.5757C22.6613 15.9376 20.0054 15.9376 18.3672 17.5757C16.7291 19.2139 16.7291 21.8698 18.3672 23.5079C20.0054 25.1461 22.6613 25.1461 24.2994 23.5079C25.9376 21.8698 25.9376 19.2139 24.2994 17.5757ZM25.1046 16.7706C23.0218 14.6878 19.6449 14.6878 17.5621 16.7706C15.4793 18.8534 15.4793 22.2303 17.5621 24.3131C19.6449 26.3959 23.0218 26.3959 25.1046 24.3131C27.1874 22.2303 27.1874 18.8534 25.1046 16.7706Z"
+                                                                    fill="#555555" />
+                                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                    d="M24.1834 24.1834C24.428 23.9389 24.8246 23.9389 25.0692 24.1834L27.8166 26.9308C28.0611 27.1754 28.0611 27.572 27.8166 27.8166C27.572 28.0611 27.1754 28.0611 26.9308 27.8166L24.1834 25.0692C23.9389 24.8246 23.9389 24.428 24.1834 24.1834Z"
+                                                                    fill="#555555" />
+                                                            </svg>
+                                                        </a>
+                                                    @endif
 
                             </div>
                         </td>
@@ -741,49 +746,53 @@ $index = array_search($item['label'], $numberedLabels);
                                     <path fill-rule="evenodd" clip-rule="evenodd" d="M22.3582 19.6917C21.9471 20.1028 21.2806 20.1028 20.8695 19.6917L15.9998 14.822L11.1301 19.6917C10.719 20.1028 10.0526 20.1028 9.64148 19.6917C9.2304 19.2806 9.2304 18.6141 9.64148 18.203L15.2555 12.589C15.6666 12.1779 16.3331 12.1779 16.7442 12.589L22.3582 18.203C22.7693 18.6141 22.7693 19.2806 22.3582 19.6917Z" fill="#555555" />
                                 </svg> --}}
 
-                                <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M9.6418 12.3083C10.0529 11.8972 10.7194 11.8972 11.1305 12.3083L16.0002 17.178L20.8699 12.3083C21.281 11.8972 21.9474 11.8972 22.3585 12.3083C22.7696 12.7194 22.7696 13.3859 22.3585 13.797L16.7445 19.411C16.3334 19.8221 15.6669 19.8221 15.2558 19.411L9.6418 13.797C9.23073 13.3859 9.23073 12.7194 9.6418 12.3083Z"
-                                        fill="#555555" />
-                                </svg>
-                            </div>
-                            @endif
-                        </td>
-                        </tr>
-                        @foreach ($product as $item)
-                        <tr id="product-details-{{ $value->id }}" class="collapse product-details">
-                            @if ($value->id == $item->products_id)
-                            <td></td>
-                            <td>{{ $value->id }} - {{ $item->id }}</td>
-                            <td>{{ $value->products_code }}</td>
-                            <td>{{ $item->product_name }}</td>
-                            <td>
-                                <p>Ghi chú</p>{{ $item->product_category }}
-                            </td>
-                            <td>{{ $item->product_trademark }}</td>
-                            <td class="text-right">
-                                <p>Tồn kho</p>{{ $item->product_qty }}
-                            </td>
-                            <td class="text-right">
-                                <p>Đơn giá nhập</p>{{ number_format($item->product_price) }}
-                            </td>
-                            <td class="text-right">
-                                <p>Trị tồn kho</p>{{ number_format($item->total) }}
-                            </td>
-                            <td></td>
-                            <td>
-                                <form action="{{ route('editProduct', $item->id) }}" method="post">
-                                    @csrf
-                                    @method('PUT')
-                                    <button type="submit" style="background: transparent; border:none;">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
-                                            viewBox="0 0 32 32" fill="none">
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M18.7832 6.79483C18.987 6.71027 19.2056 6.66675 19.4263 6.66675C19.6471 6.66675 19.8656 6.71027 20.0695 6.79483C20.2734 6.87938 20.4586 7.00331 20.6146 7.15952L21.9607 8.50563C22.1169 8.66165 22.2408 8.84693 22.3253 9.05087C22.4099 9.25482 22.4534 9.47342 22.4534 9.69419C22.4534 9.91495 22.4099 10.1336 22.3253 10.3375C22.2408 10.5414 22.1169 10.7267 21.9607 10.8827L20.2809 12.5626C20.2711 12.5736 20.2609 12.5844 20.2503 12.595C20.2397 12.6056 20.2289 12.6158 20.2178 12.6256L11.5607 21.2827C11.4257 21.4177 11.2426 21.4936 11.0516 21.4936H8.34644C7.94881 21.4936 7.62647 21.1712 7.62647 20.7736V18.0684C7.62647 17.8775 7.70233 17.6943 7.83737 17.5593L16.4889 8.9086C16.5003 8.89532 16.5124 8.88235 16.525 8.86973C16.5376 8.8571 16.5506 8.84504 16.5639 8.83354L18.2381 7.15952C18.394 7.00352 18.5795 6.8793 18.7832 6.79483ZM17.0354 10.3984L9.06641 18.3667V20.0536H10.7534L18.7221 12.085L17.0354 10.3984ZM19.7402 11.0668L18.0537 9.38022L19.2572 8.17685C19.2794 8.15461 19.3057 8.13696 19.3348 8.12493C19.3638 8.11289 19.3949 8.10669 19.4263 8.10669C19.4578 8.10669 19.4889 8.11289 19.5179 8.12493C19.5469 8.13697 19.5737 8.15504 19.5959 8.17728L20.9428 9.52411C20.9651 9.5464 20.9831 9.57315 20.9951 9.60228C21.0072 9.63141 21.0134 9.66264 21.0134 9.69419C21.0134 9.72573 21.0072 9.75696 20.9951 9.78609C20.9831 9.81522 20.9651 9.84197 20.9428 9.86426L19.7402 11.0668ZM6.6665 24.6134C6.6665 24.2158 6.98885 23.8935 7.38648 23.8935H24.6658C25.0634 23.8935 25.3858 24.2158 25.3858 24.6134C25.3858 25.0111 25.0634 25.3334 24.6658 25.3334H7.38648C6.98885 25.3334 6.6665 25.0111 6.6665 24.6134Z"
-                                                fill="#555555"></path>
-                                        </svg>
-                                    </button>
+                                                        <svg width="32" height="32" viewBox="0 0 32 32"
+                                                            fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                d="M9.6418 12.3083C10.0529 11.8972 10.7194 11.8972 11.1305 12.3083L16.0002 17.178L20.8699 12.3083C21.281 11.8972 21.9474 11.8972 22.3585 12.3083C22.7696 12.7194 22.7696 13.3859 22.3585 13.797L16.7445 19.411C16.3334 19.8221 15.6669 19.8221 15.2558 19.411L9.6418 13.797C9.23073 13.3859 9.23073 12.7194 9.6418 12.3083Z"
+                                                                fill="#555555" />
+                                                        </svg>
+                                                    </div>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                        @foreach ($product as $item)
+                                            <tr id="product-details-{{ $value->id }}"
+                                                class="collapse product-details">
+                                                @if ($value->id == $item->products_id)
+                                                    <td></td>
+                                                    <td>{{ $value->id }} - {{ $item->id }}</td>
+                                                    <td>{{ $value->products_code }}</td>
+                                                    <td>{{ $item->product_name }}</td>
+                                                    <td>
+                                                        <p>Ghi chú</p>{{ $item->product_category }}
+                                                    </td>
+                                                    <td>{{ $item->product_trademark }}</td>
+                                                    <td class="text-right">
+                                                        <p>Tồn kho</p>{{ $item->product_qty }}
+                                                    </td>
+                                                    <td class="text-right">
+                                                        <p>Đơn giá nhập</p>{{ number_format($item->product_price) }}
+                                                    </td>
+                                                    <td class="text-right">
+                                                        <p>Trị tồn kho</p>{{ number_format($item->total) }}
+                                                    </td>
+                                                    <td></td>
+                                                    <td>
+                                                        <form action="{{ route('editProduct', $item->id) }}"
+                                                            method="post">
+                                                            @csrf
+                                                            @method('PUT')
+                                                            <button type="submit"
+                                                                style="background: transparent; border:none;">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="32"
+                                                                    height="32" viewBox="0 0 32 32"
+                                                                    fill="none">
+                                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                        d="M18.7832 6.79483C18.987 6.71027 19.2056 6.66675 19.4263 6.66675C19.6471 6.66675 19.8656 6.71027 20.0695 6.79483C20.2734 6.87938 20.4586 7.00331 20.6146 7.15952L21.9607 8.50563C22.1169 8.66165 22.2408 8.84693 22.3253 9.05087C22.4099 9.25482 22.4534 9.47342 22.4534 9.69419C22.4534 9.91495 22.4099 10.1336 22.3253 10.3375C22.2408 10.5414 22.1169 10.7267 21.9607 10.8827L20.2809 12.5626C20.2711 12.5736 20.2609 12.5844 20.2503 12.595C20.2397 12.6056 20.2289 12.6158 20.2178 12.6256L11.5607 21.2827C11.4257 21.4177 11.2426 21.4936 11.0516 21.4936H8.34644C7.94881 21.4936 7.62647 21.1712 7.62647 20.7736V18.0684C7.62647 17.8775 7.70233 17.6943 7.83737 17.5593L16.4889 8.9086C16.5003 8.89532 16.5124 8.88235 16.525 8.86973C16.5376 8.8571 16.5506 8.84504 16.5639 8.83354L18.2381 7.15952C18.394 7.00352 18.5795 6.8793 18.7832 6.79483ZM17.0354 10.3984L9.06641 18.3667V20.0536H10.7534L18.7221 12.085L17.0354 10.3984ZM19.7402 11.0668L18.0537 9.38022L19.2572 8.17685C19.2794 8.15461 19.3057 8.13696 19.3348 8.12493C19.3638 8.11289 19.3949 8.10669 19.4263 8.10669C19.4578 8.10669 19.4889 8.11289 19.5179 8.12493C19.5469 8.13697 19.5737 8.15504 19.5959 8.17728L20.9428 9.52411C20.9651 9.5464 20.9831 9.57315 20.9951 9.60228C21.0072 9.63141 21.0134 9.66264 21.0134 9.69419C21.0134 9.72573 21.0072 9.75696 20.9951 9.78609C20.9831 9.81522 20.9651 9.84197 20.9428 9.86426L19.7402 11.0668ZM6.6665 24.6134C6.6665 24.2158 6.98885 23.8935 7.38648 23.8935H24.6658C25.0634 23.8935 25.3858 24.2158 25.3858 24.6134C25.3858 25.0111 25.0634 25.3334 24.6658 25.3334H7.38648C6.98885 25.3334 6.6665 25.0111 6.6665 24.6134Z"
+                                                                        fill="#555555"></path>
+                                                                </svg>
+                                                            </button>
 
                                 </form>
                             </td>
@@ -989,168 +998,97 @@ $('.product_category').change(function() {
     });
 })
 
-//xóa tất cả thẻ tr rỗng
-const rows = document.querySelectorAll('tr');
-rows.forEach(row => {
-    if (row.innerHTML.trim() === '') {
-        row.remove();
-    }
-});
-
-$('#btn-status').click(function(event) {
-    event.preventDefault();
-    $('#status-options').toggle();
-    $('#category-options').hide();
-
-});
-//Trademarks
-$('#btn-trademark').click(function(event) {
-    event.preventDefault();
-    $('#trademark-options').toggle();
-});
-$('#cancel-trademark').click(function(event) {
-    event.preventDefault();
-    $('#trademark-options').hide();
-});
-
-$('#btn-id').click(function(event) {
-    event.preventDefault();
-    $('#id-options').toggle();
-});
-$('#cancel-id').click(function(event) {
-    event.preventDefault();
-    $('#id-options').hide();
-});
-//Code
-$('#btn-code').click(function(event) {
-    event.preventDefault();
-    $('#code-options').toggle();
-});
-$('#cancel-code').click(function(event) {
-    event.preventDefault();
-    $('#code-options').hide();
-});
-$('#btn-price_inven').click(function(event) {
-    event.preventDefault();
-    $('#price_inven-options').toggle();
-});
-$('#cancel-price_inven').click(function(event) {
-    event.preventDefault();
-    $('#price_inven-options').hide();
-});
-$('#btn-avg').click(function(event) {
-    event.preventDefault();
-    $('#avg-options').toggle();
-});
-$('#cancel-avg').click(function(event) {
-    event.preventDefault();
-    $('#avg-options').hide();
-});
-$('#btn-quantity').click(function(event) {
-    event.preventDefault();
-    $('#quantity-options').toggle();
-});
-$('#cancel-quantity').click(function(event) {
-    event.preventDefault();
-    $('#quantity-options').hide();
-});
-$('#btn-category').click(function(event) {
-    event.preventDefault();
-    $('#category-options').toggle();
-});
-$('#cancel-status').click(function(event) {
-    event.preventDefault();
-    $('#status-options').hide();
-});
-$('#cancel-category').click(function(event) {
-    event.preventDefault();
-    $('#category-options').hide();
-});
-$(document).ready(function() {
-    // Chọn tất cả các checkbox
-    $('.select-all-category').click(function() {
-        $('#category-options input[type="checkbox"]').prop('checked', true);
+    $('#btn-status').click(function(event) {
+        event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
+        $('#status-options').toggle();
+        $('#category-options').hide();
     });
-
-    // Hủy tất cả các checkbox
-    $('.deselect-all-category').click(function() {
-        $('#category-options input[type="checkbox"]').prop('checked', false);
+    //Trademarks
+    $('#btn-trademark').click(function(event) {
+        event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
+        $('#trademark-options').toggle();
     });
-});
-$(document).ready(function() {
-    // Chọn tất cả các checkbox
-    $('.select-all').click(function() {
-        $('#status-options input[type="checkbox"]').prop('checked', true);
-    });
-
-    // Hủy tất cả các checkbox
-    $('.deselect-all').click(function() {
-        $('#status-options input[type="checkbox"]').prop('checked', false);
-    });
-});
-$(document).ready(function() {
-    // Chọn tất cả các checkbox
-    $('.select-all-trademark').click(function() {
-        $('#trademark-options input[type="checkbox"]').prop('checked', true);
-    });
-
-    // Hủy tất cả các checkbox
-    $('.deselect-all-trademark').click(function() {
+    $('#cancel-trademark').click(function(event) {
+        event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
         $('#trademark-options input[type="checkbox"]').prop('checked', false);
+        $('#trademark-options').hide();
     });
-});
-$(document).ready(function() {
-    $('.filter-results').on('click', '.delete-btn-status', function() {
-        $('.deselect-all').click();
-        document.getElementById('search-filter').submit();
+
+    $('#btn-id').click(function(event) {
+        event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
+        $('#id-options').toggle();
     });
-});
-$(document).ready(function() {
-    $('.filter-results').on('click', '.delete-btn-category', function() {
-        $('.deselect-all-category').click();
-        document.getElementById('search-filter').submit();
-    });
-});
-$(document).ready(function() {
-    $('.filter-results').on('click', '.delete-btn-trademark', function() {
-        $('.deselect-all-trademark').click();
-        document.getElementById('search-filter').submit();
-    });
-});
-$(document).ready(function() {
-    $('.filter-results').on('click', '.delete-btn-quantity', function() {
-        $('.quantity-input').val('');
-        document.getElementById('search-filter').submit();
-    });
-});
-$(document).ready(function() {
-    $('.filter-results').on('click', '.delete-btn-avg', function() {
-        $('.avg-input').val('');
-        document.getElementById('search-filter').submit();
-    });
-});
-$(document).ready(function() {
-    $('.filter-results').on('click', '.delete-btn-price_inven', function() {
-        $('.price_inven-input').val('');
-        document.getElementById('search-filter').submit();
-    });
-});
-$(document).ready(function() {
-    $('.filter-results').on('click', '.delete-btn-id', function() {
-        $('.deselect-all-id').click();
-        document.getElementById('search-filter').submit();
-    });
-});
-$(document).ready(function() {
-    $('.filter-results').on('click', '.delete-btn-code', function() {
-        $('.code-input').val('');
-        document.getElementById('search-filter').submit();
-    });
-});
-$(document).ready(function() {
-    $('.filter-results').on('click', '.delete-btn-products_name', function() {
+    $('#cancel-id').click(function(event) {
+        event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
         $('.products_name-input').val('');
-        document.getElementById('search-filter').submit();
+        $('#id-options').hide();
+    });
+    //Code
+    $('#btn-code').click(function(event) {
+        event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
+        $('#code-options').toggle();
+    });
+    $('#cancel-code').click(function(event) {
+        event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
+        $('.code-input').val('');
+        $('#code-options').hide();
+    });
+    $('#btn-price_inven').click(function(event) {
+        event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
+        $('#price_inven-options').toggle();
+    });
+    $('#cancel-price_inven').click(function(event) {
+        event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
+        $('.price_inven-input').val('');
+        $('#price_inven-options').hide();
+    });
+    $('#btn-avg').click(function(event) {
+        event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
+        $('#avg-options').toggle();
+    });
+    $('#cancel-avg').click(function(event) {
+        event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
+        $('.avg-input').val('');
+        $('#avg-options').hide();
+    });
+    $('#btn-quantity').click(function(event) {
+        event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
+        $('#quantity-options').toggle();
+    });
+    $('#cancel-quantity').click(function(event) {
+        event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
+        $('.quantity-input').val('');
+        $('#quantity-options').hide();
+    });
+    $('#btn-category').click(function(event) {
+        event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
+        $('#category-options').toggle();
+    });
+    $('#cancel-status').click(function(event) {
+        event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
+        $('#status-options input[type="checkbox"]').prop('checked', false);
+        $('#status-options').hide();
+    });
+    $('#cancel-category').click(function(event) {
+        event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
+        $('#category-options input[type="checkbox"]').prop('checked', false);
+        $('#category-options').hide();
     });
 });
 

@@ -353,7 +353,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 </option>
                                                 <option value="<="
                                                     {{ request('comparison_operator') === '<=' ? 'selected' : '' }}>
-                                                    <=< /option>
+                                                    <=</option>
                                             </select>
                                             <input class="w-50 input-quantity sum-input" type="number"
                                                 name="sum" value="{{ request()->sum }}" placeholder="Số lượng">
@@ -704,6 +704,7 @@ $index = array_search($item['label'], $numberedLabels);
                             $('.' + id[i]).remove();
                         }
                         updateMultipleActionVisibility();
+                        location.reload()
                     }
                 }
 
@@ -745,47 +746,75 @@ $index = array_search($item['label'], $numberedLabels);
 
     $('#btn-update_at').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
         $('#update_at-options').toggle();
     });
     $('#cancel-update_at').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
+
+        $('#start').val('');
+            $('#end').val('');
         $('#update_at-options').hide();
     });
     $('#btn-sum').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
+
         $('#sum-options').toggle();
     });
     $('#cancel-sum').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
+
+        $('.sum-input').val('');
         $('#sum-options').hide();
     });
     $('#btn-creator').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
+
         $('#creator-options').toggle();
     });
     $('#cancel-creator').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
+
+        $('#creator-options input[type="checkbox"]').prop('checked', false);
         $('#creator-options').hide();
     });
     $('#btn-status').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
+
         $('#status-options').toggle();
     });
     $('#cancel-status').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
+
+        $('#status-options input[type="checkbox"]').prop('checked', false);
         $('#status-options').hide();
     });
     $('#btn-id').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
+
         $('#id-options').toggle();
     });
     $('#cancel-id').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
+
+        $('.id-input').val('');
         $('#id-options').hide();
     });
 
     $('#cancel-provide_name').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
+
+        $('.deselect-all-provide_name').click();
         $('#provide_name-options').hide();
     });
 
@@ -862,6 +891,8 @@ $index = array_search($item['label'], $numberedLabels);
 
     $('#btn-provide_name').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
+
         $('#provide_name-options').toggle();
     });
 
