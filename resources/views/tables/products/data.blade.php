@@ -1055,6 +1055,95 @@ $index = array_search($item['label'], $numberedLabels);
         $('#category-options input[type="checkbox"]').prop('checked', false);
         $('#category-options').hide();
     });
+
+    $(document).ready(function() {
+        // Chọn tất cả các checkbox
+        $('.select-all-category').click(function() {
+            $('#category-options input[type="checkbox"]').prop('checked', true);
+        });
+
+        // Hủy tất cả các checkbox
+        $('.deselect-all-category').click(function() {
+            $('#category-options input[type="checkbox"]').prop('checked', false);
+        });
+    });
+    $(document).ready(function() {
+        // Chọn tất cả các checkbox
+        $('.select-all').click(function() {
+            $('#status-options input[type="checkbox"]').prop('checked', true);
+        });
+
+        // Hủy tất cả các checkbox
+        $('.deselect-all').click(function() {
+            $('#status-options input[type="checkbox"]').prop('checked', false);
+        });
+    });
+    $(document).ready(function() {
+        // Chọn tất cả các checkbox
+        $('.select-all-trademark').click(function() {
+            $('#trademark-options input[type="checkbox"]').prop('checked', true);
+        });
+
+        // Hủy tất cả các checkbox
+        $('.deselect-all-trademark').click(function() {
+            $('#trademark-options input[type="checkbox"]').prop('checked', false);
+        });
+    });
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-status', function() {
+            $('.deselect-all').click();
+            document.getElementById('search-filter').submit();
+        });
+    });
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-category', function() {
+            $('.deselect-all-category').click();
+            document.getElementById('search-filter').submit();
+        });
+    });
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-trademark', function() {
+            $('.deselect-all-trademark').click();
+            document.getElementById('search-filter').submit();
+        });
+    });
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-quantity', function() {
+            $('.quantity-input').val('');
+            document.getElementById('search-filter').submit();
+        });
+    });
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-avg', function() {
+            $('.avg-input').val('');
+            document.getElementById('search-filter').submit();
+        });
+    });
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-price_inven', function() {
+            $('.price_inven-input').val('');
+            document.getElementById('search-filter').submit();
+        });
+    });
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-id', function() {
+            $('.deselect-all-id').click();
+            document.getElementById('search-filter').submit();
+        });
+    });
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-code', function() {
+            $('.code-input').val('');
+            document.getElementById('search-filter').submit();
+        });
+    });
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-products_name', function() {
+            $('.products_name-input').val('');
+            document.getElementById('search-filter').submit();
+        });
+    });
+
     //Xử lí tìm kiếm bộ lọc tổng
     function filterFunction() {
         var input = $("#myInput");
