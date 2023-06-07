@@ -428,15 +428,12 @@
             '<option value="1">Thanh toán bằng tiền mặt</option>' +
             '</select>' +
             '</div>' + '<div class="form-group">' +
-            '<label for="email">Điều kiện thanh toán:</label>' +
-            '<select name="guest_payTerm" class="form-control" id="guest_payTerm">' +
-            '<option value="">Chọn biểu mẫu</option>' +
-            '<option value="0">Biểu mẫu 15 ngày</option>' +
-            '</select>' +
-            '</div>' + '<div class="form-group">' +
             '<label for="email">Ghi chú:</label>' +
             '<input type="text" class="form-control" id="guest_note" placeholder="Nhập thông tin" name="guest_note" value="" required>' +
-            '</div></div></div></div>'
+            '</div>' + '<div class="form-group">' +
+            '<label for="email">Điều kiện thanh toán:</label>' +
+            '<textarea class="form-control" id="guest_payTerm" name="guest_payTerm"></textarea>' +
+            '</div>' + '</div></div></div>'
         );
     });
 
@@ -553,7 +550,8 @@
                             '<thead><tr><td>ID</td><td>Mã sản phẩm</td><td>Tên sản phẩm</td><td>Số lượng sản phẩm</td><td>Số lượng S/N</td></tr></thead>' +
                             '<tbody><tr>' + '<td>1</td>' + '<td>' +
                             productCode1 + '</td>' + '<td>' + productName +
-                            '</td>' + '<td>' + qty + '</td>' + '<td>' + qty + '</td>' +
+                            '</td>' + '<td>' + qty + '</td>' + '<td>' + qty +
+                            '</td>' +
                             '</tr</tbody>' + '</table>' +
                             '<h5>Thông tin Serial Number </h5>');
                         response.forEach(function(sn) {
@@ -702,17 +700,15 @@
                         '>Thanh toán bằng tiền mặt</option>' +
                         '</select>' +
                         '</div>' + '<div class="form-group">' +
-                        '<label for="email">Điều kiện thanh toán:</label>' +
-                        '<select name="guest_payTerm" class="form-control" id="guest_payTerm">' +
-                        '<option value="">Chọn biểu mẫu</option>' +
-                        '<option value="0"' + (data.guest_payTerm == 0 ? ' selected' :
-                            '') + '>Biểu mẫu 15 ngày</option>' +
-                        '</select>' +
-                        '</div>' + '<div class="form-group">' +
                         '<label for="email">Ghi chú:</label>' +
                         '<input type="text" class="form-control" id="guest_note" placeholder="Nhập thông tin" name="guest_note" value="' +
                         data.guest_note + '">' +
-                        '</div></div></div><div>'
+                        '</div>' +
+                        '<div class="form-group">' +
+                        '<label for="email">Điều kiện thanh toán:</label>' +
+                        '<textarea class="form-control" id="guest_payTerm" name="guest_payTerm">' +
+                        data.guest_payTerm + '</textarea>' +
+                        '</div>' + '</div></div><div>'
                     );
                 }
             });
@@ -909,16 +905,6 @@
             input.value = 100;
         }
     }
-    
-    //Kiểm tra số lượng rỗng hoặc nhỏ hơn hoặc bằng 0
-    $(document).on('blur', '.quantity-input', function() {
-        var input = $(this);
-        var quantity = input.val();
-        if (quantity < 0) {
-            input.val('');
-            alert('Số lượng không hợp lệ');
-        }
-    });
     //tính thành tiền của sản phẩm
     $(document).on('input', '.quantity-input, [name^="product_price"]', function() {
         var productQty = parseInt($(this).closest('tr').find('.quantity-input').val());

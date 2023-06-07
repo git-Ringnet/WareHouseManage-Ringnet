@@ -295,25 +295,15 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="email">Điều kiện thanh toán:</label>
-                                <select name="guest_payTerm" class="form-control" id="guest_payTerm"
-                                    <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                        echo 'disabled';
-                                    } ?>>
-                                    <option value="" <?php if ($guest->guest_payTerm == null) {
-                                        echo 'selected';
-                                    } ?>>Chọn biểu mẫu</option>
-                                    <option value="0" <?php if ($guest->guest_payTerm == 0) {
-                                        echo 'selected';
-                                    } ?>>Biểu mẫu 15 ngày</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
                                 <label for="email">Ghi chú:</label>
                                 <input type="text" class="form-control" id="guest_note" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                     echo 'readonly';
                                 } ?>
                                     placeholder="Nhập thông tin" name="guest_note" value="{{ $guest->guest_note }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Điều kiện thanh toán:</label>
+                                <textarea name="guest_payTerm" id="guest_payTerm" class="form-control">{{ $guest->guest_payTerm }}</textarea>
                             </div>
                         </div>
                     </div>
@@ -394,8 +384,7 @@
                                         id="product_price" name="product_price[]" class="form-control"
                                         <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                             echo 'readonly';
-                                        } ?> value={{ $value_export->product_price }}
-                                        required="">
+                                        } ?> value={{ $value_export->product_price }} required="">
                                 </td>
                                 <td>
                                     <input type="text" id="" name="product_note[]" class="form-control"
@@ -531,9 +520,10 @@
             '<div id="form-guest">' +
             '<div class="border-bottom p-3 d-flex justify-content-between align-items-center">' +
             '<b>Thông tin khách hàng</b>' +
-            '<button id="btn-addCustomer" class="btn btn-primary align-items-center">' +
-            '<img src="../../dist/img/icon/Union.png">' +
+            '<button id="btn-addCustomer" type="submit" class="btn btn-primary d-flex align-items-center">' +
+            '<img src="../dist/img/icon/Union.png">' +
             '<span class="ml-1">Lưu thông tin</span></button></div>' +
+            '<input type="hidden" name="click" id="click" value="">' +
             '<div class="row p-3">' +
             '<div class="col-sm-6">' +
             '<div class="form-group">' +
@@ -544,8 +534,8 @@
             '<label>Địa chỉ xuất hóa đơn:</label>' +
             '<input type="text" class="form-control" id="guest_addressInvoice" placeholder="Nhập thông tin" name="guest_addressInvoice" value="" required>' +
             '</div>' + '<div class="form-group">' +
-            '<label for="email">Mã số thuế:</label>' +
-            '<input type="text" class="form-control" id="guest_code" placeholder="Nhập thông tin" name="guest_code" value="" required>' +
+            '<label>Mã số thuế:</label>' +
+            '<input type="text" oninput="validateNumberInput(this)" class="form-control" id="guest_code" inputmode="numeric" placeholder="Nhập thông tin" name="guest_code" value="" required>' +
             '</div>' + '<div class="form-group">' +
             '<label for="email">Địa chỉ giao hàng:</label>' +
             '<input type="text" class="form-control" id="guest_addressDeliver" placeholder="Nhập thông tin" name="guest_addressDeliver" value="" required>' +
@@ -554,17 +544,17 @@
             '<input type="text" class="form-control" id="guest_receiver" placeholder="Nhập thông tin" name="guest_receiver" value="" required>' +
             '</div>' + '<div class="form-group">' +
             '<label for="email">SĐT người nhận:</label>' +
-            '<input type="text" class="form-control" id="guest_phoneReceiver" placeholder="Nhập thông tin" name="guest_phoneReceiver" value="" required>' +
+            '<input type="text" oninput="validateNumberInput(this)" class="form-control" id="guest_phoneReceiver" placeholder="Nhập thông tin" name="guest_phoneReceiver" value="" required>' +
             '</div>' + '</div>' + '<div class="col-sm-6">' +
             '<div class="form-group">' +
             '<label for="email">Người đại diện:</label>' +
             '<input type="text" class="form-control" id="guest_represent" placeholder="Nhập thông tin" name="guest_represent" value="" required>' +
             '</div>' + '<div class="form-group">' +
             '<label for="email">Email:</label>' +
-            '<input type="email" class="form-control" id="guest_email" placeholder="Nhập thông tin" name="guest_email" value="" required>' +
+            '<input type="email" class="form-control" pattern="/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/" id="guest_email" placeholder="Nhập thông tin" name="guest_email" value="" required>' +
             '</div>' + '<div class="form-group">' +
             '<label for="email">Số điện thoại:</label>' +
-            '<input type="text" class="form-control" id="guest_phone" placeholder="Nhập thông tin" name="guest_phone" value="" required>' +
+            '<input type="text" oninput="validateNumberInput(this)" class="form-control" id="guest_phone" placeholder="Nhập thông tin" name="guest_phone" value="" required>' +
             '</div>' + '<div class="form-group">' +
             ' <label for="email">Hình thức thanh toán:</label>' +
             '<select name="guest_pay" class="form-control" id="guest_pay">' +
@@ -572,15 +562,12 @@
             '<option value="1">Thanh toán bằng tiền mặt</option>' +
             '</select>' +
             '</div>' + '<div class="form-group">' +
-            '<label for="email">Điều kiện thanh toán:</label>' +
-            '<select name="guest_payTerm" class="form-control" id="guest_payTerm">' +
-            '<option value="">Chọn biểu mẫu</option>' +
-            '<option value="0">Biểu mẫu 15 ngày</option>' +
-            '</select>' +
-            '</div>' + '<div class="form-group">' +
             '<label for="email">Ghi chú:</label>' +
             '<input type="text" class="form-control" id="guest_note" placeholder="Nhập thông tin" name="guest_note" value="" required>' +
-            '</div></div></div></div>'
+            '</div>' + '<div class="form-group">' +
+            '<label for="email">Điều kiện thanh toán:</label>' +
+            '<textarea class="form-control" id="guest_payTerm" name="guest_payTerm"></textarea>' +
+            '</div>' + '</div></div></div>'
         );
         $('#form-edit').hide();
     });
@@ -615,8 +602,8 @@
                 "<td><input type='number' id='product_qty' class='quantity-input' name='product_qty[]' required></td>"
             );
             const giaInput = $(
-                "<td><input type='number' id='product_price' name='product_price[]' required></td>");
-            const ghichuInput = $("<td><input type='text' id='' name='product_note[]'></td>");
+                "<td><input type='number' class='product_price' id='product_price' name='product_price[]' required></td>");
+            const ghichuInput = $("<td><input type='text' class='note_product' name='product_note[]'></td>");
             const thueInput = $("<td>" +
                 "<input type='number' id='product_tax' class='product_tax' name='product_tax[]' required>" +
                 "</td>");
@@ -976,15 +963,6 @@
                     }
                 });
             });
-        }
-    });
-    //Kiểm tra số lượng rỗng hoặc nhỏ hơn hoặc bằng 0
-    $(document).on('blur', '.quantity-input', function() {
-        var input = $(this);
-        var quantity = input.val();
-        if (quantity <= 0) {
-            input.val('');
-            alert('Số lượng không hợp lệ');
         }
     });
     //tính thành tiền của sản phẩm

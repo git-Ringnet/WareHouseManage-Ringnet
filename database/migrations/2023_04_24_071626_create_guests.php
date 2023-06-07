@@ -38,7 +38,7 @@ return new class extends Migration
             //hình thức thanh toán
             $table->integer('guest_pay')->nullable();
             //điều kiện thanh toán
-            $table->integer('guest_payTerm')->nullable();
+            $table->text('guest_payTerm')->nullable();
             //ghi chú
             $table->string('guest_note')->nullable();
             //
