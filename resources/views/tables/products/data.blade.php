@@ -416,9 +416,9 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('comparison_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
-                                                <input class="w-50 quantity-input" type="number" name="quantity"
+                                                <input class="w-50 quantity-input" class="form-control" type="number" name="quantity"
                                                     value="{{ request()->quantity }}" placeholder="Số lượng">
                                             </div>
                                         </div>
@@ -442,7 +442,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('avg_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
                                                 <input class="w-50 avg-input" type="number" name="avg"
                                                     value="{{ request()->avg }}" placeholder="Nhập giá trị">
@@ -470,7 +470,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('price_inven_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
                                                 <input class="w-50 price_inven-input" type="number"
                                                     name="price_inven" value="{{ request()->price_inven }}"
@@ -1010,71 +1010,94 @@ $index = array_search($item['label'], $numberedLabels);
 
     $('#btn-status').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
         $('#status-options').toggle();
         $('#category-options').hide();
-
     });
     //Trademarks
     $('#btn-trademark').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
         $('#trademark-options').toggle();
     });
     $('#cancel-trademark').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
+        $('#trademark-options input[type="checkbox"]').prop('checked', false);
         $('#trademark-options').hide();
     });
 
     $('#btn-id').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
         $('#id-options').toggle();
     });
     $('#cancel-id').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
+        $('.products_name-input').val('');
         $('#id-options').hide();
     });
     //Code
     $('#btn-code').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
         $('#code-options').toggle();
     });
     $('#cancel-code').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
+        $('.code-input').val('');
         $('#code-options').hide();
     });
     $('#btn-price_inven').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
         $('#price_inven-options').toggle();
     });
     $('#cancel-price_inven').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
+        $('.price_inven-input').val('');
         $('#price_inven-options').hide();
     });
     $('#btn-avg').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
         $('#avg-options').toggle();
     });
     $('#cancel-avg').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
+        $('.avg-input').val('');
         $('#avg-options').hide();
     });
     $('#btn-quantity').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
         $('#quantity-options').toggle();
     });
     $('#cancel-quantity').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
+        $('.quantity-input').val('');
         $('#quantity-options').hide();
     });
     $('#btn-category').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
         $('#category-options').toggle();
     });
     $('#cancel-status').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
+        $('#status-options input[type="checkbox"]').prop('checked', false);
         $('#status-options').hide();
     });
     $('#cancel-category').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
+        $('#category-options input[type="checkbox"]').prop('checked', false);
         $('#category-options').hide();
     });
     $(document).ready(function() {
