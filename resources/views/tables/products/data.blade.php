@@ -15,6 +15,7 @@
                         <span class="ml-2">Thêm sản phẩm</span>
                     </button>
                 </a>
+                <div class="class">
                 <button type="button" class="btn btn-outline-primary mx-3 d-flex align-items-center">
                     <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <path d="M15.0003 7.80054H16.5001C16.8979 7.80054 17.2794 7.95857 17.5607 8.23984C17.842 8.52112 18 8.9026 18 9.30039V17.1006C18 17.4983 17.842 17.8798 17.5607 18.1611C17.2794 18.4424 16.8979 18.6004 16.5001 18.6004H7.49986C7.10207 18.6004 6.72058 18.4424 6.4393 18.1611C6.15802 17.8798 6 17.4983 6 17.1006V9.30039C6 8.9026 6.15802 8.52112 6.4393 8.23984C6.72058 7.95857 7.10207 7.80054 7.49986 7.80054H8.99972" stroke="#0095F6" stroke-linecap="round" stroke-linejoin="round" />
@@ -23,7 +24,8 @@
                     </svg>
                     <span>Xuất Excel</span>
                 </button>
-                <label class="btn btn-outline-primary btn-file mx-3 d-flex align-items-center">
+            </div>
+                <div class="btn btn-outline-primary btn-file d-flex align-items-center">
                     <div>
                         <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                             <path d="M8.99972 15.7999H7.49986C7.10207 15.7999 6.72058 15.6419 6.4393 15.3606C6.15802 15.0793 6 14.6979 6 14.3001L6 6.49991C6 6.10212 6.15802 5.72062 6.4393 5.43934C6.72058 5.15806 7.10207 5.00003 7.49986 5.00003L16.5001 5.00003C16.8979 5.00003 17.2794 5.15806 17.5607 5.43934C17.842 5.72062 18 6.10212 18 6.49991V14.3001C18 14.6979 17.842 15.0793 17.5607 15.3606C17.2794 15.6419 16.8979 15.7999 16.5001 15.7999H15.0003" stroke="#0095F6" stroke-linecap="round" stroke-linejoin="round" />
@@ -32,7 +34,7 @@
                         </svg>
                     </div>
                     <span>Nhập Excel</span> <input type="file" id="import_file" onchange="importExcel()">
-                </label>
+                </div>
 
                 @endcan
             </div>
@@ -629,7 +631,7 @@ $index = array_search($item['label'], $numberedLabels);
 
                                                 </div>
                                             </td>
-                                            <td>
+                                            <td class="text-center">
                                                 @if ($value->inventory != 0)
                                                     <div id="dropdown_item{{ $value->id }}" data-toggle="collapse"
                                                         class="dropdownitem"
@@ -717,9 +719,6 @@ $index = array_search($item['label'], $numberedLabels);
                     <div class="paginator mt-4 d-flex justify-content-end">
                         {{ $products->appends(request()->except('page'))->links() }}
                     </div>
-                </div>
-                <div class="paginator mt-4 d-flex justify-content-end">
-                    {{ $products->appends(request()->except('page'))->links() }}
                 </div>
             </div>
         </div>

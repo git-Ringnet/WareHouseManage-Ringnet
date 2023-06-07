@@ -16,11 +16,12 @@
                             d="M11.1244 8.17446C11.3413 8.40707 11.3413 8.78421 11.1244 9.01683L8.34199 12L11.1244 14.9832C11.3413 15.2158 11.3413 15.5929 11.1244 15.8255C10.9074 16.0582 10.5557 16.0582 10.3387 15.8255L7.16349 12.4212C6.94653 12.1886 6.94653 11.8114 7.16349 11.5788L10.3387 8.17446C10.5557 7.94185 10.9074 7.94185 11.1244 8.17446Z"
                             fill="white" />
                     </svg>
-                    <span class="ml-1" style="font-size: 16px; font-weight: 500; color: #555555;">Trả về danh sách</span>
+                    <span class="ml-1" style="font-size: 16px; font-weight: 500; color: #555555;">Trả về danh
+                        sách</span>
                 </a>
             @else
-                <span> <a href="{{ route('insertProduct.index') }}"> Nhập hàng</a></span>
-                <span class="px-1"> / </span>
+                <span><a href="{{ route('insertProduct.index') }}">Nhập hàng</a></span>
+                <span class="mx-1"> / </span>
                 <span><b>Chi tiết đơn hàng</b></span>
             @endif
         </div>
@@ -184,12 +185,12 @@
             <div class="border-bottom p-3 d-flex justify-content-between">
                 <b>Thông tin nhà cung cấp</b>
                 @if (Auth::user()->id == $order->users_id)
-                @if($order->order_status == 0)
-                <button id="btn-addProvide" class="btn btn-primary save_infor d-flex align-items-center">
-                    <img src="{{ asset('dist/img/icon/Union.png') }}">
-                    <span class="ml-1">Lưu thông tin</span>
-                </button>
-                @endif
+                    @if ($order->order_status == 0)
+                        <button id="btn-addProvide" class="btn btn-primary save_infor d-flex align-items-center">
+                            <img src="{{ asset('dist/img/icon/Union.png') }}">
+                            <span class="ml-1">Lưu thông tin</span>
+                        </button>
+                    @endif
                 @endif
             </div>
             <div class="row p-3">
@@ -274,7 +275,7 @@
                         @foreach ($product_order as $pro)
                             <tr>
                                 <input type="hidden" name="product_id[]" value="{{ $pro->product_id }}">
-                                @if ($order->order_status != 1)
+                                @if ($order->order_status == 0)
                                     <td><input type="checkbox"></td>
                                 @endif
                                 <td class="select-wrapper">
@@ -291,7 +292,7 @@
                                 <td> <input class="form-control" @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif
                                         required @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif
                                         type="text" name="product_name[]" value="{{ $pro->product_name }}">
-                                    </td>
+                                </td>
                                 <td> <input class="form-control" @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif
                                         required type="text" name="product_category[]"
                                         value="{{ $pro->product_category }}"
@@ -300,15 +301,17 @@
                                         required type="text" name="product_unit[]"
                                         value="{{ $pro->product_unit }}"
                                         @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif> </td>
-                                <td> <input class="form-control quantity-input" @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif
-                                        required type="number" name="product_qty[]" value="{{ $pro->product_qty }}"
+                                <td> <input class="form-control quantity-input"
+                                        @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif required type="number"
+                                        name="product_qty[]" value="{{ $pro->product_qty }}"
                                         @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif> </td>
                                 <td> <input class="form-control" @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif
                                         required type="number" name="product_price[]"
                                         value="{{ $pro->product_price }}"
                                         @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif> </td>
-                                <td> <input class="form-control product_tax" @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif
-                                        required type="number" name="product_tax[]" value="{{ $pro->product_tax }}"
+                                <td> <input class="form-control product_tax"
+                                        @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif required type="number"
+                                        name="product_tax[]" value="{{ $pro->product_tax }}"
                                         @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif></td>
                                 <td> <input class="form-control" readonly type="text" name="product_total[]"
                                         value="{{ $pro->product_total }}"></td>
@@ -366,91 +369,119 @@
             <div id="list_modal">
                 <?php $stt = 0; ?>
                 @foreach ($product_order as $pro)
-                <div class="modal fade" id="exampleModal{{ $stt }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">'
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header align-items-center">
-                                <div>
-                                    <h5 class="modal-title" id="exampleModalLabel">Serial Number</h5>
-                                    <p>Thông tin chi tiết về số S/N của mỗi sản phẩm </p>
+                    <div class="modal fade" id="exampleModal{{ $stt }}" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalLabel" aria-hidden="true">'
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header align-items-center">
+                                    <div>
+                                        <h5 class="modal-title" id="exampleModalLabel">Serial Number</h5>
+                                        <p>Thông tin chi tiết về số S/N của mỗi sản phẩm </p>
+                                    </div>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
                                 </div>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <table class="table table-hover table_list_order">
-                                    <thead>
-                                        <tr>
-                                            <td>ID</td>
-                                            <td>Mã sản phẩm</td>
-                                            <td>Tên sản phẩm</td>
-                                            <td>Nhà cung cấp</td>
-                                            <td>Loại hàng</td>
-                                            <td>Số lượng sản phẩm</td>
-                                            <td>Số lượng S/N</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>{{ $stt }}</td>
-                                            <td class="code_product"></td>
-                                            <td class="name_product"></td>
-                                            <td class="name_provide"></td>
-                                            <td class="type_product"></td>
-                                            <td class="qty_product text-right"></td>
-                                            <td class="SNCount text-right">1</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <h3>Thông tin Serial Number </h3>
-                                <div class="div_value{{ $stt }}">
-                                    <table class="table">
+                                <div class="modal-body">
+                                    <table class="table table-hover table_list_order">
                                         <thead>
                                             <tr>
-                                                <td style="width:2%;"><input type="checkbox">
-                                                </td>
-                                                <td style="width:5%;"><span>STT</span></td>
-                                                <td><span>Serial Number</span></td>
-                                                <td style="width:3%;"></td>
+                                                <th>ID</th>
+                                                <th>Mã sản phẩm</th>
+                                                <th>Tên sản phẩm</th>
+                                                <th>Nhà cung cấp</th>
+                                                <th>Loại hàng</th>
+                                                <th class="text-right">Số lượng sản phẩm</th>
+                                                <th class="text-right">Số lượng S/N</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php $st = 1; ?>
-                                            @foreach ($seri as $se)
-                                            @if ($pro->id == $se->product_orderid)
                                             <tr>
-                                                <td><input type="checkbox" id="checkbox_{{ $stt }}"></td>
-                                                <td><span class="stt_SN">{{$st}}</span></td>
-                                                <td><input type="text" name="product_SN{{ $stt }}[]" value="{{ $se->serinumber }}" onpaste="handlePaste(this)" @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly' ?> @endif></td>
-                                                <td class="deleteRow1">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
-                                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M14.0606 6.66675C13.6589 6.66675 13.3333 6.99236 13.3333 7.39402C13.3333 7.79568 13.6589 8.12129 14.0606 8.12129H17.9394C18.341 8.12129 18.6667 7.79568 18.6667 7.39402C18.6667 6.99236 18.341 6.66675 17.9394 6.66675H14.0606ZM8 10.3031C8 9.90143 8.32561 9.57582 8.72727 9.57582H10.1818H21.8182H23.2727C23.6744 9.57582 24 9.90143 24 10.3031C24 10.7048 23.6744 11.0304 23.2727 11.0304H22.5455V22.6667C22.5455 24.2819 21.2158 25.5758 19.6179 25.5758H12.3452C11.9637 25.5755 11.5854 25.4997 11.2333 25.3528C10.8812 25.2059 10.5617 24.9908 10.2931 24.7199C10.0244 24.449 9.81206 24.1276 9.66816 23.7743C9.52463 23.4219 9.45204 23.0447 9.45455 22.6642V11.0304H8.72727C8.32561 11.0304 8 10.7048 8 10.3031ZM10.9091 22.6723V11.0304H21.0909V22.6667C21.0909 23.4623 20.4288 24.1213 19.6179 24.1213H12.3458C12.1562 24.1211 11.9684 24.0834 11.7934 24.0104C11.6183 23.9374 11.4595 23.8304 11.3259 23.6958C11.1924 23.5611 11.0868 23.4013 11.0153 23.2257C10.9437 23.05 10.9076 22.8619 10.9091 22.6723ZM17.9394 13.4546C18.3411 13.4546 18.6667 13.7802 18.6667 14.1819V20.9698C18.6667 21.3714 18.3411 21.6971 17.9394 21.6971C17.5377 21.6971 17.2121 21.3714 17.2121 20.9698V14.1819C17.2121 13.7802 17.5377 13.4546 17.9394 13.4546ZM14.7879 14.1819C14.7879 13.7802 14.4623 13.4546 14.0606 13.4546C13.6589 13.4546 13.3333 13.7802 13.3333 14.1819V20.9698C13.3333 21.3714 13.6589 21.6971 14.0606 21.6971C14.4623 21.6971 14.7879 21.3714 14.7879 20.9698V14.1819Z" fill="#555555" />
-                                                    </svg>
-                                                </td>
+                                                <td>{{ $stt }}</td>
+                                                <td class="code_product"></td>
+                                                <td class="name_product"></td>
+                                                <td class="name_provide"></td>
+                                                <td class="type_product"></td>
+                                                <td class="qty_product text-right"></td>
+                                                <td class="SNCount text-right">1</td>
                                             </tr>
-                                            @endif
-                                                <?php $st++; ?>
-                                            @endforeach
                                         </tbody>
                                     </table>
+                                    <h3>Thông tin Serial Number </h3>
+                                    <div class="div_value{{ $stt }}">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    @if ($order->order_status == 0)
+                                                        <th style="width:2%;"><input type="checkbox">
+                                                        </th>
+                                                    @endif
+                                                    <th style="width:5%;"><span>STT</span></th>
+                                                    <th><span>Serial Number</span></th>
+                                                    <th style="width:3%;"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php $st = 1; ?>
+                                                @foreach ($seri as $se)
+                                                    @if ($pro->id == $se->product_orderid)
+                                                        <tr>
+                                                            @if ($order->order_status == 0)
+                                                                @if (Auth::user()->id == $order->users_id || Auth::user()->can('isAdmin'))
+                                                                    <td><input type="checkbox"
+                                                                            id="checkbox_{{ $stt }}"></td>
+                                                                @endif
+                                                            @endif
+                                                            <td><span class="stt_SN">{{ $st }}</span></td>
+                                                            <td><input type="text"
+                                                                class="form-control w-25"
+                                                                    name="product_SN{{ $stt }}[]"
+                                                                    value="{{ $se->serinumber }}"
+                                                                    onpaste="handlePaste(this)"
+                                                                    <?php if( $order->order_status != 0 || (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1))  echo 'readonly'; ?>>
+                                                            </td>
+                                                            @if ($order->order_status == 0)
+                                                            @if (Auth::user()->id == $order->users_id || Auth::user()->can('isAdmin'))
+                                                            <td class="deleteRow1">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="32"
+                                                                    height="32" viewBox="0 0 32 32"
+                                                                    fill="none">
+                                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                        d="M14.0606 6.66675C13.6589 6.66675 13.3333 6.99236 13.3333 7.39402C13.3333 7.79568 13.6589 8.12129 14.0606 8.12129H17.9394C18.341 8.12129 18.6667 7.79568 18.6667 7.39402C18.6667 6.99236 18.341 6.66675 17.9394 6.66675H14.0606ZM8 10.3031C8 9.90143 8.32561 9.57582 8.72727 9.57582H10.1818H21.8182H23.2727C23.6744 9.57582 24 9.90143 24 10.3031C24 10.7048 23.6744 11.0304 23.2727 11.0304H22.5455V22.6667C22.5455 24.2819 21.2158 25.5758 19.6179 25.5758H12.3452C11.9637 25.5755 11.5854 25.4997 11.2333 25.3528C10.8812 25.2059 10.5617 24.9908 10.2931 24.7199C10.0244 24.449 9.81206 24.1276 9.66816 23.7743C9.52463 23.4219 9.45204 23.0447 9.45455 22.6642V11.0304H8.72727C8.32561 11.0304 8 10.7048 8 10.3031ZM10.9091 22.6723V11.0304H21.0909V22.6667C21.0909 23.4623 20.4288 24.1213 19.6179 24.1213H12.3458C12.1562 24.1211 11.9684 24.0834 11.7934 24.0104C11.6183 23.9374 11.4595 23.8304 11.3259 23.6958C11.1924 23.5611 11.0868 23.4013 11.0153 23.2257C10.9437 23.05 10.9076 22.8619 10.9091 22.6723ZM17.9394 13.4546C18.3411 13.4546 18.6667 13.7802 18.6667 14.1819V20.9698C18.6667 21.3714 18.3411 21.6971 17.9394 21.6971C17.5377 21.6971 17.2121 21.3714 17.2121 20.9698V14.1819C17.2121 13.7802 17.5377 13.4546 17.9394 13.4546ZM14.7879 14.1819C14.7879 13.7802 14.4623 13.4546 14.0606 13.4546C13.6589 13.4546 13.3333 13.7802 13.3333 14.1819V20.9698C13.3333 21.3714 13.6589 21.6971 14.0606 21.6971C14.4623 21.6971 14.7879 21.3714 14.7879 20.9698V14.1819Z"
+                                                                        fill="#555555" />
+                                                                </svg>
+                                                            </td>
+                                                            @endif
+                                                            @endif
+                                                        </tr>
+                                                    @endif
+                                                    <?php $st++; ?>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    @if ($order->order_status == 0)
+                                        @if (Auth::user()->id == $order->users_id || Auth::user()->can('isAdmin'))
+                                            <div class="AddSN btn btn-secondary" style="border:1px solid gray;">Thêm
+                                                dòng</div>
+                                        @endif
+                                    @endif
                                 </div>
-                                <div class="AddSN btn btn-secondary" style="border:1px solid gray;">Thêm dòng</div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-dismiss="modal">Lưu</button>
+                                </div>
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Lưu</button>
-                            </div>
-                        </div>  
+                        </div>
                     </div>
-                </div>
-                <?php $stt++; ?>
+                    <?php $stt++; ?>
                 @endforeach
             </div>
             <div class="btn-fixed">
                 @if ($order->order_status == 0)
-                @if (Auth::user()->id == $order->users_id || Auth::user()->can('isAdmin'))
-                <a href="javascript:;" class="btn btn-primary addBillEdit">Lưu</a>
-                @endif
+                    @if (Auth::user()->id == $order->users_id || Auth::user()->can('isAdmin'))
+                        <a href="javascript:;" class="btn btn-primary addBillEdit">Lưu</a>
+                    @endif
                 @endif
                 <a href="{{ route('insertProduct.index') }}" class="btn btn-light">Hủy</a>
             </div>
@@ -620,7 +651,7 @@
     $(document).on('click', '.addBillEdit', function(e) {
         e.preventDefault();
         if ($('#form_submit')[0].checkValidity()) {
-            $('#form_submit').attr('action', '{{ route("addBillEdit") }}');
+            $('#form_submit').attr('action', '{{ route('addBillEdit') }}');
             $('input[name="_method"]').remove();
             updateProductSN()
             $('#form_submit').submit();
@@ -808,7 +839,7 @@
             '<div class="btn btn-danger ml-2" id="deleteSNS"> Xóa SN </div>' +
             '</div>' +
             '<div class="modal-footer">' +
-            '<button type="button" class="btn btn-secondary" data-dismiss="modal">Save</button>' +
+            '<button type="button" class="btn btn-secondary" data-dismiss="modal">Lưu</button>' +
             '</div>' +
             '</div>' +
             '</div>' +
@@ -869,29 +900,29 @@
             }
         }
 
-       addDataToModal();
+        addDataToModal();
         chekckRow();
     });
 
-    function addDataToModal(){
-    var info = document.querySelectorAll('.exampleModal');
-    for (let k = 0; k < info.length; k++) {
-        info[k].addEventListener('click', function() {
-            var productCode = $(this).closest('tr').find('.list_products option:selected').text();
-            var productName = $(this).closest('tr').find('[name^="product_name"]').val();
-            var productType = $(this).closest('tr').find('[name^="product_category"]').val();
-            var productQty = $(this).closest('tr').find('[name^="product_qty"]').val();
-            var provide_name = $('#provide_name').val();
-            $('.name_provide').text(provide_name);
-            $('.code_product').text(productCode);
-            $('.name_product').text(productName);
-            $('.type_product').text(productType);
-            $('.qty_product').text(productQty);
-            // $('.modal-body table tbody .stt_SN').text(STT);
-            // STT++;
-            // $('.SNCount').text($('.modal-body table tbody input[type="checkbox"').length);
-        })
-    }
+    function addDataToModal() {
+        var info = document.querySelectorAll('.exampleModal');
+        for (let k = 0; k < info.length; k++) {
+            info[k].addEventListener('click', function() {
+                var productCode = $(this).closest('tr').find('.list_products option:selected').text();
+                var productName = $(this).closest('tr').find('[name^="product_name"]').val();
+                var productType = $(this).closest('tr').find('[name^="product_category"]').val();
+                var productQty = $(this).closest('tr').find('[name^="product_qty"]').val();
+                var provide_name = $('#provide_name').val();
+                $('.name_provide').text(provide_name);
+                $('.code_product').text(productCode);
+                $('.name_product').text(productName);
+                $('.type_product').text(productType);
+                $('.qty_product').text(productQty);
+                // $('.modal-body table tbody .stt_SN').text(STT);
+                // STT++;
+                // $('.SNCount').text($('.modal-body table tbody input[type="checkbox"').length);
+            })
+        }
     }
     addDataToModal();
 
