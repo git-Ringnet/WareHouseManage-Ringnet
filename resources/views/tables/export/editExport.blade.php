@@ -120,10 +120,13 @@
         <section class="content">
             <div class="d-flex mb-1 action-don">
                 @if ($exports->export_status == 1)
-                    <button type="submit" class="btn btn-danger text-white" name="submitBtn" value="action1">Chốt
-                        đơn</button>
-                    <button type="submit" class="btn btn-secondary mr-4" name="submitBtn" value="action2">Hủy
-                        đơn</button>
+                    @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
+                        <button type="submit" class="btn btn-danger text-white" name="submitBtn"
+                            value="action1">Chốt
+                            đơn</button>
+                        <button type="submit" class="btn btn-secondary mx-4" name="submitBtn" value="action2">Hủy
+                            đơn</button>
+                    @endif
                 @endif
                 <a href="#" class="btn border border-secondary mr-4">Xuất file</a>
                 <a href="#" class="btn border border-secondary mr-4">
@@ -143,50 +146,49 @@
                 <div class="row my-3">
                     <div class="col">
                         <div class="w-75">
-
                             @if ($exports->export_status == 1)
-                                <div class="d-flex mb-2">
-                                    <input type="radio" name="options" id="radio1" checked>
-                                    <span class="ml-1">Khách hàng cũ</span>
-                                    <input type="radio" name="options" id="radio2" style="margin-left: 40px;">
-                                    <span class="ml-1">Khách hàng mới</span>
-                                </div>
-                            @endif
-                            @if ($exports->export_status == 1)
-                                <div class="input-group mb-1 position-relative w-50">
-                                    <input type="text" class="form-control"
-                                        placeholder="Nhập thông tin khách hàng" aria-label="Username"
-                                        aria-describedby="basic-addon1" id="myInput" autocomplete="off">
-                                    <div class="position-absolute" style="right: 5px;top: 17%;">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M15.1835 7.36853C13.0254 5.21049 9.52656 5.21049 7.36853 7.36853C5.21049 9.52656 5.21049 13.0254 7.36853 15.1835C9.52656 17.3415 13.0254 17.3415 15.1835 15.1835C17.3415 13.0254 17.3415 9.52656 15.1835 7.36853ZM16.2441 6.30787C13.5003 3.56404 9.05169 3.56404 6.30787 6.30787C3.56404 9.05169 3.56404 13.5003 6.30787 16.2441C9.05169 18.988 13.5003 18.988 16.2441 16.2441C18.988 13.5003 18.988 9.05169 16.2441 6.30787Z"
-                                                fill="#555555" />
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M15.1796 15.1796C15.4725 14.8867 15.9474 14.8867 16.2403 15.1796L19.5303 18.4696C19.8232 18.7625 19.8232 19.2374 19.5303 19.5303C19.2374 19.8232 18.7625 19.8232 18.4696 19.5303L15.1796 16.2403C14.8867 15.9474 14.8867 15.4725 15.1796 15.1796Z"
-                                                fill="#555555" />
-                                        </svg>
+                                @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
+                                    <div class="d-flex mb-2">
+                                        <input type="radio" name="options" id="radio1" checked>
+                                        <span class="ml-1">Khách hàng cũ</span>
+                                        <input type="radio" name="options" id="radio2"
+                                            style="margin-left: 40px;">
+                                        <span class="ml-1">Khách hàng mới</span>
                                     </div>
-                                </div>
-                                <ul id="myUL" class="bg-white position-absolute w-50 rounded shadow p-0"
-                                    style="z-index: 99;">
-                                    @foreach ($customer as $item)
-                                        <li>
-                                            <a href="#"
-                                                class="text-dark d-flex justify-content-between p-2 search-info"
-                                                id="{{ $item->id }}" name="search-info">
-                                                <span>{{ $item->guest_represent }}</span>
-                                                <span class="mr-5">{{ $item->guest_name }}</span>
-                                            </a>
-                                        </li>
-                                    @endforeach
-                                </ul>
+                                    <div class="input-group mb-1 position-relative w-50">
+                                        <input type="text" class="form-control"
+                                            placeholder="Nhập thông tin khách hàng" aria-label="Username"
+                                            aria-describedby="basic-addon1" id="myInput" autocomplete="off">
+                                        <div class="position-absolute" style="right: 5px;top: 17%;">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M15.1835 7.36853C13.0254 5.21049 9.52656 5.21049 7.36853 7.36853C5.21049 9.52656 5.21049 13.0254 7.36853 15.1835C9.52656 17.3415 13.0254 17.3415 15.1835 15.1835C17.3415 13.0254 17.3415 9.52656 15.1835 7.36853ZM16.2441 6.30787C13.5003 3.56404 9.05169 3.56404 6.30787 6.30787C3.56404 9.05169 3.56404 13.5003 6.30787 16.2441C9.05169 18.988 13.5003 18.988 16.2441 16.2441C18.988 13.5003 18.988 9.05169 16.2441 6.30787Z"
+                                                    fill="#555555" />
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M15.1796 15.1796C15.4725 14.8867 15.9474 14.8867 16.2403 15.1796L19.5303 18.4696C19.8232 18.7625 19.8232 19.2374 19.5303 19.5303C19.2374 19.8232 18.7625 19.8232 18.4696 19.5303L15.1796 16.2403C14.8867 15.9474 14.8867 15.4725 15.1796 15.1796Z"
+                                                    fill="#555555" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <ul id="myUL" class="bg-white position-absolute w-50 rounded shadow p-0"
+                                        style="z-index: 99;">
+                                        @foreach ($customer as $item)
+                                            <li>
+                                                <a href="#"
+                                                    class="text-dark d-flex justify-content-between p-2 search-info"
+                                                    id="{{ $item->id }}" name="search-info">
+                                                    <span>{{ $item->guest_represent }}</span>
+                                                    <span class="mr-5">{{ $item->guest_name }}</span>
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                @endif
                             @endif
                         </div>
                     </div>
                 </div>
-
             </div>
             {{-- Form thông tin khách hàng --}}
             <section id="data-container" class="container-fluided bg-white rounded"></section>
@@ -195,9 +197,11 @@
                     <div class="border-bottom p-3 d-flex justify-content-between align-items-center">
                         <b>Thông tin khách hàng</b>
                         @if ($exports->export_status == 1)
+                                @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
                             <button id="btn-customer" class="btn btn-primary">
                                 <img src="../../dist/img/icon/Union.png">
                                 <span>Lưu thông tin</span></button>
+                        @endif
                         @endif
                     </div>
                     <div class="row p-3">
@@ -206,73 +210,109 @@
                                 <input type="text" hidden class="form-control" id="id" name="id"
                                     value="{{ $guest->id }}" required>
                                 <label for="congty">Công ty:</label>
-                                <input type="text" class="form-control" id="guest_name"
+                                <input type="text" class="form-control" id="guest_name" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                    echo 'readonly';
+                                } ?>
                                     placeholder="Nhập thông tin" name="guest_name" value="{{ $guest->guest_name }}"
                                     required>
                             </div>
                             <div class="form-group">
                                 <label>Địa chỉ xuất hóa đơn:</label>
                                 <input type="text" class="form-control" placeholder="Nhập thông tin"
-                                    id="guest_addressInvoice" name="guest_addressInvoice"
+                                    <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                        echo 'readonly';
+                                    } ?> id="guest_addressInvoice" name="guest_addressInvoice"
                                     value="{{ $guest->guest_addressInvoice }}">
                             </div>
                             <div class="form-group">
                                 <label for="email">Mã số thuế:</label>
-                                <input type="text" class="form-control" id="guest_code"
+                                <input type="text" class="form-control" id="guest_code" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                    echo 'readonly';
+                                } ?>
                                     placeholder="Nhập thông tin" name="guest_code" value="{{ $guest->guest_code }}">
                             </div>
                             <div class="form-group">
                                 <label for="email">Địa chỉ giao hàng:</label>
                                 <input type="text" class="form-control" id="guest_addressDeliver"
-                                    placeholder="Nhập thông tin" name="guest_addressDeliver"
+                                    <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                        echo 'readonly';
+                                    } ?> placeholder="Nhập thông tin" name="guest_addressDeliver"
                                     value="{{ $guest->guest_addressDeliver }}">
                             </div>
                             <div class="form-group">
                                 <label for="email">Người nhận hàng:</label>
-                                <input type="text" class="form-control" id="guest_receiver"
+                                <input type="text" class="form-control" id="guest_receiver" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                    echo 'readonly';
+                                } ?>
                                     placeholder="Nhập thông tin" name="guest_receiver"
                                     value="{{ $guest->guest_receiver }}">
                             </div>
                             <div class="form-group">
                                 <label for="email">SĐT người nhận:</label>
                                 <input type="text" class="form-control" id="guest_phoneReceiver"
-                                    placeholder="Nhập thông tin" name="guest_phoneReceiver"
+                                    <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                        echo 'readonly';
+                                    } ?> placeholder="Nhập thông tin" name="guest_phoneReceiver"
                                     value="{{ $guest->guest_phoneReceiver }}">
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="email">Người đại diện:</label>
-                                <input type="text" class="form-control" id="guest_represent"
+                                <input type="text" class="form-control" id="guest_represent" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                    echo 'readonly';
+                                } ?>
                                     placeholder="Nhập thông tin" name="guest_represent"
                                     value="{{ $guest->guest_represent }}" required>
                             </div>
                             <div class="form-group">
                                 <label for="email">Email:</label>
-                                <input type="email" class="form-control" id="guest_email"
+                                <input type="email" class="form-control" id="guest_email" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                    echo 'readonly';
+                                } ?>
                                     placeholder="Nhập thông tin" name="guest_email"
                                     value="{{ $guest->guest_email }}" required>
                             </div>
                             <div class="form-group">
                                 <label for="email">Số điện thoại:</label>
-                                <input type="text" class="form-control" id="guest_phone"
+                                <input type="text" class="form-control" id="guest_phone" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                    echo 'readonly';
+                                } ?>
                                     placeholder="Nhập thông tin" name="guest_phone"
                                     value="{{ $guest->guest_phone }}" required>
                             </div>
                             <div class="form-group">
                                 <label for="email">Hình thức thanh toán:</label>
-                                <input type="text" class="form-control" id="guest_pay"
-                                    placeholder="Nhập thông tin" name="guest_pay" value="{{ $guest->guest_pay }}">
+                                <select name="guest_pay" class="form-control" id="guest_pay" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                    echo 'disabled';
+                                } ?>>
+                                    <option value="0" <?php if ($guest->guest_pay == 0) {
+                                        echo 'selected';
+                                    } ?>>Chuyển khoản</option>
+                                    <option value="1" <?php if ($guest->guest_pay == 1) {
+                                        echo 'selected';
+                                    } ?>>Thanh toán bằng tiền mặt</option>
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label for="email">Điều kiện thanh toán:</label>
-                                <input type="text" class="form-control" id="guest_payTerm"
-                                    placeholder="Nhập thông tin" name="guest_payTerm"
-                                    value="{{ $guest->guest_payTerm }}">
+                                <select name="guest_payTerm" class="form-control" id="guest_payTerm"
+                                    <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                        echo 'disabled';
+                                    } ?>>
+                                    <option value="" <?php if ($guest->guest_payTerm == null) {
+                                        echo 'selected';
+                                    } ?>>Chọn biểu mẫu</option>
+                                    <option value="0" <?php if ($guest->guest_payTerm == 0) {
+                                        echo 'selected';
+                                    } ?>>Biểu mẫu 15 ngày</option>
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label for="email">Ghi chú:</label>
-                                <input type="text" class="form-control" id="guest_note"
+                                <input type="text" class="form-control" id="guest_note" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                    echo 'readonly';
+                                } ?>
                                     placeholder="Nhập thông tin" name="guest_note" value="{{ $guest->guest_note }}">
                             </div>
                         </div>
@@ -284,7 +324,11 @@
                 <table class="table">
                     <thead class="bg-white border-0 rounded-top">
                         <tr>
+                            @if ($exports->export_status == 1)
+                            @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
                             <th><input type="checkbox"></th>
+                            @endif
+                            @endif
                             <th>STT</th>
                             <th>Mã sản phẩm</th>
                             <th>Tên sản phẩm</th>
@@ -303,11 +347,18 @@
                         <?php $stt = 1; ?>
                         @foreach ($productExport as $index => $value_export)
                             <tr id="dynamic-row-{{ $index }}">
+                                @if ($exports->export_status == 1)
+                                @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
                                 <td><input type="checkbox"></td>
+                                @endif
+                                @endif
                                 <td><?php echo $stt++; ?></td>
                                 <td>
                                     @if ($exports->export_status == 1)
-                                        <select id="maProduct" class="p-1 pr-5 maProduct" name="products_id[]">
+                                        <select id="maProduct" class="p-1 maProduct form-control"
+                                            name="products_id[]" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                                echo 'disabled';
+                                            } ?>>
                                             @foreach ($product_code as $value_code)
                                                 <option value="{{ $value_code->id }}"
                                                     @if ($value_export->products_id == $value_code->id) selected @endif>
@@ -316,7 +367,10 @@
                                         </select>
                                     @endif
                                     @if ($exports->export_status == 2)
-                                        <select class="p-1 pr-5 maProduct" name="products_id[]">
+                                        <select class="p-1 maProduct form-control" name="products_id[]"
+                                            <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                                echo 'disabled';
+                                            } ?>>
                                             <option value="{{ $value_export->id }}">
                                                 {{ $value_export->products_code }}
                                             </option>
@@ -324,50 +378,72 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <select class="child-select p-1 pr-5" name="product_id[]">
+                                    <select class="child-select p-1 form-control" name="product_id[]"
+                                        <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                            echo 'disabled';
+                                        } ?>>
                                         <option value="{{ $value_export->product_id }}">
                                             {{ $value_export->product_name }}</option>
                                     </select>
                                 </td>
                                 <td>
-                                    <input type="text" id="product_unit" class="product_unit"
-                                        value="{{ $value_export->product_unit }}" name="product_unit[]"
-                                        required="">
+                                    <input type="text" id="product_unit" class="product_unit form-control"
+                                        <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                            echo 'readonly';
+                                        } ?> value="{{ $value_export->product_unit }}"
+                                        name="product_unit[]" required="">
                                 </td>
                                 <td>
-                                    <input type="number" id="product_qty" class="quantity-input"
-                                        value="{{ $value_export->product_qty }}" name="product_qty[]"
-                                        required="">
+                                    <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')" id="product_qty" class="quantity-input form-control"
+                                        <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                            echo 'readonly';
+                                        } ?> value="{{ $value_export->product_qty }}"
+                                        name="product_qty[]" required="">
                                 </td>
                                 <td>
-                                    <input type="number" id="product_price" name="product_price[]"
-                                        value="{{ $value_export->product_price }}" required="">
+                                    <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')" id="product_price" name="product_price[]"
+                                        class="form-control" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                            echo 'readonly';
+                                        } ?>
+                                        value={{ ($value_export->product_price) }} required="">
                                 </td>
                                 <td>
-                                    <input type="text" id="" name="product_note[]"
-                                        value="{{ $value_export->product_note }}">
+                                    <input type="text" id="" name="product_note[]" class="form-control"
+                                        <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                            echo 'readonly';
+                                        } ?> value="{{ $value_export->product_note }}">
                                 </td>
                                 <td>
-                                    <input type="number" id="product_tax" class="product_tax" name="product_tax[]"
-                                        required="" value="{{ $value_export->product_tax }}">
+                                    <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')" id="product_tax" class="product_tax form-control"
+                                        name="product_tax[]" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                            echo 'readonly';
+                                        } ?> required=""
+                                        value="{{ $value_export->product_tax }}">
                                 </td>
-                                <td><span class="px-5 total-amount">0</span></td>
+                                <td><span class="total-amount form-control" style="background:#e9ecef">0</span>
+                                </td>
                                 <td><img src="../../dist/img/icon/list.png"></td>
                                 <td><img src="../../dist/img/icon/Group.png"></td>
-                                <td @if ($exports->export_status == 1) class="delete-row-btn" @endif>
-                                    <img src="../../dist/img/icon/vector.png">
-                                </td>
+                                @if ($exports->export_status == 1)
+                                @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
+                                    <td @if ($exports->export_status != 2) class="delete-row-btn" @endif>
+                                        <img src="../../dist/img/icon/vector.png">
+                                    </td>
+                                @endif
+                                @endif
                             </tr>
                         @endforeach
-                        @if ($exports->export_status == 1)
+                        @if ($exports->export_status != 2)
                             <tr id="dynamic-fields"></tr>
                         @endif
                     </tbody>
                 </table>
                 @if ($exports->export_status == 1)
-                    <div class="mb-2">
-                        <span class="btn btn-secondary" id="add-field-btn">Thêm sản phẩm</span>
-                    </div>
+                    @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
+                        <div class="mb-2">
+                            <span class="btn btn-secondary" id="add-field-btn">Thêm sản phẩm</span>
+                        </div>
+                    @endif
                 @endif
             </div>
             <div class="row position-relative">
@@ -400,7 +476,7 @@
             </div>
             <div class="btn-fixed">
                 @if ($exports->export_status == 1)
-                    @if (Auth::user()->name == $exports->name || Auth::user()->can('isAdmin'))
+                    @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
                         <button type="submit" value="action3" name="submitBtn" class="btn btn-primary mr-1"
                             onclick="validateAndSubmit(event)">Lưu</button>
                     @endif
@@ -458,6 +534,7 @@
     var radio2 = document.getElementById("radio2");
     $("#radio1").on("click", function() {
         $('#data-container').empty();
+        $('#form-edit').show();
     });
     $("#radio2").on("click", function() {
         $('#data-container').html(
@@ -500,15 +577,22 @@
             '<input type="text" class="form-control" id="guest_phone" placeholder="Nhập thông tin" name="guest_phone" value="" required>' +
             '</div>' + '<div class="form-group">' +
             ' <label for="email">Hình thức thanh toán:</label>' +
-            '<input type="text" class="form-control" id="guest_pay" placeholder="Nhập thông tin" name="guest_pay" value="" required>' +
+            '<select name="guest_pay" class="form-control" id="guest_pay">' +
+            '<option value="0">Chuyển khoản</option>' +
+            '<option value="1">Thanh toán bằng tiền mặt</option>' +
+            '</select>' +
             '</div>' + '<div class="form-group">' +
             '<label for="email">Điều kiện thanh toán:</label>' +
-            '<input type="text" class="form-control" id="guest_payTerm" placeholder="Nhập thông tin" name="guest_payTerm" value="" required>' +
+            '<select name="guest_payTerm" class="form-control" id="guest_payTerm">' +
+            '<option value="">Chọn biểu mẫu</option>' +
+            '<option value="0">Biểu mẫu 15 ngày</option>' +
+            '</select>' +
             '</div>' + '<div class="form-group">' +
             '<label for="email">Ghi chú:</label>' +
             '<input type="text" class="form-control" id="guest_note" placeholder="Nhập thông tin" name="guest_note" value="" required>' +
             '</div></div></div></div>'
         );
+        $('#form-edit').hide();
     });
     //add sản phẩm
     $(document).ready(function() {
@@ -546,7 +630,7 @@
             const thueInput = $("<td>" +
                 "<input type='number' id='product_tax' class='product_tax' name='product_tax[]' required>" +
                 "</td>");
-            const thanhTienInput = $("<td><span class='px-5 total-amount'>0</span></td>");
+            const thanhTienInput = $("<td><span class='total-amount'>0</span></td>");
             const sn = $(
                 "<td data-toggle='modal' data-target='#snModal' class='sn'><img src='../../dist/img/icon/list.png'></td>"
             );
@@ -717,12 +801,19 @@
                         data.guest_phone + '" required>' +
                         '</div>' + '<div class="form-group">' +
                         ' <label for="email">Hình thức thanh toán:</label>' +
-                        '<input type="text" class="form-control" id="guest_pay" placeholder="Nhập thông tin" name="guest_pay" value="' +
-                        data.guest_pay + '">' +
+                        '<select name="guest_pay" class="form-control" id="guest_pay">' +
+                        '<option value="0"' + (data.guest_pay == 0 ? ' selected' : '') +
+                        '>Chuyển khoản</option>' +
+                        '<option value="1"' + (data.guest_pay == 1 ? ' selected' : '') +
+                        '>Thanh toán bằng tiền mặt</option>' +
+                        '</select>' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">Điều kiện thanh toán:</label>' +
-                        '<input type="text" class="form-control" id="guest_payTerm" placeholder="Nhập thông tin" name="guest_payTerm" value="' +
-                        data.guest_payTerm + '">' +
+                        '<select name="guest_payTerm" class="form-control" id="guest_payTerm">' +
+                        '<option value="">Chọn biểu mẫu</option>' +
+                        '<option value="0"' + (data.guest_payTerm == 0 ? ' selected' :
+                            '') + '>Biểu mẫu 15 ngày</option>' +
+                        '</select>' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">Ghi chú:</label>' +
                         '<input type="text" class="form-control" id="guest_note" placeholder="Nhập thông tin" name="guest_note" value="' +

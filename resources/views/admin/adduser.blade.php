@@ -58,7 +58,7 @@
                 </div>
                 <div class="mb-3">
                   <label for="">Số điện thoại</label>
-                  <input type="number" class="form-control" name="phonenumber" placeholder="Số điện thoại" value="{{old('phonenumber')}}">
+                  <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')" class="form-control" name="phonenumber" placeholder="Số điện thoại" value="{{old('phonenumber')}}">
                   @error('phonenumber')
                   <span style="color:red">{{$message}}</span>
                   @enderror

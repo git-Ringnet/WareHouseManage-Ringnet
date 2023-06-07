@@ -96,7 +96,7 @@ class ExportController extends Controller
                 $sortType = 'desc';
             }
         } else {
-            $sortType = 'asc';
+            $sortType = 'desc';
         }
         $exports = Exports::leftjoin('guests', 'exports.guest_id', '=', 'guests.id')
             ->leftjoin('users', 'exports.user_id', '=', 'users.id')->get();
@@ -132,104 +132,217 @@ class ExportController extends Controller
             $productQtys = $request->input('product_qty');
             $clickValue = $request->input('click');
             $totalQtyNeeded = 0;
-
-            // Tính tổng số lượng cần thiết cho mỗi product_id
-            $productQtyMap = [];
-            if ($productIDs == null) {
-                return redirect()->route('exports.index')->with('danger', 'Chưa thêm sản phẩm!');
-            } else {
-                for ($i = 0; $i < count($productIDs); $i++) {
-                    $productID = $productIDs[$i];
-                    $productQty = $productQtys[$i];
-
-                    $totalQtyNeeded += $productQty;
-
-                    if (!isset($productQtyMap[$productID])) {
-                        $productQtyMap[$productID] = 0;
-                    }
-                    $productQtyMap[$productID] += $productQty;
-                }
-
-                // Kiểm tra và cập nhật seri_status
-                $hasEnoughQty = true;
-                foreach ($productQtyMap as $productID => $productQty) {
-                    $serinumbers = Serinumbers::where('product_id', $productID)
-                        ->where('seri_status', 1)
-                        ->limit($productQty)
-                        ->get();
-
-                    if (count($serinumbers) < $productQty) {
-                        $hasEnoughQty = false;
-                        break;
+            $existingProductIDs = [];
+            if ($request->has('submitBtn')) {
+                $action = $request->input('submitBtn');
+                if ($action === 'action1') {
+                    // Tính tổng số lượng cần thiết cho mỗi product_id
+                    $productQtyMap = [];
+                    if ($productIDs == null) {
+                        return redirect()->route('exports.index')->with('danger', 'Chưa thêm sản phẩm!');
                     } else {
-                        // Cập nhật seri_status bằng 2 cho các sản phẩm
-                        foreach ($serinumbers as $serinumber) {
-                            if ($serinumber->seri_status == 1) {
-                                $serinumber->seri_status = 2;
-                                $serinumber->save();
+                        for ($i = 0; $i < count($productIDs); $i++) {
+                            $productID = $productIDs[$i];
+                            $productQty = $productQtys[$i];
+
+                            $totalQtyNeeded += $productQty;
+
+                            if (!isset($productQtyMap[$productID])) {
+                                $productQtyMap[$productID] = 0;
                             }
+                            $productQtyMap[$productID] += $productQty;
+                        }
+
+                        // Kiểm tra và cập nhật seri_status
+                        $hasEnoughQty = true;
+                        foreach ($productQtyMap as $productID => $productQty) {
+                            $serinumbers = Serinumbers::where('product_id', $productID)
+                                ->where('seri_status', 1)
+                                ->limit($productQty)
+                                ->get();
+
+                            if (count($serinumbers) < $productQty) {
+                                $hasEnoughQty = false;
+                                break;
+                            } else {
+                                // Cập nhật seri_status bằng 2 cho các sản phẩm
+                                foreach ($serinumbers as $serinumber) {
+                                    if ($serinumber->seri_status == 1) {
+                                        $serinumber->seri_status = 2;
+                                        $serinumber->save();
+                                    }
+                                }
+                            }
+                        }
+                        if (!$hasEnoughQty) {
+                            return redirect()->route('exports.index')->with('danger', 'Vượt quá số lượng!');
+                        } else {
+                            //thêm khách hàng
+                            if ($clickValue === null) {
+                                $guest = new Guests();
+                                $guest->guest_name = $request->guest_name;
+                                $guest->guest_addressInvoice = $request->guest_addressInvoice;
+                                $guest->guest_code = $request->guest_code;
+                                $guest->guest_addressDeliver = $request->guest_addressDeliver;
+                                $guest->guest_receiver = $request->guest_receiver;
+                                $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
+                                $guest->guest_represent = $request->guest_represent;
+                                $guest->guest_email = $request->guest_email;
+                                $guest->guest_status = 1;
+                                $guest->guest_phone = $request->guest_phone;
+                                $guest->guest_pay = $request->guest_pay;
+                                $guest->guest_payTerm = $request->guest_payTerm;
+                                $guest->guest_note = $request->guest_note;
+                                $guest->save();
+                                // Tạo đơn xuất hàng
+                                $export = new Exports();
+                                $export->guest_id = $guest->id;
+                                $export->user_id = Auth::user()->id;
+                                $export->total = $request->totalValue;
+                                $export->export_status = 2;
+                                $export->save();
+                            } else {
+                                // Tạo đơn xuất hàng
+                                $export = new Exports();
+                                $export->guest_id = $request->id;
+                                $export->user_id = Auth::user()->id;
+                                $export->total = $request->totalValue;
+                                $export->export_status = 2;
+                                $export->save();
+                            }
+                            // Tạo các bản ghi trong bảng product export
+                            for ($i = 0; $i < count($productIDs); $i++) {
+                                $productID = $productIDs[$i];
+                                $productQty = $productQtys[$i];
+                                $nameProduct = Product::where('id', $productID)->value('product_name');
+                                $proExport = new ProductExports();
+                                $proExport->products_id = $request->products_id[$i];
+                                $proExport->product_id = $productID;
+                                $proExport->export_id = $export->id;
+                                $proExport->product_name = $nameProduct;
+                                $proExport->product_unit = $request->product_unit[$i];
+                                $proExport->product_qty = $productQty;
+                                $proExport->product_price = $request->product_price[$i];
+                                $proExport->product_note = $request->product_note[$i];
+                                $proExport->product_tax = $request->product_tax[$i];
+                                $proExport->product_total = $request->totalValue;
+                                $proExport->save();
+                            }
+                            return redirect()->route('exports.index')->with('msg', 'Chốt đơn thành công!');
                         }
                     }
                 }
-
-                if (!$hasEnoughQty) {
-                    return redirect()->route('exports.index')->with('danger', 'Vượt quá số lượng!');
-                } else {
-                    //thêm khách hàng
-                    if ($clickValue === null) {
-                        $guest = new Guests();
-                        $guest->guest_name = $request->guest_name;
-                        $guest->guest_addressInvoice = $request->guest_addressInvoice;
-                        $guest->guest_code = $request->guest_code;
-                        $guest->guest_addressDeliver = $request->guest_addressDeliver;
-                        $guest->guest_receiver = $request->guest_receiver;
-                        $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
-                        $guest->guest_represent = $request->guest_represent;
-                        $guest->guest_email = $request->guest_email;
-                        $guest->guest_status = 1;
-                        $guest->guest_phone = $request->guest_phone;
-                        $guest->guest_pay = $request->guest_pay;
-                        $guest->guest_payTerm = $request->guest_payTerm;
-                        $guest->guest_note = $request->guest_note;
-                        $guest->save();
-
-                        // Tạo đơn xuất hàng
-                        $export = new Exports();
-                        $export->guest_id = $guest->id;
-                        $export->user_id = Auth::user()->id;
-                        $export->total = $request->totalValue;
-                        $export->export_status = 1;
-                        $export->save();
+                if ($action === 'action2') {
+                    // Tính tổng số lượng cần thiết cho mỗi product_id
+                    $productQtyMap = [];
+                    if ($productIDs == null) {
+                        return redirect()->route('exports.index')->with('danger', 'Chưa thêm sản phẩm!');
                     } else {
-                        // Tạo đơn xuất hàng
-                        $export = new Exports();
-                        $export->guest_id = $request->id;
-                        $export->user_id = Auth::user()->id;
-                        $export->total = $request->totalValue;
-                        $export->export_status = 1;
-                        $export->save();
-                    }
+                        for ($i = 0; $i < count($productIDs); $i++) {
+                            $productID = $productIDs[$i];
+                            $productQty = $productQtys[$i];
 
-                    // Tạo các bản ghi trong bảng product export
-                    for ($i = 0; $i < count($productIDs); $i++) {
-                        $productID = $productIDs[$i];
-                        $productQty = $productQtys[$i];
-                        $nameProduct = Product::where('id', $productID)->value('product_name');
-                        $proExport = new ProductExports();
-                        $proExport->products_id = $request->products_id[$i];
-                        $proExport->product_id = $productID;
-                        $proExport->export_id = $export->id;
-                        $proExport->product_name = $nameProduct;
-                        $proExport->product_unit = $request->product_unit[$i];
-                        $proExport->product_qty = $productQty;
-                        $proExport->product_price = $request->product_price[$i];
-                        $proExport->product_note = $request->product_note[$i];
-                        $proExport->product_tax = $request->product_tax[$i];
-                        $proExport->product_total = $request->totalValue;
-                        $proExport->save();
-                    }
+                            $totalQtyNeeded += $productQty;
 
-                    return redirect()->route('exports.index')->with('msg', 'Tạo đơn thành công!');
+                            if (!isset($productQtyMap[$productID])) {
+                                $productQtyMap[$productID] = 0;
+                            }
+                            $productQtyMap[$productID] += $productQty;
+                        }
+
+                        // Kiểm tra và cập nhật seri_status
+                        $hasEnoughQty = true;
+                        foreach ($productQtyMap as $productID => $productQty) {
+                            $serinumbers = Serinumbers::where('product_id', $productID)
+                                ->where('seri_status', 1)
+                                ->limit($productQty)
+                                ->get();
+
+                            if (count($serinumbers) < $productQty) {
+                                $hasEnoughQty = false;
+                                break;
+                            } else {
+                                // Cập nhật seri_status bằng 2 cho các sản phẩm
+                                foreach ($serinumbers as $serinumber) {
+                                    if ($serinumber->seri_status == 1) {
+                                        $serinumber->seri_status = 2;
+                                        $serinumber->save();
+                                    }
+                                }
+                            }
+                        }
+                        if (!$hasEnoughQty) {
+                            return redirect()->route('exports.index')->with('danger', 'Vượt quá số lượng!');
+                        } else {
+                            //thêm khách hàng
+                            if ($clickValue === null) {
+                                $existingCustomer = Guests::where('guest_name', $request->guest_name)
+                                    ->where('guest_email', $request->guest_email)
+                                    ->where('guest_addressInvoice', $request->guest_addressInvoice)
+                                    ->where('guest_code', $request->guest_code)
+                                    ->first();
+
+                                if (!$existingCustomer) {
+                                    $guest = new Guests();
+                                    $guest->guest_name = $request->guest_name;
+                                    $guest->guest_addressInvoice = $request->guest_addressInvoice;
+                                    $guest->guest_code = $request->guest_code;
+                                    $guest->guest_addressDeliver = $request->guest_addressDeliver;
+                                    $guest->guest_receiver = $request->guest_receiver;
+                                    $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
+                                    $guest->guest_represent = $request->guest_represent;
+                                    $guest->guest_email = $request->guest_email;
+                                    $guest->guest_status = 1;
+                                    $guest->guest_phone = $request->guest_phone;
+                                    $guest->guest_pay = $request->guest_pay;
+                                    $guest->guest_payTerm = $request->guest_payTerm;
+                                    $guest->guest_note = $request->guest_note;
+                                    $guest->save();
+                                    // Tạo đơn xuất hàng
+                                    $export = new Exports();
+                                    $export->guest_id = $guest->id;
+                                    $export->user_id = Auth::user()->id;
+                                    $export->total = $request->totalValue;
+                                    $export->export_status = 1;
+                                    $export->save();
+                                } else {
+                                    $export = new Exports();
+                                    $export->guest_id = $request->id;
+                                    $export->user_id = Auth::user()->id;
+                                    $export->total = $request->totalValue;
+                                    $export->export_status = 1;
+                                    $export->save();
+                                }
+                            } else {
+                                // Tạo đơn xuất hàng
+                                $export = new Exports();
+                                $export->guest_id = $request->id;
+                                $export->user_id = Auth::user()->id;
+                                $export->total = $request->totalValue;
+                                $export->export_status = 1;
+                                $export->save();
+                            }
+                            // Tạo các bản ghi trong bảng product export
+                            for ($i = 0; $i < count($productIDs); $i++) {
+                                $productID = $productIDs[$i];
+                                $productQty = $productQtys[$i];
+                                $nameProduct = Product::where('id', $productID)->value('product_name');
+                                $proExport = new ProductExports();
+                                $proExport->products_id = $request->products_id[$i];
+                                $proExport->product_id = $productID;
+                                $proExport->export_id = $export->id;
+                                $proExport->product_name = $nameProduct;
+                                $proExport->product_unit = $request->product_unit[$i];
+                                $proExport->product_qty = $productQty;
+                                $proExport->product_price = $request->product_price[$i];
+                                $proExport->product_note = $request->product_note[$i];
+                                $proExport->product_tax = $request->product_tax[$i];
+                                $proExport->product_total = $request->totalValue;
+                                $proExport->save();
+                            }
+                            return redirect()->route('exports.index')->with('msg', 'Tạo đơn thành công!');
+                        }
+                    }
                 }
             }
         } else {
@@ -432,9 +545,9 @@ class ExportController extends Controller
                         ->delete();
                     //cập nhật số lượng tồn kho sản phẩm cha
                     $query = "UPDATE `products` 
-                        INNER JOIN `product` ON `products`.`id` = `product`.`products_id` 
-                        SET `products`.`inventory` = (SELECT SUM(`product`.`product_qty`) FROM `product` WHERE `product`.`products_id` = `products`.`id`) 
-                        WHERE `products`.`id` IN (" . implode(',', $products_id) . ")";
+                                        INNER JOIN `product` ON `products`.`id` = `product`.`products_id` 
+                                        SET `products`.`inventory` = (SELECT SUM(`product`.`product_qty`) FROM `product` WHERE `product`.`products_id` = `products`.`id`) 
+                                        WHERE `products`.`id` IN (" . implode(',', $products_id) . ")";
                     DB::statement($query);
                     return redirect()->route('exports.index')->with('msg', 'Chốt đơn thành công!');
                 } else {
@@ -705,5 +818,32 @@ class ExportController extends Controller
         $data = $request->all();
         $sn = Serinumbers::where('product_id', $data['productCode'])->limit($data['qty'])->get();
         return response()->json($sn);
+    }
+
+
+    // Xóa đơn hàng AJAX
+    public function deleteExports(Request $request)
+    {
+        if (isset($request->list_id)) {
+            $list = $request->list_id;
+            Exports::whereIn('id', $list)->delete();
+            return response()->json(['success' => true, 'msg' => 'Xóa đơn hàng thành công', 'ids' => $list]);
+        }
+        return response()->json(['success' => false, 'msg' => 'Không tìm thấy đơn hàng cần xóa']);
+    }
+    public function cancelBillExport(Request $request)
+    {
+        if (isset($request->list_id)) {
+            $list = $request->list_id;
+            $listOrder = Exports::whereIn('id', $list)->get();
+            foreach ($listOrder as $value) {
+                if ($value->export_status != 2) {
+                    $value->export_status = 0;
+                    $value->save();
+                }
+            }
+            return response()->json(['success' => true, 'msg' => 'Hủy Đơn Hàng thành công']);
+        }
+        return response()->json(['success' => false, 'msg' => 'Not fount']);
     }
 }

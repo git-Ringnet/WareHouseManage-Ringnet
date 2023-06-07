@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Exports;
 use App\Models\Guests;
 use Illuminate\Http\Request;
 
@@ -37,7 +38,7 @@ class GuestsController extends Controller
                 $sortType = 'desc';
             }
         } else {
-            $sortType = 'asc';
+            $sortType = 'desc';
         }
 
         $sortByArr = [
@@ -176,8 +177,13 @@ class GuestsController extends Controller
      */
     public function destroy($id)
     {
-        $guests = Guests::destroy($id);
-        return redirect()->route('guests.index')->with('msg', 'Xóa thành công!');
+        $guest_exist = Exports::where('guest_id', $id)->first();
+        if (!$guest_exist) {
+            Guests::destroy($id);
+            return redirect()->route('guests.index')->with('msg', 'Xóa thành công!');
+        } else {
+            return redirect()->route('guests.index')->with('danger', 'Không thể xóa, do có thông tin khách hàng trong đơn xuất hàng!');
+        }
     }
     public function updateStatus(Request $request)
     {
@@ -185,5 +191,45 @@ class GuestsController extends Controller
         $guests = Guests::findOrFail($data['idGuest']);
         $guests->guest_status = $data['newStatus'];
         $guests->save();
+    }
+    public function deleteListGuest(Request $request)
+    {
+        if (isset($request->list_id)) {
+            $list = $request->list_id;
+            $guest_exist = Exports::whereIn('guest_id', $list)->first();
+            if (!$guest_exist) {
+                Guests::whereIn('id', $list)->delete();
+                return response()->json(['success' => true, 'msg' => 'Xóa nhà cung cấp thành công', 'ids' => $list]);
+            } else {
+                return response()->json(['success' => true, 'danger' => 'Không thể xóa, do có thông tin khách hàng trong đơn xuất hàng!', 'ids' => $list]);
+            }
+        }
+        return response()->json(['success' => false, 'msg' => 'Xóa nhà cung cấp thất bại']);
+    }
+    public function activeStatusGuest(Request $request)
+    {
+        if (isset($request->list_id)) {
+            $list = $request->list_id;
+            $listOrder = Guests::whereIn('id', $list)->get();
+            foreach ($listOrder as $value) {
+                $value->guest_status = 1;
+                $value->save();
+            }
+            return response()->json(['success' => true, 'msg' => 'Thay đổi trạng thái nhà cung cấp thành công']);
+        }
+        return response()->json(['success' => false, 'msg' => 'Not fount']);
+    }
+    public function disableStatusGuest(Request $request)
+    {
+        if (isset($request->list_id)) {
+            $list = $request->list_id;
+            $listOrder = Guests::whereIn('id', $list)->get();
+            foreach ($listOrder as $value) {
+                $value->guest_status = 0;
+                $value->save();
+            }
+            return response()->json(['success' => true, 'msg' => 'Thay đổi trạng thái nhà cung cấp thành công']);
+        }
+        return response()->json(['success' => false, 'msg' => 'Not fount']);
     }
 }

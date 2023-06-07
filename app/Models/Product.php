@@ -22,6 +22,10 @@ class Product extends Model
     {
         return $this->hasOne(Products::class,'id','products_id');
     }
+    public function getNameProvide()
+    {
+        return $this->hasOne(Provides::class,'id','provide_id');
+    }
     protected $fillable = [
         'products_id','product_name','product_category','product_unit','product_trademark','product_qty',
         'product_price'

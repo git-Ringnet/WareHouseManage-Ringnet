@@ -422,6 +422,7 @@
 
     $('#btn-status').click(function(event) {
     event.preventDefault();
+    $('.btn-filter').prop('disabled', true);
     $('#status-options').toggle();
     $('#category-options').hide();
 
@@ -429,25 +430,30 @@
 
 $('#btn-quantity').click(function(event) {
     event.preventDefault();
+    $('.btn-filter').prop('disabled', true);
     $('#quantity-options').toggle();
     $('#status-options').hide();
 });
 $('#cancel-quantity').click(function(event) {
     event.preventDefault();
+    $('.btn-filter').prop('disabled', false);
     $('#quantity-options').hide();
 });
 
 $('#btn-category').click(function(event) {
     event.preventDefault();
+    $('.btn-filter').prop('disabled', true);
     $('#category-options').toggle();
     $('#status-options').hide();
 });
 $('#cancel-status').click(function(event) {
     event.preventDefault();
+    $('.btn-filter').prop('disabled', false);
     $('#status-options').hide();
 });
 $('#cancel-category').click(function(event) {
     event.preventDefault();
+    $('.btn-filter').prop('disabled', false);
     $('#category-options').hide();
 });
 $(document).ready(function() {

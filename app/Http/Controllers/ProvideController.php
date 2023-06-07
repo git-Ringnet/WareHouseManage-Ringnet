@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Provides;
+use App\Models\Orders;
 use Illuminate\Http\Request;
 
 class ProvideController extends Controller
@@ -18,33 +19,33 @@ class ProvideController extends Controller
         // return view('tables.provide.provides', compact('provides'));
         $sortType = $request->input('sort-type');
 
-         $sortBy = $request->input('sort-by');
- 
-         $allowSort = ['asc', 'desc'];
- 
-         if (!empty($sortType) && in_array($sortType, $allowSort)) {
- 
- 
-             if ($sortType == 'desc') {
-                 $sortType = 'asc';
-             } else {
-                 $sortType = 'desc';
-             }
-         } else {
-             $sortType = 'asc';
-         }
- 
-         $sortByArr = [
-             'sortBy' => $sortBy,
-             'sortType' => $sortType
-         ];
- 
-         $filters = [];
-         $status = [];
-         $roles = [];
-         $string = array();
-         $class='';
-         $name = '';
+        $sortBy = $request->input('sort-by');
+
+        $allowSort = ['asc', 'desc'];
+
+        if (!empty($sortType) && in_array($sortType, $allowSort)) {
+
+
+            if ($sortType == 'desc') {
+                $sortType = 'asc';
+            } else {
+                $sortType = 'desc';
+            }
+        } else {
+            $sortType = 'asc';
+        }
+
+        $sortByArr = [
+            'sortBy' => $sortBy,
+            'sortType' => $sortType
+        ];
+
+        $filters = [];
+        $status = [];
+        $roles = [];
+        $string = array();
+        $class = '';
+        $name = '';
         if (!empty($request->name)) {
             $name = $request->name;
             $nameArr = explode(',.@', $name);
@@ -68,26 +69,25 @@ class ProvideController extends Controller
             $nameArr = explode(',.@', $email);
             array_push($string, ['label' => 'Email:', 'values' => $nameArr, 'class' => 'email']);
         }
- 
-         if (!empty($request->status)) {
-             $statusValues = [1 => 'Active', 0 => 'Disable'];
-             $status = $request->input('status', []);
-             $statusLabels = array_map(function ($value) use ($statusValues) {
-                 return $statusValues[$value];
-             }, $status);
-             array_push($string, ['label' => 'Trạng thái:', 'values' => $statusLabels,'class' => 'status']);
-         }
-         
- 
-         $keywords = null;
- 
-         if (!empty($request->keywords)) {
-             $keywords = $request->keywords;
-         }
-         $provides = $this->provides->getAllProvides($filters,$name, $represent, $phonenumber, $email, $status, $keywords, $sortByArr);
-        $title = 'Nhà cung cấp';
-         return view('tables.provide.provides', compact('provides', 'sortType', 'string','title'));
 
+        if (!empty($request->status)) {
+            $statusValues = [1 => 'Active', 0 => 'Disable'];
+            $status = $request->input('status', []);
+            $statusLabels = array_map(function ($value) use ($statusValues) {
+                return $statusValues[$value];
+            }, $status);
+            array_push($string, ['label' => 'Trạng thái:', 'values' => $statusLabels, 'class' => 'status']);
+        }
+
+
+        $keywords = null;
+
+        if (!empty($request->keywords)) {
+            $keywords = $request->keywords;
+        }
+        $provides = $this->provides->getAllProvides($filters, $name, $represent, $phonenumber, $email, $status, $keywords, $sortByArr);
+        $title = 'Nhà cung cấp';
+        return view('tables.provide.provides', compact('provides', 'sortType', 'string', 'title'));
     }
 
     /**
@@ -98,7 +98,7 @@ class ProvideController extends Controller
     public function create()
     {
         $title = 'Tạo nhà cung cấp';
-        return view('tables.provide.addProvide',compact('title'));
+        return view('tables.provide.addProvide', compact('title'));
     }
 
     /**
@@ -142,7 +142,7 @@ class ProvideController extends Controller
     {
         $provides = Provides::find($id);
         $title = 'Chỉnh sửa nhà cung cấp';
-        return view('tables.provide.editProvide', compact('provides','title'));
+        return view('tables.provide.editProvide', compact('provides', 'title'));
     }
 
     /**
@@ -167,8 +167,13 @@ class ProvideController extends Controller
      */
     public function destroy($id)
     {
-        $provides = Provides::destroy($id);
-        return redirect()->route('provides.index')->with('msg', 'Xóa thành công!');
+        $delOrder = Orders::where('provide_id', $id)->first();
+        if ($delOrder) {
+            return redirect()->route('provides.index')->with('danger', 'Nhà cung cấp đang tồn tại trong đơn hàng');
+        } else {
+            $provides = Provides::destroy($id);
+            return redirect()->route('provides.index')->with('msg', 'Xóa thành công!');
+        }
     }
     public function updateStatus(Request $request)
     {
@@ -176,5 +181,46 @@ class ProvideController extends Controller
         $provide = Provides::findOrFail($data['idProvide']);
         $provide->provide_status = $data['newStatus'];
         $provide->save();
+    }
+
+    public function deleteListProvides(Request $request)
+    {
+        if (isset($request->list_id)) {
+            $list = $request->list_id;
+            $provide_exist = Orders::whereIn('provide_id', $list)->first();
+            if (!$provide_exist) {
+                Provides::whereIn('id', $list)->delete();
+                return response()->json(['success' => true, 'msg' => 'Xóa nhà cung cấp thành công', 'ids' => $list]);
+            } else {
+                return response()->json(['success' => true, 'danger' => 'Không thể xóa, do có nhà cung cấp trong đơn nhậphàng!', 'ids' => $list]);
+            }
+        }
+        return response()->json(['success' => false, 'msg' => 'Xóa nhà cung cấp thất bại']);
+    }
+    public function activeStatusProvide(Request $request)
+    {
+        if (isset($request->list_id)) {
+            $list = $request->list_id;
+            $listOrder = Provides::whereIn('id', $list)->get();
+            foreach ($listOrder as $value) {
+                $value->provide_status = 1;
+                $value->save();
+            }
+            return response()->json(['success' => true, 'msg' => 'Thay đổi trạng thái nhà cung cấp thành công']);
+        }
+        return response()->json(['success' => false, 'msg' => 'Not fount']);
+    }
+    public function disableStatusProvide(Request $request)
+    {
+        if (isset($request->list_id)) {
+            $list = $request->list_id;
+            $listOrder = Provides::whereIn('id', $list)->get();
+            foreach ($listOrder as $value) {
+                $value->provide_status = 0;
+                $value->save();
+            }
+            return response()->json(['success' => true, 'msg' => 'Thay đổi trạng thái nhà cung cấp thành công']);
+        }
+        return response()->json(['success' => false, 'msg' => 'Not fount']);
     }
 }

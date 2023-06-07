@@ -32,9 +32,9 @@
                             <button type="submit" class="btn btn-primary btn-block">Tìm kiếm</button>
 
                         </div>
-                        <a class="btn ml-auto btn-delete-filter btn-light" href="{{ route('provides.index') }}"><span><svg
-                                    width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
+                        <a class="btn ml-auto btn-delete-filter btn-light"
+                            href="{{ route('provides.index') }}"><span><svg width="24" height="24"
+                                    viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path
                                         d="M6 5.4643C6 5.34116 6.04863 5.22306 6.13518 5.13599C6.22174 5.04892 6.33913 5 6.46154 5H17.5385C17.6609 5 17.7783 5.04892 17.8648 5.13599C17.9514 5.22306 18 5.34116 18 5.4643V7.32149C18 7.43599 17.9579 7.54645 17.8818 7.63164L13.8462 12.1428V16.6075C13.8461 16.7049 13.8156 16.7998 13.7589 16.8788C13.7022 16.9578 13.6223 17.0168 13.5305 17.0476L10.7612 17.9762C10.6919 17.9994 10.618 18.0058 10.5458 17.9947C10.4735 17.9836 10.4049 17.9554 10.3456 17.9124C10.2863 17.8695 10.238 17.8129 10.2047 17.7475C10.1713 17.682 10.1539 17.6096 10.1538 17.5361V12.1428L6.11815 7.63164C6.0421 7.54645 6.00002 7.43599 6 7.32149V5.4643Z"
                                         fill="#555555" />
@@ -232,7 +232,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <h5>Số điện thoại</h5>
                                             </div>
                                             <div class="input-group p-2">
-                                                <label class="title" for="">Chứa kí tự</label>
+                                                <label class="title" for="">Nhập số điện thoại</label>
                                                 <input type="number" name="phonenumber"
                                                     class="form-control phonenumber-input"
                                                     value="{{ request()->phonenumber }}"
@@ -274,6 +274,50 @@ $index = array_search($item['label'], $numberedLabels);
     </section>
 
     <!-- Main content -->
+    <div class="order_content">
+        <section class="multiple_action">
+            <div class="d-flex justify-content-between align-items-center">
+                <span class="count_checkbox mr-5"></span>
+                <div class="row action">
+                    <div class="btn-nhanvien my-2 mr-2">
+                        <button id="deleteListProvides" type="button"
+                            class="btn btn-group btn-light d-flex align-items-center">
+                            <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24"
+                                stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em"
+                                width="1em" xmlns="http://www.w3.org/2000/svg">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path
+                                    d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                                </path>
+                                <line x1="10" y1="11" x2="10" y2="17"></line>
+                                <line x1="14" y1="11" x2="14" y2="17"></line>
+                            </svg>
+                            <span>Xóa nhà cung cấp đã chọn</span>
+                        </button>
+                    </div>
+                    <div class="dropdown my-2">
+                        <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Thay đổi trạng thái
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <button id="activeStatusProvide" class="dropdown-item">Active</button>
+                            <button id="disableStatusProvide" class="dropdown-item">Disable</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="btn ml-auto cancal_action">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none">
+                        <path d="M18 18L6 6" stroke="white" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                        <path d="M18 6L6 18" stroke="white" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </div>
+            </div>
+        </section>
+    </div>
     <section class="content">
         <div class="container-fluided">
             <div class="row">
@@ -287,11 +331,13 @@ $index = array_search($item['label'], $numberedLabels);
                                         <input type="hidden" id="sortByInput" name="sort-by" value="id">
                                         <input type="hidden" id="sortTypeInput" name="sort-type"
                                             value="{{ $sortType }}">
+                                        <th><input type="checkbox" name="all" id="checkall"></th>
+
                                         <th>
                                             <span class="d-flex">
                                                 <a href="#" class="sort-link" data-sort-by="id"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
-                                                        type="submit">Mã nhân viên</button></a>
+                                                        type="submit">Mã nhà cung cấp</button></a>
                                                 <div class="icon" id="icon-id"></div>
                                             </span>
                                         </th>
@@ -342,6 +388,8 @@ $index = array_search($item['label'], $numberedLabels);
                                 <tbody>
                                     @foreach ($provides as $item)
                                         <tr>
+                                            <td><input type="checkbox" class="cb-element" name="ids[]"
+                                                    value="{{ $item->id }}"></td>
                                             <td>{{ $item->id }}</td>
                                             <td>{{ $item->provide_name }}</td>
                                             <td>{{ $item->provide_represent }}</td>
@@ -420,43 +468,68 @@ $index = array_search($item['label'], $numberedLabels);
     });
     $('#btn-status').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
         $('#status-options').toggle();
 
         $('#cancel-status').click(function(event) {
             event.preventDefault();
+            $('.btn-filter').prop('disabled', false);
+
+            $('#status-options input[type="checkbox"]').prop('checked', false);
             $('#status-options').hide();
         });
     });
     $('#btn-name').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
+
         $('#name-options').toggle();
     });
     $('#cancel-name').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
+
+        $('.name-input').val('');
         $('#name-options').hide();
     });
     $('#btn-represent').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
+
         $('#represent-options').toggle();
     });
     $('#cancel-represent').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
+
+        $('.represent-input').val('');
         $('#represent-options').hide();
     });
     $('#btn-phonenumber').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
+
         $('#phonenumber-options').toggle();
     });
     $('#cancel-phonenumber').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
+
+        $('.phonenumber-input').val('');
+
         $('#phonenumber-options').hide();
     });
     $('#btn-email').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
+
         $('#email-options').toggle();
     });
     $('#cancel-email').click(function(event) {
         event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
+
+        $('.email-input').val('');
         $('#email-options').hide();
     });
 
@@ -592,9 +665,142 @@ $index = array_search($item['label'], $numberedLabels);
             }
         });
     }
+
+
+
+    // AJAX disable user
+    $(document).on('click', '#disableStatusProvide', function(e) {
+        e.preventDefault();
+        if (myFunctionCancel()) {
+            const list_id = [];
+            $('input[name="ids[]"]').each(function() {
+                if ($(this).is(':checked')) {
+                    var value = $(this).val();
+                    list_id.push(value);
+                }
+            });
+            $.ajax({
+                url: "{{ route('disableStatusProvide') }}",
+                type: "get",
+                data: {
+                    list_id: list_id,
+                },
+                success: function(data) {
+                    location.reload();
+                }
+            })
+        }
+    })
+    // AJAX disable user
+    $(document).on('click', '#activeStatusProvide', function(e) {
+            e.preventDefault();
+            if (myFunctionCancel()) {
+                const list_id = [];
+                $('input[name="ids[]"]').each(function() {
+                    if ($(this).is(':checked')) {
+                        var value = $(this).val();
+                        list_id.push(value);
+                    }
+                });
+                $.ajax({
+                    url: '{{ route('activeStatusProvide') }}',
+                    type: "GET",
+                    data: {
+                        list_id: list_id,
+                    },
+                    success: function(data) {
+                        location.reload();
+                    },
+                })
+            }
+        }
+
+    )
+
+    function myFunction() {
+        let text = "Bạn có muốn xóa nhân viên đã chọn không?";
+        if (confirm(text) == true) {
+            return true
+        } else {
+            return false
+        }
+
+    }
+
+    function myFunctionCancel() {
+        let text = "Bạn có chắc chắn thay đổi trạng thái đã chọn không?";
+        if (confirm(text) == true) {
+            return true
+        } else {
+            return false
+        }
+
+    }
+
+    // AJAX Xóa Exports
+    $(document).on('click', '#deleteListProvides', function(e) {
+        e.preventDefault();
+        if (myFunction()) {
+            const list_id = [];
+            $('input[name="ids[]"]').each(function() {
+                if ($(this).is(':checked')) {
+                    var value = $(this).val();
+                    list_id.push(value);
+                }
+            });
+            $.ajax({
+                url: "{{ route('deleteListProvides') }}",
+                type: "get",
+                data: {
+                    list_id: list_id,
+                },
+                success: function(data) {
+                    if (data.success == true) {
+                        var id = data.ids;
+                        for (let i = 0; i < id.length; i++) {
+                            $('.' + id[i]).remove();
+                        }
+                        updateMultipleActionVisibility();
+                        location.reload();
+                    }
+                }
+
+            })
+        }
+    })
+
+    // Checkbox
+    $('#checkall').change(function() {
+        $('.cb-element').prop('checked', this.checked);
+        updateMultipleActionVisibility();
+    });
+
+    $('.cb-element').change(function() {
+        updateMultipleActionVisibility();
+        if ($('.cb-element:checked').length == $('.cb-element').length) {
+            $('#checkall').prop('checked', true);
+        } else {
+            $('#checkall').prop('checked', false);
+        }
+    });
+
+
+    $(document).on('click', '.cancal_action', function(e) {
+        e.preventDefault();
+        $('.cb-element:checked').prop('checked', false);
+        $('#checkall').prop('checked', false);
+        updateMultipleActionVisibility()
+    })
+
+    function updateMultipleActionVisibility() {
+        if ($('.cb-element:checked').length > 0) {
+            $('.multiple_action').show();
+            $('.count_checkbox').text('Đã chọn ' + $('.cb-element:checked').length);
+        } else {
+            $('.multiple_action').hide();
+        }
+    }
 </script>
-
-
 </body>
 
 </html>

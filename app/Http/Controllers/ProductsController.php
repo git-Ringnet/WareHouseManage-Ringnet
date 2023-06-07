@@ -45,7 +45,7 @@ class ProductsController extends Controller
                 $sortType = 'desc';
             }
         } else {
-            $sortType = 'asc';
+            $sortType = 'desc';
         }
 
         $sortByArr = [
@@ -122,15 +122,10 @@ class ProductsController extends Controller
             $keywords = $request->keywords;
         }
 
-        $categories = Category::all();
         $categoryarr = [];
         if (!empty($request->categoryarr)) {
             $categoryarr = $request->input('categoryarr', []);
-            if (!empty($categoryarr)) {
-                $selectedCategory = Category::whereIn('id', $categoryarr)->get();
-                $selectedCategory = $selectedCategory->pluck('category_name')->toArray();
-            }
-            array_push($string, ['label' => 'Danh mục:', 'values' => $selectedCategory, 'class' => 'category']);
+            array_push($string, ['label' => 'Danh mục:', 'values' => $categoryarr, 'class' => 'category']);
         }
         // Thương hiệu
         $trademarkarr = [];
@@ -153,6 +148,7 @@ class ProductsController extends Controller
         //lấy tất cả sản phẩm con theo sản phẩm lớn
         $product = DB::table('product')
             ->join('products', 'product.products_id', '=', 'products.id')
+            ->join('serinumbers','serinumbers.product_id','product.id')
             ->whereIn('products.id', $productIds)
             ->groupBy(
                 'product.id',
@@ -167,18 +163,20 @@ class ProductsController extends Controller
                 'product.updated_at',
                 'product.tax',
                 'product.total',
+                'product.provide_id',
                 'products.id',
                 'products.products_code'
             )
             ->select(
                 'product.*',
                 'products.products_code',
-                DB::raw('SUM(product.product_qty * product.product_price) as total')
+                DB::raw('SUM(product.product_qty * product.product_price) as total'),
+                DB::raw('SUM(CASE WHEN serinumbers.seri_status = 2 THEN 1 ELSE 0 END) as trading')
             )
             ->get();
 
         $title = 'Sản phẩm';
-        return view('tables.products.data', compact('products', 'categories', 'product', 'string', 'sortType', 'trademarks', 'title'));
+        return view('tables.products.data', compact('products', 'product', 'string', 'sortType', 'trademarks', 'title'));
     }
 
     /**
@@ -375,7 +373,7 @@ class ProductsController extends Controller
                 }
             }
             if ($hasProductWithInventory) {
-                return response()->json(['success' => false, 'msg' => 'Còn sản phẩm còn']);
+                return response()->json(['success' => false, 'msg' => 'Còn sản phẩm con']);
             }
             return response()->json(['success' => true, 'msg' => 'Xóa sản phẩm thành công', 'ids' => $list]);
         }
@@ -414,5 +412,40 @@ class ProductsController extends Controller
         $relatedProduct->save();
 
         return redirect()->route('data.index');
+    }
+     // Xóa sản phẩm con
+     public function delete_product($id)
+     {
+        $del = Product::where('id',$id)->first();
+        $current_id = $del->products_id;
+        $del->delete();
+        $updatePrice = Product::where('products_id', $current_id)->get();
+        
+        $relatedProduct = Products::findOrFail($current_id);
+        $relatedProduct->price_inventory = 0;
+        $relatedProduct->inventory = 0;
+        foreach ($updatePrice as $up) {
+            $relatedProduct->inventory += $up->product_qty;
+            $relatedProduct->price_inventory += $up->total;
+            $relatedProduct->price_avg = ($relatedProduct->price_inventory / $relatedProduct->inventory);
+        }
+        $relatedProduct->save();
+        return redirect()->route('data.index')->with('msg','Xóa sản phẩm thành công!');
+     }
+
+    //  Import data to products
+    public function import_products(Request $request)
+    {
+        $jsonData = $request->all();
+        foreach ($jsonData as $row) {
+            $products = new Products();
+            $products->products_code = $row['Products_code'];
+            $products->products_name = $row['Products_name'];
+            $products->ID_category = $row['ID_category'];
+            $products->products_trademark = $row['Products_trademark'];
+            $products->products_description = $row['Products_description'];
+            $products->save();
+        }
+        return response()->json(['message' => 'Import thành công!']);
     }
 }
