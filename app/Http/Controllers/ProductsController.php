@@ -162,6 +162,7 @@ class ProductsController extends Controller
                 'product.updated_at',
                 'product.tax',
                 'product.total',
+                'product.provide_id',
                 'products.id',
                 'products.products_code'
             )
@@ -260,10 +261,14 @@ class ProductsController extends Controller
         $cate = Category::all();
         $title = 'Chỉnh sửa sản phẩm';
         // $listProduct = Product::where('products_id', $products->id)->paginate(8);
-        $listProduct = Product::
-        join('serinumbers','product.id','serinumbers.product_id')
+        $listProduct = Product::join('serinumbers','product.id','serinumbers.product_id')
         ->where('product.products_id',$products->id)
+        ->distinct()
         ->paginate(8);
+        foreach($listProduct as $da){
+            var_dump($da);
+        }
+        die();
         return view('tables.products.edit_products', compact('products', 'cate', 'title', 'listProduct'));
     }
 
@@ -417,9 +422,12 @@ class ProductsController extends Controller
         $current_id = $del->products_id;
         $del->delete();
         $updatePrice = Product::where('products_id', $current_id)->get();
+        
         $relatedProduct = Products::findOrFail($current_id);
         $relatedProduct->price_inventory = 0;
+        $relatedProduct->inventory = 0;
         foreach ($updatePrice as $up) {
+            $relatedProduct->inventory += $up->product_qty;
             $relatedProduct->price_inventory += $up->total;
             $relatedProduct->price_avg = ($relatedProduct->price_inventory / $relatedProduct->inventory);
         }

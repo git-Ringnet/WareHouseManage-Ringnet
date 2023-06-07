@@ -158,11 +158,11 @@
                                     <td>{{ $va->id }}</td>
                                     <td>{{ $va->getNameProducts->products_code }}</td>
                                     <td>{{ $va->product_name }}</td>
-                                    <td>Nhà cung cấp</td>
+                                    <td>{{$va->getNameProvide->provide_name}}</td>
                                     <td>{{ $va->product_category }}</td>
                                     <td>{{ $va->product_unit }}</td>
                                     <td>{{ $va->product_qty }}</td>
-                                    <td>DGD</td>
+                                    <td></td>
                                     <td>{{ $va->product_price }}</td>
                                     <td>{{ $va->tax }}</td>
                                     <td>{{ $va->total }}</td>

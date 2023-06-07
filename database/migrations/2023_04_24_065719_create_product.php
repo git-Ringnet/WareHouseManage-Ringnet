@@ -24,6 +24,7 @@ class CreateProduct extends Migration
             $table->integer('product_price')->nullable();
             $table->string('tax')->nullable();
             $table->string('total')->nullable();
+            $table->integer('provide_id')->nullable();
             $table->timestamps();
         });
     }
