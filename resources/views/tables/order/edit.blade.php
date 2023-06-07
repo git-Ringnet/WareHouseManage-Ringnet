@@ -19,8 +19,8 @@
                     <span class="ml-1" style="font-size: 16px; font-weight: 500; color: #555555;">Trả về danh sách</span>
                 </a>
             @else
-                <span>Nhập hàng</span>
-                <span> / </span>
+                <span> <a href="{{ route('insertProduct.index') }}"> Nhập hàng</a></span>
+                <span class="px-1"> / </span>
                 <span><b>Chi tiết đơn hàng</b></span>
             @endif
         </div>

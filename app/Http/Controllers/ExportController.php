@@ -175,7 +175,7 @@ class ExportController extends Controller
                             }
                         }
                         if (!$hasEnoughQty) {
-                            return redirect()->route('exports.index')->with('danger', 'Vượt quá số lượng!');
+                            return redirect()->route('exports.index')->with('danger', 'Vượt quá số lượng tồn kho!');
                         } else {
                             //thêm khách hàng
                             if ($clickValue === null) {
@@ -272,7 +272,7 @@ class ExportController extends Controller
                             }
                         }
                         if (!$hasEnoughQty) {
-                            return redirect()->route('exports.index')->with('danger', 'Vượt quá số lượng!');
+                            return redirect()->route('exports.index')->with('danger', 'Vượt quá số lượng tồn kho!');
                         } else {
                             //thêm khách hàng
                             if ($clickValue === null) {

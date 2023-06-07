@@ -2,8 +2,8 @@
 <div class="content-wrapper export-add">
     <div class="row">
         <div class="col-sm-6 breadcrumb">
-            <span>Xuất hàng</span>
-            <span>/</span>
+            <span><a href="{{ route('exports.index') }}">Xuất hàng</a></span>
+            <span class="px-1">/</span>
             <span><b>Đơn hàng mới</b></span>
         </div>
         <div class="col-sm-6 position-absolute" style="top:63px;right:2%">
@@ -76,8 +76,8 @@
                 <button type="submit" class="btn btn-danger text-white" name="submitBtn" value="action1"
                     onclick="validateAndSubmit(event)">Chốt đơn</button>
                 {{-- <a href="#" class="btn btn-secondary ml-4">Hủy đơn</a> --}}
-                <a href="#" class="btn border border-secondary ml-2">Xuất file</a>
-                <button class="btn border border-secondary ml-4" onclick="toggleDiv()">
+                <a href="#" class="btn border border-secondary mx-4">Xuất file</a>
+                <button class="btn border border-secondary" onclick="toggleDiv()">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
                         <path

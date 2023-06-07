@@ -3,8 +3,8 @@
 
 <div class="content-wrapper">
     <div class="breadcrumb">
-        <span>Sản phẩm</span>
-        <span>/</span>
+        <span><a href="{{ route('data.index') }}">Sản phẩm</a></span>
+        <span class="px-1">/</span>
         <span><b>Tạo sản phẩm mới</b></span>
     </div>
     <!-- Content Header (Page header) -->

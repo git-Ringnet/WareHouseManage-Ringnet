@@ -1,9 +1,9 @@
-<x-navbar></x-navbar>
+<x-navbar :title="$title"></x-navbar>
 <div class="content-wrapper">
     <div class="row">
         <div class="col-sm-6 breadcrumb">
-            <span>Xuất hàng</span>
-            <span> / </span>
+            <span><a href="{{ route('exports.index') }}">Xuất hàng</a></span>
+            <span class="px-1">/</span>
             <span><b>Chi tiết đơn hàng</b></span>
         </div>
         <div class="col-sm-6 position-absolute" style="top:63px;right:2%">
@@ -197,11 +197,11 @@
                     <div class="border-bottom p-3 d-flex justify-content-between align-items-center">
                         <b>Thông tin khách hàng</b>
                         @if ($exports->export_status == 1)
-                                @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
-                            <button id="btn-customer" class="btn btn-primary">
-                                <img src="../../dist/img/icon/Union.png">
-                                <span>Lưu thông tin</span></button>
-                        @endif
+                            @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
+                                <button id="btn-customer" class="btn btn-primary">
+                                    <img src="../../dist/img/icon/Union.png">
+                                    <span>Lưu thông tin</span></button>
+                            @endif
                         @endif
                     </div>
                     <div class="row p-3">
@@ -325,9 +325,9 @@
                     <thead class="bg-white border-0 rounded-top">
                         <tr>
                             @if ($exports->export_status == 1)
-                            @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
-                            <th><input type="checkbox"></th>
-                            @endif
+                                @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
+                                    <th><input type="checkbox"></th>
+                                @endif
                             @endif
                             <th>STT</th>
                             <th>Mã sản phẩm</th>
@@ -348,34 +348,22 @@
                         @foreach ($productExport as $index => $value_export)
                             <tr id="dynamic-row-{{ $index }}">
                                 @if ($exports->export_status == 1)
-                                @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
-                                <td><input type="checkbox"></td>
-                                @endif
+                                    @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
+                                        <td><input type="checkbox"></td>
+                                    @endif
                                 @endif
                                 <td><?php echo $stt++; ?></td>
                                 <td>
-                                    @if ($exports->export_status == 1)
-                                        <select id="maProduct" class="p-1 maProduct form-control"
-                                            name="products_id[]" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                                echo 'disabled';
-                                            } ?>>
-                                            @foreach ($product_code as $value_code)
-                                                <option value="{{ $value_code->id }}"
-                                                    @if ($value_export->products_id == $value_code->id) selected @endif>
-                                                    {{ $value_code->products_code }}</option>
-                                            @endforeach
-                                        </select>
-                                    @endif
-                                    @if ($exports->export_status == 2)
-                                        <select class="p-1 maProduct form-control" name="products_id[]"
-                                            <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                                echo 'disabled';
-                                            } ?>>
-                                            <option value="{{ $value_export->id }}">
-                                                {{ $value_export->products_code }}
-                                            </option>
-                                        </select>
-                                    @endif
+                                    <select id="maProduct" class="p-1 maProduct form-control" name="products_id[]"
+                                        <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                            echo 'disabled';
+                                        } ?>>
+                                        @foreach ($product_code as $value_code)
+                                            <option value="{{ $value_code->id }}"
+                                                @if ($value_export->products_id == $value_code->id) selected @endif>
+                                                {{ $value_code->products_code }}</option>
+                                        @endforeach
+                                    </select>
                                 </td>
                                 <td>
                                     <select class="child-select p-1 form-control" name="product_id[]"
@@ -394,18 +382,20 @@
                                         name="product_unit[]" required="">
                                 </td>
                                 <td>
-                                    <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')" id="product_qty" class="quantity-input form-control"
-                                        <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                            echo 'readonly';
-                                        } ?> value="{{ $value_export->product_qty }}"
-                                        name="product_qty[]" required="">
-                                </td>
-                                <td>
-                                    <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')" id="product_price" name="product_price[]"
-                                        class="form-control" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                    <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                        id="product_qty" class="quantity-input form-control" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                             echo 'readonly';
                                         } ?>
-                                        value={{ ($value_export->product_price) }} required="">
+                                        value="{{ $value_export->product_qty }}" name="product_qty[]"
+                                        required="">
+                                </td>
+                                <td>
+                                    <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                        id="product_price" name="product_price[]" class="form-control"
+                                        <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                            echo 'readonly';
+                                        } ?> value={{ $value_export->product_price }}
+                                        required="">
                                 </td>
                                 <td>
                                     <input type="text" id="" name="product_note[]" class="form-control"
@@ -414,22 +404,22 @@
                                         } ?> value="{{ $value_export->product_note }}">
                                 </td>
                                 <td>
-                                    <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')" id="product_tax" class="product_tax form-control"
-                                        name="product_tax[]" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                    <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                        id="product_tax" class="product_tax form-control" name="product_tax[]"
+                                        <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                             echo 'readonly';
-                                        } ?> required=""
-                                        value="{{ $value_export->product_tax }}">
+                                        } ?> required="" value="{{ $value_export->product_tax }}">
                                 </td>
                                 <td><span class="total-amount form-control" style="background:#e9ecef">0</span>
                                 </td>
                                 <td><img src="../../dist/img/icon/list.png"></td>
                                 <td><img src="../../dist/img/icon/Group.png"></td>
                                 @if ($exports->export_status == 1)
-                                @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
-                                    <td @if ($exports->export_status != 2) class="delete-row-btn" @endif>
-                                        <img src="../../dist/img/icon/vector.png">
-                                    </td>
-                                @endif
+                                    @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
+                                        <td @if ($exports->export_status != 2) class="delete-row-btn" @endif>
+                                            <img src="../../dist/img/icon/vector.png">
+                                        </td>
+                                    @endif
                                 @endif
                             </tr>
                         @endforeach

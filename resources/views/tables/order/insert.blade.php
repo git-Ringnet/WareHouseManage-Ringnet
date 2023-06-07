@@ -4,8 +4,8 @@
 <div class="content-wrapper">
     <div class="row">
         <div class="col-sm-6 breadcrumb">
-            <span>Nhập hàng</span>
-            <span>/</span>
+            <span> <a href="{{ route('insertProduct.index') }}"> Nhập hàng</a></span>
+                <span class="px-1"> / </span>
             <span><b>Đơn hàng mới</b></span>
         </div>
         <div class="col-sm-6 position-absolute" style="top:63px;right:2%">
@@ -125,7 +125,7 @@
                         <thead>
                             <tr>
                                 <th><input type="checkbox" id="checkall"></th>
-                                <th>Mã đơn</th>
+                                <th>Mã sản phẩm</th>
                                 <th>Thông tin sản phẩm</th>
                                 <th>Loại hàng</th>
                                 <th>Đơn vị tính</th>

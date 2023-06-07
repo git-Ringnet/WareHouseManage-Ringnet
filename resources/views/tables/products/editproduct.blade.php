@@ -1,6 +1,11 @@
 <x-navbar :title="$title"></x-navbar>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
+    <div class="breadcrumb">
+        <span><a href="{{ route('data.index') }}">Sản phẩm</a></span>
+        <span class="px-1">/</span>
+        <span><b>Chỉnh sửa sản phẩm con</b></span>
+    </div>
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <div class="container-fluided">

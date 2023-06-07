@@ -267,7 +267,7 @@ class ProductsController extends Controller
         ->where('product.products_id',$products->id)
         ->distinct()
         ->paginate(8);
-        return view('tables.products.edit_products', compact('products', 'cate', 'title', 'listProduct'));
+        return view('tables.products.edit_products', compact('products', 'cate', 'title', 'listProduct'))->with('msg','Chỉnh sửa sản phẩm thành công!!');
     }
 
     /**
@@ -330,7 +330,7 @@ class ProductsController extends Controller
     {
         $cate = Category::all();
         $title = 'Thêm sản phẩm';
-        return view('tables.products.insertProducts', compact('cate', 'title'));
+        return view('tables.products.insertProducts', compact('cate', 'title'))->with('msg','Thêm sản phẩm thành công!');
     }
     public function storeProducts(Request $request)
     {
@@ -355,7 +355,7 @@ class ProductsController extends Controller
         $products->products_description = $request->products_description;
 
         $products->save();
-        return redirect()->route('data.index');
+        return redirect()->route('data.index')->with('msg','Thêm sản phẩm thành công!');
     }
 
     // Xóa sản phẩm cha AJAX
@@ -387,7 +387,7 @@ class ProductsController extends Controller
         $pro = Product::findOrFail($id);
         $select = Products::all();
         $title = 'Chỉnh sửa sản phẩm';
-        return view('tables.products.editproduct', compact('pro', 'select', 'title'));
+        return view('tables.products.editproduct', compact('pro', 'select', 'title'))->with('msg','Chỉnh sửa sản phẩm thành công!');
     }
     public function updateProduct(Request $request, $id)
     {

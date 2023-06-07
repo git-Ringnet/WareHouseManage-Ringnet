@@ -1,6 +1,11 @@
 <x-navbar :title="$title"></x-navbar>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
+  <div class="breadcrumb">
+    <span><a href="{{ route('admin.userslist') }}">Nhân viên</a></span>
+    <span class="px-1">/</span>
+    <span><b>Thêm nhân viên</b></span>
+</div>
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <div class="container-fluided">

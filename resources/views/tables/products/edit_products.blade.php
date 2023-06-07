@@ -2,8 +2,8 @@
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <div class="breadcrumb">
-        <span>Sản phẩm</span>
-        <span>/</span>
+        <span><a href="{{ route('data.index') }}">Sản phẩm</a></span>
+        <span class="px-1">/</span>
         <span><b>Chỉnh sửa sản phẩm</b></span>
     </div>
     <!-- Content Header (Page header) -->
@@ -289,9 +289,9 @@
                                     <td>{{ $va->product_unit }}</td>
                                     <td>{{ $va->product_qty }}</td>
                                     <td></td>
-                                    <td>{{ $va->product_price }}</td>
-                                    <td>{{ $va->tax }}</td>
-                                    <td>{{ $va->total }}</td>
+                                    <td>{{ number_format($va->product_price) }}</td>
+                                    <td>{{ $va->tax }}%</td>
+                                    <td>{{ number_format($va->total) }}</td>
                                     <td>{{ $va->product_trademark }}</td>
                                     <td>
                                         <button class="exampleModal" name="btn_add_SN[]" type="button"
