@@ -810,8 +810,7 @@ class ExportController extends Controller
     public function getProduct(Request $request)
     {
         $data = $request->all();
-        $product = DB::table('product')
-            ->join('serinumbers', 'serinumbers.product_id', 'product.id')
+        $product = Product::join('serinumbers', 'serinumbers.product_id', 'product.id')
             ->where('product.id', $data['idProduct'])
             ->groupBy(
                 'product.id',
@@ -824,6 +823,7 @@ class ExportController extends Controller
                 'product.product_price',
                 'product.created_at',
                 'product.updated_at',
+                'product.provide_id',
                 'product.tax',
                 'product.total',
             )
@@ -839,8 +839,12 @@ class ExportController extends Controller
     public function getSN(Request $request)
     {
         $data = $request->all();
-        $sn = Serinumbers::where('product_id', $data['productCode'])->limit($data['qty'])->get();
-        return response()->json($sn);
+        if ($data['qty'] == null) {
+            return;
+        } else {
+            $sn = Serinumbers::where('product_id', $data['productCode'])->limit($data['qty'])->get();
+            return response()->json($sn);
+        }
     }
 
     // Xóa đơn hàng AJAX

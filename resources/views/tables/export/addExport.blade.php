@@ -541,6 +541,7 @@
                         productCode: productCode,
                     },
                     success: function(response) {
+                        console.log(qty);
                         var modalBody = $('#snModal').find('.modal-body');
                         let count = 1;
                         modalBody.empty();
