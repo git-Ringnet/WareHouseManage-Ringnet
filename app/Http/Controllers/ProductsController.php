@@ -259,7 +259,11 @@ class ProductsController extends Controller
         $products = Products::findOrFail($id);
         $cate = Category::all();
         $title = 'Chỉnh sửa sản phẩm';
-        $listProduct = Product::where('products_id', $products->id)->paginate(8);
+        // $listProduct = Product::where('products_id', $products->id)->paginate(8);
+        $listProduct = Product::
+        join('serinumbers','product.id','serinumbers.product_id')
+        ->where('product.products_id',$products->id)
+        ->paginate(8);
         return view('tables.products.edit_products', compact('products', 'cate', 'title', 'listProduct'));
     }
 
@@ -405,5 +409,37 @@ class ProductsController extends Controller
         $relatedProduct->save();
 
         return redirect()->route('data.index');
+    }
+     // Xóa sản phẩm con
+     public function delete_product($id)
+     {
+        $del = Product::where('id',$id)->first();
+        $current_id = $del->products_id;
+        $del->delete();
+        $updatePrice = Product::where('products_id', $current_id)->get();
+        $relatedProduct = Products::findOrFail($current_id);
+        $relatedProduct->price_inventory = 0;
+        foreach ($updatePrice as $up) {
+            $relatedProduct->price_inventory += $up->total;
+            $relatedProduct->price_avg = ($relatedProduct->price_inventory / $relatedProduct->inventory);
+        }
+        $relatedProduct->save();
+        return redirect()->route('data.index');
+     }
+
+    //  Import data to products
+    public function import_products(Request $request)
+    {
+        $jsonData = $request->all();
+        foreach ($jsonData as $row) {
+            $products = new Products();
+            $products->products_code = $row['Products_code'];
+            $products->products_name = $row['Products_name'];
+            $products->ID_category = $row['ID_category'];
+            $products->products_trademark = $row['Products_trademark'];
+            $products->products_description = $row['Products_description'];
+            $products->save();
+        }
+        return response()->json(['message' => 'Import thành công!']);
     }
 }
