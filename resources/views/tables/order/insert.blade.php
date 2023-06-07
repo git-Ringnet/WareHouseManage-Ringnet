@@ -325,25 +325,21 @@
                 createInput();
                 rowCount++;
                 fillDataToModal();
-
+                getTax();
             }
         };
         reader.readAsText(file);
         checkRow();
     });
 
-    var change =  document.querySelectorAll('.product_tax');
-    for(let i = 0 ;i<change.length;i++){
-        change[i].addEventListener('change',function(){
-            alert('change');
-        })
-    }
-    $('.product_tax').on('change', function() {
+    function getTax(){
+        $('.product_tax').on('change', function() {
         alert('change');
         var taxValue = getTax($(this));
-        console.log(taxValue);
         calculateAndUpdateValues(taxValue, $(this));
     });
+    }
+   
 
     function getTax(e) {
         var taxValue = parseFloat($(e).closest('tr').find('.product_tax').val());
@@ -351,9 +347,7 @@
     }
 
     function calculateAndUpdateValues(taxValue, element) {
-        console.log(taxValue);
         var productQty = parseInt(element.closest('tr').find('.quantity-input').val());
-        console.log(productQty);
         var productPrice = 0;
         var grandTotal = parseFloat($('#grand-total').text());
         $('#grand-total').attr('data-value', grandTotal);
@@ -366,7 +360,6 @@
             var totalAmount = productQty * productPrice;
             var taxAmount = (productQty * productPrice * taxValue) / 100;
             element.closest('tr').find('[name^="product_total"]').val(totalAmount);
-            console.log(totalAmount);
             $('#product-tax').val(taxAmount);
 
             calculateTotalAmount();
@@ -518,9 +511,10 @@
 
         $('input[name^="product_qty[]"]').each(function(index) {
             var qty = $(this).val();
-            var sn_count = $('input[name="product_SN' + index + '[]"]').length;
+            var id_modal = $(this).closest('.container-fluided').find('.modal').attr('id').replace(/\D/g, '');
+            var sn_count = $('input[name="product_SN' + id_modal + '[]"]').length;
             var check = false;
-            $('input[name^="product_SN' + index + '[]"]').each(function(index) {
+            $('input[name^="product_SN'+id_modal+'[]"]').each(function(index) {
                 $(this).each(function() {
                     if ($(this).val() === "") {
                         check = true;
@@ -528,6 +522,7 @@
                     }
                 });
             });
+
             if (check) {
                 error = true;
                 errorMessage = 'Vui lòng nhập seri number';
@@ -993,9 +988,10 @@
 
         $('input[name^="product_qty[]"]').each(function(index) {
             var qty = $(this).val();
-            var sn_count = $('input[name="product_SN' + index + '[]"]').length;
+            var id_modal = $(this).closest('.container-fluided').find('.modal').attr('id').replace(/\D/g, '');
+            var sn_count = $('input[name="product_SN' + id_modal + '[]"]').length;
             var check = false;
-            $('input[name^="product_SN' + index + '[]"]').each(function(index) {
+            $('input[name^="product_SN'+id_modal+'[]"]').each(function(index) {
                 $(this).each(function() {
                     if ($(this).val() === "") {
                         check = true;
