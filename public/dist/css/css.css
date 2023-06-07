@@ -643,37 +643,81 @@ td p {
     font-weight: 500;
     font-size: 14px;
 }
-.wrap .cursor{
+
+.wrap .cursor {
     font-weight: 500;
     font-size: 14px;
     color: #000000;
 }
-.wrap label{
+
+.wrap label {
     font-weight: 500;
     font-size: 14px;
 }
+
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 input[type="number"] {
-  -moz-appearance: textfield;
-  appearance: textfield;
+    -moz-appearance: textfield;
+    appearance: textfield;
 }
-.filter-group span{
+
+.filter-group span {
     padding-left: 3px;
 }
-.list_products.form-control,.maProduct.form-control,.child-select.form-control,.search_product.form-control{
+
+.list_products.form-control,
+.maProduct.form-control,
+.child-select.form-control,
+.search_product.form-control {
     width: auto !important;
 }
-#product_price.form-control{
+
+#product_price.form-control {
     /* width: 115px; */
 }
-.breadcrumb a{
+
+.breadcrumb a {
     color: #858585;
 }
-.breadcrumb a:hover{
+
+.breadcrumb a:hover {
     color: #000000;
+}
+
+#exampleModalLabel,.modal h3 {
+    font-weight: 600;
+    font-size: 18px;
+    color: #1D1C20;
+}
+
+.modal-header p {
+    font-weight: 400;
+    font-size: 14px;
+    color: #555555;
+}
+
+.modal td,
+.modal th {
+    border: none;
+    box-shadow: none;
+}
+
+.modal th {
+    font-weight: 600;
+    font-size: 16px;
+    color: #1D1C20;
+}
+
+.modal .table {
+    background: #E9ECEF;
+    border-radius: 8px;
+}
+
+.modal tbody tr {
+    background: none;
 }
