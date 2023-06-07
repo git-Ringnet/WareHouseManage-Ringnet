@@ -41,7 +41,6 @@ class Products extends Model
                 $orderType = trim($sortByArr['sortType']);
             }
         }
-        $products = $products->orderBy($orderBy, $orderType);
 
         if (!empty($status)) {
             $products = $products->where(function ($query) use ($status) {
@@ -57,7 +56,7 @@ class Products extends Model
                 }
             });
         }
-
+        $products = $products->orderBy($orderBy, $orderType);
         if (!empty($filters)) {
             $products = $products->where($filters);
         }

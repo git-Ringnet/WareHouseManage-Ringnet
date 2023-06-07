@@ -679,7 +679,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     <div class="py-1 rounded  pb-1 bg-danger">
                                                         <span class="text-light">Hết hàng</span>
                                                     </div>
-                                                @elseif($value->inventory < 5)
+                                                @elseif($value->inventory < 6)
                                                     <div class="py-1 rounded  pb-1 bg-warning">
                                                         <span class="text-light">Gần hết</span>
                                                     </div>
@@ -779,7 +779,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                         <p>Trị tồn kho</p>{{ number_format($item->total) }}
                                                     </td>
                                                     <td></td>
-                                                    <td>
+                                                    <td class="text-center">
                                                         <form action="{{ route('editProduct', $item->id) }}"
                                                             method="post">
                                                             @csrf
