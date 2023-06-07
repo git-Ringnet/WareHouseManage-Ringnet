@@ -243,6 +243,7 @@
                             </div>
                         </div>
                     </div>
+                     @endforeach
                     </table>
                     <div class="btn-fixed">
                         @if(Auth::user()->can('view-provides'))
