@@ -253,7 +253,7 @@
                 <table class="table table-hover bg-white rounded" id="inputContainer">
                     <thead>
                         <tr>
-                            @if ($order->order_status != 1)
+                            @if ($order->order_status == 0)
                                 <th><input type="checkbox"></th>
                             @endif
                             <th>Mã / Tên sản phẩm</th>
