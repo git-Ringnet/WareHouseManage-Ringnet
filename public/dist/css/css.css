@@ -304,6 +304,7 @@ tbody tr {
     width: 32px;
     height: 32px;
     text-align: center;
+    margin: auto;
 }
 
 td {
@@ -663,4 +664,10 @@ input[type="number"] {
 }
 .filter-group span{
     padding-left: 3px;
+}
+.list_products.form-control,.maProduct.form-control,.child-select.form-control,.search_product.form-control{
+    width: auto !important;
+}
+#product_price.form-control{
+    width: 115px;
 }

@@ -186,7 +186,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             </div>
                                             <div class="input-group p-2">
                                                 <label class="title" for="">Nhập số điện thoại</label>
-                                                <input type="number" name="phonenumber"
+                                                <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')" name="phonenumber"
                                                     class="form-control phonenumber-input"
                                                     value="{{ request()->phonenumber }}"
                                                     placeholder="Nhập thông tin..">

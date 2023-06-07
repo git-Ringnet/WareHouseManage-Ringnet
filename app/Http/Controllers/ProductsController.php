@@ -430,7 +430,7 @@ class ProductsController extends Controller
             $relatedProduct->price_avg = ($relatedProduct->price_inventory / $relatedProduct->inventory);
         }
         $relatedProduct->save();
-        return redirect()->route('data.index');
+        return redirect()->route('data.index')->with('msg','Xóa sản phẩm thành công!');
      }
 
     //  Import data to products

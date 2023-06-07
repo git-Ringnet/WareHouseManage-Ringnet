@@ -78,7 +78,7 @@
                             </div>
                         </div>
                         <div class="btn-fixed">
-                            <button type="submit" class="btn btn-primary">Edit</button>
+                            <button type="submit" class="btn btn-primary">Lưu</button>
                             <a class="btn btn-default" href="{{ route('data.index') }}">Hủy</a>
                         </div>
                     </form>

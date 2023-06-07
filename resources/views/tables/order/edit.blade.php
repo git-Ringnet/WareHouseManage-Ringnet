@@ -277,7 +277,7 @@
                                 @if ($order->order_status != 1)
                                     <td><input type="checkbox"></td>
                                 @endif
-                                <td>
+                                <td class="select-wrapper">
                                     <select name="products_id[]" id="" class="list_products form-control"
                                         @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) disabled @endif>
                                         @foreach ($products as $prod)
@@ -290,7 +290,8 @@
                                 <!-- <td> <input readonly type="text" name='products_id[]' @if ($pro && $pro->getCodeProduct) value="{{ $pro->getCodeProduct->products_code }}" placeholder="{{ $pro->getCodeProduct->products_code }}" @endif></td> -->
                                 <td> <input class="form-control" @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif
                                         required @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif
-                                        type="text" name="product_name[]" value="{{ $pro->product_name }}"> </td>
+                                        type="text" name="product_name[]" value="{{ $pro->product_name }}">
+                                    </td>
                                 <td> <input class="form-control" @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif
                                         required type="text" name="product_category[]"
                                         value="{{ $pro->product_category }}"
@@ -437,7 +438,7 @@
                                 <div class="AddSN btn btn-secondary" style="border:1px solid gray;">Thêm dòng</div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Save</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Lưu</button>
                             </div>
                         </div>  
                     </div>
@@ -446,8 +447,8 @@
                 @endforeach
             </div>
             <div class="btn-fixed">
-                @if (Auth::user()->id == $order->users_id || Auth::user()->can('isAdmin'))
                 @if ($order->order_status == 0)
+                @if (Auth::user()->id == $order->users_id || Auth::user()->can('isAdmin'))
                 <a href="javascript:;" class="btn btn-primary addBillEdit">Lưu</a>
                 @endif
                 @endif
