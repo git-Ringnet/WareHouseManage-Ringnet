@@ -148,6 +148,7 @@ class ProductsController extends Controller
         //lấy tất cả sản phẩm con theo sản phẩm lớn
         $product = DB::table('product')
             ->join('products', 'product.products_id', '=', 'products.id')
+            ->join('serinumbers','serinumbers.product_id','product.id')
             ->whereIn('products.id', $productIds)
             ->groupBy(
                 'product.id',
@@ -168,7 +169,8 @@ class ProductsController extends Controller
             ->select(
                 'product.*',
                 'products.products_code',
-                DB::raw('SUM(product.product_qty * product.product_price) as total')
+                DB::raw('SUM(product.product_qty * product.product_price) as total'),
+                DB::raw('SUM(CASE WHEN serinumbers.seri_status = 2 THEN 1 ELSE 0 END) as trading')
             )
             ->get();
 

@@ -470,8 +470,8 @@
             const slInput = $(
                 "<td>" +
                 "<div class='d-flex'>" +
-                "<input type='number' id='product_qty' class='quantity-input' name='product_qty[]' required>" +
-                "<input type='number' readonly class='quantity-exist' name='product_qty[]' required>" +
+                "<input type='number' id='product_qty' class='quantity-input' name='product_qty[]' required style='width:50px;'>" +
+                "<input type='number' readonly class='quantity-exist' name='product_qty[]' required style='width:50px;'>" +
                 "</div>" +
                 "</td>"
             );
@@ -715,8 +715,7 @@
     })
     //thêm thông tin khách hàng
     $(document).on('click', '#btn-addCustomer', function(e) {
-        e.preventDefault();
-
+        e.preventDefault()
         var form = $('#export_form')[0];
         if (!form.reportValidity()) {
             return;
@@ -764,7 +763,7 @@
             }
         })
     })
-
+    //
     $(document).ready(function() {
         //lấy thông tin sản phẩm từ mã sản phẩm
         var selectedProductNames = [];
@@ -862,22 +861,41 @@
         }
     });
     //tính thành tiền của sản phẩm
-    $(document).on('input', '.quantity-input, [name^="product_price"], .product_tax', function() {
+    $(document).on('input', '.quantity-input, [name^="product_price"]', function() {
         var productQty = parseInt($(this).closest('tr').find('.quantity-input').val());
         var productPrice = parseFloat($(this).closest('tr').find('.product_price').val());
-        var taxValue = parseFloat($(this).closest('tr').find('.product_tax').val());
 
-        if (!isNaN(productQty) && !isNaN(productPrice) && !isNaN(taxValue)) {
+        updateTaxAmount($(this).closest('tr'));
+
+        if (!isNaN(productQty) && !isNaN(productPrice)) {
             var totalAmount = productQty * productPrice;
-            var taxAmount = (totalAmount * taxValue) / 100;
 
             $(this).closest('tr').find('.total-amount').text(totalAmount.toFixed(2));
-            $(this).closest('tr').find('.product_tax option:selected').text(taxAmount.toFixed(2));
 
             calculateTotalAmount();
             calculateTotalTax();
         }
     });
+
+    $(document).on('change', '.product_tax', function() {
+        updateTaxAmount($(this).closest('tr'));
+
+        calculateTotalAmount();
+        calculateTotalTax();
+    });
+
+    function updateTaxAmount(row) {
+        var productQty = parseInt(row.find('.quantity-input').val());
+        var productPrice = parseFloat(row.find('.product_price').val());
+        var taxValue = parseFloat(row.find('.product_tax').val());
+
+        if (!isNaN(productQty) && !isNaN(productPrice) && !isNaN(taxValue)) {
+            var totalAmount = productQty * productPrice;
+            var taxAmount = (totalAmount * taxValue) / 100;
+
+            row.find('.product_tax option:selected').text(taxAmount.toFixed(0) + '%');
+        }
+    }
 
     function calculateTotalAmount() {
         var totalAmount = 0;
@@ -902,7 +920,7 @@
                 totalTax += rowTax;
             }
         });
-        $('#product-tax').text(totalTax.toFixed(2));
+        $('#product-tax').text(totalTax.toFixed(0) + '%');
 
         // Recalculate total amount and grand total
         calculateGrandTotal();
@@ -919,7 +937,6 @@
         $('#grand-total').attr('data-value', grandTotal.toFixed(2));
         $('#total').val(grandTotal.toFixed(2));
     }
-
 
     //hàm kiểm tra
     function validateAndSubmit(event) {
