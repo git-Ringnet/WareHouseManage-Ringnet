@@ -46,6 +46,7 @@ class Products extends Model
         if (!empty($status)) {
             $products = $products->where(function ($query) use ($status) {
                 if (in_array("0", $status)) {
+                    $query->orWhere('inventory', '=', null);
                     $query->orWhere('inventory', '=', 0);
                 }
                 if (in_array("1", $status)) {
