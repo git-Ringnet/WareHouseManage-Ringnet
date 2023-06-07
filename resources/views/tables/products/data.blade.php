@@ -6,42 +6,59 @@
         <div class="container-fluided">
             <div class="row mb-1 m-0">
                 @can('view-provides')
-                <a href="{{ route('insertProducts') }}">
-                    <button type="button" class="btn btn-primary d-flex align-items-center">
-                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M6 0C6.38791 -1.97352e-08 6.70237 0.314463 6.70237 0.702373L6.70237 11.2976C6.70237 11.6855 6.38791 12 6 12C5.61209 12 5.29763 11.6855 5.29763 11.2976V0.702373C5.29763 0.314463 5.61209 -1.97352e-08 6 0Z" fill="white" />
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M12 6C12 6.38791 11.6855 6.70237 11.2976 6.70237H0.702373C0.314463 6.70237 -1.38146e-07 6.38791 0 6C-5.13115e-07 5.61209 0.314463 5.29763 0.702373 5.29763H11.2976C11.6855 5.29763 12 5.61209 12 6Z" fill="white" />
+                    <a href="{{ route('insertProducts') }}">
+                        <button type="button" class="btn btn-primary d-flex align-items-center">
+                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M6 0C6.38791 -1.97352e-08 6.70237 0.314463 6.70237 0.702373L6.70237 11.2976C6.70237 11.6855 6.38791 12 6 12C5.61209 12 5.29763 11.6855 5.29763 11.2976V0.702373C5.29763 0.314463 5.61209 -1.97352e-08 6 0Z"
+                                    fill="white" />
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M12 6C12 6.38791 11.6855 6.70237 11.2976 6.70237H0.702373C0.314463 6.70237 -1.38146e-07 6.38791 0 6C-5.13115e-07 5.61209 0.314463 5.29763 0.702373 5.29763H11.2976C11.6855 5.29763 12 5.61209 12 6Z"
+                                    fill="white" />
+                            </svg>
+                            <span class="ml-2">Thêm sản phẩm</span>
+                        </button>
+                    </a>
+                    <button onclick="exportToExcel()" type="button"
+                        class="btn btn-outline-primary mx-3 d-flex align-items-center">
+                        <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                            viewBox="0 0 24 24" fill="none">
+                            <path
+                                d="M15.0003 7.80054H16.5001C16.8979 7.80054 17.2794 7.95857 17.5607 8.23984C17.842 8.52112 18 8.9026 18 9.30039V17.1006C18 17.4983 17.842 17.8798 17.5607 18.1611C17.2794 18.4424 16.8979 18.6004 16.5001 18.6004H7.49986C7.10207 18.6004 6.72058 18.4424 6.4393 18.1611C6.15802 17.8798 6 17.4983 6 17.1006V9.30039C6 8.9026 6.15802 8.52112 6.4393 8.23984C6.72058 7.95857 7.10207 7.80054 7.49986 7.80054H8.99972"
+                                stroke="#0095F6" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M8.99976 11.3997L11.9995 14.3994L15.0003 11.3997" stroke="#0095F6"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M12.0006 3V13.7999" stroke="#0095F6" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
-                        <span class="ml-2">Thêm sản phẩm</span>
+                        <span>Xuất Excel</span>
                     </button>
-                </a>
-                <button onclick="exportToExcel()" type="button" class="btn btn-outline-primary mx-3 d-flex align-items-center">
-                    <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M15.0003 7.80054H16.5001C16.8979 7.80054 17.2794 7.95857 17.5607 8.23984C17.842 8.52112 18 8.9026 18 9.30039V17.1006C18 17.4983 17.842 17.8798 17.5607 18.1611C17.2794 18.4424 16.8979 18.6004 16.5001 18.6004H7.49986C7.10207 18.6004 6.72058 18.4424 6.4393 18.1611C6.15802 17.8798 6 17.4983 6 17.1006V9.30039C6 8.9026 6.15802 8.52112 6.4393 8.23984C6.72058 7.95857 7.10207 7.80054 7.49986 7.80054H8.99972" stroke="#0095F6" stroke-linecap="round" stroke-linejoin="round" />
-                        <path d="M8.99976 11.3997L11.9995 14.3994L15.0003 11.3997" stroke="#0095F6" stroke-linecap="round" stroke-linejoin="round" />
-                        <path d="M12.0006 3V13.7999" stroke="#0095F6" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                    <span>Xuất Excel</span>
-                </button>
-                <!-- <input type="file" id="excelFile" />
-                <button ></button> -->
-                <label class="btn btn-outline-primary btn-file mx-3 d-flex align-items-center" onclick="importExcel()">
-                    <div>
-                        <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <path d="M8.99972 15.7999H7.49986C7.10207 15.7999 6.72058 15.6419 6.4393 15.3606C6.15802 15.0793 6 14.6979 6 14.3001L6 6.49991C6 6.10212 6.15802 5.72062 6.4393 5.43934C6.72058 5.15806 7.10207 5.00003 7.49986 5.00003L16.5001 5.00003C16.8979 5.00003 17.2794 5.15806 17.5607 5.43934C17.842 5.72062 18 6.10212 18 6.49991V14.3001C18 14.6979 17.842 15.0793 17.5607 15.3606C17.2794 15.6419 16.8979 15.7999 16.5001 15.7999H15.0003" stroke="#0095F6" stroke-linecap="round" stroke-linejoin="round" />
-                            <path d="M15.0005 12.2006L12.0008 9.20092L8.99994 12.2006" stroke="#0095F6" stroke-linecap="round" stroke-linejoin="round" />
-                            <path d="M11.9995 20.6003L11.9995 9.80045" stroke="#0095F6" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </div>
-                    <span>Nhập Excel</span> <input type="file" id="import_file">
-                </label>
+                    <!-- <input type="file" id="excelFile" />
+                        <button ></button> -->
+                    <label class="btn btn-outline-primary btn-file mx-3 d-flex align-items-center" onclick="importExcel()">
+                        <div>
+                            <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none">
+                                <path
+                                    d="M8.99972 15.7999H7.49986C7.10207 15.7999 6.72058 15.6419 6.4393 15.3606C6.15802 15.0793 6 14.6979 6 14.3001L6 6.49991C6 6.10212 6.15802 5.72062 6.4393 5.43934C6.72058 5.15806 7.10207 5.00003 7.49986 5.00003L16.5001 5.00003C16.8979 5.00003 17.2794 5.15806 17.5607 5.43934C17.842 5.72062 18 6.10212 18 6.49991V14.3001C18 14.6979 17.842 15.0793 17.5607 15.3606C17.2794 15.6419 16.8979 15.7999 16.5001 15.7999H15.0003"
+                                    stroke="#0095F6" stroke-linecap="round" stroke-linejoin="round" />
+                                <path d="M15.0005 12.2006L12.0008 9.20092L8.99994 12.2006" stroke="#0095F6"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                                <path d="M11.9995 20.6003L11.9995 9.80045" stroke="#0095F6" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                        </div>
+                        <span>Nhập Excel</span> <input type="file" id="import_file">
+                    </label>
                 @endcan
             </div>
             <div class="row m-auto filter pt-2">
                 <form class="w-100" action="" method="get" id='search-filter'>
                     <div class="row mr-0">
                         <div class="col-5">
-                            <input type="text" placeholder="Tìm kiếm theo mã sản phẩm hoặc tên sản phẩm" name="keywords" class="pr-4 input-search w-100 form-control" value="{{ request()->keywords }}">
+                            <input type="text" placeholder="Tìm kiếm theo mã sản phẩm hoặc tên sản phẩm"
+                                name="keywords" class="pr-4 input-search w-100 form-control"
+                                value="{{ request()->keywords }}">
                             <span class="search-icon"><i class="fas fa-search"></i></span>
                         </div>
                         <div class="col-2 d-none">
@@ -99,7 +116,8 @@
                         <div class="filter-results d-flex row m-0">
                             <input id="delete-item-input" type="hidden" name="delete_item" value="">
                             @foreach ($string as $item)
-                            <span class="filter-group" style="order: 
+                                <span class="filter-group"
+                                    style="order: 
                                             @php
 $index = array_search($item['label'], $numberedLabels);
                                                 if ($index !== false) {
@@ -120,10 +138,17 @@ $index = array_search($item['label'], $numberedLabels);
                             <span class="" style="order: 999;">
                                 <div class="filter-options">
                                     <div class="dropdown">
-                                        <button class="btn btn-filter btn-light" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M12 6C12.3879 6 12.7024 6.31446 12.7024 6.70237L12.7024 17.2976C12.7024 17.6855 12.3879 18 12 18C11.6121 18 11.2976 17.6855 11.2976 17.2976V6.70237C11.2976 6.31446 11.6121 6 12 6Z" fill="#555555" />
-                                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M18 12C18 12.3879 17.6855 12.7024 17.2976 12.7024H6.70237C6.31446 12.7024 6 12.3879 6 12C6 11.6121 6.31446 11.2976 6.70237 11.2976H17.2976C17.6855 11.2976 18 11.6121 18 12Z" fill="#555555" />
+                                        <button class="btn btn-filter btn-light" type="button"
+                                            id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false">
+                                            <span><svg width="24" height="24" viewBox="0 0 24 24"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                        d="M12 6C12.3879 6 12.7024 6.31446 12.7024 6.70237L12.7024 17.2976C12.7024 17.6855 12.3879 18 12 18C11.6121 18 11.2976 17.6855 11.2976 17.2976V6.70237C11.2976 6.31446 11.6121 6 12 6Z"
+                                                        fill="#555555" />
+                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                        d="M18 12C18 12.3879 17.6855 12.7024 17.2976 12.7024H6.70237C6.31446 12.7024 6 12.3879 6 12C6 11.6121 6.31446 11.2976 6.70237 11.2976H17.2976C17.6855 11.2976 18 11.6121 18 12Z"
+                                                        fill="#555555" />
                                                 </svg>
                                                 Thêm bộ lọc
                                             </span>
@@ -282,20 +307,24 @@ $index = array_search($item['label'], $numberedLabels);
                                             </div>
                                             <ul class="ks-cboxtags-category p-0 m-0 px-2">
                                                 @if (!empty($trademarks))
-                                                @php
-                                                $seenValues = [];
-                                                @endphp
-                                                @foreach ($trademarks as $value)
-                                                @if (!in_array($value->ID_category, $seenValues))
-                                                <li>
-                                                    <input type="checkbox" id="roles_active" {{ in_array($value->ID_category, $categoryarr) ? 'checked' : '' }} name="categoryarr[]" value="{{ $value->ID_category }}">
-                                                    <label id="category_value" for="category_active">{{ $value->ID_category }}</label>
-                                                </li>
-                                                @php
-                                                $seenValues[] = $value->ID_category;
-                                                @endphp
-                                                @endif
-                                                @endforeach
+                                                    @php
+                                                        $seenValues = [];
+                                                    @endphp
+                                                    @foreach ($trademarks as $value)
+                                                        @if (!in_array($value->ID_category, $seenValues))
+                                                            <li>
+                                                                <input type="checkbox" id="roles_active"
+                                                                    {{ in_array($value->ID_category, $categoryarr) ? 'checked' : '' }}
+                                                                    name="categoryarr[]"
+                                                                    value="{{ $value->ID_category }}">
+                                                                <label id="category_value"
+                                                                    for="category_active">{{ $value->ID_category }}</label>
+                                                            </li>
+                                                            @php
+                                                                $seenValues[] = $value->ID_category;
+                                                            @endphp
+                                                        @endif
+                                                    @endforeach
                                                 @endif
 
                                                 {{-- @if (!empty($categories))
@@ -332,20 +361,24 @@ $index = array_search($item['label'], $numberedLabels);
                                             </div>
                                             <ul class="ks-cboxtags-trademark p-0 m-0 px-2">
                                                 @if (!empty($trademarks))
-                                                @php
-                                                $seenValues = [];
-                                                @endphp
-                                                @foreach ($trademarks as $value)
-                                                @if (!in_array($value->products_trademark, $seenValues))
-                                                <li>
-                                                    <input type="checkbox" id="trademark_active" {{ in_array($value->products_trademark, $trademarkarr) ? 'checked' : '' }} name="trademarkarr[]" value="{{ $value->products_trademark }}">
-                                                    <label id="trademark_value" for="trademark_active">{{ $value->products_trademark }}</label>
-                                                </li>
-                                                @php
-                                                $seenValues[] = $value->products_trademark;
-                                                @endphp
-                                                @endif
-                                                @endforeach
+                                                    @php
+                                                        $seenValues = [];
+                                                    @endphp
+                                                    @foreach ($trademarks as $value)
+                                                        @if (!in_array($value->products_trademark, $seenValues))
+                                                            <li>
+                                                                <input type="checkbox" id="trademark_active"
+                                                                    {{ in_array($value->products_trademark, $trademarkarr) ? 'checked' : '' }}
+                                                                    name="trademarkarr[]"
+                                                                    value="{{ $value->products_trademark }}">
+                                                                <label id="trademark_value"
+                                                                    for="trademark_active">{{ $value->products_trademark }}</label>
+                                                            </li>
+                                                            @php
+                                                                $seenValues[] = $value->products_trademark;
+                                                            @endphp
+                                                        @endif
+                                                    @endforeach
                                                 @endif
                                             </ul>
                                             <div class="d-flex justify-contents-center align-items-baseline p-2">
@@ -366,7 +399,8 @@ $index = array_search($item['label'], $numberedLabels);
                                                     <option value=">=" {{ request('comparison_operator') === '>=' ? 'selected' : '' }}>
                                                         >=
                                                     </option>
-                                                    <option value="<=" {{ request('comparison_operator') === '<=' ? 'selected' : '' }}>
+                                                    <option value="<="
+                                                        {{ request('comparison_operator') === '<=' ? 'selected' : '' }}>
                                                         <=< /option>
                                                 </select>
                                                 <input class="w-50 quantity-input input-so" type="number" name="quantity" value="{{ request()->quantity }}" placeholder="Số lượng">
@@ -411,7 +445,8 @@ $index = array_search($item['label'], $numberedLabels);
                                                     <option value=">=" {{ request('price_inven_operator') === '>=' ? 'selected' : '' }}>
                                                         >=
                                                     </option>
-                                                    <option value="<=" {{ request('price_inven_operator') === '<=' ? 'selected' : '' }}>
+                                                    <option value="<="
+                                                        {{ request('price_inven_operator') === '<=' ? 'selected' : '' }}>
                                                         <=< /option>
                                                 </select>
                                                 <input class="w-50 price_inven-input input-so" type="number" name="price_inven" value="{{ request()->price_inven }}" placeholder="Nhập giá trị">
@@ -439,18 +474,28 @@ $index = array_search($item['label'], $numberedLabels);
                 <div class="row action">
                     <div class="btn-taodon my-2">
                         <button type="button" class="btn-group btn btn-light">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <path fill-rule="evenodd" clip-rule="evenodd" d="M12 6C12.3879 6 12.7024 6.31446 12.7024 6.70237L12.7024 17.2976C12.7024 17.6855 12.3879 18 12 18C11.6121 18 11.2976 17.6855 11.2976 17.2976V6.70237C11.2976 6.31446 11.6121 6 12 6Z" fill="#555555" />
-                                <path fill-rule="evenodd" clip-rule="evenodd" d="M18 12C18 12.3879 17.6855 12.7024 17.2976 12.7024H6.70237C6.31446 12.7024 6 12.3879 6 12C6 11.6121 6.31446 11.2976 6.70237 11.2976H17.2976C17.6855 11.2976 18 11.6121 18 12Z" fill="#555555" />
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M12 6C12.3879 6 12.7024 6.31446 12.7024 6.70237L12.7024 17.2976C12.7024 17.6855 12.3879 18 12 18C11.6121 18 11.2976 17.6855 11.2976 17.2976V6.70237C11.2976 6.31446 11.6121 6 12 6Z"
+                                    fill="#555555" />
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M18 12C18 12.3879 17.6855 12.7024 17.2976 12.7024H6.70237C6.31446 12.7024 6 12.3879 6 12C6 11.6121 6.31446 11.2976 6.70237 11.2976H17.2976C17.6855 11.2976 18 11.6121 18 12Z"
+                                    fill="#555555" />
                             </svg>
                             <span>Tạo đơn bán</span>
                         </button>
                     </div>
                     <div class="btn-nhaphang my-2">
                         <button type="button" class="btn-group btn btn-light mx-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <path fill-rule="evenodd" clip-rule="evenodd" d="M12 6C12.3879 6 12.7024 6.31446 12.7024 6.70237L12.7024 17.2976C12.7024 17.6855 12.3879 18 12 18C11.6121 18 11.2976 17.6855 11.2976 17.2976V6.70237C11.2976 6.31446 11.6121 6 12 6Z" fill="#555555" />
-                                <path fill-rule="evenodd" clip-rule="evenodd" d="M18 12C18 12.3879 17.6855 12.7024 17.2976 12.7024H6.70237C6.31446 12.7024 6 12.3879 6 12C6 11.6121 6.31446 11.2976 6.70237 11.2976H17.2976C17.6855 11.2976 18 11.6121 18 12Z" fill="#555555" />
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M12 6C12.3879 6 12.7024 6.31446 12.7024 6.70237L12.7024 17.2976C12.7024 17.6855 12.3879 18 12 18C11.6121 18 11.2976 17.6855 11.2976 17.2976V6.70237C11.2976 6.31446 11.6121 6 12 6Z"
+                                    fill="#555555" />
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M18 12C18 12.3879 17.6855 12.7024 17.2976 12.7024H6.70237C6.31446 12.7024 6 12.3879 6 12C6 11.6121 6.31446 11.2976 6.70237 11.2976H17.2976C17.6855 11.2976 18 11.6121 18 12Z"
+                                    fill="#555555" />
                             </svg>
                             <span>Nhập hàng</span>
                         </button>
@@ -465,9 +510,12 @@ $index = array_search($item['label'], $numberedLabels);
                     </div>
                 </div>
                 <div class="cancal_action btn ml-auto">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M18 18L6 6" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                        <path d="M18 6L6 18" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none">
+                        <path d="M18 18L6 6" stroke="white" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                        <path d="M18 6L6 18" stroke="white" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round" />
                     </svg>
                 </div>
             </div>
@@ -556,144 +604,192 @@ $index = array_search($item['label'], $numberedLabels);
                                 </thead>
                                 <tbody>
                                     @foreach ($products as $value)
-                                    <tr class="{{ $value->id }}">
-                                        <td><input type="checkbox" name="ids[]" class="cb-element" value="{{ $value->id }}"></td>
-                                        <td scope="row">{{ $value->id }}</td>
-                                        <td>
-                                            <!-- <a href="{{ route('data.show', $value->id) }}"> -->
-                                            {{ $value->products_code }}
-                                            <!-- </a> -->
-                                        </td>
-                                        <td>{{ $value->products_name }}</td>
-                                        <td>
-                                            {{ $value->ID_category }}
-                                        </td>
-                                        <td class="text-left">{{ $value->products_trademark }}</td>
-                                        <td class="text-right">
-                                            @if ($value->inventory == 0)
-                                            0
-                                            @else
-                                            {{ $value->inventory }}
-                                            @endif
-                                        </td>
-                                        <td class="text-right">{{ number_format($value->price_avg) }}</td>
-                                        <td class="text-right">{{ number_format($value->price_inventory) }}</td>
-                                        <td class="p-0 text-center">
-                                            @if ($value->inventory == 0)
-                                            <div class="py-1 rounded  pb-1 bg-danger">
-                                                <span class="text-light">Hết hàng</span>
-                                            </div>
-                                            @elseif($value->inventory < 5) <div class="py-1 rounded  pb-1 bg-warning">
-                                                <span class="text-light">Gần hết</span>
-                        </div>
-                        @else
-                        <div class="py-1 rounded  pb-1 bg-success">
-                            <span class="text-light">Sẵn hàng</span>
-                        </div>
-                        @endif
-                        </td>
-                        <td class="text-center">
-                            <div class="icon">
-                                @if (Auth::user()->can('view-provides'))
-                                <a href="{{ route('data.edit', $value->id) }}">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
-                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M18.7832 6.79483C18.987 6.71027 19.2056 6.66675 19.4263 6.66675C19.6471 6.66675 19.8656 6.71027 20.0695 6.79483C20.2734 6.87938 20.4586 7.00331 20.6146 7.15952L21.9607 8.50563C22.1169 8.66165 22.2408 8.84693 22.3253 9.05087C22.4099 9.25482 22.4534 9.47342 22.4534 9.69419C22.4534 9.91495 22.4099 10.1336 22.3253 10.3375C22.2408 10.5414 22.1169 10.7267 21.9607 10.8827L20.2809 12.5626C20.2711 12.5736 20.2609 12.5844 20.2503 12.595C20.2397 12.6056 20.2289 12.6158 20.2178 12.6256L11.5607 21.2827C11.4257 21.4177 11.2426 21.4936 11.0516 21.4936H8.34644C7.94881 21.4936 7.62647 21.1712 7.62647 20.7736V18.0684C7.62647 17.8775 7.70233 17.6943 7.83737 17.5593L16.4889 8.9086C16.5003 8.89532 16.5124 8.88235 16.525 8.86973C16.5376 8.8571 16.5506 8.84504 16.5639 8.83354L18.2381 7.15952C18.394 7.00352 18.5795 6.8793 18.7832 6.79483ZM17.0354 10.3984L9.06641 18.3667V20.0536H10.7534L18.7221 12.085L17.0354 10.3984ZM19.7402 11.0668L18.0537 9.38022L19.2572 8.17685C19.2794 8.15461 19.3057 8.13696 19.3348 8.12493C19.3638 8.11289 19.3949 8.10669 19.4263 8.10669C19.4578 8.10669 19.4889 8.11289 19.5179 8.12493C19.5469 8.13697 19.5737 8.15504 19.5959 8.17728L20.9428 9.52411C20.9651 9.5464 20.9831 9.57315 20.9951 9.60228C21.0072 9.63141 21.0134 9.66264 21.0134 9.69419C21.0134 9.72573 21.0072 9.75696 20.9951 9.78609C20.9831 9.81522 20.9651 9.84197 20.9428 9.86426L19.7402 11.0668ZM6.6665 24.6134C6.6665 24.2158 6.98885 23.8935 7.38648 23.8935H24.6658C25.0634 23.8935 25.3858 24.2158 25.3858 24.6134C25.3858 25.0111 25.0634 25.3334 24.6658 25.3334H7.38648C6.98885 25.3334 6.6665 25.0111 6.6665 24.6134Z" fill="#555555" />
-                                    </svg>
-                                </a>
-                                @else
-                                <a href="{{ route('data.edit', $value->id) }}">
-                                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M24.9033 14.1636V7.89258C24.9033 7.33819 24.6831 6.8065 24.2911 6.41449C23.8991 6.02248 23.3674 5.80225 22.813 5.80225H9.22583C8.67144 5.80225 8.13976 6.02248 7.74774 6.41449C7.35573 6.8065 7.1355 7.33819 7.1355 7.89258V22.5249C7.1355 23.0793 7.35573 23.611 7.74774 24.003C8.13976 24.395 8.67144 24.6152 9.22583 24.6152H14.4517" stroke="#555555" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                        <path d="M13.6678 18.3442H14.4517" stroke="#555555" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                        <path d="M13.6678 14.1631H17.5872" stroke="#555555" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                        <path d="M13.6678 10.1133H20.7227" stroke="#555555" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                        <path d="M11.0549 10.8187C11.2099 10.8187 11.3615 10.7727 11.4904 10.6866C11.6193 10.6005 11.7197 10.4781 11.7791 10.3348C11.8384 10.1916 11.8539 10.034 11.8237 9.88192C11.7934 9.72987 11.7188 9.59019 11.6092 9.48057C11.4995 9.37094 11.3599 9.29629 11.2078 9.26604C11.0557 9.23579 10.8981 9.25131 10.7549 9.31064C10.6117 9.36997 10.4892 9.47044 10.4031 9.59935C10.317 9.72826 10.271 9.87981 10.271 10.0349C10.271 10.2427 10.3536 10.4421 10.5006 10.5891C10.6476 10.7361 10.847 10.8187 11.0549 10.8187Z" fill="#555555" />
-                                        <path d="M11.0549 14.9994C11.2099 14.9994 11.3615 14.9534 11.4904 14.8673C11.6193 14.7811 11.7197 14.6587 11.7791 14.5155C11.8384 14.3723 11.8539 14.2146 11.8237 14.0626C11.7934 13.9105 11.7188 13.7709 11.6092 13.6612C11.4995 13.5516 11.3599 13.477 11.2078 13.4467C11.0557 13.4165 10.8981 13.432 10.7549 13.4913C10.6117 13.5506 10.4892 13.6511 10.4031 13.78C10.317 13.9089 10.271 14.0605 10.271 14.2155C10.271 14.4234 10.3536 14.6228 10.5006 14.7698C10.6476 14.9168 10.847 14.9994 11.0549 14.9994Z" fill="#555555" />
-                                        <path d="M11.0549 19.0756C11.2099 19.0756 11.3615 19.0296 11.4904 18.9435C11.6193 18.8573 11.7197 18.7349 11.7791 18.5917C11.8384 18.4484 11.8539 18.2908 11.8237 18.1388C11.7934 17.9867 11.7188 17.847 11.6092 17.7374C11.4995 17.6278 11.3599 17.5531 11.2078 17.5229C11.0557 17.4926 10.8981 17.5081 10.7549 17.5675C10.6117 17.6268 10.4892 17.7273 10.4031 17.8562C10.317 17.9851 10.271 18.1367 10.271 18.2917C10.271 18.4996 10.3536 18.699 10.5006 18.846C10.6476 18.993 10.847 19.0756 11.0549 19.0756Z" fill="#555555" />
-                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M24.2994 17.5757C22.6613 15.9376 20.0054 15.9376 18.3672 17.5757C16.7291 19.2139 16.7291 21.8698 18.3672 23.5079C20.0054 25.1461 22.6613 25.1461 24.2994 23.5079C25.9376 21.8698 25.9376 19.2139 24.2994 17.5757ZM25.1046 16.7706C23.0218 14.6878 19.6449 14.6878 17.5621 16.7706C15.4793 18.8534 15.4793 22.2303 17.5621 24.3131C19.6449 26.3959 23.0218 26.3959 25.1046 24.3131C27.1874 22.2303 27.1874 18.8534 25.1046 16.7706Z" fill="#555555" />
-                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M24.1834 24.1834C24.428 23.9389 24.8246 23.9389 25.0692 24.1834L27.8166 26.9308C28.0611 27.1754 28.0611 27.572 27.8166 27.8166C27.572 28.0611 27.1754 28.0611 26.9308 27.8166L24.1834 25.0692C23.9389 24.8246 23.9389 24.428 24.1834 24.1834Z" fill="#555555" />
-                                    </svg>
-                                </a>
-                                @endif
+                                        <tr class="{{ $value->id }}">
+                                            <td><input type="checkbox" name="ids[]" class="cb-element"
+                                                    value="{{ $value->id }}"></td>
+                                            <td scope="row">{{ $value->id }}</td>
+                                            <td>
+                                                <!-- <a href="{{ route('data.show', $value->id) }}"> -->
+                                                {{ $value->products_code }}
+                                                <!-- </a> -->
+                                            </td>
+                                            <td>{{ $value->products_name }}</td>
+                                            <td>
+                                                {{ $value->ID_category }}
+                                            </td>
+                                            <td class="text-left">{{ $value->products_trademark }}</td>
+                                            <td class="text-right">
+                                                @if ($value->inventory == 0)
+                                                    0
+                                                @else
+                                                    {{ $value->inventory }}
+                                                @endif
+                                            </td>
+                                            <td class="text-right">{{ number_format($value->price_avg) }}</td>
+                                            <td class="text-right">{{ number_format($value->price_inventory) }}</td>
+                                            <td class="p-0 text-center">
+                                                @if ($value->inventory == 0)
+                                                    <div class="py-1 rounded  pb-1 bg-danger">
+                                                        <span class="text-light">Hết hàng</span>
+                                                    </div>
+                                                @elseif($value->inventory < 5)
+                                                    <div class="py-1 rounded  pb-1 bg-warning">
+                                                        <span class="text-light">Gần hết</span>
+                                                    </div>
+                                                @else
+                                                    <div class="py-1 rounded  pb-1 bg-success">
+                                                        <span class="text-light">Sẵn hàng</span>
+                                                    </div>
+                                                @endif
+                                            </td>
+                                            <td class="text-center">
+                                                <div class="icon">
+                                                    @if (Auth::user()->can('view-provides'))
+                                                        <a href="{{ route('data.edit', $value->id) }}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="32"
+                                                                height="32" viewBox="0 0 32 32" fill="none">
+                                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                    d="M18.7832 6.79483C18.987 6.71027 19.2056 6.66675 19.4263 6.66675C19.6471 6.66675 19.8656 6.71027 20.0695 6.79483C20.2734 6.87938 20.4586 7.00331 20.6146 7.15952L21.9607 8.50563C22.1169 8.66165 22.2408 8.84693 22.3253 9.05087C22.4099 9.25482 22.4534 9.47342 22.4534 9.69419C22.4534 9.91495 22.4099 10.1336 22.3253 10.3375C22.2408 10.5414 22.1169 10.7267 21.9607 10.8827L20.2809 12.5626C20.2711 12.5736 20.2609 12.5844 20.2503 12.595C20.2397 12.6056 20.2289 12.6158 20.2178 12.6256L11.5607 21.2827C11.4257 21.4177 11.2426 21.4936 11.0516 21.4936H8.34644C7.94881 21.4936 7.62647 21.1712 7.62647 20.7736V18.0684C7.62647 17.8775 7.70233 17.6943 7.83737 17.5593L16.4889 8.9086C16.5003 8.89532 16.5124 8.88235 16.525 8.86973C16.5376 8.8571 16.5506 8.84504 16.5639 8.83354L18.2381 7.15952C18.394 7.00352 18.5795 6.8793 18.7832 6.79483ZM17.0354 10.3984L9.06641 18.3667V20.0536H10.7534L18.7221 12.085L17.0354 10.3984ZM19.7402 11.0668L18.0537 9.38022L19.2572 8.17685C19.2794 8.15461 19.3057 8.13696 19.3348 8.12493C19.3638 8.11289 19.3949 8.10669 19.4263 8.10669C19.4578 8.10669 19.4889 8.11289 19.5179 8.12493C19.5469 8.13697 19.5737 8.15504 19.5959 8.17728L20.9428 9.52411C20.9651 9.5464 20.9831 9.57315 20.9951 9.60228C21.0072 9.63141 21.0134 9.66264 21.0134 9.69419C21.0134 9.72573 21.0072 9.75696 20.9951 9.78609C20.9831 9.81522 20.9651 9.84197 20.9428 9.86426L19.7402 11.0668ZM6.6665 24.6134C6.6665 24.2158 6.98885 23.8935 7.38648 23.8935H24.6658C25.0634 23.8935 25.3858 24.2158 25.3858 24.6134C25.3858 25.0111 25.0634 25.3334 24.6658 25.3334H7.38648C6.98885 25.3334 6.6665 25.0111 6.6665 24.6134Z"
+                                                                    fill="#555555" />
+                                                            </svg>
+                                                        </a>
+                                                    @else
+                                                        <a href="{{ route('data.edit', $value->id) }}">
+                                                            <svg width="32" height="32" viewBox="0 0 32 32"
+                                                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path
+                                                                    d="M24.9033 14.1636V7.89258C24.9033 7.33819 24.6831 6.8065 24.2911 6.41449C23.8991 6.02248 23.3674 5.80225 22.813 5.80225H9.22583C8.67144 5.80225 8.13976 6.02248 7.74774 6.41449C7.35573 6.8065 7.1355 7.33819 7.1355 7.89258V22.5249C7.1355 23.0793 7.35573 23.611 7.74774 24.003C8.13976 24.395 8.67144 24.6152 9.22583 24.6152H14.4517"
+                                                                    stroke="#555555" stroke-width="1.5"
+                                                                    stroke-linecap="round" stroke-linejoin="round" />
+                                                                <path d="M13.6678 18.3442H14.4517" stroke="#555555"
+                                                                    stroke-width="1.5" stroke-linecap="round"
+                                                                    stroke-linejoin="round" />
+                                                                <path d="M13.6678 14.1631H17.5872" stroke="#555555"
+                                                                    stroke-width="1.5" stroke-linecap="round"
+                                                                    stroke-linejoin="round" />
+                                                                <path d="M13.6678 10.1133H20.7227" stroke="#555555"
+                                                                    stroke-width="1.5" stroke-linecap="round"
+                                                                    stroke-linejoin="round" />
+                                                                <path
+                                                                    d="M11.0549 10.8187C11.2099 10.8187 11.3615 10.7727 11.4904 10.6866C11.6193 10.6005 11.7197 10.4781 11.7791 10.3348C11.8384 10.1916 11.8539 10.034 11.8237 9.88192C11.7934 9.72987 11.7188 9.59019 11.6092 9.48057C11.4995 9.37094 11.3599 9.29629 11.2078 9.26604C11.0557 9.23579 10.8981 9.25131 10.7549 9.31064C10.6117 9.36997 10.4892 9.47044 10.4031 9.59935C10.317 9.72826 10.271 9.87981 10.271 10.0349C10.271 10.2427 10.3536 10.4421 10.5006 10.5891C10.6476 10.7361 10.847 10.8187 11.0549 10.8187Z"
+                                                                    fill="#555555" />
+                                                                <path
+                                                                    d="M11.0549 14.9994C11.2099 14.9994 11.3615 14.9534 11.4904 14.8673C11.6193 14.7811 11.7197 14.6587 11.7791 14.5155C11.8384 14.3723 11.8539 14.2146 11.8237 14.0626C11.7934 13.9105 11.7188 13.7709 11.6092 13.6612C11.4995 13.5516 11.3599 13.477 11.2078 13.4467C11.0557 13.4165 10.8981 13.432 10.7549 13.4913C10.6117 13.5506 10.4892 13.6511 10.4031 13.78C10.317 13.9089 10.271 14.0605 10.271 14.2155C10.271 14.4234 10.3536 14.6228 10.5006 14.7698C10.6476 14.9168 10.847 14.9994 11.0549 14.9994Z"
+                                                                    fill="#555555" />
+                                                                <path
+                                                                    d="M11.0549 19.0756C11.2099 19.0756 11.3615 19.0296 11.4904 18.9435C11.6193 18.8573 11.7197 18.7349 11.7791 18.5917C11.8384 18.4484 11.8539 18.2908 11.8237 18.1388C11.7934 17.9867 11.7188 17.847 11.6092 17.7374C11.4995 17.6278 11.3599 17.5531 11.2078 17.5229C11.0557 17.4926 10.8981 17.5081 10.7549 17.5675C10.6117 17.6268 10.4892 17.7273 10.4031 17.8562C10.317 17.9851 10.271 18.1367 10.271 18.2917C10.271 18.4996 10.3536 18.699 10.5006 18.846C10.6476 18.993 10.847 19.0756 11.0549 19.0756Z"
+                                                                    fill="#555555" />
+                                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                    d="M24.2994 17.5757C22.6613 15.9376 20.0054 15.9376 18.3672 17.5757C16.7291 19.2139 16.7291 21.8698 18.3672 23.5079C20.0054 25.1461 22.6613 25.1461 24.2994 23.5079C25.9376 21.8698 25.9376 19.2139 24.2994 17.5757ZM25.1046 16.7706C23.0218 14.6878 19.6449 14.6878 17.5621 16.7706C15.4793 18.8534 15.4793 22.2303 17.5621 24.3131C19.6449 26.3959 23.0218 26.3959 25.1046 24.3131C27.1874 22.2303 27.1874 18.8534 25.1046 16.7706Z"
+                                                                    fill="#555555" />
+                                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                    d="M24.1834 24.1834C24.428 23.9389 24.8246 23.9389 25.0692 24.1834L27.8166 26.9308C28.0611 27.1754 28.0611 27.572 27.8166 27.8166C27.572 28.0611 27.1754 28.0611 26.9308 27.8166L24.1834 25.0692C23.9389 24.8246 23.9389 24.428 24.1834 24.1834Z"
+                                                                    fill="#555555" />
+                                                            </svg>
+                                                        </a>
+                                                    @endif
 
-                            </div>
-                        </td>
-                        <td>
-                            @if ($value->inventory != 0)
-                            <div id="dropdown_item{{ $value->id }}" data-toggle="collapse" class="dropdownitem" data-target="#product-details-<?php echo $value->id; ?>">
-                                {{-- <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                @if ($value->inventory != 0)
+                                                    <div id="dropdown_item{{ $value->id }}" data-toggle="collapse"
+                                                        class="dropdownitem"
+                                                        data-target="#product-details-<?php echo $value->id; ?>">
+                                                        {{-- <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
                                     <rect width="32" height="32" rx="4" fill="white" />
                                     <path fill-rule="evenodd" clip-rule="evenodd" d="M22.3582 19.6917C21.9471 20.1028 21.2806 20.1028 20.8695 19.6917L15.9998 14.822L11.1301 19.6917C10.719 20.1028 10.0526 20.1028 9.64148 19.6917C9.2304 19.2806 9.2304 18.6141 9.64148 18.203L15.2555 12.589C15.6666 12.1779 16.3331 12.1779 16.7442 12.589L22.3582 18.203C22.7693 18.6141 22.7693 19.2806 22.3582 19.6917Z" fill="#555555" />
                                 </svg> --}}
 
-                                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M9.6418 12.3083C10.0529 11.8972 10.7194 11.8972 11.1305 12.3083L16.0002 17.178L20.8699 12.3083C21.281 11.8972 21.9474 11.8972 22.3585 12.3083C22.7696 12.7194 22.7696 13.3859 22.3585 13.797L16.7445 19.411C16.3334 19.8221 15.6669 19.8221 15.2558 19.411L9.6418 13.797C9.23073 13.3859 9.23073 12.7194 9.6418 12.3083Z" fill="#555555" />
-                                </svg>
-                            </div>
-                            @endif
-                        </td>
-                        </tr>
-                        @foreach ($product as $item)
-                        <tr id="product-details-{{ $value->id }}" class="collapse product-details">
-                            @if ($value->id == $item->products_id)
-                            <td></td>
-                            <td>{{ $value->id }} - {{ $item->id }}</td>
-                            <td>{{ $value->products_code }}</td>
-                            <td>{{ $item->product_name }}</td>
-                            <td>
-                                <p>Ghi chú</p>{{ $item->product_category }}
-                            </td>
-                            <td>{{ $item->product_trademark }}</td>
-                            <td class="text-right">
-                                <p>Tồn kho</p>{{ $item->product_qty }}
-                            </td>
-                            <td class="text-right">
-                                <p>Đơn giá nhập</p>{{ number_format($item->product_price) }}
-                            </td>
-                            <td class="text-right">
-                                <p>Trị tồn kho</p>{{ number_format($item->total) }}
-                            </td>
-                            <td></td>
-                            <td>
-                                <form action="{{ route('editProduct', $item->id) }}" method="post">
-                                    @csrf
-                                    @method('PUT')
-                                    <button type="submit" style="background: transparent; border:none;">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
-                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M18.7832 6.79483C18.987 6.71027 19.2056 6.66675 19.4263 6.66675C19.6471 6.66675 19.8656 6.71027 20.0695 6.79483C20.2734 6.87938 20.4586 7.00331 20.6146 7.15952L21.9607 8.50563C22.1169 8.66165 22.2408 8.84693 22.3253 9.05087C22.4099 9.25482 22.4534 9.47342 22.4534 9.69419C22.4534 9.91495 22.4099 10.1336 22.3253 10.3375C22.2408 10.5414 22.1169 10.7267 21.9607 10.8827L20.2809 12.5626C20.2711 12.5736 20.2609 12.5844 20.2503 12.595C20.2397 12.6056 20.2289 12.6158 20.2178 12.6256L11.5607 21.2827C11.4257 21.4177 11.2426 21.4936 11.0516 21.4936H8.34644C7.94881 21.4936 7.62647 21.1712 7.62647 20.7736V18.0684C7.62647 17.8775 7.70233 17.6943 7.83737 17.5593L16.4889 8.9086C16.5003 8.89532 16.5124 8.88235 16.525 8.86973C16.5376 8.8571 16.5506 8.84504 16.5639 8.83354L18.2381 7.15952C18.394 7.00352 18.5795 6.8793 18.7832 6.79483ZM17.0354 10.3984L9.06641 18.3667V20.0536H10.7534L18.7221 12.085L17.0354 10.3984ZM19.7402 11.0668L18.0537 9.38022L19.2572 8.17685C19.2794 8.15461 19.3057 8.13696 19.3348 8.12493C19.3638 8.11289 19.3949 8.10669 19.4263 8.10669C19.4578 8.10669 19.4889 8.11289 19.5179 8.12493C19.5469 8.13697 19.5737 8.15504 19.5959 8.17728L20.9428 9.52411C20.9651 9.5464 20.9831 9.57315 20.9951 9.60228C21.0072 9.63141 21.0134 9.66264 21.0134 9.69419C21.0134 9.72573 21.0072 9.75696 20.9951 9.78609C20.9831 9.81522 20.9651 9.84197 20.9428 9.86426L19.7402 11.0668ZM6.6665 24.6134C6.6665 24.2158 6.98885 23.8935 7.38648 23.8935H24.6658C25.0634 23.8935 25.3858 24.2158 25.3858 24.6134C25.3858 25.0111 25.0634 25.3334 24.6658 25.3334H7.38648C6.98885 25.3334 6.6665 25.0111 6.6665 24.6134Z" fill="#555555"></path>
-                                        </svg>
-                                    </button>
+                                                        <svg width="32" height="32" viewBox="0 0 32 32"
+                                                            fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                d="M9.6418 12.3083C10.0529 11.8972 10.7194 11.8972 11.1305 12.3083L16.0002 17.178L20.8699 12.3083C21.281 11.8972 21.9474 11.8972 22.3585 12.3083C22.7696 12.7194 22.7696 13.3859 22.3585 13.797L16.7445 19.411C16.3334 19.8221 15.6669 19.8221 15.2558 19.411L9.6418 13.797C9.23073 13.3859 9.23073 12.7194 9.6418 12.3083Z"
+                                                                fill="#555555" />
+                                                        </svg>
+                                                    </div>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                        @foreach ($product as $item)
+                                            <tr id="product-details-{{ $value->id }}"
+                                                class="collapse product-details">
+                                                @if ($value->id == $item->products_id)
+                                                    <td></td>
+                                                    <td>{{ $value->id }} - {{ $item->id }}</td>
+                                                    <td>{{ $value->products_code }}</td>
+                                                    <td>{{ $item->product_name }}</td>
+                                                    <td>
+                                                        <p>Loại hàng</p>{{ $item->product_category }}
+                                                    </td>
+                                                    <td>
+                                                        <p>Đang giao dịch</p>
+                                                        {{ $item->trading }}
+                                                    </td>
+                                                    <td class="text-right">
+                                                        <p>Tồn kho</p>{{ $item->product_qty }}
+                                                    </td>
+                                                    <td class="text-right">
+                                                        <p>Đơn giá nhập</p>{{ number_format($item->product_price) }}
+                                                    </td>
+                                                    <td class="text-right">
+                                                        <p>Trị tồn kho</p>{{ number_format($item->total) }}
+                                                    </td>
+                                                    <td>
+                                                        <p>Ghi chú</p>{{ $item->product_trademark }}
+                                                    </td>
+                                                    <td>
+                                                        <form action="{{ route('editProduct', $item->id) }}"
+                                                            method="post">
+                                                            @csrf
+                                                            @method('PUT')
+                                                            <button type="submit"
+                                                                style="background: transparent; border:none;">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="32"
+                                                                    height="32" viewBox="0 0 32 32"
+                                                                    fill="none">
+                                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                        d="M18.7832 6.79483C18.987 6.71027 19.2056 6.66675 19.4263 6.66675C19.6471 6.66675 19.8656 6.71027 20.0695 6.79483C20.2734 6.87938 20.4586 7.00331 20.6146 7.15952L21.9607 8.50563C22.1169 8.66165 22.2408 8.84693 22.3253 9.05087C22.4099 9.25482 22.4534 9.47342 22.4534 9.69419C22.4534 9.91495 22.4099 10.1336 22.3253 10.3375C22.2408 10.5414 22.1169 10.7267 21.9607 10.8827L20.2809 12.5626C20.2711 12.5736 20.2609 12.5844 20.2503 12.595C20.2397 12.6056 20.2289 12.6158 20.2178 12.6256L11.5607 21.2827C11.4257 21.4177 11.2426 21.4936 11.0516 21.4936H8.34644C7.94881 21.4936 7.62647 21.1712 7.62647 20.7736V18.0684C7.62647 17.8775 7.70233 17.6943 7.83737 17.5593L16.4889 8.9086C16.5003 8.89532 16.5124 8.88235 16.525 8.86973C16.5376 8.8571 16.5506 8.84504 16.5639 8.83354L18.2381 7.15952C18.394 7.00352 18.5795 6.8793 18.7832 6.79483ZM17.0354 10.3984L9.06641 18.3667V20.0536H10.7534L18.7221 12.085L17.0354 10.3984ZM19.7402 11.0668L18.0537 9.38022L19.2572 8.17685C19.2794 8.15461 19.3057 8.13696 19.3348 8.12493C19.3638 8.11289 19.3949 8.10669 19.4263 8.10669C19.4578 8.10669 19.4889 8.11289 19.5179 8.12493C19.5469 8.13697 19.5737 8.15504 19.5959 8.17728L20.9428 9.52411C20.9651 9.5464 20.9831 9.57315 20.9951 9.60228C21.0072 9.63141 21.0134 9.66264 21.0134 9.69419C21.0134 9.72573 21.0072 9.75696 20.9951 9.78609C20.9831 9.81522 20.9651 9.84197 20.9428 9.86426L19.7402 11.0668ZM6.6665 24.6134C6.6665 24.2158 6.98885 23.8935 7.38648 23.8935H24.6658C25.0634 23.8935 25.3858 24.2158 25.3858 24.6134C25.3858 25.0111 25.0634 25.3334 24.6658 25.3334H7.38648C6.98885 25.3334 6.6665 25.0111 6.6665 24.6134Z"
+                                                                        fill="#555555"></path>
+                                                                </svg>
+                                                            </button>
 
-                                </form>
-                            </td>
-                            <td>
-                                <form action="{{route('delete_product',$item->id)}}" method="post">
-                                    @csrf
-                                    @method('delete')
-                                    <button type="submit" style="background: transparent; border:none;">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
-                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M14.0606 6.66675C13.6589 6.66675 13.3333 6.99236 13.3333 7.39402C13.3333 7.79568 13.6589 8.12129 14.0606 8.12129H17.9394C18.341 8.12129 18.6667 7.79568 18.6667 7.39402C18.6667 6.99236 18.341 6.66675 17.9394 6.66675H14.0606ZM8 10.3031C8 9.90143 8.32561 9.57582 8.72727 9.57582H10.1818H21.8182H23.2727C23.6744 9.57582 24 9.90143 24 10.3031C24 10.7048 23.6744 11.0304 23.2727 11.0304H22.5455V22.6667C22.5455 24.2819 21.2158 25.5758 19.6179 25.5758H12.3452C11.9637 25.5755 11.5854 25.4997 11.2333 25.3528C10.8812 25.2059 10.5617 24.9908 10.2931 24.7199C10.0244 24.449 9.81206 24.1276 9.66816 23.7743C9.52463 23.4219 9.45204 23.0447 9.45455 22.6642V11.0304H8.72727C8.32561 11.0304 8 10.7048 8 10.3031ZM10.9091 22.6723V11.0304H21.0909V22.6667C21.0909 23.4623 20.4288 24.1213 19.6179 24.1213H12.3458C12.1562 24.1211 11.9684 24.0834 11.7934 24.0104C11.6183 23.9374 11.4595 23.8304 11.3259 23.6958C11.1924 23.5611 11.0868 23.4013 11.0153 23.2257C10.9437 23.05 10.9076 22.8619 10.9091 22.6723ZM17.9394 13.4546C18.3411 13.4546 18.6667 13.7802 18.6667 14.1819V20.9698C18.6667 21.3714 18.3411 21.6971 17.9394 21.6971C17.5377 21.6971 17.2121 21.3714 17.2121 20.9698V14.1819C17.2121 13.7802 17.5377 13.4546 17.9394 13.4546ZM14.7879 14.1819C14.7879 13.7802 14.4623 13.4546 14.0606 13.4546C13.6589 13.4546 13.3333 13.7802 13.3333 14.1819V20.9698C13.3333 21.3714 13.6589 21.6971 14.0606 21.6971C14.4623 21.6971 14.7879 21.3714 14.7879 20.9698V14.1819Z" fill="#555555"></path>
-                                        </svg>
-                                    </button>
-                                </form>
-                            </td>
-                            @endif
-                        </tr>
-                        @endforeach
-                        @endforeach
-                        </tbody>
-                        </table>
+                                                        </form>
+                                                    </td>
+                                                    <td>
+                                                        <form action="{{ route('delete_product', $item->id) }}"
+                                                            method="post">
+                                                            @csrf
+                                                            @method('delete')
+                                                            <button type="submit"
+                                                                style="background: transparent; border:none;">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="32"
+                                                                    height="32" viewBox="0 0 32 32"
+                                                                    fill="none">
+                                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                        d="M14.0606 6.66675C13.6589 6.66675 13.3333 6.99236 13.3333 7.39402C13.3333 7.79568 13.6589 8.12129 14.0606 8.12129H17.9394C18.341 8.12129 18.6667 7.79568 18.6667 7.39402C18.6667 6.99236 18.341 6.66675 17.9394 6.66675H14.0606ZM8 10.3031C8 9.90143 8.32561 9.57582 8.72727 9.57582H10.1818H21.8182H23.2727C23.6744 9.57582 24 9.90143 24 10.3031C24 10.7048 23.6744 11.0304 23.2727 11.0304H22.5455V22.6667C22.5455 24.2819 21.2158 25.5758 19.6179 25.5758H12.3452C11.9637 25.5755 11.5854 25.4997 11.2333 25.3528C10.8812 25.2059 10.5617 24.9908 10.2931 24.7199C10.0244 24.449 9.81206 24.1276 9.66816 23.7743C9.52463 23.4219 9.45204 23.0447 9.45455 22.6642V11.0304H8.72727C8.32561 11.0304 8 10.7048 8 10.3031ZM10.9091 22.6723V11.0304H21.0909V22.6667C21.0909 23.4623 20.4288 24.1213 19.6179 24.1213H12.3458C12.1562 24.1211 11.9684 24.0834 11.7934 24.0104C11.6183 23.9374 11.4595 23.8304 11.3259 23.6958C11.1924 23.5611 11.0868 23.4013 11.0153 23.2257C10.9437 23.05 10.9076 22.8619 10.9091 22.6723ZM17.9394 13.4546C18.3411 13.4546 18.6667 13.7802 18.6667 14.1819V20.9698C18.6667 21.3714 18.3411 21.6971 17.9394 21.6971C17.5377 21.6971 17.2121 21.3714 17.2121 20.9698V14.1819C17.2121 13.7802 17.5377 13.4546 17.9394 13.4546ZM14.7879 14.1819C14.7879 13.7802 14.4623 13.4546 14.0606 13.4546C13.6589 13.4546 13.3333 13.7802 13.3333 14.1819V20.9698C13.3333 21.3714 13.6589 21.6971 14.0606 21.6971C14.4623 21.6971 14.7879 21.3714 14.7879 20.9698V14.1819Z"
+                                                                        fill="#555555"></path>
+                                                                </svg>
+                                                            </button>
+                                                        </form>
+                                                    </td>
+                                                @endif
+                                            </tr>
+                                        @endforeach
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="paginator mt-4 d-flex justify-content-end">
+                        {{ $products->appends(request()->except('page'))->links() }}
                     </div>
                 </div>
-                <div class="paginator mt-4 d-flex justify-content-end">
-                    {{ $products->appends(request()->except('page'))->links() }}
-                </div>
             </div>
-        </div>
 
-</div>
-</section>
-<meta name="csrf-token" content="{{ csrf_token() }}">
+        </div>
+    </section>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </div>
 </div>
 <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
@@ -752,12 +848,10 @@ $index = array_search($item['label'], $numberedLabels);
             for (var i = 1; i < jsonData.length; i++) {
                 var row = jsonData[i];
                 var formattedRow = {};
-
                 for (var j = 0; j < headers.length; j++) {
                     var header = headers[j];
                     formattedRow[header] = row[j];
                 }
-
                 formattedData.push(formattedRow);
             }
             var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -957,7 +1051,6 @@ $index = array_search($item['label'], $numberedLabels);
         $('#category-options input[type="checkbox"]').prop('checked', false);
         $('#category-options').hide();
     });
-
     //Xử lí tìm kiếm bộ lọc tổng
     function filterFunction() {
         var input = $("#myInput");
