@@ -44,16 +44,19 @@
                                 <div class="form-group">
                                     <label>Tên sản phẩm</label>
                                     <input required type="text" class="form-control" id="product_name"
+                            <?php if(!Auth::user()->can('view-provides')) echo 'readonly' ?>
                                         name="product_name" value="{{ $pro->product_name }}">
                                 </div>
                                 <div class="form-group">
                                     <label for="email">Loại hàng</label>
                                     <input required type="text" class="form-control" id="product_type"
+                            <?php if(!Auth::user()->can('view-provides')) echo 'readonly' ?>
                                         name="product_type" value="{{ $pro->product_category }}">
                                 </div>
                                 <div class="form-group">
                                     <label for="">Đơn vị tính</label>
                                     <input required type="text" class="form-control" id="product_unit"
+                            <?php if(!Auth::user()->can('view-provides')) echo 'readonly' ?>
                                         name="product_unit" value="{{ $pro->product_unit }}">
                                 </div>
                             </div>
@@ -61,6 +64,7 @@
                                 <div class="form-group">
                                     <label for="email">Ghi chú</label>
                                     <input type="text" class="form-control" id="product_trademark"
+                            <?php if(!Auth::user()->can('view-provides')) echo 'readonly' ?>
                                         name="product_trademark" value="{{ $pro->product_trademark }}">
                                 </div>
                                 <div class="form-group">
@@ -71,11 +75,14 @@
                                 <div class="form-group">
                                     <label for="email">Giá nhập</label>
                                     <input required type="number" class="form-control" id="product_price"
+                            <?php if(!Auth::user()->can('view-provides')) echo 'readonly' ?>
                                         name="product_price" value="{{ $pro->product_price }}">
                                 </div>
                                 <div class="form-group">
                                     <label for="">Thuế</label>
-                                    <input type="number" class="form-control" id="product_tax" name="product_tax"
+                                    <input type="number" class="form-control" 
+                            <?php if(!Auth::user()->can('view-provides')) echo 'readonly' ?>
+                            id="product_tax" name="product_tax"
                                         value="{{ $pro->tax }}">
                                 </div>
                                 <div class="form-group">
@@ -83,7 +90,9 @@
                             </div>
                         </div>
                         <div class="btn-fixed">
+                            @if (Auth::user()->can('view-provides'))
                             <button type="submit" class="btn btn-primary">Lưu</button>
+                            @endif
                             <a class="btn btn-default" href="{{ route('data.index') }}">Hủy</a>
                         </div>
                     </form>

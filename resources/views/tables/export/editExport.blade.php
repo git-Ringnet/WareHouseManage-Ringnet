@@ -583,7 +583,7 @@
                 "text": `${fieldCounter}`
             });
             const TenInput = $("<td>" +
-                "<select id='maProduct' class='p-1 pr-5 maProduct' name='products_id[]'>" +
+                "<select id='maProduct' class='p-1 maProduct form-control' name='products_id[]'>" +
                 "<option value=''>Lựa chọn sản phẩm</option>" +
                 '@foreach ($product_code as $value)' +
                 "<option value='{{ $value->id }}'>{{ $value->products_code }}</option>" +
@@ -591,21 +591,22 @@
                 "</select>"
             );
             const ProInput = $("<td>" +
-                "<select class='child-select p-1 pr-5 productName' name='product_id[]'>" +
+                "<select class='child-select p-1 productName form-control' name='product_id[]'>" +
                 "<option value=''>Lựa chọn sản phẩm</option>" +
                 "</select>" +
                 "</td>");
             const dvtInput = $(
-                "<td><input type='text' id='product_unit' class='product_unit' name='product_unit[]' required></td>"
+                "<td><input type='text' id='product_unit' class='product_unit form-control' style='width:80px' name='product_unit[]' required></td>"
             );
             const slInput = $(
-                "<td><input type='number' id='product_qty' class='quantity-input' name='product_qty[]' required></td>"
+                "<td><input type='number' id='product_qty' class='quantity-input form-control' name='product_qty[]' required></td>"
             );
             const giaInput = $(
-                "<td><input type='number' class='product_price' id='product_price' name='product_price[]' required></td>");
-            const ghichuInput = $("<td><input type='text' class='note_product' name='product_note[]'></td>");
+
+                "<td><input type='number' id='product_price' class='form-control' style='width:140px' name='product_price[]' required></td>");
+            const ghichuInput = $("<td><input type='text' id='' class='form-control' name='product_note[]'></td>");
             const thueInput = $("<td>" +
-                "<input type='number' id='product_tax' class='product_tax' name='product_tax[]' required>" +
+                "<input type='number' id='product_tax' class='product_tax form-control' name='product_tax[]' required>" +
                 "</td>");
             const thanhTienInput = $("<td><span class='total-amount'>0</span></td>");
             const sn = $(

@@ -106,13 +106,13 @@
                     </div>
                 </form>
                 <div class="title-edit">Chủng loại sản phẩm</div>
-                <div class="card">
+                <div class="carded">
                     <div class="card-header">
                         <h3 class="card-title">Sản phẩm / Sửa sản phẩm</h3>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <table id="example2" class="table table-hover">
+                        <table id="example2" class="table table-hover bg-white rounded">
                             <thead>
                                 <tr>
                                     <th>ID</th>
@@ -214,12 +214,12 @@
                         <?php $st++; ?>
                         @endforeach
                     </div>
-                    <div class="btn-fixed">
+                    {{-- <div class="btn-fixed">
                         @if(Auth::user()->can('view-provides'))
                         <button type="submit" class="btn btn-primary">Lưu</button>
                         @endif
                         <a href="{{ asset('./data') }}" class="btn btn-default">Hủy</a>
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="paginator mt-4 d-flex justify-content-end">
                     {{ $listProduct->appends(request()->except('page'))->links() }}

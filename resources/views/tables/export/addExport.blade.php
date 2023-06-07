@@ -453,7 +453,7 @@
                 "text": `${fieldCounter}`
             });
             const TenInput = $("<td>" +
-                "<select id='maProduct' class='p-1 pr-5 maProduct' required name='products_id[]'>" +
+                "<select id='maProduct' class='p-1 pr-5 maProduct form-control' required name='products_id[]'>" +
                 "<option value=''>Lựa chọn sản phẩm</option>" +
                 '@foreach ($products as $value)' +
                 "<option value='{{ $value->id }}'>{{ $value->products_code }}</option>" +
@@ -461,28 +461,28 @@
                 "</select>"
             );
             const ProInput = $("<td>" +
-                "<select class='child-select p-1 pr-5 productName' required name='product_id[]'>" +
+                "<select class='child-select p-1 productName form-control' required name='product_id[]'>" +
                 "<option value=''>Lựa chọn sản phẩm</option>" +
                 "</select>" +
                 "</td>");
             const dvtInput = $(
-                "<td><input type='text' id='product_unit' class='product_unit' name='product_unit[]' required></td>"
+                "<td><input type='text' id='product_unit' class='product_unit form-control' style='width:70px' name='product_unit[]' required></td>"
             );
             const slInput = $(
                 "<td>" +
                 "<div class='d-flex'>" +
-                "<input type='number' oninput='limitMaxValue(this)' id='product_qty' class='quantity-input' name='product_qty[]' required style='width:50px;'>" +
-                "<input type='text' readonly class='quantity-exist' required style='width:50px;background:#D6D6D6;border:none;'>" +
+                "<input type='number' oninput='limitMaxValue(this)' id='product_qty' class='quantity-input form-control' name='product_qty[]' required style='width:50px;'>" +
+                "<input type='text' readonly class='quantity-exist form-control' required style='width:50px;background:#D6D6D6;border:none;'>" +
                 "</div>" +
                 "</td>"
             );
             const giaInput = $(
-                "<td><input type='number' class='product_price' id='product_price' name='product_price[]' required></td>"
+                "<td><input type='number' class='product_price form-control' style='width:140px' id='product_price' name='product_price[]' required></td>"
             );
             const ghichuInput = $(
-                "<td><input type='text' class='note_product' name='product_note[]'></td>");
+                "<td><input type='text' class='note_product form-control' style='width:120px' name='product_note[]'></td>");
             const thueInput = $("<td>" +
-                "<select name='product_tax[]' class='product_tax p-1 pr-5' id='product_tax' required>" +
+                "<select name='product_tax[]' class='product_tax p-1 form-control' style='width:80px' id='product_tax' required>" +
                 "<option value='0'>0%</option>" +
                 "<option value='8'>8%</option>" +
                 "<option value='10'>10%</option>" +
@@ -543,17 +543,18 @@
                         let count = 1;
                         modalBody.empty();
                         var snList = $('<table class="table table-hover">' +
-                            '<thead><tr><td>STT</td><td>Serial Number</td></tr></thead>' +
+                            '<thead><tr><th>STT</th><th>Serial Number</th></tr></thead>' +
                             '<tbody>'
                         );
                         var product = $('<table class="table table-hover">' +
-                            '<thead><tr><td>ID</td><td>Mã sản phẩm</td><td>Tên sản phẩm</td><td>Số lượng sản phẩm</td><td>Số lượng S/N</td></tr></thead>' +
+                            '<thead><tr><th>ID</th><th>Mã sản phẩm</th><th>Tên sản phẩm</th><th class="text-right">Số lượng sản phẩm</th><th class="text-right">Số lượng S/N</th></tr></thead>' +
                             '<tbody><tr>' + '<td>1</td>' + '<td>' +
                             productCode1 + '</td>' + '<td>' + productName +
-                            '</td>' + '<td>' + qty + '</td>' + '<td>' + qty +
-                            '</td>' +
+
+                            '</td>' + '<td class="text-right">' + qty + '</td>' + '<td class="text-right">' + qty + '</td>' +
+
                             '</tr</tbody>' + '</table>' +
-                            '<h5>Thông tin Serial Number </h5>');
+                            '<h3>Thông tin Serial Number </h3>');
                         response.forEach(function(sn) {
                             var countCell = $('<td>').text(count);
                             var snItemCell = $('<td>').text(sn.serinumber);

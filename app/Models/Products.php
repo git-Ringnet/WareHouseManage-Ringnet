@@ -49,7 +49,7 @@ class Products extends Model
                     $query->orWhere('inventory', '=', 0);
                 }
                 if (in_array("1", $status)) {
-                    $query->orWhereBetween('inventory', [0, 5]);
+                    $query->orWhereBetween('inventory', [1, 5]);
                 }
                 if (in_array("2", $status)) {
                     $query->orWhere('inventory', '>', 5);

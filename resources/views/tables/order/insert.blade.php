@@ -231,7 +231,7 @@
                     '<input type="hidden" name="product_id[]" value="' + last + '">' +
                     '<td scope="row"><input type="checkbox" id=' + rowCount + '" class="cb-element"></td>' +
                     '<td>' +
-                    '<select name="products_id[]">' +
+                    '<select class="form-control" name="products_id[]">' +
                     '<option value="">Lựa chọn mã sản phẩm</option>' +
                     '@foreach ($products as $va)' +
                     '<option value="{{ $va->id }}">{{ $va->products_code }}</option>' +
@@ -240,16 +240,16 @@
                     '</td>' +
                     '<td><input required type="text" name="product_name[]" value="' + titlesValue +
                     '"></td>' +
-                    '<td><input required type="text" name="product_category[]"></td>' +
-                    '<td><input required type="text" name="product_unit[]" value="' + typeValue +
+                    '<td><input required type="text" class="form-control" style="width:120px" name="product_category[]"></td>' +
+                    '<td><input required type="text" class="form-control" style="width:70px" name="product_unit[]" value="' + typeValue +
                     '"></td>' +
-                    '<td><input required type="number" name="product_qty[]" class="quantity-input" value="' +
+                    '<td><input required type="number" name="product_qty[]" class="quantity-input form-control" value="' +
                     numberssValue + '"></td>' +
-                    '<td><input required type="number" name="product_price[]" value="' + price + '"></td>' +
-                    '<td><input required type="number" name="product_tax[]" class="product_tax" value=' + tax +
+                    '<td><input required type="number" class="form-control" style="width:120px" name="product_price[]" value="' + price + '"></td>' +
+                    '<td><input required type="number" name="product_tax[]" class="product_tax form-control" style="width:70px" value=' + tax +
                     '></td>' +
-                    '<td><input readonly type="text" name="product_total[]" value="' + totalPrice + '"></td>' +
-                    '<td><input type="text" name="product_trademark[]"></td>' +
+                    '<td><input readonly type="text" class="form-control" name="product_total[]" value="' + totalPrice + '"></td>' +
+                    '<td><input type="text" class="form-control" style="width:120px" name="product_trademark[]"></td>' +
                     '<td>' +
                     '<button class="exampleModal" name="btn_add_SN[]" type="button" data-toggle="modal" data-target="#exampleModal' +
                     rowCount + '" style="background:transparent; border:none;">' +
@@ -578,7 +578,7 @@
             '<input type="hidden" name="product_id[]" value="' + last + '">' +
             '<td scope="row"><input type="checkbox" id=' + rowCount + '" class="cb-element"></td>' +
             '<td>' +
-            '<select name="products_id[]" class="list_products">' +
+            '<select name="products_id[]" class="list_products form-control">' +
             '<option value="">Lựa chọn mã sản phẩm  </option> ' +
             '@foreach ($products as $va)' +
             '<option value="{{ $va->id }}">{{ $va->products_code }}</option>' +
@@ -586,24 +586,24 @@
             '</select> ' +
             '</td>' +
             '<td>' +
-            '<input id="search" type="text" placeholder="Nhập thông tin sản phẩm" name="product_name[]" class="search_product" onkeyup="filterFunction()"> ' +
+            '<input id="search" type="text" placeholder="Nhập thông tin sản phẩm" name="product_name[]" class="search_product form-control" onkeyup="filterFunction()"> ' +
             '<div id="dropdown-values" class="dropdown-values"><ul id="myUL1" class="myUL1 bg-white position-absolute rounded shadow" style="padding:0 10px; cursor:pointer;"> </ul>  </div>' +
             '</td>' +
-            '<td><input required type="text" name="product_category[]"></td>' +
-            '<td><input required type="text" name="product_unit[]"></td>' +
-            '<td><input required type="number" name="product_qty[]" class="quantity-input"></td>' +
-            '<td><input required type="number" name="product_price[]" ></td>' +
+            '<td><input required type="text" class="form-control" style="width:120px" name="product_category[]"></td>' +
+            '<td><input required type="text" class="form-control" style="width:70px" name="product_unit[]"></td>' +
+            '<td><input required type="number" name="product_qty[]" class="quantity-input form-control"></td>' +
+            '<td><input required type="number" class="form-control" style="width:120px"" name="product_price[]" ></td>' +
             // '<td><input required type="number" name="product_tax[]" class="product_tax"></td>' +
             '<td>' +
-            '<select name="product_tax[]" class="product_tax">' +
+            '<select name="product_tax[]" style="width:80px" class="product_tax form-control">' +
             '<option value="10">10%</option>' +
             '<option value="0">0%</option>' +
             '<option value="8">8%</option>' +
             '<option value="0">NOVAT</option>' +
             '</select>' +
             '</td>' +
-            '<td><input readonly type="text" name="product_total[]"></td>' +
-            '<td><input type="text" name="product_trademark[]"></td>' +
+            '<td><input readonly type="text" class="form-control" name="product_total[]"></td>' +
+            '<td><input type="text" class="form-control" style="width:120px" name="product_trademark[]"></td>' +
             '<td>' +
             '<button class="exampleModal" name="btn_add_SN[]" type="button" data-toggle="modal" data-target="#exampleModal' +
             rowCount + '" style="background:transparent; border:none;">' +
