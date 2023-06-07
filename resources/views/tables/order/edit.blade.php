@@ -16,7 +16,7 @@
                             d="M11.1244 8.17446C11.3413 8.40707 11.3413 8.78421 11.1244 9.01683L8.34199 12L11.1244 14.9832C11.3413 15.2158 11.3413 15.5929 11.1244 15.8255C10.9074 16.0582 10.5557 16.0582 10.3387 15.8255L7.16349 12.4212C6.94653 12.1886 6.94653 11.8114 7.16349 11.5788L10.3387 8.17446C10.5557 7.94185 10.9074 7.94185 11.1244 8.17446Z"
                             fill="white" />
                     </svg>
-                    <span>Trả về danh sách</span>
+                    <span class="ml-1" style="font-size: 16px; font-weight: 500; color: #555555;">Trả về danh sách</span>
                 </a>
             @else
                 <span>Nhập hàng</span>
@@ -184,7 +184,7 @@
             <div class="border-bottom p-3 d-flex justify-content-between">
                 <b>Thông tin nhà cung cấp</b>
                 @if (Auth::user()->id == $order->users_id)
-                @if($order->order_status != 1)
+                @if($order->order_status == 0)
                 <button id="btn-addProvide" class="btn btn-primary save_infor d-flex align-items-center">
                     <img src="{{ asset('dist/img/icon/Union.png') }}">
                     <span class="ml-1">Lưu thông tin</span>
@@ -415,7 +415,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php $st = 0; ?>
+                                            <?php $st = 1; ?>
                                             @foreach ($seri as $se)
                                             @if ($pro->id == $se->product_orderid)
                                             <tr>
@@ -447,7 +447,7 @@
             </div>
             <div class="btn-fixed">
                 @if (Auth::user()->id == $order->users_id || Auth::user()->can('isAdmin'))
-                @if ($order->order_status != 1)
+                @if ($order->order_status == 0)
                 <a href="javascript:;" class="btn btn-primary addBillEdit">Lưu</a>
                 @endif
                 @endif
@@ -619,7 +619,7 @@
     $(document).on('click', '.addBillEdit', function(e) {
         e.preventDefault();
         if ($('#form_submit')[0].checkValidity()) {
-            $('#form_submit').attr('action', '{{ route('addBillEdit') }}');
+            $('#form_submit').attr('action', '{{ route("addBillEdit") }}');
             $('input[name="_method"]').remove();
             updateProductSN()
             $('#form_submit').submit();
