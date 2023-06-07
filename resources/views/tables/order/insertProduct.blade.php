@@ -515,7 +515,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 value="{{ $va->id }}"></td>
                                         <td>{{ $va->id }}</td>
                                         <td>{{ $va->provide_name }}</td>
-                                        <td>{{ $va->updated_at }}</td>
+                                        <td>{{ date_format(new DateTime($va->updated_at), "d-m-Y") }}</td>
                                         <td>{{ $va->name }}</td>
                                         <td class="text-right">{{ number_format($va->total) }}</td>
                                         <td class="text-center">

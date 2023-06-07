@@ -148,7 +148,7 @@ class ProductsController extends Controller
         //lấy tất cả sản phẩm con theo sản phẩm lớn
         $product = DB::table('product')
             ->join('products', 'product.products_id', '=', 'products.id')
-            ->join('serinumbers','serinumbers.product_id','product.id')
+            ->join('serinumbers', 'serinumbers.product_id', 'product.id')
             ->whereIn('products.id', $productIds)
             ->groupBy(
                 'product.id',
@@ -262,12 +262,20 @@ class ProductsController extends Controller
         $products = Products::findOrFail($id);
         $cate = Category::all();
         $title = 'Chỉnh sửa sản phẩm';
-        // $listProduct = Product::where('products_id', $products->id)->paginate(8);
-        $listProduct = Product::join('serinumbers','product.id','serinumbers.product_id')
-        ->where('product.products_id',$products->id)
-        ->distinct()
-        ->paginate(8);
+
+        $listProduct = Product::with('getSerinumbers')->where('products_id', $products->id)->paginate(8);
+        // $listProduct = Product::join('serinumber', 'product.id', 'serinumbers.product_id')
+        //     ->where('product.products_id', $products->id)
+        //     ->distinct()
+        //     ->paginate(8);
+
+        // foreach($listProduct as $va){
+        //     var_dump($va->getSerinumbers);
+        // }
+        // die();
+        
         return view('tables.products.edit_products', compact('products', 'cate', 'title', 'listProduct'))->with('msg','Chỉnh sửa sản phẩm thành công!!');
+
     }
 
     /**
@@ -413,25 +421,35 @@ class ProductsController extends Controller
 
         return redirect()->route('data.index');
     }
-     // Xóa sản phẩm con
-     public function delete_product($id)
-     {
-        $del = Product::where('id',$id)->first();
+    // Xóa sản phẩm con
+    public function delete_product($id)
+    {
+        $del = Product::where('id', $id)->first();
         $current_id = $del->products_id;
-        $del->delete();
-        $updatePrice = Product::where('products_id', $current_id)->get();
-        
-        $relatedProduct = Products::findOrFail($current_id);
-        $relatedProduct->price_inventory = 0;
-        $relatedProduct->inventory = 0;
-        foreach ($updatePrice as $up) {
-            $relatedProduct->inventory += $up->product_qty;
-            $relatedProduct->price_inventory += $up->total;
-            $relatedProduct->price_avg = ($relatedProduct->price_inventory / $relatedProduct->inventory);
+        $check = Serinumbers::where('product_id', $del->id)->get();
+        $block = false;
+        foreach ($check as $ck) {
+            if ($ck->seri_status == 2) {
+                $block = true;
+            }
         }
-        $relatedProduct->save();
-        return redirect()->route('data.index')->with('msg','Xóa sản phẩm thành công!');
-     }
+        if ($block) {
+            return redirect()->route('data.index')->with('danger', 'Sản phẩm còn tồn tại trong đơn nhập hàng!');
+        } else {
+            $del->delete();
+            $updatePrice = Product::where('products_id', $current_id)->get();
+            $relatedProduct = Products::findOrFail($current_id);
+            $relatedProduct->price_inventory = 0;
+            $relatedProduct->inventory = 0;
+            foreach ($updatePrice as $up) {
+                $relatedProduct->inventory += $up->product_qty;
+                $relatedProduct->price_inventory += $up->total;
+                $relatedProduct->price_avg = ($relatedProduct->price_inventory / $relatedProduct->inventory);
+            }
+            $relatedProduct->save();
+            return redirect()->route('data.index')->with('msg', 'Xóa sản phẩm thành công!');
+        }
+    }
 
     //  Import data to products
     public function import_products(Request $request)
