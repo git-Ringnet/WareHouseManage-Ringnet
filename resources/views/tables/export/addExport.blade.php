@@ -174,14 +174,14 @@
                             <span><b>Thuế VAT:</b></span>
                             <span id="product-tax">{{ number_format(0) }}</span>
                         </div>
-                        <div class="d-flex justify-content-between mt-2">
+                        {{-- <div class="d-flex justify-content-between mt-2">
                             <span class="text-primary">Giảm giá:</span>
                             <span>0đ</span>
                         </div>
                         <div class="d-flex justify-content-between mt-2">
                             <span class="text-primary">Phí vận chuyển:</span>
                             <span>0đ</span>
-                        </div>
+                        </div> --}}
                         <div class="d-flex justify-content-between mt-2">
                             <span class="text-lg"><b>Tổng cộng:</b></span>
                             <span><b id="grand-total" data-value="0">{{ number_format(0) }}</b></span>
@@ -217,19 +217,19 @@
             {{-- Modal S/N --}}
             <div class="modal fade" id="snModal" tabindex="-1" role="dialog"
                 aria-labelledby="productModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
+                <div class="modal-dialog" role="document" style="max-width: 85%;">
                     <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="productModalLabel">Danh sách Serial Number</h5>
+                        <div class="modal-header align-items-center">
+                            <div>
+                                <h5 class="modal-title" id="exampleModalLabel">Serial Number</h5>
+                                <p>Thông tin chi tiết về số S/N của mỗi sản phẩm </p>
+                            </div>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
 
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
                         </div>
                     </div>
                 </div>
@@ -474,8 +474,8 @@
             const slInput = $(
                 "<td>" +
                 "<div class='d-flex'>" +
-                "<input type='number' id='product_qty' class='quantity-input' name='product_qty[]' required style='width:50px;'>" +
-                "<input type='number' readonly class='quantity-exist' name='product_qty[]' required style='width:50px;'>" +
+                "<input type='number' oninput='limitMaxValue(this)' id='product_qty' class='quantity-input' name='product_qty[]' required style='width:50px;'>" +
+                "<input type='text' readonly class='quantity-exist' required style='width:50px;background:#D6D6D6;border:none;'>" +
                 "</div>" +
                 "</td>"
             );
@@ -488,7 +488,7 @@
                 "<select name='product_tax[]' class='product_tax p-1 pr-5' id='product_tax' required>" +
                 "<option value='0'>0%</option>" +
                 "<option value='8'>8%</option>" +
-                "<option value='10' >10%</option>" +
+                "<option value='10'>10%</option>" +
                 "</select>" +
                 "</td>");
             const thanhTienInput = $("<td><span class='px-5 total-amount'>0</span></td>");
@@ -501,6 +501,12 @@
             const deleteBtn = $("<td><img src='../dist/img/icon/vector.png'></td>", {
                 "class": "delete-row-btn"
             });
+            const option = $(
+                "<td style='display:none;'><input type='number' class='price_import' required></td>" +
+                "<td style='display:none;'><input type='text' class='tonkho' required></td>" +
+                "<td style='display:none;'><input type='text' class='loaihang' required></td>" +
+                "<td style='display:none;'><input type='text' class='dangGD' required></td>"
+            );
             //Xóa sản phẩm
             deleteBtn.click(function() {
                 $(this).closest("tr").remove();
@@ -511,6 +517,21 @@
             sn.click(function() {
                 var qty = $(this).closest('tr').find('.quantity-input').val();
                 var productCode = $(this).closest('tr').find('.productName').val();
+                var productCode1 = $(this).closest('tr').find('.maProduct option:selected')
+                    .text();
+                var productName = $(this).closest('tr').find('.productName option:selected')
+                    .text();
+                var dvt = $(this).closest('tr').find('.product_unit').val();
+                var giaBan = $(this).closest('tr').find('.product_price')
+                    .val();
+                var ghiChu = $(this).closest('tr').find('.note_product')
+                    .val();
+                var thue = $(this).closest('tr').find('.product_tax')
+                    .val();
+                var thanhTien = $(this).closest('tr').find('.total-amount')
+                    .text();
+                var giaNhap = $(this).closest('tr').find('.price_import').val();
+                var tonKho = $(this).closest('tr').find('.tonkho').val();
                 console.log(productCode);
                 $.ajax({
                     url: "{{ route('getSN') }}",
@@ -520,16 +541,29 @@
                         productCode: productCode,
                     },
                     success: function(response) {
-                        var modalBody = $('#snModal').find(
-                            '.modal-body');
+                        var modalBody = $('#snModal').find('.modal-body');
+                        let count = 1;
                         modalBody.empty();
-                        var snList = $('<ul>');
+                        var snList = $('<table class="table table-hover">' +
+                            '<thead><tr><td>STT</td><td>Serial Number</td></tr></thead>' +
+                            '<tbody>'
+                        );
+                        var product = $('<table class="table table-hover">' +
+                            '<thead><tr><td>ID</td><td>Mã sản phẩm</td><td>Tên sản phẩm</td><td>Số lượng sản phẩm</td><td>Số lượng S/N</td></tr></thead>' +
+                            '<tbody><tr>' + '<td>1</td>' + '<td>' +
+                            productCode1 + '</td>' + '<td>' + productName +
+                            '</td>' + '<td>' + qty + '</td>' + '<td>' + qty + '</td>' +
+                            '</tr</tbody>' + '</table>' +
+                            '<h5>Thông tin Serial Number </h5>');
                         response.forEach(function(sn) {
-                            var snItem = $('<li>').text(sn
-                                .serinumber);
-                            snList.append(snItem);
+                            var countCell = $('<td>').text(count);
+                            var snItemCell = $('<td>').text(sn.serinumber);
+                            var row = $('<tr>').append(countCell,
+                                snItemCell);
+                            snList.append(row);
+                            count++;
                         });
-                        modalBody.append(snList);
+                        modalBody.append(product, snList);
                         $('#snModal').modal('show');
                     },
                     error: function(xhr, status, error) {
@@ -544,27 +578,33 @@
                 var productName = $(this).closest('tr').find('.productName option:selected')
                     .text();
                 var dvt = $(this).closest('tr').find('.product_unit').val();
-                var soluong = $(this).closest('tr').find('.quantity-input')
-                    .val();
-                var giaBan = $(this).closest('tr').find('.product_price')
-                    .val();
+                // var soluong = $(this).closest('tr').find('.quantity-input')
+                //     .val();
+                // var giaBan = $(this).closest('tr').find('.product_price')
+                //     .val();
                 var ghiChu = $(this).closest('tr').find('.note_product')
                     .val();
                 var thue = $(this).closest('tr').find('.product_tax')
                     .val();
-                var thanhTien = $(this).closest('tr').find('.total-amount')
-                    .text();
-                $('#productModal').find('.modal-body').html('<b>Mã sản phẩm:</b> ' +
+                // var thanhTien = $(this).closest('tr').find('.total-amount')
+                //     .text();
+                var giaNhap = $(this).closest('tr').find('.price_import').val();
+                var tonKho = $(this).closest('tr').find('.tonkho').val();
+                var loaihang = $(this).closest('tr').find('.loaihang').val();
+                var dangGD = $(this).closest('tr').find('.dangGD').val();
+
+                $('#productModal').find('.modal-body').html('<b>Mã sản phẩm: </b> ' +
                     productCode +
-                    '<br>' + '<b>Tên sản phẩm:</b> ' + productName + '<br>' +
-                    '<b>ĐVT:</b> ' + dvt + '<br>' + '<b>Số lượng: </b>' + soluong + '<br>' +
-                    '<b>Giá bán: </b>' + giaBan + '<br>' + '<b>Ghi chú: </b>' + ghiChu +
-                    '<br>' + '<b>Thuế:</b> ' + thue + '<br>' + '<b>Thành tiền:</b> ' +
-                    thanhTien);
+                    '<br>' + '<b>Tên sản phẩm: </b> ' + productName + '<br>' +
+                    '<b>Loại hàng: </b> ' + loaihang + '<br>' +
+                    '<b>Tồn kho: </b>' + tonKho + '<br>' + '<b>Đang giao dịch: </b>' +
+                    dangGD +
+                    '<br>' + '<b>Giá nhập: </b>' + giaNhap + '<br>' + '<b>Thuế: </b>' +
+                    thue + '%');
             });
             // Gắn các phần tử vào hàng mới
             newRow.append(checkbox, MaInput, TenInput, ProInput, dvtInput, slInput,
-                giaInput, ghichuInput, thueInput, thanhTienInput, sn, info, deleteBtn);
+                giaInput, ghichuInput, thueInput, thanhTienInput, sn, info, deleteBtn, option);
             $("#dynamic-fields").before(newRow);
             // Tăng giá trị fieldCounter
             fieldCounter++;
@@ -807,10 +847,13 @@
         $(document).on('change', '.child-select', function() {
             var selectedName = $(this).val();
             var row = $(this).closest('tr');
-
             var idProduct = $(this).val();
             var productUnitElement = $(this).closest('tr').find('.product_unit');
             var qty_exist = $(this).closest('tr').find('.quantity-exist');
+            var price_import = $(this).closest('tr').find('.price_import');
+            var tonkho = $(this).closest('tr').find('.tonkho');
+            var loaihang = $(this).closest('tr').find('.loaihang');
+            var dangGD = $(this).closest('tr').find('.dangGD');
             if (idProduct) {
                 $.ajax({
                     url: "{{ route('getProduct') }}",
@@ -820,7 +863,11 @@
                     },
                     success: function(response) {
                         productUnitElement.val(response.product_unit);
-                        qty_exist.val(response.product_qty);
+                        qty_exist.val("/" + response.qty_exist);
+                        price_import.val(response.product_price);
+                        tonkho.val(response.product_qty);
+                        loaihang.val(response.product_category);
+                        dangGD.val(response.trading);
                     },
                 });
             }
@@ -855,6 +902,13 @@
             });
         }
     });
+
+    function limitMaxValue(input) {
+        if (input.value > 100) {
+            input.value = 100;
+        }
+    }
+    
     //Kiểm tra số lượng rỗng hoặc nhỏ hơn hoặc bằng 0
     $(document).on('blur', '.quantity-input', function() {
         var input = $(this);
@@ -924,7 +978,7 @@
                 totalTax += rowTax;
             }
         });
-        $('#product-tax').text(totalTax.toFixed(0) + '%');
+        $('#product-tax').text(totalTax.toFixed(0));
 
         // Recalculate total amount and grand total
         calculateGrandTotal();

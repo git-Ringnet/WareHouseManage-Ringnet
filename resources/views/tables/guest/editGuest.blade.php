@@ -78,7 +78,7 @@
                                 <div class="form-group">
                                     <label for="email">Ghi chú:</label>
                                     <input type="text" class="form-control" id="guest_note"
-                                        placeholder="Nhập ghi chú" name="guest_note" value="{{$guests->guest_note}}" required="">
+                                        placeholder="Nhập ghi chú" name="guest_note" value="{{$guests->guest_note}}">
                                 </div>
                                 <div class="form-group">
                                     <label for="pwd">Trạng thái:</label>

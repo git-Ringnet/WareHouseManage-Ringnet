@@ -531,25 +531,26 @@ class ExportController extends Controller
 
                     if ($totalQtyNeeded > $availableQtyTotal) {
                         return redirect()->route('exports.index')->with('danger', 'Vượt quá tổng số lượng sản phẩm!');
+                    } else {
+                        $exports->guest_id = $request->id;
+                        $exports->user_id = Auth::user()->id;
+                        $exports->total = $request->totalValue;
+                        $exports->export_status = 2;
+                        $exports->save();
+
+                        // Cập nhật tình trạng seri sau khi chốt
+                        Serinumbers::whereIn('product_id', $productIDs)
+                            ->where('seri_status', 2)
+                            ->update(['seri_status' => 3]);
+
+                        //cập nhật số lượng tồn kho sản phẩm cha
+                        $query = "UPDATE `products` 
+                                            INNER JOIN `product` ON `products`.`id` = `product`.`products_id` 
+                                            SET `products`.`inventory` = (SELECT SUM(`product`.`product_qty`) FROM `product` WHERE `product`.`products_id` = `products`.`id`) 
+                                            WHERE `products`.`id` IN (" . implode(',', $products_id) . ")";
+                        DB::statement($query);
+                        return redirect()->route('exports.index')->with('msg', 'Chốt đơn thành công!');
                     }
-
-                    $exports->guest_id = $request->id;
-                    $exports->user_id = Auth::user()->id;
-                    $exports->total = $request->totalValue;
-                    $exports->export_status = 2;
-                    $exports->save();
-
-                    // Xóa các serinumbers có seri_status = 2
-                    Serinumbers::where('seri_status', 2)
-                        ->whereIn('product_id', $productIDs)
-                        ->delete();
-                    //cập nhật số lượng tồn kho sản phẩm cha
-                    $query = "UPDATE `products` 
-                                        INNER JOIN `product` ON `products`.`id` = `product`.`products_id` 
-                                        SET `products`.`inventory` = (SELECT SUM(`product`.`product_qty`) FROM `product` WHERE `product`.`products_id` = `products`.`id`) 
-                                        WHERE `products`.`id` IN (" . implode(',', $products_id) . ")";
-                    DB::statement($query);
-                    return redirect()->route('exports.index')->with('msg', 'Chốt đơn thành công!');
                 } else {
                     return redirect()->route('exports.index')->with('danger', 'Chưa được thêm sản phẩm nào!');
                 }
@@ -809,7 +810,29 @@ class ExportController extends Controller
     public function getProduct(Request $request)
     {
         $data = $request->all();
-        $product = Product::findOrFail($data['idProduct']);
+        $product = DB::table('product')
+            ->join('serinumbers', 'serinumbers.product_id', 'product.id')
+            ->where('product.id', $data['idProduct'])
+            ->groupBy(
+                'product.id',
+                'product.products_id',
+                'product.product_name',
+                'product.product_category',
+                'product.product_trademark',
+                'product.product_unit',
+                'product_qty',
+                'product.product_price',
+                'product.created_at',
+                'product.updated_at',
+                'product.tax',
+                'product.total',
+            )
+            ->select(
+                'product.*',
+                DB::raw('SUM(CASE WHEN serinumbers.seri_status = 2 THEN 1 ELSE 0 END) as trading'),
+                DB::raw('SUM(CASE WHEN serinumbers.seri_status = 1 THEN 1 ELSE 0 END) as qty_exist')
+            )
+            ->first();
         return response()->json($product);
     }
 
@@ -819,7 +842,6 @@ class ExportController extends Controller
         $sn = Serinumbers::where('product_id', $data['productCode'])->limit($data['qty'])->get();
         return response()->json($sn);
     }
-
 
     // Xóa đơn hàng AJAX
     public function deleteExports(Request $request)

@@ -20,11 +20,11 @@ class ProductSeeder extends Seeder
                 'product_name' => 'Cisco Catalyst 9800-CL Wireless Controler for Cloud',
                 'product_category' => 'Chính hãng',
                 'product_trademark' => 'CO,CQ',
-                'product_qty' => 3,
+                'product_qty' => 4,
                 'product_price' => 4000000,
                 'product_unit' => 'Cái',
                 'tax' => 0,
-                'total' => 13500000
+                'total' => 16000000
             ],
             [
                 'id' => 2,
@@ -32,11 +32,11 @@ class ProductSeeder extends Seeder
                 'product_name' => 'Thiết bị quản lý không dây Cisco Catalyst 9800-CL',
                 'product_category' => 'Nhập khẩu',
                 'product_trademark' => '',
-                'product_qty' => 4,
+                'product_qty' => 3,
                 'product_price' => 3750000,
                 'product_unit' => 'Cái',
                 'tax' => 0,
-                'total' => 15000000
+                'total' => 11250000
             ],
             [
                 'id' => 3,
@@ -44,11 +44,11 @@ class ProductSeeder extends Seeder
                 'product_name' => 'Cisco 9800-CL WLC',
                 'product_category' => 'Nhập khẩu',
                 'product_trademark' => '',
-                'product_qty' => 8,
+                'product_qty' => 3,
                 'product_price' => 3500000,
                 'product_unit' => 'Cái',
                 'tax' => 8,
-                'total' => 28000000
+                'total' => 10500000
             ],
             [
                 'id' => 4,

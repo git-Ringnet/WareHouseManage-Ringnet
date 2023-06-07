@@ -22,7 +22,7 @@ class productsSeeder extends Seeder
                 'ID_category' => 1,
                 'products_trademark' => 'Cisco',
                 'products_description' => 'Ringnet1',
-                'inventory' => 15,
+                'inventory' => 10,
                 'price_avg' => 3666667,
                 'price_inventory' => 55000000,
             ],

@@ -448,14 +448,14 @@
                             <span><b>Thuế VAT:</b></span>
                             <span id="product-tax">{{ number_format(0) }}</span>
                         </div>
-                        <div class="d-flex justify-content-between mt-2">
+                        {{-- <div class="d-flex justify-content-between mt-2">
                             <span class="text-primary">Giảm giá:</span>
                             <span>0đ</span>
                         </div>
                         <div class="d-flex justify-content-between mt-2">
                             <span class="text-primary">Phí vận chuyển:</span>
                             <span>0đ</span>
-                        </div>
+                        </div> --}}
                         <div class="d-flex justify-content-between mt-2">
                             <span class="text-lg"><b>Tổng cộng:</b></span>
                             <span><b id="grand-total" data-value="0">{{ number_format(0) }}</b></span>
