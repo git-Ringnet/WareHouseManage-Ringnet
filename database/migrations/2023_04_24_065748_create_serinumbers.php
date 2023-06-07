@@ -16,6 +16,7 @@ class CreateSerinumbers extends Migration
         Schema::create('serinumbers', function (Blueprint $table) {
             $table->id()->autoIncrement();
             $table->string('serinumber');
+            $table->integer('product_orderid')->nullable();
             $table->integer('product_id')->nullable();
             $table->integer('seri_status');
             $table->timestamps();

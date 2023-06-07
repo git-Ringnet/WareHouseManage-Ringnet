@@ -203,6 +203,7 @@ class AddProductController extends Controller
                 foreach ($product_SN as $seri_number) {
                     $Seri = new Serinumbers();
                     $Seri->product_id = $pro->id;
+                    $Seri->product_orderid = $pro->id;
                     $Seri->serinumber = $seri_number;
                     $Seri->seri_status = 0;
                     $Seri->save();
@@ -210,6 +211,7 @@ class AddProductController extends Controller
             } else {
                 $Seri = new Serinumbers();
                 $Seri->product_id = $pro->id;
+                $Seri->product_orderid = $pro->id;
                 $Seri->serinumber = $request->{'product_SN' . $i}[0];
                 $Seri->seri_status = 0;
                 $Seri->save();
@@ -247,10 +249,15 @@ class AddProductController extends Controller
         foreach ($product_order as $value) {
             array_push($productIds, $value->id);
         }
-        $seri =  DB::table('serinumbers')
+        if($order->order_status == 1){
+            $seri =  DB::table('serinumbers')
+            ->join('productorders', 'serinumbers.product_orderid', '=', 'productorders.id')
+            ->whereIn('productorders.id', $productIds)->get();
+        }else{
+            $seri =  DB::table('serinumbers')
             ->join('productorders', 'serinumbers.product_id', '=', 'productorders.id')
             ->whereIn('productorders.id', $productIds)->get();
-
+        }
         $title = 'Chi tiết đơn nhập hàng';
 
         return view('tables.order.edit', compact('provide', 'order', 'product_order', 'provide_order', 'lastId', 'products', 'seri', 'title'));
@@ -499,9 +506,9 @@ class AddProductController extends Controller
     public function addBillEdit(Request $request)
     {
         $order = Orders::findOrFail($request->order_id);
+        //  var_dump($order);
+        //         die();
         if ($order->order_status != 1) {
-            $order->provide_id = $request->provide_id;
-            $order->save();
             $product_id = $request->product_id;
             $products_id = $request->products_id;
             $product_name = $request->product_name;
@@ -554,6 +561,7 @@ class AddProductController extends Controller
                 }
 
                 $check = ProductOrders::where('id', $product_id[$i])->first();
+                $order->total = 0;
                 if ($check == null) {
                     $pro = new ProductOrders();
                     $pro->product_id = $product_id[$i];
@@ -569,6 +577,9 @@ class AddProductController extends Controller
                     $pro->product_tax = $product_tax[$i];
                     $pro->product_total = $product_total[$i];
                     $pro->save();
+                    $order->provide_id = $request->provide_id;
+                    $order->total += $product_total[$i];
+                    $order->save();
                     $product_SN = $request->{'product_SN' . $i};
                     if (count($product_SN) > 1) {
                         foreach ($product_SN as $seri_number) {
@@ -596,6 +607,9 @@ class AddProductController extends Controller
                     $check->product_tax = $product_tax[$i];
                     $check->product_total = $product_total[$i];
                     $check->save();
+                    $order->provide_id = $request->provide_id;
+                    $order->total += $product_total[$i];
+                    $order->save();
                 }
             }
             // Xóa sản phẩm không tồn tại trong array
@@ -651,11 +665,13 @@ class AddProductController extends Controller
         if (isset($request->list_id)) {
             $list = $request->list_id;
             $listOrder = Orders::whereIn('id', $list)->get();
-            foreach ($listOrder as $value) {
-                if ($value->order_status != 1) {
-                    $value->order_status = 2;
-                    $value->save();
-                }
+                foreach ($listOrder as $value) {
+                    if($value->users_id == Auth::user()->id || Auth::user()->id == 1){
+                        if ($value->order_status != 1) {
+                            $value->order_status = 2;
+                            $value->save();
+                        }
+                    }
             }
             return response()->json(['success' => true, 'msg' => 'Hủy Đơn Hàng thành công']);
         }

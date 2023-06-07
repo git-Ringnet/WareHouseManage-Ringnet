@@ -72,6 +72,11 @@ Route::get('/data_edit', [ProductsController::class, 'edit_ajax'])->name('ajax')
 Route::get('/data_show', [ProductsController::class, 'show_ajax'])->name('show_ajax');
 Route::get('/deleteProducts', [ProductsController::class, 'deleteProducts'])->name('deleteProducts');
 Route::PUT('/editProduct/{id}', [ProductsController::class, 'editProduct'])->name('editProduct');
+
+Route::delete('/delete_product/{id}', [ProductsController::class, 'delete_product'])->name('delete_product');
+Route::post('/import_products',[ProductsController::class,'import_products'])->name('import_products');
+
+
 Route::PUT('/updateProduct/{id}', [ProductsController::class, 'updateProduct'])->name('updateProduct');
 
 Route::get('/show_provide', [AddProductController::class, 'show_provide'])->name('show_provide');

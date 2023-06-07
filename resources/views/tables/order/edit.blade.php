@@ -299,17 +299,15 @@
                                         required type="text" name="product_unit[]"
                                         value="{{ $pro->product_unit }}"
                                         @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif> </td>
-                                <td> <input class="form-control" @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif
+                                <td> <input class="form-control quantity-input" @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif
                                         required type="number" name="product_qty[]" value="{{ $pro->product_qty }}"
-                                        class="quantity-input"
                                         @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif> </td>
                                 <td> <input class="form-control" @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif
                                         required type="number" name="product_price[]"
                                         value="{{ $pro->product_price }}"
                                         @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif> </td>
-                                <td> <input class="form-control" @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif
+                                <td> <input class="form-control product_tax" @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif
                                         required type="number" name="product_tax[]" value="{{ $pro->product_tax }}"
-                                        class="product_tax"
                                         @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif></td>
                                 <td> <input class="form-control" readonly type="text" name="product_total[]"
                                         value="{{ $pro->product_total }}"></td>
@@ -367,34 +365,6 @@
             <div id="list_modal">
                 <?php $stt = 0; ?>
                 @foreach ($product_order as $pro)
-                    <div class="modal fade" id="exampleModal{{ $stt }}" tabindex="-1" role="dialog"
-                        aria-labelledby="exampleModalLabel" aria-hidden="true">'
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header align-items-center">
-                                    <div>
-                                        <h5 class="modal-title" id="exampleModalLabel">Serial Number</h5>
-                                        <p>Thông tin chi tiết về số S/N của mỗi sản phẩm </p>
-                                    </div>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <table class="table table-hover table_list_order">
-                                        <thead>
-                                            <tr>
-                                                <td>ID</td>
-                                                <td>Mã sản phẩm</td>
-                                                <td>Tên sản phẩm</td>
-                                                <td>Nhà cung cấp</td>
-                                                <td>Loại hàng</td>
-                                                <td>Số lượng sản phẩm</td>
-                                                <td>Số lượng S/N</td>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
                 <div class="modal fade" id="exampleModal{{ $stt }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">'
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
@@ -445,12 +415,12 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        <?php $st = 1; ?>
+                                            <?php $st = 0; ?>
                                             @foreach ($seri as $se)
-                                            @if ($pro->id == $se->product_id)
+                                            @if ($pro->id == $se->product_orderid)
                                             <tr>
                                                 <td><input type="checkbox" id="checkbox_{{ $stt }}"></td>
-                                                <td><span>{{$st}}</span></td>
+                                                <td><span class="stt_SN">{{$st}}</span></td>
                                                 <td><input type="text" name="product_SN{{ $stt }}[]" value="{{ $se->serinumber }}" onpaste="handlePaste(this)" @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly' ?> @endif></td>
                                                 <td class="deleteRow1">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
@@ -459,7 +429,7 @@
                                                 </td>
                                             </tr>
                                             @endif
-                                            <?php $st++ ?>
+                                                <?php $st++; ?>
                                             @endforeach
                                         </tbody>
                                     </table>
@@ -469,12 +439,11 @@
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Save</button>
                             </div>
-                        </div>
+                        </div>  
                     </div>
                 </div>
                 <?php $stt++; ?>
                 @endforeach
-
             </div>
             <div class="btn-fixed">
                 @if (Auth::user()->id == $order->users_id || Auth::user()->can('isAdmin'))
@@ -583,7 +552,6 @@
             var productQty = parseInt($(this).find('.quantity-input').val());
             var productPrice = 0;
             var taxValue = parseFloat($(this).find('.product_tax').val());
-
             $(this).find('[name^="product_price"]').each(function() {
                 productPrice += parseFloat($(this).val());
             });
@@ -900,25 +868,11 @@
             }
         }
 
-        var info = document.querySelectorAll('.exampleModal');
-        for (let k = 0; k < info.length; k++) {
-            info[k].addEventListener('click', function() {
-                var productCode = $(this).closest('tr').find('.list_products option:selected').text();
-                var productName = $(this).closest('tr').find('[name^="product_name"]').val();
-                var productType = $(this).closest('tr').find('[name^="product_category"]').val();
-                var productQty = $(this).closest('tr').find('[name^="product_qty"]').val();
-                var provide_name = $('#provide_name').val();
-                $('.name_provide').text(provide_name);
-                $('.code_product').text(productCode);
-                $('.name_product').text(productName);
-                $('.type_product').text(productType);
-                $('.qty_product').text(productQty);
-            })
-        }
+       addDataToModal();
         chekckRow();
     });
 
-
+    function addDataToModal(){
     var info = document.querySelectorAll('.exampleModal');
     for (let k = 0; k < info.length; k++) {
         info[k].addEventListener('click', function() {
@@ -932,9 +886,13 @@
             $('.name_product').text(productName);
             $('.type_product').text(productType);
             $('.qty_product').text(productQty);
-
+            // $('.modal-body table tbody .stt_SN').text(STT);
+            // STT++;
+            // $('.SNCount').text($('.modal-body table tbody input[type="checkbox"').length);
         })
     }
+    }
+    addDataToModal();
 
     // Hiển thị sản phẩm con 
     $(document).on('change', '.list_products', function(e) {
