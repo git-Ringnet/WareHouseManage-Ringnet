@@ -336,16 +336,24 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <a class="cursor deselect-all-category">Hủy chọn</a>
                                             </div>
                                             <ul class="ks-cboxtags-category p-0 m-0 px-2">
-
-                                                @if (!empty($categories))
-                                                    @foreach ($categories as $category)
-                                                        <li>
-                                                            <input type="checkbox" id="roles_active"
-                                                                {{ in_array($category->id, $categoryarr) ? 'checked' : '' }}
-                                                                name="categoryarr[]" value="{{ $category->id }}">
-                                                            <label
-                                                                for="roles_active">{{ $category->category_name }}</label>
-                                                        </li>
+                                                @if (!empty($trademarks))
+                                                    @php
+                                                        $seenValues = [];
+                                                    @endphp
+                                                    @foreach ($trademarks as $value)
+                                                        @if (!in_array($value->ID_category, $seenValues))
+                                                            <li>
+                                                                <input type="checkbox" id="roles_active"
+                                                                    {{ in_array($value->ID_category, $categoryarr) ? 'checked' : '' }}
+                                                                    name="categoryarr[]"
+                                                                    value="{{ $value->ID_category }}">
+                                                                <label id="category_value"
+                                                                    for="category_active">{{ $value->ID_category }}</label>
+                                                            </li>
+                                                            @php
+                                                                $seenValues[] = $value->ID_category;
+                                                            @endphp
+                                                        @endif
                                                     @endforeach
                                                 @endif
                                             </ul>
