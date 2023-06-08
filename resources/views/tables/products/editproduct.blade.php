@@ -4,7 +4,7 @@
     <div class="breadcrumb">
         <span><a href="{{ route('data.index') }}">Sản phẩm</a></span>
         <span class="px-1">/</span>
-        <span><b>Chỉnh sửa sản phẩm con</b></span>
+        <span><b>Thông tin sản phẩm con</b></span>
     </div>
     <!-- Content Header (Page header) -->
     <section class="content-header">

@@ -228,7 +228,7 @@ class ExportController extends Controller
                                 $proExport->product_total = $request->totalValue;
                                 $proExport->save();
                             }
-                            return redirect()->route('exports.index')->with('msg', 'Chốt đơn thành công!');
+                            return redirect()->route('exports.index')->with('msg', 'Duyệt đơn thành công!');
                         }
                     }
                 }
@@ -626,7 +626,7 @@ class ExportController extends Controller
           )
           WHERE `products`.`id` IN (" . implode(',', $products_id) . ")";
                         DB::statement($query);
-                        return redirect()->route('exports.index')->with('msg', 'Chốt đơn thành công!');
+                        return redirect()->route('exports.index')->with('msg', 'Duyệt đơn thành công!');
                     }
                 } else {
                     return redirect()->route('exports.index')->with('danger', 'Chưa được thêm sản phẩm nào!');

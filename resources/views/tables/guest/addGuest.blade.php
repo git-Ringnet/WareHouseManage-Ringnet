@@ -70,7 +70,7 @@
                                 <div class="form-group">
                                     <label for="email">SĐT người nhận:</label>
                                     <input type="number" class="form-control" id="guest_phoneReceiver"
-                                        placeholder="Nhập Số điện thoại người nhận" name="guest_phoneReceiver" value=""
+                                        placeholder="Nhập số điện thoại người nhận" name="guest_phoneReceiver" value=""
                                         required="">
                                 </div>
                                 <div class="form-group">

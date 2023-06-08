@@ -30,7 +30,7 @@
                 @csrf
                 <div class="mb-3">
                   <label for="">Họ và tên</label>
-                  <input type="text" class="form-control" name="name" placeholder="Họ và tên" value="{{old('name')}}">
+                  <input type="text" class="form-control" name="name" placeholder="Nhập họ và tên" value="{{old('name')}}">
                   @error('name')
                   <span style="color:red">{{$message}}</span>
                   @enderror
@@ -44,7 +44,7 @@
                 </div>
                 <div class="mb-3">
                   <label for="">Mật khẩu</label>
-                  <input type="password" class="form-control" name="password" placeholder="Mật khẩu">
+                  <input type="password" class="form-control" name="password" placeholder="Nhập mật khẩu">
                   @error('password')
                   <span style="color:red">{{$message}}</span>
                   @enderror
@@ -63,7 +63,7 @@
                 </div>
                 <div class="mb-3">
                   <label for="">Số điện thoại</label>
-                  <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')" class="form-control" name="phonenumber" placeholder="Số điện thoại" value="{{old('phonenumber')}}">
+                  <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')" class="form-control" name="phonenumber" placeholder="Nhập số điện thoại" value="{{old('phonenumber')}}">
                   @error('phonenumber')
                   <span style="color:red">{{$message}}</span>
                   @enderror

@@ -500,7 +500,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             <a href="#" class="sort-link" data-sort-by="order_status"
                                                 data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                     type="submit">Trạng thái</button></a>
-                                            <div class="icon" id="icon-export_status"></div>
+                                            <div class="icon" id="icon-order_status"></div>
                                         </span>
                                     </th>
                                     <th></th>
