@@ -73,11 +73,11 @@
         @csrf
         <section class="content">
             <div class="d-flex mb-1 action-don">
-                <button type="submit" class="btn btn-danger text-white" name="submitBtn" value="action1"
-                    onclick="validateAndSubmit(event)">Chốt đơn</button>
+                {{-- <button type="submit" class="btn btn-danger text-white mr-3" name="submitBtn" value="action1"
+                    onclick="validateAndSubmit(event)">Chốt đơn</button> --}}
                 {{-- <a href="#" class="btn btn-secondary ml-4">Hủy đơn</a> --}}
-                <a href="#" class="btn border border-secondary mx-4">Xuất file</a>
-                <button class="btn border border-secondary" onclick="toggleDiv()">
+                {{-- <a href="#" class="btn border border-secondary mx-4">Xuất file</a> --}}
+                <a class="btn border border-secondary" onclick="toggleDiv()">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
                         <path
@@ -88,7 +88,7 @@
                             fill="#555555" />
                     </svg>
                     In báo giá
-                </button>
+                </a>
             </div>
             <div class="container-fluided position-relative">
                 <div class="row my-3">
@@ -450,6 +450,7 @@
             });
             const checkbox = $("<td><input type='checkbox'></td>");
             const MaInput = $("<td>", {
+                "class": "row-number",
                 "text": `${fieldCounter}`
             });
             const TenInput = $("<td>" +
@@ -499,16 +500,25 @@
                 "class": "delete-row-btn"
             });
             const option = $(
-                "<td style='display:none;'><input type='number' class='price_import' required></td>" +
-                "<td style='display:none;'><input type='text' class='tonkho' required></td>" +
-                "<td style='display:none;'><input type='text' class='loaihang' required></td>" +
-                "<td style='display:none;'><input type='text' class='dangGD' required></td>"
+                "<td style='display:none;'><input type='number' class='price_import'></td>" +
+                "<td style='display:none;'><input type='text' class='tonkho'></td>" +
+                "<td style='display:none;'><input type='text' class='loaihang'></td>" +
+                "<td style='display:none;'><input type='text' class='dangGD'></td>" +
+                "<td style='display:none;'><input type='text' class='product_tax1'></td>"
             );
+
+            function updateRowNumbers() {
+                $('.row-number').each(function(index) {
+                    $(this).text(index + 1);
+                });
+            }
             //Xóa sản phẩm
             deleteBtn.click(function() {
                 $(this).closest("tr").remove();
+                fieldCounter--;
                 calculateTotalAmount();
                 calculateGrandTotal();
+                updateRowNumbers(); // Cập nhật lại số thứ tự
             });
             //lấy S/N
             sn.click(function() {
@@ -529,7 +539,6 @@
                     .text();
                 var giaNhap = $(this).closest('tr').find('.price_import').val();
                 var tonKho = $(this).closest('tr').find('.tonkho').val();
-                console.log(productCode);
                 $.ajax({
                     url: "{{ route('getSN') }}",
                     method: 'GET',
@@ -538,7 +547,6 @@
                         productCode: productCode,
                     },
                     success: function(response) {
-                        console.log(qty);
                         var modalBody = $('#snModal').find('.modal-body');
                         let count = 1;
                         modalBody.empty();
@@ -648,7 +656,7 @@
                         '<div id="form-guest">' +
                         '<div class="border-bottom p-3 d-flex justify-content-between align-items-center">' +
                         '<b>Thông tin khách hàng</b>' +
-                        '<button id="btn-customer" class="btn btn-primary d-flex align-items-center">' +
+                        '<button id="btn-customer" type="submit" class="btn btn-primary d-flex align-items-center">' +
                         '<img src="../dist/img/icon/Union.png">' +
                         '<span class="ml-1">Lưu thông tin</span></button></div>' +
                         '<div class="row p-3">' +
@@ -718,6 +726,10 @@
     //cập nhật thông tin khách hàng
     $(document).on('click', '#btn-customer', function(e) {
         e.preventDefault();
+        var form = $('#export_form')[0];
+        if (!form.reportValidity()) {
+            return;
+        }
         var id = $('#id').val();
         var guest_name = $('#guest_name').val();
         var guest_addressInvoice = $('#guest_addressInvoice').val();
@@ -852,6 +864,7 @@
             var tonkho = $(this).closest('tr').find('.tonkho');
             var loaihang = $(this).closest('tr').find('.loaihang');
             var dangGD = $(this).closest('tr').find('.dangGD');
+            var thue = $(this).closest('tr').find('.product_tax');
             if (idProduct) {
                 $.ajax({
                     url: "{{ route('getProduct') }}",
@@ -866,6 +879,10 @@
                         tonkho.val(response.product_qty);
                         loaihang.val(response.product_category);
                         dangGD.val(response.trading);
+                        thue.val(response.tax);
+                        // Tính lại tổng số tiền và tổng số thuế
+                        calculateTotalTax();
+                        calculateGrandTotal();
                     },
                 });
             }
@@ -906,18 +923,18 @@
             input.value = 100;
         }
     }
+    
     //tính thành tiền của sản phẩm
     $(document).on('input', '.quantity-input, [name^="product_price"]', function() {
         var productQty = parseInt($(this).closest('tr').find('.quantity-input').val());
-        var productPrice = parseFloat($(this).closest('tr').find('.product_price').val());
-
+        var productPrice = parseFloat($(this).closest('tr').find('input[name^="product_price"]').val());
         updateTaxAmount($(this).closest('tr'));
 
         if (!isNaN(productQty) && !isNaN(productPrice)) {
             var totalAmount = productQty * productPrice;
 
-            $(this).closest('tr').find('.total-amount').text(totalAmount.toFixed(2));
-
+            $(this).closest('tr').find('.total-amount').val(totalAmount);
+            $('.total-amount').text(totalAmount);
             calculateTotalAmount();
             calculateTotalTax();
         }
@@ -925,35 +942,36 @@
 
     $(document).on('change', '.product_tax', function() {
         updateTaxAmount($(this).closest('tr'));
-
+        var initialValue = parseFloat($(this).find(':selected').data('initial-value'));
+        $(this).find(':selected').val(initialValue);
         calculateTotalAmount();
         calculateTotalTax();
     });
 
     function updateTaxAmount(row) {
         var productQty = parseInt(row.find('.quantity-input').val());
-        var productPrice = parseFloat(row.find('.product_price').val());
+        var productPrice = parseFloat(row.find('input[name^="product_price"]').val());
         var taxValue = parseFloat(row.find('.product_tax').val());
 
         if (!isNaN(productQty) && !isNaN(productPrice) && !isNaN(taxValue)) {
             var totalAmount = productQty * productPrice;
             var taxAmount = (totalAmount * taxValue) / 100;
 
-            row.find('.product_tax option:selected').text(taxAmount.toFixed(0) + '%');
+            row.find('.product_tax1').text(taxAmount);
+            calculateTotalTax();
+            calculateGrandTotal();
         }
     }
 
     function calculateTotalAmount() {
         var totalAmount = 0;
         $('tr').each(function() {
-            var rowTotal = parseFloat($(this).find('.total-amount').text());
+            var rowTotal = parseFloat($(this).find('.total-amount').val());
             if (!isNaN(rowTotal)) {
                 totalAmount += rowTotal;
             }
         });
-        $('#total-amount-sum').text(totalAmount.toFixed(2));
-
-        // Recalculate total tax and grand total
+        $('#total-amount-sum').text(totalAmount);
         calculateTotalTax();
         calculateGrandTotal();
     }
@@ -961,14 +979,13 @@
     function calculateTotalTax() {
         var totalTax = 0;
         $('tr').each(function() {
-            var rowTax = parseFloat($(this).find('.product_tax option:selected').text());
+            var rowTax = parseFloat($(this).find('.product_tax1').text());
             if (!isNaN(rowTax)) {
                 totalTax += rowTax;
             }
         });
-        $('#product-tax').text(totalTax.toFixed(0));
+        $('#product-tax').text(totalTax);
 
-        // Recalculate total amount and grand total
         calculateGrandTotal();
     }
 
@@ -977,21 +994,26 @@
         var totalTax = parseFloat($('#product-tax').text());
 
         var grandTotal = totalAmount + totalTax;
-        $('#grand-total').text(grandTotal.toFixed(2));
+        $('#grand-total').text(grandTotal);
 
         // Update data-value attribute
-        $('#grand-total').attr('data-value', grandTotal.toFixed(2));
-        $('#total').val(grandTotal.toFixed(2));
+        $('#grand-total').attr('data-value', grandTotal);
+        $('#total').val(grandTotal);
     }
 
     //hàm kiểm tra
     function validateAndSubmit(event) {
         var formGuest = $('#form-guest');
-        var formProduct = $('#dynamic-row');
-        if (formGuest.length) {
+        var productList = $('.productName');
+
+        if (formGuest.length && productList.length > 0) {
 
         } else {
-            alert('Lỗi: Chưa chọn nhà cung cấp!');
+            if (formGuest.length === 0) {
+                alert('Lỗi: Chưa chọn nhà cung cấp!');
+            } else if (productList.length === 0) {
+                alert('Lỗi: Chưa thêm sản phẩm!');
+            }
             event.preventDefault();
         }
     }

@@ -281,7 +281,6 @@ class ExportController extends Controller
                                     ->where('guest_addressInvoice', $request->guest_addressInvoice)
                                     ->where('guest_code', $request->guest_code)
                                     ->first();
-
                                 if (!$existingCustomer) {
                                     $guest = new Guests();
                                     $guest->guest_name = $request->guest_name;
@@ -307,7 +306,7 @@ class ExportController extends Controller
                                     $export->save();
                                 } else {
                                     $export = new Exports();
-                                    $export->guest_id = $request->id;
+                                    $export->guest_id = $existingCustomer->id;
                                     $export->user_id = Auth::user()->id;
                                     $export->total = $request->totalValue;
                                     $export->export_status = 1;
@@ -397,6 +396,7 @@ class ExportController extends Controller
         $totalQtyNeeded = 0;
         $serinumbersToUpdate = [];
         $products_id = $request->input('products_id');
+        $clickValue = $request->input('click');
 
         if ($request->has('submitBtn')) {
             $action = $request->input('submitBtn');
@@ -407,7 +407,6 @@ class ExportController extends Controller
                         $existingProductIDs[] = $productExport->product_id;
                     }
                 }
-
                 if ($productIDs != null) {
                     // Cập nhật thông tin sản phẩm đang tồn tại
                     for ($i = 0; $i < count($productIDs); $i++) {
@@ -465,11 +464,9 @@ class ExportController extends Controller
                         } else {
                             // Kiểm tra số lượng sản phẩm mới được thêm
                             $currentQty = Product::where('id', $productID)->value('product_qty');
-
                             if ($productQty > $currentQty) {
                                 return redirect()->route('exports.index')->with('danger', 'Vượt quá số lượng cho sản phẩm ' . $nameProduct . '!');
                             }
-
                             $proExport = new ProductExports();
                             $proExport->products_id = $request->products_id[$i];
                             $proExport->product_id = $productID;
@@ -523,7 +520,26 @@ class ExportController extends Controller
                     for ($i = 0; $i < count($productIDs); $i++) {
                         $productID = $productIDs[$i];
                         $productQty = $productQtys[$i];
-                        Product::where('id', $productID)->decrement('product_qty', $productQty);
+
+                        // Lấy số lượng hiện tại của sản phẩm
+                        $currentQty = Product::where('id', $productID)->value('product_qty');
+
+                        // Giảm số lượng sản phẩm
+                        $newQty = $currentQty - $productQty;
+
+                        // Lấy giá sản phẩm
+                        $product = Product::find($productID);
+                        $productPrice = $product->product_price;
+
+                        // Tính toán giá trị total
+                        $total = $newQty * $productPrice;
+
+                        // Cập nhật số lượng và trường 'total'
+                        Product::where('id', $productID)
+                            ->update([
+                                'product_qty' => $newQty,
+                                'total' => $total
+                            ]);
                     }
 
                     // Kiểm tra số lượng tổng cần thiết
@@ -532,11 +548,48 @@ class ExportController extends Controller
                     if ($totalQtyNeeded > $availableQtyTotal) {
                         return redirect()->route('exports.index')->with('danger', 'Vượt quá tổng số lượng sản phẩm!');
                     } else {
-                        $exports->guest_id = $request->id;
-                        $exports->user_id = Auth::user()->id;
-                        $exports->total = $request->totalValue;
-                        $exports->export_status = 2;
-                        $exports->save();
+                        if ($clickValue === null) {
+                            $existingCustomer = Guests::where('guest_name', $request->guest_name)
+                                ->where('guest_email', $request->guest_email)
+                                ->where('guest_addressInvoice', $request->guest_addressInvoice)
+                                ->where('guest_code', $request->guest_code)
+                                ->first();
+                            if (!$existingCustomer) {
+                                $guest = new Guests();
+                                $guest->guest_name = $request->guest_name;
+                                $guest->guest_addressInvoice = $request->guest_addressInvoice;
+                                $guest->guest_code = $request->guest_code;
+                                $guest->guest_addressDeliver = $request->guest_addressDeliver;
+                                $guest->guest_receiver = $request->guest_receiver;
+                                $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
+                                $guest->guest_represent = $request->guest_represent;
+                                $guest->guest_email = $request->guest_email;
+                                $guest->guest_status = 1;
+                                $guest->guest_phone = $request->guest_phone;
+                                $guest->guest_pay = $request->guest_pay;
+                                $guest->guest_payTerm = $request->guest_payTerm;
+                                $guest->guest_note = $request->guest_note;
+                                $guest->save();
+                                //Cập nhật đơn xuất hàng
+                                $exports->guest_id = $guest->id;
+                                $exports->user_id = Auth::user()->id;
+                                $exports->total = $request->totalValue;
+                                $exports->export_status = 2;
+                                $exports->save();
+                            } else {
+                                $exports->guest_id = $existingCustomer->id;
+                                $exports->user_id = Auth::user()->id;
+                                $exports->total = $request->totalValue;
+                                $exports->export_status = 2;
+                                $exports->save();
+                            }
+                        } else {
+                            $exports->guest_id = $request->id;
+                            $exports->user_id = Auth::user()->id;
+                            $exports->total = $request->totalValue;
+                            $exports->export_status = 2;
+                            $exports->save();
+                        }
 
                         // Cập nhật tình trạng seri sau khi chốt
                         Serinumbers::whereIn('product_id', $productIDs)
@@ -545,9 +598,33 @@ class ExportController extends Controller
 
                         //cập nhật số lượng tồn kho sản phẩm cha
                         $query = "UPDATE `products` 
-                                            INNER JOIN `product` ON `products`.`id` = `product`.`products_id` 
-                                            SET `products`.`inventory` = (SELECT SUM(`product`.`product_qty`) FROM `product` WHERE `product`.`products_id` = `products`.`id`) 
-                                            WHERE `products`.`id` IN (" . implode(',', $products_id) . ")";
+          INNER JOIN `product` ON `products`.`id` = `product`.`products_id` 
+          SET `products`.`inventory` = (
+              SELECT SUM(`product`.`product_qty`) 
+              FROM `product` 
+              WHERE `product`.`products_id` = `products`.`id`
+          ),
+          `products`.`price_inventory` = (
+              SELECT SUM(`product`.`total`) 
+              FROM `product` 
+              WHERE `product`.`products_id` = `products`.`id`
+          ),
+          `products`.`price_avg` = (
+              SELECT CASE WHEN (
+                  SELECT SUM(`product`.`product_qty`) 
+                  FROM `product` 
+                  WHERE `product`.`products_id` = `products`.`id`
+              ) = 0 THEN 0 ELSE (
+                  SELECT SUM(`product`.`total`) 
+                  FROM `product` 
+                  WHERE `product`.`products_id` = `products`.`id`
+              ) / (
+                  SELECT SUM(`product`.`product_qty`) 
+                  FROM `product` 
+                  WHERE `product`.`products_id` = `products`.`id`
+              ) END
+          )
+          WHERE `products`.`id` IN (" . implode(',', $products_id) . ")";
                         DB::statement($query);
                         return redirect()->route('exports.index')->with('msg', 'Chốt đơn thành công!');
                     }

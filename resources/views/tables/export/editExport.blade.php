@@ -128,7 +128,7 @@
                             đơn</button>
                     @endif
                 @endif
-                <a href="#" class="btn border border-secondary mr-4">Xuất file</a>
+                {{-- <a href="#" class="btn border border-secondary mr-4">Xuất file</a> --}}
                 <a href="#" class="btn border border-secondary mr-4">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
@@ -356,7 +356,7 @@
                                     </select>
                                 </td>
                                 <td>
-                                    <select class="child-select p-1 form-control" name="product_id[]"
+                                    <select class="child-select p-1 form-control productName" name="product_id[]"
                                         <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                             echo 'disabled';
                                         } ?>>
@@ -401,8 +401,8 @@
                                 </td>
                                 <td><span class="total-amount form-control" style="background:#e9ecef">0</span>
                                 </td>
-                                <td><img src="../../dist/img/icon/list.png"></td>
-                                <td><img src="../../dist/img/icon/Group.png"></td>
+                                <td data-toggle='modal' data-target='#snModal' class='sn'><img src="../../dist/img/icon/list.png"></td>
+                                <td data-toggle='modal' data-target='#productModal'><img src="../../dist/img/icon/Group.png"></td>
                                 @if ($exports->export_status == 1)
                                     @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
                                         <td @if ($exports->export_status != 2) class="delete-row-btn" @endif>
@@ -488,7 +488,7 @@
 {{-- Modal S/N --}}
 <div class="modal fade" id="snModal" tabindex="-1" role="dialog" aria-labelledby="productModalLabel"
     aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog" role="document" style="max-width: 85%;">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="productModalLabel">Danh sách Serial Number</h5>
@@ -521,7 +521,7 @@
             '<div class="border-bottom p-3 d-flex justify-content-between align-items-center">' +
             '<b>Thông tin khách hàng</b>' +
             '<button id="btn-addCustomer" type="submit" class="btn btn-primary d-flex align-items-center">' +
-            '<img src="../dist/img/icon/Union.png">' +
+            '<img src="../../dist/img/icon/Union.png">' +
             '<span class="ml-1">Lưu thông tin</span></button></div>' +
             '<input type="hidden" name="click" id="click" value="">' +
             '<div class="row p-3">' +
@@ -599,12 +599,18 @@
                 "<td><input type='text' id='product_unit' class='product_unit form-control' style='width:80px' name='product_unit[]' required></td>"
             );
             const slInput = $(
-                "<td><input type='number' id='product_qty' class='quantity-input form-control' name='product_qty[]' required></td>"
+                "<td>" +
+                "<div class='d-flex'>" +
+                "<input type='number' oninput='limitMaxValue(this)' id='product_qty' class='quantity-input' name='product_qty[]' required style='width:50px;'>" +
+                "<input type='text' readonly class='quantity-exist' required style='width:50px;background:#D6D6D6;border:none;'>" +
+                "</div>" +
+                "</td>"
             );
             const giaInput = $(
-
-                "<td><input type='number' id='product_price' class='form-control' style='width:140px' name='product_price[]' required></td>");
-            const ghichuInput = $("<td><input type='text' id='' class='form-control' name='product_note[]'></td>");
+                "<td><input type='number' class='product_price' id='product_price' name='product_price[]' required></td>"
+                );
+            const ghichuInput = $(
+                "<td><input type='text' class='note_product' name='product_note[]'></td>");
             const thueInput = $("<td>" +
                 "<input type='number' id='product_tax' class='product_tax form-control' name='product_tax[]' required>" +
                 "</td>");
@@ -626,7 +632,21 @@
             sn.click(function() {
                 var qty = $(this).closest('tr').find('.quantity-input').val();
                 var productCode = $(this).closest('tr').find('.productName').val();
-                console.log(productCode);
+                var productCode1 = $(this).closest('tr').find('.maProduct option:selected')
+                    .text();
+                var productName = $(this).closest('tr').find('.productName option:selected')
+                    .text();
+                var dvt = $(this).closest('tr').find('.product_unit').val();
+                var giaBan = $(this).closest('tr').find('.product_price')
+                    .val();
+                var ghiChu = $(this).closest('tr').find('.note_product')
+                    .val();
+                var thue = $(this).closest('tr').find('.product_tax')
+                    .val();
+                var thanhTien = $(this).closest('tr').find('.total-amount')
+                    .text();
+                var giaNhap = $(this).closest('tr').find('.price_import').val();
+                var tonKho = $(this).closest('tr').find('.tonkho').val();
                 $.ajax({
                     url: "{{ route('getSN') }}",
                     method: 'GET',
@@ -635,16 +655,30 @@
                         productCode: productCode,
                     },
                     success: function(response) {
-                        var modalBody = $('#snModal').find(
-                            '.modal-body');
+                        var modalBody = $('#snModal').find('.modal-body');
+                        let count = 1;
                         modalBody.empty();
-                        var snList = $('<ul>');
+                        var snList = $('<table class="table table-hover">' +
+                            '<thead><tr><td>STT</td><td>Serial Number</td></tr></thead>' +
+                            '<tbody>'
+                        );
+                        var product = $('<table class="table table-hover">' +
+                            '<thead><tr><td>ID</td><td>Mã sản phẩm</td><td>Tên sản phẩm</td><td>Số lượng sản phẩm</td><td>Số lượng S/N</td></tr></thead>' +
+                            '<tbody><tr>' + '<td>1</td>' + '<td>' +
+                            productCode1 + '</td>' + '<td>' + productName +
+                            '</td>' + '<td>' + qty + '</td>' + '<td>' + qty +
+                            '</td>' +
+                            '</tr</tbody>' + '</table>' +
+                            '<h5>Thông tin Serial Number </h5>');
                         response.forEach(function(sn) {
-                            var snItem = $('<li>').text(sn
-                                .serinumber);
-                            snList.append(snItem);
+                            var countCell = $('<td>').text(count);
+                            var snItemCell = $('<td>').text(sn.serinumber);
+                            var row = $('<tr>').append(countCell,
+                                snItemCell);
+                            snList.append(row);
+                            count++;
                         });
-                        modalBody.append(snList);
+                        modalBody.append(product, snList);
                         $('#snModal').modal('show');
                     },
                     error: function(xhr, status, error) {
@@ -844,7 +878,13 @@
     })
     //thêm thông tin khách hàng
     $(document).on('click', '#btn-addCustomer', function(e) {
-        e.preventDefault();
+        e.preventDefault()
+        var form = $('#export_form')[0];
+        if (!form.reportValidity()) {
+            return;
+        }
+        $('#click').val(1);
+        var click = $('#click').val();
         var guest_name = $('#guest_name').val();
         var guest_addressInvoice = $('#guest_addressInvoice').val();
         var guest_code = $('#guest_code').val();
@@ -873,10 +913,16 @@
                 guest_phone,
                 guest_pay,
                 guest_payTerm,
-                guest_note
+                guest_note,
+                click,
             },
             success: function(data) {
-                alert('Thêm thông tin thành công');
+                if (data.hasOwnProperty('message')) {
+                    alert(data.message); // Hiển thị thông báo đã tồn tại
+                } else if (data.hasOwnProperty('id')) {
+                    alert('Thêm thông tin thành công');
+                    $('#form-guest input[name="id"]').val(data.id);
+                }
             }
         })
     })
@@ -923,6 +969,7 @@
 
             var idProduct = $(this).val();
             var productUnitElement = $(this).closest('tr').find('.product_unit');
+            var qty_exist = $(this).closest('tr').find('.quantity-exist');
             if (idProduct) {
                 $.ajax({
                     url: "{{ route('getProduct') }}",
@@ -932,6 +979,7 @@
                     },
                     success: function(response) {
                         productUnitElement.val(response.product_unit);
+                        qty_exist.val("/" + response.qty_exist);
                     },
                 });
             }
@@ -1022,28 +1070,15 @@
     //hàm kiểm tra submit
     function validateAndSubmit(event) {
         var formGuest = $('#form-guest');
+        var productList = $('.productName');
+        if (formGuest.length && productList.length > 0) {
 
-        if (formGuest.length) {
-            var requiredInputs = formGuest.find(':input[required]');
-            var isValid = true;
-
-            // Kiểm tra tất cả các trường required
-            requiredInputs.each(function() {
-                if (!$(this).val()) {
-                    isValid = false;
-                    return false; // Dừng vòng lặp nếu có trường không hợp lệ
-                }
-            });
-
-            if (isValid) {
-                $('#export_form').submit();
-                $('#btn-addCustomer').click();
-            } else {
-                alert('Lỗi: Vui lòng điền đầy đủ thông tin!');
-                event.preventDefault();
-            }
         } else {
-            alert('Lỗi: Chưa chọn nhà cung cấp!');
+            if (formGuest.length === 0) {
+                alert('Lỗi: Chưa chọn nhà cung cấp!');
+            } else if (productList.length === 0) {
+                alert('Lỗi: Chưa thêm sản phẩm!');
+            }
             event.preventDefault();
         }
     }
