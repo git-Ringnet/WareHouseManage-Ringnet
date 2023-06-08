@@ -3,6 +3,7 @@
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     {{-- Thai Minh Hieu --}}
+    <!-- TAO COMMENT -->
     <section class="content-header">
         <div class="container-fluided">
             <div class="row mb-2">
@@ -494,5 +495,4 @@ $(document).ready(function() {
     });
 </script>
 </body>
-
 </html>
