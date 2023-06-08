@@ -204,7 +204,7 @@ class AddProductController extends Controller
                 foreach ($product_SN as $seri_number) {
                     $Seri = new Serinumbers();
                     $Seri->product_id = $pro->id;
-                    $Seri->product_orderid = $pro->id;
+                    $Seri->product_orderid = $pro->product_id;
                     $Seri->serinumber = $seri_number;
                     $Seri->seri_status = 0;
                     $Seri->save();
@@ -212,7 +212,7 @@ class AddProductController extends Controller
             } else {
                 $Seri = new Serinumbers();
                 $Seri->product_id = $pro->id;
-                $Seri->product_orderid = $pro->id;
+                $Seri->product_orderid = $pro->product_id;
                 $Seri->serinumber = $request->{'product_SN' . $i}[0];
                 $Seri->seri_status = 0;
                 $Seri->save();
@@ -252,11 +252,11 @@ class AddProductController extends Controller
         }
         if ($order->order_status == 1) {
             $seri =  DB::table('serinumbers')
-                ->join('productorders', 'serinumbers.product_orderid', '=', 'productorders.id')
+                ->join('productorders', 'serinumbers.product_orderid', '=', 'productorders.product_id')
                 ->whereIn('productorders.id', $productIds)->get();
         } else {
             $seri =  DB::table('serinumbers')
-                ->join('productorders', 'serinumbers.product_id', '=', 'productorders.id')
+                ->join('productorders', 'serinumbers.product_orderid', '=', 'productorders.product_id')
                 ->whereIn('productorders.id', $productIds)->get();
         }
         $title = 'Chi tiết đơn nhập hàng';
@@ -304,6 +304,7 @@ class AddProductController extends Controller
                     $pro->tax = $product_tax[$i];
                     $pro->total = $product_total[$i];
                     $pro->provide_id = $updateOrder->provide_id;
+                    $pro->product_orderid = $product_id[$i];
                     $pro->save();
                     foreach ($serinumbers as $serinumber) {
                         $serinumber->product_id = $pro->id;
@@ -444,8 +445,6 @@ class AddProductController extends Controller
             $product_total = $request->product_total;
             for ($i = 0; $i < count($product_name); $i++) {
                 $check = Product::where('product_name', $product_name[$i])->where('product_category', $product_category[$i])
-                
-                
                 ->first();
                 $serinumbers = Serinumbers::where('product_id', $product_id[$i])->get();
                 $products = Products::where('id', $products_id[$i])->first();
@@ -460,6 +459,7 @@ class AddProductController extends Controller
                     $pro->product_price = $product_price[$i];
                     $pro->tax = $product_tax[$i];
                     $pro->total = $product_total[$i];
+                    $pro->product_orderid = $product_id[$i];
                     $pro->save();
                     foreach ($serinumbers as $serinumber) {
                         $serinumber->product_id = $pro->id;
@@ -714,7 +714,6 @@ class AddProductController extends Controller
     public function add_newProvide(Request $request)
     {
         $data = $request->all();
-        // var_dump($data);
         $add_newProvide = new Provides();
         $add_newProvide->provide_name = $data['provide_name'];
         $add_newProvide->provide_represent = $data['provide_represent'];

@@ -898,6 +898,7 @@ class ExportController extends Controller
                 'product.product_unit',
                 'product_qty',
                 'product.product_price',
+                'product.product_orderid',
                 'product.created_at',
                 'product.updated_at',
                 'product.provide_id',
