@@ -2,8 +2,8 @@
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <div class="breadcrumb">
-        <span>Sản phẩm</span>
-        <span>/</span>
+        <span><a href="{{ route('data.index') }}">Sản phẩm</a></span>
+        <span class="px-1">/</span>
         <span><b>Chỉnh sửa sản phẩm</b></span>
     </div>
     <!-- Content Header (Page header) -->
@@ -111,7 +111,7 @@
                         <h3 class="card-title">Sản phẩm / Sửa sản phẩm</h3>
                     </div>
                     <!-- /.card-header -->
-                    <div class="card-body">
+                    <div class="card-body" style="overflow-x: auto;">
                         <table id="example2" class="table table-hover bg-white rounded">
                             <thead>
                                 <tr>

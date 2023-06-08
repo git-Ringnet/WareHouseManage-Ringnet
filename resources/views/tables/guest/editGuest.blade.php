@@ -28,23 +28,23 @@
                                 <div class="form-group">
                                     <label for="email">Đơn vị:</label>
                                     <input type="text" class="form-control" value="{{ $guests->guest_name }}"
-                                        name="guest_name" placeholder="Enter guest name" required>
+                                        name="guest_name" placeholder="Nhập tên đơn vị" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="pwd">Đại diện:</label>
                                     <input type="text" class="form-control" value="{{ $guests->guest_represent }}"
-                                        name="guest_represent" placeholder="Enter guest represent" required>
+                                        name="guest_represent" placeholder="Nhập tên người đại diện" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="pwd">Số điện thoại:</label>
                                     <input type="number" class="form-control" value="{{ $guests->guest_phone }}"
-                                        name="guest_phone" placeholder="Enter guest phone" required>
+                                        name="guest_phone" placeholder="Nhập số điện thoại" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="pwd">Email:</label>
                                     <input type="email" class="form-control" value="{{ $guests->guest_email }}"
                                         pattern="/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/" name="guest_email"
-                                        placeholder="Enter guest email" required>
+                                        placeholder="Nhập email" required>
                                 </div>
                                 <div class="form-group">
                                     <label>Địa chỉ xuất hóa đơn:</label>
@@ -72,7 +72,7 @@
                                 <div class="form-group">
                                     <label for="email">SĐT người nhận:</label>
                                     <input type="number" class="form-control" id="guest_phoneReceiver"
-                                        placeholder="Nhập Số điện thoại người nhận" name="guest_phoneReceiver"
+                                        placeholder="Nhập số điện thoại người nhận" name="guest_phoneReceiver"
                                         value="{{$guests->guest_phoneReceiver}}" required="">
                                 </div>
                                 <div class="form-group">

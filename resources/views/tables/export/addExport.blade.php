@@ -138,7 +138,7 @@
             {{-- Bảng thêm sản phẩm --}}
             <div class="mt-4" style="overflow-x: auto;">
                 <table class="table table-hover bg-white rounded" id="sourceTable">
-                    <thead class="bg-white border-0 rounded">
+                    <thead>
                         <tr>
                             <th><input type="checkbox"></th>
                             <th>STT</th>
@@ -467,7 +467,7 @@
                 "</select>" +
                 "</td>");
             const dvtInput = $(
-                "<td><input type='text' id='product_unit' class='product_unit form-control' style='width:70px' name='product_unit[]' required></td>"
+                "<td><input type='text' id='product_unit' class='product_unit form-control' style='width:80px' name='product_unit[]' required></td>"
             );
             const slInput = $(
                 "<td>" +
@@ -481,7 +481,7 @@
                 "<td><input type='number' class='product_price form-control' style='width:140px' id='product_price' name='product_price[]' required></td>"
             );
             const ghichuInput = $(
-                "<td><input type='text' class='note_product form-control' style='width:120px' name='product_note[]'></td>");
+                "<td><input type='text' class='note_product form-control' style='width:140px' name='product_note[]'></td>");
             const thueInput = $("<td>" +
                 "<select name='product_tax[]' class='product_tax p-1 form-control' style='width:80px' id='product_tax' required>" +
                 "<option value='0'>0%</option>" +

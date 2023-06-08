@@ -311,8 +311,8 @@
             </section>
             {{-- Bảng thêm sản phẩm --}}
             <div class="mt-4" style="overflow-x: auto;">
-                <table class="table">
-                    <thead class="bg-white border-0 rounded-top">
+                <table class="table bg-white border-0 rounded-top">
+                    <thead class="">
                         <tr>
                             @if ($exports->export_status == 1)
                                 @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
@@ -365,7 +365,7 @@
                                     </select>
                                 </td>
                                 <td>
-                                    <input type="text" id="product_unit" class="product_unit form-control"
+                                    <input type="text" id="product_unit" style="width: 80px" class="product_unit form-control text-center"
                                         <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                             echo 'readonly';
                                         } ?> value="{{ $value_export->product_unit }}"
@@ -373,7 +373,7 @@
                                 </td>
                                 <td>
                                     <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-                                        id="product_qty" class="quantity-input form-control" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                        id="product_qty" class="quantity-input form-control text-center" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                             echo 'readonly';
                                         } ?>
                                         value="{{ $value_export->product_qty }}" name="product_qty[]"
@@ -381,25 +381,25 @@
                                 </td>
                                 <td>
                                     <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-                                        id="product_price" name="product_price[]" class="form-control"
+                                        id="product_price" name="product_price[]" class="form-control text-center" style="width: 140px"
                                         <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                             echo 'readonly';
                                         } ?> value={{ $value_export->product_price }} required="">
                                 </td>
                                 <td>
-                                    <input type="text" id="" name="product_note[]" class="form-control"
+                                    <input type="text" id="" name="product_note[]" class="form-control" style="width: 140px"
                                         <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                             echo 'readonly';
                                         } ?> value="{{ $value_export->product_note }}">
                                 </td>
                                 <td>
                                     <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-                                        id="product_tax" class="product_tax form-control" name="product_tax[]"
+                                        id="product_tax" class="product_tax form-control text-center"  style="width: 80px" name="product_tax[]"
                                         <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                             echo 'readonly';
                                         } ?> required="" value="{{ $value_export->product_tax }}">
                                 </td>
-                                <td><span class="total-amount form-control" style="background:#e9ecef">0</span>
+                                <td><span class="total-amount form-control text-center" style="background:#e9ecef; width:140px">0</span>
                                 </td>
                                 <td data-toggle='modal' data-target='#snModal' class='sn'><img src="../../dist/img/icon/list.png"></td>
                                 <td data-toggle='modal' data-target='#productModal'><img src="../../dist/img/icon/Group.png"></td>
@@ -601,16 +601,16 @@
             const slInput = $(
                 "<td>" +
                 "<div class='d-flex'>" +
-                "<input type='number' oninput='limitMaxValue(this)' id='product_qty' class='quantity-input' name='product_qty[]' required style='width:50px;'>" +
+                "<input type='number' oninput='limitMaxValue(this)' id='product_qty' class='quantity-input form-control text-center' name='product_qty[]' required style='width:50px;'>" +
                 "<input type='text' readonly class='quantity-exist' required style='width:50px;background:#D6D6D6;border:none;'>" +
                 "</div>" +
                 "</td>"
             );
             const giaInput = $(
-                "<td><input type='number' class='product_price' id='product_price' name='product_price[]' required></td>"
+                "<td><input type='number' class='product_price form-control text-center' id='product_price' name='product_price[]' required></td>"
                 );
             const ghichuInput = $(
-                "<td><input type='text' class='note_product' name='product_note[]'></td>");
+                "<td><input type='text' class='note_product form-control text-center' name='product_note[]'></td>");
             const thueInput = $("<td>" +
                 "<input type='number' id='product_tax' class='product_tax form-control' name='product_tax[]' required>" +
                 "</td>");

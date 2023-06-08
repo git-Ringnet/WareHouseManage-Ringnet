@@ -606,7 +606,7 @@
             '<td scope="row"><input type="checkbox" id=' + rowCount + '" class="cb-element"></td>' +
             '<td>' +
             '<select name="products_id[]" class="list_products form-control">' +
-            '<option value="">Lựa chọn mã sản phẩm  </option> ' +
+            '<option value="">Lựa chọn mã sản phẩm </option> ' +
             '@foreach ($products as $va)' +
             '<option value="{{ $va->id }}">{{ $va->products_code }}</option>' +
             '@endforeach' +
@@ -617,9 +617,9 @@
             '<div id="dropdown-values" class="dropdown-values"><ul id="myUL1" class="myUL1 bg-white position-absolute rounded shadow" style="padding:0 10px; cursor:pointer;"> </ul>  </div>' +
             '</td>' +
             '<td><input required type="text" class="form-control" style="width:120px" name="product_category[]"></td>' +
-            '<td><input required type="text" class="form-control" style="width:70px" name="product_unit[]"></td>' +
-            '<td><input required type="number" name="product_qty[]" class="quantity-input form-control"></td>' +
-            '<td><input required type="number" class="form-control" style="width:120px"" name="product_price[]" ></td>' +
+            '<td><input required type="text" class="form-control text-center" style="width:70px" name="product_unit[]"></td>' +
+            '<td><input required type="number" name="product_qty[]" class="quantity-input form-control text-center"></td>' +
+            '<td><input required type="number" class="form-control text-center" style="width:140px"" name="product_price[]" ></td>' +
             // '<td><input required type="number" name="product_tax[]" class="product_tax"></td>' +
             '<td>' +
             '<input type="hidden" class="product_tax1">' +
@@ -630,8 +630,8 @@
             '<option value="00">NOVAT</option>' +
             '</select>' +
             '</td>' +
-            '<td><input readonly type="text" class="form-control total-amount" name="product_total[]"></td>' +
-            '<td><input type="text" class="form-control" style="width:120px" name="product_trademark[]"></td>' +
+            '<td><input readonly type="text" class="form-control total-amount text-center" style="width:140px" name="product_total[]"></td>' +
+            '<td><input type="text" class="form-control" style="width:140px" name="product_trademark[]"></td>' +
             '<td>' +
             '<button class="exampleModal" name="btn_add_SN[]" type="button" data-toggle="modal" data-target="#exampleModal' +
             rowCount + '" style="background:transparent; border:none;">' +

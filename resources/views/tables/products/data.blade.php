@@ -20,8 +20,9 @@
                             <span class="ml-2">Thêm sản phẩm</span>
                         </button>
                     </a>
+                    <div class="class mx-3">
                     <button onclick="exportToExcel()" type="button"
-                        class="btn btn-outline-primary mx-3 d-flex align-items-center">
+                        class="btn btn-outline-primary d-flex align-items-center">
                         <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             viewBox="0 0 24 24" fill="none">
                             <path
@@ -33,9 +34,10 @@
                         </svg>
                         <span>Xuất Excel</span>
                     </button>
+                    </div>
                     <!-- <input type="file" id="excelFile" />
                         <button ></button> -->
-                    <label class="btn btn-outline-primary btn-file mx-3 d-flex align-items-center" onclick="importExcel()">
+                    <div class="btn btn-outline-primary btn-file d-flex align-items-center" onclick="importExcel()">
                         <div>
                             <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24" fill="none">
@@ -49,7 +51,7 @@
                             </svg>
                         </div>
                         <span>Nhập Excel</span> <input type="file" id="import_file">
-                    </label>
+                    </div>
                 @endcan
             </div>
             <div class="row m-auto filter pt-2">
@@ -437,8 +439,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('comparison_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
-                                                </select>
+                                                        <=</option>                                                </select>
                                                 <input class="w-50 quantity-input input-so" type="number"
                                                     name="quantity" value="{{ request()->quantity }}"
                                                     placeholder="Số lượng">
@@ -453,8 +454,7 @@ $index = array_search($item['label'], $numberedLabels);
                                     </div>
                                     {{-- filter trị trung bình --}}
                                     <div class="block-options" id="avg-options" style="display:none">
-                                        <div class="wrap w-100">
-                                            <div class="heading-title title-wrap">
+                                        <div class="wrap w-100"></option>                                            <div class="heading-title title-wrap">
                                                 <h5>Trị trung bình</h5>
                                             </div>
                                             <div class="input-group p-2 justify-content-around">
@@ -464,8 +464,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('avg_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
-                                                </select>
+                                                        <=</option>                                                </select>
                                                 <input class="w-50 avg-input" type="number" name="avg"
                                                     value="{{ request()->avg }}" placeholder="Nhập giá trị">
                                             </div>
@@ -492,8 +491,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('price_inven_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
-                                                </select>
+                                                        <=</option>                                                </select>
                                                 <input class="w-50 price_inven-input input-so" type="number"
                                                     name="price_inven" value="{{ request()->price_inven }}"
                                                     placeholder="Nhập giá trị">
@@ -585,12 +583,14 @@ $index = array_search($item['label'], $numberedLabels);
                                         <input type="hidden" id="sortByInput" name="sort-by" value="id">
                                         <input type="hidden" id="sortTypeInput" name="sort-type"
                                             value="{{ $sortType }}">
+                                            @can('view-provides')
                                         <th scope="col" style="width:2%">
                                             <span class="d-flex">
                                                 <input type="checkbox" id="checkall">
                                             </span>
                                         </th>
-                                        <th scope="col">
+                                        @endcan
+                                        <th>
                                             <span class="d-flex">
                                                 <a href="#" class="sort-link" data-sort-by="id"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
@@ -673,8 +673,10 @@ $index = array_search($item['label'], $numberedLabels);
                                 <tbody>
                                     @foreach ($products as $value)
                                         <tr class="{{ $value->id }}">
+                                            @can('view-provides')
                                             <td><input type="checkbox" name="ids[]" class="cb-element"
                                                     value="{{ $value->id }}"></td>
+                                            @endcan
                                             <td scope="row">{{ $value->id }}</td>
                                             <td>
                                                 <!-- <a href="{{ route('data.show', $value->id) }}"> -->
@@ -700,7 +702,8 @@ $index = array_search($item['label'], $numberedLabels);
                                                     <div class="py-1 rounded  pb-1 bg-danger">
                                                         <span class="text-light">Hết hàng</span>
                                                     </div>
-                                                @elseif($value->inventory < 5)
+                                                {{-- Fix lỗi tìm kiếm gần hết --}}
+                                                @elseif($value->inventory < 6)
                                                     <div class="py-1 rounded  pb-1 bg-warning">
                                                         <span class="text-light">Gần hết</span>
                                                     </div>
@@ -759,7 +762,7 @@ $index = array_search($item['label'], $numberedLabels);
 
                                                 </div>
                                             </td>
-                                            <td>
+                                            <td class="text-center">
                                                 @if ($value->inventory != 0)
                                                     <div id="dropdown_item{{ $value->id }}" data-toggle="collapse"
                                                         class="dropdownitem"
@@ -783,14 +786,16 @@ $index = array_search($item['label'], $numberedLabels);
                                             <tr id="product-details-{{ $value->id }}"
                                                 class="collapse product-details">
                                                 @if ($value->id == $item->products_id)
+                                                @can('view-provides')
                                                     <td></td>
+                                                    @endcan
                                                     <td>{{ $value->id }} - {{ $item->id }}</td>
                                                     <td>{{ $value->products_code }}</td>
                                                     <td>{{ $item->product_name }}</td>
                                                     <td>
                                                         <p>Loại hàng</p>{{ $item->product_category }}
                                                     </td>
-                                                    <td>
+                                                    <td class="text-right">
                                                         <p>Đang giao dịch</p>
                                                         {{ $item->trading }}
                                                     </td>
@@ -803,10 +808,13 @@ $index = array_search($item['label'], $numberedLabels);
                                                     <td class="text-right">
                                                         <p>Trị tồn kho</p>{{ number_format($item->total) }}
                                                     </td>
-                                                    <td>
+                                                    <td class="text-left">
+                                                        @if(!empty($item->product_trademark))
                                                         <p>Ghi chú</p>{{ $item->product_trademark }}
+                                                        @endif
                                                     </td>
-                                                    <td>
+                                                    <td class="text-center">
+                                                        @if (Auth::user()->can('view-provides'))
                                                         <form action="{{ route('editProduct', $item->id) }}"
                                                             method="post">
                                                             @csrf
@@ -821,12 +829,55 @@ $index = array_search($item['label'], $numberedLabels);
                                                                         fill="#555555"></path>
                                                                 </svg>
                                                             </button>
-
                                                         </form>
-                                                    </td>
-                                                    <td>
-                                                        <form action="{{ route('delete_product', $item->id) }}"
+                                                        @else
+                                                        <form action="{{ route('editProduct', $item->id) }}"
                                                             method="post">
+                                                            @csrf
+                                                            @method('PUT')
+                                                            <button type="submit"
+                                                                style="background: transparent; border:none;">
+                                                                <svg width="32" height="32" viewBox="0 0 32 32"
+                                                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path
+                                                                    d="M24.9033 14.1636V7.89258C24.9033 7.33819 24.6831 6.8065 24.2911 6.41449C23.8991 6.02248 23.3674 5.80225 22.813 5.80225H9.22583C8.67144 5.80225 8.13976 6.02248 7.74774 6.41449C7.35573 6.8065 7.1355 7.33819 7.1355 7.89258V22.5249C7.1355 23.0793 7.35573 23.611 7.74774 24.003C8.13976 24.395 8.67144 24.6152 9.22583 24.6152H14.4517"
+                                                                    stroke="#555555" stroke-width="1.5"
+                                                                    stroke-linecap="round" stroke-linejoin="round" />
+                                                                <path d="M13.6678 18.3442H14.4517" stroke="#555555"
+                                                                    stroke-width="1.5" stroke-linecap="round"
+                                                                    stroke-linejoin="round" />
+                                                                <path d="M13.6678 14.1631H17.5872" stroke="#555555"
+                                                                    stroke-width="1.5" stroke-linecap="round"
+                                                                    stroke-linejoin="round" />
+                                                                <path d="M13.6678 10.1133H20.7227" stroke="#555555"
+                                                                    stroke-width="1.5" stroke-linecap="round"
+                                                                    stroke-linejoin="round" />
+                                                                <path
+                                                                    d="M11.0549 10.8187C11.2099 10.8187 11.3615 10.7727 11.4904 10.6866C11.6193 10.6005 11.7197 10.4781 11.7791 10.3348C11.8384 10.1916 11.8539 10.034 11.8237 9.88192C11.7934 9.72987 11.7188 9.59019 11.6092 9.48057C11.4995 9.37094 11.3599 9.29629 11.2078 9.26604C11.0557 9.23579 10.8981 9.25131 10.7549 9.31064C10.6117 9.36997 10.4892 9.47044 10.4031 9.59935C10.317 9.72826 10.271 9.87981 10.271 10.0349C10.271 10.2427 10.3536 10.4421 10.5006 10.5891C10.6476 10.7361 10.847 10.8187 11.0549 10.8187Z"
+                                                                    fill="#555555" />
+                                                                <path
+                                                                    d="M11.0549 14.9994C11.2099 14.9994 11.3615 14.9534 11.4904 14.8673C11.6193 14.7811 11.7197 14.6587 11.7791 14.5155C11.8384 14.3723 11.8539 14.2146 11.8237 14.0626C11.7934 13.9105 11.7188 13.7709 11.6092 13.6612C11.4995 13.5516 11.3599 13.477 11.2078 13.4467C11.0557 13.4165 10.8981 13.432 10.7549 13.4913C10.6117 13.5506 10.4892 13.6511 10.4031 13.78C10.317 13.9089 10.271 14.0605 10.271 14.2155C10.271 14.4234 10.3536 14.6228 10.5006 14.7698C10.6476 14.9168 10.847 14.9994 11.0549 14.9994Z"
+                                                                    fill="#555555" />
+                                                                <path
+                                                                    d="M11.0549 19.0756C11.2099 19.0756 11.3615 19.0296 11.4904 18.9435C11.6193 18.8573 11.7197 18.7349 11.7791 18.5917C11.8384 18.4484 11.8539 18.2908 11.8237 18.1388C11.7934 17.9867 11.7188 17.847 11.6092 17.7374C11.4995 17.6278 11.3599 17.5531 11.2078 17.5229C11.0557 17.4926 10.8981 17.5081 10.7549 17.5675C10.6117 17.6268 10.4892 17.7273 10.4031 17.8562C10.317 17.9851 10.271 18.1367 10.271 18.2917C10.271 18.4996 10.3536 18.699 10.5006 18.846C10.6476 18.993 10.847 19.0756 11.0549 19.0756Z"
+                                                                    fill="#555555" />
+                                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                    d="M24.2994 17.5757C22.6613 15.9376 20.0054 15.9376 18.3672 17.5757C16.7291 19.2139 16.7291 21.8698 18.3672 23.5079C20.0054 25.1461 22.6613 25.1461 24.2994 23.5079C25.9376 21.8698 25.9376 19.2139 24.2994 17.5757ZM25.1046 16.7706C23.0218 14.6878 19.6449 14.6878 17.5621 16.7706C15.4793 18.8534 15.4793 22.2303 17.5621 24.3131C19.6449 26.3959 23.0218 26.3959 25.1046 24.3131C27.1874 22.2303 27.1874 18.8534 25.1046 16.7706Z"
+                                                                    fill="#555555" />
+                                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                    d="M24.1834 24.1834C24.428 23.9389 24.8246 23.9389 25.0692 24.1834L27.8166 26.9308C28.0611 27.1754 28.0611 27.572 27.8166 27.8166C27.572 28.0611 27.1754 28.0611 26.9308 27.8166L24.1834 25.0692C23.9389 24.8246 23.9389 24.428 24.1834 24.1834Z"
+                                                                    fill="#555555" />
+                                                            </svg>
+                                                            </button>
+                                                        </form>
+                                                        @endif
+                                                    </td>
+                                                    <td class="text-center">
+                                                        @if (Auth::user()->can('view-provides'))
+                                                        <form action="{{ route('delete_product', $item->id) }}"
+                                                            method="post"
+                                                            onsubmit="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')"
+                                                            >
                                                             @csrf
                                                             @method('delete')
                                                             <button type="submit"
@@ -840,6 +891,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                                 </svg>
                                                             </button>
                                                         </form>
+                                                        @endif
                                                     </td>
                                                 @endif
                                             </tr>
@@ -1261,6 +1313,95 @@ $index = array_search($item['label'], $numberedLabels);
                     transition: 'transform 0.3s ease'
                 });
             }
+        });
+    });
+
+    // Tắt bộ lọc commit by nqv
+    $(document).ready(function() {
+        // Chọn tất cả các checkbox
+        $('.select-all-category').click(function() {
+            $('#category-options input[type="checkbox"]').prop('checked', true);
+        });
+
+        // Hủy tất cả các checkbox
+        $('.deselect-all-category').click(function() {
+            $('#category-options input[type="checkbox"]').prop('checked', false);
+        });
+    });
+    $(document).ready(function() {
+        // Chọn tất cả các checkbox
+        $('.select-all').click(function() {
+            $('#status-options input[type="checkbox"]').prop('checked', true);
+        });
+
+        // Hủy tất cả các checkbox
+        $('.deselect-all').click(function() {
+            $('#status-options input[type="checkbox"]').prop('checked', false);
+        });
+    });
+    $(document).ready(function() {
+        // Chọn tất cả các checkbox
+        $('.select-all-trademark').click(function() {
+            $('#trademark-options input[type="checkbox"]').prop('checked', true);
+        });
+
+        // Hủy tất cả các checkbox
+        $('.deselect-all-trademark').click(function() {
+            $('#trademark-options input[type="checkbox"]').prop('checked', false);
+        });
+    });
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-status', function() {
+            $('.deselect-all').click();
+            document.getElementById('search-filter').submit();
+        });
+    });
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-category', function() {
+            $('.deselect-all-category').click();
+            document.getElementById('search-filter').submit();
+        });
+    });
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-trademark', function() {
+            $('.deselect-all-trademark').click();
+            document.getElementById('search-filter').submit();
+        });
+    });
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-quantity', function() {
+            $('.quantity-input').val('');
+            document.getElementById('search-filter').submit();
+        });
+    });
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-avg', function() {
+            $('.avg-input').val('');
+            document.getElementById('search-filter').submit();
+        });
+    });
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-price_inven', function() {
+            $('.price_inven-input').val('');
+            document.getElementById('search-filter').submit();
+        });
+    });
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-id', function() {
+            $('.deselect-all-id').click();
+            document.getElementById('search-filter').submit();
+        });
+    });
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-code', function() {
+            $('.code-input').val('');
+            document.getElementById('search-filter').submit();
+        });
+    });
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-products_name', function() {
+            $('.products_name-input').val('');
+            document.getElementById('search-filter').submit();
         });
     });
 </script>

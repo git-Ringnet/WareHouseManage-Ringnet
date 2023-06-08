@@ -45,7 +45,7 @@
     <link rel="stylesheet" href="{{ asset('plugins/summernote/summernote-bs4.min.css') }}">
     <!-- jQuery -->
     <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
-
+    
     <!-- jQuery UI 1.11.4 -->
     <script src="{{ asset('plugins/jquery-ui/jquery-ui.min.js') }}"></script>
     <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
@@ -385,7 +385,7 @@
     </aside>
     <div class="main-header">
         @if (Session::has('msg'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert" style="z-index: 999999;">
+            <div id="notification" class="alert alert-success alert-dismissible fade show" role="alert" style="z-index: 999999;">
                 {{ Session::get('msg') }}
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -403,3 +403,12 @@
             </div>
         @endif
     </div>
+    <script>
+        $(document).ready(function() {
+            setTimeout(function() {
+                $('#notification').fadeOut('slow', function() {
+                    $(this).remove();
+                });
+            }, 4000);
+        });
+    </script>

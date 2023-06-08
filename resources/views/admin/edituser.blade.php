@@ -45,10 +45,17 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="">Mật khẩu</label>
-                                    <input type="password" class="form-control" name="password" placeholder="Mật khẩu"
-                                        value="{{ old('password') ?? $userDetail->password }}">
+                                    <input type="password" class="form-control" name="password" placeholder="Nhập mật khẩu" id="password"
+                                        value="">
                                     @error('password')
                                         <span style="color:red">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <div class="mb-3">
+                                    <label for="confirm_password">Xác nhận mật khẩu</label>
+                                    <input type="password" id="confirm_password" class="form-control" name="confirm_password" id="confirm_password" placeholder="Xác nhận mật khẩu">
+                                    @error('confirm_password')
+                                        <span style="color: red">{{ $message }}</span>
                                     @enderror
                                 </div>
                                 <div class="mb-3">

@@ -310,7 +310,7 @@ class ProductsController extends Controller
         // $products->products_unit = $request->get('products_unit');
         $products->products_description = $request->get('products_description');
         $products->save();
-        return redirect()->route('data.index');
+        return redirect()->route('data.index')->with('msg', 'Chỉnh sửa sản phẩm thành công!');
     }
 
     /**
