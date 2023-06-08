@@ -596,7 +596,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <td></td>
                                                 <td>
                                                     <p>{{ $item->product_name }}</p>
-                                                    {{ $item->getCodeProduct->products_code }}
+                                                     @if($item->getCodeProduct != null) {{$item->getCodeProduct->products_code}} @endif 
                                                 </td>
                                                 <td>
                                                     <p>Số lượng</p>

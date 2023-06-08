@@ -16,7 +16,7 @@ class Product extends Model
     }
     public function getSerinumbers()
     {
-        return $this->hasMany(Serinumbers::class);
+        return $this->hasMany(Serinumbers::class,'product_orderid','product_orderid');
     }
     public function getNameProducts()
     {

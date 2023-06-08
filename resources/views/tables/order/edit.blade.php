@@ -309,10 +309,16 @@
                                         required type="number" name="product_price[]"
                                         value="{{ $pro->product_price }}"
                                         @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif> </td>
-                                <td> <input class="form-control product_tax"
-                                        @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif required type="number"
-                                        name="product_tax[]" value="{{ $pro->product_tax }}"
-                                        @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif></td>
+                                        <td>
+                                            <select name="product_tax[]" id="" class="form-control product_tax" style="width:80px;"
+                                            @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) disabled @endif>>
+                                                <option value="0" <?php echo $pro->product_tax == 0 ?  "selected" : "" ?>>0%</option>
+                                                <option value="8" <?php echo $pro->product_tax == 8 ?  "selected" : "" ?>>8%</option>
+                                                <option value="10" <?php echo $pro->product_tax == 10 ?  "selected" : "" ?>>10%</option>
+                                                <option value="00" <?php echo $pro->product_tax == 00 ?  "selected" : "" ?>>NOVAT</option>
+                                            </select>
+                                        </td>
+                                        <input type="hidden" class="product_tax1">
                                 <td> <input class="form-control" readonly type="text" name="product_total[]"
                                         value="{{ $pro->product_total }}"></td>
                                 <td> <input class="form-control" @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif
@@ -424,7 +430,7 @@
                                             <tbody>
                                                 <?php $st = 1; ?>
                                                 @foreach ($seri as $se)
-                                                    @if ($pro->id == $se->product_orderid)
+                                                    @if ($pro->product_id == $se->product_orderid)
                                                         <tr>
                                                             @if ($order->order_status == 0)
                                                                 @if (Auth::user()->id == $order->users_id || Auth::user()->can('isAdmin'))
@@ -432,7 +438,7 @@
                                                                             id="checkbox_{{ $stt }}"></td>
                                                                 @endif
                                                             @endif
-                                                            <td><span class="stt_SN">{{ $st }}</span></td>
+                                                            <td><span class="stt_SN"></span></td>
                                                             <td><input type="text"
                                                                 class="form-control w-25"
                                                                     name="product_SN{{ $stt }}[]"
@@ -584,7 +590,7 @@
         $('tr').each(function() {
             var productQty = parseInt($(this).find('.quantity-input').val());
             var productPrice = 0;
-            var taxValue = parseFloat($(this).find('.product_tax').val());
+            var taxValue = $(this).find('.product_tax option:selected').val();
             $(this).find('[name^="product_price"]').each(function() {
                 productPrice += parseFloat($(this).val());
             });
@@ -595,7 +601,7 @@
 
                 // Hiển thị kết quả
                 $(this).find('[name^="product_total"]').val(rowTotal);
-                $(this).find('.product_tax').text(rowTax);
+                $(this).find('.product_tax1').text(rowTax);
 
                 // Cộng dồn vào tổng totalAmount và totalTax
                 totalAmount += rowTotal;
@@ -613,7 +619,7 @@
 
     function calculateGrandTotal(totalAmount, totalTax) {
         var grandTotal = totalAmount + totalTax;
-        $('#grand-total').text(grandTotal.toFixed(2));
+        $('#grand-total').text(grandTotal);
     }
 
     // Hủy đơn hàng
@@ -652,7 +658,7 @@
     $(document).on('click', '.addBillEdit', function(e) {
         e.preventDefault();
         if ($('#form_submit')[0].checkValidity()) {
-            $('#form_submit').attr('action', '{{ route('addBillEdit') }}');
+            $('#form_submit').attr('action', '{{ route("addBillEdit") }}');
             $('input[name="_method"]').remove();
             updateProductSN()
             $('#form_submit').submit();
@@ -670,7 +676,6 @@
 
     function chekckRow() {
         var rowLength = $('#inputContainer tbody tr').length;
-        console.log($('#inputContainer tbody tr').length);
         if (rowLength < 1) {
             return false;
         } else {
@@ -756,7 +761,7 @@
             '<input type="hidden" name="product_id[]" value="' + last + '">' +
             '<td scope="row"><input type="checkbox" id=' + rowCount + '" class="cb-element"></td>' +
             '<td>' +
-            '<select name="products_id[]" class="list_products w-100 form-control">' +
+            '<select name="products_id[]" class="list_products form-control">' +
             '<option value="">Lựa chọn mã sản phẩm  </option> ' +
             '@foreach ($products as $va)' +
             '<option value="{{ $va->id }}">{{ $va->products_code }}</option>' +
@@ -771,7 +776,15 @@
             '<td><input required type="text" class="form-control" style="width:120px" name="product_unit[]"></td>' +
             '<td><input required type="number" name="product_qty[]" class="quantity-input form-control"></td>' +
             '<td><input required type="number" class="form-control" style="width:120px" name="product_price[]"></td>' +
-            '<td><input required type="number" name="product_tax[]" class="product_tax form-control" style="width:50px"></td>' +
+            // '<td><input required type="number" name="product_tax[]" class="product_tax form-control" style="width:50px"></td>' +
+            '<td>'+
+            '<select name="product_tax[]" class="product_tax form-control" style="width:80px">'+
+            '<option value="10">10%</option>'+
+            '<option value="0">0%</option>'+
+            '<option value="8">8%</option>'+
+            '<option value="00">NOVAT</option>'+
+            '</select>'+
+            '</td>'+
             '<td><input readonly type="text" class="form-control" style="width:120px" name="product_total[]"></td>' +
             '<td><input type="text" class="form-control" style="width:120px" name="product_trademark[]"></td>' +
             '<td>' +
@@ -884,8 +897,6 @@
                 div_value1.appendChild(newtr);
                 stt.innerHTML = checkboxCount;
                 checkbox.setAttribute("id", "checkbox_" + checkboxCount);
-                console.log(document.querySelector('.div_value' + i).parentNode.querySelector(
-                    '.SNCount'));
                 document.querySelector('.div_value' + i).parentNode.querySelector('.SNCount')
                     .textContent = checkboxCount;
             });
@@ -920,9 +931,13 @@
                 $('.name_product').text(productName);
                 $('.type_product').text(productType);
                 $('.qty_product').text(productQty);
-                // $('.modal-body table tbody .stt_SN').text(STT);
-                // STT++;
-                // $('.SNCount').text($('.modal-body table tbody input[type="checkbox"').length);
+                var id_modal = $(info[k]).attr('data-target').match(/\d+/)[0];
+                var div_value = $('.div_value'+id_modal);
+                div_value.closest('.modal-body').find('.SNCount').text(div_value.find('table tbody input[type="checkbox"]').length);
+                var setSTT = div_value.closest('.modal-body').find('.stt_SN');
+                for(let i =  0;i < setSTT.length;i++){
+                    $(setSTT[i]).eq(0).text(i + 1);
+                }
             })
         }
     }
@@ -1103,7 +1118,6 @@
         var provide_email = $('#provide_email').val();
         var provide_phone = $('#provide_phone').val();
         var provide_code = $('#provide_code').val();
-        console.log(provides_id);
         $.ajax({
             url: "{{ route('update_provide') }}",
             type: "get",
