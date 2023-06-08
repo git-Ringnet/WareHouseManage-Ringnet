@@ -137,7 +137,7 @@
                                     <td>{{ $va->id }}</td>
                                     <td>{{ $va->getNameProducts->products_code }}</td>
                                     <td>{{ $va->product_name }}</td>
-                                    <td>{{ $va->getNameProvide->provide_name == null ? "" : $va->getNameProvide->provide_name}}</td>
+                                    <td>@if($va->getNameProvide != null) {{ $va->getNameProvide->provide_name}} @endif</td>
                                     <td>{{ $va->product_category }}</td>
                                     <td>{{ $va->product_unit }}</td>
                                     <td>{{ $va->product_qty }}</td>
@@ -166,7 +166,7 @@
                             <?php $st = 0; ?>
                             @foreach ($listProduct as $va)
                             <div class="modal fade" id="exampleModal{{$st}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-modal="true" style="padding-right: 8px;">'
-                                <div class="modal-dialog" role="document">
+                                <div class="modal-dialog" role="document" style="max-width:85%;">
                                     <div class="modal-content">
                                         <div class="modal-header align-items-center">
                                             <div>

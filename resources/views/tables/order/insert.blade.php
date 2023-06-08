@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-sm-6 breadcrumb">
             <span> <a href="{{ route('insertProduct.index') }}"> Nhập hàng</a></span>
-                <span class="px-1"> / </span>
+            <span class="px-1"> / </span>
             <span><b>Đơn hàng mới</b></span>
         </div>
         <div class="col-sm-6 position-absolute" style="top:63px;right:2%">
@@ -189,6 +189,106 @@
     var rowCount = $('tbody tr').length;
     var last = "<?php echo $lastId; ?>";
 
+    function numberWithCommas(number) {
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+
+    function format(event) {
+        // Lấy giá trị đã nhập
+        var value = event.target.value;
+
+        // Xóa tất cả các ký tự không phải số
+        var formattedValue = value.replace(/\D/g, '');
+
+        // Chia nhỏ giá trị thành các phần ngàn
+        var parts = [];
+        while (formattedValue.length > 3) {
+            parts.unshift(formattedValue.slice(-3));
+            formattedValue = formattedValue.slice(0, formattedValue.length - 3);
+        }
+        parts.unshift(formattedValue);
+
+        // Định dạng số với dấu phân cách hàng nghìn
+        var formattedNumber = parts.join('.');
+        event.target.value = formattedNumber;
+        console.log(event.target.value);
+    };
+
+    $(document).on('input', '.quantity-input, [name^="product_price"]', function(e) {
+        var productQty = parseInt($(this).closest('tr').find('.quantity-input').val());
+        var productPrice = parseFloat($(this).closest('tr').find('input[name^="product_price"]').val());
+        updateTaxAmount($(this).closest('tr'));
+
+        if (!isNaN(productQty) && !isNaN(productPrice)) {
+            var totalAmount = productQty * productPrice;
+
+            $(this).closest('tr').find('.total-amount').val(totalAmount);
+
+            calculateTotalAmount();
+            calculateTotalTax();
+        }
+    });
+
+    $(document).on('change', '.product_tax', function() {
+        updateTaxAmount($(this).closest('tr'));
+        calculateTotalAmount();
+        calculateTotalTax();
+    });
+
+    function updateTaxAmount(row) {
+        var productQty = parseInt(row.find('.quantity-input').val());
+        var productPrice = parseFloat(row.find('input[name^="product_price"]').val());
+        var taxValue = parseFloat(row.find('.product_tax').val());
+
+        if (!isNaN(productQty) && !isNaN(productPrice) && !isNaN(taxValue)) {
+            var totalAmount = productQty * productPrice;
+            var taxAmount = (totalAmount * taxValue) / 100;
+
+            row.find('.product_tax1').text(taxAmount);
+        }
+    }
+
+    function calculateTotalAmount() {
+        var totalAmount = 0;
+        $('tr').each(function() {
+            var rowTotal = parseFloat($(this).find('.total-amount').val());
+            if (!isNaN(rowTotal)) {
+                totalAmount += rowTotal;
+            }
+        });
+        $('#total-amount-sum').text(numberWithCommas(totalAmount));
+
+        calculateTotalTax();
+        calculateGrandTotal();
+    }
+
+    function calculateTotalTax() {
+        var totalTax = 0;
+        $('tr').each(function() {
+            var rowTax = parseFloat($(this).find('.product_tax1').text());
+            if (!isNaN(rowTax)) {
+                totalTax += rowTax;
+            }
+        });
+        $('#product-tax').text(numberWithCommas(totalTax));
+
+        calculateGrandTotal();
+    }
+
+    function calculateGrandTotal() {
+        var totalAmount = parseFloat($('#total-amount-sum').text());
+        var totalTax = parseFloat($('#product-tax').text());
+
+        var grandTotal = totalAmount + totalTax;
+        $('#grand-total').text(numberWithCommas(grandTotal));
+
+        // Update data-value attribute
+        $('#grand-total').attr('data-value', grandTotal);
+        $('#total').val(numberWithCommas(grandTotal));
+    }
+
+
+
     $(document).on('click', '#deleteRowTable', function() {
         $('tbody input[type="checkbox"]:checked').closest('tr').remove();
     });
@@ -332,79 +432,6 @@
         checkRow();
     });
 
-    function getTax(){
-        $('.product_tax').on('change', function() {
-        alert('change');
-        var taxValue = getTax($(this));
-        calculateAndUpdateValues(taxValue, $(this));
-    });
-    }
-   
-
-    function getTax(e) {
-        var taxValue = parseFloat($(e).closest('tr').find('.product_tax').val());
-        return taxValue;
-    }
-
-    function calculateAndUpdateValues(taxValue, element) {
-        var productQty = parseInt(element.closest('tr').find('.quantity-input').val());
-        var productPrice = 0;
-        var grandTotal = parseFloat($('#grand-total').text());
-        $('#grand-total').attr('data-value', grandTotal);
-        $('#inputValue').val(grandTotal);
-        element.closest('tr').find('[name^="product_price"]').each(function() {
-            productPrice += parseFloat($(this).val());
-        });
-
-        if (!isNaN(productQty) && !isNaN(productPrice)) {
-            var totalAmount = productQty * productPrice;
-            var taxAmount = (productQty * productPrice * taxValue) / 100;
-            element.closest('tr').find('[name^="product_total"]').val(totalAmount);
-            $('#product-tax').val(taxAmount);
-
-            calculateTotalAmount();
-            calculateTotalTax();
-        }
-    }
-
-    $(document).on('input', '.quantity-input, [name^="product_price"]', function() {
-        var taxValue = getTax($(this));
-        calculateAndUpdateValues(taxValue, $(this));
-    });
-
-    function calculateTotalAmount() {
-        var totalAmount = 0;
-        $('tr').each(function() {
-            var rowTotal = parseFloat($(this).find('[name^="product_total"]').val());
-            if (!isNaN(rowTotal)) {
-                totalAmount += rowTotal;
-            }
-        });
-        $('#total-amount-sum').text(totalAmount);
-        calculateTotalTax();
-        calculateGrandTotal();
-    }
-
-    function calculateTotalTax() {
-        var totalTax = 0;
-        $('tr').each(function() {
-            var rowTax = parseFloat($(this).find('.product_tax').text());
-            if (!isNaN(rowTax)) {
-                totalTax += rowTax;
-            }
-        });
-        $('#product-tax').text(totalTax);
-        calculateGrandTotal();
-    }
-
-    function calculateGrandTotal() {
-        var totalAmount = parseFloat($('#total-amount-sum').text());
-        var totalTax = parseFloat($('#product-tax').text());
-        var grandTotal = totalAmount + totalTax;
-        $('#grand-total').text(grandTotal.toFixed(2));
-        $('#grand-total').attr('data-value', grandTotal.toFixed(2));
-    }
-
     $("#radio1").on("click", function() {
         $('#infor_provide').empty();
     });
@@ -514,7 +541,7 @@
             var id_modal = $(this).closest('.container-fluided').find('.modal').attr('id').replace(/\D/g, '');
             var sn_count = $('input[name="product_SN' + id_modal + '[]"]').length;
             var check = false;
-            $('input[name^="product_SN'+id_modal+'[]"]').each(function(index) {
+            $('input[name^="product_SN' + id_modal + '[]"]').each(function(index) {
                 $(this).each(function() {
                     if ($(this).val() === "") {
                         check = true;
@@ -595,14 +622,15 @@
             '<td><input required type="number" class="form-control" style="width:120px"" name="product_price[]" ></td>' +
             // '<td><input required type="number" name="product_tax[]" class="product_tax"></td>' +
             '<td>' +
+            '<input type="hidden" class="product_tax1">' +
             '<select name="product_tax[]" style="width:80px" class="product_tax form-control">' +
             '<option value="10">10%</option>' +
             '<option value="0">0%</option>' +
             '<option value="8">8%</option>' +
-            '<option value="0">NOVAT</option>' +
+            '<option value="00">NOVAT</option>' +
             '</select>' +
             '</td>' +
-            '<td><input readonly type="text" class="form-control" name="product_total[]"></td>' +
+            '<td><input readonly type="text" class="form-control total-amount" name="product_total[]"></td>' +
             '<td><input type="text" class="form-control" style="width:120px" name="product_trademark[]"></td>' +
             '<td>' +
             '<button class="exampleModal" name="btn_add_SN[]" type="button" data-toggle="modal" data-target="#exampleModal' +
@@ -988,29 +1016,46 @@
             }
         });
 
+        var id_modals = []; // Mảng để lưu trữ các giá trị id_modal
+
         $('input[name^="product_qty[]"]').each(function(index) {
             var qty = $(this).val();
             var id_modal = $(this).closest('.container-fluided').find('.modal').attr('id').replace(/\D/g, '');
-            var sn_count = $('input[name="product_SN' + id_modal + '[]"]').length;
-            var check = false;
-            $('input[name^="product_SN'+id_modal+'[]"]').each(function(index) {
-                $(this).each(function() {
+            console.log(id_modal.length);
+            for(let k =0;k< index;k++){
+            id_modals.push(id_modal);
+           }
+          
+            console.log(id_modals);
+            var errorCheck = false;
+            var snCheck = false;
+
+            for (var i = 0; i < id_modals.length; i++) {
+                var sn_count = $('input[name="product_SN' + id_modals[i] + '[]"]').length;
+
+                $('input[name^="product_SN' + id_modals[i] + '[]"]').each(function(index) {
                     if ($(this).val() === "") {
-                        check = true;
-                        return false;
+                        errorCheck = true;
+                        return false; // Dừng lặp nếu tìm thấy một trường rỗng
                     }
                 });
-            });
 
-            if (check) {
+                if (qty != sn_count) {
+                    snCheck = true;
+                    break; // Dừng lặp nếu số lượng và số seri không hợp lệ
+                }
+            }
+
+            if (errorCheck) {
                 error = true;
                 alert('Vui lòng nhập seri number');
-                return false;
+                return false; // Dừng lặp nếu có trường rỗng
             }
-            if (qty != sn_count) {
+
+            if (snCheck) {
                 error = true;
                 alert('Số lượng và seri number không hợp lệ');
-                return false;
+                return false; // Dừng lặp nếu có số lượng và số seri không hợp lệ
             }
         });
 

@@ -158,6 +158,7 @@ class ProductsController extends Controller
                 'product.product_trademark',
                 'product.product_unit',
                 'product_qty',
+                'product.product_orderid',
                 'product.product_price',
                 'product.created_at',
                 'product.updated_at',
@@ -218,7 +219,6 @@ class ProductsController extends Controller
             $detail->product_id = $pro->id;
             $detail->provide_id = $product_provide[$i];
             $detail->save();
-
             $product_SN = $request->{'product_SN' . $i};
             if (count($product_SN) > 1) {
                 foreach ($product_SN as $seri_number) {
@@ -264,11 +264,13 @@ class ProductsController extends Controller
         $title = 'Chỉnh sửa sản phẩm';
 
         $listProduct = Product::with('getSerinumbers')->where('products_id', $products->id)->paginate(8);
+        // var_dump($listProduct[1]->getSerinumbers);
+        // die();
         // $listProduct = Product::join('serinumber', 'product.id', 'serinumbers.product_id')
         //     ->where('product.products_id', $products->id)
         //     ->distinct()
         //     ->paginate(8);
-
+        // var_dump($listProduct)
         // foreach($listProduct as $va){
         //     var_dump($va->getSerinumbers);
         // }
@@ -343,6 +345,7 @@ class ProductsController extends Controller
     public function storeProducts(Request $request)
     {
         $products = new Products();
+
         $get_image = $request->file('products_img');
         if ($get_image) {
             $get_name_image = $get_image->getClientOriginalName();
