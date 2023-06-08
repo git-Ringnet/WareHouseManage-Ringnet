@@ -2,6 +2,7 @@
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
+    {{-- Thai Minh Hieu --}}
     <section class="content-header">
         <div class="container-fluided">
             <div class="row mb-2">
