@@ -689,7 +689,8 @@ input[type="number"] {
     color: #000000;
 }
 
-#exampleModalLabel,.modal h3 {
+#exampleModalLabel,
+.modal h3 {
     font-weight: 600;
     font-size: 18px;
     color: #1D1C20;
@@ -721,3 +722,24 @@ input[type="number"] {
 .modal tbody tr {
     background: none;
 }
+
+.filter-options li {
+    display: flex;
+    padding: 5px;
+}
+.filter-options ul label {
+    font-weight: 400 !important;
+    color: #555555;
+    margin: 0;
+    padding-left: 5px;
+}
+
+.filter-options li:hover {
+    background-color: #ebebeb;
+    transition: background-color 0.3s ease;
+}
+.btn-block+.btn-block {
+    margin:0 ;  
+}
+
+
