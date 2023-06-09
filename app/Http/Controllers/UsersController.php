@@ -131,14 +131,27 @@ class UsersController extends Controller
     public function editUser(UserRequest $request)
     {
         $id = session('id');
-        $data = [
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-            'roleid' => $request->role,
-            'phonenumber' => $request->phonenumber,
-            'status' => $request->status,
-        ];
+        // dd($request);
+        $password = bcrypt($request->password);
+        if(!empty($request->password)){
+            $data = [
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => $password,
+                'roleid' => $request->role,
+                'phonenumber' => $request->phonenumber,
+                'status' => $request->status,
+            ];
+        }else{
+            $data = [
+                'name' => $request->name,
+                'email' => $request->email,
+                'roleid' => $request->role,
+                'phonenumber' => $request->phonenumber,
+                'status' => $request->status,
+            ];
+        }
+       
         // dd($id);
 
         $this->users->updateUser($data, $id);

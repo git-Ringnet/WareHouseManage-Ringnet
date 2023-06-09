@@ -102,7 +102,7 @@
                                         <a class="cursor select-all mr-auto">Chọn tất cả</a>
                                         <a class="cursor deselect-all">Hủy chọn</a>
                                     </div>
-                                    <ul class="ks-cboxtags p-0 m-0 px-2">
+                                    <ul class="ks-cboxtags p-0 mb-1 px-2">
                                         <li>
                                             <input type="checkbox" id="status_active" {{ in_array(1, $status)
                                                 ? 'checked' : '' }} name="status[]" value="1">
@@ -131,7 +131,7 @@
                                         <a class="cursor select-all-category mr-auto">Chọn tất cả</a>
                                         <a class="cursor deselect-all-category">Hủy chọn</a>
                                     </div>
-                                    <ul class="ks-cboxtags p-0 m-0 px-2">
+                                    <ul class="ks-cboxtags p-0 mb-1 px-2">
                                         @if(!empty($categories))
                                         @foreach($categories as $category)
                                         <li>

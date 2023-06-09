@@ -244,7 +244,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <a class="cursor select-all mr-auto">Chọn tất cả</a>
                                                 <a class="cursor deselect-all">Hủy chọn</a>
                                             </div>
-                                            <ul class="ks-cboxtags-status p-0 m-0 px-2">
+                                            <ul class="ks-cboxtags-status p-0 mb-1 px-2">
                                                 <li>
                                                     <input type="checkbox" id="status_active"
                                                         {{ in_array(0, $status) ? 'checked' : '' }} name="status[]"
@@ -288,7 +288,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <a class="cursor select-all-creator mr-auto">Chọn tất cả</a>
                                                 <a class="cursor deselect-all-creator">Hủy chọn</a>
                                             </div>
-                                            <ul class="ks-cboxtags-creator p-0 m-0 px-2">
+                                            <ul class="ks-cboxtags-creator p-0 mb-1 px-2">
                                                 @if (!empty($exports))
                                                     @php
                                                         $seenValues = [];
@@ -575,6 +575,18 @@ $index = array_search($item['label'], $numberedLabels);
     <!-- /.content -->
 </div>
 <script>
+    $('.ks-cboxtags-status li').on('click', function(event) {
+        if (event.target.tagName !== 'INPUT') {
+            var checkbox = $(this).find('input[type="checkbox"]');
+            checkbox.prop('checked', !checkbox.prop('checked')); // Đảo ngược trạng thái checked
+        }
+    });
+    $('.ks-cboxtags-creator li').on('click', function(event) {
+        if (event.target.tagName !== 'INPUT') {
+            var checkbox = $(this).find('input[type="checkbox"]');
+            checkbox.prop('checked', !checkbox.prop('checked')); // Đảo ngược trạng thái checked
+        }
+    });
     $('#btn-update_at').click(function(event) {
         event.preventDefault();
     $('.btn-filter').prop('disabled', true);
@@ -600,7 +612,8 @@ $index = array_search($item['label'], $numberedLabels);
     });
     $('#btn-creator').click(function(event) {
         event.preventDefault();
-    $('.btn-filter').prop('disabled', true);
+        $('#creator-options input').addClass('creator-checkbox');
+        $('.btn-filter').prop('disabled', true);
         $('#creator-options').toggle();
     });
     $('#cancel-creator').click(function(event) {
@@ -611,6 +624,7 @@ $index = array_search($item['label'], $numberedLabels);
     });
     $('#btn-status').click(function(event) {
         event.preventDefault();
+        $('#status-options input').addClass('status-checkbox');
     $('.btn-filter').prop('disabled', true);
         $('#status-options').toggle();
     });

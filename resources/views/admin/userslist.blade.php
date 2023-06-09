@@ -228,7 +228,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <a class="cursor select-all mr-auto">Chọn tất cả</a>
                                                 <a class="cursor deselect-all">Hủy chọn</a>
                                             </div>
-                                            <ul class="ks-cboxtags p-0 m-0 px-2">
+                                            <ul class="ks-cboxtags-status p-0 mb-1 px-2">
                                                 <li>
                                                     <input type="checkbox" id="status_active"
                                                         {{ in_array(1, $status) ? 'checked' : '' }} name="status[]"
@@ -265,7 +265,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <a class="cursor select-all-roles mr-auto">Chọn tất cả</a>
                                                 <a class="cursor deselect-all-roles">Hủy chọn</a>
                                             </div>
-                                            <ul class="ks-cboxtags-roles p-0 m-0 px-2">
+                                            <ul class="ks-cboxtags-roles p-0 mb-1 px-2">
                                                 @if (!empty($allRoles))
                                                     @foreach ($allRoles as $role)
                                                         <li>
@@ -408,13 +408,14 @@ $index = array_search($item['label'], $numberedLabels);
                                         </th>
                                         </form>
                                         <th></th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($usersList as $value)
                                         <tr>
                                             <td>
-                                                @if ($value->id != 1)
+                                                @if ($value->id != Auth::user()->id)
                                                     <input type="checkbox" class="cb-element" name="ids[]"
                                                         value="{{ $value->id }}">
                                                 @endif
@@ -429,7 +430,7 @@ $index = array_search($item['label'], $numberedLabels);
                         class="btn btn-sm btn-secondary">Active</button>':' <button type="submit"
                         class="btn btn-sm btn-primary">Disable</button>'!!}</td> --}}
                                             <td class="text-center">
-                                                @if ($value->id != 1)
+                                                @if ($value->id != Auth::user()->id)
                                                 <select class="p-1 px-2 status-select"
                                                     style="border: 1px solid #D6D6D6; <?php if ($value->status == 1) {
                                                         echo 'color:#09BD3C;';
@@ -449,7 +450,8 @@ $index = array_search($item['label'], $numberedLabels);
                                                     Active
                                                 @endif
                                             </td>
-                                            <td class="d-flex"><a>
+                                            <td>
+                                                <a>
                                                     <form action="{{ route('admin.edit') }}" method="get"
                                                         enctype="multipart/form">
                                                         @csrf
@@ -461,6 +463,9 @@ $index = array_search($item['label'], $numberedLabels);
                                                             value="{{ $value->id }}" />
                                                     </form>
                                                 </a>
+                                            </td>
+                                            <td>
+                                                @if ($value->id != Auth::user()->id)
                                                 <form onclick="return confirm('Bạn có chắc chắn muốn xoá !!')"
                                                     action="{{ route('admin.delete') }}" method="get"
                                                     enctype="multipart/form">
@@ -472,6 +477,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     <input type="hidden" name="id"
                                                         value="{{ $value->id }}" />
                                                 </form>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach
@@ -512,9 +518,23 @@ $index = array_search($item['label'], $numberedLabels);
             location.reload();
         });
     });
+
+    $('.ks-cboxtags-status li').on('click', function(event) {
+        if (event.target.tagName !== 'INPUT') {
+            var checkbox = $(this).find('input[type="checkbox"]');
+            checkbox.prop('checked', !checkbox.prop('checked')); // Đảo ngược trạng thái checked
+        }
+    });
+    $('.ks-cboxtags-roles li').on('click', function(event) {
+        if (event.target.tagName !== 'INPUT') {
+            var checkbox = $(this).find('input[type="checkbox"]');
+            checkbox.prop('checked', !checkbox.prop('checked')); // Đảo ngược trạng thái checked
+        }
+    });
     $('#btn-status').click(function(event) {
         event.preventDefault();
         $('.btn-filter').prop('disabled', true);
+        $('#status-options input').addClass('status-checkbox');
         $('#status-options').toggle();
         $('#role-options').hide();
 
@@ -577,6 +597,7 @@ $index = array_search($item['label'], $numberedLabels);
     $('#btn-roles').click(function(event) {
         event.preventDefault();
         $('.btn-filter').prop('disabled', true);
+        $('#status-options input').addClass('status-checkbox');
         $('#role-options').toggle();
         $('#status-options').hide();
     });

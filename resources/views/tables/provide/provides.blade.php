@@ -163,7 +163,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <a class="cursor select-all mr-auto">Chọn tất cả</a>
                                                 <a class="cursor deselect-all">Hủy chọn</a>
                                             </div>
-                                            <ul class="ks-cboxtags p-0 m-0 px-2">
+                                            <ul class="ks-cboxtags-status p-0 mb-1 px-2">
                                                 <li>
                                                     <input type="checkbox" id="status_active"
                                                         {{ in_array(1, $status) ? 'checked' : '' }} name="status[]"
@@ -468,18 +468,24 @@ $index = array_search($item['label'], $numberedLabels);
             location.reload();
         });
     });
+    $('.ks-cboxtags-status li').on('click', function(event) {
+        if (event.target.tagName !== 'INPUT') {
+            var checkbox = $(this).find('input[type="checkbox"]');
+            checkbox.prop('checked', !checkbox.prop('checked')); // Đảo ngược trạng thái checked
+        }
+    });
     $('#btn-status').click(function(event) {
         event.preventDefault();
         $('.btn-filter').prop('disabled', true);
         $('#status-options').toggle();
-
-        $('#cancel-status').click(function(event) {
+        $('#status-options input').addClass('status-checkbox');
+    });
+    $('#cancel-status').click(function(event) {
             event.preventDefault();
             $('.btn-filter').prop('disabled', false);
 
             $('#status-options input[type="checkbox"]').prop('checked', false);
             $('#status-options').hide();
-        });
     });
     $('#btn-name').click(function(event) {
         event.preventDefault();
