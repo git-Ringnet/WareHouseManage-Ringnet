@@ -761,7 +761,7 @@
         last++;
         updateRowNumbers();
         var tr = '<tr>' +
-            '<input type="hidden" name="product_id[]" value="' + last + '">' +
+            // '<input type="hidden" name="product_id[]" value="' + last + '">' +
             '<td scope="row"><input type="checkbox" id=' + rowCount + '" class="cb-element"></td>' +
             '<td>' +
             '<select name="products_id[]" class="list_products form-control">' +
@@ -935,9 +935,8 @@
                 $('.type_product').text(productType);
                 $('.qty_product').text(productQty);
                 var id_modal = $(info[k]).attr('data-target').match(/\d+/)[0];
-                var div_value = $('.div_value' + id_modal);
-                div_value.closest('.modal-body').find('.SNCount').text(div_value.find(
-                    'table tbody input[type="checkbox"]').length);
+                var div_value = $('.div_value'+id_modal);
+                div_value.closest('.modal-body').find('.SNCount').text(div_value.find('table tbody .stt_SN').length);
                 var setSTT = div_value.closest('.modal-body').find('.stt_SN');
                 for (let i = 0; i < setSTT.length; i++) {
                     $(setSTT[i]).eq(0).text(i + 1);

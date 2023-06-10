@@ -36,9 +36,9 @@
                             <span>Xuất Excel</span>
                         </button>
                     </div>
-                    <!-- <input type="file" id="excelFile" />
-                            <button ></button> -->
-                    <div class="btn btn-outline-primary btn-file d-flex align-items-center" onclick="importExcel()">
+
+                        <button ></button> -->
+                    <div class="btn btn-outline-primary btn-file d-flex align-items-center">
                         <div>
                             <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24" fill="none">
@@ -51,7 +51,8 @@
                                     stroke-linejoin="round" />
                             </svg>
                         </div>
-                        <span>Nhập Excel</span> <input type="file" id="import_file">
+
+                        <span>Nhập Excel</span> <input type="file" id="import_file" onchange="importExcel()">
                     </div>
                 @endcan
             </div>
@@ -813,7 +814,8 @@ $index = array_search($item['label'], $numberedLabels);
                                                         <p>Đơn giá nhập</p>{{ number_format($item->product_price) }}
                                                     </td>
                                                     <td class="text-right">
-                                                        <p>Trị tồn kho</p>{{ number_format($item->total) }}
+                                                
+                                                        <p>Trị tồn kho</p>{{ number_format($item->product_qty * $item->product_price) }}
                                                     </td>
                                                     <td class="text-left">
                                                         @if (!empty($item->product_trademark))
@@ -978,7 +980,7 @@ $index = array_search($item['label'], $numberedLabels);
 
     // Import file excel
     function importExcel() {
-        var input = document.getElementById("excelFile");
+        var input = document.getElementById("import_file");
         var file = input.files[0];
         var reader = new FileReader();
 
