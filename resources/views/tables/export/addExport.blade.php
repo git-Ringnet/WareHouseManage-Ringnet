@@ -410,7 +410,7 @@
             '<input type="text" class="form-control" id="guest_receiver" placeholder="Nhập thông tin" name="guest_receiver" value="" required>' +
             '</div>' + '<div class="form-group">' +
             '<label for="email">SĐT người nhận:</label>' +
-            '<input type="text" oninput="validateNumberInput(this)" class="form-control" id="guest_phoneReceiver" placeholder="Nhập thông tin" name="guest_phoneReceiver" value="" required>' +
+            '<input type="text" pattern="^(0|\+84)(3[2-9]|5[2689]|7[06-9]|8[1-9]|9[0-9])\d{7}$" oninput="validateNumberInput(this)" class="form-control" id="guest_phoneReceiver" placeholder="Nhập thông tin" name="guest_phoneReceiver" value="" required>' +
             '</div>' + '</div>' + '<div class="col-sm-6">' +
             '<div class="form-group">' +
             '<label for="email">Người đại diện:</label>' +
@@ -420,7 +420,7 @@
             '<input type="email" class="form-control" pattern="/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/" id="guest_email" placeholder="Nhập thông tin" name="guest_email" value="" required>' +
             '</div>' + '<div class="form-group">' +
             '<label for="email">Số điện thoại:</label>' +
-            '<input type="text" oninput="validateNumberInput(this)" class="form-control" id="guest_phone" placeholder="Nhập thông tin" name="guest_phone" value="" required>' +
+            '<input type="text" pattern="/^(0|\+84)(3[2-9]|5[2689]|7[06-9]|8[1-9]|9[0-9])\d{7}$/" oninput="validateNumberInput(this)" class="form-control" id="guest_phone" placeholder="Nhập thông tin" name="guest_phone" value="" required>' +
             '</div>' + '<div class="form-group">' +
             ' <label for="email">Hình thức thanh toán:</label>' +
             '<select name="guest_pay" class="form-control" id="guest_pay">' +
@@ -438,8 +438,13 @@
     });
 
     function validateNumberInput(input) {
-        input.value = input.value.replace(/[^0-9]/g, '');
+        // const regex = /^[-+]?[0-9]{1,3}(?:,?[0-9]{3})*(?:\.[0-9]+)?$/;
+        // const value = input.value.replace(/,/g, '');
+        // if (!regex.test(value)) {
+        //     input.value = '';
+        // }
     }
+
     //add sản phẩm
     $(document).ready(function() {
         let fieldCounter = 1;
@@ -478,15 +483,17 @@
                 "</td>"
             );
             const giaInput = $(
-                "<td><input type='number' class='product_price form-control' style='width:140px' id='product_price' name='product_price[]' required></td>"
+                "<td><input type='text' class='product_price form-control' style='width:140px' id='product_price' name='product_price[]' required></td>"
             );
             const ghichuInput = $(
-                "<td><input type='text' class='note_product form-control' style='width:120px' name='product_note[]'></td>");
+                "<td><input type='text' class='note_product form-control' style='width:120px' name='product_note[]'></td>"
+            );
             const thueInput = $("<td>" +
                 "<select name='product_tax[]' class='product_tax p-1 form-control' style='width:80px' id='product_tax' required>" +
                 "<option value='0'>0%</option>" +
                 "<option value='8'>8%</option>" +
                 "<option value='10'>10%</option>" +
+                "<option value='0'>NOVAT</option>" +
                 "</select>" +
                 "</td>");
             const thanhTienInput = $("<td><span class='px-5 total-amount'>0</span></td>");
@@ -515,6 +522,10 @@
             //Xóa sản phẩm
             deleteBtn.click(function() {
                 $(this).closest("tr").remove();
+                var taxAmount = parseFloat(row.find('.product_tax1').text());
+                var totalTax = parseFloat($('#product-tax').text());
+                totalTax -= taxAmount;
+                $('#product-tax').text(totalTax);
                 fieldCounter--;
                 calculateTotalAmount();
                 calculateGrandTotal();
@@ -533,8 +544,7 @@
                     .val();
                 var ghiChu = $(this).closest('tr').find('.note_product')
                     .val();
-                var thue = $(this).closest('tr').find('.product_tax')
-                    .val();
+                var thue = $(this).closest('tr').find('.product_tax option:selected').text();
                 var thanhTien = $(this).closest('tr').find('.total-amount')
                     .text();
                 var giaNhap = $(this).closest('tr').find('.price_import').val();
@@ -559,7 +569,9 @@
                             '<tbody><tr>' + '<td>1</td>' + '<td>' +
                             productCode1 + '</td>' + '<td>' + productName +
 
-                            '</td>' + '<td class="text-right">' + qty + '</td>' + '<td class="text-right">' + qty + '</td>' +
+                            '</td>' + '<td class="text-right">' + qty +
+                            '</td>' + '<td class="text-right">' + qty +
+                            '</td>' +
 
                             '</tr</tbody>' + '</table>' +
                             '<h3>Thông tin Serial Number </h3>');
@@ -670,23 +682,23 @@
                         '</div>' + '<div class="form-group">' +
                         '<label>Địa chỉ xuất hóa đơn:</label>' +
                         '<input type="text" class="form-control" placeholder="Nhập thông tin" id="guest_addressInvoice" name="guest_addressInvoice" value="' +
-                        data.guest_addressInvoice + '">' +
+                        data.guest_addressInvoice + '" required>' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">Mã số thuế:</label>' +
                         '<input type="text" oninput="validateNumberInput(this)" class="form-control" inputmode="numeric" id="guest_code" placeholder="Nhập thông tin" name="guest_code" value="' +
-                        data.guest_code + '">' +
+                        data.guest_code + '" required>' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">Địa chỉ giao hàng:</label>' +
                         '<input type="text" class="form-control" id="guest_addressDeliver" placeholder="Nhập thông tin" name="guest_addressDeliver" value="' +
-                        data.guest_addressDeliver + '">' +
+                        data.guest_addressDeliver + '" required>' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">Người nhận hàng:</label>' +
                         '<input type="text" class="form-control" id="guest_receiver" placeholder="Nhập thông tin" name="guest_receiver" value="' +
-                        data.guest_receiver + '">' +
+                        data.guest_receiver + '" required>' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">SĐT người nhận:</label>' +
-                        '<input type="text" oninput="validateNumberInput(this)" class="form-control" id="guest_phoneReceiver" placeholder="Nhập thông tin" name="guest_phoneReceiver" value="' +
-                        data.guest_phoneReceiver + '">' +
+                        '<input type="text" pattern="^(0|\+84)(3[2-9]|5[2689]|7[06-9]|8[1-9]|9[0-9])\d{7}$" oninput="validateNumberInput(this)" class="form-control" id="guest_phoneReceiver" placeholder="Nhập thông tin" name="guest_phoneReceiver" value="' +
+                        data.guest_phoneReceiver + '" required>' +
                         '</div>' + '</div>' + '<div class="col-sm-6">' +
                         '<div class="form-group">' +
                         '<label for="email">Người đại diện:</label>' +
@@ -697,12 +709,12 @@
                         '<input type="email" class="form-control" pattern="/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/" id="guest_email" placeholder="Nhập thông tin" name="guest_email" value="' +
                         data.guest_email + '" required>' +
                         '</div>' + '<div class="form-group">' +
-                        '<label for="email">Số điện thoại:</label>' +
-                        '<input type="text" oninput="validateNumberInput(this)" class="form-control" id="guest_phone" placeholder="Nhập thông tin" name="guest_phone" value="' +
+                        '<label>Số điện thoại:</label>' +
+                        '<input type="text" pattern="^(0|\+84)(3[2-9]|5[2689]|7[06-9]|8[1-9]|9[0-9])\d{7}$" oninput="validateNumberInput(this)" class="form-control" id="guest_phone" placeholder="Nhập thông tin" name="guest_phone" value="' +
                         data.guest_phone + '" required>' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">Hình thức thanh toán:</label>' +
-                        '<select name="guest_pay" class="form-control" id="guest_pay">' +
+                        '<select name="guest_pay" class="form-control" id="guest_pay" required>' +
                         '<option value="0"' + (data.guest_pay == 0 ? ' selected' : '') +
                         '>Chuyển khoản</option>' +
                         '<option value="1"' + (data.guest_pay == 1 ? ' selected' : '') +
@@ -723,6 +735,14 @@
             });
         });
     });
+    //Giới hạn số lượng
+    var qty_exist = $('.quantity-exist').val();
+
+    function limitMaxValue(input) {
+        if (input.value > qty_exist) {
+            input.value = qty_exist;
+        }
+    }
     //cập nhật thông tin khách hàng
     $(document).on('click', '#btn-customer', function(e) {
         e.preventDefault();
@@ -918,87 +938,84 @@
         }
     });
 
-    function limitMaxValue(input) {
-        if (input.value > 100) {
-            input.value = 100;
-        }
-    }
-    
     //tính thành tiền của sản phẩm
     $(document).on('input', '.quantity-input, [name^="product_price"]', function() {
-        var productQty = parseInt($(this).closest('tr').find('.quantity-input').val());
-        var productPrice = parseFloat($(this).closest('tr').find('input[name^="product_price"]').val());
+        var productQty = parseInt($(this).closest('tr').find('.quantity-input').val().replace(/[^0-9.-]+/g,
+            ""));
+        var productPrice = parseFloat($(this).closest('tr').find('input[name^="product_price"]').val().replace(
+            /[^0-9.-]+/g, ""));
         updateTaxAmount($(this).closest('tr'));
 
         if (!isNaN(productQty) && !isNaN(productPrice)) {
             var totalAmount = productQty * productPrice;
 
-            $(this).closest('tr').find('.total-amount').val(totalAmount);
-            $('.total-amount').text(totalAmount);
+            $(this).closest('tr').find('.total-amount').text(formatCurrency(totalAmount.toFixed(2)));
             calculateTotalAmount();
             calculateTotalTax();
+            calculateGrandTotal();
         }
     });
 
     $(document).on('change', '.product_tax', function() {
         updateTaxAmount($(this).closest('tr'));
-        var initialValue = parseFloat($(this).find(':selected').data('initial-value'));
-        $(this).find(':selected').val(initialValue);
         calculateTotalAmount();
         calculateTotalTax();
+        calculateGrandTotal();
     });
 
     function updateTaxAmount(row) {
-        var productQty = parseInt(row.find('.quantity-input').val());
-        var productPrice = parseFloat(row.find('input[name^="product_price"]').val());
-        var taxValue = parseFloat(row.find('.product_tax').val());
+        var productQty = parseInt(row.find('.quantity-input').val().replace(/[^0-9.-]+/g, ""));
+        var productPrice = parseFloat(row.find('input[name^="product_price"]').val().replace(/[^0-9.-]+/g, ""));
+        var taxValue = parseFloat(row.find('.product_tax').val().replace(/[^0-9.-]+/g, ""));
 
         if (!isNaN(productQty) && !isNaN(productPrice) && !isNaN(taxValue)) {
             var totalAmount = productQty * productPrice;
             var taxAmount = (totalAmount * taxValue) / 100;
 
-            row.find('.product_tax1').text(taxAmount);
-            calculateTotalTax();
-            calculateGrandTotal();
+            row.find('.product_tax1').text(formatCurrency(taxAmount.toFixed(2)));
         }
     }
 
     function calculateTotalAmount() {
         var totalAmount = 0;
         $('tr').each(function() {
-            var rowTotal = parseFloat($(this).find('.total-amount').val());
+            var rowTotal = parseFloat($(this).find('.total-amount').text().replace(/[^0-9.-]+/g, ""));
             if (!isNaN(rowTotal)) {
                 totalAmount += rowTotal;
             }
         });
-        $('#total-amount-sum').text(totalAmount);
-        calculateTotalTax();
-        calculateGrandTotal();
+        $('#total-amount-sum').text(formatCurrency(totalAmount.toFixed(2)));
     }
 
     function calculateTotalTax() {
         var totalTax = 0;
         $('tr').each(function() {
-            var rowTax = parseFloat($(this).find('.product_tax1').text());
+            var rowTax = parseFloat($(this).find('.product_tax1').text().replace(/[^0-9.-]+/g, ""));
             if (!isNaN(rowTax)) {
                 totalTax += rowTax;
             }
         });
-        $('#product-tax').text(totalTax);
-
-        calculateGrandTotal();
+        $('#product-tax').text(formatCurrency(totalTax.toFixed(2)));
     }
 
     function calculateGrandTotal() {
-        var totalAmount = parseFloat($('#total-amount-sum').text());
-        var totalTax = parseFloat($('#product-tax').text());
+        var totalAmount = parseFloat($('#total-amount-sum').text().replace(/[^0-9.-]+/g, ""));
+        var totalTax = parseFloat($('#product-tax').text().replace(/[^0-9.-]+/g, ""));
 
         var grandTotal = totalAmount + totalTax;
-        $('#grand-total').text(grandTotal);
+        var formattedGrandTotal = formatCurrency(grandTotal.toFixed(2));
 
-        // Update data-value attribute
-        $('#grand-total').attr('data-value', grandTotal);
-        $('#total').val(grandTotal);
+        // Xóa ký tự "," khỏi giá trị trước khi hiển thị
+        var totalValue = formattedGrandTotal.replace(/,/g, '');
+
+        $('#grand-total').text(formattedGrandTotal);
+        $('#grand-total').attr('data-value', formattedGrandTotal);
+        $('#total').val(totalValue);
+    }
+
+
+    function formatCurrency(value) {
+        return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
     //hàm kiểm tra
@@ -1007,10 +1024,13 @@
         var productList = $('.productName');
 
         if (formGuest.length && productList.length > 0) {
-
+            $('.quantity-input, [name^="product_price"]').each(function() {
+                var newValue = $(this).val().replace(/,/g, '');
+                $(this).val(newValue);
+            });
         } else {
             if (formGuest.length === 0) {
-                alert('Lỗi: Chưa chọn nhà cung cấp!');
+                alert('Lỗi: Chưa nhập thông tin khách hàng!');
             } else if (productList.length === 0) {
                 alert('Lỗi: Chưa thêm sản phẩm!');
             }
@@ -1072,6 +1092,26 @@
 
         // Print the content
         window.print();
+    }
+    //format giá
+    var inputElement = document.getElementById('product_price');
+
+    // Bắt sự kiện khi người dùng nhập dữ liệu
+    $('body').on('input', '.product_price', function(event) {
+        // Lấy giá trị đã nhập
+        var value = event.target.value;
+
+        // Xóa các ký tự không phải số và dấu phân thập phân từ giá trị
+        var formattedValue = value.replace(/[^0-9.]/g, '');
+
+        // Định dạng số với dấu phân cách hàng nghìn
+        var formattedNumber = numberWithCommas(formattedValue);
+
+        event.target.value = formattedNumber;
+    });
+    
+    function numberWithCommas(number) {
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 </script>
 </body>

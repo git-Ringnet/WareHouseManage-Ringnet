@@ -332,7 +332,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('comparison_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity sum-input" type="number"
                                                     name="sum" value="{{ request()->sum }}"
@@ -499,7 +499,9 @@ $index = array_search($item['label'], $numberedLabels);
                                             <td>{{ $value->guest_represent }}</td>
                                             <td>{{ date_format(new DateTime($value->updated_at), 'd-m-Y') }}</td>
                                             <td>{{ $value->name }}</td>
-                                            <td class="text-right">{{ number_format($value->total) }}</td>
+                                            <td class="text-right">
+                                                {{ number_format($value->total)}}
+                                            </td>
                                             <td class="text-center">
                                                 @if ($value->export_status == 0)
                                                     <span class="p-2 bg-danger rounded">Đã hủy</span>
@@ -510,7 +512,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 @endif
                                             </td>
                                             <td>
-                                                @if($value->export_status == 1 && (Auth::user()->name == $value->name || Auth::user()->can('isAdmin')))
+                                                @if ($value->export_status == 1 && (Auth::user()->name == $value->name || Auth::user()->can('isAdmin')))
                                                     <a href="{{ route('exports.edit', $value->id) }}">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="32"
                                                             height="32" viewBox="0 0 32 32" fill="none">
@@ -577,69 +579,69 @@ $index = array_search($item['label'], $numberedLabels);
 <script>
     $('#btn-update_at').click(function(event) {
         event.preventDefault();
-    $('.btn-filter').prop('disabled', true);
+        $('.btn-filter').prop('disabled', true);
         $('#update_at-options').toggle();
     });
     $('#cancel-update_at').click(function(event) {
         event.preventDefault();
-    $('.btn-filter').prop('disabled', false);
+        $('.btn-filter').prop('disabled', false);
         $('#start').val('');
-            $('#end').val('');
+        $('#end').val('');
         $('#update_at-options').hide();
     });
     $('#btn-sum').click(function(event) {
         event.preventDefault();
-    $('.btn-filter').prop('disabled', true);
+        $('.btn-filter').prop('disabled', true);
         $('#sum-options').toggle();
     });
     $('#cancel-sum').click(function(event) {
         event.preventDefault();
-    $('.btn-filter').prop('disabled', false);
+        $('.btn-filter').prop('disabled', false);
         $('.sum-input').val('');
         $('#sum-options').hide();
     });
     $('#btn-creator').click(function(event) {
         event.preventDefault();
-    $('.btn-filter').prop('disabled', true);
+        $('.btn-filter').prop('disabled', true);
         $('#creator-options').toggle();
     });
     $('#cancel-creator').click(function(event) {
         event.preventDefault();
-    $('.btn-filter').prop('disabled', false);
+        $('.btn-filter').prop('disabled', false);
         $('#creator-options input[type="checkbox"]').prop('checked', false);
         $('#creator-options').hide();
     });
     $('#btn-status').click(function(event) {
         event.preventDefault();
-    $('.btn-filter').prop('disabled', true);
+        $('.btn-filter').prop('disabled', true);
         $('#status-options').toggle();
     });
     $('#cancel-status').click(function(event) {
         event.preventDefault();
-    $('.btn-filter').prop('disabled', false);
+        $('.btn-filter').prop('disabled', false);
         $('#status-options input[type="checkbox"]').prop('checked', false);
         $('#status-options').hide();
     });
     $('#btn-id').click(function(event) {
         event.preventDefault();
-    $('.btn-filter').prop('disabled', true);
+        $('.btn-filter').prop('disabled', true);
         $('#id-options').toggle();
     });
     $('#cancel-id').click(function(event) {
         event.preventDefault();
-    $('.btn-filter').prop('disabled', false);
+        $('.btn-filter').prop('disabled', false);
         $('.id-input').val('');
         $('#id-options').hide();
     });
 
     $('#btn-guest').click(function(event) {
         event.preventDefault();
-    $('.btn-filter').prop('disabled', true);
+        $('.btn-filter').prop('disabled', true);
         $('#guest-options').toggle();
     });
     $('#cancel-guest').click(function(event) {
         event.preventDefault();
-    $('.btn-filter').prop('disabled', false);
+        $('.btn-filter').prop('disabled', false);
         $('.guest-input').val('');
         $('#guest-options').hide();
     });

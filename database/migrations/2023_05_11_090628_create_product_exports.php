@@ -21,10 +21,10 @@ return new class extends Migration
             $table->string('product_name');
             $table->string('product_unit');
             $table->integer('product_qty');
-            $table->bigInteger('product_price');
+            $table->decimal('product_price', 15, 4);
             $table->string('product_note')->nullable();
             $table->integer('product_tax');
-            $table->bigInteger('product_total');
+            $table->decimal('product_total', 15, 4);
             $table->timestamps();
         });
     }
