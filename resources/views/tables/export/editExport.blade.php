@@ -198,7 +198,7 @@
                         <b>Thông tin khách hàng</b>
                         @if ($exports->export_status == 1)
                             @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
-                                <button id="btn-customer" class="btn btn-primary">
+                                <button id="btn-customer" type="submit" class="btn btn-primary">
                                     <img src="../../dist/img/icon/Union.png">
                                     <span>Lưu thông tin</span></button>
                             @endif
@@ -222,7 +222,7 @@
                                     <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                         echo 'readonly';
                                     } ?> id="guest_addressInvoice" name="guest_addressInvoice"
-                                    value="{{ $guest->guest_addressInvoice }}">
+                                    value="{{ $guest->guest_addressInvoice }}" required>
                             </div>
                             <div class="form-group">
                                 <label for="email">Mã số thuế:</label>
@@ -245,15 +245,16 @@
                                     echo 'readonly';
                                 } ?>
                                     placeholder="Nhập thông tin" name="guest_receiver"
-                                    value="{{ $guest->guest_receiver }}">
+                                    value="{{ $guest->guest_receiver }}" required>
                             </div>
                             <div class="form-group">
                                 <label for="email">SĐT người nhận:</label>
                                 <input type="text" class="form-control" id="guest_phoneReceiver"
-                                    <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                    pattern="^(0|\+84)(3[2-9]|5[2689]|7[06-9]|8[1-9]|9[0-9])\d{7}$" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                         echo 'readonly';
-                                    } ?> placeholder="Nhập thông tin" name="guest_phoneReceiver"
-                                    value="{{ $guest->guest_phoneReceiver }}">
+                                    } ?>
+                                    placeholder="Nhập thông tin" name="guest_phoneReceiver"
+                                    value="{{ $guest->guest_phoneReceiver }}" required>
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -275,17 +276,19 @@
                             </div>
                             <div class="form-group">
                                 <label for="email">Số điện thoại:</label>
-                                <input type="text" class="form-control" id="guest_phone" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                    echo 'readonly';
-                                } ?>
-                                    placeholder="Nhập thông tin" name="guest_phone"
+                                <input type="text" class="form-control"
+                                    pattern="^(0|\+84)(3[2-9]|5[2689]|7[06-9]|8[1-9]|9[0-9])\d{7}$" id="guest_phone"
+                                    <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                        echo 'readonly';
+                                    } ?> placeholder="Nhập thông tin" name="guest_phone"
                                     value="{{ $guest->guest_phone }}" required>
                             </div>
                             <div class="form-group">
                                 <label for="email">Hình thức thanh toán:</label>
-                                <select name="guest_pay" class="form-control" id="guest_pay" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                    echo 'disabled';
-                                } ?>>
+                                <select name="guest_pay" required class="form-control" id="guest_pay"
+                                    <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                        echo 'disabled';
+                                    } ?>>
                                     <option value="0" <?php if ($guest->guest_pay == 0) {
                                         echo 'selected';
                                     } ?>>Chuyển khoản</option>
@@ -311,8 +314,8 @@
             </section>
             {{-- Bảng thêm sản phẩm --}}
             <div class="mt-4" style="overflow-x: auto;">
-                <table class="table bg-white border-0 rounded-top">
-                    <thead class="">
+                <table class="table">
+                    <thead class="bg-white border-0 rounded-top">
                         <tr>
                             @if ($exports->export_status == 1)
                                 @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
@@ -342,7 +345,7 @@
                                         <td><input type="checkbox"></td>
                                     @endif
                                 @endif
-                                <td><?php echo $stt++; ?></td>
+                                <td class="soTT"><?php echo $stt++; ?></td>
                                 <td>
                                     <select id="maProduct" class="p-1 maProduct form-control" name="products_id[]"
                                         <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
@@ -393,16 +396,30 @@
                                         } ?> value="{{ $value_export->product_note }}">
                                 </td>
                                 <td>
-                                    <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-                                        id="product_tax" class="product_tax form-control text-center"  style="width: 80px" name="product_tax[]"
-                                        <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                            echo 'readonly';
-                                        } ?> required="" value="{{ $value_export->product_tax }}">
+                                    <select name="product_tax[]" class="product_tax px-3 form-control"
+                                        id="product_tax" required <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                            echo 'disabled';
+                                        } ?>>
+                                        <option value="0" <?php if ($value_export->product_tax == 0) {
+                                            echo 'selected';
+                                        } ?>>0%</option>
+                                        <option value="8" <?php if ($value_export->product_tax == 8) {
+                                            echo 'selected';
+                                        } ?>>8%</option>
+                                        <option value="10" <?php if ($value_export->product_tax == 10) {
+                                            echo 'selected';
+                                        } ?>>10%</option>
+                                        <option value="00" <?php if ($value_export->product_tax == 00) {
+                                            echo 'selected';
+                                        } ?>>NOVAT</option>
+                                    </select>
                                 </td>
                                 <td><span class="total-amount form-control text-center" style="background:#e9ecef; width:140px">0</span>
                                 </td>
-                                <td data-toggle='modal' data-target='#snModal' class='sn'><img src="../../dist/img/icon/list.png"></td>
-                                <td data-toggle='modal' data-target='#productModal'><img src="../../dist/img/icon/Group.png"></td>
+                                <td data-toggle='modal' data-target='#snModal' class='sn'><img
+                                        src="../../dist/img/icon/list.png"></td>
+                                <td data-toggle='modal' data-target='#productModal'><img
+                                        src="../../dist/img/icon/Group.png"></td>
                                 @if ($exports->export_status == 1)
                                     @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
                                         <td @if ($exports->export_status != 2) class="delete-row-btn" @endif>
@@ -544,7 +561,7 @@
             '<input type="text" class="form-control" id="guest_receiver" placeholder="Nhập thông tin" name="guest_receiver" value="" required>' +
             '</div>' + '<div class="form-group">' +
             '<label for="email">SĐT người nhận:</label>' +
-            '<input type="text" oninput="validateNumberInput(this)" class="form-control" id="guest_phoneReceiver" placeholder="Nhập thông tin" name="guest_phoneReceiver" value="" required>' +
+            '<input type="text" oninput="validateNumberInput(this)" pattern="^(0|\+84)(3[2-9]|5[2689]|7[06-9]|8[1-9]|9[0-9])\d{7}$" class="form-control" id="guest_phoneReceiver" placeholder="Nhập thông tin" name="guest_phoneReceiver" value="" required>' +
             '</div>' + '</div>' + '<div class="col-sm-6">' +
             '<div class="form-group">' +
             '<label for="email">Người đại diện:</label>' +
@@ -554,7 +571,7 @@
             '<input type="email" class="form-control" pattern="/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/" id="guest_email" placeholder="Nhập thông tin" name="guest_email" value="" required>' +
             '</div>' + '<div class="form-group">' +
             '<label for="email">Số điện thoại:</label>' +
-            '<input type="text" oninput="validateNumberInput(this)" class="form-control" id="guest_phone" placeholder="Nhập thông tin" name="guest_phone" value="" required>' +
+            '<input type="text" oninput="validateNumberInput(this)" pattern="^(0|\+84)(3[2-9]|5[2689]|7[06-9]|8[1-9]|9[0-9])\d{7}$" class="form-control" id="guest_phone" placeholder="Nhập thông tin" name="guest_phone" value="" required>' +
             '</div>' + '<div class="form-group">' +
             ' <label for="email">Hình thức thanh toán:</label>' +
             '<select name="guest_pay" class="form-control" id="guest_pay">' +
@@ -607,12 +624,17 @@
                 "</td>"
             );
             const giaInput = $(
-                "<td><input type='number' class='product_price form-control text-center' id='product_price' name='product_price[]' required></td>"
-                );
+                "<td><input type='number' class='product_price' id='product_price' name='product_price[]' required></td>"
+            );
             const ghichuInput = $(
                 "<td><input type='text' class='note_product form-control text-center' name='product_note[]'></td>");
             const thueInput = $("<td>" +
-                "<input type='number' id='product_tax' class='product_tax form-control' name='product_tax[]' required>" +
+                "<select name='product_tax[]' class='product_tax p-1 form-control' style='width:80px' id='product_tax' required>" +
+                "<option value='0'>0%</option>" +
+                "<option value='8'>8%</option>" +
+                "<option value='10'>10%</option>" +
+                "<option value='0'>NOVAT</option>" +
+                "</select>" +
                 "</td>");
             const thanhTienInput = $("<td><span class='total-amount'>0</span></td>");
             const sn = $(
@@ -625,6 +647,7 @@
                 "class": "delete-row-btn"
             });
             deleteBtn.click(function() {
+                soTT
                 $(this).closest("tr").remove();
                 calculateGrandTotal();
             });
@@ -796,7 +819,7 @@
                         data.guest_receiver + '">' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">SĐT người nhận:</label>' +
-                        '<input type="text" class="form-control" id="guest_phoneReceiver" placeholder="Nhập thông tin" name="guest_phoneReceiver" value="' +
+                        '<input type="text" class="form-control" pattern="^(0|\+84)(3[2-9]|5[2689]|7[06-9]|8[1-9]|9[0-9])\d{7}$" id="guest_phoneReceiver" placeholder="Nhập thông tin" name="guest_phoneReceiver" value="' +
                         data.guest_phoneReceiver + '">' +
                         '</div>' + '</div>' + '<div class="col-sm-6">' +
                         '<div class="form-group">' +
@@ -809,7 +832,7 @@
                         data.guest_email + '" required>' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">Số điện thoại:</label>' +
-                        '<input type="text" class="form-control" id="guest_phone" placeholder="Nhập thông tin" name="guest_phone" value="' +
+                        '<input type="text" class="form-control" pattern="^(0|\+84)(3[2-9]|5[2689]|7[06-9]|8[1-9]|9[0-9])\d{7}$" id="guest_phone" placeholder="Nhập thông tin" name="guest_phone" value="' +
                         data.guest_phone + '" required>' +
                         '</div>' + '<div class="form-group">' +
                         ' <label for="email">Hình thức thanh toán:</label>' +
@@ -839,6 +862,10 @@
     //cập nhật thông tin khách hàng
     $(document).on('click', '#btn-customer', function(e) {
         e.preventDefault();
+        var form = $('#export_form')[0];
+        if (!form.reportValidity()) {
+            return;
+        }
         var id = $('#id').val();
         var guest_name = $('#guest_name').val();
         var guest_addressInvoice = $('#guest_addressInvoice').val();
@@ -1081,6 +1108,27 @@
             }
             event.preventDefault();
         }
+    }
+
+    //format giá
+    var inputElement = document.getElementById('product_price');
+
+    // Bắt sự kiện khi người dùng nhập dữ liệu
+    inputElement.addEventListener('input', function(event) {
+        // Lấy giá trị đã nhập
+        var value = event.target.value;
+
+        // Xóa các ký tự không phải số và dấu phân thập phân từ giá trị
+        var formattedValue = value.replace(/[^0-9.]/g, '');
+
+        // Định dạng số với dấu phân cách hàng nghìn
+        var formattedNumber = numberWithCommas(formattedValue);
+
+        event.target.value = formattedNumber;
+    });
+
+    function numberWithCommas(number) {
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 </script>
 </body>

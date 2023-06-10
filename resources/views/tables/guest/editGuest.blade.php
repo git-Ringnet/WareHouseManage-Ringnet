@@ -50,35 +50,52 @@
                                     <label>Địa chỉ xuất hóa đơn:</label>
                                     <input type="text" class="form-control" id="guest_addressInvoice"
                                         placeholder="Nhập địa chỉ xuất hóa đơn" name="guest_addressInvoice"
-                                        value="{{$guests->guest_addressInvoice}}" required="">
+                                        value="{{ $guests->guest_addressInvoice }}" required="">
                                 </div>
                                 <div class="form-group">
                                     <label>Mã số thuế:</label>
                                     <input type="number" class="form-control" id="guest_code"
-                                        placeholder="Nhập mã số thuế" name="guest_code" value="{{$guests->guest_code}}" required="">
+                                        placeholder="Nhập mã số thuế" name="guest_code"
+                                        value="{{ $guests->guest_code }}" required="">
                                 </div>
                                 <div class="form-group">
                                     <label for="email">Địa chỉ giao hàng:</label>
                                     <input type="text" class="form-control" id="guest_addressDeliver"
-                                        placeholder="Nhập địa chỉ giao hàng" name="guest_addressDeliver" value="{{$guests->guest_addressDeliver}}"
-                                        required="">
+                                        placeholder="Nhập địa chỉ giao hàng" name="guest_addressDeliver"
+                                        value="{{ $guests->guest_addressDeliver }}" required="">
                                 </div>
                                 <div class="form-group">
                                     <label for="email">Người nhận hàng:</label>
                                     <input type="text" class="form-control" id="guest_receiver"
-                                        placeholder="Nhập người nhận hàng" name="guest_receiver" value="{{$guests->guest_receiver}}"
-                                        required="">
+                                        placeholder="Nhập người nhận hàng" name="guest_receiver"
+                                        value="{{ $guests->guest_receiver }}" required="">
                                 </div>
                                 <div class="form-group">
                                     <label for="email">SĐT người nhận:</label>
                                     <input type="number" class="form-control" id="guest_phoneReceiver"
-                                        placeholder="Nhập số điện thoại người nhận" name="guest_phoneReceiver"
-                                        value="{{$guests->guest_phoneReceiver}}" required="">
+                                        placeholder="Nhập Số điện thoại người nhận" name="guest_phoneReceiver"
+                                        value="{{ $guests->guest_phoneReceiver }}" required="">
                                 </div>
                                 <div class="form-group">
                                     <label for="email">Ghi chú:</label>
                                     <input type="text" class="form-control" id="guest_note"
-                                        placeholder="Nhập ghi chú" name="guest_note" value="{{$guests->guest_note}}">
+                                        placeholder="Nhập ghi chú" name="guest_note" value="{{ $guests->guest_note }}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Hình thức thanh toán:</label>
+                                    <select name="guest_pay" class="form-control" name="guest_pay" id="guest_pay"
+                                        equired>
+                                        <option value="0" <?php if ($guests->guest_pay == 0) {
+                                            echo 'selected';
+                                        } ?>>Chuyển khoản</option>
+                                        <option value="1" <?php if ($guests->guest_pay == 1) {
+                                            echo 'selected';
+                                        } ?>>Thanh toán bằng tiền mặt</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Điều kiện thanh toán:</label>
+                                    <textarea class="form-control" name="guest_payTerm" id="guest_payTerm">{{ $guests->guest_payTerm }}</textarea>
                                 </div>
                                 <div class="form-group">
                                     <label for="pwd">Trạng thái:</label>
