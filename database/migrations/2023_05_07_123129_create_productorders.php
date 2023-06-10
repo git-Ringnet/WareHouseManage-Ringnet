@@ -22,10 +22,10 @@ return new class extends Migration
             $table->string('product_unit')->nullable();
             $table->string('product_trademark')->nullable();
             $table->integer('product_qty')->nullable();
-            $table->integer('product_price')->nullable();
+            $table->decimal('product_price', 15, 4)->nullable();
             $table->integer('order_id');
             $table->integer('product_tax')->nullable();
-            $table->integer('product_total')->nullable();
+            $table->decimal('product_total', 15, 4)->nullable();
             $table->integer('provide_id')->nullable();
             $table->timestamps();
         });

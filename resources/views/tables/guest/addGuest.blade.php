@@ -47,8 +47,8 @@
                                 <div class="form-group">
                                     <label>Địa chỉ xuất hóa đơn:</label>
                                     <input type="text" class="form-control" id="guest_addressInvoice"
-                                        placeholder="Nhập địa chỉ xuất hóa đơn" name="guest_addressInvoice" value=""
-                                        required="">
+                                        placeholder="Nhập địa chỉ xuất hóa đơn" name="guest_addressInvoice"
+                                        value="" required="">
                                 </div>
                                 <div class="form-group">
                                     <label>Mã số thuế:</label>
@@ -70,13 +70,24 @@
                                 <div class="form-group">
                                     <label for="email">SĐT người nhận:</label>
                                     <input type="number" class="form-control" id="guest_phoneReceiver"
-                                        placeholder="Nhập số điện thoại người nhận" name="guest_phoneReceiver" value=""
-                                        required="">
+                                        placeholder="Nhập Số điện thoại người nhận" name="guest_phoneReceiver"
+                                        value="" required="">
                                 </div>
                                 <div class="form-group">
                                     <label for="email">Ghi chú:</label>
                                     <input type="text" class="form-control" id="guest_note"
                                         placeholder="Nhập ghi chú" name="guest_note" value="">
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Hình thức thanh toán:</label>
+                                    <select name="guest_pay" class="form-control" name="guest_pay" id="guest_pay" required>
+                                        <option value="0">Chuyển khoản</option>
+                                        <option value="1">Thanh toán bằng tiền mặt</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Điều kiện thanh toán:</label>
+                                    <textarea class="form-control" name="guest_payTerm" id="guest_payTerm"></textarea>
                                 </div>
                                 <div class="form-group">
                                     <label for="pwd">Trạng thái:</label>

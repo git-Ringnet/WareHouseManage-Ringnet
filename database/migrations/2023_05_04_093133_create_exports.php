@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id()->autoIncrement();
             $table->integer('guest_id');
             $table->integer('user_id');
-            $table->bigInteger('total');
+            $table->decimal('total', 15, 4);
             $table->integer('export_status');
             $table->timestamps();
         });

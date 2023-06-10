@@ -123,9 +123,11 @@ class GuestsController extends Controller
             'guest_status' => $request->guest_status,
             'guest_addressInvoice' => $request->guest_addressInvoice,
             'guest_code' => $request->guest_code,
-            'guest_addressDeliver' => $request->uest_addressDeliver,
+            'guest_addressDeliver' => $request->guest_addressDeliver,
             'guest_receiver' => $request->guest_receiver,
             'guest_phoneReceiver' => $request->guest_phoneReceiver,
+            'guest_pay' => $request->guest_pay,
+            'guest_payTerm' => $request->guest_payTerm,
             'guest_note' => $request->guest_note,
         ]);
         return redirect()->route('guests.index')->with('msg', 'Thêm khách hàng thành công!');
