@@ -76,7 +76,7 @@
                             <span class="ml-1">Nhà cung cấp mới</span>
                         </div>
                         <div class="input-group mb-1 position-relative w-50">
-                            <input type="text" class="form-control" placeholder="Nhập thông tin khách hàng" aria-label="Username" aria-describedby="basic-addon1" id="myInput" autocomplete="off">
+                            <input type="text" class="form-control" placeholder="Nhập thông tin nhà cung cấp" aria-label="Username" aria-describedby="basic-addon1" id="myInput" autocomplete="off">
                             <div class="position-absolute" style="right: 5px;top: 17%;">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd" clip-rule="evenodd" d="M15.1835 7.36853C13.0254 5.21049 9.52656 5.21049 7.36853 7.36853C5.21049 9.52656 5.21049 13.0254 7.36853 15.1835C9.52656 17.3415 13.0254 17.3415 15.1835 15.1835C17.3415 13.0254 17.3415 9.52656 15.1835 7.36853ZM16.2441 6.30787C13.5003 3.56404 9.05169 3.56404 6.30787 6.30787C3.56404 9.05169 3.56404 13.5003 6.30787 16.2441C9.05169 18.988 13.5003 18.988 16.2441 16.2441C18.988 13.5003 18.988 9.05169 16.2441 6.30787Z" fill="#555555" />
@@ -425,7 +425,6 @@
                 createInput();
                 rowCount++;
                 fillDataToModal();
-                getTax();
             }
         };
         reader.readAsText(file);
@@ -536,31 +535,31 @@
             }
         });
 
-        $('input[name^="product_qty[]"]').each(function(index) {
-            var qty = $(this).val();
-            var id_modal = $(this).closest('.container-fluided').find('.modal').attr('id').replace(/\D/g, '');
-            var sn_count = $('input[name="product_SN' + id_modal + '[]"]').length;
-            var check = false;
-            $('input[name^="product_SN' + id_modal + '[]"]').each(function(index) {
-                $(this).each(function() {
-                    if ($(this).val() === "") {
-                        check = true;
-                        return false;
-                    }
-                });
-            });
+        // $('input[name^="product_qty[]"]').each(function(index) {
+        //     var qty = $(this).val();
+        //     var id_modal = $(this).closest('.container-fluided').find('.modal').attr('id').replace(/\D/g, '');
+        //     var sn_count = $('input[name="product_SN' + id_modal + '[]"]').length;
+        //     var check = false;
+        //     $('input[name^="product_SN' + id_modal + '[]"]').each(function(index) {
+        //         $(this).each(function() {
+        //             if ($(this).val() === "") {
+        //                 check = true;
+        //                 return false;
+        //             }
+        //         });
+        //     });
 
-            if (check) {
-                error = true;
-                errorMessage = 'Vui lòng nhập seri number';
-                return false;
-            }
-            if (qty != sn_count) {
-                error = true;
-                errorMessage = 'Số lượng và seri number không hợp lệ';
-                return false;
-            }
-        });
+        //     if (check) {
+        //         error = true;
+        //         errorMessage = 'Vui lòng nhập seri number';
+        //         return false;
+        //     }
+        //     if (qty != sn_count) {
+        //         error = true;
+        //         errorMessage = 'Số lượng và seri number không hợp lệ';
+        //         return false;
+        //     }
+        // });
 
         if ($('#provide_id').val().trim() == '' && $('#radio1').prop('checked') == true) {
             error = true;
@@ -602,7 +601,7 @@
     $('.addRow').on('click', function() {
         last++;
         var tr = '<tr>' +
-            '<input type="hidden" name="product_id[]" value="' + last + '">' +
+            // '<input type="hidden" name="product_id[]" value="' + last + '">' +
             '<td scope="row"><input type="checkbox" id=' + rowCount + '" class="cb-element"></td>' +
             '<td>' +
             '<select name="products_id[]" class="list_products form-control">' +
@@ -912,7 +911,6 @@
             $(this).find('td').eq(1).text(index + 1);
         });
     })
-
     $('body').on('click', '.deleteRow', function() {
         var parentTr = $(this).closest('tr');
         var targetId = $(this).closest('tr').find('button[name="btn_add_SN[]"]').attr('data-target');
@@ -1001,6 +999,32 @@
         });
     })
 
+    function validateData() {
+        var error = false;
+        // var countTr = $('input[name^="product_qty[]"]').length;
+        $('input[name^="product_qty[]"]').each(function(index) {
+            var qty = $(this).val();
+            var snCheck = false;
+            var sn_count = $('input[name="product_SN' + index + '[]"]').length;
+
+            $('input[name^="product_SN' + index + '[]"]').each(function() {
+                if ($(this).val() === "") {
+                    error = true;
+                    alert('Vui lòng nhập seri number');
+                    return false;
+                }
+            });
+
+            if (qty != sn_count) {
+                alert('Số lượng và seri number không hợp lệ');
+                error = true;
+                return false;
+            }
+        });
+
+        return error;
+    }
+
     // Kiểm tra dữ liệu trước khi submit
     $(document).on('submit', '#form_submit', function(e) {
         e.preventDefault();
@@ -1016,46 +1040,28 @@
             }
         });
 
-        var id_modals = []; // Mảng để lưu trữ các giá trị id_modal
-
         $('input[name^="product_qty[]"]').each(function(index) {
             var qty = $(this).val();
-            var id_modal = $(this).closest('.container-fluided').find('.modal').attr('id').replace(/\D/g, '');
-            console.log(id_modal.length);
-            for(let k =0;k< index;k++){
-            id_modals.push(id_modal);
-           }
-          
-            console.log(id_modals);
-            var errorCheck = false;
             var snCheck = false;
 
-            for (var i = 0; i < id_modals.length; i++) {
-                var sn_count = $('input[name="product_SN' + id_modals[i] + '[]"]').length;
-
-                $('input[name^="product_SN' + id_modals[i] + '[]"]').each(function(index) {
-                    if ($(this).val() === "") {
-                        errorCheck = true;
-                        return false; // Dừng lặp nếu tìm thấy một trường rỗng
-                    }
-                });
-
-                if (qty != sn_count) {
-                    snCheck = true;
-                    break; // Dừng lặp nếu số lượng và số seri không hợp lệ
+            var sn_count = $('input[name="product_SN' + index + '[]"]').length;
+            $('input[name^="product_SN' + index + '[]"]').each(function(index) {
+                if ($(this).val() === "") {
+                    error = true;
+                    alert('Vui lòng nhập seri number');
+                    return false;
                 }
-            }
+            });
 
-            if (errorCheck) {
-                error = true;
-                alert('Vui lòng nhập seri number');
-                return false; // Dừng lặp nếu có trường rỗng
+            if (qty != sn_count) {
+                snCheck = true;
+                return false;
             }
 
             if (snCheck) {
                 error = true;
                 alert('Số lượng và seri number không hợp lệ');
-                return false; // Dừng lặp nếu có số lượng và số seri không hợp lệ
+                return false;
             }
         });
 
@@ -1071,6 +1077,7 @@
         updateProductSN();
         $(this).off('submit');
         this.submit();
+
     });
 
     // Prevent form submit when click 'Mẫu nhập nhanh'
