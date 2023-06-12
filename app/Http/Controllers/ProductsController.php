@@ -370,7 +370,6 @@ class ProductsController extends Controller
             $products->save();
             return redirect()->route('data.index')->with('msg', 'Thêm sản phẩm thành công!');
         }
-        die();
     }
 
     // Xóa sản phẩm cha AJAX
