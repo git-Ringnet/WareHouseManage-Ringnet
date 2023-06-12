@@ -111,7 +111,7 @@
                                         <li>
                                             <input type="checkbox" id="status_inactive" {{ in_array(0, $status)
                                                 ? 'checked' : '' }} name="status[]" value="0">
-                                            <label for="status_inactive">Disable</label>
+                                            <label for="">Disable</label>
                                         </li>
                                     </ul>
                                 </div>

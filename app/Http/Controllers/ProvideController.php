@@ -168,7 +168,7 @@ class ProvideController extends Controller
     {
         $delOrder = Orders::where('provide_id', $id)->first();
         if ($delOrder) {
-            return redirect()->route('provides.index')->with('danger', 'Nhà cung cấp đang tồn tại trong đơn hàng');
+            return redirect()->route('provides.index')->with('warning', 'Nhà cung cấp đang tồn tại trong đơn hàng');
         } else {
             $provides = Provides::destroy($id);
             return redirect()->route('provides.index')->with('msg', 'Xóa thành công!');
@@ -189,11 +189,14 @@ class ProvideController extends Controller
             $provide_exist = Orders::whereIn('provide_id', $list)->first();
             if (!$provide_exist) {
                 Provides::whereIn('id', $list)->delete();
+            session()->flash('msg', 'Xóa nhà cung cấp thành công!');
                 return response()->json(['success' => true, 'msg' => 'Xóa nhà cung cấp thành công', 'ids' => $list]);
             } else {
-                return response()->json(['success' => true, 'danger' => 'Không thể xóa, do có nhà cung cấp trong đơn nhậphàng!', 'ids' => $list]);
+            session()->flash('warning', 'Không thể xóa, do có nhà cung cấp trong đơn nhập hàng!');
+                return response()->json(['success' => true, 'warning' => 'Không thể xóa, do có nhà cung cấp trong đơn nhập hàng!', 'ids' => $list]);
             }
         }
+        session()->flash('warning', 'Xóa nhà cung cấp thất bại!');
         return response()->json(['success' => false, 'msg' => 'Xóa nhà cung cấp thất bại']);
     }
     public function activeStatusProvide(Request $request)
@@ -205,6 +208,7 @@ class ProvideController extends Controller
                 $value->provide_status = 1;
                 $value->save();
             }
+        session()->flash('warning', 'Thay đổi trạng thái nhà cung cấp thành công!');
             return response()->json(['success' => true, 'msg' => 'Thay đổi trạng thái nhà cung cấp thành công']);
         }
         return response()->json(['success' => false, 'msg' => 'Not fount']);
@@ -218,6 +222,7 @@ class ProvideController extends Controller
                 $value->provide_status = 0;
                 $value->save();
             }
+        session()->flash('warning', 'Thay đổi trạng thái nhà cung cấp thành công!');
             return response()->json(['success' => true, 'msg' => 'Thay đổi trạng thái nhà cung cấp thành công']);
         }
         return response()->json(['success' => false, 'msg' => 'Not fount']);

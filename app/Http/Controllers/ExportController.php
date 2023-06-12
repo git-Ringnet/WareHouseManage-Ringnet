@@ -139,7 +139,7 @@ class ExportController extends Controller
                     // Tính tổng số lượng cần thiết cho mỗi product_id
                     $productQtyMap = [];
                     if ($productIDs == null) {
-                        return redirect()->route('exports.index')->with('danger', 'Chưa thêm sản phẩm!');
+                        return redirect()->route('exports.index')->with('warning', 'Chưa thêm sản phẩm!');
                     } else {
                         for ($i = 0; $i < count($productIDs); $i++) {
                             $productID = $productIDs[$i];
@@ -175,7 +175,7 @@ class ExportController extends Controller
                             }
                         }
                         if (!$hasEnoughQty) {
-                            return redirect()->route('exports.index')->with('danger', 'Vượt quá số lượng tồn kho!');
+                            return redirect()->route('exports.index')->with('warning', 'Vượt quá số lượng tồn kho!');
                         } else {
                             //thêm khách hàng
                             if ($clickValue === null) {
@@ -236,7 +236,7 @@ class ExportController extends Controller
                     // Tính tổng số lượng cần thiết cho mỗi product_id
                     $productQtyMap = [];
                     if ($productIDs == null) {
-                        return redirect()->route('exports.index')->with('danger', 'Chưa thêm sản phẩm!');
+                        return redirect()->route('exports.index')->with('warning', 'Chưa thêm sản phẩm!');
                     } else {
                         for ($i = 0; $i < count($productIDs); $i++) {
                             $productID = $productIDs[$i];
@@ -272,7 +272,7 @@ class ExportController extends Controller
                             }
                         }
                         if (!$hasEnoughQty) {
-                            return redirect()->route('exports.index')->with('danger', 'Vượt quá số lượng tồn kho!');
+                            return redirect()->route('exports.index')->with('warning', 'Vượt quá số lượng tồn kho!');
                         } else {
                             //thêm khách hàng
                             if ($clickValue === null) {
@@ -426,7 +426,7 @@ class ExportController extends Controller
                             $availableQty = $currentQty + $proExport->product_qty - $productQty;
 
                             if ($availableQty < 0) {
-                                return redirect()->route('exports.index')->with('danger', 'Vượt quá số lượng cho sản phẩm ' . $nameProduct . '!');
+                                return redirect()->route('exports.index')->with('warning', 'Vượt quá số lượng cho sản phẩm ' . $nameProduct . '!');
                             }
 
                             // Cập nhật seri_status khi số lượng sản phẩm tăng hoặc giảm
@@ -465,7 +465,7 @@ class ExportController extends Controller
                             // Kiểm tra số lượng sản phẩm mới được thêm
                             $currentQty = Product::where('id', $productID)->value('product_qty');
                             if ($productQty > $currentQty) {
-                                return redirect()->route('exports.index')->with('danger', 'Vượt quá số lượng cho sản phẩm ' . $nameProduct . '!');
+                                return redirect()->route('exports.index')->with('warning', 'Vượt quá số lượng cho sản phẩm ' . $nameProduct . '!');
                             }
                             $proExport = new ProductExports();
                             $proExport->products_id = $request->products_id[$i];
@@ -546,7 +546,7 @@ class ExportController extends Controller
                     $availableQtyTotal = $this->getAvailableProductQtyTotal();
 
                     if ($totalQtyNeeded > $availableQtyTotal) {
-                        return redirect()->route('exports.index')->with('danger', 'Vượt quá tổng số lượng sản phẩm!');
+                        return redirect()->route('exports.index')->with('warning', 'Vượt quá tổng số lượng sản phẩm!');
                     } else {
                         if ($clickValue === null) {
                             $existingCustomer = Guests::where('guest_name', $request->guest_name)
@@ -629,7 +629,7 @@ class ExportController extends Controller
                         return redirect()->route('exports.index')->with('msg', 'Duyệt đơn thành công!');
                     }
                 } else {
-                    return redirect()->route('exports.index')->with('danger', 'Chưa được thêm sản phẩm nào!');
+                    return redirect()->route('exports.index')->with('warning', 'Chưa được thêm sản phẩm nào!');
                 }
             } elseif ($action === 'action2') {
                 Serinumbers::whereIn('product_id', $productIDs)
@@ -666,7 +666,7 @@ class ExportController extends Controller
                             $availableQty = $this->getAvailableProductQty($productID) + $proExport->product_qty - $productQty;
 
                             if ($availableQty < 0) {
-                                return redirect()->route('exports.index')->with('danger', 'Vượt quá số lượng cho sản phẩm ' . $nameProduct . '!');
+                                return redirect()->route('exports.index')->with('warning', 'Vượt quá số lượng cho sản phẩm ' . $nameProduct . '!');
                             }
 
                             // Cập nhật seri_status khi số lượng sản phẩm tăng hoặc giảm
@@ -705,7 +705,7 @@ class ExportController extends Controller
                             $availableQty = $this->getAvailableProductQty($productID);
 
                             if ($productQty > $availableQty) {
-                                return redirect()->route('exports.index')->with('danger', 'Vượt quá số lượng cho sản phẩm ' . $nameProduct . '!');
+                                return redirect()->route('exports.index')->with('warning', 'Vượt quá số lượng cho sản phẩm ' . $nameProduct . '!');
                             }
 
                             $proExport = new ProductExports();
@@ -761,7 +761,7 @@ class ExportController extends Controller
                     $availableQtyTotal = $this->getAvailableProductQtyTotal();
 
                     if ($totalQtyNeeded > $availableQtyTotal) {
-                        return redirect()->route('exports.index')->with('danger', 'Vượt quá tổng số lượng sản phẩm!');
+                        return redirect()->route('exports.index')->with('warning', 'Vượt quá tổng số lượng sản phẩm!');
                     }
 
                     $exports->guest_id = $request->id;
@@ -772,7 +772,7 @@ class ExportController extends Controller
 
                     return redirect()->route('exports.index')->with('msg', 'Cập nhật thành công!');
                 } else {
-                    return redirect()->route('exports.index')->with('danger', 'Chưa được thêm sản phẩm nào!');
+                    return redirect()->route('exports.index')->with('warning', 'Chưa được thêm sản phẩm nào!');
                 }
             }
         }
@@ -839,6 +839,7 @@ class ExportController extends Controller
 
             if ($existingCustomer) {
                 // Dữ liệu đã tồn tại, trả về thông báo
+                session()->flash('msg', 'Xóa đơn hàng thành công');
                 return response()->json(['message' => 'Thông tin khách hàng đã có trong hệ thống']);
             }
 
@@ -931,8 +932,10 @@ class ExportController extends Controller
         if (isset($request->list_id)) {
             $list = $request->list_id;
             Exports::whereIn('id', $list)->delete();
+            session()->flash('msg', 'Xóa đơn hàng thành công');
             return response()->json(['success' => true, 'msg' => 'Xóa đơn hàng thành công', 'ids' => $list]);
         }
+        session()->flash('warning', 'Không tìm thấy đơn hàng cần xóa');
         return response()->json(['success' => false, 'msg' => 'Không tìm thấy đơn hàng cần xóa']);
     }
     public function cancelBillExport(Request $request)
@@ -946,6 +949,7 @@ class ExportController extends Controller
                     $value->save();
                 }
             }
+            session()->flash('msg', 'Hủy đơn hàng thành công');
             return response()->json(['success' => true, 'msg' => 'Hủy Đơn Hàng thành công']);
         }
         return response()->json(['success' => false, 'msg' => 'Not fount']);

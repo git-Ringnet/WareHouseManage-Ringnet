@@ -298,19 +298,19 @@ $index = array_search($item['label'], $numberedLabels);
                                                     <input type="checkbox" id="status_active"
                                                         {{ in_array(2, $status) ? 'checked' : '' }} name="status[]"
                                                         value="2">
-                                                    <label for="status_active">Sẵn hàng</label>
+                                                    <label id="status_value" for="">Sẵn hàng</label>
                                                 </li>
                                                 <li>
                                                     <input type="checkbox" id="status_inactive"
                                                         {{ in_array(1, $status) ? 'checked' : '' }} name="status[]"
                                                         value="1">
-                                                    <label for="status_inactive">Gần hết</label>
+                                                    <label id="status_value" for="">Gần hết</label>
                                                 </li>
                                                 <li>
-                                                    <input type="checkbox" id="status_inactive"
+                                                    <input type="checkbox" id="status"
                                                         {{ in_array(0, $status) ? 'checked' : '' }} name="status[]"
                                                         value="0">
-                                                    <label for="status_inactive">Hết hàng</label>
+                                                    <label for="">Hết hàng</label>
                                                 </li>
                                             </ul>
                                         </div>
@@ -351,7 +351,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                                     name="categoryarr[]"
                                                                     value="{{ $value->ID_category }}">
                                                                 <label id="category_value"
-                                                                    for="category_active">{{ $value->ID_category }}</label>
+                                                                    for="">{{ $value->ID_category }}</label>
                                                             </li>
                                                             @php
                                                                 $seenValues[] = $value->ID_category;
@@ -408,7 +408,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                                     name="trademarkarr[]"
                                                                     value="{{ $value->products_trademark }}">
                                                                 <label id="trademark_value"
-                                                                    for="trademark_active">{{ $value->products_trademark }}</label>
+                                                                    for="">{{ $value->products_trademark }}</label>
                                                             </li>
                                                             @php
                                                                 $seenValues[] = $value->products_trademark;
@@ -1083,6 +1083,7 @@ $index = array_search($item['label'], $numberedLabels);
                         $('.' + id[i]).remove();
                     }
                     updateMultipleActionVisibility();
+                    location.reload();
                 } else {
                     alert(data.msg);
                     location.reload();

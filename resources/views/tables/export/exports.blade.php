@@ -249,19 +249,19 @@ $index = array_search($item['label'], $numberedLabels);
                                                     <input type="checkbox" id="status_active"
                                                         {{ in_array(0, $status) ? 'checked' : '' }} name="status[]"
                                                         value="0">
-                                                    <label for="status_active">Đã hủy</label>
+                                                    <label for="">Đã hủy</label>
                                                 </li>
                                                 <li>
                                                     <input type="checkbox" id="status_inactive"
                                                         {{ in_array(1, $status) ? 'checked' : '' }} name="status[]"
                                                         value="1">
-                                                    <label for="status_inactive">Đã báo giá</label>
+                                                    <label for="">Đã báo giá</label>
                                                 </li>
                                                 <li>
                                                     <input type="checkbox" id="status_inactive"
                                                         {{ in_array(2, $status) ? 'checked' : '' }} name="status[]"
                                                         value="2">
-                                                    <label for="status_inactive">Đã chốt</label>
+                                                    <label for="">Đã chốt</label>
                                                 </li>
                                             </ul>
                                         </div>

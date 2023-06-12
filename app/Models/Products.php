@@ -96,12 +96,12 @@ class Products extends Model
     }
     public function productsNearEnd(){
         $products = DB::table($this->table);
-        $products = $products->whereBetween('inventory', [0, 5])->get();
+        $products = $products->whereBetween('inventory', [1, 5])->get();
         return $products;
     }
     public function productsStock(){
         $products = DB::table($this->table);
-        $products = $products->where('inventory', '>', 5)->get();
+        $products = $products->where('inventory', '>', 6)->get();
         return $products;
     }
     public function productsEnd(){

@@ -184,7 +184,7 @@ class GuestsController extends Controller
             Guests::destroy($id);
             return redirect()->route('guests.index')->with('msg', 'Xóa thành công!');
         } else {
-            return redirect()->route('guests.index')->with('danger', 'Không thể xóa, do có thông tin khách hàng trong đơn xuất hàng!');
+            return redirect()->route('guests.index')->with('warning', 'Không thể xóa, do có thông tin khách hàng trong đơn xuất hàng!');
         }
     }
     public function updateStatus(Request $request)
@@ -201,9 +201,11 @@ class GuestsController extends Controller
             $guest_exist = Exports::whereIn('guest_id', $list)->first();
             if (!$guest_exist) {
                 Guests::whereIn('id', $list)->delete();
+            session()->flash('msg', 'Xóa nhà cung cấp thành công');
                 return response()->json(['success' => true, 'msg' => 'Xóa nhà cung cấp thành công', 'ids' => $list]);
             } else {
-                return response()->json(['success' => true, 'danger' => 'Không thể xóa, do có thông tin khách hàng trong đơn xuất hàng!', 'ids' => $list]);
+            session()->flash('warning', 'Không thể xóa, do có thông tin khách hàng trong đơn xuất hàng!');
+                return response()->json(['success' => true, 'warning' => 'Không thể xóa, do có thông tin khách hàng trong đơn xuất hàng!', 'ids' => $list]);
             }
         }
         return response()->json(['success' => false, 'msg' => 'Xóa nhà cung cấp thất bại']);
@@ -217,6 +219,7 @@ class GuestsController extends Controller
                 $value->guest_status = 1;
                 $value->save();
             }
+            session()->flash('msg', 'Thay đổi trạng thái nhà cung cấp thành công');
             return response()->json(['success' => true, 'msg' => 'Thay đổi trạng thái nhà cung cấp thành công']);
         }
         return response()->json(['success' => false, 'msg' => 'Not fount']);
@@ -230,6 +233,7 @@ class GuestsController extends Controller
                 $value->guest_status = 0;
                 $value->save();
             }
+            session()->flash('msg', 'Thay đổi trạng thái nhà cung cấp thành công');
             return response()->json(['success' => true, 'msg' => 'Thay đổi trạng thái nhà cung cấp thành công']);
         }
         return response()->json(['success' => false, 'msg' => 'Not fount']);

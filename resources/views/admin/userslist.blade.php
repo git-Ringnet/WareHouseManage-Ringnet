@@ -233,13 +233,13 @@ $index = array_search($item['label'], $numberedLabels);
                                                     <input type="checkbox" id="status_active"
                                                         {{ in_array(1, $status) ? 'checked' : '' }} name="status[]"
                                                         value="1">
-                                                    <label for="status_active">Active</label>
+                                                    <label for="">Active</label>
                                                 </li>
                                                 <li>
                                                     <input type="checkbox" id="status_inactive"
                                                         {{ in_array(0, $status) ? 'checked' : '' }} name="status[]"
                                                         value="0">
-                                                    <label for="status_inactive">Disable</label>
+                                                    <label for="">Disable</label>
                                                 </li>
                                             </ul>
                                         </div>
@@ -272,7 +272,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                             <input type="checkbox" id="roles_active"
                                                                 {{ in_array($role->id, $roles) ? 'checked' : '' }}
                                                                 name="roles[]" value="{{ $role->id }}">
-                                                            <label for="roles_active">{{ $role->name }}</label>
+                                                            <label for="">{{ $role->name }}</label>
                                                         </li>
                                                     @endforeach
                                                 @endif
@@ -827,6 +827,9 @@ $index = array_search($item['label'], $numberedLabels);
                             $('.' + id[i]).remove();
                         }
                         updateMultipleActionVisibility();
+                        location.reload();
+                    }
+                    else{
                         location.reload();
                     }
                 }
