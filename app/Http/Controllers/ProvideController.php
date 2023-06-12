@@ -115,7 +115,6 @@ class ProvideController extends Controller
             'provide_phone' => $request->provide_phone,
             'provide_email' => $request->provide_email,
             'provide_address' => $request->provide_address,
-            'provide_code' => $request->provide_code,
             'provide_status' => $request->provide_status,
         ]);
         return redirect()->route('provides.index')->with('msg', 'Thêm nhà cung cấp thành công!');

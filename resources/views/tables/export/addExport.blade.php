@@ -507,7 +507,7 @@
                 "class": "delete-row-btn"
             });
             const option = $(
-                "<td style='display:none;'><input type='number' class='price_import'></td>" +
+                "<td style='display:none;'><input type='text' class='price_import'></td>" +
                 "<td style='display:none;'><input type='text' class='tonkho'></td>" +
                 "<td style='display:none;'><input type='text' class='loaihang'></td>" +
                 "<td style='display:none;'><input type='text' class='dangGD'></td>" +
@@ -729,7 +729,8 @@
                         '<div class="form-group">' +
                         '<label for="email">Điều kiện thanh toán:</label>' +
                         '<textarea class="form-control" id="guest_payTerm" name="guest_payTerm">' +
-                        (data.guest_payTerm == null ? '' : data.guest_payTerm) + '</textarea>' +
+                        (data.guest_payTerm == null ? '' : data.guest_payTerm) +
+                        '</textarea>' +
                         '</div>' + '</div></div><div>'
                     );
                 }
@@ -897,7 +898,9 @@
                     success: function(response) {
                         productUnitElement.val(response.product_unit);
                         qty_exist.val("/" + response.qty_exist);
-                        price_import.val(response.product_price);
+                        var productPrice = parseFloat(response.product_price);
+                        var formattedPrice = numeral(productPrice).format('0,0.0');
+                        price_import.val(formattedPrice);
                         tonkho.val(response.product_qty);
                         loaihang.val(response.product_category);
                         dangGD.val(response.trading);
@@ -1119,8 +1122,6 @@
     }
     //format giá
     var inputElement = document.getElementById('product_price');
-
-    // Bắt sự kiện khi người dùng nhập dữ liệu
     $('body').on('input', '.product_price', function(event) {
         // Lấy giá trị đã nhập
         var value = event.target.value;
