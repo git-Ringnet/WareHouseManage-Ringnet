@@ -181,9 +181,11 @@ class UsersController extends Controller
             $guest_exist = Exports::whereIn('user_id', $list)->first();
             if (!$provide_exist && !$guest_exist) {
                 User::whereIn('id', $list)->delete();
+                session()->flash('msg', 'Xóa nhân viên thành công');
                 return response()->json(['success' => true, 'msg' => 'Xóa người dùng thành công', 'ids' => $list]);
             }
             else{
+                session()->flash('warning', 'Xóa nhân viên thất bại, nhân viên còn đơn hàng');
                 return response()->json(['success' => false, 'msg' => 'Xóa người dùng thất bại']);
             }
         }
@@ -198,6 +200,7 @@ class UsersController extends Controller
                 $value->status = 1;
                 $value->save();
             }
+            session()->flash('msg', 'Thay đổi trạng thái người dùng thành công');
             return response()->json(['success' => true, 'msg' => 'Thay đổi trạng thái người dùng thành công']);
         }
         return response()->json(['success' => false, 'msg' => 'Not fount']);
@@ -211,8 +214,9 @@ class UsersController extends Controller
                 $value->status = 0;
                 $value->save();
             }
+            session()->flash('msg', 'Thay đổi trạng thái người dùng thành công');
             return response()->json(['success' => true, 'msg' => 'Thay đổi trạng thái người dùng thành công']);
         }
-        return response()->json(['success' => false, 'msg' => 'Not fount']);
+        return response()->json(['success' => false, 'warning' => 'Thay đổi trạng thái người dùng thất bại!']);
     }
 }

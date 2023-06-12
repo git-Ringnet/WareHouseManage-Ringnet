@@ -384,10 +384,13 @@ class ProductsController extends Controller
                 }
             }
             if ($hasProductWithInventory) {
+            session()->flash('warning', 'Còn sản phẩm con');
                 return response()->json(['success' => false, 'msg' => 'Còn sản phẩm con']);
             }
-            return response()->json(['success' => true, 'msg' => 'Xóa sản phẩm thành công', 'ids' => $list]);
+            session()->flash('msg', 'Xóa sản phẩm thành công');
+            return response()->json(['success' => true, 'msg' => 'Xóa danh sách sản phẩm thành công', 'ids' => $list]);
         }
+        session()->flash('warning', 'Không tìm thấy sản phẩm cần xóa');
         return response()->json(['success' => false, 'msg' => 'Không tìm thấy sản phẩm cần xóa']);
     }
 
@@ -422,7 +425,7 @@ class ProductsController extends Controller
         }
         $relatedProduct->save();
 
-        return redirect()->route('data.index');
+        return redirect()->route('data.index')->with('msg','Chỉnh sửa sản phẩm thành công!');
     }
     // Xóa sản phẩm con
     public function delete_product($id)
@@ -437,7 +440,7 @@ class ProductsController extends Controller
             }
         }
         if ($block) {
-            return redirect()->route('data.index')->with('danger', 'Sản phẩm còn tồn tại trong đơn nhập hàng!');
+            return redirect()->route('data.index')->with('warning', 'Sản phẩm còn tồn tại trong đơn nhập hàng!');
         } else {
             $del->delete();
             $updatePrice = Product::where('products_id', $current_id)->get();
@@ -467,6 +470,7 @@ class ProductsController extends Controller
             $products->products_description = $row['Products_description'];
             $products->save();
         }
+        session()->flash('msg', 'Import thành công!');
         return response()->json(['message' => 'Import thành công!']);
     }
 }

@@ -807,6 +807,7 @@ class AddProductController extends Controller
         if (isset($request->list_id)) {
             $list = $request->list_id;
             Orders::whereIn('id', $list)->delete();
+            session()->flash('msg', 'Xóa đơn hàng thành công');
             return response()->json(['success' => true, 'msg' => 'Xóa đơn hàng thành công', 'ids' => $list]);
         }
         return response()->json(['success' => false, 'msg' => 'Không tìm thấy đơn hàng cần xóa']);
@@ -824,6 +825,7 @@ class AddProductController extends Controller
                     }
                 }
             }
+            session()->flash('msg', 'Hủy đơn hàng thành công');
             return response()->json(['success' => true, 'msg' => 'Hủy Đơn Hàng thành công']);
         }
         return response()->json(['success' => false, 'msg' => 'Not fount']);
@@ -839,6 +841,7 @@ class AddProductController extends Controller
                     $product = ProductOrders::where('order_id', $value->id)->get();
                 }
             }
+            session()->flash('msg', 'Hủy đơn hàng thành công');
             return response()->json(['success' => true, 'msg' => 'Hủy Đơn Hàng thành công']);
         }
         return response()->json(['success' => false, 'msg' => 'Not fount']);
@@ -863,6 +866,7 @@ class AddProductController extends Controller
         $add_newProvide->provide_address = $data['provide_address'];
         $add_newProvide->provide_code = $data['provide_code'];
         $add_newProvide->save();
+        session()->flash('msg', 'Thêm mới nhà cung cấp thành công!');
         return response()->json(['success' => true, 'msg' => 'Thêm mới nhà cung cấp thành công !', 'data' => $add_newProvide]);
     }
 }

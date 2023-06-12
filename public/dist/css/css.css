@@ -727,19 +727,55 @@ input[type="number"] {
     display: flex;
     padding: 5px;
 }
+
 .filter-options ul label {
     font-weight: 400 !important;
     color: #555555;
     margin: 0;
     padding-left: 5px;
+    user-select: none;
 }
 
-.filter-options li:hover {
+.filter-options li:hover,
+.filter-options label:hover {
     background-color: #ebebeb;
     transition: background-color 0.3s ease;
+    cursor: pointer;
+    user-select: none;
 }
+
 .btn-block+.btn-block {
-    margin:0 ;  
+    margin: 0;
 }
 
+#notification .icon {
+    position: absolute;
+    left: 5px;
+    top: 10px;
+}
 
+.alert .close,
+.alert .mailbox-attachment-close {
+    color: #ffff;
+    opacity: 1;
+}
+
+#notification .message {
+    font-weight: 600;
+    color: #ffff;
+    font-size: 16px;
+}
+.alert-warning{
+    background-color: #FF9500;
+    border-color: #FF9500;
+}
+.alert-success{
+    background-color: #09BD3C;
+    border-color: #09BD3C;
+}
+.icon-filter{
+    margin-bottom: 5px;
+}
+.btn-filter{
+    margin-top: 2px;
+}

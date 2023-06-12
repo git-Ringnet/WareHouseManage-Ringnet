@@ -237,7 +237,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                         <input type="checkbox" id="roles_active"
                                                             {{ in_array($value->id, $provide_namearr) ? 'checked' : '' }}
                                                             name="provide_namearr[]" value="{{ $value->id }}">
-                                                        <label for="roles_active">{{ $value->provide_name }}</label>
+                                                        <label for="">{{ $value->provide_name }}</label>
                                                     </li>
                                                 @endforeach
                                             @endif
@@ -271,19 +271,19 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <input type="checkbox" id="status_active"
                                                     {{ in_array(0, $status) ? 'checked' : '' }} name="status[]"
                                                     value="0">
-                                                <label for="status_active">Chờ duyệt</label>
+                                                <label for="">Chờ duyệt</label>
                                             </li>
                                             <li>
                                                 <input type="checkbox" id="status_inactive"
                                                     {{ in_array(1, $status) ? 'checked' : '' }} name="status[]"
                                                     value="1">
-                                                <label for="status_inactive">Đã nhập hàng</label>
+                                                <label for="">Đã nhập hàng</label>
                                             </li>
                                             <li>
                                                 <input type="checkbox" id="status_inactive"
                                                     {{ in_array(2, $status) ? 'checked' : '' }} name="status[]"
                                                     value="2">
-                                                <label for="status_inactive">Đã hủy</label>
+                                                <label for="">Đã hủy</label>
                                             </li>
                                         </ul>
                                     </div>
