@@ -183,7 +183,7 @@
                                                 <table class="table">
                                                     <thead>
                                                         <tr>
-                                                            <td style="width:2%;"><input type="checkbox"></td>
+                                                            <!-- <td style="width:2%;"><input type="checkbox"></td> -->
                                                             <td style="width:5%;"><span>STT</span></td>
                                                             <td><span>Serial Number</span></td>
                                                             <td style="width:3%;"></td>
@@ -193,7 +193,7 @@
                                                         <?php $sttt = 1; ?>
                                                         @foreach($va->getSerinumbers as $val)
                                                         <tr>
-                                                            <td><input type="checkbox" id="checkbox_0"></td>
+                                                            <!-- <td><input type="checkbox" id="checkbox_0"></td> -->
                                                             <td><span class="stt_SN">{{$sttt}}</span></td>
                                                             <td>{{ $val->serinumber}}</td>
                                                             <td></td>

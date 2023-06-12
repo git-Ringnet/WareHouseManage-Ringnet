@@ -60,10 +60,10 @@
         <div class="d-flex mb-1 action-don">
             <a href="#" class="btn btn-danger text-white" id="add_bill">Duyệt đơn</a>
             <a href="#" class="btn btn-secondary mx-4">Hủy đơn</a>
-            <a href="#" class="btn border border-secondary d-flex align-items-center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- <a href="#" class="btn border border-secondary d-flex align-items-center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M9 5C8.46957 5 7.96086 5.21071 7.58579 5.58579C7.21071 5.96086 7 6.46957 7 7V8H17V7C17 6.46957 16.7893 5.96086 16.4142 5.58579C16.0391 5.21071 15.5304 5 15 5H9ZM15 13H9C8.73478 13 8.48043 13.1054 8.29289 13.2929C8.10536 13.4804 8 13.7348 8 14V17C8 17.2652 8.10536 17.5196 8.29289 17.7071C8.48043 17.8946 8.73478 18 9 18H15C15.2652 18 15.5196 17.8946 15.7071 17.7071C15.8946 17.5196 16 17.2652 16 17V14C16 13.7348 15.8946 13.4804 15.7071 13.2929C15.5196 13.1054 15.2652 13 15 13Z" fill="#555555" />
                     <path d="M4 11C4 10.4696 4.21071 9.96086 4.58579 9.58579C4.96086 9.21071 5.46957 9 6 9H18C18.5304 9 19.0391 9.21071 19.4142 9.58579C19.7893 9.96086 20 10.4696 20 11V14C20 14.5304 19.7893 15.0391 19.4142 15.4142C19.0391 15.7893 18.5304 16 18 16H17V14C17 13.4696 16.7893 12.9609 16.4142 12.5858C16.0391 12.2107 15.5304 12 15 12H9C8.46957 12 7.96086 12.2107 7.58579 12.5858C7.21071 12.9609 7 13.4696 7 14V16H6C5.46957 16 4.96086 15.7893 4.58579 15.4142C4.21071 15.0391 4 14.5304 4 14V11ZM6.5 12C6.63261 12 6.75979 11.9473 6.85355 11.8536C6.94732 11.7598 7 11.6326 7 11.5C7 11.3674 6.94732 11.2402 6.85355 11.1464C6.75979 11.0527 6.63261 11 6.5 11C6.36739 11 6.24021 11.0527 6.14645 11.1464C6.05268 11.2402 6 11.3674 6 11.5C6 11.6326 6.05268 11.7598 6.14645 11.8536C6.24021 11.9473 6.36739 12 6.5 12Z" fill="#555555" />
-                </svg>In đơn hàng</a>
+                </svg>In đơn hàng</a> -->
         </div>
         <div class="container-fluided">
             <div class="row my-3">
@@ -110,7 +110,7 @@
                 <div class="btn btn-danger" id="deleteRowTable">Xóa hàng</div>
                 <div class="d-flex">
                     <label class="btn btn-default btn-file m-2 d-flex">
-                        Import file<input type="file" id="import_file">
+                        Import file<input type="file" id="import_file" class="import_file">
                         <div>
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                                 <path fill-rule="evenodd" clip-rule="evenodd" d="M7.23123 9.23123C7.53954 8.92292 8.03941 8.92292 8.34772 9.23123L12 12.8835L15.6523 9.23123C15.9606 8.92292 16.4605 8.92292 16.7688 9.23123C17.0771 9.53954 17.0771 10.0394 16.7688 10.3477L12.5582 14.5582C12.2499 14.8665 11.7501 14.8665 11.4418 14.5582L7.23123 10.3477C6.92292 10.0394 6.92292 9.53954 7.23123 9.23123Z" fill="#555555" />
@@ -311,16 +311,21 @@
             var DVTinh = xmlDoc.getElementsByTagName('DVTinh');
             var DGia = xmlDoc.getElementsByTagName('DGia');
             var TSuat = xmlDoc.getElementsByTagName('TSuat');
-            $('tbody tr').remove();
+            // $('tbody tr').remove();
             var totalProducts = 0;
             var totalTax = 0;
             // Tạo các ô input mới và đặt giá trị của chúng
             for (var i = 0; i < THHDVu.length; i++) {
+                var tax = 0;
+                if (TSuat[i].textContent == "KCT") {
+                    tax = 0;
+                } else {
+                    tax = parseInt(TSuat[i].textContent.match(/\d+/)[0]);
+                }
                 var titlesValue = THHDVu[i].textContent;
                 var numberssValue = Math.floor(SLuong[i].textContent).toString();
                 var typeValue = DVTinh[i].textContent;
                 var price = Math.floor(DGia[i].textContent).toString();
-                var tax = parseInt(TSuat[i].textContent.match(/\d+/)[0]);
                 var totalPrice = numberssValue * price;
                 totalProducts += numberssValue * price;
                 totalTax += numberssValue * price * tax / 100;
@@ -328,10 +333,10 @@
                 $('#product-tax').text(totalTax);
                 $('#grand-total').text(totalProducts + totalTax);
                 var tr = '<tr>' +
-                    '<input type="hidden" name="product_id[]" value="' + last + '">' +
+                    // '<input type="hidden" name="product_id[]" value="' + last + '">' +
                     '<td scope="row"><input type="checkbox" id=' + rowCount + '" class="cb-element"></td>' +
                     '<td>' +
-                    '<select class="form-control" name="products_id[]">' +
+                    '<select class="form-control w-auto" name="products_id[]">' +
                     '<option value="">Lựa chọn mã sản phẩm</option>' +
                     '@foreach ($products as $va)' +
                     '<option value="{{ $va->id }}">{{ $va->products_code }}</option>' +
@@ -405,7 +410,7 @@
                     '<tr>' +
                     '<td><input class="mr-5" type="checkbox" id="checkbox_1"> </td>' +
                     '<td><span class="mr-5" >1</span></td>' +
-                    '<td><input class="mr-5 form-control w-25" required type="text" name="product_SN' + rowCount +
+                    '<td><input class="mr-5 form-control w-25" type="text" name="product_SN' + rowCount +
                     '[]" onpaste="handlePaste(this)"></td>' +
                     '<td class="deleteRow1"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.0606 6.66675C13.6589 6.66675 13.3333 6.99236 13.3333 7.39402C13.3333 7.79568 13.6589 8.12129 14.0606 8.12129H17.9394C18.341 8.12129 18.6667 7.79568 18.6667 7.39402C18.6667 6.99236 18.341 6.66675 17.9394 6.66675H14.0606ZM8 10.3031C8 9.90143 8.32561 9.57582 8.72727 9.57582H10.1818H21.8182H23.2727C23.6744 9.57582 24 9.90143 24 10.3031C24 10.7048 23.6744 11.0304 23.2727 11.0304H22.5455V22.6667C22.5455 24.2819 21.2158 25.5758 19.6179 25.5758H12.3452C11.9637 25.5755 11.5854 25.4997 11.2333 25.3528C10.8812 25.2059 10.5617 24.9908 10.2931 24.7199C10.0244 24.449 9.81206 24.1276 9.66816 23.7743C9.52463 23.4219 9.45204 23.0447 9.45455 22.6642V11.0304H8.72727C8.32561 11.0304 8 10.7048 8 10.3031ZM10.9091 22.6723V11.0304H21.0909V22.6667C21.0909 23.4623 20.4288 24.1213 19.6179 24.1213H12.3458C12.1562 24.1211 11.9684 24.0834 11.7934 24.0104C11.6183 23.9374 11.4595 23.8304 11.3259 23.6958C11.1924 23.5611 11.0868 23.4013 11.0153 23.2257C10.9437 23.05 10.9076 22.8619 10.9091 22.6723ZM17.9394 13.4546C18.3411 13.4546 18.6667 13.7802 18.6667 14.1819V20.9698C18.6667 21.3714 18.3411 21.6971 17.9394 21.6971C17.5377 21.6971 17.2121 21.3714 17.2121 20.9698V14.1819C17.2121 13.7802 17.5377 13.4546 17.9394 13.4546ZM14.7879 14.1819C14.7879 13.7802 14.4623 13.4546 14.0606 13.4546C13.6589 13.4546 13.3333 13.7802 13.3333 14.1819V20.9698C13.3333 21.3714 13.6589 21.6971 14.0606 21.6971C14.4623 21.6971 14.7879 21.3714 14.7879 20.9698V14.1819Z" fill="#555555"/></svg></td>' +
                     '</tr>' +
@@ -1071,18 +1076,46 @@
             alert('Vui lòng chọn nhà cung cấp');
         }
 
+
         if (error) {
             return false;
         }
-        updateProductSN();
-        $(this).off('submit');
-        this.submit();
 
-    });
 
-    // Prevent form submit when click 'Mẫu nhập nhanh'
-    $(document).on('click', '#form_quick', function(e) {
-        e.preventDefault();
+        // AJAX Kiểm tra Serial number đã tồn tại chưa
+        var listSN = [];
+        var products_id = [];
+        $('select[name^="products_id[]"]').each(function() {
+            products_id.push($('select[name^="products_id[]"]').val());
+        })
+        $('input[name^="product_SN"]').each(function() {
+            var sn = $(this).val();
+            if (sn !== "") {
+                listSN.push(sn);
+            }
+        });
+        $.ajax({
+            url: "{{route('checkSN')}}",
+            type: "get",
+            data: {
+                listSN: listSN,
+            },
+            success: function(data) {
+                if (data.success == false) {
+                    error = true;
+                    alert("Seri number" + data.existingSN + "đã tồn tại");
+                } else {
+                    updateProductSN();
+                    // console.log($('#form_submit')[0]);
+                    $('#form_submit')[0].submit();
+                    // $(this).off('submit');
+                    // this.submit();
+                }
+            }
+        })
+
+
+
     });
 
     // Thêm nhanh nhà cung cấp

@@ -80,10 +80,8 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="">Thuế</label>
-                                    <input type="number" class="form-control" 
-                            <?php if(!Auth::user()->can('view-provides')) echo 'readonly' ?>
-                            id="product_tax" name="product_tax"
-                                        value="{{ $pro->tax }}">
+                                    <input type="number" class="form-control"  readonly
+                                    id="product_tax" name="product_tax" value="{{ $pro->tax }}">
                                 </div>
                                 <div class="form-group">
                                 </div>

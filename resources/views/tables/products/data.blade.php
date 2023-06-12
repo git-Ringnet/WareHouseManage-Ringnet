@@ -49,8 +49,7 @@
                                     stroke-linejoin="round" />
                             </svg>
                         </div>
-
-                        <span>Nhập Excel</span> <input type="file" id="import_file" onchange="importExcel()">
+                        <span>Nhập Excel</span> <input type="file" id="import_file" onchange="importExcel()" accept=".xlsx">
                     </div>
                 @endcan
             </div>
@@ -1019,7 +1018,7 @@ $index = array_search($item['label'], $numberedLabels);
                     if (response.ok) {
                         location.reload();
                     } else {
-                        console.log("Có lỗi xảy ra trong quá trình import.");
+                        alert('Có lỗi xảy ra trong quá trình import.');
                     }
                 })
                 .catch(function(error) {
