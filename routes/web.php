@@ -91,6 +91,11 @@ Route::get('/confirmBill', [AddProductController::class, 'confirmBill'])->name('
 Route::get('/showProduct', [AddProductController::class, 'showProduct'])->name('showProduct');
 Route::get('/add_newProvide', [AddProductController::class, 'add_newProvide'])->name('add_newProvide');
 
+
+// Kiểm tra serial number tồn tại chưa
+Route::get('/checkSN',[AddProductController::class, 'checkSN'])->name('checkSN');
+
+
 Route::get('/simple', function () {
     return view('tables.simple');
 });

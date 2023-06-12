@@ -275,9 +275,8 @@ class ProductsController extends Controller
         //     var_dump($va->getSerinumbers);
         // }
         // die();
-        
-        return view('tables.products.edit_products', compact('products', 'cate', 'title', 'listProduct'))->with('msg','Chỉnh sửa sản phẩm thành công!!');
 
+        return view('tables.products.edit_products', compact('products', 'cate', 'title', 'listProduct'))->with('msg', 'Chỉnh sửa sản phẩm thành công!!');
     }
 
     /**
@@ -340,33 +339,38 @@ class ProductsController extends Controller
     {
         $cate = Category::all();
         $title = 'Thêm sản phẩm';
-        return view('tables.products.insertProducts', compact('cate', 'title'))->with('msg','Thêm sản phẩm thành công!');
+        return view('tables.products.insertProducts', compact('cate', 'title'))->with('msg', 'Thêm sản phẩm thành công!');
     }
     public function storeProducts(Request $request)
     {
-        $products = new Products();
-
-        $get_image = $request->file('products_img');
-        if ($get_image) {
-            $get_name_image = $get_image->getClientOriginalName();
-            $name_image = current(explode('.', $get_name_image));
-            $extension = $get_image->getClientOriginalExtension();
-            $new_image = $name_image . '.' . $extension;
-            $get_image->move('../public/dist/img', $new_image);
-            $products->products_image = $new_image;
+        $checkProducts = Products::where('products_code', $request->products_code)->first();
+        if ($checkProducts) {
+            return redirect()->route('data.index')->with('msg', 'Mã sản phẩm đã tồn tại !');
         } else {
-            $products->products_image = "";
+            $products = new Products();
+            $get_image = $request->file('products_img');
+            if ($get_image) {
+                $get_name_image = $get_image->getClientOriginalName();
+                $name_image = current(explode('.', $get_name_image));
+                $extension = $get_image->getClientOriginalExtension();
+                $new_image = $name_image . '.' . $extension;
+                $get_image->move('../public/dist/img', $new_image);
+                $products->products_image = $new_image;
+            } else {
+                $products->products_image = "";
+            }
+
+            $products->products_code = $request->products_code;
+            $products->products_name = $request->products_name;
+            $products->ID_category = $request->product_category;
+            $products->products_trademark = $request->products_trademark;
+            // $products->products_unit = $request->products_unit;
+            $products->products_description = $request->products_description;
+
+            $products->save();
+            return redirect()->route('data.index')->with('msg', 'Thêm sản phẩm thành công!');
         }
-
-        $products->products_code = $request->products_code;
-        $products->products_name = $request->products_name;
-        $products->ID_category = $request->product_category;
-        $products->products_trademark = $request->products_trademark;
-        // $products->products_unit = $request->products_unit;
-        $products->products_description = $request->products_description;
-
-        $products->save();
-        return redirect()->route('data.index')->with('msg','Thêm sản phẩm thành công!');
+        die();
     }
 
     // Xóa sản phẩm cha AJAX
@@ -401,7 +405,7 @@ class ProductsController extends Controller
         $pro = Product::findOrFail($id);
         $select = Products::all();
         $title = 'Chỉnh sửa sản phẩm';
-        return view('tables.products.editproduct', compact('pro', 'select', 'title'))->with('msg','Chỉnh sửa sản phẩm thành công!');
+        return view('tables.products.editproduct', compact('pro', 'select', 'title'))->with('msg', 'Chỉnh sửa sản phẩm thành công!');
     }
     public function updateProduct(Request $request, $id)
     {
@@ -462,13 +466,21 @@ class ProductsController extends Controller
     {
         $jsonData = $request->all();
         foreach ($jsonData as $row) {
-            $products = new Products();
-            $products->products_code = $row['Products_code'];
-            $products->products_name = $row['Products_name'];
-            $products->ID_category = $row['ID_category'];
-            $products->products_trademark = $row['Products_trademark'];
-            $products->products_description = $row['Products_description'];
-            $products->save();
+            $existingProduct = Products::where('products_code', $row['Products_code'])
+                ->where('products_name', $row['Products_name'])
+                ->where('ID_category', $row['ID_category'])
+                ->where('products_trademark', $row['Products_trademark'])
+                ->where('products_description', $row['Products_description'])
+                ->first();
+            if (!$existingProduct) {
+                $products = new Products();
+                $products->products_code = $row['Products_code'];
+                $products->products_name = $row['Products_name'];
+                $products->ID_category = $row['ID_category'];
+                $products->products_trademark = $row['Products_trademark'];
+                $products->products_description = $row['Products_description'];
+                $products->save();
+            }
         }
         session()->flash('msg', 'Import thành công!');
         return response()->json(['message' => 'Import thành công!']);
