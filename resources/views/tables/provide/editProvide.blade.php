@@ -51,10 +51,6 @@
                                     <input type="text" class="form-control" value="{{ $provides->provide_address }}" name="provide_address" placeholder="Nhập địa chỉ" required="">
                                 </div>
                                 <div class="form-group">
-                                    <label for="pwd">Mã nhà cung cấp:</label>
-                                    <input type="text" class="form-control" name="provide_code" value="{{ $provides->provide_code }}" placeholder="Nhập mã nhà cung cấp" required="">
-                                </div>
-                                <div class="form-group">
                                     <label for="pwd">Trạng thái:</label>
                                     <select name="provide_status" class="form-control">
                                         <option value="1" <?php if ($provides->provide_status == 1) {

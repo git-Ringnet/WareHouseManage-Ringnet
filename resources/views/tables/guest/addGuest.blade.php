@@ -36,8 +36,8 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="pwd">Số điện thoại:</label>
-                                    <input type="number" class="form-control" name="guest_phone"
-                                        placeholder="Nhập số điện thoại" required>
+                                    <input type="text" class="form-control" name="guest_phone" oninput=validateNumberInput(this)
+                                        placeholder="Nhập số điện thoại" pattern="^(?:\+?84|0)(?:\d{9}|\d{10})$" title="Số điện thoại không hợp lệ" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="pwd">Email:</label>
@@ -48,30 +48,29 @@
                                     <label>Địa chỉ xuất hóa đơn:</label>
                                     <input type="text" class="form-control" id="guest_addressInvoice"
                                         placeholder="Nhập địa chỉ xuất hóa đơn" name="guest_addressInvoice"
-                                        value="" required="">
+                                        value="" required>
                                 </div>
                                 <div class="form-group">
                                     <label>Mã số thuế:</label>
                                     <input type="number" class="form-control" id="guest_code"
-                                        placeholder="Nhập mã số thuế" name="guest_code" value="" required="">
+                                        placeholder="Nhập mã số thuế" name="guest_code" value="" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="email">Địa chỉ giao hàng:</label>
                                     <input type="text" class="form-control" id="guest_addressDeliver"
                                         placeholder="Nhập địa chỉ giao hàng" name="guest_addressDeliver" value=""
-                                        required="">
+                                        required>
                                 </div>
                                 <div class="form-group">
                                     <label for="email">Người nhận hàng:</label>
                                     <input type="text" class="form-control" id="guest_receiver"
                                         placeholder="Nhập người nhận hàng" name="guest_receiver" value=""
-                                        required="">
+                                        required>
                                 </div>
                                 <div class="form-group">
                                     <label for="email">SĐT người nhận:</label>
-                                    <input type="number" class="form-control" id="guest_phoneReceiver"
-                                        placeholder="Nhập Số điện thoại người nhận" name="guest_phoneReceiver"
-                                        value="" required="">
+                                    <input type="text" class="form-control" id="guest_phoneReceiver" value="" oninput=validateNumberInput(this)
+                                        placeholder="Nhập Số điện thoại người nhận" name="guest_phoneReceiver" pattern="^(?:\+?84|0)(?:\d{9}|\d{10})$" title="Số điện thoại không hợp lệ" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="email">Ghi chú:</label>
@@ -114,6 +113,16 @@
     </section>
     <!-- /.content -->
 </div>
+<script>
+    //cho phép nhập số 
+    function validateNumberInput(input) {
+        const regex = /^[-+]?[0-9]{1,3}(?:,?[0-9]{3})*(?:\.[0-9]+)?$/;
+        const value = input.value.replace(/,/g, '');
+        if (!regex.test(value)) {
+            input.value = '';
+        }
+    }
+</script>
 </body>
 
 </html>

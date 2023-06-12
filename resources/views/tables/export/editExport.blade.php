@@ -306,7 +306,14 @@
                             </div>
                             <div class="form-group">
                                 <label for="email">Điều kiện thanh toán:</label>
-                                <textarea name="guest_payTerm" id="guest_payTerm" class="form-control">{{ $guest->guest_payTerm }}</textarea>
+                                <textarea name="guest_payTerm" id="guest_payTerm" class="form-control">
+                                    <?php if ($guest->guest_payTerm == null) {
+                                        echo '';
+                                    } else {
+                                        $guest->guest_payTerm;
+                                    }
+                                    ?>
+                                </textarea>
                             </div>
                         </div>
                     </div>
@@ -368,36 +375,39 @@
                                     </select>
                                 </td>
                                 <td>
-                                    <input type="text" id="product_unit" style="width: 80px" class="product_unit form-control text-center"
-                                        <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                            echo 'readonly';
-                                        } ?> value="{{ $value_export->product_unit }}"
-                                        name="product_unit[]" required="">
-                                </td>
-                                <td>
-                                    <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-                                        id="product_qty" class="quantity-input form-control text-center" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                    <input type="text" id="product_unit" style="width: 80px"
+                                        class="product_unit form-control text-center" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                             echo 'readonly';
                                         } ?>
-                                        value="{{ $value_export->product_qty }}" name="product_qty[]"
+                                        value="{{ $value_export->product_unit }}" name="product_unit[]"
                                         required="">
                                 </td>
                                 <td>
                                     <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-                                        id="product_price" name="product_price[]" class="form-control text-center" style="width: 140px"
+                                        id="product_qty" class="quantity-input form-control text-center"
                                         <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                             echo 'readonly';
-                                        } ?> value={{ $value_export->product_price }} required="">
+                                        } ?> value="{{ $value_export->product_qty }}"
+                                        name="product_qty[]" required="">
                                 </td>
                                 <td>
-                                    <input type="text" id="" name="product_note[]" class="form-control" style="width: 140px"
-                                        <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                    <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                        id="product_price" name="product_price[]" class="form-control text-center"
+                                        style="width: 140px" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                             echo 'readonly';
-                                        } ?> value="{{ $value_export->product_note }}">
+                                        } ?>
+                                        value={{ $value_export->product_price }} required="">
                                 </td>
                                 <td>
-                                    <select name="product_tax[]" class="product_tax px-3 form-control"
-                                        id="product_tax" required <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                    <input type="text" id="" name="product_note[]" class="form-control"
+                                        style="width: 140px" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                            echo 'readonly';
+                                        } ?>
+                                        value="{{ $value_export->product_note }}">
+                                </td>
+                                <td>
+                                    <select name="product_tax[]" class="product_tax form-control"
+                                        style="width: 100px;" id="product_tax" required <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                             echo 'disabled';
                                         } ?>>
                                         <option value="0" <?php if ($value_export->product_tax == 0) {
@@ -414,7 +424,8 @@
                                         } ?>>NOVAT</option>
                                     </select>
                                 </td>
-                                <td><span class="total-amount form-control text-center" style="background:#e9ecef; width:140px">0</span>
+                                <td><span class="total-amount form-control text-center"
+                                        style="background:#e9ecef; width:140px">0</span>
                                 </td>
                                 <td data-toggle='modal' data-target='#snModal' class='sn'><img
                                         src="../../dist/img/icon/list.png"></td>
@@ -595,7 +606,7 @@
             const newRow = $("<tr>", {
                 "id": `dynamic-row-${fieldCounter}`
             });
-            const checkbox = $("<td><input type='checkbox'></td>");
+            // const checkbox = $("<td><input type='checkbox'></td>");
             const MaInput = $("<td>", {
                 "text": `${fieldCounter}`
             });
@@ -624,10 +635,11 @@
                 "</td>"
             );
             const giaInput = $(
-                "<td><input type='number' class='product_price' id='product_price' name='product_price[]' required></td>"
+                "<td><input type='number' class='product_price form-control' style='width:100px;' id='product_price' name='product_price[]' required></td>"
             );
             const ghichuInput = $(
-                "<td><input type='text' class='note_product form-control text-center' name='product_note[]'></td>");
+                "<td><input type='text' class='note_product form-control text-center' name='product_note[]'></td>"
+            );
             const thueInput = $("<td>" +
                 "<select name='product_tax[]' class='product_tax p-1 form-control' style='width:80px' id='product_tax' required>" +
                 "<option value='0'>0%</option>" +
@@ -636,7 +648,7 @@
                 "<option value='0'>NOVAT</option>" +
                 "</select>" +
                 "</td>");
-            const thanhTienInput = $("<td><span class='total-amount'>0</span></td>");
+            const thanhTienInput = $("<td><span class='total-amount form-control'>0</span></td>");
             const sn = $(
                 "<td data-toggle='modal' data-target='#snModal' class='sn'><img src='../../dist/img/icon/list.png'></td>"
             );
@@ -646,8 +658,14 @@
             const deleteBtn = $("<td><img src='../../dist/img/icon/vector.png'></td>", {
                 "class": "delete-row-btn"
             });
+            const option = $(
+                "<td style='display:none;'><input type='number' class='price_import'></td>" +
+                "<td style='display:none;'><input type='text' class='tonkho'></td>" +
+                "<td style='display:none;'><input type='text' class='loaihang'></td>" +
+                "<td style='display:none;'><input type='text' class='dangGD'></td>" +
+                "<td style='display:none;'><input type='text' class='product_tax1'></td>"
+            );
             deleteBtn.click(function() {
-                soTT
                 $(this).closest("tr").remove();
                 calculateGrandTotal();
             });
@@ -734,8 +752,8 @@
                     '<br>' + '<b>Thuế:</b> ' + thue + '<br>' + '<b>Thành tiền:</b> ' +
                     thanhTien);
             });
-            newRow.append(checkbox, MaInput, TenInput, ProInput, dvtInput, slInput,
-                giaInput, ghichuInput, thueInput, thanhTienInput, sn, info, deleteBtn);
+            newRow.append(MaInput, TenInput, ProInput, dvtInput, slInput,
+                giaInput, ghichuInput, thueInput, thanhTienInput, sn, info, deleteBtn, option);
             $("#dynamic-fields").before(newRow);
             fieldCounter++;
         });
@@ -763,6 +781,16 @@
             }
         });
     });
+
+    //cho phép nhập số 
+    function validateNumberInput(input) {
+        // const regex = /^[-+]?[0-9]{1,3}(?:,?[0-9]{3})*(?:\.[0-9]+)?$/;
+        // const value = input.value.replace(/,/g, '');
+        // if (!regex.test(value)) {
+        //     input.value = '';
+        // }
+    }
+
     //search thông tin khách hàng
     $(document).ready(function() {
         $("#myInput").on("keyup", function() {
@@ -790,8 +818,8 @@
                         '<div id="form-guest">' +
                         '<div class="border-bottom p-3 d-flex justify-content-between align-items-center">' +
                         '<b>Thông tin khách hàng</b>' +
-                        '<button id="btn-customer" class="btn btn-primary align-items-center">' +
-                        '<img src="../../dist/img/icon/Union.png">' +
+                        '<button id="btn-customer" type="submit" class="btn btn-primary d-flex align-items-center">' +
+                        '<img src="../dist/img/icon/Union.png">' +
                         '<span class="ml-1">Lưu thông tin</span></button></div>' +
                         '<div class="row p-3">' +
                         '<div class="col-sm-6">' +
@@ -804,23 +832,23 @@
                         '</div>' + '<div class="form-group">' +
                         '<label>Địa chỉ xuất hóa đơn:</label>' +
                         '<input type="text" class="form-control" placeholder="Nhập thông tin" id="guest_addressInvoice" name="guest_addressInvoice" value="' +
-                        data.guest_addressInvoice + '">' +
+                        data.guest_addressInvoice + '" required>' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">Mã số thuế:</label>' +
-                        '<input type="text" class="form-control" id="guest_code" placeholder="Nhập thông tin" name="guest_code" value="' +
-                        data.guest_code + '">' +
+                        '<input type="text" oninput="validateNumberInput(this)" class="form-control" inputmode="numeric" id="guest_code" placeholder="Nhập thông tin" name="guest_code" value="' +
+                        data.guest_code + '" required>' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">Địa chỉ giao hàng:</label>' +
                         '<input type="text" class="form-control" id="guest_addressDeliver" placeholder="Nhập thông tin" name="guest_addressDeliver" value="' +
-                        data.guest_addressDeliver + '">' +
+                        data.guest_addressDeliver + '" required>' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">Người nhận hàng:</label>' +
                         '<input type="text" class="form-control" id="guest_receiver" placeholder="Nhập thông tin" name="guest_receiver" value="' +
-                        data.guest_receiver + '">' +
+                        data.guest_receiver + '" required>' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">SĐT người nhận:</label>' +
-                        '<input type="text" class="form-control" pattern="^(0|\+84)(3[2-9]|5[2689]|7[06-9]|8[1-9]|9[0-9])\d{7}$" id="guest_phoneReceiver" placeholder="Nhập thông tin" name="guest_phoneReceiver" value="' +
-                        data.guest_phoneReceiver + '">' +
+                        '<input type="text" pattern="/^((\+84)|(0[1-9]))\d{8}$/" class="form-control" id="guest_phoneReceiver" placeholder="Nhập thông tin" name="guest_phoneReceiver" value="' +
+                        data.guest_phoneReceiver + '" required>' +
                         '</div>' + '</div>' + '<div class="col-sm-6">' +
                         '<div class="form-group">' +
                         '<label for="email">Người đại diện:</label>' +
@@ -828,32 +856,31 @@
                         data.guest_represent + '" required>' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">Email:</label>' +
-                        '<input type="email" class="form-control" id="guest_email" placeholder="Nhập thông tin" name="guest_email" value="' +
+                        '<input type="email" class="form-control" pattern="/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/" id="guest_email" placeholder="Nhập thông tin" name="guest_email" value="' +
                         data.guest_email + '" required>' +
                         '</div>' + '<div class="form-group">' +
-                        '<label for="email">Số điện thoại:</label>' +
-                        '<input type="text" class="form-control" pattern="^(0|\+84)(3[2-9]|5[2689]|7[06-9]|8[1-9]|9[0-9])\d{7}$" id="guest_phone" placeholder="Nhập thông tin" name="guest_phone" value="' +
+                        '<label>Số điện thoại:</label>' +
+                        '<input type="text" class="form-control" pattern="/^((\+84)|(0[1-9]))\d{8}$/" id="guest_phone" placeholder="Nhập thông tin" name="guest_phone" value="' +
                         data.guest_phone + '" required>' +
                         '</div>' + '<div class="form-group">' +
-                        ' <label for="email">Hình thức thanh toán:</label>' +
-                        '<select name="guest_pay" class="form-control" id="guest_pay">' +
+                        '<label for="email">Hình thức thanh toán:</label>' +
+                        '<select name="guest_pay" class="form-control" id="guest_pay" required>' +
                         '<option value="0"' + (data.guest_pay == 0 ? ' selected' : '') +
                         '>Chuyển khoản</option>' +
                         '<option value="1"' + (data.guest_pay == 1 ? ' selected' : '') +
                         '>Thanh toán bằng tiền mặt</option>' +
                         '</select>' +
                         '</div>' + '<div class="form-group">' +
-                        '<label for="email">Điều kiện thanh toán:</label>' +
-                        '<select name="guest_payTerm" class="form-control" id="guest_payTerm">' +
-                        '<option value="">Chọn biểu mẫu</option>' +
-                        '<option value="0"' + (data.guest_payTerm == 0 ? ' selected' :
-                            '') + '>Biểu mẫu 15 ngày</option>' +
-                        '</select>' +
-                        '</div>' + '<div class="form-group">' +
                         '<label for="email">Ghi chú:</label>' +
                         '<input type="text" class="form-control" id="guest_note" placeholder="Nhập thông tin" name="guest_note" value="' +
                         data.guest_note + '">' +
-                        '</div></div></div><div>'
+                        '</div>' +
+                        '<div class="form-group">' +
+                        '<label for="email">Điều kiện thanh toán:</label>' +
+                        '<textarea class="form-control" id="guest_payTerm" name="guest_payTerm">' +
+                        (data.guest_payTerm == null ? '' : data.guest_payTerm) +
+                        '</textarea>' +
+                        '</div>' + '</div></div><div>'
                     );
                 }
             });
@@ -1045,6 +1072,7 @@
     $(document).ready(function() {
         calculateTotals();
     });
+
     $(document).on('input', '.quantity-input, [name^="product_price"], .product_tax', function() {
         calculateTotals();
     });
@@ -1057,7 +1085,7 @@
         $('tr').each(function() {
             var productQty = parseInt($(this).find('.quantity-input').val());
             var productPrice = 0;
-            var taxValue = parseFloat($(this).find('.product_tax').val());
+            var taxValue = parseInt($(this).find('.product_tax option:selected').val());
 
             $(this).find('[name^="product_price"]').each(function() {
                 productPrice += parseFloat($(this).val());
@@ -1068,8 +1096,8 @@
                 var rowTax = (productQty * productPrice * taxValue) / 100;
 
                 // Hiển thị kết quả
-                $(this).find('.total-amount').text(rowTotal);
-                $(this).find('.product_tax').text(rowTax);
+                $(this).find('.total-amount').text(rowTotal.toFixed(2));
+                $(this).find('.product_tax1').text(rowTax.toFixed(2));
 
                 // Cộng dồn vào tổng totalAmount và totalTax
                 totalAmount += rowTotal;
@@ -1078,8 +1106,8 @@
         });
 
         // Hiển thị tổng totalAmount và totalTax
-        $('#total-amount-sum').text(totalAmount);
-        $('#product-tax').text(totalTax);
+        $('#total-amount-sum').text(totalAmount.toFixed(2));
+        $('#product-tax').text(totalTax.toFixed(2));
 
         // Tính tổng thành tiền và thuế
         calculateGrandTotal(totalAmount, totalTax);
@@ -1093,6 +1121,7 @@
         $('#grand-total').attr('data-value', grandTotal.toFixed(2));
         $('#total').val(grandTotal.toFixed(2));
     }
+
 
     //hàm kiểm tra submit
     function validateAndSubmit(event) {

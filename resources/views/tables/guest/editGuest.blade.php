@@ -37,8 +37,8 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="pwd">Số điện thoại:</label>
-                                    <input type="number" class="form-control" value="{{ $guests->guest_phone }}"
-                                        name="guest_phone" placeholder="Nhập số điện thoại" required>
+                                    <input type="text" class="form-control" oninput=validateNumberInput(this) value="{{ $guests->guest_phone }}"
+                                        name="guest_phone" pattern="^(?:\+?84|0)(?:\d{9}|\d{10})$" title="Số điện thoại không hợp lệ" placeholder="Nhập số điện thoại" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="pwd">Email:</label>
@@ -72,8 +72,8 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="email">SĐT người nhận:</label>
-                                    <input type="number" class="form-control" id="guest_phoneReceiver"
-                                        placeholder="Nhập Số điện thoại người nhận" name="guest_phoneReceiver"
+                                    <input type="text" class="form-control" id="guest_phoneReceiver" oninput=validateNumberInput(this)
+                                        placeholder="Nhập Số điện thoại người nhận" name="guest_phoneReceiver" pattern="^(?:\+?84|0)(?:\d{9}|\d{10})$" title="Số điện thoại không hợp lệ"
                                         value="{{ $guests->guest_phoneReceiver }}" required="">
                                 </div>
                                 <div class="form-group">
@@ -125,6 +125,16 @@
     </section>
     <!-- /.content -->
 </div>
+<script>
+    //cho phép nhập số 
+    function validateNumberInput(input) {
+        const regex = /^[-+]?[0-9]{1,3}(?:,?[0-9]{3})*(?:\.[0-9]+)?$/;
+        const value = input.value.replace(/,/g, '');
+        if (!regex.test(value)) {
+            input.value = '';
+        }
+    }
+</script>
 </body>
 
 </html>

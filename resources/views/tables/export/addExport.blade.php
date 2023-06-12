@@ -138,7 +138,7 @@
             {{-- Bảng thêm sản phẩm --}}
             <div class="mt-4" style="overflow-x: auto;">
                 <table class="table table-hover bg-white rounded" id="sourceTable">
-                    <thead class="bg-white border-0 rounded">
+                    <thead class="">
                         <tr>
                             <th><input type="checkbox"></th>
                             <th>STT</th>
@@ -168,11 +168,11 @@
                     <div class="mt-4 w-50" style="float: right;">
                         <div class="d-flex justify-content-between">
                             <span><b>Giá trị trước thuế:</b></span>
-                            <span id="total-amount-sum">{{ number_format(0) }}</span>
+                            <span id="total-amount-sum">{{ number_format(0) }}đ</span>
                         </div>
                         <div class="d-flex justify-content-between mt-2">
                             <span><b>Thuế VAT:</b></span>
-                            <span id="product-tax">{{ number_format(0) }}</span>
+                            <span id="product-tax">{{ number_format(0) }}đ</span>
                         </div>
                         {{-- <div class="d-flex justify-content-between mt-2">
                             <span class="text-primary">Giảm giá:</span>
@@ -184,7 +184,7 @@
                         </div> --}}
                         <div class="d-flex justify-content-between mt-2">
                             <span class="text-lg"><b>Tổng cộng:</b></span>
-                            <span><b id="grand-total" data-value="0">{{ number_format(0) }}</b></span>
+                            <span><b id="grand-total" data-value="0">{{ number_format(0) }}đ</b></span>
                             <input type="text" hidden name="totalValue" value="0" id="total">
                         </div>
                     </div>
@@ -410,7 +410,7 @@
             '<input type="text" class="form-control" id="guest_receiver" placeholder="Nhập thông tin" name="guest_receiver" value="" required>' +
             '</div>' + '<div class="form-group">' +
             '<label for="email">SĐT người nhận:</label>' +
-            '<input type="text" pattern="^(0|\+84)(3[2-9]|5[2689]|7[06-9]|8[1-9]|9[0-9])\d{7}$" oninput="validateNumberInput(this)" class="form-control" id="guest_phoneReceiver" placeholder="Nhập thông tin" name="guest_phoneReceiver" value="" required>' +
+            '<input type="text" pattern="/^((\+84)|(0[1-9]))\d{8}$/" class="form-control" id="guest_phoneReceiver" placeholder="Nhập thông tin" name="guest_phoneReceiver" value="" required>' +
             '</div>' + '</div>' + '<div class="col-sm-6">' +
             '<div class="form-group">' +
             '<label for="email">Người đại diện:</label>' +
@@ -419,8 +419,8 @@
             '<label for="email">Email:</label>' +
             '<input type="email" class="form-control" pattern="/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/" id="guest_email" placeholder="Nhập thông tin" name="guest_email" value="" required>' +
             '</div>' + '<div class="form-group">' +
-            '<label for="email">Số điện thoại:</label>' +
-            '<input type="text" pattern="/^(0|\+84)(3[2-9]|5[2689]|7[06-9]|8[1-9]|9[0-9])\d{7}$/" oninput="validateNumberInput(this)" class="form-control" id="guest_phone" placeholder="Nhập thông tin" name="guest_phone" value="" required>' +
+            '<label>Số điện thoại:</label>' +
+            '<input type="text" class="form-control" pattern="/^((\+84)|(0[1-9]))\d{8}$/" id="guest_phone" placeholder="Nhập thông tin" name="guest_phone" value="" required>' +
             '</div>' + '<div class="form-group">' +
             ' <label for="email">Hình thức thanh toán:</label>' +
             '<select name="guest_pay" class="form-control" id="guest_pay">' +
@@ -438,11 +438,11 @@
     });
 
     function validateNumberInput(input) {
-        // const regex = /^[-+]?[0-9]{1,3}(?:,?[0-9]{3})*(?:\.[0-9]+)?$/;
-        // const value = input.value.replace(/,/g, '');
-        // if (!regex.test(value)) {
-        //     input.value = '';
-        // }
+        const regex = /^[-+]?[0-9]{1,3}(?:,?[0-9]{3})*(?:\.[0-9]+)?$/;
+        const value = input.value.replace(/,/g, '');
+        if (!regex.test(value)) {
+            input.value = '';
+        }
     }
 
     //add sản phẩm
@@ -472,7 +472,7 @@
                 "</select>" +
                 "</td>");
             const dvtInput = $(
-                "<td><input type='text' id='product_unit' class='product_unit form-control' style='width:80px' name='product_unit[]' required></td>"
+                "<td><input type='text' id='product_unit' class='product_unit form-control' style='width:100px' name='product_unit[]' required></td>"
             );
             const slInput = $(
                 "<td>" +
@@ -522,14 +522,15 @@
             //Xóa sản phẩm
             deleteBtn.click(function() {
                 $(this).closest("tr").remove();
+                fieldCounter--;
+                calculateTotalAmount();
+                calculateTotalTax();
+                calculateGrandTotal();
+                updateRowNumbers(); // Cập nhật lại số thứ tự
                 var taxAmount = parseFloat(row.find('.product_tax1').text());
                 var totalTax = parseFloat($('#product-tax').text());
                 totalTax -= taxAmount;
                 $('#product-tax').text(totalTax);
-                fieldCounter--;
-                calculateTotalAmount();
-                calculateGrandTotal();
-                updateRowNumbers(); // Cập nhật lại số thứ tự
             });
             //lấy S/N
             sn.click(function() {
@@ -697,7 +698,7 @@
                         data.guest_receiver + '" required>' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">SĐT người nhận:</label>' +
-                        '<input type="text" pattern="^(0|\+84)(3[2-9]|5[2689]|7[06-9]|8[1-9]|9[0-9])\d{7}$" oninput="validateNumberInput(this)" class="form-control" id="guest_phoneReceiver" placeholder="Nhập thông tin" name="guest_phoneReceiver" value="' +
+                        '<input type="text" pattern="/^((\+84)|(0[1-9]))\d{8}$/" class="form-control" id="guest_phoneReceiver" placeholder="Nhập thông tin" name="guest_phoneReceiver" value="' +
                         data.guest_phoneReceiver + '" required>' +
                         '</div>' + '</div>' + '<div class="col-sm-6">' +
                         '<div class="form-group">' +
@@ -710,7 +711,7 @@
                         data.guest_email + '" required>' +
                         '</div>' + '<div class="form-group">' +
                         '<label>Số điện thoại:</label>' +
-                        '<input type="text" pattern="^(0|\+84)(3[2-9]|5[2689]|7[06-9]|8[1-9]|9[0-9])\d{7}$" oninput="validateNumberInput(this)" class="form-control" id="guest_phone" placeholder="Nhập thông tin" name="guest_phone" value="' +
+                        '<input type="text" class="form-control" pattern="/^((\+84)|(0[1-9]))\d{8}$/" id="guest_phone" placeholder="Nhập thông tin" name="guest_phone" value="' +
                         data.guest_phone + '" required>' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">Hình thức thanh toán:</label>' +
@@ -728,7 +729,7 @@
                         '<div class="form-group">' +
                         '<label for="email">Điều kiện thanh toán:</label>' +
                         '<textarea class="form-control" id="guest_payTerm" name="guest_payTerm">' +
-                        data.guest_payTerm + '</textarea>' +
+                        (data.guest_payTerm == null ? '' : data.guest_payTerm) + '</textarea>' +
                         '</div>' + '</div></div><div>'
                     );
                 }
@@ -743,6 +744,7 @@
             input.value = qty_exist;
         }
     }
+
     //cập nhật thông tin khách hàng
     $(document).on('click', '#btn-customer', function(e) {
         e.preventDefault();
@@ -1013,9 +1015,31 @@
         $('#total').val(totalValue);
     }
 
-
     function formatCurrency(value) {
-        return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        // Làm tròn đến 2 chữ số thập phân
+        value = Math.round(value * 100) / 100;
+
+        // Xử lý phần nguyên
+        var parts = value.toString().split(".");
+        var integerPart = parts[0];
+        var formattedValue = "";
+
+        // Định dạng phần nguyên
+        var count = 0;
+        for (var i = integerPart.length - 1; i >= 0; i--) {
+            formattedValue = integerPart.charAt(i) + formattedValue;
+            count++;
+            if (count % 3 === 0 && i !== 0) {
+                formattedValue = "," + formattedValue;
+            }
+        }
+
+        // Nếu có phần thập phân, thêm vào sau phần nguyên
+        if (parts.length > 1) {
+            formattedValue += "." + parts[1];
+        }
+
+        return formattedValue;
     }
 
     //hàm kiểm tra
@@ -1104,14 +1128,26 @@
         // Xóa các ký tự không phải số và dấu phân thập phân từ giá trị
         var formattedValue = value.replace(/[^0-9.]/g, '');
 
-        // Định dạng số với dấu phân cách hàng nghìn
+        // Định dạng số với dấu phân cách hàng nghìn và giữ nguyên số thập phân
         var formattedNumber = numberWithCommas(formattedValue);
 
         event.target.value = formattedNumber;
     });
-    
+
     function numberWithCommas(number) {
-        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        // Chia số thành phần nguyên và phần thập phân
+        var parts = number.split('.');
+        var integerPart = parts[0];
+        var decimalPart = parts[1];
+
+        // Định dạng phần nguyên số với dấu phân cách hàng nghìn
+        var formattedIntegerPart = integerPart.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+        // Kết hợp phần nguyên và phần thập phân (nếu có)
+        var formattedNumber = decimalPart !== undefined ? formattedIntegerPart + '.' + decimalPart :
+            formattedIntegerPart;
+
+        return formattedNumber;
     }
 </script>
 </body>

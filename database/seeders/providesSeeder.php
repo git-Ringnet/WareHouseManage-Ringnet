@@ -23,7 +23,6 @@ class ProvidesSeeder extends Seeder
                 'provide_email' => 'a@gmail.com',
                 'provide_status' => 1,
                 'provide_address' => '38 Út tịch',
-                'provide_code' => 123
             ],
             [
                 'id' => 2,
@@ -33,7 +32,6 @@ class ProvidesSeeder extends Seeder
                 'provide_email' => 'b@gmail.com',
                 'provide_status' => 1,
                 'provide_address' => '38 Út tịch',
-                'provide_code' => 456
             ],
             [
                 'id' => 3,
@@ -43,7 +41,6 @@ class ProvidesSeeder extends Seeder
                 'provide_email' => 'c@gmail.com',
                 'provide_status' => 1,
                 'provide_address' => '38 Út tịch',
-                'provide_code' => 789
             ],
         ]);
     }
