@@ -37,8 +37,10 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="pwd">Số điện thoại:</label>
-                                    <input type="text" class="form-control" oninput=validateNumberInput(this) value="{{ $guests->guest_phone }}"
-                                        name="guest_phone" pattern="^(?:\+?84|0)(?:\d{9}|\d{10})$" title="Số điện thoại không hợp lệ" placeholder="Nhập số điện thoại" required>
+                                    <input type="text" class="form-control" oninput=validateNumberInput(this)
+                                        value="{{ $guests->guest_phone }}" name="guest_phone"
+                                        pattern="^(?:\+?84|0)(?:\d{9}|\d{10})$" title="Số điện thoại không hợp lệ"
+                                        placeholder="Nhập số điện thoại" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="pwd">Email:</label>
@@ -72,9 +74,11 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="email">SĐT người nhận:</label>
-                                    <input type="text" class="form-control" id="guest_phoneReceiver" oninput=validateNumberInput(this)
-                                        placeholder="Nhập Số điện thoại người nhận" name="guest_phoneReceiver" pattern="^(?:\+?84|0)(?:\d{9}|\d{10})$" title="Số điện thoại không hợp lệ"
-                                        value="{{ $guests->guest_phoneReceiver }}" required="">
+                                    <input type="text" class="form-control" id="guest_phoneReceiver"
+                                        oninput=validateNumberInput(this) placeholder="Nhập Số điện thoại người nhận"
+                                        name="guest_phoneReceiver" pattern="^(?:\+?84|0)(?:\d{9}|\d{10})$"
+                                        title="Số điện thoại không hợp lệ" value="{{ $guests->guest_phoneReceiver }}"
+                                        required="">
                                 </div>
                                 <div class="form-group">
                                     <label for="email">Ghi chú:</label>
@@ -92,10 +96,6 @@
                                             echo 'selected';
                                         } ?>>Thanh toán bằng tiền mặt</option>
                                     </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="email">Điều kiện thanh toán:</label>
-                                    <textarea class="form-control" name="guest_payTerm" id="guest_payTerm">{{ $guests->guest_payTerm }}</textarea>
                                 </div>
                                 <div class="form-group">
                                     <label for="pwd">Trạng thái:</label>

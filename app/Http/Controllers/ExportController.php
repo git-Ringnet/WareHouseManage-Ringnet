@@ -130,9 +130,10 @@ class ExportController extends Controller
         if (Auth::check()) {
             $productIDs = $request->input('product_id');
             $productQtys = $request->input('product_qty');
+            $products_id = $request->input('products_id');
             $clickValue = $request->input('click');
+            $updateClick = $request->input('updateClick');
             $totalQtyNeeded = 0;
-            $existingProductIDs = [];
             if ($request->has('submitBtn')) {
                 $action = $request->input('submitBtn');
                 if ($action === 'action1') {
@@ -179,28 +180,89 @@ class ExportController extends Controller
                         } else {
                             //thêm khách hàng
                             if ($clickValue === null) {
-                                $guest = new Guests();
-                                $guest->guest_name = $request->guest_name;
-                                $guest->guest_addressInvoice = $request->guest_addressInvoice;
-                                $guest->guest_code = $request->guest_code;
-                                $guest->guest_addressDeliver = $request->guest_addressDeliver;
-                                $guest->guest_receiver = $request->guest_receiver;
-                                $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
-                                $guest->guest_represent = $request->guest_represent;
-                                $guest->guest_email = $request->guest_email;
-                                $guest->guest_status = 1;
-                                $guest->guest_phone = $request->guest_phone;
-                                $guest->guest_pay = $request->guest_pay;
-                                $guest->guest_payTerm = $request->guest_payTerm;
-                                $guest->guest_note = $request->guest_note;
-                                $guest->save();
-                                // Tạo đơn xuất hàng
-                                $export = new Exports();
-                                $export->guest_id = $guest->id;
-                                $export->user_id = Auth::user()->id;
-                                $export->total = $request->totalValue;
-                                $export->export_status = 2;
-                                $export->save();
+                                $existingCustomer = Guests::where('guest_name', $request->guest_name)
+                                    ->where('guest_email', $request->guest_email)
+                                    ->where('guest_addressInvoice', $request->guest_addressInvoice)
+                                    ->where('guest_code', $request->guest_code)
+                                    ->where('guest_addressDeliver', $request->guest_addressDeliver)
+                                    ->where('guest_receiver', $request->guest_receiver)
+                                    ->where('guest_phoneReceiver', $request->guest_phoneReceiver)
+                                    ->where('guest_represent', $request->guest_represent)
+                                    ->where('guest_phone', $request->guest_phone)
+                                    ->first();
+                                if (!$existingCustomer) {
+                                    $guest = new Guests();
+                                    $guest->guest_name = $request->guest_name;
+                                    $guest->guest_addressInvoice = $request->guest_addressInvoice;
+                                    $guest->guest_code = $request->guest_code;
+                                    $guest->guest_addressDeliver = $request->guest_addressDeliver;
+                                    $guest->guest_receiver = $request->guest_receiver;
+                                    $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
+                                    $guest->guest_represent = $request->guest_represent;
+                                    $guest->guest_email = $request->guest_email;
+                                    $guest->guest_status = 1;
+                                    $guest->guest_phone = $request->guest_phone;
+                                    $guest->guest_pay = $request->guest_pay;
+                                    $guest->guest_note = $request->guest_note;
+                                    $guest->save();
+                                    // Tạo đơn xuất hàng
+                                    $export = new Exports();
+                                    $export->guest_id = $guest->id;
+                                    $export->user_id = Auth::user()->id;
+                                    $export->total = $request->totalValue;
+                                    $export->export_status = 2;
+                                    $export->save();
+                                } else {
+                                    $export = new Exports();
+                                    $export->guest_id = $existingCustomer->id;
+                                    $export->user_id = Auth::user()->id;
+                                    $export->total = $request->totalValue;
+                                    $export->export_status = 2;
+                                    $export->save();
+                                }
+                            }
+                            //cập nhật khách hàng
+                            else if ($updateClick == null) {
+                                $existingCustomer = Guests::where('guest_name', $request->guest_name)
+                                    ->where('guest_email', $request->guest_email)
+                                    ->where('guest_addressInvoice', $request->guest_addressInvoice)
+                                    ->where('guest_code', $request->guest_code)
+                                    ->where('guest_addressDeliver', $request->guest_addressDeliver)
+                                    ->where('guest_receiver', $request->guest_receiver)
+                                    ->where('guest_phoneReceiver', $request->guest_phoneReceiver)
+                                    ->where('guest_represent', $request->guest_represent)
+                                    ->where('guest_phone', $request->guest_phone)
+                                    ->first();
+                                if (!$existingCustomer) {
+                                    $guest = Guests::find($request->id);
+                                    $guest->guest_name = $request->guest_name;
+                                    $guest->guest_addressInvoice = $request->guest_addressInvoice;
+                                    $guest->guest_code = $request->guest_code;
+                                    $guest->guest_addressDeliver = $request->guest_addressDeliver;
+                                    $guest->guest_receiver = $request->guest_receiver;
+                                    $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
+                                    $guest->guest_represent = $request->guest_represent;
+                                    $guest->guest_email = $request->guest_email;
+                                    $guest->guest_status = 1;
+                                    $guest->guest_phone = $request->guest_phone;
+                                    $guest->guest_pay = $request->guest_pay;
+                                    $guest->guest_note = $request->guest_note;
+                                    $guest->save();
+                                    // Tạo đơn xuất hàng
+                                    $export = new Exports();
+                                    $export->guest_id = $guest->id;
+                                    $export->user_id = Auth::user()->id;
+                                    $export->total = $request->totalValue;
+                                    $export->export_status = 1;
+                                    $export->save();
+                                } else {
+                                    $export = new Exports();
+                                    $export->guest_id = $existingCustomer->id;
+                                    $export->user_id = Auth::user()->id;
+                                    $export->total = $request->totalValue;
+                                    $export->export_status = 2;
+                                    $export->save();
+                                }
                             } else {
                                 // Tạo đơn xuất hàng
                                 $export = new Exports();
@@ -228,6 +290,66 @@ class ExportController extends Controller
                                 $proExport->product_total = $request->totalValue;
                                 $proExport->save();
                             }
+                            // Giảm số lượng của sản phẩm trong bảng product
+                            for ($i = 0; $i < count($productIDs); $i++) {
+                                $productID = $productIDs[$i];
+                                $productQty = $productQtys[$i];
+
+                                // Lấy số lượng hiện tại của sản phẩm
+                                $currentQty = Product::where('id', $productID)->value('product_qty');
+
+                                // Giảm số lượng sản phẩm
+                                $newQty = $currentQty - $productQty;
+
+                                // Lấy giá sản phẩm
+                                $product = Product::find($productID);
+                                $productPrice = $product->product_price;
+
+                                // Tính toán giá trị total
+                                $total = $newQty * $productPrice;
+
+                                // Cập nhật số lượng và trường 'total'
+                                Product::where('id', $productID)
+                                    ->update([
+                                        'product_qty' => $newQty,
+                                        'total' => $total
+                                    ]);
+                            }
+                            // Cập nhật tình trạng seri sau khi chốt
+                            Serinumbers::whereIn('product_id', $productIDs)
+                                ->where('seri_status', 2)
+                                ->update(['seri_status' => 3]);
+
+                            //cập nhật số lượng tồn kho sản phẩm cha
+                            $query = "UPDATE `products` 
+      INNER JOIN `product` ON `products`.`id` = `product`.`products_id` 
+      SET `products`.`inventory` = (
+          SELECT SUM(`product`.`product_qty`) 
+          FROM `product` 
+          WHERE `product`.`products_id` = `products`.`id`
+      ),
+      `products`.`price_inventory` = (
+          SELECT SUM(`product`.`total`) 
+          FROM `product` 
+          WHERE `product`.`products_id` = `products`.`id`
+      ),
+      `products`.`price_avg` = (
+          SELECT CASE WHEN (
+              SELECT SUM(`product`.`product_qty`) 
+              FROM `product` 
+              WHERE `product`.`products_id` = `products`.`id`
+          ) = 0 THEN 0 ELSE (
+              SELECT SUM(`product`.`total`) 
+              FROM `product` 
+              WHERE `product`.`products_id` = `products`.`id`
+          ) / (
+              SELECT SUM(`product`.`product_qty`) 
+              FROM `product` 
+              WHERE `product`.`products_id` = `products`.`id`
+          ) END
+      )
+      WHERE `products`.`id` IN (" . implode(',', $products_id) . ")";
+                            DB::statement($query);
                             return redirect()->route('exports.index')->with('msg', 'Duyệt đơn thành công!');
                         }
                     }
@@ -280,6 +402,11 @@ class ExportController extends Controller
                                     ->where('guest_email', $request->guest_email)
                                     ->where('guest_addressInvoice', $request->guest_addressInvoice)
                                     ->where('guest_code', $request->guest_code)
+                                    ->where('guest_addressDeliver', $request->guest_addressDeliver)
+                                    ->where('guest_receiver', $request->guest_receiver)
+                                    ->where('guest_phoneReceiver', $request->guest_phoneReceiver)
+                                    ->where('guest_represent', $request->guest_represent)
+                                    ->where('guest_phone', $request->guest_phone)
                                     ->first();
                                 if (!$existingCustomer) {
                                     $guest = new Guests();
@@ -294,7 +421,49 @@ class ExportController extends Controller
                                     $guest->guest_status = 1;
                                     $guest->guest_phone = $request->guest_phone;
                                     $guest->guest_pay = $request->guest_pay;
-                                    $guest->guest_payTerm = $request->guest_payTerm;
+                                    $guest->guest_note = $request->guest_note;
+                                    $guest->save();
+                                    // Tạo đơn xuất hàng
+                                    $export = new Exports();
+                                    $export->guest_id = $guest->id;
+                                    $export->user_id = Auth::user()->id;
+                                    $export->total = $request->totalValue;
+                                    $export->export_status = 1;
+                                    $export->save();
+                                } else {
+                                    $export = new Exports();
+                                    $export->guest_id = $existingCustomer->id;
+                                    $export->user_id = Auth::user()->id;
+                                    $export->total = $request->totalValue;
+                                    $export->export_status = 1;
+                                    $export->save();
+                                }
+                            }
+                            //cập nhật khách hàng
+                            else if ($updateClick == null) {
+                                $existingCustomer = Guests::where('guest_name', $request->guest_name)
+                                    ->where('guest_email', $request->guest_email)
+                                    ->where('guest_addressInvoice', $request->guest_addressInvoice)
+                                    ->where('guest_code', $request->guest_code)
+                                    ->where('guest_addressDeliver', $request->guest_addressDeliver)
+                                    ->where('guest_receiver', $request->guest_receiver)
+                                    ->where('guest_phoneReceiver', $request->guest_phoneReceiver)
+                                    ->where('guest_represent', $request->guest_represent)
+                                    ->where('guest_phone', $request->guest_phone)
+                                    ->first();
+                                if (!$existingCustomer) {
+                                    $guest = Guests::find($request->id);
+                                    $guest->guest_name = $request->guest_name;
+                                    $guest->guest_addressInvoice = $request->guest_addressInvoice;
+                                    $guest->guest_code = $request->guest_code;
+                                    $guest->guest_addressDeliver = $request->guest_addressDeliver;
+                                    $guest->guest_receiver = $request->guest_receiver;
+                                    $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
+                                    $guest->guest_represent = $request->guest_represent;
+                                    $guest->guest_email = $request->guest_email;
+                                    $guest->guest_status = 1;
+                                    $guest->guest_phone = $request->guest_phone;
+                                    $guest->guest_pay = $request->guest_pay;
                                     $guest->guest_note = $request->guest_note;
                                     $guest->save();
                                     // Tạo đơn xuất hàng
@@ -397,6 +566,7 @@ class ExportController extends Controller
         $serinumbersToUpdate = [];
         $products_id = $request->input('products_id');
         $clickValue = $request->input('click');
+        $updateClick = $request->input('updateClick');
 
         if ($request->has('submitBtn')) {
             $action = $request->input('submitBtn');
@@ -548,11 +718,18 @@ class ExportController extends Controller
                     if ($totalQtyNeeded > $availableQtyTotal) {
                         return redirect()->route('exports.index')->with('warning', 'Vượt quá tổng số lượng sản phẩm!');
                     } else {
+
+                        //thêm khách hàng
                         if ($clickValue === null) {
                             $existingCustomer = Guests::where('guest_name', $request->guest_name)
                                 ->where('guest_email', $request->guest_email)
                                 ->where('guest_addressInvoice', $request->guest_addressInvoice)
                                 ->where('guest_code', $request->guest_code)
+                                ->where('guest_addressDeliver', $request->guest_addressDeliver)
+                                ->where('guest_receiver', $request->guest_receiver)
+                                ->where('guest_phoneReceiver', $request->guest_phoneReceiver)
+                                ->where('guest_represent', $request->guest_represent)
+                                ->where('guest_phone', $request->guest_phone)
                                 ->first();
                             if (!$existingCustomer) {
                                 $guest = new Guests();
@@ -567,10 +744,50 @@ class ExportController extends Controller
                                 $guest->guest_status = 1;
                                 $guest->guest_phone = $request->guest_phone;
                                 $guest->guest_pay = $request->guest_pay;
-                                $guest->guest_payTerm = $request->guest_payTerm;
                                 $guest->guest_note = $request->guest_note;
                                 $guest->save();
-                                //Cập nhật đơn xuất hàng
+                                // Tạo đơn xuất hàng
+                                $exports->guest_id = $guest->id;
+                                $exports->user_id = Auth::user()->id;
+                                $exports->total = $request->totalValue;
+                                $exports->export_status = 2;
+                                $exports->save();
+                            } else {
+                                $exports->guest_id = $existingCustomer->id;
+                                $exports->user_id = Auth::user()->id;
+                                $exports->total = $request->totalValue;
+                                $exports->export_status = 2;
+                                $exports->save();
+                            }
+                        }
+                        //cập nhật khách hàng
+                        else if ($updateClick == null) {
+                            $existingCustomer = Guests::where('guest_name', $request->guest_name)
+                                ->where('guest_email', $request->guest_email)
+                                ->where('guest_addressInvoice', $request->guest_addressInvoice)
+                                ->where('guest_code', $request->guest_code)
+                                ->where('guest_addressDeliver', $request->guest_addressDeliver)
+                                ->where('guest_receiver', $request->guest_receiver)
+                                ->where('guest_phoneReceiver', $request->guest_phoneReceiver)
+                                ->where('guest_represent', $request->guest_represent)
+                                ->where('guest_phone', $request->guest_phone)
+                                ->first();
+                            if (!$existingCustomer) {
+                                $guest = Guests::find($request->id);
+                                $guest->guest_name = $request->guest_name;
+                                $guest->guest_addressInvoice = $request->guest_addressInvoice;
+                                $guest->guest_code = $request->guest_code;
+                                $guest->guest_addressDeliver = $request->guest_addressDeliver;
+                                $guest->guest_receiver = $request->guest_receiver;
+                                $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
+                                $guest->guest_represent = $request->guest_represent;
+                                $guest->guest_email = $request->guest_email;
+                                $guest->guest_status = 1;
+                                $guest->guest_phone = $request->guest_phone;
+                                $guest->guest_pay = $request->guest_pay;
+                                $guest->guest_note = $request->guest_note;
+                                $guest->save();
+                                // Tạo đơn xuất hàng
                                 $exports->guest_id = $guest->id;
                                 $exports->user_id = Auth::user()->id;
                                 $exports->total = $request->totalValue;
@@ -584,6 +801,7 @@ class ExportController extends Controller
                                 $exports->save();
                             }
                         } else {
+                            // Tạo đơn xuất hàng
                             $exports->guest_id = $request->id;
                             $exports->user_id = Auth::user()->id;
                             $exports->total = $request->totalValue;
@@ -764,12 +982,95 @@ class ExportController extends Controller
                         return redirect()->route('exports.index')->with('warning', 'Vượt quá tổng số lượng sản phẩm!');
                     }
 
-                    $exports->guest_id = $request->id;
-                    $exports->user_id = Auth::user()->id;
-                    $exports->total = $request->totalValue;
-                    $exports->export_status = 1;
-                    $exports->save();
-
+                    //thêm khách hàng
+                    if ($clickValue === null) {
+                        $existingCustomer = Guests::where('guest_name', $request->guest_name)
+                            ->where('guest_email', $request->guest_email)
+                            ->where('guest_addressInvoice', $request->guest_addressInvoice)
+                            ->where('guest_code', $request->guest_code)
+                            ->where('guest_addressDeliver', $request->guest_addressDeliver)
+                            ->where('guest_receiver', $request->guest_receiver)
+                            ->where('guest_phoneReceiver', $request->guest_phoneReceiver)
+                            ->where('guest_represent', $request->guest_represent)
+                            ->where('guest_phone', $request->guest_phone)
+                            ->first();
+                        if (!$existingCustomer) {
+                            $guest = new Guests();
+                            $guest->guest_name = $request->guest_name;
+                            $guest->guest_addressInvoice = $request->guest_addressInvoice;
+                            $guest->guest_code = $request->guest_code;
+                            $guest->guest_addressDeliver = $request->guest_addressDeliver;
+                            $guest->guest_receiver = $request->guest_receiver;
+                            $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
+                            $guest->guest_represent = $request->guest_represent;
+                            $guest->guest_email = $request->guest_email;
+                            $guest->guest_status = 1;
+                            $guest->guest_phone = $request->guest_phone;
+                            $guest->guest_pay = $request->guest_pay;
+                            $guest->guest_note = $request->guest_note;
+                            $guest->save();
+                            // Tạo đơn xuất hàng
+                            $exports->guest_id = $guest->id;
+                            $exports->user_id = Auth::user()->id;
+                            $exports->total = $request->totalValue;
+                            $exports->export_status = 1;
+                            $exports->save();
+                        } else {
+                            $exports->guest_id = $existingCustomer->id;
+                            $exports->user_id = Auth::user()->id;
+                            $exports->total = $request->totalValue;
+                            $exports->export_status = 1;
+                            $exports->save();
+                        }
+                    }
+                    //cập nhật khách hàng
+                    else if ($updateClick == null) {
+                        $existingCustomer = Guests::where('guest_name', $request->guest_name)
+                            ->where('guest_email', $request->guest_email)
+                            ->where('guest_addressInvoice', $request->guest_addressInvoice)
+                            ->where('guest_code', $request->guest_code)
+                            ->where('guest_addressDeliver', $request->guest_addressDeliver)
+                            ->where('guest_receiver', $request->guest_receiver)
+                            ->where('guest_phoneReceiver', $request->guest_phoneReceiver)
+                            ->where('guest_represent', $request->guest_represent)
+                            ->where('guest_phone', $request->guest_phone)
+                            ->first();
+                        if (!$existingCustomer) {
+                            $guest = Guests::find($request->id);
+                            $guest->guest_name = $request->guest_name;
+                            $guest->guest_addressInvoice = $request->guest_addressInvoice;
+                            $guest->guest_code = $request->guest_code;
+                            $guest->guest_addressDeliver = $request->guest_addressDeliver;
+                            $guest->guest_receiver = $request->guest_receiver;
+                            $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
+                            $guest->guest_represent = $request->guest_represent;
+                            $guest->guest_email = $request->guest_email;
+                            $guest->guest_status = 1;
+                            $guest->guest_phone = $request->guest_phone;
+                            $guest->guest_pay = $request->guest_pay;
+                            $guest->guest_note = $request->guest_note;
+                            $guest->save();
+                            // Tạo đơn xuất hàng
+                            $exports->guest_id = $guest->id;
+                            $exports->user_id = Auth::user()->id;
+                            $exports->total = $request->totalValue;
+                            $exports->export_status = 1;
+                            $exports->save();
+                        } else {
+                            $exports->guest_id = $existingCustomer->id;
+                            $exports->user_id = Auth::user()->id;
+                            $exports->total = $request->totalValue;
+                            $exports->export_status = 1;
+                            $exports->save();
+                        }
+                    } else {
+                        // Tạo đơn xuất hàng
+                        $exports->guest_id = $request->id;
+                        $exports->user_id = Auth::user()->id;
+                        $exports->total = $request->totalValue;
+                        $exports->export_status = 1;
+                        $exports->save();
+                    }
                     return redirect()->route('exports.index')->with('msg', 'Cập nhật thành công!');
                 } else {
                     return redirect()->route('exports.index')->with('warning', 'Chưa được thêm sản phẩm nào!');
@@ -811,57 +1112,81 @@ class ExportController extends Controller
     public function updateCustomer(Request $request)
     {
         $data = $request->all();
-        $update_guest = Guests::findOrFail($data['id']);
-        $update_guest->guest_name = $data['guest_name'];
-        $update_guest->guest_addressInvoice = $data['guest_addressInvoice'];
-        $update_guest->guest_code = $data['guest_code'];
-        $update_guest->guest_addressDeliver = $data['guest_addressDeliver'];
-        $update_guest->guest_receiver = $data['guest_receiver'];
-        $update_guest->guest_phoneReceiver = $data['guest_phoneReceiver'];
-        $update_guest->guest_represent = $data['guest_represent'];
-        $update_guest->guest_email = $data['guest_email'];
-        $update_guest->guest_phone = $data['guest_phone'];
-        $update_guest->guest_pay = $data['guest_pay'];
-        $update_guest->guest_payTerm = $data['guest_payTerm'];
-        $update_guest->guest_note = $data['guest_note'];
-        $update_guest->save();
+        if ($data['updateClick'] == 1) {
+            // Kiểm tra xem dữ liệu đã tồn tại trong cơ sở dữ liệu hay chưa
+            $existingCustomer = Guests::where('guest_name', $request->guest_name)
+                ->where('guest_email', $request->guest_email)
+                ->where('guest_addressInvoice', $request->guest_addressInvoice)
+                ->where('guest_code', $request->guest_code)
+                ->where('guest_addressDeliver', $request->guest_addressDeliver)
+                ->where('guest_receiver', $request->guest_receiver)
+                ->where('guest_phoneReceiver', $request->guest_phoneReceiver)
+                ->where('guest_represent', $request->guest_represent)
+                ->where('guest_phone', $request->guest_phone)
+                ->first();
+
+            if ($existingCustomer) {
+                // Dữ liệu đã tồn tại, trả về thông báo
+                // session()->flash('warning', 'Thông tin khách hàng đã có trong hệ thống');
+                return response()->json(['message' => 'Thông tin khách hàng đã có trong hệ thống']);
+            } else {
+                $update_guest = Guests::findOrFail($data['id']);
+                $update_guest->guest_name = $data['guest_name'];
+                $update_guest->guest_addressInvoice = $data['guest_addressInvoice'];
+                $update_guest->guest_code = $data['guest_code'];
+                $update_guest->guest_addressDeliver = $data['guest_addressDeliver'];
+                $update_guest->guest_receiver = $data['guest_receiver'];
+                $update_guest->guest_phoneReceiver = $data['guest_phoneReceiver'];
+                $update_guest->guest_represent = $data['guest_represent'];
+                $update_guest->guest_email = $data['guest_email'];
+                $update_guest->guest_phone = $data['guest_phone'];
+                $update_guest->guest_pay = $data['guest_pay'];
+                $update_guest->guest_note = $data['guest_note'];
+                $update_guest->save();
+                return response()->json(['message' => 'Lưu thông tin thành công!']);
+            }
+        }
     }
     public function addCustomer(Request $request)
     {
         $data = $request->all();
         if ($data['click'] == 1) {
             // Kiểm tra xem dữ liệu đã tồn tại trong cơ sở dữ liệu hay chưa
-            $existingCustomer = Guests::where('guest_name', $data['guest_name'])
-                ->where('guest_email', $data['guest_email'])
-                ->where('guest_addressInvoice', $data['guest_addressInvoice'])
-                ->where('guest_code', $data['guest_code'])
+            $existingCustomer = Guests::where('guest_name', $request->guest_name)
+                ->where('guest_email', $request->guest_email)
+                ->where('guest_addressInvoice', $request->guest_addressInvoice)
+                ->where('guest_code', $request->guest_code)
+                ->where('guest_addressDeliver', $request->guest_addressDeliver)
+                ->where('guest_receiver', $request->guest_receiver)
+                ->where('guest_phoneReceiver', $request->guest_phoneReceiver)
+                ->where('guest_represent', $request->guest_represent)
+                ->where('guest_phone', $request->guest_phone)
                 ->first();
 
             if ($existingCustomer) {
                 // Dữ liệu đã tồn tại, trả về thông báo
                 session()->flash('msg', 'Xóa đơn hàng thành công');
                 return response()->json(['message' => 'Thông tin khách hàng đã có trong hệ thống']);
+            } else {
+                // Tạo mới bản ghi khách hàng
+                $guest = new Guests();
+                $guest->guest_name = $data['guest_name'];
+                $guest->guest_addressInvoice = $data['guest_addressInvoice'];
+                $guest->guest_code = $data['guest_code'];
+                $guest->guest_addressDeliver = $data['guest_addressDeliver'];
+                $guest->guest_receiver = $data['guest_receiver'];
+                $guest->guest_phoneReceiver = $data['guest_phoneReceiver'];
+                $guest->guest_represent = $data['guest_represent'];
+                $guest->guest_email = $data['guest_email'];
+                $guest->guest_status = 1;
+                $guest->guest_phone = $data['guest_phone'];
+                $guest->guest_pay = $data['guest_pay'];
+                $guest->guest_note = $data['guest_note'];
+                $guest->save();
+
+                // Trả về giá trị id của khách hàng vừa lưu
+                return response()->json(['id' => $guest->id]);
             }
-
-            // Tạo mới bản ghi khách hàng
-            $guest = new Guests();
-            $guest->guest_name = $data['guest_name'];
-            $guest->guest_addressInvoice = $data['guest_addressInvoice'];
-            $guest->guest_code = $data['guest_code'];
-            $guest->guest_addressDeliver = $data['guest_addressDeliver'];
-            $guest->guest_receiver = $data['guest_receiver'];
-            $guest->guest_phoneReceiver = $data['guest_phoneReceiver'];
-            $guest->guest_represent = $data['guest_represent'];
-            $guest->guest_email = $data['guest_email'];
-            $guest->guest_status = 1;
-            $guest->guest_phone = $data['guest_phone'];
-            $guest->guest_pay = $data['guest_pay'];
-            $guest->guest_payTerm = $data['guest_payTerm'];
-            $guest->guest_note = $data['guest_note'];
-            $guest->save();
-
-            // Trả về giá trị id của khách hàng vừa lưu
-            return response()->json(['id' => $guest->id]);
         }
     }
 

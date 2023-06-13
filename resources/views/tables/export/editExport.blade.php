@@ -215,6 +215,9 @@
                                 } ?>
                                     placeholder="Nhập thông tin" name="guest_name" value="{{ $guest->guest_name }}"
                                     required>
+                                <input type="text" hidden class="form-control" id="id" name="id"
+                                    value="{{ $guest->id }}">
+                                <input type="hidden" name="updateClick" id="updateClick" value="">
                             </div>
                             <div class="form-group">
                                 <label>Địa chỉ xuất hóa đơn:</label>
@@ -303,17 +306,6 @@
                                     echo 'readonly';
                                 } ?>
                                     placeholder="Nhập thông tin" name="guest_note" value="{{ $guest->guest_note }}">
-                            </div>
-                            <div class="form-group">
-                                <label for="email">Điều kiện thanh toán:</label>
-                                <textarea name="guest_payTerm" id="guest_payTerm" class="form-control">
-                                    <?php if ($guest->guest_payTerm == null) {
-                                        echo '';
-                                    } else {
-                                        $guest->guest_payTerm;
-                                    }
-                                    ?>
-                                </textarea>
                             </div>
                         </div>
                     </div>
@@ -407,7 +399,7 @@
                                 </td>
                                 <td>
                                     <select name="product_tax[]" class="product_tax form-control"
-                                        style="width: 100px;" id="product_tax" required <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                        style="width: 140px;" id="product_tax" required <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                             echo 'disabled';
                                         } ?>>
                                         <option value="0" <?php if ($value_export->product_tax == 0) {
@@ -549,7 +541,7 @@
             '<div class="border-bottom p-3 d-flex justify-content-between align-items-center">' +
             '<b>Thông tin khách hàng</b>' +
             '<button id="btn-addCustomer" type="submit" class="btn btn-primary d-flex align-items-center">' +
-            '<img src="../../dist/img/icon/Union.png">' +
+            '<img src="../dist/img/icon/Union.png">' +
             '<span class="ml-1">Lưu thông tin</span></button></div>' +
             '<input type="hidden" name="click" id="click" value="">' +
             '<div class="row p-3">' +
@@ -572,7 +564,7 @@
             '<input type="text" class="form-control" id="guest_receiver" placeholder="Nhập thông tin" name="guest_receiver" value="" required>' +
             '</div>' + '<div class="form-group">' +
             '<label for="email">SĐT người nhận:</label>' +
-            '<input type="text" oninput="validateNumberInput(this)" pattern="^(0|\+84)(3[2-9]|5[2689]|7[06-9]|8[1-9]|9[0-9])\d{7}$" class="form-control" id="guest_phoneReceiver" placeholder="Nhập thông tin" name="guest_phoneReceiver" value="" required>' +
+            '<input type="text" pattern="/^((\+84)|(0[1-9]))\d{8}$/" class="form-control" id="guest_phoneReceiver" placeholder="Nhập thông tin" name="guest_phoneReceiver" value="" required>' +
             '</div>' + '</div>' + '<div class="col-sm-6">' +
             '<div class="form-group">' +
             '<label for="email">Người đại diện:</label>' +
@@ -581,8 +573,8 @@
             '<label for="email">Email:</label>' +
             '<input type="email" class="form-control" pattern="/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/" id="guest_email" placeholder="Nhập thông tin" name="guest_email" value="" required>' +
             '</div>' + '<div class="form-group">' +
-            '<label for="email">Số điện thoại:</label>' +
-            '<input type="text" oninput="validateNumberInput(this)" pattern="^(0|\+84)(3[2-9]|5[2689]|7[06-9]|8[1-9]|9[0-9])\d{7}$" class="form-control" id="guest_phone" placeholder="Nhập thông tin" name="guest_phone" value="" required>' +
+            '<label>Số điện thoại:</label>' +
+            '<input type="text" class="form-control" pattern="/^((\+84)|(0[1-9]))\d{8}$/" id="guest_phone" placeholder="Nhập thông tin" name="guest_phone" value="" required>' +
             '</div>' + '<div class="form-group">' +
             ' <label for="email">Hình thức thanh toán:</label>' +
             '<select name="guest_pay" class="form-control" id="guest_pay">' +
@@ -592,9 +584,6 @@
             '</div>' + '<div class="form-group">' +
             '<label for="email">Ghi chú:</label>' +
             '<input type="text" class="form-control" id="guest_note" placeholder="Nhập thông tin" name="guest_note" value="" required>' +
-            '</div>' + '<div class="form-group">' +
-            '<label for="email">Điều kiện thanh toán:</label>' +
-            '<textarea class="form-control" id="guest_payTerm" name="guest_payTerm"></textarea>' +
             '</div>' + '</div></div></div>'
         );
         $('#form-edit').hide();
@@ -603,15 +592,17 @@
     $(document).ready(function() {
         let fieldCounter = 1;
         $("#add-field-btn").click(function() {
+            let nextSoTT = $(".soTT").length + 1;
             const newRow = $("<tr>", {
                 "id": `dynamic-row-${fieldCounter}`
             });
-            // const checkbox = $("<td><input type='checkbox'></td>");
+            const checkbox = $("<td><input type='checkbox'></td>");
             const MaInput = $("<td>", {
-                "text": `${fieldCounter}`
+                "class": "soTT",
+                "text": nextSoTT
             });
             const TenInput = $("<td>" +
-                "<select id='maProduct' class='p-1 maProduct form-control' name='products_id[]'>" +
+                "<select id='maProduct' class='p-1 maProduct form-control' name='products_id[]' required>" +
                 "<option value=''>Lựa chọn sản phẩm</option>" +
                 '@foreach ($product_code as $value)' +
                 "<option value='{{ $value->id }}'>{{ $value->products_code }}</option>" +
@@ -619,7 +610,7 @@
                 "</select>"
             );
             const ProInput = $("<td>" +
-                "<select class='child-select p-1 productName form-control' name='product_id[]'>" +
+                "<select class='child-select p-1 productName form-control' name='product_id[]' required>" +
                 "<option value=''>Lựa chọn sản phẩm</option>" +
                 "</select>" +
                 "</td>");
@@ -635,7 +626,7 @@
                 "</td>"
             );
             const giaInput = $(
-                "<td><input type='number' class='product_price form-control' style='width:100px;' id='product_price' name='product_price[]' required></td>"
+                "<td><input type='number' class='product_price form-control' style='width:140px;' id='product_price' name='product_price[]' required></td>"
             );
             const ghichuInput = $(
                 "<td><input type='text' class='note_product form-control text-center' name='product_note[]'></td>"
@@ -667,7 +658,9 @@
             );
             deleteBtn.click(function() {
                 $(this).closest("tr").remove();
+                updateSTT();
                 calculateGrandTotal();
+                calculateTotals();
             });
             //lấy S/N
             sn.click(function() {
@@ -752,11 +745,17 @@
                     '<br>' + '<b>Thuế:</b> ' + thue + '<br>' + '<b>Thành tiền:</b> ' +
                     thanhTien);
             });
-            newRow.append(MaInput, TenInput, ProInput, dvtInput, slInput,
+            newRow.append(checkbox, MaInput, TenInput, ProInput, dvtInput, slInput,
                 giaInput, ghichuInput, thueInput, thanhTienInput, sn, info, deleteBtn, option);
             $("#dynamic-fields").before(newRow);
             fieldCounter++;
         });
+
+        function updateSTT() {
+            $(".soTT").each(function(index) {
+                $(this).text(index + 1);
+            });
+        }
         //xóa sản phẩm
         $(document).on("click", ".delete-row-btn", function() {
             var grandTotal = parseFloat($('#grand-total').attr('data-value'));
@@ -765,6 +764,7 @@
             var newGrandTotal = grandTotal - deletedAmount;
             $('#grand-total').text(newGrandTotal.toFixed(2));
             $('#grand-total').attr('data-value', newGrandTotal.toFixed(2));
+            updateSTT();
             calculateGrandTotal();
             calculateTotals();
         });
@@ -784,11 +784,11 @@
 
     //cho phép nhập số 
     function validateNumberInput(input) {
-        // const regex = /^[-+]?[0-9]{1,3}(?:,?[0-9]{3})*(?:\.[0-9]+)?$/;
-        // const value = input.value.replace(/,/g, '');
-        // if (!regex.test(value)) {
-        //     input.value = '';
-        // }
+        const regex = /^[-+]?[0-9]{1,3}(?:,?[0-9]{3})*(?:\.[0-9]+)?$/;
+        const value = input.value.replace(/,/g, '');
+        if (!regex.test(value)) {
+            input.value = '';
+        }
     }
 
     //search thông tin khách hàng
@@ -806,7 +806,6 @@
         $('.search-info').click(function() {
             var idCustomer = $(this).attr('id');
             $('#radio1').prop('checked', true);
-            $('#form-edit').remove();
             $.ajax({
                 url: '{{ route('searchExport') }}',
                 type: 'GET',
@@ -826,6 +825,7 @@
                         '<div class="form-group">' +
                         '<input type="text" hidden class="form-control" id="id" name="id" value="' +
                         data.id + '" required>' +
+                        '<input type="hidden" name="updateClick" id="updateClick" value="">' +
                         '<label for="congty">Công ty:</label>' +
                         '<input type="text" class="form-control" id="guest_name" placeholder="Nhập thông tin" name="guest_name" value="' +
                         data.guest_name + '" required>' +
@@ -873,13 +873,7 @@
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">Ghi chú:</label>' +
                         '<input type="text" class="form-control" id="guest_note" placeholder="Nhập thông tin" name="guest_note" value="' +
-                        data.guest_note + '">' +
-                        '</div>' +
-                        '<div class="form-group">' +
-                        '<label for="email">Điều kiện thanh toán:</label>' +
-                        '<textarea class="form-control" id="guest_payTerm" name="guest_payTerm">' +
-                        (data.guest_payTerm == null ? '' : data.guest_payTerm) +
-                        '</textarea>' +
+                        (data.guest_note == null ? '' : data.guest_note) + '">' +
                         '</div>' + '</div></div><div>'
                     );
                 }
@@ -893,6 +887,8 @@
         if (!form.reportValidity()) {
             return;
         }
+        $('#updateClick').val(1);
+        var updateClick = $('#updateClick').val();
         var id = $('#id').val();
         var guest_name = $('#guest_name').val();
         var guest_addressInvoice = $('#guest_addressInvoice').val();
@@ -904,7 +900,6 @@
         var guest_email = $('#guest_email').val();
         var guest_phone = $('#guest_phone').val();
         var guest_pay = $('#guest_pay').val();
-        var guest_payTerm = $('#guest_payTerm').val();
         var guest_note = $('#guest_note').val();
 
         $.ajax({
@@ -922,11 +917,15 @@
                 guest_email,
                 guest_phone,
                 guest_pay,
-                guest_payTerm,
-                guest_note
+                guest_note,
+                updateClick
             },
             success: function(data) {
-                alert('Lưu thông tin thành công');
+                if (data.hasOwnProperty('message')) {
+                    alert(data.message); // Hiển thị thông báo đã tồn tại
+                } else if (data.hasOwnProperty('id')) {
+                    alert('Lưu thông tin thành công');
+                }
             }
         })
     })
@@ -949,7 +948,6 @@
         var guest_email = $('#guest_email').val();
         var guest_phone = $('#guest_phone').val();
         var guest_pay = $('#guest_pay').val();
-        var guest_payTerm = $('#guest_payTerm').val();
         var guest_note = $('#guest_note').val();
 
         $.ajax({
@@ -966,7 +964,6 @@
                 guest_email,
                 guest_phone,
                 guest_pay,
-                guest_payTerm,
                 guest_note,
                 click,
             },
@@ -1121,7 +1118,6 @@
         $('#grand-total').attr('data-value', grandTotal.toFixed(2));
         $('#total').val(grandTotal.toFixed(2));
     }
-
 
     //hàm kiểm tra submit
     function validateAndSubmit(event) {

@@ -52,7 +52,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Mã số thuế:</label>
-                                    <input type="number" class="form-control" id="guest_code"
+                                    <input type="number" class="form-control" id="guest_code" oninput=validateNumberInput(this)
                                         placeholder="Nhập mã số thuế" name="guest_code" value="" required>
                                 </div>
                                 <div class="form-group">
@@ -83,10 +83,6 @@
                                         <option value="0">Chuyển khoản</option>
                                         <option value="1">Thanh toán bằng tiền mặt</option>
                                     </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="email">Điều kiện thanh toán:</label>
-                                    <textarea class="form-control" name="guest_payTerm" id="guest_payTerm"></textarea>
                                 </div>
                                 <div class="form-group">
                                     <label for="pwd">Trạng thái:</label>

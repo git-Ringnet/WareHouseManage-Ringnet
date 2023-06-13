@@ -22,27 +22,38 @@
                     <div class="card">
                         <!-- /.card-header -->
                         <div class="card-body p-3">
-                            <form action="{{route('provides.store')}}" method="POST">
+                            <form action="{{ route('provides.store') }}" method="POST">
                                 @csrf
                                 <div class="form-group">
                                     <label for="email">Đơn vị cung cấp:</label>
-                                    <input type="text" class="form-control" name="provide_name" placeholder="Nhập đơn vị cung cấp" required>
+                                    <input type="text" class="form-control" name="provide_name"
+                                        placeholder="Nhập đơn vị cung cấp" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="pwd">Đại diện:</label>
-                                    <input type="text" class="form-control" name="provide_represent" placeholder="Nhập tên đại diện" required>
+                                    <input type="text" class="form-control" name="provide_represent"
+                                        placeholder="Nhập tên đại diện" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="pwd">Số điện thoại:</label>
-                                    <input type="number" class="form-control" name="provide_phone" placeholder="Nhập số điện thoại" required>
+                                    <input type="text" class="form-control" name="provide_phone"
+                                        oninput=validateNumberInput(this) pattern="^(?:\+?84|0)(?:\d{9}|\d{10})$"
+                                        placeholder="Nhập số điện thoại" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="pwd">Email:</label>
-                                    <input type="email" pattern="/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/" class="form-control" name="provide_email" placeholder="Nhập email" required>
+                                    <input type="email" pattern="/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/"
+                                        class="form-control" name="provide_email" placeholder="Nhập email" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="pwd">Địa chỉ:</label>
-                                    <input type="text" class="form-control" name="provide_address" placeholder="Nhập địa chỉ" required>
+                                    <input type="text" class="form-control" name="provide_address"
+                                        placeholder="Nhập địa chỉ" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="pwd">Mã số thuế:</label>
+                                    <input type="text" class="form-control" name="provide_code"
+                                        oninput=validateNumberInput(this) placeholder="Nhập mã số thuế" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="pwd">Trạng thái:</label>
@@ -52,9 +63,9 @@
                                     </select>
                                 </div>
                                 <div class="btn-fixed">
-                                <button type="submit" class="btn btn-primary">Thêm</button>
-                                <a href="{{ asset('./provides') }}" class="btn btn-default">Hủy</a>
-                        </div>
+                                    <button type="submit" class="btn btn-primary">Thêm</button>
+                                    <a href="{{ asset('./provides') }}" class="btn btn-default">Hủy</a>
+                                </div>
                             </form>
                         </div>
                         <!-- /.card-body -->
@@ -68,6 +79,16 @@
     </section>
     <!-- /.content -->
 </div>
+<script>
+    //cho phép nhập số 
+    function validateNumberInput(input) {
+        const regex = /^[-+]?[0-9]{1,3}(?:,?[0-9]{3})*(?:\.[0-9]+)?$/;
+        const value = input.value.replace(/,/g, '');
+        if (!regex.test(value)) {
+            input.value = '';
+        }
+    }
+</script>
 </body>
 
 </html>

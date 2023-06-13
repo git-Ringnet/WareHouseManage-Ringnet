@@ -73,8 +73,8 @@
         @csrf
         <section class="content">
             <div class="d-flex mb-1 action-don">
-                {{-- <button type="submit" class="btn btn-danger text-white mr-3" name="submitBtn" value="action1"
-                    onclick="validateAndSubmit(event)">Chốt đơn</button> --}}
+                <button type="submit" class="btn btn-danger text-white mr-3" name="submitBtn" value="action1"
+                    onclick="validateAndSubmit(event)">Chốt đơn</button>
                 {{-- <a href="#" class="btn btn-secondary ml-4">Hủy đơn</a> --}}
                 {{-- <a href="#" class="btn border border-secondary mx-4">Xuất file</a> --}}
                 <a class="btn border border-secondary" onclick="toggleDiv()">
@@ -430,13 +430,12 @@
             '</div>' + '<div class="form-group">' +
             '<label for="email">Ghi chú:</label>' +
             '<input type="text" class="form-control" id="guest_note" placeholder="Nhập thông tin" name="guest_note" value="" required>' +
-            '</div>' + '<div class="form-group">' +
-            '<label for="email">Điều kiện thanh toán:</label>' +
-            '<textarea class="form-control" id="guest_payTerm" name="guest_payTerm"></textarea>' +
             '</div>' + '</div></div></div>'
         );
+
     });
 
+    //nhập số
     function validateNumberInput(input) {
         const regex = /^[-+]?[0-9]{1,3}(?:,?[0-9]{3})*(?:\.[0-9]+)?$/;
         const value = input.value.replace(/,/g, '');
@@ -477,7 +476,7 @@
             const slInput = $(
                 "<td>" +
                 "<div class='d-flex'>" +
-                "<input type='number' oninput='limitMaxValue(this)' id='product_qty' class='quantity-input form-control' name='product_qty[]' required style='width:50px;'>" +
+                "<input type='text' oninput='validateNumberInput(this)' id='product_qty' class='quantity-input form-control' name='product_qty[]' required style='width:50px;'>" +
                 "<input type='text' readonly class='quantity-exist form-control' required style='width:50px;background:#D6D6D6;border:none;'>" +
                 "</div>" +
                 "</td>"
@@ -486,7 +485,7 @@
                 "<td><input type='text' class='product_price form-control' style='width:140px' id='product_price' name='product_price[]' required></td>"
             );
             const ghichuInput = $(
-                "<td><input type='text' class='note_product form-control' style='width:120px' name='product_note[]'></td>"
+                "<td><input type='text' class='note_product form-control' style='width:140px' name='product_note[]'></td>"
             );
             const thueInput = $("<td>" +
                 "<select name='product_tax[]' class='product_tax p-1 form-control' style='width:80px' id='product_tax' required>" +
@@ -677,6 +676,7 @@
                         '<div class="form-group">' +
                         '<input type="text" hidden class="form-control" id="id" name="id" value="' +
                         data.id + '" required>' +
+                        '<input type="hidden" name="updateClick" id="updateClick" value="">' +
                         '<label for="congty">Công ty:</label>' +
                         '<input type="text" class="form-control" id="guest_name" placeholder="Nhập thông tin" name="guest_name" value="' +
                         data.guest_name + '" required>' +
@@ -724,13 +724,7 @@
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">Ghi chú:</label>' +
                         '<input type="text" class="form-control" id="guest_note" placeholder="Nhập thông tin" name="guest_note" value="' +
-                        data.guest_note + '">' +
-                        '</div>' +
-                        '<div class="form-group">' +
-                        '<label for="email">Điều kiện thanh toán:</label>' +
-                        '<textarea class="form-control" id="guest_payTerm" name="guest_payTerm">' +
-                        (data.guest_payTerm == null ? '' : data.guest_payTerm) +
-                        '</textarea>' +
+                        (data.guest_note == null ? '' : data.guest_note) + '">' +
                         '</div>' + '</div></div><div>'
                     );
                 }
@@ -753,6 +747,8 @@
         if (!form.reportValidity()) {
             return;
         }
+        $('#updateClick').val(1);
+        var updateClick = $('#updateClick').val();
         var id = $('#id').val();
         var guest_name = $('#guest_name').val();
         var guest_addressInvoice = $('#guest_addressInvoice').val();
@@ -764,7 +760,6 @@
         var guest_email = $('#guest_email').val();
         var guest_phone = $('#guest_phone').val();
         var guest_pay = $('#guest_pay').val();
-        var guest_payTerm = $('#guest_payTerm').val();
         var guest_note = $('#guest_note').val();
 
         $.ajax({
@@ -782,11 +777,15 @@
                 guest_email,
                 guest_phone,
                 guest_pay,
-                guest_payTerm,
-                guest_note
+                guest_note,
+                updateClick
             },
             success: function(data) {
-                alert('Lưu thông tin thành công');
+                if (data.hasOwnProperty('message')) {
+                    alert(data.message); // Hiển thị thông báo đã tồn tại
+                } else if (data.hasOwnProperty('id')) {
+                    alert('Lưu thông tin thành công');
+                }
             }
         })
     })
@@ -809,7 +808,6 @@
         var guest_email = $('#guest_email').val();
         var guest_phone = $('#guest_phone').val();
         var guest_pay = $('#guest_pay').val();
-        var guest_payTerm = $('#guest_payTerm').val();
         var guest_note = $('#guest_note').val();
 
         $.ajax({
@@ -826,7 +824,6 @@
                 guest_email,
                 guest_phone,
                 guest_pay,
-                guest_payTerm,
                 guest_note,
                 click,
             },
@@ -899,7 +896,12 @@
                         productUnitElement.val(response.product_unit);
                         qty_exist.val("/" + response.qty_exist);
                         var productPrice = parseFloat(response.product_price);
-                        var formattedPrice = numeral(productPrice).format('0,0.0');
+                        var formattedPrice;
+                        if (Number.isInteger(productPrice)) {
+                            formattedPrice = numeral(productPrice).format('0,0');
+                        } else {
+                            formattedPrice = numeral(productPrice).format('0,0.00');
+                        }
                         price_import.val(formattedPrice);
                         tonkho.val(response.product_qty);
                         loaihang.val(response.product_category);
