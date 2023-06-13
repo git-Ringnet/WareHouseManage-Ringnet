@@ -21,9 +21,10 @@
                 <div class="col-12">
                     <div class="card">
                         <!-- /.card-header -->
-                        <div class="card-body p-3">
+                        <div class="card-body p-3 mb-5">
                             <form action="{{ route('guests.store') }}" method="POST">
                                 @csrf
+                                <input type="hidden" name="user_id" value="{{Auth::user()->id}}">
                                 <div class="form-group">
                                     <label for="email">Đơn vị:</label>
                                     <input type="text" class="form-control" name="guest_name"

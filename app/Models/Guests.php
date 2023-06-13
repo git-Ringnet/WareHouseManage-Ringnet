@@ -23,12 +23,15 @@ class Guests extends Model
         'guest_pay',
         'guest_payTerm',
         'guest_note',
+        'user_id',
     ];
     protected $table = 'guests';
-    public function getAllGuests($filter = [],$name = null,$represent = null,$phonenumber = null,$email = null, $status = [], $keywords = null, $sortByArr = null)
+    public function getAllGuests($filter = [],$users_name=[],$name = null,$represent = null,$phonenumber = null,$email = null, $status = [], $keywords = null, $sortByArr = null)
     {
         $guests = DB::table($this->table)
-            ->select('guests.*');
+            ->leftJoin('users', 'guests.user_id', '=', 'users.id')
+            ->select('guests.*', 'users.name as users_name');
+
 
         $orderBy = 'created_at';
         $orderType = 'desc';
@@ -47,6 +50,9 @@ class Guests extends Model
             $guests = $guests->where(function ($query) use ($name) {
                 $query->orWhere('guest_name', 'like', '%' . $name . '%');
             });
+        }
+        if (!empty($users_name)) {
+            $guests = $guests->whereIn('users.name', $users_name);
         }
         if (!empty($represent)) {
             $guests = $guests->where(function ($query) use ($represent) {

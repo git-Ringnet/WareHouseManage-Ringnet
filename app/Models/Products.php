@@ -106,7 +106,11 @@ class Products extends Model
     }
     public function productsEnd(){
         $products = DB::table($this->table);
-        $products = $products->where('inventory', '=', 0)->get();
+        $products = $products->where(function ($query) {
+            $query->orWhere('inventory', '=', null);
+            $query->orWhere('inventory', '=', 0);
+        });
+        $products = $products->get();
         return $products;
     }
     public function sumTotalInventory(){

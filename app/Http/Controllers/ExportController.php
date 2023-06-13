@@ -429,6 +429,7 @@ class ExportController extends Controller
                                     $export->user_id = Auth::user()->id;
                                     $export->total = $request->totalValue;
                                     $export->export_status = 1;
+                                    $export->note_form = $request->note_form;
                                     $export->save();
                                 } else {
                                     $export = new Exports();
@@ -436,6 +437,7 @@ class ExportController extends Controller
                                     $export->user_id = Auth::user()->id;
                                     $export->total = $request->totalValue;
                                     $export->export_status = 1;
+                                    $export->note_form = $request->note_form;
                                     $export->save();
                                 }
                             }
@@ -472,6 +474,7 @@ class ExportController extends Controller
                                     $export->user_id = Auth::user()->id;
                                     $export->total = $request->totalValue;
                                     $export->export_status = 1;
+                                    $export->note_form = $request->note_form;
                                     $export->save();
                                 } else {
                                     $export = new Exports();
@@ -479,6 +482,7 @@ class ExportController extends Controller
                                     $export->user_id = Auth::user()->id;
                                     $export->total = $request->totalValue;
                                     $export->export_status = 1;
+                                    $export->note_form = $request->note_form;
                                     $export->save();
                                 }
                             } else {
@@ -488,6 +492,7 @@ class ExportController extends Controller
                                 $export->user_id = Auth::user()->id;
                                 $export->total = $request->totalValue;
                                 $export->export_status = 1;
+                                $export->note_form = $request->note_form;
                                 $export->save();
                             }
                             // Tạo các bản ghi trong bảng product export

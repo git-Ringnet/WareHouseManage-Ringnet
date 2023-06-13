@@ -19,7 +19,7 @@
                         Thông tin cơ bản
                     </div>
                     <!-- Small boxes (Stat box) -->
-                    <div class="row container">
+                    <div class="row container m-0">
                         <div class="col-lg-3 col-6">
                             <!-- small box -->
                             <div class="small-box" style="background:#0095F6">

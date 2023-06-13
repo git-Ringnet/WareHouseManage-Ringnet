@@ -29,7 +29,7 @@
                                 @csrf
                                 <div class="mb-3">
                                     <label for="">Họ và tên</label>
-                                    <input type="text" class="form-control" name="name" placeholder="Họ và tên"
+                                    <input type="text" class="form-control" name="name" placeholder="Nhập họ và tên"
                                         value="{{ old('name') ?? $userDetail->name }}">
                                     @error('name')
                                         <span style="color:red">{{ $message }}</span>
@@ -75,7 +75,7 @@
                                 <div class="mb-3">
                                     <label for="">Số điện thoại</label>
                                     <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')" class="form-control" name="phonenumber"
-                                        placeholder="Số điện thoại"
+                                        placeholder="Nhập số điện thoại"
                                         value="{{ old('phonenumber') ?? $userDetail->phonenumber }}">
                                     @error('phonenumber')
                                         <span style="color:red">{{ $message }}</span>

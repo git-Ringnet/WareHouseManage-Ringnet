@@ -523,7 +523,7 @@ $index = array_search($item['label'], $numberedLabels);
             <div class="d-flex justify-content-between align-items-center">
                 <span class="count_checkbox mr-5"></span>
                 <div class="row action">
-                    <div class="btn-taodon my-2">
+                    <div class="btn-taodon my-2 mx-3">
                         <button type="button" class="btn-group btn btn-light">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24" fill="none">
@@ -538,7 +538,7 @@ $index = array_search($item['label'], $numberedLabels);
                         </button>
                     </div>
                     <div class="btn-nhaphang my-2">
-                        <button type="button" class="btn-group btn btn-light mx-2">
+                        <button type="button" class="btn-group btn btn-light mx-3">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24" fill="none">
                                 <path fill-rule="evenodd" clip-rule="evenodd"
@@ -551,13 +551,13 @@ $index = array_search($item['label'], $numberedLabels);
                             <span>Nhập hàng</span>
                         </button>
                     </div>
-                    <div class="dropdown my-2">
+                    <div class="dropdown my-2 mx-3">
                         <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Hành động khác
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a href="#" id="deleteProducts" class="dropdown-item">Xóa nhiều</a>
+                            <a href="#" id="deleteProducts" class="dropdown-item">Xóa sản phẩm</a>
                         </div>
                     </div>
                 </div>

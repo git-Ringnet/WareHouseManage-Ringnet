@@ -401,7 +401,7 @@ $index = array_search($item['label'], $numberedLabels);
             <div class="d-flex justify-content-between align-items-center">
                 <span class="count_checkbox mr-5"></span>
                 <div class="row action">
-                    <div class="btn-xoahang my-2 mr-2">
+                    <div class="btn-xoahang my-2 mx-3">
                         <button id="deleteOrder" type="button"
                             class="btn btn-group btn-light d-flex align-items-center">
                             <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24"
@@ -414,7 +414,7 @@ $index = array_search($item['label'], $numberedLabels);
                                 <line x1="10" y1="11" x2="10" y2="17"></line>
                                 <line x1="14" y1="11" x2="14" y2="17"></line>
                             </svg>
-                            <span>Xóa các đơn hàng đã chọn</span>
+                            <span>Xóa đơn</span>
                         </button>
                     </div>
                     <div class="btn-huy my-2">
@@ -426,7 +426,7 @@ $index = array_search($item['label'], $numberedLabels);
                                 <path d="M13 1L1 13" stroke="#555555" stroke-width="1.5" stroke-linecap="round"
                                     stroke-linejoin="round" />
                             </svg>
-                            <span class="px-1">Hủy đơn hàng đã chọn</span>
+                            <span class="px-1">Hủy đơn</span>
                         </button>
                     </div>
                 </div>

@@ -111,157 +111,223 @@ $index = array_search($item['label'], $numberedLabels);
                                     </a>
                                 </span>
                             @endforeach
-                            <div class="class" style="order:999"> <div class="filter-options">
-                                <div class="dropdown">
-                                    <button class="btn btn-filter btn-light" type="button" id="dropdownMenuButton"
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <span><svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                                    d="M12 6C12.3879 6 12.7024 6.31446 12.7024 6.70237L12.7024 17.2976C12.7024 17.6855 12.3879 18 12 18C11.6121 18 11.2976 17.6855 11.2976 17.2976V6.70237C11.2976 6.31446 11.6121 6 12 6Z"
-                                                    fill="#555555" />
-                                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                                    d="M18 12C18 12.3879 17.6855 12.7024 17.2976 12.7024H6.70237C6.31446 12.7024 6 12.3879 6 12C6 11.6121 6.31446 11.2976 6.70237 11.2976H17.2976C17.6855 11.2976 18 11.6121 18 12Z"
-                                                    fill="#555555" />
-                                            </svg>
-                                            Thêm bộ lọc
-                                        </span>
-                                    </button>
-                                    <div class="dropdown-menu" id="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <div class="search-container px-2">
-                                            <input type="text" placeholder="Tìm kiếm" id="myInput"
-                                                onkeyup="filterFunction()">
-                                            <span class="search-icon"><i class="fas fa-search"></i></span>
-                                        </div>
-                                        <div class="scrollbar">
-                                            <button class="dropdown-item" id="btn-name">Đơn vị</button>
-                                            <button class="dropdown-item" id="btn-represent">Đại diện</button>
-                                            <button class="dropdown-item" id="btn-phonenumber">Số điện thoại</button>
-                                            <button class="dropdown-item" id="btn-email">Email</button>
-                                            <button class="dropdown-item" id="btn-status">Trạng thái</button>
+                            <div class="class" style="order:999">
+                                <div class="filter-options">
+                                    <div class="dropdown">
+                                        <button class="btn btn-filter btn-light" type="button" id="dropdownMenuButton"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <span><svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                        d="M12 6C12.3879 6 12.7024 6.31446 12.7024 6.70237L12.7024 17.2976C12.7024 17.6855 12.3879 18 12 18C11.6121 18 11.2976 17.6855 11.2976 17.2976V6.70237C11.2976 6.31446 11.6121 6 12 6Z"
+                                                        fill="#555555" />
+                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                        d="M18 12C18 12.3879 17.6855 12.7024 17.2976 12.7024H6.70237C6.31446 12.7024 6 12.3879 6 12C6 11.6121 6.31446 11.2976 6.70237 11.2976H17.2976C17.6855 11.2976 18 11.6121 18 12Z"
+                                                        fill="#555555" />
+                                                </svg>
+                                                Thêm bộ lọc
+                                            </span>
+                                        </button>
+                                        <div class="dropdown-menu" id="dropdown-menu"
+                                            aria-labelledby="dropdownMenuButton">
+                                            <div class="search-container px-2">
+                                                <input type="text" placeholder="Tìm kiếm" id="myInput"
+                                                    onkeyup="filterFunction()">
+                                                <span class="search-icon"><i class="fas fa-search"></i></span>
+                                            </div>
+                                            <div class="scrollbar">
+                                                <button class="dropdown-item" id="btn-name">Đơn vị</button>
+                                                {{-- <button class="dropdown-item" id="btn-represent">Đại diện</button> --}}
+                                                <button class="dropdown-item" id="btn-users_name">Người phụ
+                                                    trách</button>
+                                                <button class="dropdown-item" id="btn-phonenumber">Số điện
+                                                    thoại</button>
+                                                <button class="dropdown-item" id="btn-email">Email</button>
+                                                <button class="dropdown-item" id="btn-status">Trạng thái</button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <?php $status = [];
-                                $roles = [];
-                                if (isset(request()->status)) {
-                                    $status = request()->status;
-                                } else {
-                                    $status = [];
-                                }
-                                if (isset(request()->roles)) {
-                                    $roles = request()->roles;
-                                } else {
+                                    <?php $status = [];
                                     $roles = [];
-                                }
-                                ?>
-                                <div class="block-options" id="status-options" style="display:none">
-                                    <div class="wrap w-100">
-                                        <div class="heading-title title-wrap">
-                                            <h5>Trạng thái</h5>
+                                    if (isset(request()->status)) {
+                                        $status = request()->status;
+                                    } else {
+                                        $status = [];
+                                    }
+                                    if (isset(request()->roles)) {
+                                        $roles = request()->roles;
+                                    } else {
+                                        $roles = [];
+                                    }
+                                    $users_name = [];
+                                    if (isset(request()->users_name)) {
+                                        $users_name = request()->users_name;
+                                    } else {
+                                        $users_name = [];
+                                    }
+                                    ?>
+                                    <div class="block-options" id="status-options" style="display:none">
+                                        <div class="wrap w-100">
+                                            <div class="heading-title title-wrap">
+                                                <h5>Trạng thái</h5>
+                                            </div>
+                                            <div
+                                                class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
+                                                <a class="cursor select-all mr-auto">Chọn tất cả</a>
+                                                <a class="cursor deselect-all">Hủy chọn</a>
+                                            </div>
+                                            <ul class="ks-cboxtags-status p-0 mb-1 px-2">
+                                                <li>
+                                                    <input type="checkbox" id="status_active"
+                                                        {{ in_array(1, $status) ? 'checked' : '' }} name="status[]"
+                                                        value="1">
+                                                    <label for="">Active</label>
+                                                </li>
+                                                <li>
+                                                    <input type="checkbox" id="status_inactive"
+                                                        {{ in_array(0, $status) ? 'checked' : '' }} name="status[]"
+                                                        value="0">
+                                                    <label for="">Disable</label>
+                                                </li>
+                                            </ul>
                                         </div>
-                                        <div
-                                            class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
-                                            <a class="cursor select-all mr-auto">Chọn tất cả</a>
-                                            <a class="cursor deselect-all">Hủy chọn</a>
+                                        <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                            <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                                Nhận</button>
+                                            <button type="button" id="cancel-status"
+                                                class="btn btn-default btn-block">Hủy</button>
                                         </div>
-                                        <ul class="ks-cboxtags-status p-0 mb-1 px-2">
-                                            <li>
-                                                <input type="checkbox" id="status_active"
-                                                    {{ in_array(1, $status) ? 'checked' : '' }} name="status[]"
-                                                    value="1">
-                                                <label for="status_active">Active</label>
-                                            </li>
-                                            <li>
-                                                <input type="checkbox" id="status_inactive"
-                                                    {{ in_array(0, $status) ? 'checked' : '' }} name="status[]"
-                                                    value="0">
-                                                <label for="">Disable</label>
-                                            </li>
-                                        </ul>
                                     </div>
-                                    <div class="d-flex justify-contents-center align-items-baseline p-2">
-                                        <button type="submit" class="btn btn-primary btn-block mr-2">Xác Nhận</button>
-                                        <button type="button" id="cancel-status"
-                                            class="btn btn-default btn-block">Hủy</button>
+                                    {{-- Tìm đơn vị --}}
+                                    <div class="block-options" id="name-options" style="display:none">
+                                        <div class="wrap w-100">
+                                            <div class="heading-title title-wrap">
+                                                <h5>Đơn vị</h5>
+                                            </div>
+                                            <div class="input-group p-2">
+                                                <label class="title" for="">Chứa kí tự</label>
+                                                <input type="search" name="name" class="form-control name-input"
+                                                    value="{{ request()->name }}" placeholder="Nhập thông tin..">
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                            <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                                Nhận</button>
+                                            <button type="button" id="cancel-name"
+                                                class="btn btn-default btn-block">Hủy</button>
+                                        </div>
+                                    </div>
+                                    {{-- Người phụ trách --}}
+                                    <div class="block-options" id="users_name-options" style="display:none">
+                                        <div class="wrap w-100">
+                                            <div class="heading-title title-wrap">
+                                                <h5>Người tạo</h5>
+                                            </div>
+                                            <div class="search-container px-2 mt-2">
+                                                <input type="text" placeholder="Tìm kiếm" id="myInput-users_name"
+                                                    class="pr-4 w-100 input-search" onkeyup="filterCreator()">
+                                                <span class="search-icon"><i class="fas fa-search"></i></span>
+                                            </div>
+                                            <div
+                                                class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
+                                                <a class="cursor select-all-users_name mr-auto">Chọn tất cả</a>
+                                                <a class="cursor deselect-all-users_name">Hủy chọn</a>
+                                            </div>
+                                            <ul class="ks-cboxtags-users_name p-0 mb-1 px-2">
+                                                @if (!empty($users))
+                                                    @php
+                                                        $seenValues = [];
+                                                    @endphp
+                                                    @foreach ($users as $value)
+                                                        @if (!in_array($value->name, $seenValues))
+                                                            <li>
+                                                                <input type="checkbox" id="name_active"
+                                                                    {{ in_array($value->name, $users_name) ? 'checked' : '' }}
+                                                                    name="users_name[]"
+                                                                    value="{{ $value->name }}">
+                                                                <label id="users_name"
+                                                                    for="">{{ $value->name }}</label>
+                                                            </li>
+                                                            @php
+                                                                $seenValues[] = $value->name;
+                                                            @endphp
+                                                        @endif
+                                                    @endforeach
+                                                @endif
+                                            </ul>
+                                            <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                                <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                                    Nhận</button>
+                                                <button type="button" id="cancel-users_name"
+                                                    class="btn btn-default btn-block">Hủy</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{-- Tìm đại diện --}}
+                                    <div class="block-options" id="represent-options" style="display:none">
+                                        <div class="wrap w-100">
+                                            <div class="heading-title title-wrap">
+                                                <h5>Đại diện</h5>
+                                            </div>
+                                            <div class="input-group p-2">
+                                                <label class="title" for="">Chứa kí tự</label>
+                                                <input type="search" name="represent"
+                                                    class="form-control represent-input"
+                                                    value="{{ request()->represent }}"
+                                                    placeholder="Nhập thông tin..">
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                            <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                                Nhận</button>
+                                            <button type="button" id="cancel-represent"
+                                                class="btn btn-default btn-block">Hủy</button>
+                                        </div>
+                                    </div>
+                                    {{-- Tìm số điện thoại --}}
+                                    <div class="block-options" id="phonenumber-options" style="display:none">
+                                        <div class="wrap w-100">
+                                            <div class="heading-title title-wrap">
+                                                <h5>Số điện thoại</h5>
+                                            </div>
+                                            <div class="input-group p-2">
+                                                <label class="title" for="">Nhập số điện thoại</label>
+                                                <input type="number" name="phonenumber"
+                                                    class="form-control phonenumber-input"
+                                                    value="{{ request()->phonenumber }}"
+                                                    placeholder="Nhập thông tin..">
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                            <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                                Nhận</button>
+                                            <button type="button" id="cancel-phonenumber"
+                                                class="btn btn-default btn-block">Hủy</button>
+                                        </div>
+                                    </div>
+                                    {{-- Tìm Email --}}
+                                    <div class="block-options" id="email-options" style="display:none">
+                                        <div class="wrap w-100">
+                                            <div class="heading-title title-wrap">
+                                                <h5>Email</h5>
+                                            </div>
+                                            <div class="input-group p-2">
+                                                <label class="title" for="">Chứa kí tự</label>
+                                                <input type="search" name="email" class="form-control email-input"
+                                                    value="{{ request()->email }}" placeholder="Nhập thông tin..">
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                            <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                                Nhận</button>
+                                            <button type="button" id="cancel-email"
+                                                class="btn btn-default btn-block">Hủy</button>
+                                        </div>
                                     </div>
                                 </div>
-                                {{-- Tìm đơn vị --}}
-                                <div class="block-options" id="name-options" style="display:none">
-                                    <div class="wrap w-100">
-                                        <div class="heading-title title-wrap">
-                                            <h5>Đơn vị</h5>
-                                        </div>
-                                        <div class="input-group p-2">
-                                            <label class="title" for="">Chứa kí tự</label>
-                                            <input type="search" name="name" class="form-control name-input"
-                                                value="{{ request()->name }}" placeholder="Nhập thông tin..">
-                                        </div>
-                                    </div>
-                                    <div class="d-flex justify-contents-center align-items-baseline p-2">
-                                        <button type="submit" class="btn btn-primary btn-block mr-2">Xác Nhận</button>
-                                        <button type="button" id="cancel-name"
-                                            class="btn btn-default btn-block">Hủy</button>
-                                    </div>
-                                </div>
-                                {{-- Tìm đại diện --}}
-                                <div class="block-options" id="represent-options" style="display:none">
-                                    <div class="wrap w-100">
-                                        <div class="heading-title title-wrap">
-                                            <h5>Đại diện</h5>
-                                        </div>
-                                        <div class="input-group p-2">
-                                            <label class="title" for="">Chứa kí tự</label>
-                                            <input type="search" name="represent" class="form-control represent-input"
-                                                value="{{ request()->represent }}" placeholder="Nhập thông tin..">
-                                        </div>
-                                    </div>
-                                    <div class="d-flex justify-contents-center align-items-baseline p-2">
-                                        <button type="submit" class="btn btn-primary btn-block mr-2">Xác Nhận</button>
-                                        <button type="button" id="cancel-represent"
-                                            class="btn btn-default btn-block">Hủy</button>
-                                    </div>
-                                </div>
-                                {{-- Tìm số điện thoại --}}
-                                <div class="block-options" id="phonenumber-options" style="display:none">
-                                    <div class="wrap w-100">
-                                        <div class="heading-title title-wrap">
-                                            <h5>Số điện thoại</h5>
-                                        </div>
-                                        <div class="input-group p-2">
-                                            <label class="title" for="">Nhập số điện thoại</label>
-                                            <input type="number" name="phonenumber"
-                                                class="form-control phonenumber-input"
-                                                value="{{ request()->phonenumber }}" placeholder="Nhập thông tin..">
-                                        </div>
-                                    </div>
-                                    <div class="d-flex justify-contents-center align-items-baseline p-2">
-                                        <button type="submit" class="btn btn-primary btn-block mr-2">Xác Nhận</button>
-                                        <button type="button" id="cancel-phonenumber"
-                                            class="btn btn-default btn-block">Hủy</button>
-                                    </div>
-                                </div>
-                                {{-- Tìm Email --}}
-                                <div class="block-options" id="email-options" style="display:none">
-                                    <div class="wrap w-100">
-                                        <div class="heading-title title-wrap">
-                                            <h5>Email</h5>
-                                        </div>
-                                        <div class="input-group p-2">
-                                            <label class="title" for="">Chứa kí tự</label>
-                                            <input type="search" name="email" class="form-control email-input"
-                                                value="{{ request()->email }}" placeholder="Nhập thông tin..">
-                                        </div>
-                                    </div>
-                                    <div class="d-flex justify-contents-center align-items-baseline p-2">
-                                        <button type="submit" class="btn btn-primary btn-block mr-2">Xác Nhận</button>
-                                        <button type="button" id="cancel-email"
-                                            class="btn btn-default btn-block">Hủy</button>
-                                    </div>
-                                </div>
-                            </div></div>
+                            </div>
                         </div>
-                       
+
                     </div>
             </div><!-- /.container-fluided -->
     </section>
@@ -272,7 +338,7 @@ $index = array_search($item['label'], $numberedLabels);
             <div class="d-flex justify-content-between align-items-center">
                 <span class="count_checkbox mr-5"></span>
                 <div class="row action">
-                    <div class="btn-nhanvien my-2 mr-2">
+                    <div class="btn-nhanvien my-2 mx-3">
                         <button id="deleteListGuest" type="button"
                             class="btn btn-group btn-light d-flex align-items-center">
                             <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24"
@@ -343,10 +409,10 @@ $index = array_search($item['label'], $numberedLabels);
                                         </th>
                                         <th>
                                             <span class="d-flex">
-                                                <a href="#" class="sort-link" data-sort-by="guest_represent"
+                                                <a href="#" class="sort-link" data-sort-by="user_id"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
-                                                        type="submit">Đại diện</button></a>
-                                                <div class="icon" id="icon-guest_represent"></div>
+                                                        type="submit">Người phụ trách</button></a>
+                                                <div class="icon" id="icon-user_id"></div>
                                             </span>
                                         </th>
                                         <th>
@@ -379,49 +445,58 @@ $index = array_search($item['label'], $numberedLabels);
                                 </thead>
                                 <tbody>
                                     @foreach ($guests as $item)
-                                        <tr>
-                                            <td><input type="checkbox" class="cb-element" name="ids[]"
-                                                    value="{{ $item->id }}"></td>
-                                            <td>{{ $item->id }}</td>
-                                            <td>{{ $item->guest_name }}</td>
-                                            <td>{{ $item->guest_represent }}</td>
-                                            <td>{{ $item->guest_phone }}</td>
-                                            <td>{{ $item->guest_email }}</td>
-                                            <td>
-                                                <select class="p-1 px-2 status-select"
-                                                    style="border: 1px solid #D6D6D6; <?php if ($item->guest_status == 1) {
-                                                        echo 'color:#09BD3C;';
-                                                    } else {
-                                                        echo 'color:#D6D6D6';
-                                                    }
-                                                    ?>"
-                                                    id="{{ $item->id }}" name="status-select">
-                                                    <option value="1" <?php if ($item->guest_status == 1) {
-                                                        echo 'selected';
-                                                    } ?>>Active</option>
-                                                    <option value="0" <?php if ($item->guest_status == 0) {
-                                                        echo 'selected';
-                                                    } ?>>Disable</option>
-                                                </select>
-                                            </td>
-                                            <td class="text-center">
-                                                <a class="btn btn-sm"
-                                                    href="{{ route('guests.edit', $item->id) }}">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
-                                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M18.7832 6.79483C18.987 6.71027 19.2056 6.66675 19.4263 6.66675C19.6471 6.66675 19.8656 6.71027 20.0695 6.79483C20.2734 6.87938 20.4586 7.00331 20.6146 7.15952L21.9607 8.50563C22.1169 8.66165 22.2408 8.84693 22.3253 9.05087C22.4099 9.25482 22.4534 9.47342 22.4534 9.69419C22.4534 9.91495 22.4099 10.1336 22.3253 10.3375C22.2408 10.5414 22.1169 10.7267 21.9607 10.8827L20.2809 12.5626C20.2711 12.5736 20.2609 12.5844 20.2503 12.595C20.2397 12.6056 20.2289 12.6158 20.2178 12.6256L11.5607 21.2827C11.4257 21.4177 11.2426 21.4936 11.0516 21.4936H8.34644C7.94881 21.4936 7.62647 21.1712 7.62647 20.7736V18.0684C7.62647 17.8775 7.70233 17.6943 7.83737 17.5593L16.4889 8.9086C16.5003 8.89532 16.5124 8.88235 16.525 8.86973C16.5376 8.8571 16.5506 8.84504 16.5639 8.83354L18.2381 7.15952C18.394 7.00352 18.5795 6.8793 18.7832 6.79483ZM17.0354 10.3984L9.06641 18.3667V20.0536H10.7534L18.7221 12.085L17.0354 10.3984ZM19.7402 11.0668L18.0537 9.38022L19.2572 8.17685C19.2794 8.15461 19.3057 8.13696 19.3348 8.12493C19.3638 8.11289 19.3949 8.10669 19.4263 8.10669C19.4578 8.10669 19.4889 8.11289 19.5179 8.12493C19.5469 8.13697 19.5737 8.15504 19.5959 8.17728L20.9428 9.52411C20.9651 9.5464 20.9831 9.57315 20.9951 9.60228C21.0072 9.63141 21.0134 9.66264 21.0134 9.69419C21.0134 9.72573 21.0072 9.75696 20.9951 9.78609C20.9831 9.81522 20.9651 9.84197 20.9428 9.86426L19.7402 11.0668ZM6.6665 24.6134C6.6665 24.2158 6.98885 23.8935 7.38648 23.8935H24.6658C25.0634 23.8935 25.3858 24.2158 25.3858 24.6134C25.3858 25.0111 25.0634 25.3334 24.6658 25.3334H7.38648C6.98885 25.3334 6.6665 25.0111 6.6665 24.6134Z" fill="#555555"></path>
-                                                    </svg>
-                                                </a>
-                                                <form onclick="return confirm('Bạn có chắc chắn muốn xóa?')"
-                                                    action="{{ route('guests.destroy', $item->id) }}" method="POST"
-                                                    class="d-inline">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
-                                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M14.0606 6.66675C13.6589 6.66675 13.3333 6.99236 13.3333 7.39402C13.3333 7.79568 13.6589 8.12129 14.0606 8.12129H17.9394C18.341 8.12129 18.6667 7.79568 18.6667 7.39402C18.6667 6.99236 18.341 6.66675 17.9394 6.66675H14.0606ZM8 10.3031C8 9.90143 8.32561 9.57582 8.72727 9.57582H10.1818H21.8182H23.2727C23.6744 9.57582 24 9.90143 24 10.3031C24 10.7048 23.6744 11.0304 23.2727 11.0304H22.5455V22.6667C22.5455 24.2819 21.2158 25.5758 19.6179 25.5758H12.3452C11.9637 25.5755 11.5854 25.4997 11.2333 25.3528C10.8812 25.2059 10.5617 24.9908 10.2931 24.7199C10.0244 24.449 9.81206 24.1276 9.66816 23.7743C9.52463 23.4219 9.45204 23.0447 9.45455 22.6642V11.0304H8.72727C8.32561 11.0304 8 10.7048 8 10.3031ZM10.9091 22.6723V11.0304H21.0909V22.6667C21.0909 23.4623 20.4288 24.1213 19.6179 24.1213H12.3458C12.1562 24.1211 11.9684 24.0834 11.7934 24.0104C11.6183 23.9374 11.4595 23.8304 11.3259 23.6958C11.1924 23.5611 11.0868 23.4013 11.0153 23.2257C10.9437 23.05 10.9076 22.8619 10.9091 22.6723ZM17.9394 13.4546C18.3411 13.4546 18.6667 13.7802 18.6667 14.1819V20.9698C18.6667 21.3714 18.3411 21.6971 17.9394 21.6971C17.5377 21.6971 17.2121 21.3714 17.2121 20.9698V14.1819C17.2121 13.7802 17.5377 13.4546 17.9394 13.4546ZM14.7879 14.1819C14.7879 13.7802 14.4623 13.4546 14.0606 13.4546C13.6589 13.4546 13.3333 13.7802 13.3333 14.1819V20.9698C13.3333 21.3714 13.6589 21.6971 14.0606 21.6971C14.4623 21.6971 14.7879 21.3714 14.7879 20.9698V14.1819Z" fill="#555555"></path>
-                                                    </svg></button>
-                                                </form>
-                                            </td>
-                                        </tr>
+                                        @if (Auth::user()->id == $item->user_id || Auth::user()->can('isAdmin'))
+                                            <tr>
+                                                <td><input type="checkbox" class="cb-element" name="ids[]"
+                                                        value="{{ $item->id }}"></td>
+                                                <td>{{ $item->id }}</td>
+                                                <td>{{ $item->guest_name }}</td>
+                                                <td>{{ $item->users_name }}</td>
+                                                <td>{{ $item->guest_phone }}</td>
+                                                <td>{{ $item->guest_email }}</td>
+                                                <td>
+                                                    <select class="p-1 px-2 status-select"
+                                                        style="border: 1px solid #D6D6D6; <?php if ($item->guest_status == 1) {
+                                                            echo 'color:#09BD3C;';
+                                                        } else {
+                                                            echo 'color:#D6D6D6';
+                                                        }
+                                                        ?>"
+                                                        id="{{ $item->id }}" name="status-select">
+                                                        <option value="1" <?php if ($item->guest_status == 1) {
+                                                            echo 'selected';
+                                                        } ?>>Active</option>
+                                                        <option value="0" <?php if ($item->guest_status == 0) {
+                                                            echo 'selected';
+                                                        } ?>>Disable</option>
+                                                    </select>
+                                                </td>
+                                                <td class="text-center">
+                                                    <a class="btn btn-sm"
+                                                        href="{{ route('guests.edit', $item->id) }}">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="32"
+                                                            height="32" viewBox="0 0 32 32" fill="none">
+                                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                d="M18.7832 6.79483C18.987 6.71027 19.2056 6.66675 19.4263 6.66675C19.6471 6.66675 19.8656 6.71027 20.0695 6.79483C20.2734 6.87938 20.4586 7.00331 20.6146 7.15952L21.9607 8.50563C22.1169 8.66165 22.2408 8.84693 22.3253 9.05087C22.4099 9.25482 22.4534 9.47342 22.4534 9.69419C22.4534 9.91495 22.4099 10.1336 22.3253 10.3375C22.2408 10.5414 22.1169 10.7267 21.9607 10.8827L20.2809 12.5626C20.2711 12.5736 20.2609 12.5844 20.2503 12.595C20.2397 12.6056 20.2289 12.6158 20.2178 12.6256L11.5607 21.2827C11.4257 21.4177 11.2426 21.4936 11.0516 21.4936H8.34644C7.94881 21.4936 7.62647 21.1712 7.62647 20.7736V18.0684C7.62647 17.8775 7.70233 17.6943 7.83737 17.5593L16.4889 8.9086C16.5003 8.89532 16.5124 8.88235 16.525 8.86973C16.5376 8.8571 16.5506 8.84504 16.5639 8.83354L18.2381 7.15952C18.394 7.00352 18.5795 6.8793 18.7832 6.79483ZM17.0354 10.3984L9.06641 18.3667V20.0536H10.7534L18.7221 12.085L17.0354 10.3984ZM19.7402 11.0668L18.0537 9.38022L19.2572 8.17685C19.2794 8.15461 19.3057 8.13696 19.3348 8.12493C19.3638 8.11289 19.3949 8.10669 19.4263 8.10669C19.4578 8.10669 19.4889 8.11289 19.5179 8.12493C19.5469 8.13697 19.5737 8.15504 19.5959 8.17728L20.9428 9.52411C20.9651 9.5464 20.9831 9.57315 20.9951 9.60228C21.0072 9.63141 21.0134 9.66264 21.0134 9.69419C21.0134 9.72573 21.0072 9.75696 20.9951 9.78609C20.9831 9.81522 20.9651 9.84197 20.9428 9.86426L19.7402 11.0668ZM6.6665 24.6134C6.6665 24.2158 6.98885 23.8935 7.38648 23.8935H24.6658C25.0634 23.8935 25.3858 24.2158 25.3858 24.6134C25.3858 25.0111 25.0634 25.3334 24.6658 25.3334H7.38648C6.98885 25.3334 6.6665 25.0111 6.6665 24.6134Z"
+                                                                fill="#555555"></path>
+                                                        </svg>
+                                                    </a>
+                                                    <form onclick="return confirm('Bạn có chắc chắn muốn xóa?')"
+                                                        action="{{ route('guests.destroy', $item->id) }}"
+                                                        method="POST" class="d-inline">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-sm"><svg
+                                                                xmlns="http://www.w3.org/2000/svg" width="32"
+                                                                height="32" viewBox="0 0 32 32" fill="none">
+                                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                    d="M14.0606 6.66675C13.6589 6.66675 13.3333 6.99236 13.3333 7.39402C13.3333 7.79568 13.6589 8.12129 14.0606 8.12129H17.9394C18.341 8.12129 18.6667 7.79568 18.6667 7.39402C18.6667 6.99236 18.341 6.66675 17.9394 6.66675H14.0606ZM8 10.3031C8 9.90143 8.32561 9.57582 8.72727 9.57582H10.1818H21.8182H23.2727C23.6744 9.57582 24 9.90143 24 10.3031C24 10.7048 23.6744 11.0304 23.2727 11.0304H22.5455V22.6667C22.5455 24.2819 21.2158 25.5758 19.6179 25.5758H12.3452C11.9637 25.5755 11.5854 25.4997 11.2333 25.3528C10.8812 25.2059 10.5617 24.9908 10.2931 24.7199C10.0244 24.449 9.81206 24.1276 9.66816 23.7743C9.52463 23.4219 9.45204 23.0447 9.45455 22.6642V11.0304H8.72727C8.32561 11.0304 8 10.7048 8 10.3031ZM10.9091 22.6723V11.0304H21.0909V22.6667C21.0909 23.4623 20.4288 24.1213 19.6179 24.1213H12.3458C12.1562 24.1211 11.9684 24.0834 11.7934 24.0104C11.6183 23.9374 11.4595 23.8304 11.3259 23.6958C11.1924 23.5611 11.0868 23.4013 11.0153 23.2257C10.9437 23.05 10.9076 22.8619 10.9091 22.6723ZM17.9394 13.4546C18.3411 13.4546 18.6667 13.7802 18.6667 14.1819V20.9698C18.6667 21.3714 18.3411 21.6971 17.9394 21.6971C17.5377 21.6971 17.2121 21.3714 17.2121 20.9698V14.1819C17.2121 13.7802 17.5377 13.4546 17.9394 13.4546ZM14.7879 14.1819C14.7879 13.7802 14.4623 13.4546 14.0606 13.4546C13.6589 13.4546 13.3333 13.7802 13.3333 14.1819V20.9698C13.3333 21.3714 13.6589 21.6971 14.0606 21.6971C14.4623 21.6971 14.7879 21.3714 14.7879 20.9698V14.1819Z"
+                                                                    fill="#555555"></path>
+                                                            </svg></button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        @endif
                                     @endforeach
                                 </tbody>
                             </table>
@@ -442,6 +517,58 @@ $index = array_search($item['label'], $numberedLabels);
     <!-- /.content -->
 </div>
 <script>
+    $('.ks-cboxtags-users_name li').on('click', function(event) {
+        if (event.target.tagName !== 'INPUT') {
+            var checkbox = $(this).find('input[type="checkbox"]');
+            checkbox.prop('checked', !checkbox.prop('checked')); // Đảo ngược trạng thái checked
+        }
+    });
+    $('#btn-users_name').click(function(event) {
+        event.preventDefault();
+        $('#users_name-options input').addClass('users_name-checkbox');
+        $('.btn-filter').prop('disabled', true);
+        $('#users_name-options').toggle();
+    });
+    $('#cancel-users_name').click(function(event) {
+        event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
+        $('#users_name-options input[type="checkbox"]').prop('checked', false);
+        $('#users_name-options').hide();
+    });
+    $(document).ready(function() {
+        // Chọn tất cả các checkbox
+        $('.select-all-users_name').click(function() {
+            $('#users_name-options input[type="checkbox"]').prop('checked', true);
+        });
+
+        // Hủy tất cả các checkbox
+        $('.deselect-all-users_name').click(function() {
+            $('#users_name-options input[type="checkbox"]').prop('checked', false);
+        });
+    });
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-users_name', function() {
+            $('.deselect-all-users_name').click();
+            document.getElementById('search-filter').submit();
+        });
+    });
+
+    function filterCreator() {
+        var input = $("#myInput-users_name");
+        var filter = input.val().toUpperCase();
+        var buttons = $(".ks-cboxtags-users_name li");
+
+        buttons.each(function() {
+            var text = $(this).text();
+            if (text.toUpperCase().indexOf(filter) > -1) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    }
+
+
     $(document).ready(function() {
         $('.status-select').change(function() {
             var newStatus = $(this).val();

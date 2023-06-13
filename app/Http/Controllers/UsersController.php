@@ -9,6 +9,7 @@ use \Illuminate\Support\Facades\DB;
 use App\Http\Requests\UserRequest;
 use App\Models\Exports;
 use App\Models\Orders;
+use Illuminate\Support\Facades\Auth;
 
 class UsersController extends Controller
 {
@@ -218,5 +219,12 @@ class UsersController extends Controller
             return response()->json(['success' => true, 'msg' => 'Thay đổi trạng thái người dùng thành công']);
         }
         return response()->json(['success' => false, 'warning' => 'Thay đổi trạng thái người dùng thất bại!']);
+    }
+    public function addNoteFormSale(Request $request)
+    {
+        $data = $request->all();
+        $user = User::findOrFail($data['creator']);
+        $user->note_form = $data['note_form'];
+        $user->update();
     }
 }

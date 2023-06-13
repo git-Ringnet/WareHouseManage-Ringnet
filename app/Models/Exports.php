@@ -65,6 +65,7 @@ class Exports extends Model
         'user_id',
         'total',
         'export_status',
+        'note_form',
     ];
     public function sumTotalExports(){
         $totalSum = DB::table($this->table)->sum('total');
