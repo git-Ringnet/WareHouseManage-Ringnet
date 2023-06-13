@@ -52,7 +52,7 @@ class AddProductController extends Controller
             $comparison_operator = $request->input('comparison_operator');
             $filters[] = ['orders.total', $comparison_operator, $sum];
             $inventoryArray = explode(',.@', $sum);
-            array_push($string, ['label' => 'Tổng tiền' . $comparison_operator, 'values' => $inventoryArray, 'class' => 'sum']);
+            array_push($string, ['label' => 'Tổng tiền ' . $comparison_operator, 'values' => $inventoryArray, 'class' => 'sum']);
         }
 
         //Nhà cung cấp
@@ -344,9 +344,9 @@ class AddProductController extends Controller
             }
             $updateOrder->order_status = 1;
             $updateOrder->save();
-            return redirect()->route('insertProduct.index')->with('section', 'Đơn hàng đã được duyệt');
+            return redirect()->route('insertProduct.index')->with('msg', 'Đơn hàng đã được duyệt');
         } else {
-            return redirect()->route('insertProduct.index')->with('section', 'Đơn hàng đã được duyệt trước đó');
+            return redirect()->route('insertProduct.index')->with('warning', 'Đơn hàng đã được duyệt trước đó');
         }
     }
 
@@ -512,10 +512,10 @@ class AddProductController extends Controller
             $updateOrder->order_status = 1;
             $updateOrder->save();
         } else {
-            return redirect()->route('insertProduct.index')->with('section', 'Đơn hàng đã được duyệt trước đó');
+            return redirect()->route('insertProduct.index')->with('warning', 'Đơn hàng đã được duyệt trước đó');
         }
 
-        return redirect()->route('insertProduct.index')->with('section', 'Duyệt nhanh đơn hàng thành công');
+        return redirect()->route('insertProduct.index')->with('msg', 'Duyệt nhanh đơn hàng thành công');
     }
 
     // update provide AJAX
@@ -790,9 +790,9 @@ class AddProductController extends Controller
             //         $order->save();
             //     }
             // }
-            return redirect()->route('insertProduct.index')->with('section', 'Lưu đơn hàng thành công');
+            return redirect()->route('insertProduct.index')->with('msg', 'Lưu đơn hàng thành công');
         } else {
-            return redirect()->route('insertProduct.index')->with('section', 'Đơn hàng đã được duyệt không thể chỉnh sưa');
+            return redirect()->route('insertProduct.index')->with('warning', 'Đơn hàng đã được duyệt không thể chỉnh sưa');
         }
     }
 
@@ -805,9 +805,9 @@ class AddProductController extends Controller
             $dele->order_status = 2;
             $dele->save();
         } else {
-            return redirect()->route('insertProduct.index')->with('section', 'Sản phẩm đã được duyệt không thể hủy');
+            return redirect()->route('insertProduct.index')->with('warning', 'Sản phẩm đã được duyệt không thể hủy');
         }
-        return redirect()->route('insertProduct.index')->with('section', 'Đã hủy đơn');
+        return redirect()->route('insertProduct.index')->with('msg', 'Đã hủy đơn');
     }
 
     // Xóa đơn hàng AJAX

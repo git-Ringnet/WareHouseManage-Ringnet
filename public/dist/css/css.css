@@ -765,17 +765,34 @@ input[type="number"] {
     color: #ffff;
     font-size: 16px;
 }
-.alert-warning{
+
+.alert-warning {
     background-color: #FF9500;
     border-color: #FF9500;
 }
-.alert-success{
+
+.alert-success {
     background-color: #09BD3C;
     border-color: #09BD3C;
 }
-.icon-filter{
+
+.icon-filter {
     margin-bottom: 5px;
 }
-.btn-filter{
+
+.btn-filter {
     margin-top: 2px;
 }
+
+#btn-addNoteForm {
+    cursor: pointer;
+    position: absolute;
+    right: 5px;
+    top: 0;
+}
+#btn-addNoteForm.active path{
+    fill: #0095F6;
+}
+#btn-addNoteForm.disable {
+    pointer-events: none;
+  }

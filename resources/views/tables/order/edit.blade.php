@@ -781,7 +781,7 @@
             '<td><input required type="number" class="form-control text-center" style="width:140px" name="product_price[]"></td>' +
             // '<td><input required type="number" name="product_tax[]" class="product_tax form-control" style="width:50px"></td>' +
             '<td>' +
-            '<select name="product_tax[]" class="product_tax form-control" style="width:80px">' +
+            '<select name="product_tax[]" class="product_tax form-control" style="width:100px">' +
             '<option value="10">10%</option>' +
             '<option value="0">0%</option>' +
             '<option value="8">8%</option>' +

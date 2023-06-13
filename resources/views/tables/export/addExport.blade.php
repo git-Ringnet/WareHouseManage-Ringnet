@@ -162,8 +162,24 @@
                 <div class="mb-2"> <span class="btn btn-secondary" id="add-field-btn">Thêm sản phẩm</span>
                 </div>
             </div>
-            <div class="row position-relative">
-                <div class="col-sm-6"></div>
+            <div class="row position-relative pb-4">
+                <div class="col-sm-6">
+                    <div class="mt-4 w-75" style="float: left;">
+                        <b class="pl-2">*Ghi chú báo giá</b>
+                        <div class="position-relative">
+                            <input type="hidden" name="creator" id="creator" value="{{Auth::user()->id}}">
+                            <textarea name="note_form" id="note_form" class="form-control" rows="8">{{ Auth::user()->note_form }}</textarea>
+                            <div id="btn-addNoteForm">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M5.43364 3H8.07596H15.1555H15.3069C15.6265 3 15.943 3.06298 16.2382 3.18535C16.5335 3.30771 16.8017 3.48706 17.0276 3.71314L19.53 6.2155C19.9864 6.67177 20.2429 7.2907 20.243 7.93604V17.8227C20.243 18.4681 19.9866 19.0871 19.5303 19.5435C19.0739 19.9999 18.4549 20.2563 17.8095 20.2563L16.0466 20.2563H7.19724L5.52568 20.2563C4.8834 20.2563 4.26716 20.0024 3.8113 19.55C3.35544 19.0975 3.09692 18.4832 3.0921 17.8409L3.00007 5.45183C2.99767 5.13073 3.05883 4.81228 3.18005 4.51493C3.30127 4.21757 3.48014 3.94713 3.70636 3.71922C3.93258 3.4913 4.20167 3.31041 4.49812 3.18698C4.79456 3.06354 5.11253 2.99999 5.43364 3ZM7.86094 18.9289H15.3829V12.7662C15.3829 12.5041 15.17 12.2918 14.9095 12.2918H8.33527C8.07351 12.2918 7.86094 12.5044 7.86094 12.7662V18.9289ZM16.7103 18.9289V12.7662C16.7103 11.7716 15.9038 10.9644 14.9095 10.9644H8.33527C7.34041 10.9644 6.53354 11.7713 6.53354 12.7662V18.9289H5.52566C5.2337 18.9289 4.95359 18.8135 4.74638 18.6078C4.53918 18.4022 4.42167 18.1229 4.41947 17.831L4.32744 5.44187C4.32634 5.29591 4.35415 5.15118 4.40924 5.01601C4.46434 4.88085 4.54565 4.75792 4.64848 4.65432C4.7513 4.55072 4.87362 4.4685 5.00837 4.41239C5.14312 4.35629 5.28764 4.3274 5.43361 4.32741H7.41226V7.12292C7.41226 7.53364 7.57542 7.92755 7.86585 8.21797C8.15627 8.5084 8.55018 8.67156 8.9609 8.67156H14.2705C14.6812 8.67156 15.0751 8.5084 15.3656 8.21797C15.656 7.92755 15.8192 7.53364 15.8192 7.12292V4.45331C15.9184 4.50525 16.0094 4.57211 16.0889 4.65158L18.5915 7.15426C18.799 7.36162 18.9155 7.64302 18.9156 7.93632V17.8227C18.9156 18.1161 18.7991 18.3974 18.5916 18.6049C18.3842 18.8123 18.1028 18.9289 17.8095 18.9289H16.7103ZM14.4918 7.12292V4.32741H8.73967V7.12292C8.73967 7.18159 8.76297 7.23787 8.80446 7.27936C8.84595 7.32085 8.90223 7.34415 8.9609 7.34415H14.2705C14.3292 7.34415 14.3855 7.32085 14.427 7.27936C14.4684 7.23787 14.4918 7.18159 14.4918 7.12292Z"
+                                        fill="#D6D6D6" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="col-sm-6">
                     <div class="mt-4 w-50" style="float: right;">
                         <div class="d-flex justify-content-between">
@@ -375,6 +391,21 @@
     </div>
 </div>
 <script>
+    // Thay đổi màu nút save note_form
+    $(document).ready(function() {
+        $('#note_form').on('input', function() {
+            if ($(this).val().trim() !== '') {
+                // Thêm class cho nút
+                $('#btn-addNoteForm').removeClass('disable');
+                $('#btn-addNoteForm').addClass('active');
+            } else {
+                $('#btn-addNoteForm').addClass('disable');
+                $('#btn-addNoteForm').removeClass('active');
+            }
+        });
+    });
+
+
     //form thong tin khach hang xuất hàng
     var radio1 = document.getElementById("radio1");
     var radio2 = document.getElementById("radio2");
@@ -789,6 +820,25 @@
             }
         })
     })
+    //Thêm form ghi chú cho nhân viên
+    $(document).on('click', '#btn-addNoteForm', function(e) {
+        e.preventDefault()
+        var note_form = $('#note_form').val();
+        var creator = $('#creator').val();
+        $.ajax({
+            url: '{{ route('addNoteFormSale') }}',
+            type: 'GET',
+            data: {
+                note_form: note_form,
+                creator: creator,
+            },
+            success: function(data) {
+                alert('Lưu biểu mẫu thành công!');
+            }
+        });
+    });
+
+
     //thêm thông tin khách hàng
     $(document).on('click', '#btn-addCustomer', function(e) {
         e.preventDefault()

@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Exports;
 use App\Models\Guests;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class GuestsController extends Controller
 {
@@ -52,6 +54,11 @@ class GuestsController extends Controller
         $string = array();
         $class = '';
         $name = '';
+        $users_name = [];
+        if (!empty($request->users_name)) {
+            $users_name = $request->input('users_name', []);
+            array_push($string, ['label' => 'Người phụ trách:', 'values' => $users_name, 'class' => 'users_name']);
+        }
         if (!empty($request->name)) {
             $name = $request->name;
             $nameArr = explode(',.@', $name);
@@ -85,15 +92,16 @@ class GuestsController extends Controller
             array_push($string, ['label' => 'Trạng thái:', 'values' => $statusLabels, 'class' => 'status']);
         }
 
-
         $keywords = null;
 
         if (!empty($request->keywords)) {
             $keywords = $request->keywords;
         }
-        $guests = $this->guests->getAllguests($filters, $name, $represent, $phonenumber, $email, $status, $keywords, $sortByArr);
+        $users = User::whereIn('roleid', [1, 3])->get();
+        $guests = $this->guests->getAllguests($filters,$users_name, $name, $represent, $phonenumber, $email, $status, $keywords, $sortByArr);
+        // dd($guests);
         $title = 'Khách hàng';
-        return view('tables.guest.guests', compact('guests', 'sortType', 'string', 'title'));
+        return view('tables.guest.guests', compact('guests','users', 'sortType', 'string', 'title'));
     }
 
     /**
@@ -114,7 +122,7 @@ class GuestsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {   
         Guests::create([
             'guest_name' => $request->guest_name,
             'guest_represent' => $request->guest_represent,
@@ -129,6 +137,7 @@ class GuestsController extends Controller
             'guest_pay' => $request->guest_pay,
             'guest_payTerm' => $request->guest_payTerm,
             'guest_note' => $request->guest_note,
+            'user_id' =>  $request->user_id,
         ]);
         return redirect()->route('guests.index')->with('msg', 'Thêm khách hàng thành công!');
     }
@@ -154,7 +163,8 @@ class GuestsController extends Controller
     {
         $title = 'Chỉnh sửa khách hàng';
         $guests = Guests::find($id);
-        return view('tables.guest.editGuest', compact('guests', 'title'));
+        $usersSale = User::where('roleid', 3)->get();
+        return view('tables.guest.editGuest', compact('guests', 'title','usersSale'));
     }
 
     /**

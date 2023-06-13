@@ -34,6 +34,7 @@ Route::prefix('admin')->name('admin.')->middleware('permission:admin')->group(fu
     Route::get('/activeStatusUser', [UsersController::class, 'activeStatusUser'])->name('activeStatusUser');
     Route::get('/disableStatusUser', [UsersController::class, 'disableStatusUser'])->name('disableStatusUser');
 });
+Route::get('addNoteFormSale', [UsersController::class, 'addNoteFormSale'])->name('addNoteFormSale');
 
 //nha cung cap
 Route::resource('provides', provideController::class)->middleware('permission:admin,manager');

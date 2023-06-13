@@ -21,7 +21,7 @@
                 <div class="col-12">
                     <div class="card">
                         <!-- /.card-header -->
-                        <div class="card-body p-3">
+                        <div class="card-body p-3 mb-5">
                             <form action="{{ route('guests.update', $guests->id) }}" method="POST">
                                 @csrf
                                 @method('PUT')
@@ -87,8 +87,8 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="email">Hình thức thanh toán:</label>
-                                    <select name="guest_pay" class="form-control" name="guest_pay" id="guest_pay"
-                                        equired>
+                                    <select class="form-control" name="guest_pay" id="guest_pay"
+                                        required>
                                         <option value="0" <?php if ($guests->guest_pay == 0) {
                                             echo 'selected';
                                         } ?>>Chuyển khoản</option>
@@ -97,6 +97,19 @@
                                         } ?>>Thanh toán bằng tiền mặt</option>
                                     </select>
                                 </div>
+                                @if(Auth::user()->can('isAdmin'))
+                                <div class="form-group">
+                                    <label for="email">Người phụ trách:</label>
+                                    <select class="form-control" name="user_id" id="user_id" required>
+                                        <option value="{{$guests->user_id ?? Auth::user()->id}}">{{Auth::user()->name}}</option>
+                                        @foreach($usersSale as $user)
+                                        <option value="{{$user->id ?? old('user_id')}}" {{$user->id==$guests->user_id ?? old('user_id') ? 'selected' : false}}>{{$user->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                @else
+                                    <input type="hidden" name="user_id" id="user_id" value="{{Auth::user()->id}}">
+                                @endif
                                 <div class="form-group">
                                     <label for="pwd">Trạng thái:</label>
                                     <select name="guest_status" class="form-control">
