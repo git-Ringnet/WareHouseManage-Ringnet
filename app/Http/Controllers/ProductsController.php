@@ -262,8 +262,8 @@ class ProductsController extends Controller
         $products = Products::findOrFail($id);
         $cate = Category::all();
         $title = 'Chỉnh sửa sản phẩm';
-
         $listProduct = Product::with('getSerinumbers')->where('products_id', $products->id)->paginate(8);
+
         // var_dump($listProduct[1]->getSerinumbers);
         // die();
         // $listProduct = Product::join('serinumber', 'product.id', 'serinumbers.product_id')

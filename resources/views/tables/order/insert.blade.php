@@ -189,40 +189,14 @@
     var rowCount = $('tbody tr').length;
     var last = "<?php echo $lastId; ?>";
 
-    function numberWithCommas(number) {
-        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    }
-
-    function format(event) {
-        // Lấy giá trị đã nhập
-        var value = event.target.value;
-
-        // Xóa tất cả các ký tự không phải số
-        var formattedValue = value.replace(/\D/g, '');
-
-        // Chia nhỏ giá trị thành các phần ngàn
-        var parts = [];
-        while (formattedValue.length > 3) {
-            parts.unshift(formattedValue.slice(-3));
-            formattedValue = formattedValue.slice(0, formattedValue.length - 3);
-        }
-        parts.unshift(formattedValue);
-
-        // Định dạng số với dấu phân cách hàng nghìn
-        var formattedNumber = parts.join('.');
-        event.target.value = formattedNumber;
-        console.log(event.target.value);
-    };
-
     $(document).on('input', '.quantity-input, [name^="product_price"]', function(e) {
         var productQty = parseInt($(this).closest('tr').find('.quantity-input').val());
-        var productPrice = parseFloat($(this).closest('tr').find('input[name^="product_price"]').val());
+        var productPrice = parseFloat($(this).closest('tr').find('input[name^="product_price"]').val().replace(/[^0-9.-]+/g, ""));
         updateTaxAmount($(this).closest('tr'));
 
         if (!isNaN(productQty) && !isNaN(productPrice)) {
             var totalAmount = productQty * productPrice;
-
-            $(this).closest('tr').find('.total-amount').val(totalAmount);
+            $(this).closest('tr').find('.total-amount').val(formatCurrency(totalAmount));
 
             calculateTotalAmount();
             calculateTotalTax();
@@ -237,7 +211,7 @@
 
     function updateTaxAmount(row) {
         var productQty = parseInt(row.find('.quantity-input').val());
-        var productPrice = parseFloat(row.find('input[name^="product_price"]').val());
+        var productPrice = parseFloat(row.find('input[name^="product_price"]').val().replace(/[^0-9.-]+/g, ""));
         var taxValue = parseFloat(row.find('.product_tax').val());
 
         if (!isNaN(productQty) && !isNaN(productPrice) && !isNaN(taxValue)) {
@@ -251,13 +225,12 @@
     function calculateTotalAmount() {
         var totalAmount = 0;
         $('tr').each(function() {
-            var rowTotal = parseFloat($(this).find('.total-amount').val());
+            var rowTotal = parseFloat(String($(this).find('.total-amount').val()).replace(/[^0-9.-]+/g, ""));
             if (!isNaN(rowTotal)) {
                 totalAmount += rowTotal;
             }
         });
-        $('#total-amount-sum').text(numberWithCommas(totalAmount));
-
+        $('#total-amount-sum').text(formatCurrency(totalAmount));
         calculateTotalTax();
         calculateGrandTotal();
     }
@@ -265,29 +238,27 @@
     function calculateTotalTax() {
         var totalTax = 0;
         $('tr').each(function() {
-            var rowTax = parseFloat($(this).find('.product_tax1').text());
+            var rowTax = parseFloat($(this).find('.product_tax1').text().replace(/[^0-9.-]+/g, ""));
             if (!isNaN(rowTax)) {
                 totalTax += rowTax;
             }
         });
-        $('#product-tax').text(numberWithCommas(totalTax));
+        $('#product-tax').text(formatCurrency(totalTax));
 
         calculateGrandTotal();
     }
 
     function calculateGrandTotal() {
-        var totalAmount = parseFloat($('#total-amount-sum').text());
-        var totalTax = parseFloat($('#product-tax').text());
+        var totalAmount = parseFloat($('#total-amount-sum').text().replace(/[^0-9.-]+/g, ""));
+        var totalTax = parseFloat($('#product-tax').text().replace(/[^0-9.-]+/g, ""));
 
         var grandTotal = totalAmount + totalTax;
-        $('#grand-total').text(numberWithCommas(grandTotal));
+        $('#grand-total').text(formatCurrency(grandTotal));
 
         // Update data-value attribute
         $('#grand-total').attr('data-value', grandTotal);
-        $('#total').val(numberWithCommas(grandTotal));
+        $('#total').val(formatCurrency(grandTotal));
     }
-
-
 
     $(document).on('click', '#deleteRowTable', function() {
         $('tbody input[type="checkbox"]:checked').closest('tr').remove();
@@ -457,7 +428,7 @@
             '<input required type="text" class="form-control" id="provide_address_new" placeholder="Nhập thông tin" name="provide_address_new" value="">' +
             '</div>' + '<div class="form-group">' +
             '<label for="email">Mã số thuế:</label>' +
-            '<input required type="number" class="form-control" id="provide_code_new" placeholder="Nhập thông tin" name="provide_code_new" value="">' +
+            '<input required type="number" class="form-control" oninput="validateNumberInput(this)" id="provide_code_new" placeholder="Nhập thông tin" name="provide_code_new" value="">' +
             '</div>' + '</div>' + '<div class="col-sm-6">' +
             '<div class="form-group">' +
             '<label for="email">Người đại diện:</label>' +
@@ -540,36 +511,68 @@
             }
         });
 
-        // $('input[name^="product_qty[]"]').each(function(index) {
-        //     var qty = $(this).val();
-        //     var id_modal = $(this).closest('.container-fluided').find('.modal').attr('id').replace(/\D/g, '');
-        //     var sn_count = $('input[name="product_SN' + id_modal + '[]"]').length;
-        //     var check = false;
-        //     $('input[name^="product_SN' + id_modal + '[]"]').each(function(index) {
-        //         $(this).each(function() {
-        //             if ($(this).val() === "") {
-        //                 check = true;
-        //                 return false;
-        //             }
-        //         });
-        //     });
-
-        //     if (check) {
-        //         error = true;
-        //         errorMessage = 'Vui lòng nhập seri number';
-        //         return false;
-        //     }
-        //     if (qty != sn_count) {
-        //         error = true;
-        //         errorMessage = 'Số lượng và seri number không hợp lệ';
-        //         return false;
-        //     }
-        // });
-
         if ($('#provide_id').val().trim() == '' && $('#radio1').prop('checked') == true) {
             error = true;
             errorMessage = 'Vui lòng chọn nhà cung cấp';
         }
+
+        var listSN = [];
+        var products_id = [];
+        $('select[name^="products_id[]"]').each(function() {
+            products_id.push($(this).val());
+        })
+        $('input[name^="product_SN"]').each(function() {
+            if ($(this).val() == "") {
+                error = true;
+                alert('Vui lòng nhập seri number');
+                return false;
+            } else {
+                var sn = $(this).val();
+                if (sn !== "") {
+                    listSN.push(sn);
+                }
+            }
+
+        });
+
+        if (error) {
+            return false;
+        }
+
+        // Kiểm tra xem các giá trị SN có giống nhau hay không
+        var isDuplicate = false;
+        for (var i = 0; i < listSN.length - 1; i++) {
+            for (var j = i + 1; j < listSN.length; j++) {
+                if (listSN[i] === listSN[j]) {
+                    isDuplicate = true;
+                    alert("Test đúng rồi đó mà bị chặn rồi " + listSN[j]);
+                    break;
+                }
+            }
+            if (isDuplicate) {
+                break;
+            }
+        }
+        if (isDuplicate == false) {
+            $.ajax({
+                url: "{{route('checkSN')}}",
+                type: "get",
+                data: {
+                    listSN: listSN,
+                    products_id: products_id
+                },
+                success: function(data) {
+                    if (data.success == false) {
+                        error = true;
+                        alert("Seri number " + data.existingSN + " đã tồn tại");
+                    } else {
+                        updateProductSN();
+                        $('#form_submit')[0].submit();
+                    }
+                }
+            })
+        }
+
 
         if (error) {
             alert(errorMessage);
@@ -634,6 +637,7 @@
             '<option value="00">NOVAT</option>' +
             '</select>' +
             '</td>' +
+            // '<td><span readonly class="form-control total-amount text-center" style="width:140px" name="product_total[]"> </span></td>'+
             '<td><input readonly type="text" class="form-control total-amount text-center" style="width:140px" name="product_total[]"></td>' +
             '<td><input type="text" class="form-control" style="width:140px" name="product_trademark[]"></td>' +
             '<td>' +
@@ -810,7 +814,7 @@
         var row = $(this).closest('tr');
         var childSelect = row.find('.myUL1');
         var name = row.find('input[name="product_name[]"]');
-        name.val("");
+        // name.val("");
         if (id) {
             $.ajax({
                 url: "{{ route('showProduct') }}",
@@ -991,7 +995,7 @@
                     data.provide_address + '">' +
                     '</div>' + '<div class="form-group">' +
                     '<label for="email">Mã số thuế:</label>' +
-                    '<input required type="text" class="form-control" id="provide_code" placeholder="Nhập thông tin" name="provide_code" value="' +
+                    '<input required type="text" class="form-control" oninput="validateNumberInput(this)" id="provide_code" placeholder="Nhập thông tin" name="provide_code" value="' +
                     data.provide_code + '">' +
                     '</div>' + '</div>' + '<div class="col-sm-6">' +
                     '<div class="form-group">' +
@@ -1054,30 +1058,30 @@
             }
         });
 
-        $('input[name^="product_qty[]"]').each(function(index) {
-            var qty = $(this).val();
-            var snCheck = false;
+        // $('input[name^="product_qty[]"]').each(function(index) {
+        //     var qty = $(this).val();
+        //     var snCheck = false;
 
-            var sn_count = $('input[name="product_SN' + index + '[]"]').length;
-            $('input[name^="product_SN' + index + '[]"]').each(function(index) {
-                if ($(this).val() === "") {
-                    error = true;
-                    alert('Vui lòng nhập seri number');
-                    return false;
-                }
-            });
+        //     var sn_count = $('input[name="product_SN' + index + '[]"]').length;
+        //     $('input[name^="product_SN' + index + '[]"]').each(function(index) {
+        //         if ($(this).val() === "") {
+        //             error = true;
+        //             alert('Vui lòng nhập seri number');
+        //             return false;
+        //         }
+        //     });
 
-            if (qty != sn_count) {
-                snCheck = true;
-                return false;
-            }
+        //     if (qty != sn_count) {
+        //         snCheck = true;
+        //         return false;
+        //     }
 
-            if (snCheck) {
-                error = true;
-                alert('Số lượng và seri number không hợp lệ');
-                return false;
-            }
-        });
+        //     if (qty != sn_count) {
+        //         error = true;
+        //         alert('Số lượng và seri number không hợp lệ');
+        //         return false;
+        //     }
+        // });
 
 
         if ($('#provide_id').val().trim() == '' && $('#radio1').prop('checked') == true) {
@@ -1085,47 +1089,137 @@
             alert('Vui lòng chọn nhà cung cấp');
         }
 
+        // AJAX Kiểm tra Serial number đã tồn tại chưa
+        // Kiểm tra số lượng và seri number;
+        // $('input[name^="product_qty[]"]').each(function(index) {
+        //     var qty = $(this).val();
+        //     var sn_count = $('input[name="product_SN' + index + '[]"]').length;
+        //     console.log(sn_count)
+        //     if(qty != sn_count){
+        //         error = true;
+        //         alert('Số lượng sản phẩm và seri number không hợp lệ !');
+        //         return false;
+        //     }
+        // });
+
+        var listSN = [];
+        var products_id = [];
+        $('select[name^="products_id[]"]').each(function() {
+            products_id.push($(this).val());
+        })
+        $('input[name^="product_SN"]').each(function() {
+            if ($(this).val() == "") {
+                error = true;
+                alert('Vui lòng nhập seri number');
+                return false;
+            } else {
+                var sn = $(this).val();
+                if (sn !== "") {
+                    listSN.push(sn);
+                }
+            }
+
+        });
 
         if (error) {
             return false;
         }
 
-
-        // AJAX Kiểm tra Serial number đã tồn tại chưa
-        var listSN = [];
-        var products_id = [];
-        $('select[name^="products_id[]"]').each(function() {
-            products_id.push($('select[name^="products_id[]"]').val());
-        })
-        $('input[name^="product_SN"]').each(function() {
-            var sn = $(this).val();
-            if (sn !== "") {
-                listSN.push(sn);
-            }
-        });
-        $.ajax({
-            url: "{{route('checkSN')}}",
-            type: "get",
-            data: {
-                listSN: listSN,
-            },
-            success: function(data) {
-                if (data.success == false) {
-                    error = true;
-                    alert("Seri number" + data.existingSN + "đã tồn tại");
-                } else {
-                    updateProductSN();
-                    // console.log($('#form_submit')[0]);
-                    $('#form_submit')[0].submit();
-                    // $(this).off('submit');
-                    // this.submit();
+        // Kiểm tra xem các giá trị SN có giống nhau hay không
+        var isDuplicate = false;
+        for (var i = 0; i < listSN.length - 1; i++) {
+            for (var j = i + 1; j < listSN.length; j++) {
+                if (listSN[i] === listSN[j]) {
+                    isDuplicate = true;
+                    alert("Test đúng rồi đó mà bị chặn rồi " + listSN[j]);
+                    break;
                 }
             }
-        })
-
-
-
+            if (isDuplicate) {
+                break;
+            }
+        }
+        if (isDuplicate == false) {
+            $.ajax({
+                url: "{{route('checkSN')}}",
+                type: "get",
+                data: {
+                    listSN: listSN,
+                    products_id: products_id
+                },
+                success: function(data) {
+                    if (data.success == false) {
+                        error = true;
+                        alert("Seri number" + data.existingSN + "đã tồn tại");
+                    } else {
+                        updateProductSN();
+                        $('#form_submit')[0].submit();
+                    }
+                }
+            })
+        }
     });
+    $('body').on('input', '.product_price', function(event) {
+        // Lấy giá trị đã nhập
+        var value = event.target.value;
+
+        // Xóa các ký tự không phải số và dấu phân thập phân từ giá trị
+        var formattedValue = value.replace(/[^0-9.]/g, '');
+
+        // Định dạng số với dấu phân cách hàng nghìn và giữ nguyên số thập phân
+        var formattedNumber = numberWithCommas(formattedValue);
+
+        event.target.value = formattedNumber;
+    });
+
+    $('body').on('input','.total-amount',function(event){
+        alert('change');
+    })
+
+    function numberWithCommas(number) {
+        // Chia số thành phần nguyên và phần thập phân
+        var parts = number.split('.');
+        var integerPart = parts[0];
+        var decimalPart = parts[1];
+
+        // Định dạng phần nguyên số với dấu phân cách hàng nghìn
+        var formattedIntegerPart = integerPart.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+        // Kết hợp phần nguyên và phần thập phân (nếu có)
+        var formattedNumber = decimalPart !== undefined ? formattedIntegerPart + '.' + decimalPart :
+            formattedIntegerPart;
+
+        return formattedNumber;
+    }
+
+    // Định dạng lai thành tiền
+    function formatCurrency(value) {
+        // Làm tròn đến 2 chữ số thập phân
+        value = Math.round(value * 100) / 100;
+
+        // Xử lý phần nguyên
+        var parts = value.toString().split(".");
+        var integerPart = parts[0];
+        var formattedValue = "";
+
+        // Định dạng phần nguyên
+        var count = 0;
+        for (var i = integerPart.length - 1; i >= 0; i--) {
+            formattedValue = integerPart.charAt(i) + formattedValue;
+            count++;
+            if (count % 3 === 0 && i !== 0) {
+                formattedValue = "," + formattedValue;
+            }
+        }
+
+        // Nếu có phần thập phân, thêm vào sau phần nguyên
+        if (parts.length > 1) {
+            formattedValue += "." + parts[1];
+        }
+
+        return formattedValue;
+    }
+
 
     // Thêm nhanh nhà cung cấp
     $(document).on('click', '#btn-addCustomer', function(e) {
@@ -1178,6 +1272,15 @@
         }
 
     })
+
+    // Nhập số
+    function validateNumberInput(input) {
+        const regex = /^[-+]?[0-9]{1,3}(?:,?[0-9]{3})*(?:\.[0-9]+)?$/;
+        const value = input.value.replace(/,/g, '');
+        if (!regex.test(value)) {
+            input.value = '';
+        }
+    }
 </script>
 @endif
 </body>

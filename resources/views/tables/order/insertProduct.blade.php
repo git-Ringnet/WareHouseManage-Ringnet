@@ -681,7 +681,6 @@ $index = array_search($item['label'], $numberedLabels);
         } else {
             return false
         }
-
     }
 
     // AJAX Xóa Order by Order_id
