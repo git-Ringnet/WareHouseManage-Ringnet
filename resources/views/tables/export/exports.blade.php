@@ -20,7 +20,7 @@
                     </button>
                 </a>
                 <button style="margin-left:24px" type="button" onclick="exportToExcel()"
-                    class="btn bg-transparent border-primary d-flex align-items-center">
+                    class="btn btn-outline-primary border-primary d-flex align-items-center">
                     <svg width="14" height="18" viewBox="0 0 14 18" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
                         <path

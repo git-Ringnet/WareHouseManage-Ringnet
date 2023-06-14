@@ -101,7 +101,7 @@ class Products extends Model
     }
     public function productsStock(){
         $products = DB::table($this->table);
-        $products = $products->where('inventory', '>', 6)->get();
+        $products = $products->where('inventory', '>', 5)->get();
         return $products;
     }
     public function productsEnd(){

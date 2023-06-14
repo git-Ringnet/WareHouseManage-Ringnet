@@ -138,8 +138,10 @@ $index = array_search($item['label'], $numberedLabels);
                                             <div class="scrollbar">
                                                 <button class="dropdown-item" id="btn-name">Đơn vị</button>
                                                 {{-- <button class="dropdown-item" id="btn-represent">Đại diện</button> --}}
+                                                @if(Auth::user()->can('isAdmin'))
                                                 <button class="dropdown-item" id="btn-users_name">Người phụ
                                                     trách</button>
+                                                    @endif
                                                 <button class="dropdown-item" id="btn-phonenumber">Số điện
                                                     thoại</button>
                                                 <button class="dropdown-item" id="btn-email">Email</button>

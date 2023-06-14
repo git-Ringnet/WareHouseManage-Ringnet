@@ -790,12 +790,18 @@ input[type="number"] {
     right: 5px;
     top: 0;
 }
-#btn-addNoteForm.active path{
+
+#btn-addNoteForm.active path {
     fill: #0095F6;
 }
+
 #btn-addNoteForm.disable {
     pointer-events: none;
-  }
-  .btn-outline-primary:hover svg path{
+}
+
+.btn-outline-primary:hover svg path {
     stroke: #ffff;
-  }
+}
+.btn-outline-primary:hover span{
+    color: #ffff;
+}

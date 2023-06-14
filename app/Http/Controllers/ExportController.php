@@ -550,7 +550,7 @@ class ExportController extends Controller
             ->where('export_id', $id)
             ->get();
         $product_code = Products::all();
-        $title = 'Chỉnh sửa đơn xuất hàng';
+        $title = 'Chi tiết đơn hàng';
         return view('tables.export.editExport', compact('exports', 'guest', 'productExport', 'product_code', 'customer', 'title'));
     }
 
