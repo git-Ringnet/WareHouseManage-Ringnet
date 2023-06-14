@@ -253,10 +253,10 @@
                             <div class="form-group">
                                 <label for="email">SĐT người nhận:</label>
                                 <input type="text" class="form-control" id="guest_phoneReceiver"
-                                    pattern="^(0|\+84)(3[2-9]|5[2689]|7[06-9]|8[1-9]|9[0-9])\d{7}$" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                    pattern="^(0|\+84)(3[2-9]|5[2689]|7[0|6-9]|8[1-9]|9[0-9])\d{7,9}$"
+                                    <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                         echo 'readonly';
-                                    } ?>
-                                    placeholder="Nhập thông tin" name="guest_phoneReceiver"
+                                    } ?> placeholder="Nhập thông tin" name="guest_phoneReceiver"
                                     value="{{ $guest->guest_phoneReceiver }}" required>
                             </div>
                         </div>
@@ -280,11 +280,11 @@
                             <div class="form-group">
                                 <label for="email">Số điện thoại:</label>
                                 <input type="text" class="form-control"
-                                    pattern="^(0|\+84)(3[2-9]|5[2689]|7[06-9]|8[1-9]|9[0-9])\d{7}$" id="guest_phone"
-                                    <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                    pattern="^(0|\+84)(3[2-9]|5[2689]|7[0|6-9]|8[1-9]|9[0-9])\d{7,9}$"
+                                    id="guest_phone" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                         echo 'readonly';
-                                    } ?> placeholder="Nhập thông tin" name="guest_phone"
-                                    value="{{ $guest->guest_phone }}" required>
+                                    } ?> placeholder="Nhập thông tin"
+                                    name="guest_phone" value="{{ $guest->guest_phone }}" required>
                             </div>
                             <div class="form-group">
                                 <label for="email">Hình thức thanh toán:</label>
@@ -383,12 +383,12 @@
                                         name="product_qty[]" required="">
                                 </td>
                                 <td>
-                                    <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-                                        id="product_price" name="product_price[]" class="form-control text-center"
-                                        style="width: 140px" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                    <input type="text" id="product_price" name="product_price[]"
+                                        class="form-control text-center product_price" style="width: 140px"
+                                        <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                             echo 'readonly';
-                                        } ?>
-                                        value={{ $value_export->product_price }} required="">
+                                        } ?> value={{ number_format($value_export->product_price) }}
+                                        required="">
                                 </td>
                                 <td>
                                     <input type="text" id="" name="product_note[]" class="form-control"
@@ -399,7 +399,7 @@
                                 </td>
                                 <td>
                                     <select name="product_tax[]" class="product_tax form-control"
-                                        style="width: 140px;" id="product_tax" required <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                        style="width: 100px;" id="product_tax" required <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                             echo 'disabled';
                                         } ?>>
                                         <option value="0" <?php if ($value_export->product_tax == 0) {
@@ -419,8 +419,16 @@
                                 <td><span class="total-amount form-control text-center"
                                         style="background:#e9ecef; width:140px">0</span>
                                 </td>
-                                <td data-toggle='modal' data-target='#snModal' class='sn'><img
-                                        src="../../dist/img/icon/list.png"></td>
+                                @if ($exports->export_status == 2)
+                                    <td data-toggle='modal' data-target='#snModal' class='sn'><img
+                                            src="../../dist/img/icon/list.png"></td>
+                                @elseif($exports->export_status == 0)
+                                    <td data-toggle='modal' data-target='#snModal' class='sn1'><img
+                                            src="../../dist/img/icon/list.png"></td>
+                                @else
+                                    <td data-toggle='modal' data-target='#snModal' class='sn2'><img
+                                            src="../../dist/img/icon/list.png"></td>
+                                @endif
                                 <td data-toggle='modal' data-target='#productModal' class='productMD'><img
                                         src="../../dist/img/icon/Group.png"></td>
                                 @if ($exports->export_status == 1)
@@ -471,11 +479,11 @@
                     <div class="mt-4 w-50" style="float: right;">
                         <div class="d-flex justify-content-between">
                             <span><b>Giá trị trước thuế:</b></span>
-                            <span id="total-amount-sum">{{ number_format(0) }}</span>
+                            <span id="total-amount-sum">0</span>
                         </div>
                         <div class="d-flex justify-content-between mt-2">
                             <span><b>Thuế VAT:</b></span>
-                            <span id="product-tax">{{ number_format(0) }}</span>
+                            <span id="product-tax">0</span>
                         </div>
                         {{-- <div class="d-flex justify-content-between mt-2">
                             <span class="text-primary">Giảm giá:</span>
@@ -586,8 +594,67 @@
             },
         });
     });
-    //hiển thị thông tin S/N
+    //hiển thị thông tin S/N chốt đơn
     $('.sn').on('click', function() {
+        var qty = $(this).closest('tr').find('.quantity-input').val();
+        var productCode = $(this).closest('tr').find('.productName').val();
+        var productCode1 = $(this).closest('tr').find('.maProduct option:selected')
+            .text();
+        var productName = $(this).closest('tr').find('.productName option:selected')
+            .text();
+        var dvt = $(this).closest('tr').find('.product_unit').val();
+        var giaBan = $(this).closest('tr').find('.product_price')
+            .val();
+        var ghiChu = $(this).closest('tr').find('.note_product')
+            .val();
+        var thue = $(this).closest('tr').find('.product_tax')
+            .val();
+        var thanhTien = $(this).closest('tr').find('.total-amount')
+            .text();
+        var giaNhap = $(this).closest('tr').find('.price_import').val();
+        var tonKho = $(this).closest('tr').find('.tonkho').val();
+        $.ajax({
+            url: '{{ route('getSN1') }}',
+            type: 'GET',
+            data: {
+                qty: qty,
+                productCode: productCode,
+            },
+            success: function(response) {
+                console.log(response);
+                var modalBody = $('#snModal').find('.modal-body');
+                let count = 1;
+                modalBody.empty();
+                var snList = $('<table class="table table-hover">' +
+                    '<thead><tr><td>STT</td><td>Serial Number</td></tr></thead>' +
+                    '<tbody>'
+                );
+                var product = $('<table class="table table-hover">' +
+                    '<thead><tr><td>ID</td><td>Mã sản phẩm</td><td>Tên sản phẩm</td><td>Số lượng sản phẩm</td><td>Số lượng S/N</td></tr></thead>' +
+                    '<tbody><tr>' + '<td>1</td>' + '<td>' +
+                    productCode1 + '</td>' + '<td>' + productName +
+                    '</td>' + '<td>' + qty + '</td>' + '<td>' + qty +
+                    '</td>' +
+                    '</tr</tbody>' + '</table>' +
+                    '<h5>Thông tin Serial Number </h5>');
+                response.forEach(function(sn) {
+                    var countCell = $('<td>').text(count);
+                    var snItemCell = $('<td>').text(sn.serinumber);
+                    var row = $('<tr>').append(countCell,
+                        snItemCell);
+                    snList.append(row);
+                    count++;
+                });
+                modalBody.append(product, snList);
+                $('#snModal').modal('show');
+            },
+            error: function(xhr, status, error) {
+                console.log(error);
+            }
+        });
+    });
+    //hiển thị thông tin S/N hủy đơn
+    $('.sn1').on('click', function() {
         var qty = $(this).closest('tr').find('.quantity-input').val();
         var productCode = $(this).closest('tr').find('.productName').val();
         var productCode1 = $(this).closest('tr').find('.maProduct option:selected')
@@ -613,6 +680,66 @@
                 productCode: productCode,
             },
             success: function(response) {
+                console.log(response);
+                var modalBody = $('#snModal').find('.modal-body');
+                let count = 1;
+                modalBody.empty();
+                var snList = $('<table class="table table-hover">' +
+                    '<thead><tr><td>STT</td><td>Serial Number</td></tr></thead>' +
+                    '<tbody>'
+                );
+                var product = $('<table class="table table-hover">' +
+                    '<thead><tr><td>ID</td><td>Mã sản phẩm</td><td>Tên sản phẩm</td><td>Số lượng sản phẩm</td><td>Số lượng S/N</td></tr></thead>' +
+                    '<tbody><tr>' + '<td>1</td>' + '<td>' +
+                    productCode1 + '</td>' + '<td>' + productName +
+                    '</td>' + '<td>' + qty + '</td>' + '<td>' + qty +
+                    '</td>' +
+                    '</tr</tbody>' + '</table>' +
+                    '<h5>Thông tin Serial Number </h5>');
+                response.forEach(function(sn) {
+                    var countCell = $('<td>').text(count);
+                    var snItemCell = $('<td>').text(sn.serinumber);
+                    var row = $('<tr>').append(countCell,
+                        snItemCell);
+                    snList.append(row);
+                    count++;
+                });
+                modalBody.append(product, snList);
+                $('#snModal').modal('show');
+            },
+            error: function(xhr, status, error) {
+                console.log(error);
+            }
+        });
+    });
+    //hiển thị thông tin S/N cho duyet
+    $('.sn2').on('click', function() {
+        var qty = $(this).closest('tr').find('.quantity-input').val();
+        var productCode = $(this).closest('tr').find('.productName').val();
+        var productCode1 = $(this).closest('tr').find('.maProduct option:selected')
+            .text();
+        var productName = $(this).closest('tr').find('.productName option:selected')
+            .text();
+        var dvt = $(this).closest('tr').find('.product_unit').val();
+        var giaBan = $(this).closest('tr').find('.product_price')
+            .val();
+        var ghiChu = $(this).closest('tr').find('.note_product')
+            .val();
+        var thue = $(this).closest('tr').find('.product_tax')
+            .val();
+        var thanhTien = $(this).closest('tr').find('.total-amount')
+            .text();
+        var giaNhap = $(this).closest('tr').find('.price_import').val();
+        var tonKho = $(this).closest('tr').find('.tonkho').val();
+        $.ajax({
+            url: '{{ route('getSN2') }}',
+            type: 'GET',
+            data: {
+                qty: qty,
+                productCode: productCode,
+            },
+            success: function(response) {
+                console.log(response);
                 var modalBody = $('#snModal').find('.modal-body');
                 let count = 1;
                 modalBody.empty();
@@ -742,7 +869,7 @@
                 "</td>"
             );
             const giaInput = $(
-                "<td><input type='number' class='product_price form-control' style='width:140px;' id='product_price' name='product_price[]' required></td>"
+                "<td><input type='text' class='product_price form-control' style='width:140px;' id='product_price' name='product_price[]' required></td>"
             );
             const ghichuInput = $(
                 "<td><input type='text' class='note_product form-control text-center' name='product_note[]'></td>"
@@ -1188,31 +1315,31 @@
             }
 
             // Check if the selected product name is already in use
-            if (selectedProductNames.includes(selectedName)) {
-                $(this).val('');
-            } else {
-                selectedProductNames.push(selectedName);
-            }
+            // if (selectedProductNames.includes(selectedName)) {
+            //     $(this).val('');
+            // } else {
+            //     selectedProductNames.push(selectedName);
+            // }
         });
 
         // Function to hide selected product names from other child select options
-        function hideSelectedProductNames(row) {
-            var selectedNames = row.find('.child-select').map(function() {
-                return $(this).val();
-            }).get();
+        // function hideSelectedProductNames(row) {
+        //     var selectedNames = row.find('.child-select').map(function() {
+        //         return $(this).val();
+        //     }).get();
 
-            row.find('.child-select').each(function() {
-                var currentName = $(this).val();
-                $(this).find('option').each(function() {
-                    if ($(this).val() !== currentName && selectedNames.includes($(this)
-                            .val())) {
-                        $(this).hide();
-                    } else {
-                        $(this).show();
-                    }
-                });
-            });
-        }
+        //     row.find('.child-select').each(function() {
+        //         var currentName = $(this).val();
+        //         $(this).find('option').each(function() {
+        //             if ($(this).val() !== currentName && selectedNames.includes($(this)
+        //                     .val())) {
+        //                 $(this).hide();
+        //             } else {
+        //                 $(this).show();
+        //             }
+        //         });
+        //     });
+        // }
     });
     //tính thành tiền của sản phẩm
     $(document).ready(function() {
@@ -1230,19 +1357,23 @@
         // Lặp qua từng hàng
         $('tr').each(function() {
             var productQty = parseInt($(this).find('.quantity-input').val());
+            var productPriceElement = $(this).find('[name^="product_price"]');
             var productPrice = 0;
-            var taxValue = parseInt($(this).find('.product_tax option:selected').val());
+            var taxValue = parseFloat($(this).find('.product_tax option:selected').val());
 
-            $(this).find('[name^="product_price"]').each(function() {
-                productPrice += parseFloat($(this).val());
-            });
+            if (productPriceElement.length > 0) {
+                var rawPrice = productPriceElement.val();
+                if (rawPrice !== "") {
+                    productPrice = parseFloat(rawPrice.replace(/,/g, ''));
+                }
+            }
 
             if (!isNaN(productQty) && !isNaN(productPrice) && !isNaN(taxValue)) {
                 var rowTotal = productQty * productPrice;
-                var rowTax = (productQty * productPrice * taxValue) / 100;
+                var rowTax = (rowTotal * taxValue) / 100;
 
                 // Hiển thị kết quả
-                $(this).find('.total-amount').text(rowTotal.toFixed(2));
+                $(this).find('.total-amount').text(formatCurrency(rowTotal.toFixed(2)));
                 $(this).find('.product_tax1').text(rowTax.toFixed(2));
 
                 // Cộng dồn vào tổng totalAmount và totalTax
@@ -1252,8 +1383,8 @@
         });
 
         // Hiển thị tổng totalAmount và totalTax
-        $('#total-amount-sum').text(totalAmount.toFixed(2));
-        $('#product-tax').text(totalTax.toFixed(2));
+        $('#total-amount-sum').text(formatCurrency(totalAmount.toFixed(2)));
+        $('#product-tax').text(formatCurrency(totalTax.toFixed(2)));
 
         // Tính tổng thành tiền và thuế
         calculateGrandTotal(totalAmount, totalTax);
@@ -1261,22 +1392,53 @@
 
     function calculateGrandTotal(totalAmount, totalTax) {
         var grandTotal = totalAmount + totalTax;
-        $('#grand-total').text(grandTotal.toFixed(2));
+        $('#grand-total').text(formatCurrency(grandTotal.toFixed(2)));
 
         // Cập nhật giá trị data-value
         $('#grand-total').attr('data-value', grandTotal.toFixed(2));
         $('#total').val(grandTotal.toFixed(2));
     }
 
+    function formatCurrency(value) {
+        // Làm tròn đến 2 chữ số thập phân
+        value = Math.round(value * 100) / 100;
+
+        // Xử lý phần nguyên
+        var parts = value.toString().split(".");
+        var integerPart = parts[0];
+        var formattedValue = "";
+
+        // Định dạng phần nguyên
+        var count = 0;
+        for (var i = integerPart.length - 1; i >= 0; i--) {
+            formattedValue = integerPart.charAt(i) + formattedValue;
+            count++;
+            if (count % 3 === 0 && i !== 0) {
+                formattedValue = "," + formattedValue;
+            }
+        }
+
+        // Nếu có phần thập phân, thêm vào sau phần nguyên
+        if (parts.length > 1) {
+            formattedValue += "." + parts[1];
+        }
+
+        return formattedValue;
+    }
+
     //hàm kiểm tra submit
     function validateAndSubmit(event) {
         var formGuest = $('#form-guest');
         var productList = $('.productName');
-        if (formGuest.length && productList.length > 0) {
 
+        if (formGuest.length && productList.length > 0) {
+            $('.quantity-input, [name^="product_price"]').each(function() {
+                var newValue = $(this).val().replace(/,/g, '');
+                $(this).val(newValue);
+            });
         } else {
             if (formGuest.length === 0) {
-                alert('Lỗi: Chưa chọn nhà cung cấp!');
+                alert('Lỗi: Chưa nhập thông tin khách hàng!');
             } else if (productList.length === 0) {
                 alert('Lỗi: Chưa thêm sản phẩm!');
             }
@@ -1286,23 +1448,33 @@
 
     //format giá
     var inputElement = document.getElementById('product_price');
-
-    // Bắt sự kiện khi người dùng nhập dữ liệu
-    inputElement.addEventListener('input', function(event) {
+    $('body').on('input', '.product_price', function(event) {
         // Lấy giá trị đã nhập
         var value = event.target.value;
 
         // Xóa các ký tự không phải số và dấu phân thập phân từ giá trị
         var formattedValue = value.replace(/[^0-9.]/g, '');
 
-        // Định dạng số với dấu phân cách hàng nghìn
+        // Định dạng số với dấu phân cách hàng nghìn và giữ nguyên số thập phân
         var formattedNumber = numberWithCommas(formattedValue);
 
         event.target.value = formattedNumber;
     });
 
     function numberWithCommas(number) {
-        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        // Chia số thành phần nguyên và phần thập phân
+        var parts = number.split('.');
+        var integerPart = parts[0];
+        var decimalPart = parts[1];
+
+        // Định dạng phần nguyên số với dấu phân cách hàng nghìn
+        var formattedIntegerPart = integerPart.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+        // Kết hợp phần nguyên và phần thập phân (nếu có)
+        var formattedNumber = decimalPart !== undefined ? formattedIntegerPart + '.' + decimalPart :
+            formattedIntegerPart;
+
+        return formattedNumber;
     }
 </script>
 </body>

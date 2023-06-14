@@ -98,10 +98,10 @@ class GuestsController extends Controller
             $keywords = $request->keywords;
         }
         $users = User::whereIn('roleid', [1, 3])->get();
-        $guests = $this->guests->getAllguests($filters,$users_name, $name, $represent, $phonenumber, $email, $status, $keywords, $sortByArr);
+        $guests = $this->guests->getAllguests($filters, $users_name, $name, $represent, $phonenumber, $email, $status, $keywords, $sortByArr);
         // dd($guests);
         $title = 'Khách hàng';
-        return view('tables.guest.guests', compact('guests','users', 'sortType', 'string', 'title'));
+        return view('tables.guest.guests', compact('guests', 'users', 'sortType', 'string', 'title'));
     }
 
     /**
@@ -122,24 +122,39 @@ class GuestsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {   
-        Guests::create([
-            'guest_name' => $request->guest_name,
-            'guest_represent' => $request->guest_represent,
-            'guest_phone' => $request->guest_phone,
-            'guest_email' => $request->guest_email,
-            'guest_status' => $request->guest_status,
-            'guest_addressInvoice' => $request->guest_addressInvoice,
-            'guest_code' => $request->guest_code,
-            'guest_addressDeliver' => $request->guest_addressDeliver,
-            'guest_receiver' => $request->guest_receiver,
-            'guest_phoneReceiver' => $request->guest_phoneReceiver,
-            'guest_pay' => $request->guest_pay,
-            'guest_payTerm' => $request->guest_payTerm,
-            'guest_note' => $request->guest_note,
-            'user_id' =>  $request->user_id,
-        ]);
-        return redirect()->route('guests.index')->with('msg', 'Thêm khách hàng thành công!');
+    {
+        $existingCustomer = Guests::where('guest_name', $request->guest_name)
+            ->where('guest_email', $request->guest_email)
+            ->where('guest_addressInvoice', $request->guest_addressInvoice)
+            ->where('guest_code', $request->guest_code)
+            ->where('guest_addressDeliver', $request->guest_addressDeliver)
+            ->where('guest_receiver', $request->guest_receiver)
+            ->where('guest_phoneReceiver', $request->guest_phoneReceiver)
+            ->where('guest_represent', $request->guest_represent)
+            ->where('guest_phone', $request->guest_phone)
+            ->first();
+
+        if ($existingCustomer) {
+            return redirect()->route('guests.index')->with('warning', 'Thông tin khách hàng đã có trong hệ thống!');
+        } else {
+            Guests::create([
+                'guest_name' => $request->guest_name,
+                'guest_represent' => $request->guest_represent,
+                'guest_phone' => $request->guest_phone,
+                'guest_email' => $request->guest_email,
+                'guest_status' => $request->guest_status,
+                'guest_addressInvoice' => $request->guest_addressInvoice,
+                'guest_code' => $request->guest_code,
+                'guest_addressDeliver' => $request->guest_addressDeliver,
+                'guest_receiver' => $request->guest_receiver,
+                'guest_phoneReceiver' => $request->guest_phoneReceiver,
+                'guest_pay' => $request->guest_pay,
+                'guest_payTerm' => $request->guest_payTerm,
+                'guest_note' => $request->guest_note,
+                'user_id' =>  $request->user_id,
+            ]);
+            return redirect()->route('guests.index')->with('msg', 'Thêm khách hàng thành công!');
+        }
     }
 
     /**
@@ -164,7 +179,7 @@ class GuestsController extends Controller
         $title = 'Chỉnh sửa khách hàng';
         $guests = Guests::find($id);
         $usersSale = User::where('roleid', 3)->get();
-        return view('tables.guest.editGuest', compact('guests', 'title','usersSale'));
+        return view('tables.guest.editGuest', compact('guests', 'title', 'usersSale'));
     }
 
     /**
@@ -176,9 +191,23 @@ class GuestsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $guests = Guests::find($id);
-        $guests->update($request->all());
-        return redirect()->route('guests.index')->with('msg', 'Cập nhật thành công!');
+        $existingCustomer = Guests::find($id)->where('guest_name', $request->guest_name)
+            ->where('guest_email', $request->guest_email)
+            ->where('guest_addressInvoice', $request->guest_addressInvoice)
+            ->where('guest_code', $request->guest_code)
+            ->where('guest_addressDeliver', $request->guest_addressDeliver)
+            ->where('guest_receiver', $request->guest_receiver)
+            ->where('guest_phoneReceiver', $request->guest_phoneReceiver)
+            ->where('guest_represent', $request->guest_represent)
+            ->where('guest_phone', $request->guest_phone)
+            ->first();
+        if ($existingCustomer) {
+            return redirect()->route('guests.index')->with('warning', 'Cập nhật thất bại, do trùng thông tin khách hàng đã có trong hệ thống!');
+        } else {
+            $guests = Guests::find($id);
+            $guests->update($request->all());
+            return redirect()->route('guests.index')->with('msg', 'Cập nhật thành công!');
+        }
     }
 
     /**
@@ -211,10 +240,10 @@ class GuestsController extends Controller
             $guest_exist = Exports::whereIn('guest_id', $list)->first();
             if (!$guest_exist) {
                 Guests::whereIn('id', $list)->delete();
-            session()->flash('msg', 'Xóa nhà cung cấp thành công');
+                session()->flash('msg', 'Xóa nhà cung cấp thành công');
                 return response()->json(['success' => true, 'msg' => 'Xóa nhà cung cấp thành công', 'ids' => $list]);
             } else {
-            session()->flash('warning', 'Không thể xóa, do có thông tin khách hàng trong đơn xuất hàng!');
+                session()->flash('warning', 'Không thể xóa, do có thông tin khách hàng trong đơn xuất hàng!');
                 return response()->json(['success' => true, 'warning' => 'Không thể xóa, do có thông tin khách hàng trong đơn xuất hàng!', 'ids' => $list]);
             }
         }

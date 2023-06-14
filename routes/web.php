@@ -63,6 +63,8 @@ Route::get('nameProducts', [ExportController::class, 'nameProduct'])->name('name
 Route::get('getProduct', [ExportController::class, 'getProduct'])->name('getProduct');
 //lấy thông tin SN của sản phẩm con
 Route::get('getSN', [ExportController::class, 'getSN'])->name('getSN');
+Route::get('getSN1', [ExportController::class, 'getSN1'])->name('getSN1');
+Route::get('getSN2', [ExportController::class, 'getSN2'])->name('getSN2');
 Route::get('/deleteExports', [ExportController::class, 'deleteExports'])->name('deleteExports');
 Route::get('/cancelBillExport', [ExportController::class, 'cancelBillExport'])->name('cancelBillExport');
 
