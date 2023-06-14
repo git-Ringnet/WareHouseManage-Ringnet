@@ -1251,7 +1251,7 @@ class ExportController extends Controller
         if ($data['qty'] == null) {
             return;
         } else {
-            $sn = Serinumbers::where('product_id', $data['productCode'])->limit($data['qty'])->get();
+            $sn = Serinumbers::where('product_id', $data['productCode'])->where('seri_status','1')->limit($data['qty'])->get();
             return response()->json($sn);
         }
     }

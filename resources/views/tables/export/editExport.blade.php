@@ -421,7 +421,7 @@
                                 </td>
                                 <td data-toggle='modal' data-target='#snModal' class='sn'><img
                                         src="../../dist/img/icon/list.png"></td>
-                                <td data-toggle='modal' data-target='#productModal'><img
+                                <td data-toggle='modal' data-target='#productModal' class='productMD'><img
                                         src="../../dist/img/icon/Group.png"></td>
                                 @if ($exports->export_status == 1)
                                     @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
@@ -455,14 +455,14 @@
                                 echo 'readonly';
                             } ?>>{{ $exports->note_form }}</textarea>
                             @if ($exports->export_status == 1)
-                            <div id="btn-addNoteForm">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M5.43364 3H8.07596H15.1555H15.3069C15.6265 3 15.943 3.06298 16.2382 3.18535C16.5335 3.30771 16.8017 3.48706 17.0276 3.71314L19.53 6.2155C19.9864 6.67177 20.2429 7.2907 20.243 7.93604V17.8227C20.243 18.4681 19.9866 19.0871 19.5303 19.5435C19.0739 19.9999 18.4549 20.2563 17.8095 20.2563L16.0466 20.2563H7.19724L5.52568 20.2563C4.8834 20.2563 4.26716 20.0024 3.8113 19.55C3.35544 19.0975 3.09692 18.4832 3.0921 17.8409L3.00007 5.45183C2.99767 5.13073 3.05883 4.81228 3.18005 4.51493C3.30127 4.21757 3.48014 3.94713 3.70636 3.71922C3.93258 3.4913 4.20167 3.31041 4.49812 3.18698C4.79456 3.06354 5.11253 2.99999 5.43364 3ZM7.86094 18.9289H15.3829V12.7662C15.3829 12.5041 15.17 12.2918 14.9095 12.2918H8.33527C8.07351 12.2918 7.86094 12.5044 7.86094 12.7662V18.9289ZM16.7103 18.9289V12.7662C16.7103 11.7716 15.9038 10.9644 14.9095 10.9644H8.33527C7.34041 10.9644 6.53354 11.7713 6.53354 12.7662V18.9289H5.52566C5.2337 18.9289 4.95359 18.8135 4.74638 18.6078C4.53918 18.4022 4.42167 18.1229 4.41947 17.831L4.32744 5.44187C4.32634 5.29591 4.35415 5.15118 4.40924 5.01601C4.46434 4.88085 4.54565 4.75792 4.64848 4.65432C4.7513 4.55072 4.87362 4.4685 5.00837 4.41239C5.14312 4.35629 5.28764 4.3274 5.43361 4.32741H7.41226V7.12292C7.41226 7.53364 7.57542 7.92755 7.86585 8.21797C8.15627 8.5084 8.55018 8.67156 8.9609 8.67156H14.2705C14.6812 8.67156 15.0751 8.5084 15.3656 8.21797C15.656 7.92755 15.8192 7.53364 15.8192 7.12292V4.45331C15.9184 4.50525 16.0094 4.57211 16.0889 4.65158L18.5915 7.15426C18.799 7.36162 18.9155 7.64302 18.9156 7.93632V17.8227C18.9156 18.1161 18.7991 18.3974 18.5916 18.6049C18.3842 18.8123 18.1028 18.9289 17.8095 18.9289H16.7103ZM14.4918 7.12292V4.32741H8.73967V7.12292C8.73967 7.18159 8.76297 7.23787 8.80446 7.27936C8.84595 7.32085 8.90223 7.34415 8.9609 7.34415H14.2705C14.3292 7.34415 14.3855 7.32085 14.427 7.27936C14.4684 7.23787 14.4918 7.18159 14.4918 7.12292Z"
-                                        fill="#D6D6D6" />
-                                </svg>
-                            </div>
+                                <div id="btn-addNoteForm">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                            d="M5.43364 3H8.07596H15.1555H15.3069C15.6265 3 15.943 3.06298 16.2382 3.18535C16.5335 3.30771 16.8017 3.48706 17.0276 3.71314L19.53 6.2155C19.9864 6.67177 20.2429 7.2907 20.243 7.93604V17.8227C20.243 18.4681 19.9866 19.0871 19.5303 19.5435C19.0739 19.9999 18.4549 20.2563 17.8095 20.2563L16.0466 20.2563H7.19724L5.52568 20.2563C4.8834 20.2563 4.26716 20.0024 3.8113 19.55C3.35544 19.0975 3.09692 18.4832 3.0921 17.8409L3.00007 5.45183C2.99767 5.13073 3.05883 4.81228 3.18005 4.51493C3.30127 4.21757 3.48014 3.94713 3.70636 3.71922C3.93258 3.4913 4.20167 3.31041 4.49812 3.18698C4.79456 3.06354 5.11253 2.99999 5.43364 3ZM7.86094 18.9289H15.3829V12.7662C15.3829 12.5041 15.17 12.2918 14.9095 12.2918H8.33527C8.07351 12.2918 7.86094 12.5044 7.86094 12.7662V18.9289ZM16.7103 18.9289V12.7662C16.7103 11.7716 15.9038 10.9644 14.9095 10.9644H8.33527C7.34041 10.9644 6.53354 11.7713 6.53354 12.7662V18.9289H5.52566C5.2337 18.9289 4.95359 18.8135 4.74638 18.6078C4.53918 18.4022 4.42167 18.1229 4.41947 17.831L4.32744 5.44187C4.32634 5.29591 4.35415 5.15118 4.40924 5.01601C4.46434 4.88085 4.54565 4.75792 4.64848 4.65432C4.7513 4.55072 4.87362 4.4685 5.00837 4.41239C5.14312 4.35629 5.28764 4.3274 5.43361 4.32741H7.41226V7.12292C7.41226 7.53364 7.57542 7.92755 7.86585 8.21797C8.15627 8.5084 8.55018 8.67156 8.9609 8.67156H14.2705C14.6812 8.67156 15.0751 8.5084 15.3656 8.21797C15.656 7.92755 15.8192 7.53364 15.8192 7.12292V4.45331C15.9184 4.50525 16.0094 4.57211 16.0889 4.65158L18.5915 7.15426C18.799 7.36162 18.9155 7.64302 18.9156 7.93632V17.8227C18.9156 18.1161 18.7991 18.3974 18.5916 18.6049C18.3842 18.8123 18.1028 18.9289 17.8095 18.9289H16.7103ZM14.4918 7.12292V4.32741H8.73967V7.12292C8.73967 7.18159 8.76297 7.23787 8.80446 7.27936C8.84595 7.32085 8.90223 7.34415 8.9609 7.34415H14.2705C14.3292 7.34415 14.3855 7.32085 14.427 7.27936C14.4684 7.23787 14.4918 7.18159 14.4918 7.12292Z"
+                                            fill="#D6D6D6" />
+                                    </svg>
+                                </div>
                             @endif
                         </div>
                     </div>
@@ -548,6 +548,102 @@
 </section>
 </div>
 <script>
+    //hiển thị thông tin sản phảm
+    $('.productMD').on('click', function() {
+        var idProduct = $(this).closest('tr').find('.productName').val();
+        var productCode = $(this).closest('tr').find('.maProduct option:selected')
+            .text();
+        var productName = $(this).closest('tr').find('.productName option:selected')
+            .text();
+        var dvt = $(this).closest('tr').find('.product_unit').val();
+        var ghiChu = $(this).closest('tr').find('.note_product')
+            .val();
+        var thue = $(this).closest('tr').find('.product_tax')
+            .val();
+        $.ajax({
+            url: "{{ route('getProduct') }}",
+            type: "get",
+            data: {
+                idProduct: idProduct,
+            },
+            success: function(response) {
+                var productPrice = parseFloat(response.product_price);
+                var formattedPrice;
+                if (Number.isInteger(productPrice)) {
+                    formattedPrice = numeral(productPrice).format('0,0');
+                } else {
+                    formattedPrice = numeral(productPrice).format('0,0.00');
+                }
+                $('#productModal').find('.modal-body').html('<b>Mã sản phẩm: </b> ' +
+                    productCode +
+                    '<br>' + '<b>Tên sản phẩm: </b> ' + productName + '<br>' +
+                    '<b>Loại hàng: </b> ' + response.product_category + '<br>' +
+                    '<b>Tồn kho: </b>' + response.product_qty + '<br>' +
+                    '<b>Đang giao dịch: </b>' +
+                    response.trading +
+                    '<br>' + '<b>Giá nhập: </b>' + formattedPrice + '<br>' + '<b>Thuế: </b>' +
+                    thue + '%');
+            },
+        });
+    });
+    //hiển thị thông tin S/N
+    $('.sn').on('click', function() {
+        var qty = $(this).closest('tr').find('.quantity-input').val();
+        var productCode = $(this).closest('tr').find('.productName').val();
+        var productCode1 = $(this).closest('tr').find('.maProduct option:selected')
+            .text();
+        var productName = $(this).closest('tr').find('.productName option:selected')
+            .text();
+        var dvt = $(this).closest('tr').find('.product_unit').val();
+        var giaBan = $(this).closest('tr').find('.product_price')
+            .val();
+        var ghiChu = $(this).closest('tr').find('.note_product')
+            .val();
+        var thue = $(this).closest('tr').find('.product_tax')
+            .val();
+        var thanhTien = $(this).closest('tr').find('.total-amount')
+            .text();
+        var giaNhap = $(this).closest('tr').find('.price_import').val();
+        var tonKho = $(this).closest('tr').find('.tonkho').val();
+        $.ajax({
+            url: '{{ route('getSN') }}',
+            type: 'GET',
+            data: {
+                qty: qty,
+                productCode: productCode,
+            },
+            success: function(response) {
+                var modalBody = $('#snModal').find('.modal-body');
+                let count = 1;
+                modalBody.empty();
+                var snList = $('<table class="table table-hover">' +
+                    '<thead><tr><td>STT</td><td>Serial Number</td></tr></thead>' +
+                    '<tbody>'
+                );
+                var product = $('<table class="table table-hover">' +
+                    '<thead><tr><td>ID</td><td>Mã sản phẩm</td><td>Tên sản phẩm</td><td>Số lượng sản phẩm</td><td>Số lượng S/N</td></tr></thead>' +
+                    '<tbody><tr>' + '<td>1</td>' + '<td>' +
+                    productCode1 + '</td>' + '<td>' + productName +
+                    '</td>' + '<td>' + qty + '</td>' + '<td>' + qty +
+                    '</td>' +
+                    '</tr</tbody>' + '</table>' +
+                    '<h5>Thông tin Serial Number </h5>');
+                response.forEach(function(sn) {
+                    var countCell = $('<td>').text(count);
+                    var snItemCell = $('<td>').text(sn.serinumber);
+                    var row = $('<tr>').append(countCell,
+                        snItemCell);
+                    snList.append(row);
+                    count++;
+                });
+                modalBody.append(product, snList);
+                $('#snModal').modal('show');
+            },
+            error: function(xhr, status, error) {
+                console.log(error);
+            }
+        });
+    });
     //form thong tin khach hang xuất hàng
     var radio1 = document.getElementById("radio1");
     var radio2 = document.getElementById("radio2");
@@ -661,7 +757,7 @@
                 "</td>");
             const thanhTienInput = $("<td><span class='total-amount form-control'>0</span></td>");
             const sn = $(
-                "<td data-toggle='modal' data-target='#snModal' class='sn'><img src='../../dist/img/icon/list.png'></td>"
+                "<td data-toggle='modal' data-target='#snModal'><img src='../../dist/img/icon/list.png'></td>"
             );
             const info = $(
                 "<td data-toggle='modal' data-target='#productModal'><img src='../../dist/img/icon/Group.png'></td>"
@@ -742,28 +838,45 @@
             });
             //xem thông tin sản phẩm
             info.click(function() {
+                var idProduct = $(this).closest('tr').find('.productName').val();
                 var productCode = $(this).closest('tr').find('.maProduct option:selected')
                     .text();
                 var productName = $(this).closest('tr').find('.productName option:selected')
                     .text();
                 var dvt = $(this).closest('tr').find('.product_unit').val();
-                var soluong = $(this).closest('tr').find('.quantity-input')
-                    .val();
-                var giaBan = $(this).closest('tr').find('.product_price')
-                    .val();
                 var ghiChu = $(this).closest('tr').find('.note_product')
                     .val();
                 var thue = $(this).closest('tr').find('.product_tax')
                     .val();
-                var thanhTien = $(this).closest('tr').find('.total-amount')
-                    .text();
-                $('#productModal').find('.modal-body').html('<b>Mã sản phẩm:</b> ' +
-                    productCode +
-                    '<br>' + '<b>Tên sản phẩm:</b> ' + productName + '<br>' +
-                    '<b>ĐVT:</b> ' + dvt + '<br>' + '<b>Số lượng: </b>' + soluong + '<br>' +
-                    '<b>Giá bán: </b>' + giaBan + '<br>' + '<b>Ghi chú: </b>' + ghiChu +
-                    '<br>' + '<b>Thuế:</b> ' + thue + '<br>' + '<b>Thành tiền:</b> ' +
-                    thanhTien);
+                $.ajax({
+                    url: "{{ route('getProduct') }}",
+                    type: "get",
+                    data: {
+                        idProduct: idProduct,
+                    },
+                    success: function(response) {
+                        var productPrice = parseFloat(response.product_price);
+                        var formattedPrice;
+                        if (Number.isInteger(productPrice)) {
+                            formattedPrice = numeral(productPrice).format('0,0');
+                        } else {
+                            formattedPrice = numeral(productPrice).format('0,0.00');
+                        }
+                        $('#productModal').find('.modal-body').html(
+                            '<b>Mã sản phẩm: </b> ' +
+                            productCode +
+                            '<br>' + '<b>Tên sản phẩm: </b> ' + productName +
+                            '<br>' +
+                            '<b>Loại hàng: </b> ' + response.product_category +
+                            '<br>' +
+                            '<b>Tồn kho: </b>' + response.product_qty + '<br>' +
+                            '<b>Đang giao dịch: </b>' +
+                            response.trading +
+                            '<br>' + '<b>Giá nhập: </b>' + formattedPrice +
+                            '<br>' + '<b>Thuế: </b>' +
+                            thue + '%');
+                    },
+                });
             });
             newRow.append(checkbox, MaInput, TenInput, ProInput, dvtInput, slInput,
                 giaInput, ghichuInput, thueInput, thanhTienInput, sn, info, deleteBtn, option);
@@ -1037,10 +1150,14 @@
         $(document).on('change', '.child-select', function() {
             var selectedName = $(this).val();
             var row = $(this).closest('tr');
-
             var idProduct = $(this).val();
             var productUnitElement = $(this).closest('tr').find('.product_unit');
             var qty_exist = $(this).closest('tr').find('.quantity-exist');
+            var price_import = $(this).closest('tr').find('.price_import');
+            var tonkho = $(this).closest('tr').find('.tonkho');
+            var loaihang = $(this).closest('tr').find('.loaihang');
+            var dangGD = $(this).closest('tr').find('.dangGD');
+            var thue = $(this).closest('tr').find('.product_tax');
             if (idProduct) {
                 $.ajax({
                     url: "{{ route('getProduct') }}",
@@ -1051,6 +1168,21 @@
                     success: function(response) {
                         productUnitElement.val(response.product_unit);
                         qty_exist.val("/" + response.qty_exist);
+                        var productPrice = parseFloat(response.product_price);
+                        var formattedPrice;
+                        if (Number.isInteger(productPrice)) {
+                            formattedPrice = numeral(productPrice).format('0,0');
+                        } else {
+                            formattedPrice = numeral(productPrice).format('0,0.00');
+                        }
+                        price_import.val(formattedPrice);
+                        tonkho.val(response.product_qty);
+                        loaihang.val(response.product_category);
+                        dangGD.val(response.trading);
+                        thue.val(response.tax);
+                        // Tính lại tổng số tiền và tổng số thuế
+                        calculateTotalTax();
+                        calculateGrandTotal();
                     },
                 });
             }
@@ -1061,9 +1193,6 @@
             } else {
                 selectedProductNames.push(selectedName);
             }
-
-            // Hide the selected product name from other child select options
-            hideSelectedProductNames(row);
         });
 
         // Function to hide selected product names from other child select options

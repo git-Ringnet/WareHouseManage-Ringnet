@@ -838,7 +838,6 @@
         });
     });
 
-
     //thêm thông tin khách hàng
     $(document).on('click', '#btn-addCustomer', function(e) {
         e.preventDefault()

@@ -159,14 +159,14 @@
                                     <span><b>Thuế VAT:</b></span>
                                     <span id="product-tax">Đ</span>
                                 </div>
-                                {{-- <div class="d-flex justify-content-between mt-2">
+                                <div class="d-flex justify-content-between mt-2">
                                     <span class="text-primary">Giảm giá:</span>
                                     <span>0đ</span>
                                 </div>
                                 <div class="d-flex justify-content-between mt-2">
                                     <span class="text-primary">Phí vận chuyển:</span>
                                     <span>0đ</span>
-                                </div> --}}
+                                </div>
                                 <div class="d-flex justify-content-between mt-2">
                                     <span class="text-lg"><b>Tổng cộng:</b></span>
                                     <span><b id="grand-total">đ</b></span>
@@ -625,8 +625,8 @@
             '</td>' +
             '<td><input required type="text" class="form-control" style="width:120px" name="product_category[]"></td>' +
             '<td><input required type="text" class="form-control text-center" style="width:70px" name="product_unit[]"></td>' +
-            '<td><input required type="text" oninput="validateNumberInput(this)" name="product_qty[]" class="quantity-input form-control text-center"></td>' +
-            '<td><input required type="text" oninput="validateNumberInput(this)" class="form-control text-center" style="width:140px"" name="product_price[]" ></td>' +
+            '<td><input required type="number" name="product_qty[]" class="quantity-input form-control text-center"></td>' +
+            '<td><input required type="text" class="form-control text-center product_price" style="width:140px"" name="product_price[]" ></td>' +
             // '<td><input required type="number" name="product_tax[]" class="product_tax"></td>' +
             '<td>' +
             '<input type="hidden" class="product_tax1">' +
@@ -733,15 +733,6 @@
         }
         fillDataToModal();
     });
-
-    //nhập số
-    function validateNumberInput(input) {
-        const regex = /^[-+]?[0-9]{1,3}(?:,?[0-9]{3})*(?:\.[0-9]+)?$/;
-        const value = input.value.replace(/,/g, '');
-        if (!regex.test(value)) {
-            input.value = '';
-        }
-    }
 
     function fillDataToModal() {
         var info = document.querySelectorAll('.exampleModal');
