@@ -796,3 +796,6 @@ input[type="number"] {
 #btn-addNoteForm.disable {
     pointer-events: none;
   }
+  .btn-outline-primary:hover svg path{
+    stroke: #ffff;
+  }

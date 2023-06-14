@@ -332,9 +332,9 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('comparison_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
-                                                <input class="w-50 input-quantity sum-input" type="number"
+                                                <input class="w-50 input-quantity sum-input" type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                                     name="sum" value="{{ request()->sum }}"
                                                     placeholder="Số lượng">
                                             </div>

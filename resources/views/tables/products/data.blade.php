@@ -441,7 +441,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                         {{ request('comparison_operator') === '<=' ? 'selected' : '' }}>
                                                         <=</option>
                                                 </select>
-                                                <input class="w-50 quantity-input input-so" type="number"
+                                                <input class="w-50 quantity-input input-so" type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                                     name="quantity" value="{{ request()->quantity }}"
                                                     placeholder="Số lượng">
                                             </div>
@@ -469,14 +469,14 @@ $index = array_search($item['label'], $numberedLabels);
                                                         {{ request('avg_operator') === '<=' ? 'selected' : '' }}>
                                                         <=</option>
                                                 </select>
-                                                <input class="w-50 avg-input" type="number" name="avg"
+                                                <input class="w-50 avg-input" type="text" name="avg" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                                     value="{{ request()->avg }}" placeholder="Nhập giá trị">
                                             </div>
                                         </div>
                                         <div class="d-flex justify-contents-center align-items-baseline p-2">
                                             <button type="submit" class="btn btn-primary btn-block mr-2">Xác
                                                 Nhận</button>
-                                            <button type="button" id="cancel-avg"
+                                            <button type="button" id="cancel-avg" 
                                                 class="btn btn-default btn-block">Hủy</button>
                                         </div>
                                     </div>
@@ -497,7 +497,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                         {{ request('price_inven_operator') === '<=' ? 'selected' : '' }}>
                                                         <=</option>
                                                 </select>
-                                                <input class="w-50 price_inven-input input-so" type="number"
+                                                <input class="w-50 price_inven-input input-so" type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                                     name="price_inven" value="{{ request()->price_inven }}"
                                                     placeholder="Nhập giá trị">
                                             </div>
