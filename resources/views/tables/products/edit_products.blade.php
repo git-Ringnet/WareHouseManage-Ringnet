@@ -131,7 +131,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php $stt = 0; ?>
+                                <?php $stt = 0; $count =0; ?>
                                 @foreach ($listProduct as $va)
                                 <tr>
                                     <td>{{ $va->id }}</td>
@@ -141,7 +141,14 @@
                                     <td>{{ $va->product_category }}</td>
                                     <td>{{ $va->product_unit }}</td>
                                     <td>{{ $va->product_qty }}</td>
-                                    <td></td>
+                                    <td>
+                                    @foreach($va->getSerinumbers as $val)
+                                        @if($val->seri_status == 2)
+                                            <?php $count++; ?>
+                                        @endif
+                                    @endforeach
+                                    {{$count}}
+                                    </td>
                                     <td>{{ $va->product_price }}</td>
                                     <td>{{ $va->tax }}</td>
                                     <td>{{ $va->total }}</td>
