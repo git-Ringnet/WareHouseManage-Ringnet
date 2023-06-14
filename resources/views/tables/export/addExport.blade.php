@@ -167,7 +167,7 @@
                     <div class="mt-4 w-75" style="float: left;">
                         <b class="pl-2">*Ghi chú báo giá</b>
                         <div class="position-relative">
-                            <input type="hidden" name="creator" id="creator" value="{{Auth::user()->id}}">
+                            <input type="hidden" name="creator" id="creator" value="{{ Auth::user()->id }}">
                             <textarea name="note_form" id="note_form" class="form-control" rows="8">{{ Auth::user()->note_form }}</textarea>
                             <div id="btn-addNoteForm">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -441,7 +441,7 @@
             '<input type="text" class="form-control" id="guest_receiver" placeholder="Nhập thông tin" name="guest_receiver" value="" required>' +
             '</div>' + '<div class="form-group">' +
             '<label for="email">SĐT người nhận:</label>' +
-            '<input type="text" pattern="/^((\+84)|(0[1-9]))\d{8}$/" class="form-control" id="guest_phoneReceiver" placeholder="Nhập thông tin" name="guest_phoneReceiver" value="" required>' +
+            '<input type="text" oninput="validateNumberInput(this)" pattern="/^(0|\+84)(3[2-9]|5[2689]|7[0|6-9]|8[1-9]|9[0-9])\d{7,9}$/" class="form-control" id="guest_phoneReceiver" placeholder="Nhập thông tin" name="guest_phoneReceiver" value="" required>' +
             '</div>' + '</div>' + '<div class="col-sm-6">' +
             '<div class="form-group">' +
             '<label for="email">Người đại diện:</label>' +
@@ -451,7 +451,7 @@
             '<input type="email" class="form-control" pattern="/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/" id="guest_email" placeholder="Nhập thông tin" name="guest_email" value="" required>' +
             '</div>' + '<div class="form-group">' +
             '<label>Số điện thoại:</label>' +
-            '<input type="text" class="form-control" pattern="/^((\+84)|(0[1-9]))\d{8}$/" id="guest_phone" placeholder="Nhập thông tin" name="guest_phone" value="" required>' +
+            '<input type="text" class="form-control" oninput="validateNumberInput(this)" pattern="/^(0|\+84)(3[2-9]|5[2689]|7[0|6-9]|8[1-9]|9[0-9])\d{7,9}$/" id="guest_phone" placeholder="Nhập thông tin" name="guest_phone" value="" required>' +
             '</div>' + '<div class="form-group">' +
             ' <label for="email">Hình thức thanh toán:</label>' +
             '<select name="guest_pay" class="form-control" id="guest_pay">' +
@@ -460,7 +460,7 @@
             '</select>' +
             '</div>' + '<div class="form-group">' +
             '<label for="email">Ghi chú:</label>' +
-            '<input type="text" class="form-control" id="guest_note" placeholder="Nhập thông tin" name="guest_note" value="" required>' +
+            '<input type="text" class="form-control" id="guest_note" placeholder="Nhập thông tin" name="guest_note" value="">' +
             '</div>' + '</div></div></div>'
         );
 
@@ -523,7 +523,7 @@
                 "<option value='0'>0%</option>" +
                 "<option value='8'>8%</option>" +
                 "<option value='10'>10%</option>" +
-                "<option value='0'>NOVAT</option>" +
+                "<option value='00'>NOVAT</option>" +
                 "</select>" +
                 "</td>");
             const thanhTienInput = $("<td><span class='px-5 total-amount'>0</span></td>");
@@ -729,7 +729,7 @@
                         data.guest_receiver + '" required>' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">SĐT người nhận:</label>' +
-                        '<input type="text" pattern="/^((\+84)|(0[1-9]))\d{8}$/" class="form-control" id="guest_phoneReceiver" placeholder="Nhập thông tin" name="guest_phoneReceiver" value="' +
+                        '<input type="text" oninput="validateNumberInput(this)" pattern="/^(0|\+84)(3[2-9]|5[2689]|7[0|6-9]|8[1-9]|9[0-9])\d{7,9}$/" class="form-control" id="guest_phoneReceiver" placeholder="Nhập thông tin" name="guest_phoneReceiver" value="' +
                         data.guest_phoneReceiver + '" required>' +
                         '</div>' + '</div>' + '<div class="col-sm-6">' +
                         '<div class="form-group">' +
@@ -742,7 +742,7 @@
                         data.guest_email + '" required>' +
                         '</div>' + '<div class="form-group">' +
                         '<label>Số điện thoại:</label>' +
-                        '<input type="text" class="form-control" pattern="/^((\+84)|(0[1-9]))\d{8}$/" id="guest_phone" placeholder="Nhập thông tin" name="guest_phone" value="' +
+                        '<input type="text" class="form-control" oninput="validateNumberInput(this)" pattern="/^(0|\+84)(3[2-9]|5[2689]|7[0|6-9]|8[1-9]|9[0-9])\d{7,9}$/" id="guest_phone" placeholder="Nhập thông tin" name="guest_phone" value="' +
                         data.guest_phone + '" required>' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">Hình thức thanh toán:</label>' +
@@ -923,10 +923,12 @@
             }
         });
         //lấy thông tin sản phẩm con từ tên sản phẩm con
+        var selectedProductIDs = [];
+
         $(document).on('change', '.child-select', function() {
-            var selectedName = $(this).val();
+            var selectedID = $(this).val();
             var row = $(this).closest('tr');
-            var idProduct = $(this).val();
+            var productNameElement = $(this).closest('tr').find('.product_name');
             var productUnitElement = $(this).closest('tr').find('.product_unit');
             var qty_exist = $(this).closest('tr').find('.quantity-exist');
             var price_import = $(this).closest('tr').find('.price_import');
@@ -934,14 +936,17 @@
             var loaihang = $(this).closest('tr').find('.loaihang');
             var dangGD = $(this).closest('tr').find('.dangGD');
             var thue = $(this).closest('tr').find('.product_tax');
-            if (idProduct) {
+
+            if (selectedID) {
                 $.ajax({
                     url: "{{ route('getProduct') }}",
                     type: "get",
                     data: {
-                        idProduct: idProduct,
+                        idProduct: selectedID,
                     },
                     success: function(response) {
+                        productNameElement.val(response
+                            .product_name); // Hiển thị tên sản phẩm đã chọn trong ô input
                         productUnitElement.val(response.product_unit);
                         qty_exist.val("/" + response.qty_exist);
                         var productPrice = parseFloat(response.product_price);
@@ -963,28 +968,27 @@
                 });
             }
 
-            // Check if the selected product name is already in use
-            if (selectedProductNames.includes(selectedName)) {
+            // Kiểm tra nếu ID sản phẩm đã chọn đã có trong danh sách các sản phẩm đã chọn
+            if (selectedProductIDs.includes(selectedID)) {
                 $(this).val('');
             } else {
-                selectedProductNames.push(selectedName);
+                selectedProductIDs.push(selectedID); // Lưu ID sản phẩm đã chọn
             }
 
-            // Hide the selected product name from other child select options
+            // Ẩn tên sản phẩm đã chọn từ các tùy chọn khác
             hideSelectedProductNames(row);
         });
 
         // Function to hide selected product names from other child select options
         function hideSelectedProductNames(row) {
-            var selectedNames = row.find('.child-select').map(function() {
+            var selectedIDs = row.find('.child-select').map(function() {
                 return $(this).val();
             }).get();
 
             row.find('.child-select').each(function() {
-                var currentName = $(this).val();
+                var currentID = $(this).val();
                 $(this).find('option').each(function() {
-                    if ($(this).val() !== currentName && selectedNames.includes($(this)
-                            .val())) {
+                    if ($(this).val() !== currentID && selectedIDs.includes($(this).val())) {
                         $(this).hide();
                     } else {
                         $(this).show();

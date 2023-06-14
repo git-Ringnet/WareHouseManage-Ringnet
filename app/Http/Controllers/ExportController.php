@@ -113,7 +113,7 @@ class ExportController extends Controller
     public function create()
     {
         $products = Products::all();
-        $customer = Guests::all();
+        $customer = Guests::where('guest_status',1)->get();
         $guest_id = DB::table('guests')->select('id')->orderBy('id', 'DESC')->first();
         $title = 'Tạo đơn xuất hàng';
         return view('tables.export.addExport', compact('customer', 'products', 'title'));
@@ -1252,6 +1252,28 @@ class ExportController extends Controller
             return;
         } else {
             $sn = Serinumbers::where('product_id', $data['productCode'])->where('seri_status','1')->limit($data['qty'])->get();
+            return response()->json($sn);
+        }
+    }
+
+    public function getSN1(Request $request)
+    {
+        $data = $request->all();
+        if ($data['qty'] == null) {
+            return;
+        } else {
+            $sn = Serinumbers::where('product_id', $data['productCode'])->where('seri_status','3')->limit($data['qty'])->get();
+            return response()->json($sn);
+        }
+    }
+
+    public function getSN2(Request $request)
+    {
+        $data = $request->all();
+        if ($data['qty'] == null) {
+            return;
+        } else {
+            $sn = Serinumbers::where('product_id', $data['productCode'])->where('seri_status','2')->limit($data['qty'])->get();
             return response()->json($sn);
         }
     }

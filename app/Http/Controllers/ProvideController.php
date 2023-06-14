@@ -109,16 +109,27 @@ class ProvideController extends Controller
      */
     public function store(Request $request)
     {
-        Provides::create([
-            'provide_name' => $request->provide_name,
-            'provide_represent' => $request->provide_represent,
-            'provide_phone' => $request->provide_phone,
-            'provide_email' => $request->provide_email,
-            'provide_address' => $request->provide_address,
-            'provide_code' => $request->provide_code,
-            'provide_status' => $request->provide_status,
-        ]);
-        return redirect()->route('provides.index')->with('msg', 'Thêm nhà cung cấp thành công!');
+        $existingprovide = Provides::where('provide_name', $request->provide_name)
+            ->where('provide_represent', $request->provide_represent)
+            ->where('provide_phone', $request->provide_phone)
+            ->where('provide_email', $request->provide_email)
+            ->where('provide_address', $request->provide_address)
+            ->where('provide_code', $request->provide_code)
+            ->first();
+        if ($existingprovide) {
+            return redirect()->route('provides.index')->with('warning', 'Thông tin nhà cung cấp đã có trong hệ thống!');
+        } else {
+            Provides::create([
+                'provide_name' => $request->provide_name,
+                'provide_represent' => $request->provide_represent,
+                'provide_phone' => $request->provide_phone,
+                'provide_email' => $request->provide_email,
+                'provide_address' => $request->provide_address,
+                'provide_code' => $request->provide_code,
+                'provide_status' => $request->provide_status,
+            ]);
+            return redirect()->route('provides.index')->with('msg', 'Thêm nhà cung cấp thành công!');
+        }
     }
 
     /**
@@ -154,9 +165,20 @@ class ProvideController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $provides = Provides::find($id);
-        $provides->update($request->all());
-        return redirect()->route('provides.index')->with('msg', 'Cập nhật thành công!');
+        $existingprovide = Provides::find($id)->where('provide_name', $request->provide_name)
+            ->where('provide_represent', $request->provide_represent)
+            ->where('provide_phone', $request->provide_phone)
+            ->where('provide_email', $request->provide_email)
+            ->where('provide_address', $request->provide_address)
+            ->where('provide_code', $request->provide_code)
+            ->first();
+        if ($existingprovide) {
+            return redirect()->route('provides.index')->with('warning', 'Cập nhật thất bại, do trùng thông tin nhà cung cấp đã có trong hệ thống!');
+        } else {
+            $provides = Provides::find($id);
+            $provides->update($request->all());
+            return redirect()->route('provides.index')->with('msg', 'Cập nhật thành công!');
+        }
     }
 
     /**
@@ -190,10 +212,10 @@ class ProvideController extends Controller
             $provide_exist = Orders::whereIn('provide_id', $list)->first();
             if (!$provide_exist) {
                 Provides::whereIn('id', $list)->delete();
-            session()->flash('msg', 'Xóa nhà cung cấp thành công!');
+                session()->flash('msg', 'Xóa nhà cung cấp thành công!');
                 return response()->json(['success' => true, 'msg' => 'Xóa nhà cung cấp thành công', 'ids' => $list]);
             } else {
-            session()->flash('warning', 'Không thể xóa, do có nhà cung cấp trong đơn nhập hàng!');
+                session()->flash('warning', 'Không thể xóa, do có nhà cung cấp trong đơn nhập hàng!');
                 return response()->json(['success' => true, 'warning' => 'Không thể xóa, do có nhà cung cấp trong đơn nhập hàng!', 'ids' => $list]);
             }
         }
@@ -209,7 +231,7 @@ class ProvideController extends Controller
                 $value->provide_status = 1;
                 $value->save();
             }
-        session()->flash('warning', 'Thay đổi trạng thái nhà cung cấp thành công!');
+            session()->flash('warning', 'Thay đổi trạng thái nhà cung cấp thành công!');
             return response()->json(['success' => true, 'msg' => 'Thay đổi trạng thái nhà cung cấp thành công']);
         }
         return response()->json(['success' => false, 'msg' => 'Not fount']);
@@ -223,7 +245,7 @@ class ProvideController extends Controller
                 $value->provide_status = 0;
                 $value->save();
             }
-        session()->flash('warning', 'Thay đổi trạng thái nhà cung cấp thành công!');
+            session()->flash('warning', 'Thay đổi trạng thái nhà cung cấp thành công!');
             return response()->json(['success' => true, 'msg' => 'Thay đổi trạng thái nhà cung cấp thành công']);
         }
         return response()->json(['success' => false, 'msg' => 'Not fount']);

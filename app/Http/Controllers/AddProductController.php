@@ -173,9 +173,9 @@ class AddProductController extends Controller
         $product_unit = $request->product_unit;
         $product_trademark = $request->product_trademark;
         $product_qty = $request->product_qty;
-        $product_price = $request->product_price;
+        $product_price = str_replace(',', '', $request->product_price);
         $product_tax = $request->product_tax;
-        $product_total = $request->product_total;
+        $product_total = str_replace(',', '', $request->product_total);
         $order = new Orders();
         for ($i = 0; $i < count($products_id); $i++) {
             $order->provide_id = $new_provide->id != null ? $new_provide->id :  $request['provide_id'];
