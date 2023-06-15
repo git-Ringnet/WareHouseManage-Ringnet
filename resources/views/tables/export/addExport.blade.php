@@ -513,7 +513,7 @@
                 "</td>"
             );
             const giaInput = $(
-                "<td><input type='text' class='product_price form-control' style='width:140px' id='product_price' name='product_price[]' required></td>"
+                "<td><input type='text' class='product_price form-control text-center' style='width:140px' id='product_price' name='product_price[]' required></td>"
             );
             const ghichuInput = $(
                 "<td><input type='text' class='note_product form-control' style='width:140px' name='product_note[]'></td>"
