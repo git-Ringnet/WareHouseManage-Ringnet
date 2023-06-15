@@ -117,7 +117,7 @@
                             @if (Auth::user()->id == $order->users_id || Auth::user()->can('isAdmin'))
                             <div class="w-75">
                                 <div class="input-group mb-1 position-relative w-50">
-                                    <input type="text" class="form-control" placeholder="Nhập thông tin khách hàng" aria-label="Username" aria-describedby="basic-addon1" id="myInput" autocomplete="off">
+                                    <input type="text" class="form-control" placeholder="Nhập thông tin nhà cung cấp" aria-label="Username" aria-describedby="basic-addon1" id="myInput" autocomplete="off">
                                     <div class="position-absolute" style="right: 5px;top: 17%;">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path fill-rule="evenodd" clip-rule="evenodd" d="M15.1835 7.36853C13.0254 5.21049 9.52656 5.21049 7.36853 7.36853C5.21049 9.52656 5.21049 13.0254 7.36853 15.1835C9.52656 17.3415 13.0254 17.3415 15.1835 15.1835C17.3415 13.0254 17.3415 9.52656 15.1835 7.36853ZM16.2441 6.30787C13.5003 3.56404 9.05169 3.56404 6.30787 6.30787C3.56404 9.05169 3.56404 13.5003 6.30787 16.2441C9.05169 18.988 13.5003 18.988 16.2441 16.2441C18.988 13.5003 18.988 9.05169 16.2441 6.30787Z" fill="#555555" />
@@ -261,8 +261,8 @@
                             <td> <input class="form-control quantity-input text-center" @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif required type="number"
                                 name="product_qty[]" value="{{ $pro->product_qty }}"
                                 @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif> </td>
-                            <td> <input class="form-control text-center" @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif required type="number"
-                                style="width:140px" name="product_price[]" value="{{ $pro->product_price }}"
+                            <td> <input class="form-control text-center product_price" @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif required type="text"
+                                style="width:140px" name="product_price[]" value="{{ number_format($pro->product_price) }}"
                                 @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif> </td>
                             <td>
                                 <select name="product_tax[]" id="" class="form-control product_tax" style="width:100px;" @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) disabled @endif>>
@@ -273,7 +273,7 @@
                                 </select>
                             </td>
                             <input type="hidden" class="product_tax1">
-                            <td> <input class="form-control text-center" style="width:140px" readonly type="text" name="product_total[]" value="{{ $pro->product_total }}">
+                            <td> <input class="form-control text-center total-amount" style="width:140px" readonly type="text" name="product_total[]" value="{{ $pro->product_total }}">
                             </td>
                             <td> <input class="form-control" style="width:150px" @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif type="text"
                                 name="product_trademark[]" value=" {{ $pro->product_trademark }}"
@@ -340,7 +340,7 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>{{ $stt }}</td>
+                                            <td>{{ ($stt + 1) }}</td>
                                             <td class="code_product"></td>
                                             <td class="name_product"></td>
                                             <td class="name_provide"></td>
@@ -367,7 +367,7 @@
                                         <tbody>
                                             <?php $st = 1; ?>
                                             @foreach ($seri as $se)
-                                            @if ($pro->product_id == $se->product_orderid)
+                                            @if ($pro->product_id == $se->order_id)
                                             <tr>
                                                 @if ($order->order_status == 0)
                                                 @if (Auth::user()->id == $order->users_id || Auth::user()->can('isAdmin'))
@@ -376,8 +376,8 @@
                                                 @endif
                                                 <td><span class="stt_SN"></span></td>
                                                 <td><input oninput="getInputName(this)" type="text" class="form-control w-25" name="product_SN{{ $stt }}[]" value="{{ $se->serinumber }}" onpaste="handlePaste(this)" <?php if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1)) {
-                                                                                                                                                                                                echo 'readonly';
-                                                                                                                                                                                            } ?>>
+                                                                                                                                                                                                                            echo 'readonly';
+                                                                                                                                                                                                                        } ?>>
                                                 </td>
                                                 @if ($order->order_status == 0)
                                                 @if (Auth::user()->id == $order->users_id || Auth::user()->can('isAdmin'))
@@ -501,6 +501,58 @@
         $(input).parent().parent().remove();
         // $(input).closest('div').remove();
     }
+    // Định dạng lại giá trị thành tiền
+    function formatCurrency(value) {
+        // Làm tròn đến 2 chữ số thập phân
+        value = Math.round(value * 100) / 100;
+
+        // Xử lý phần nguyên
+        var parts = value.toString().split(".");
+        var integerPart = parts[0];
+        var formattedValue = "";
+
+        // Định dạng phần nguyên
+        var count = 0;
+        for (var i = integerPart.length - 1; i >= 0; i--) {
+            formattedValue = integerPart.charAt(i) + formattedValue;
+            count++;
+            if (count % 3 === 0 && i !== 0) {
+                formattedValue = "," + formattedValue;
+            }
+        }
+
+        // Trả về kết quả đã định dạng
+        return formattedValue;
+    }
+
+    $('body').on('input', '.product_price', function(event) {
+        // Lấy giá trị đã nhập
+        var value = event.target.value;
+
+        // Xóa các ký tự không phải số và dấu phân thập phân từ giá trị
+        var formattedValue = value.replace(/[^0-9.]/g, '');
+
+        // Định dạng số với dấu phân cách hàng nghìn và giữ nguyên số thập phân
+        var formattedNumber = numberWithCommas(formattedValue);
+
+        event.target.value = formattedNumber;
+    });
+
+    function numberWithCommas(number) {
+        // Chia số thành phần nguyên và phần thập phân
+        var parts = number.split('.');
+        var integerPart = parts[0];
+        var decimalPart = parts[1];
+
+        // Định dạng phần nguyên số với dấu phân cách hàng nghìn
+        var formattedIntegerPart = integerPart.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+        // Kết hợp phần nguyên và phần thập phân (nếu có)
+        var formattedNumber = decimalPart !== undefined ? formattedIntegerPart + '.' + decimalPart :
+            formattedIntegerPart;
+
+        return formattedNumber;
+    }
 
     $(document).ready(function() {
         calculateTotals();
@@ -517,18 +569,23 @@
         // Lặp qua từng hàng
         $('tr').each(function() {
             var productQty = parseInt($(this).find('.quantity-input').val());
+            var productPriceElement = $(this).find('[name^="product_price"]');
             var productPrice = 0;
-            var taxValue = $(this).find('.product_tax option:selected').val();
-            $(this).find('[name^="product_price"]').each(function() {
-                productPrice += parseFloat($(this).val());
-            });
+            var taxValue = parseFloat($(this).find('.product_tax option:selected').val());
+
+            if (productPriceElement.length > 0) {
+                var rawPrice = productPriceElement.val();
+                if (rawPrice !== "") {
+                    productPrice = parseFloat(rawPrice.replace(/,/g, ''));
+                }
+            }
 
             if (!isNaN(productQty) && !isNaN(productPrice) && !isNaN(taxValue)) {
                 var rowTotal = productQty * productPrice;
-                var rowTax = (productQty * productPrice * taxValue) / 100;
+                var rowTax = (rowTotal * taxValue) / 100;
 
                 // Hiển thị kết quả
-                $(this).find('[name^="product_total"]').val(rowTotal);
+                $(this).find('.total-amount').val(formatCurrency(rowTotal));
                 $(this).find('.product_tax1').text(rowTax);
 
                 // Cộng dồn vào tổng totalAmount và totalTax
@@ -538,8 +595,8 @@
         });
 
         // Hiển thị tổng totalAmount và totalTax
-        $('#total-amount-sum').text(totalAmount);
-        $('#product-tax').text(totalTax);
+        $('#total-amount-sum').text(formatCurrency(totalAmount));
+        $('#product-tax').text(formatCurrency(totalTax));
 
         // Tính tổng thành tiền và thuế
         calculateGrandTotal(totalAmount, totalTax);
@@ -547,7 +604,7 @@
 
     function calculateGrandTotal(totalAmount, totalTax) {
         var grandTotal = totalAmount + totalTax;
-        $('#grand-total').text(grandTotal);
+        $('#grand-total').text(formatCurrency(grandTotal));
     }
 
     // Hủy đơn hàng
@@ -599,16 +656,6 @@
         }
     }
 
-
-    // $('input[name^="product_qty[]"]').each(function(index) {
-    //     var qty = $(this).val();
-    //     var sn_count = $('input[name="product_SN' + index + '[]"]').length;
-    //     if (qty != sn_count) {
-    //         checkSubmit = true;
-    //         alert('Số lượng và seri number không hợp lệ');
-    //     }
-    // });
-
     // Kiểm tra dữ liệu trước khi submit
     var checkSubmit = false;
 
@@ -646,55 +693,6 @@
             er = true;
             alert('Vui lòng chọn nhà cung cấp');
         }
-        var products_id = [];
-        var listSN = [];
-        $('select[name^="products_id[]"]').each(function() {
-            products_id.push($(this).val());
-        });
-        $('input[name^="product_SN_new"]').each(function() {
-            if ($(this).val() == "") {
-                er = true;
-                alert('Vui lòng nhập seri number');
-            } else {
-                var sn = $(this).val();
-                if (sn !== "") {
-                    listSN.push(sn);
-                }
-            }
-        });
-        // Kiểm tra xem các giá trị SN có giống nhau hay không
-        var isDuplicate = false;
-        for (var i = 0; i < listSN.length - 1; i++) {
-            for (var j = i + 1; j < listSN.length; j++) {
-                if (listSN[i] === listSN[j]) {
-                    isDuplicate = true;
-                    alert("Đã nhập trùng serial number " + " " + listSN[j]);
-                    break;
-                }
-            }
-            if (isDuplicate) {
-                break;
-            }
-        }
-        if (listSN.length > 0) {
-            if (isDuplicate == false) {
-                $.ajax({
-                    url: "{{route('checkSN')}}",
-                    type: "get",
-                    data: {
-                        listSN: listSN,
-                        products_id: products_id
-                    },
-                    success: function(data) {
-                        if (data.success == false) {
-                            er = true;
-                            alert("Seri number" + data.existingSN + "đã tồn tại");
-                        }
-                    }
-                })
-            }
-        }
-        console.log(er)
         if (er) {
             checkSubmit = true;
         } else {
@@ -704,18 +702,13 @@
         return checkSubmit;
     }
 
-    $(document).on('submit', '#form_submit', function(e) {
-        e.preventDefault();
-
-    });
-
     // Chuyển hướng form để thêm dữ liệu
     $(document).on('click', '.addBillEdit', function(e) {
         e.preventDefault();
-        // console.log(checkData());
         if ($('#form_submit')[0].checkValidity()) {
             var products_id = [];
             var listSN = [];
+            var listSNOld = [];
             $('select[name^="products_id[]"]').each(function() {
                 products_id.push($(this).val());
             });
@@ -730,11 +723,18 @@
                     }
                 }
             });
+            $('input[name^="product_SN"]').each(function() {
+                var sn = $(this).val();
+                if (sn !== "") {
+                    listSNOld.push(sn);
+                }
+            });
             // Kiểm tra xem các giá trị SN có giống nhau hay không
             var isDuplicate = false;
+
             for (var i = 0; i < listSN.length - 1; i++) {
                 for (var j = i + 1; j < listSN.length; j++) {
-                    if (listSN[i] === listSN[j]) {
+                    if (listSN[i].trim() === listSN[j].trim()) {
                         isDuplicate = true;
                         alert("Đã nhập trùng serial number " + " " + listSN[j]);
                         break;
@@ -744,8 +744,22 @@
                     break;
                 }
             }
-            if (listSN.length > 0) {
-                if (isDuplicate == false) {
+
+            var countQTY = 0;
+            // var countSN = listSN.length + listSNOld.length;
+            // Kiểm tra số lượng và seri number
+            $('input[name^="product_qty"]').each(function() {
+                countQTY += parseInt($(this).val());
+            })
+            if (listSNOld.length != countQTY) {
+                isDuplicate = true;
+                alert("Số lượng sản phẩm và serial number không hợp lệ !");
+            }
+            // Kiểm tra có lỗi hay không
+            var hasErrors = isDuplicate || listSNOld.length != countQTY;
+
+            if (!hasErrors) {
+                if (listSN.length > 0) {
                     $.ajax({
                         url: "{{route('checkSN')}}",
                         type: "get",
@@ -764,24 +778,21 @@
                                 $('#form_submit')[0].submit();
                             }
                         }
-                    })
+                    });
+                } else {
+                    $('#form_submit').attr('action', '{{ route("addBillEdit") }}');
+                    $('input[name="_method"]').remove();
+                    updateProductSN();
+                    $('#form_submit')[0].submit();
                 }
-            } else {
-                $('#form_submit').attr('action', '{{ route("addBillEdit") }}');
-                $('input[name="_method"]').remove();
-                updateProductSN()
-                $('#form_submit')[0].submit();
             }
-            // alert('submit');
         } else {
             $('#form_submit')[0].reportValidity();
         }
     });
 
     var rowCount = $('.table_list_order tbody tr').length;
-    var last = "<?php echo $lastId; ?>";
     $('.addRow').on('click', function() {
-        last++;
         updateRowNumbers();
         var tr = '<tr>' +
             // '<input type="hidden" name="product_id[]" value="' + last + '">' +
@@ -801,7 +812,7 @@
             '<td><input required type="text" class="form-control text-center" style="width:120px" name="product_category[]"></td>' +
             '<td><input required type="text" class="form-control text-center" style="width:80px" name="product_unit[]"></td>' +
             '<td><input required type="number" name="product_qty[]" class="quantity-input form-control text-center"></td>' +
-            '<td><input required type="number" class="form-control text-center" style="width:140px" name="product_price[]"></td>' +
+            '<td><input required type="text" class="form-control text-center product_price" style="width:140px" name="product_price[]"></td>' +
             // '<td><input required type="number" name="product_tax[]" class="product_tax form-control" style="width:50px"></td>' +
             '<td>' +
             '<select name="product_tax[]" class="product_tax form-control" style="width:100px">' +
@@ -811,7 +822,7 @@
             '<option value="00">NOVAT</option>' +
             '</select>' +
             '</td>' +
-            '<td><input readonly type="text" class="form-control text-center" style="width:140px" name="product_total[]"></td>' +
+            '<td><input readonly type="text" class="form-control text-center total-amount" style="width:140px" name="product_total[]"></td>' +
             '<td><input type="text" class="form-control" style="width:140px" name="product_trademark[]"></td>' +
             '<td>' +
             '<button class="exampleModal" name="btn_add_SN[]" type="button" data-toggle="modal" data-target="#exampleModal' +
@@ -868,7 +879,7 @@
             '<tr>' +
             '<td><input class="mr-5" type="checkbox" id="checkbox_1"> </td>' +
             '<td><span class="mr-5" >1</span></td>' +
-            '<td><input class="mr-5 form-control w-25" required type="text" name="product_SN_new' + rowCount +
+            '<td><input class="mr-5 form-control w-25" type="text" name="product_SN_new' + rowCount +
             '[]" onpaste="handlePaste(this)"></td>' +
             '<td class="deleteRow1"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.0606 6.66675C13.6589 6.66675 13.3333 6.99236 13.3333 7.39402C13.3333 7.79568 13.6589 8.12129 14.0606 8.12129H17.9394C18.341 8.12129 18.6667 7.79568 18.6667 7.39402C18.6667 6.99236 18.341 6.66675 17.9394 6.66675H14.0606ZM8 10.3031C8 9.90143 8.32561 9.57582 8.72727 9.57582H10.1818H21.8182H23.2727C23.6744 9.57582 24 9.90143 24 10.3031C24 10.7048 23.6744 11.0304 23.2727 11.0304H22.5455V22.6667C22.5455 24.2819 21.2158 25.5758 19.6179 25.5758H12.3452C11.9637 25.5755 11.5854 25.4997 11.2333 25.3528C10.8812 25.2059 10.5617 24.9908 10.2931 24.7199C10.0244 24.449 9.81206 24.1276 9.66816 23.7743C9.52463 23.4219 9.45204 23.0447 9.45455 22.6642V11.0304H8.72727C8.32561 11.0304 8 10.7048 8 10.3031ZM10.9091 22.6723V11.0304H21.0909V22.6667C21.0909 23.4623 20.4288 24.1213 19.6179 24.1213H12.3458C12.1562 24.1211 11.9684 24.0834 11.7934 24.0104C11.6183 23.9374 11.4595 23.8304 11.3259 23.6958C11.1924 23.5611 11.0868 23.4013 11.0153 23.2257C10.9437 23.05 10.9076 22.8619 10.9091 22.6723ZM17.9394 13.4546C18.3411 13.4546 18.6667 13.7802 18.6667 14.1819V20.9698C18.6667 21.3714 18.3411 21.6971 17.9394 21.6971C17.5377 21.6971 17.2121 21.3714 17.2121 20.9698V14.1819C17.2121 13.7802 17.5377 13.4546 17.9394 13.4546ZM14.7879 14.1819C14.7879 13.7802 14.4623 13.4546 14.0606 13.4546C13.6589 13.4546 13.3333 13.7802 13.3333 14.1819V20.9698C13.3333 21.3714 13.6589 21.6971 14.0606 21.6971C14.4623 21.6971 14.7879 21.3714 14.7879 20.9698V14.1819Z" fill="#555555"/></svg></td>' +
             '</tr>' +
@@ -876,7 +887,7 @@
             '</table>' +
             '</div>' +
             '<div class="AddSN btn btn-secondary" style="border:1px solid gray;">Thêm dòng</div>' +
-            '<div class="btn btn-danger ml-2" id="deleteSNS"> Xóa SN </div>' +
+            // '<div class="btn btn-danger ml-2" id="deleteSNS"> Xóa SN </div>' +
             '</div>' +
             '<div class="modal-footer">' +
             '<button type="button" class="btn btn-secondary" data-dismiss="modal">Lưu</button>' +
@@ -928,7 +939,6 @@
             });
         }
         rowCount++;
-
         var list_search = document.querySelectorAll('.search_product');
         if (list_search) {
             for (let i = 0; i < list_search.length; i++) {
@@ -938,7 +948,6 @@
                 });
             }
         }
-
         addDataToModal();
         chekckRow();
     });

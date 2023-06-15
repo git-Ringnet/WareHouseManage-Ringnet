@@ -143,15 +143,17 @@
                                     <td>{{ $va->product_qty }}</td>
                                     <td>
                                     @foreach($va->getSerinumbers as $val)
+                                    @if($val->order_id == $va->product_orderid)
                                         @if($val->seri_status == 2)
                                             <?php $count++; ?>
+                                        @endif
                                         @endif
                                     @endforeach
                                     {{$count}}
                                     </td>
-                                    <td>{{ $va->product_price }}</td>
+                                    <td>{{ number_format($va->product_price) }}</td>
                                     <td>{{ $va->tax }}</td>
-                                    <td>{{ $va->total }}</td>
+                                    <td>{{ number_format($va->total) }}</td>
                                     <td>{{ $va->product_trademark }}</td>
                                     <td>
                                         <button class="exampleModal" name="btn_add_SN[]" type="button" data-toggle="modal" data-target="#exampleModal{{$stt}}" style="background: transparent; border:none;">

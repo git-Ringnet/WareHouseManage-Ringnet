@@ -480,42 +480,23 @@
     add_bill.addEventListener('click', function(e) {
         e.preventDefault();
         var error = false;
-        var errorMessage = "";
-
         if (checkRow() == false) {
+            alert('Vui lòng nhập ít nhất 1 sản phẩm');
             error = true;
-            errorMessage = 'Vui lòng nhập ít nhất 1 sản phẩm';
         }
-
-        $('input[name="product_name[]"]').each(function() {
-            if ($(this).val() === '') {
+        $('select[name="products_id[]"]').each(function() {
+            if ($(this).val() === "") {
                 error = true;
-                errorMessage = 'Vui lòng nhập tên sản phẩm';
-                return false;
-            }
-        });
-
-        $('input[name="product_qty[]"]').each(function() {
-            if ($(this).val() === '') {
-                error = true;
-                errorMessage = 'Vui lòng nhập số lượng sản phẩm';
-                return false;
-            }
-        });
-
-        $('input[name="product_price[]"]').each(function() {
-            if ($(this).val() === '') {
-                error = true;
-                errorMessage = 'Vui lòng nhập giá sản phẩm';
-                return false;
+                alert('Vui lòng chọn sản phẩm cần thêm');
             }
         });
 
         if ($('#provide_id').val().trim() == '' && $('#radio1').prop('checked') == true) {
             error = true;
-            errorMessage = 'Vui lòng chọn nhà cung cấp';
+            alert('Vui lòng chọn nhà cung cấp');
         }
 
+        // AJAX Kiểm tra Serial number đã tồn tại chưa
         var listSN = [];
         var products_id = [];
         $('select[name^="products_id[]"]').each(function() {
@@ -535,17 +516,13 @@
 
         });
 
-        if (error) {
-            return false;
-        }
-
         // Kiểm tra xem các giá trị SN có giống nhau hay không
         var isDuplicate = false;
         for (var i = 0; i < listSN.length - 1; i++) {
             for (var j = i + 1; j < listSN.length; j++) {
-                if (listSN[i] === listSN[j]) {
+                if (listSN[i].trim() === listSN[j].trim()) {
                     isDuplicate = true;
-                    alert("Test đúng rồi đó mà bị chặn rồi " + listSN[j]);
+                    alert("Seri number " + listSN[j] + " đã tồn tại");
                     break;
                 }
             }
@@ -553,6 +530,18 @@
                 break;
             }
         }
+
+        var countQTY = 0;
+        // Kiểm tra số lượng và seri number
+        $('input[name^="product_qty"]').each(function() {
+            countQTY += parseInt($(this).val());
+        })
+
+        if (listSN.length != countQTY) {
+            error = true;
+            alert("Số lượng sản phẩm và serial number không hợp lệ !");
+        }
+
         if (isDuplicate == false) {
             $.ajax({
                 url: "{{route('checkSN')}}",
@@ -564,25 +553,16 @@
                 success: function(data) {
                     if (data.success == false) {
                         error = true;
-                        alert("Seri number " + data.existingSN + " đã tồn tại");
+                        alert("Seri number" + data.existingSN + "đã tồn tại");
                     } else {
                         updateProductSN();
-                        $('#form_submit')[0].submit();
+                        var provides_id = document.getElementById('form_submit');
+                        provides_id.setAttribute('action', '{{ route("addBill") }}');
+                        provides_id.submit();
                     }
                 }
             })
         }
-
-
-        if (error) {
-            alert(errorMessage);
-            return false;
-        }
-
-        updateProductSN();
-        var provides_id = document.getElementById('form_submit');
-        provides_id.setAttribute('action', '{{ route("addBill") }}');
-        provides_id.submit();
     });
 
     function updateProductSN() {
@@ -678,7 +658,7 @@
             '</thead>' +
             '<tbody>' +
             '<tr>' +
-            '<td>' + rowCount + '</td>' +
+            '<td>' + (rowCount + 1) + '</td>' +
             '<td class="code_product"></td>' +
             '<td class="name_product"></td>' +
             '<td class="provide_name"></td>' +
@@ -704,7 +684,7 @@
             '</table>' +
             '</div>' +
             '<div class="AddSN btn btn-secondary" style="border:1px solid gray;">Thêm dòng</div>' +
-            '<div class="btn btn-danger ml-2" id="deleteSNS"> Xóa SN </div>' +
+            // '<div class="btn btn-danger ml-2" id="deleteSNS"> Xóa SN </div>' +
             '</div>' +
             '<div class="modal-footer">' +
             '<button type="button" class="btn btn-secondary" data-dismiss="modal">Lưu</button>' +
@@ -1049,50 +1029,12 @@
             }
         });
 
-        // $('input[name^="product_qty[]"]').each(function(index) {
-        //     var qty = $(this).val();
-        //     var snCheck = false;
-
-        //     var sn_count = $('input[name="product_SN' + index + '[]"]').length;
-        //     $('input[name^="product_SN' + index + '[]"]').each(function(index) {
-        //         if ($(this).val() === "") {
-        //             error = true;
-        //             alert('Vui lòng nhập seri number');
-        //             return false;
-        //         }
-        //     });
-
-        //     if (qty != sn_count) {
-        //         snCheck = true;
-        //         return false;
-        //     }
-
-        //     if (qty != sn_count) {
-        //         error = true;
-        //         alert('Số lượng và seri number không hợp lệ');
-        //         return false;
-        //     }
-        // });
-
-
         if ($('#provide_id').val().trim() == '' && $('#radio1').prop('checked') == true) {
             error = true;
             alert('Vui lòng chọn nhà cung cấp');
         }
 
         // AJAX Kiểm tra Serial number đã tồn tại chưa
-        // Kiểm tra số lượng và seri number;
-        // $('input[name^="product_qty[]"]').each(function(index) {
-        //     var qty = $(this).val();
-        //     var sn_count = $('input[name="product_SN' + index + '[]"]').length;
-        //     console.log(sn_count)
-        //     if(qty != sn_count){
-        //         error = true;
-        //         alert('Số lượng sản phẩm và seri number không hợp lệ !');
-        //         return false;
-        //     }
-        // });
-
         var listSN = [];
         var products_id = [];
         $('select[name^="products_id[]"]').each(function() {
@@ -1112,6 +1054,17 @@
 
         });
 
+        var countQTY = 0;
+        // Kiểm tra số lượng và seri number
+        $('input[name^="product_qty"]').each(function() {
+            countQTY += parseInt($(this).val());
+        })
+
+        if (listSN.length != countQTY) {
+            error = true;
+            alert("Số lượng sản phẩm và serial number không hợp lệ !");
+        }
+
         if (error) {
             return false;
         }
@@ -1120,9 +1073,9 @@
         var isDuplicate = false;
         for (var i = 0; i < listSN.length - 1; i++) {
             for (var j = i + 1; j < listSN.length; j++) {
-                if (listSN[i] === listSN[j]) {
+                if (listSN[i].trim() === listSN[j].trim()) {
                     isDuplicate = true;
-                    alert("Test đúng rồi đó mà bị chặn rồi " + listSN[j]);
+                    alert("Seri number " + listSN[j] + " đã tồn tại");
                     break;
                 }
             }
@@ -1150,6 +1103,7 @@
             })
         }
     });
+
     $('body').on('input', '.product_price', function(event) {
         // Lấy giá trị đã nhập
         var value = event.target.value;
@@ -1162,10 +1116,6 @@
 
         event.target.value = formattedNumber;
     });
-
-    $('body').on('input','.total-amount',function(event){
-        alert('change');
-    })
 
     function numberWithCommas(number) {
         // Chia số thành phần nguyên và phần thập phân
