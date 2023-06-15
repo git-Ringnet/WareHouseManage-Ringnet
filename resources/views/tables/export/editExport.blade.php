@@ -122,9 +122,9 @@
                 @if ($exports->export_status == 1)
                     @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
                         <button type="submit" class="btn btn-danger text-white" name="submitBtn"
-                            value="action1">Chốt
+                            value="action1" onclick="validateAndSubmit(event)">Chốt
                             đơn</button>
-                        <button type="submit" class="btn btn-secondary mx-4" name="submitBtn" value="action2">Hủy
+                        <button type="submit" class="btn btn-secondary mx-4" name="submitBtn" value="action2" onclick="validateAndSubmit(event)">Hủy
                             đơn</button>
                     @endif
                 @endif
@@ -858,7 +858,7 @@
                 "</select>" +
                 "</td>");
             const dvtInput = $(
-                "<td><input type='text' id='product_unit' class='product_unit form-control' style='width:80px' name='product_unit[]' required></td>"
+                "<td><input type='text' id='product_unit' class='product_unit form-control text-center' style='width:80px' name='product_unit[]' required></td>"
             );
             const slInput = $(
                 "<td>" +
@@ -869,20 +869,20 @@
                 "</td>"
             );
             const giaInput = $(
-                "<td><input type='text' class='product_price form-control' style='width:140px;' id='product_price' name='product_price[]' required></td>"
+                "<td><input type='text' class='product_price form-control text-center' style='width:140px;' id='product_price' name='product_price[]' required></td>"
             );
             const ghichuInput = $(
                 "<td><input type='text' class='note_product form-control text-center' name='product_note[]'></td>"
             );
             const thueInput = $("<td>" +
-                "<select name='product_tax[]' class='product_tax p-1 form-control' style='width:80px' id='product_tax' required>" +
+                "<select name='product_tax[]' class='product_tax p-1 form-control text-center' style='width:100px' id='product_tax' required>" +
                 "<option value='0'>0%</option>" +
                 "<option value='8'>8%</option>" +
                 "<option value='10'>10%</option>" +
                 "<option value='0'>NOVAT</option>" +
                 "</select>" +
                 "</td>");
-            const thanhTienInput = $("<td><span class='total-amount form-control'>0</span></td>");
+            const thanhTienInput = $("<td><span class='total-amount form-control text-center'>0</span></td>");
             const sn = $(
                 "<td data-toggle='modal' data-target='#snModal'><img src='../../dist/img/icon/list.png'></td>"
             );
@@ -1432,7 +1432,7 @@
         var productList = $('.productName');
 
         if (formGuest.length && productList.length > 0) {
-            $('.quantity-input, [name^="product_price"]').each(function() {
+            $('.product_price, [name^="product_price"]').each(function() {
                 var newValue = $(this).val().replace(/,/g, '');
                 $(this).val(newValue);
             });

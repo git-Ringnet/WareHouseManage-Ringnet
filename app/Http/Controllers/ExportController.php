@@ -113,7 +113,7 @@ class ExportController extends Controller
     public function create()
     {
         $products = Products::all();
-        $customer = Guests::where('guest_status',1)->get();
+        $customer = Guests::where('guest_status', 1)->get();
         $guest_id = DB::table('guests')->select('id')->orderBy('id', 'DESC')->first();
         $title = 'Tạo đơn xuất hàng';
         return view('tables.export.addExport', compact('customer', 'products', 'title'));
@@ -169,7 +169,7 @@ class ExportController extends Controller
                                 // Cập nhật seri_status bằng 2 cho các sản phẩm
                                 foreach ($serinumbers as $serinumber) {
                                     if ($serinumber->seri_status == 1) {
-                                        $serinumber->seri_status = 2;
+                                        $serinumber->seri_status = 3;
                                         $serinumber->save();
                                     }
                                 }
@@ -316,9 +316,23 @@ class ExportController extends Controller
                                     ]);
                             }
                             // Cập nhật tình trạng seri sau khi chốt
-                            Serinumbers::whereIn('product_id', $productIDs)
-                                ->where('seri_status', 2)
-                                ->update(['seri_status' => 3]);
+                            // for ($i = 0; $i < count($productIDs); $i++) {
+                            //     $productID = $productIDs[$i];
+                            //     $productQty = $productQtys[$i];
+
+                            //     // Cập nhật seri_status theo số lượng đã nhập
+                            //     $serinumbers = Serinumbers::where('product_id', $productID)
+                            //         ->where('seri_status', 1)
+                            //         ->limit($productQty)
+                            //         ->get();
+
+                            //     foreach ($serinumbers as $serinumber) {
+                            //         if ($serinumber->seri_status == 1) {
+                            //             $serinumber->seri_status = 3;
+                            //             $serinumber->save();
+                            //         }
+                            //     }
+                            // }
 
                             //cập nhật số lượng tồn kho sản phẩm cha
                             $query = "UPDATE `products` 
@@ -815,9 +829,27 @@ class ExportController extends Controller
                         }
 
                         // Cập nhật tình trạng seri sau khi chốt
-                        Serinumbers::whereIn('product_id', $productIDs)
-                            ->where('seri_status', 2)
-                            ->update(['seri_status' => 3]);
+                        // Serinumbers::whereIn('product_id', $productIDs)
+                        //     ->where('seri_status', 2)
+                        //     ->update(['seri_status' => 3]);
+
+                        for ($i = 0; $i < count($productIDs); $i++) {
+                            $productID = $productIDs[$i];
+                            $productQty = $productQtys[$i];
+
+                            // Cập nhật seri_status theo số lượng đã nhập
+                            $serinumbers = Serinumbers::where('product_id', $productID)
+                                ->where('seri_status', 2)
+                                ->limit($productQty)
+                                ->get();
+
+                            foreach ($serinumbers as $serinumber) {
+                                if ($serinumber->seri_status == 2) {
+                                    $serinumber->seri_status = 3;
+                                    $serinumber->save();
+                                }
+                            }
+                        }
 
                         //cập nhật số lượng tồn kho sản phẩm cha
                         $query = "UPDATE `products` 
@@ -1251,7 +1283,7 @@ class ExportController extends Controller
         if ($data['qty'] == null) {
             return;
         } else {
-            $sn = Serinumbers::where('product_id', $data['productCode'])->where('seri_status','1')->limit($data['qty'])->get();
+            $sn = Serinumbers::where('product_id', $data['productCode'])->where('seri_status', '1')->limit($data['qty'])->get();
             return response()->json($sn);
         }
     }
@@ -1262,7 +1294,7 @@ class ExportController extends Controller
         if ($data['qty'] == null) {
             return;
         } else {
-            $sn = Serinumbers::where('product_id', $data['productCode'])->where('seri_status','3')->limit($data['qty'])->get();
+            $sn = Serinumbers::where('product_id', $data['productCode'])->where('seri_status', '3')->limit($data['qty'])->get();
             return response()->json($sn);
         }
     }
@@ -1273,7 +1305,7 @@ class ExportController extends Controller
         if ($data['qty'] == null) {
             return;
         } else {
-            $sn = Serinumbers::where('product_id', $data['productCode'])->where('seri_status','2')->limit($data['qty'])->get();
+            $sn = Serinumbers::where('product_id', $data['productCode'])->where('seri_status', '2')->limit($data['qty'])->get();
             return response()->json($sn);
         }
     }
