@@ -420,8 +420,7 @@
                 <a href="{{ route('insertProduct.index') }}" class="btn btn-light">Hủy</a>
             </div>
         </section>
-        <div class="container">
-            <div class="row position-relative">
+            <div class="row position-relative footer-total">
                 <div class="col-sm-6"></div>
                 <div class="col-sm-6">
                     <div class="mt-4 w-50" style="float: right;">
@@ -448,7 +447,6 @@
                     </div>
                 </div>
             </div>
-        </div>
     </form>
 </div>
 <!-- /.content -->

@@ -4,26 +4,26 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <div class="container-fluided">
-            <div class="row mb-1 m-0">
+            <div class="d-flex mb-1">
                 @can('view-provides')
                     <a href="{{ route('insertProducts') }}">
-                        <button type="button" class="btn btn-primary d-flex align-items-center">
-                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M6 0C6.38791 -1.97352e-08 6.70237 0.314463 6.70237 0.702373L6.70237 11.2976C6.70237 11.6855 6.38791 12 6 12C5.61209 12 5.29763 11.6855 5.29763 11.2976V0.702373C5.29763 0.314463 5.61209 -1.97352e-08 6 0Z"
-                                    fill="white" />
-                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M12 6C12 6.38791 11.6855 6.70237 11.2976 6.70237H0.702373C0.314463 6.70237 -1.38146e-07 6.38791 0 6C-5.13115e-07 5.61209 0.314463 5.29763 0.702373 5.29763H11.2976C11.6855 5.29763 12 5.61209 12 6Z"
-                                    fill="white" />
-                            </svg>
-                            <span class="ml-2">Thêm sản phẩm</span>
+                        <button type="button" class="custom-btn btn btn-primary d-flex align-items-center">
+                            <svg class="mr-1" width="24" height="24" viewBox="0 0 24 24"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                        d="M12 6C12.3879 6 12.7024 6.31446 12.7024 6.70237L12.7024 17.2976C12.7024 17.6855 12.3879 18 12 18C11.6121 18 11.2976 17.6855 11.2976 17.2976V6.70237C11.2976 6.31446 11.6121 6 12 6Z"
+                                                        fill="#ffff" />
+                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                        d="M18 12C18 12.3879 17.6855 12.7024 17.2976 12.7024H6.70237C6.31446 12.7024 6 12.3879 6 12C6 11.6121 6.31446 11.2976 6.70237 11.2976H17.2976C17.6855 11.2976 18 11.6121 18 12Z"
+                                                        fill="#ffff" />
+                                                </svg>
+                            <span>Thêm sản phẩm</span>
                         </button>
                     </a>
-                    <div class="class mx-3">
+                    <div class="class mx-4">
                         <button onclick="exportToExcel()" type="button"
-                            class="btn btn-outline-primary d-flex align-items-center">
-                            <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                            class="custom-btn btn btn-outline-primary d-flex align-items-center">
+                            <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24" fill="none">
                                 <path
                                     d="M15.0003 7.80054H16.5001C16.8979 7.80054 17.2794 7.95857 17.5607 8.23984C17.842 8.52112 18 8.9026 18 9.30039V17.1006C18 17.4983 17.842 17.8798 17.5607 18.1611C17.2794 18.4424 16.8979 18.6004 16.5001 18.6004H7.49986C7.10207 18.6004 6.72058 18.4424 6.4393 18.1611C6.15802 17.8798 6 17.4983 6 17.1006V9.30039C6 8.9026 6.15802 8.52112 6.4393 8.23984C6.72058 7.95857 7.10207 7.80054 7.49986 7.80054H8.99972"
@@ -36,7 +36,7 @@
                             <span>Xuất Excel</span>
                         </button>
                     </div>
-                    <div class="btn btn-outline-primary btn-file d-flex align-items-center">
+                    <div class="custom-btn btn btn-outline-primary btn-file d-flex align-items-center">
                         <div>
                             <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24" fill="none">
@@ -58,7 +58,7 @@
                     <div class="row mr-0">
                         <div class="col-5">
                             <input type="text" placeholder="Tìm kiếm theo mã sản phẩm hoặc tên sản phẩm"
-                                name="keywords" class="pr-4 input-search w-100 form-control"
+                                name="keywords" class="pr-4 input-search w-100 form-control h-100"
                                 value="{{ request()->keywords }}">
                             <span class="search-icon"><i class="fas fa-search"></i></span>
                         </div>
@@ -72,7 +72,7 @@
                                         d="M6 5.4643C6 5.34116 6.04863 5.22306 6.13518 5.13599C6.22174 5.04892 6.33913 5 6.46154 5H17.5385C17.6609 5 17.7783 5.04892 17.8648 5.13599C17.9514 5.22306 18 5.34116 18 5.4643V7.32149C18 7.43599 17.9579 7.54645 17.8818 7.63164L13.8462 12.1428V16.6075C13.8461 16.7049 13.8156 16.7998 13.7589 16.8788C13.7022 16.9578 13.6223 17.0168 13.5305 17.0476L10.7612 17.9762C10.6919 17.9994 10.618 18.0058 10.5458 17.9947C10.4735 17.9836 10.4049 17.9554 10.3456 17.9124C10.2863 17.8695 10.238 17.8129 10.2047 17.7475C10.1713 17.682 10.1539 17.6096 10.1538 17.5361V12.1428L6.11815 7.63164C6.0421 7.54645 6.00002 7.43599 6 7.32149V5.4643Z"
                                         fill="#555555" />
                                 </svg>
-                            </span>Tắt bộ lọc</a>
+                            </span><span>Tắt bộ lọc</span></a>
                     </div>
                     <div class="d-flex justify-contents-center align-items-center mr-auto row-filter my-3 m-0">
                         <div class="icon-filter mr-3">
@@ -523,9 +523,9 @@ $index = array_search($item['label'], $numberedLabels);
             <div class="d-flex justify-content-between align-items-center">
                 <span class="count_checkbox mr-5"></span>
                 <div class="row action">
-                    <div class="btn-taodon my-2 mx-3">
-                        <button type="button" class="btn-group btn btn-light">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    <div class="btn-taodon my-2 ml-3">
+                        <button type="button" class="btn-group btn btn-light d-flex align-items-center">
+                            <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24" fill="none">
                                 <path fill-rule="evenodd" clip-rule="evenodd"
                                     d="M12 6C12.3879 6 12.7024 6.31446 12.7024 6.70237L12.7024 17.2976C12.7024 17.6855 12.3879 18 12 18C11.6121 18 11.2976 17.6855 11.2976 17.2976V6.70237C11.2976 6.31446 11.6121 6 12 6Z"
@@ -538,8 +538,8 @@ $index = array_search($item['label'], $numberedLabels);
                         </button>
                     </div>
                     <div class="btn-nhaphang my-2">
-                        <button type="button" class="btn-group btn btn-light mx-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                        <button type="button" class="btn-group btn btn-light d-flex align-items-center ml-4">
+                            <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24" fill="none">
                                 <path fill-rule="evenodd" clip-rule="evenodd"
                                     d="M12 6C12.3879 6 12.7024 6.31446 12.7024 6.70237L12.7024 17.2976C12.7024 17.6855 12.3879 18 12 18C11.6121 18 11.2976 17.6855 11.2976 17.2976V6.70237C11.2976 6.31446 11.6121 6 12 6Z"
@@ -551,10 +551,10 @@ $index = array_search($item['label'], $numberedLabels);
                             <span>Nhập hàng</span>
                         </button>
                     </div>
-                    <div class="dropdown my-2 mx-3">
-                        <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton"
+                    <div class="dropdown my-2 ml-4">
+                        <button class="custom-btn btn btn-light dropdown-toggle align-items-center d-flex h-100" type="button" id="dropdownMenuButton"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Hành động khác
+                            <span>Hành động khác</span>
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             <a href="#" id="deleteProducts" class="dropdown-item">Xóa sản phẩm</a>

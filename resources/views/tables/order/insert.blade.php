@@ -146,8 +146,7 @@
                     <div id="list_modal">
                     </div>
                 </div><!-- /.container-fluided -->
-                <div class="container">
-                    <div class="row position-relative">
+                    <div class="row position-relative footer-total">
                         <div class="col-sm-6"></div>
                         <div class="col-sm-6">
                             <div class="mt-4 w-50" style="float: right;">
@@ -174,7 +173,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
                 <div class="d-flex justify-content-center btn-fixed">
                     <button style="bottom: 0;" type="submit" name="action" class="btn btn-primary mr-2" value="AddProduct">Lưu</button>
                     <a href="{{ route('insertProduct.index') }}" class="btn btn-light" onclick="return confirm('Bạn có muốn quay lại ?');">Hủy</a>

@@ -4,33 +4,34 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <div class="container-fluided">
-            <div class="d-flex mb-1">
+            <div class="row m-0 mb-1">
                 <a href="{{ route('exports.create') }}">
-                    <button type="button" class="btn btn-primary d-flex align-items-center">
-                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                d="M6 0C6.38791 -1.97352e-08 6.70237 0.314463 6.70237 0.702373L6.70237 11.2976C6.70237 11.6855 6.38791 12 6 12C5.61209 12 5.29763 11.6855 5.29763 11.2976V0.702373C5.29763 0.314463 5.61209 -1.97352e-08 6 0Z"
-                                fill="white" />
-                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                d="M12 6C12 6.38791 11.6855 6.70237 11.2976 6.70237H0.702373C0.314463 6.70237 -1.38146e-07 6.38791 0 6C-5.13115e-07 5.61209 0.314463 5.29763 0.702373 5.29763H11.2976C11.6855 5.29763 12 5.61209 12 6Z"
-                                fill="white" />
-                        </svg>
-                        <span class="ml-2">Tạo đơn</span>
+                    <button type="button" class="custom-btn btn btn-primary d-flex align-items-center h-100">
+                        <svg class="mr-1" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M12 6C12.3879 6 12.7024 6.31446 12.7024 6.70237L12.7024 17.2976C12.7024 17.6855 12.3879 18 12 18C11.6121 18 11.2976 17.6855 11.2976 17.2976V6.70237C11.2976 6.31446 11.6121 6 12 6Z"
+                            fill="#ffff" />
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M18 12C18 12.3879 17.6855 12.7024 17.2976 12.7024H6.70237C6.31446 12.7024 6 12.3879 6 12C6 11.6121 6.31446 11.2976 6.70237 11.2976H17.2976C17.6855 11.2976 18 11.6121 18 12Z"
+                            fill="#ffff" />
+                    </svg>
+                        <span>Tạo đơn</span>
                     </button>
                 </a>
                 <button style="margin-left:24px" type="button" onclick="exportToExcel()"
-                    class="btn btn-outline-primary border-primary d-flex align-items-center">
-                    <svg width="14" height="18" viewBox="0 0 14 18" fill="none"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M10.0003 5.80078H11.5001C11.8979 5.80078 12.2794 5.95881 12.5607 6.24009C12.842 6.52137 13 6.90285 13 7.30063V15.1008C13 15.4986 12.842 15.8801 12.5607 16.1614C12.2794 16.4426 11.8979 16.6007 11.5001 16.6007H2.49986C2.10207 16.6007 1.72058 16.4426 1.4393 16.1614C1.15802 15.8801 1 15.4986 1 15.1008V7.30063C1 6.90285 1.15802 6.52137 1.4393 6.24009C1.72058 5.95881 2.10207 5.80078 2.49986 5.80078H3.99972"
-                            stroke="#0095F6" stroke-linecap="round" stroke-linejoin="round" />
-                        <path d="M3.99976 9.39941L6.99948 12.3991L10.0003 9.39941" stroke="#0095F6"
-                            stroke-linecap="round" stroke-linejoin="round" />
-                        <path d="M7.00055 1V11.7999" stroke="#0095F6" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                    <span class="ml-2">Xuất excel</span>
+                    class="custom-btn btn btn-outline-primary border-primary d-flex align-items-center">
+                    <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                viewBox="0 0 24 24" fill="none">
+                <path
+                    d="M15.0003 7.80054H16.5001C16.8979 7.80054 17.2794 7.95857 17.5607 8.23984C17.842 8.52112 18 8.9026 18 9.30039V17.1006C18 17.4983 17.842 17.8798 17.5607 18.1611C17.2794 18.4424 16.8979 18.6004 16.5001 18.6004H7.49986C7.10207 18.6004 6.72058 18.4424 6.4393 18.1611C6.15802 17.8798 6 17.4983 6 17.1006V9.30039C6 8.9026 6.15802 8.52112 6.4393 8.23984C6.72058 7.95857 7.10207 7.80054 7.49986 7.80054H8.99972"
+                    stroke="#0095F6" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M8.99976 11.3997L11.9995 14.3994L15.0003 11.3997" stroke="#0095F6"
+                    stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M12.0006 3V13.7999" stroke="#0095F6" stroke-linecap="round"
+                    stroke-linejoin="round" />
+            </svg>
+                    <span>Xuất excel</span>
                 </button>
             </div>
             <div class="row m-auto filter pt-2">
@@ -38,7 +39,7 @@
                     <div class="row  mr-0">
                         <div class="col-5">
                             <input type="text" placeholder="Tìm kiếm theo mã đơn hàng hoặc tên khách hàng"
-                                name="keywords" class="pr-4 form-control input-search w-100"
+                                name="keywords" class="pr-4 form-control input-search w-100 h-100"
                                 value="{{ request()->keywords }}">
                             <span class="search-icon"><i class="fas fa-search"></i></span>
                         </div>
@@ -384,31 +385,21 @@ $index = array_search($item['label'], $numberedLabels);
             <div class="d-flex justify-content-between align-items-center">
                 <span class="count_checkbox mr-5"></span>
                 <div class="row action">
-                    <div class="btn-xoahang my-2 mx-3">
+                    <div class="btn-xoahang my-2 ml-3">
                         <button id="deleteExports" type="button"
-                            class="btn btn-group btn-light d-flex align-items-center">
-                            <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24"
-                                stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em"
-                                width="1em" xmlns="http://www.w3.org/2000/svg">
-                                <polyline points="3 6 5 6 21 6"></polyline>
-                                <path
-                                    d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
-                                </path>
-                                <line x1="10" y1="11" x2="10" y2="17"></line>
-                                <line x1="14" y1="11" x2="14" y2="17"></line>
-                            </svg>
+                            class="btn btn-group btn-light d-flex align-items-center h-100">
+                            <svg class="mr-1" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M10.5454 5C10.2442 5 9.99999 5.24421 9.99999 5.54545C9.99999 5.8467 10.2442 6.09091 10.5454 6.09091H13.4545C13.7558 6.09091 14 5.8467 14 5.54545C14 5.24421 13.7558 5 13.4545 5H10.5454ZM6 7.72726C6 7.42601 6.24421 7.18181 6.54545 7.18181H7.63637H16.3636H17.4545C17.7558 7.18181 18 7.42601 18 7.72726C18 8.02851 17.7558 8.27272 17.4545 8.27272H16.9091V17C16.9091 18.2113 15.9118 19.1818 14.7135 19.1818H9.25891C8.97278 19.1816 8.68906 19.1247 8.42499 19.0145C8.16092 18.9044 7.92126 18.7431 7.71979 18.5399C7.51833 18.3367 7.35905 18.0957 7.25112 17.8307C7.14347 17.5664 7.08903 17.2834 7.09091 16.9981V8.27272H6.54545C6.24421 8.27272 6 8.02851 6 7.72726ZM8.18182 17.0041V8.27272H15.8182V17C15.8182 17.5966 15.3216 18.0909 14.7135 18.0909H9.25938C9.11713 18.0908 8.97632 18.0625 8.84503 18.0077C8.71375 17.953 8.5946 17.8728 8.49444 17.7718C8.39429 17.6707 8.3151 17.5509 8.26144 17.4192C8.20779 17.2874 8.18074 17.1464 8.18182 17.0041ZM13.4545 10.0909C13.7558 10.0909 14 10.3351 14 10.6364V15.7273C14 16.0285 13.7558 16.2727 13.4545 16.2727C13.1533 16.2727 12.9091 16.0285 12.9091 15.7273V10.6364C12.9091 10.3351 13.1533 10.0909 13.4545 10.0909ZM11.0909 10.6364C11.0909 10.3351 10.8467 10.0909 10.5454 10.0909C10.2442 10.0909 9.99999 10.3351 9.99999 10.6364V15.7273C9.99999 16.0285 10.2442 16.2727 10.5454 16.2727C10.8467 16.2727 11.0909 16.0285 11.0909 15.7273V10.6364Z" fill="#555555"/>
+                                </svg>                                
                             <span>Xóa đơn</span>
                         </button>
                     </div>
-                    <div class="btn-huy my-2">
-                        <button id="cancelBillExport" class="btn btn-group btn-light d-flex align-items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
-                                viewBox="0 0 14 14" fill="none">
-                                <path d="M13 13L1 1" stroke="#555555" stroke-width="1.5" stroke-linecap="round"
-                                    stroke-linejoin="round" />
-                                <path d="M13 1L1 13" stroke="#555555" stroke-width="1.5" stroke-linecap="round"
-                                    stroke-linejoin="round" />
-                            </svg>
+                    <div class="btn-huy my-2 ml-4">
+                        <button id="cancelBillExport" class="btn btn-group btn-light d-flex align-items-center h-100">
+                            <svg class="mr-1" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M18 18L6 6" stroke="#555555" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M18 6L6 18" stroke="#555555" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>                                
                             <span class="px-1">Hủy đơn</span>
                         </button>
                     </div>

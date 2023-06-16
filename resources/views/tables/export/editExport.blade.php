@@ -453,7 +453,7 @@
                     @endif
                 @endif
             </div>
-            <div class="row position-relative pb-5">
+            <div class="row position-relative footer-total">
                 <div class="col-sm-6">
                     <div class="mt-4 w-75" style="float: left;">
                         <b class="pl-2">*Ghi chú báo giá</b>

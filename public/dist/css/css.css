@@ -781,7 +781,7 @@ input[type="number"] {
 }
 
 .btn-filter {
-    margin-top: 2px;
+    margin-bottom: 5px;
 }
 
 #btn-addNoteForm {
@@ -804,4 +804,26 @@ input[type="number"] {
 }
 .btn-outline-primary:hover span{
     color: #ffff;
+}
+.btn-light{
+    padding: 8px 16px;
+}
+.btn-taodon .btn-light,.btn-xoahang .btn-light,.btn-nhanvien .btn-light{
+    margin-left: 14px;
+}
+.custom-btn span,.btn-light span{
+    font-weight: 500;
+    font-size: 14px;
+}
+.custom-btn{
+    padding: 8px 16px;
+}
+input[type='text'],input[type='search']{
+    font-size: 14px;
+    font-weight: 400;
+    color: #ADADAD;
+}
+.footer-total{
+    padding-bottom: 100px;
+    padding-right: 100px;
 }
