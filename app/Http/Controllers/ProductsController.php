@@ -10,6 +10,7 @@ use App\Models\Provides;
 use App\Models\Serinumbers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Symfony\Component\Console\Input\Input;
 
 use function GuzzleHttp\Promise\all;
 
@@ -263,7 +264,7 @@ class ProductsController extends Controller
         $cate = Category::all();
         $title = 'Chỉnh sửa sản phẩm';
         $listProduct = Product::with('getSerinumbers')->where('products_id', $products->id)->paginate(8);
-
+     
         // var_dump($listProduct[1]->getSerinumbers);
         // die();
         // $listProduct = Product::join('serinumber', 'product.id', 'serinumbers.product_id')
@@ -483,5 +484,15 @@ class ProductsController extends Controller
         }
         session()->flash('msg', 'Import thành công!');
         return response()->json(['message' => 'Import thành công!']);
+    }
+
+    public function checkProducts_code(Request $request){
+        $data = $request->input('products_code');
+        $check = Products::where('products_code', $data)->first();
+        if($check === null){
+            return response()->json(['success' => false]);
+        }else{
+            return response()->json(['success' => true ,'msg' => "Mã sản phẩm đã tồn tại"]);
+        }
     }
 }

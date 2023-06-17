@@ -176,7 +176,7 @@
                     </div>
                     <div class="form-group">
                         <label for="email">Mã số thuế:</label>
-                        <input required type="text" class="form-control" @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif id="provide_code"
+                        <input required oninput="validateNumberInput(this)" type="text" class="form-control" @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif id="provide_code"
                         placeholder="Nhập thông tin" name="provide_code"
                         value="{{ $provide_order[0]->provide_code }}"
                         @if ($order->order_status == 1) <?php echo 'readonly'; ?> @endif>
@@ -199,7 +199,7 @@
                     </div>
                     <div class="form-group">
                         <label for="email">Số điện thoại:</label>
-                        <input required type="text" class="form-control" @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif id="provide_phone"
+                        <input oninput="validateNumberInput(this)" required type="text" class="form-control" @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif id="provide_phone"
                         placeholder="Nhập thông tin" name="provide_phone"
                         value="{{ $provide_order[0]->provide_phone }}"
                         @if ($order->order_status == 1) <?php echo 'readonly'; ?> @endif>
@@ -238,7 +238,7 @@
                             <td><input type="checkbox"></td>
                             @endif
                             <td class="select-wrapper">
-                                <select name="products_id[]" id="" class="list_products form-control" @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) disabled @endif>
+                                <select style="width:224px !important;" name="products_id[]" id="" class="list_products form-control w-100" @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) disabled @endif>
                                     @foreach ($products as $prod)
                                     <option class="form-control" value="{{ $prod->id }}" {{ $prod->id == $pro->products_id ? 'selected' : '' }}>
                                         {{ $prod->products_code }}
@@ -453,6 +453,19 @@
 </div>
 
 <script>
+    $(document).ready(function() {
+        checkDuplicateRow();
+    })
+
+    function checkDuplicateRow() {
+        $('#inputContainer tbody tr').each(function() {
+            var td0 = $(this).find('td select').val();
+            var td1 = $(this).find('td').eq(2).val();
+            console.log(td1);
+        });
+    }
+
+
     function handlePaste(input) {
         var rowCount = $(input).attr('name').match(/\d+/)[0];
         var clipboardData = event.clipboardData || window.clipboardData;
@@ -477,7 +490,7 @@
             newtd1.append(checkbox);
             newDiv.setAttribute("type", "text");
             newDiv.setAttribute("class", "form-control w-25");
-            newDiv.setAttribute("name", "product_SN" + rowCount + "[]");
+            newDiv.setAttribute("name", "product_SN_new" + rowCount + "[]");
             newDiv.setAttribute("onpaste", "handlePaste(this)");
             newtd3.append(newDiv);
             newtd4.setAttribute('class', 'deleteRow1');
@@ -517,6 +530,11 @@
             if (count % 3 === 0 && i !== 0) {
                 formattedValue = "," + formattedValue;
             }
+        }
+
+        // Nếu có phần thập phân, thêm vào sau phần nguyên
+        if (parts.length > 1) {
+            formattedValue += "." + parts[1];
         }
 
         // Trả về kết quả đã định dạng
@@ -584,7 +602,7 @@
 
                 // Hiển thị kết quả
                 $(this).find('.total-amount').val(formatCurrency(rowTotal));
-                $(this).find('.product_tax1').text(rowTax);
+                $(this).find('.product_tax1').text(rowTax.toFixed(2));
 
                 // Cộng dồn vào tổng totalAmount và totalTax
                 totalAmount += rowTotal;
@@ -594,7 +612,7 @@
 
         // Hiển thị tổng totalAmount và totalTax
         $('#total-amount-sum').text(formatCurrency(totalAmount));
-        $('#product-tax').text(formatCurrency(totalTax));
+        $('#product-tax').text((formatCurrency(totalTax)));
 
         // Tính tổng thành tiền và thuế
         calculateGrandTotal(totalAmount, totalTax);
@@ -657,48 +675,44 @@
     // Kiểm tra dữ liệu trước khi submit
     var checkSubmit = false;
 
-    function checkData() {
-        var er = false;
-        if (chekckRow() == false) {
-            er = true;
-            alert('Vui lòng nhập ít nhất 1 sản phẩm');
-        }
-        $('input[name="product_name[]"]').each(function() {
-            if ($(this).val() === '') {
-                er = true;
-                alert('Vui lòng nhập tên sản phẩm')
-            }
-        });
-        $('input[name="product_qty[]"]').each(function() {
-            if ($(this).val() === '') {
-                alert('Vui lòng nhập số lượng sản phẩm')
-                er = true;
-            }
-        });
-        $('input[name="product_price[]"]').each(function() {
-            if ($(this).val() === '') {
-                alert('Vui lòng nhập giá sản phẩm')
-                er = true;
-            }
-        });
-        $('input[name="product_SN[]"]').each(function() {
-            if ($(this).val() === '') {
-                alert('Vui lòng nhập seri number');
-                er = true;
-            }
-        });
-        if ($('#provide_id').val().trim() == '' && $('#radio1').prop('checked') == true) {
-            er = true;
-            alert('Vui lòng chọn nhà cung cấp');
-        }
-        if (er) {
-            checkSubmit = true;
-        } else {
-            checkSubmit = false;
-        }
+    // function checkData() {
+    //     var er = false;
+    //     $('input[name="product_name[]"]').each(function() {
+    //         if ($(this).val() === '') {
+    //             er = true;
+    //             alert('Vui lòng nhập tên sản phẩm')
+    //         }
+    //     });
+    //     $('input[name="product_qty[]"]').each(function() {
+    //         if ($(this).val() === '') {
+    //             alert('Vui lòng nhập số lượng sản phẩm')
+    //             er = true;
+    //         }
+    //     });
+    //     $('input[name="product_price[]"]').each(function() {
+    //         if ($(this).val() === '') {
+    //             alert('Vui lòng nhập giá sản phẩm')
+    //             er = true;
+    //         }
+    //     });
+    //     $('input[name="product_SN[]"]').each(function() {
+    //         if ($(this).val() === '') {
+    //             alert('Vui lòng nhập seri number');
+    //             er = true;
+    //         }
+    //     });
+    //     if ($('#provide_id').val().trim() == '' && $('#radio1').prop('checked') == true) {
+    //         er = true;
+    //         alert('Vui lòng chọn nhà cung cấp');
+    //     }
+    //     if (er) {
+    //         checkSubmit = true;
+    //     } else {
+    //         checkSubmit = false;
+    //     }
 
-        return checkSubmit;
-    }
+    //     return checkSubmit;
+    // }
 
     // Chuyển hướng form để thêm dữ liệu
     $(document).on('click', '.addBillEdit', function(e) {
@@ -707,6 +721,11 @@
             var products_id = [];
             var listSN = [];
             var listSNOld = [];
+
+            if (chekckRow() == false) {
+                alert('Vui lòng nhập ít nhất 1 sản phẩm');
+            }
+
             $('select[name^="products_id[]"]').each(function() {
                 products_id.push($(this).val());
             });
@@ -743,9 +762,8 @@
                 }
             }
 
-            var countQTY = 0;
-            // var countSN = listSN.length + listSNOld.length;
             // Kiểm tra số lượng và seri number
+            var countQTY = 0;
             $('input[name^="product_qty"]').each(function() {
                 countQTY += parseInt($(this).val());
             })
@@ -754,7 +772,7 @@
                 alert("Số lượng sản phẩm và serial number không hợp lệ !");
             }
             // Kiểm tra có lỗi hay không
-            var hasErrors = isDuplicate || listSNOld.length != countQTY;
+            var hasErrors = isDuplicate || listSNOld.length != countQTY || chekckRow() === false;
 
             if (!hasErrors) {
                 if (listSN.length > 0) {
@@ -895,47 +913,7 @@
             '</div>'
         $('#list_modal').append(modal);
 
-        var addSNBtns = $('.AddSN');
-        for (let i = 0; i < addSNBtns.length; i++) {
-            $(addSNBtns[i]).off('click').on('click', function() {
-                var newtr = document.createElement('tr');
-                var newtd1 = document.createElement('td');
-                var newtd2 = document.createElement('td');
-                var newtd3 = document.createElement('td');
-                var newtd = document.createElement('td');
-                var newtd4 = document.createElement('td');
-                var newDiv = document.createElement("input");
-                var checkbox = document.createElement("input");
-                var stt = document.createElement("span");
-                var div1 = document.createElement("div");
-                var div = document.createElement("div");
-                var divDelete = document.createElement("div");
-                var div_value1 = document.querySelector('.div_value' + i + ' table tbody');
-                var checkboxes = document.querySelectorAll('.div_value' + i +
-                    ' input[type="checkbox"]');
-                var checkboxCount = checkboxes.length;
-                checkbox.setAttribute("type", "checkbox");
-                newtd1.append(checkbox);
-                newDiv.setAttribute("type", "text");
-                newDiv.setAttribute("class", "form-control w-25");
-                newDiv.setAttribute("name", "product_SN_new" + i + "[]");
-                newDiv.setAttribute("onpaste", "handlePaste(this)");
-                newtd3.append(newDiv);
-                newtd4.setAttribute('class', 'deleteRow1');
-                newtd4.innerHTML =
-                    '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.0606 6.66675C13.6589 6.66675 13.3333 6.99236 13.3333 7.39402C13.3333 7.79568 13.6589 8.12129 14.0606 8.12129H17.9394C18.341 8.12129 18.6667 7.79568 18.6667 7.39402C18.6667 6.99236 18.341 6.66675 17.9394 6.66675H14.0606ZM8 10.3031C8 9.90143 8.32561 9.57582 8.72727 9.57582H10.1818H21.8182H23.2727C23.6744 9.57582 24 9.90143 24 10.3031C24 10.7048 23.6744 11.0304 23.2727 11.0304H22.5455V22.6667C22.5455 24.2819 21.2158 25.5758 19.6179 25.5758H12.3452C11.9637 25.5755 11.5854 25.4997 11.2333 25.3528C10.8812 25.2059 10.5617 24.9908 10.2931 24.7199C10.0244 24.449 9.81206 24.1276 9.66816 23.7743C9.52463 23.4219 9.45204 23.0447 9.45455 22.6642V11.0304H8.72727C8.32561 11.0304 8 10.7048 8 10.3031ZM10.9091 22.6723V11.0304H21.0909V22.6667C21.0909 23.4623 20.4288 24.1213 19.6179 24.1213H12.3458C12.1562 24.1211 11.9684 24.0834 11.7934 24.0104C11.6183 23.9374 11.4595 23.8304 11.3259 23.6958C11.1924 23.5611 11.0868 23.4013 11.0153 23.2257C10.9437 23.05 10.9076 22.8619 10.9091 22.6723ZM17.9394 13.4546C18.3411 13.4546 18.6667 13.7802 18.6667 14.1819V20.9698C18.6667 21.3714 18.3411 21.6971 17.9394 21.6971C17.5377 21.6971 17.2121 21.3714 17.2121 20.9698V14.1819C17.2121 13.7802 17.5377 13.4546 17.9394 13.4546ZM14.7879 14.1819C14.7879 13.7802 14.4623 13.4546 14.0606 13.4546C13.6589 13.4546 13.3333 13.7802 13.3333 14.1819V20.9698C13.3333 21.3714 13.6589 21.6971 14.0606 21.6971C14.4623 21.6971 14.7879 21.3714 14.7879 20.9698V14.1819Z" fill="#555555"/></svg>';
-                newtd2.appendChild(stt);
-                newtr.append(newtd1);
-                newtr.append(newtd2);
-                newtr.append(newtd3);
-                newtr.append(newtd4);
-                div_value1.appendChild(newtr);
-                stt.innerHTML = checkboxCount;
-                checkbox.setAttribute("id", "checkbox_" + checkboxCount);
-                document.querySelector('.div_value' + i).parentNode.querySelector('.SNCount')
-                    .textContent = checkboxCount;
-            });
-        }
+        createInput();
         rowCount++;
         var list_search = document.querySelectorAll('.search_product');
         if (list_search) {
@@ -949,6 +927,52 @@
         addDataToModal();
         chekckRow();
     });
+
+    function createInput() {
+        var addSNBtns = $('.AddSN');
+        for (let i = 0; i <= addSNBtns.length; i++) {
+            $(addSNBtns[i]).off('click').on('click', function() {
+                var currentIndex = addSNBtns[i].closest('.modal-body').querySelector('#table_SNS')
+                    .closest('div')
+                    .className.match(/\d+/)[0];
+                var modal_body = addSNBtns[i].closest('.modal-body');
+                var newtr = document.createElement('tr');
+                var newtd1 = document.createElement('td');
+                var newtd2 = document.createElement('td');
+                var newtd3 = document.createElement('td');
+                var newtd4 = document.createElement('td');
+                var newDiv = document.createElement("input");
+                var checkbox = document.createElement("input");
+                var stt = document.createElement("span");
+                var div1 = document.createElement("div");
+                var div = document.createElement("div");
+                var divDelete = document.createElement("div");
+                var div_value1 = document.querySelector('.div_value' + i + ' table tbody');
+                var checkboxes = modal_body.querySelectorAll('input[type="checkbox"]');
+                var checkboxCount = checkboxes.length;
+                checkbox.setAttribute("type", "checkbox");
+                newtd1.append(checkbox);
+                newDiv.setAttribute("type", "text");
+                newDiv.setAttribute("class", "form-control w-25");
+                newDiv.setAttribute("name", "product_SN_new" + currentIndex + "[]");
+                newDiv.setAttribute("onpaste", "handlePaste(this)");
+                newtd3.append(newDiv);
+                newtd4.setAttribute('class', 'deleteRow1');
+                newtd4.innerHTML =
+                    '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.0606 6.66675C13.6589 6.66675 13.3333 6.99236 13.3333 7.39402C13.3333 7.79568 13.6589 8.12129 14.0606 8.12129H17.9394C18.341 8.12129 18.6667 7.79568 18.6667 7.39402C18.6667 6.99236 18.341 6.66675 17.9394 6.66675H14.0606ZM8 10.3031C8 9.90143 8.32561 9.57582 8.72727 9.57582H10.1818H21.8182H23.2727C23.6744 9.57582 24 9.90143 24 10.3031C24 10.7048 23.6744 11.0304 23.2727 11.0304H22.5455V22.6667C22.5455 24.2819 21.2158 25.5758 19.6179 25.5758H12.3452C11.9637 25.5755 11.5854 25.4997 11.2333 25.3528C10.8812 25.2059 10.5617 24.9908 10.2931 24.7199C10.0244 24.449 9.81206 24.1276 9.66816 23.7743C9.52463 23.4219 9.45204 23.0447 9.45455 22.6642V11.0304H8.72727C8.32561 11.0304 8 10.7048 8 10.3031ZM10.9091 22.6723V11.0304H21.0909V22.6667C21.0909 23.4623 20.4288 24.1213 19.6179 24.1213H12.3458C12.1562 24.1211 11.9684 24.0834 11.7934 24.0104C11.6183 23.9374 11.4595 23.8304 11.3259 23.6958C11.1924 23.5611 11.0868 23.4013 11.0153 23.2257C10.9437 23.05 10.9076 22.8619 10.9091 22.6723ZM17.9394 13.4546C18.3411 13.4546 18.6667 13.7802 18.6667 14.1819V20.9698C18.6667 21.3714 18.3411 21.6971 17.9394 21.6971C17.5377 21.6971 17.2121 21.3714 17.2121 20.9698V14.1819C17.2121 13.7802 17.5377 13.4546 17.9394 13.4546ZM14.7879 14.1819C14.7879 13.7802 14.4623 13.4546 14.0606 13.4546C13.6589 13.4546 13.3333 13.7802 13.3333 14.1819V20.9698C13.3333 21.3714 13.6589 21.6971 14.0606 21.6971C14.4623 21.6971 14.7879 21.3714 14.7879 20.9698V14.1819Z" fill="#555555"/></svg>';
+                newtd2.appendChild(stt);
+                newtr.append(newtd1);
+                newtr.append(newtd2);
+                newtr.append(newtd3);
+                newtr.append(newtd4);
+                modal_body.querySelector('#table_SNS tbody').appendChild(newtr);
+                stt.innerHTML = checkboxCount;
+                checkbox.setAttribute("id", "checkbox_" + checkboxCount);
+                modal_body.querySelector('.SNCount').textContent = checkboxCount;
+            });
+        }
+    }
+
 
     function addDataToModal() {
         var info = document.querySelectorAll('.exampleModal');
@@ -1205,6 +1229,15 @@
         var index = originalName.match(/\d+/)[0];
         var newName = "product_SN_new" + index + "[]";
         input.name = newName;
+    }
+
+    // Check nhập số
+    function validateNumberInput(input) {
+        const regex = /^[-+]?[0-9]{1,3}(?:,?[0-9]{3})*(?:\.[0-9]+)?$/;
+        const value = input.value.replace(/,/g, '');
+        if (!regex.test(value)) {
+            input.value = '';
+        }
     }
 </script>
 </body>
