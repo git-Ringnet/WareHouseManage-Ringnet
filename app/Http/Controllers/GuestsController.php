@@ -125,9 +125,7 @@ class GuestsController extends Controller
     {
         $existingCustomer = Guests::where('guest_name', $request->guest_name)
             ->where('guest_email', $request->guest_email)
-            ->where('guest_addressInvoice', $request->guest_addressInvoice)
             ->where('guest_code', $request->guest_code)
-            ->where('guest_addressDeliver', $request->guest_addressDeliver)
             ->where('guest_receiver', $request->guest_receiver)
             ->where('guest_phoneReceiver', $request->guest_phoneReceiver)
             ->where('guest_represent', $request->guest_represent)
@@ -135,7 +133,7 @@ class GuestsController extends Controller
             ->first();
 
         if ($existingCustomer) {
-            return redirect()->route('guests.index')->with('warning', 'Thông tin khách hàng đã có trong hệ thống!');
+            return redirect()->route('guests.index')->with('warning', 'Thêm thất bại,do thông tin khách hàng đã có trong hệ thống!');
         } else {
             Guests::create([
                 'guest_name' => $request->guest_name,
@@ -193,9 +191,7 @@ class GuestsController extends Controller
     {
         $existingCustomer = Guests::find($id)->where('guest_name', $request->guest_name)
             ->where('guest_email', $request->guest_email)
-            ->where('guest_addressInvoice', $request->guest_addressInvoice)
             ->where('guest_code', $request->guest_code)
-            ->where('guest_addressDeliver', $request->guest_addressDeliver)
             ->where('guest_receiver', $request->guest_receiver)
             ->where('guest_phoneReceiver', $request->guest_phoneReceiver)
             ->where('guest_represent', $request->guest_represent)

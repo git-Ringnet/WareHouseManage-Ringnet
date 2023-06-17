@@ -110,14 +110,12 @@ class ProvideController extends Controller
     public function store(Request $request)
     {
         $existingprovide = Provides::where('provide_name', $request->provide_name)
-            ->where('provide_represent', $request->provide_represent)
             ->where('provide_phone', $request->provide_phone)
             ->where('provide_email', $request->provide_email)
-            ->where('provide_address', $request->provide_address)
             ->where('provide_code', $request->provide_code)
             ->first();
         if ($existingprovide) {
-            return redirect()->route('provides.index')->with('warning', 'Thông tin nhà cung cấp đã có trong hệ thống!');
+            return redirect()->route('provides.index')->with('warning', 'Thêm thất bại, Do thông tin nhà cung cấp đã có trong hệ thống!');
         } else {
             Provides::create([
                 'provide_name' => $request->provide_name,
@@ -166,10 +164,8 @@ class ProvideController extends Controller
     public function update(Request $request, $id)
     {
         $existingprovide = Provides::find($id)->where('provide_name', $request->provide_name)
-            ->where('provide_represent', $request->provide_represent)
             ->where('provide_phone', $request->provide_phone)
             ->where('provide_email', $request->provide_email)
-            ->where('provide_address', $request->provide_address)
             ->where('provide_code', $request->provide_code)
             ->first();
         if ($existingprovide) {
