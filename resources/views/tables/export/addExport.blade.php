@@ -89,6 +89,7 @@
                     </svg>
                     In báo giá
                 </a>
+                
             </div>
             <div class="container-fluided position-relative">
                 <div class="row my-3">
@@ -267,26 +268,26 @@
             <div class="col-md-9">
                 <div class>
                     <span>Kính gửi:</span>
-                    <span><b>CÔNG TY THƯƠNG MẠI DỊCH VỤ ABC</b></span>
+                    <span class="guest-name"><b></b></span>
                 </div>
                 <div class>
                     <span>Địa chỉ:</span>
-                    <span>38 Út Tịch, P4, Quận Tân Bình</span>
+                    <span class="guest-addressDeliver"></span>
                 </div>
                 <div class>
                     <span>MST:</span>
-                    <span>0123496575</span>
+                    <span class="guest-code"></span>
                 </div>
                 <div class>
                     <span>
                         Người liên hệ:
                     </span>
-                    <span>
-                        <b>Trần Nguyễn Mai A</b>
+                    <span class="guest-receiver">
+                        <b></b>
                     </span>
                     <span>-</span>
                     <span>Phone:</span>
-                    <span><b>0123496575</b></span>
+                    <span class="guest-phoneReceiver"><b></b></span>
                 </div>
                 <div class>
                     <span><b><u><i>Kính gửi:</i></u></b></span>
@@ -299,18 +300,20 @@
             <div class="col-md-3">
                 <div class>
                     <span><i>Date:</i></span>
-                    <span><i>30/03/2023</i></span>
+                    <span><i><?php $ngayHienTai = date('d/m/Y');
+                    echo $ngayHienTai; ?></i></span>
                 </div>
                 <div class>
                     <span><i>From:</i></span>
-                    <span><i>Sale 1</i></span>
+                    <span><i>{{ Auth::user()->name }}</i></span>
                 </div>
                 <div class>
                     <span><i>Email:</i></span>
+                    <span><i>{{ Auth::user()->email }}</i></span>
                 </div>
                 <div class>
                     <span><i>Mobile:</i></span>
-                    <span><i>0934567814</i></span>
+                    <span><i>{{ Auth::user()->phonenumber }}</i></span>
                 </div>
             </div>
         </div>
@@ -323,44 +326,31 @@
                     <th class="text-center">CHI TIẾT CẤU HÌNH KỸ THUẬT</th>
                     <th class="text-center">SL</th>
                     <th class="text-center">ĐƠN GIÁ</th>
+                    <th class="text-center">THUẾ</th>
                     <th class="text-center">THÀNH TIỀN</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td class="text-center">1</td>
-                    <td>Cisco Catalyst 9800-CL Wireless Controller for Cloud</td>
-                    <td class="text-center">3</td>
-                    <td class="text-right">5,600,000</td>
-                    <td class="text-right">16,800,000</td>
-                </tr>
-                <tr>
-                    <td class="text-center">2</td>
-                    <td>Thiết bị quản lý không dây Cisco Catalyst 9800-CL</td>
-                    <td class="text-center">4</td>
-                    <td class="text-right">4,750,000</td>
-                    <td class="text-right">19,000,000</td>
-                </tr>
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="4" class="text-center">
+                    <td colspan="5" class="text-center">
                         <b style="color: #EC212D;">Tổng cộng tiền hàng:</b>
                     </td>
-                    <td style="color: #EC212D;" class="text-right"><b>35,800,000</b></td>
+                    <td style="color: #EC212D;" class="text-right tong-tien"><b></b></td>
                 </tr>
                 <tr>
-                    <td colspan="4" class="text-center" style="color: #EC212D;">
-                        <b>Thuế VAT 10%:</b>
+                    <td colspan="5" class="text-center" style="color: #EC212D;">
+                        <b>Thuế VAT:</b>
                     </td>
-                    <td style="color: #EC212D;" class="text-right"><b>3,580,000</b></td>
+                    <td style="color: #EC212D;" class="text-right thue-vat"><b></b></td>
                 </tr>
                 <tr>
-                    <td colspan="4" class="text-center"><b style="color: #EC212D;">Thành tiền:</b></td>
-                    <td style="color: #EC212D;" class="text-right"><b>39,380,000</b></td>
+                    <td colspan="5" class="text-center"><b style="color: #EC212D;">Thành tiền:</b></td>
+                    <td style="color: #EC212D;" class="text-right tong-cong"><b></b></td>
                 </tr>
                 <tr>
-                    <td colspan="5" class="text-center">
+                    <td colspan="6" class="text-center">
                         <b>(Bằng chữ: Ba mươi chín triệu ba trăm tám mươi
                             ngàn đồng chẵn).
                         </b>
@@ -370,14 +360,10 @@
         </table>
         <div class="mt-4">
             <p class="p-0 m-0"><b><u><i>*Ghi chú:</i></u></b></p>
-            <ul>
-                <li>1. Bảng giá chào hàng này có giá trị trong vòng 15 ngày.</li>
-                <li>2. Giá trên đã bao gồm thuế VAT 10%.</li>
-                <li>3. Thời gian giao hàng: 01 ngày.</li>
-                <li>4. Hình thức thanh toán: Thanh toán 100% sau khi duyệt đặt hàng.</li>
-                <li>5. Phương thức thanh toán: Chuyển khoản.</li>
-                <li>6. Hàng đầy đủ CO, CQ.</li>
-            </ul>
+            <?php
+            $noteForm = nl2br(e(Auth::user()->note_form)); // Sử dụng hàm nl2br để chuyển xuống dòng thành thẻ <br>
+            ?>
+            <div class="noteForm"><?php echo $noteForm; ?></div>
         </div>
         <div class="p-4" style="border: 2px solid black;">
             <div class="text-center"><b>Công ty TNHH Công Nghệ Khanh Yến</b></div>
@@ -404,7 +390,6 @@
             }
         });
     });
-
 
     //form thong tin khach hang xuất hàng
     var radio1 = document.getElementById("radio1");
@@ -774,6 +759,7 @@
     //cập nhật thông tin khách hàng
     $(document).on('click', '#btn-customer', function(e) {
         e.preventDefault();
+        $('#sourceTable [required]').removeAttr('required');        
         var form = $('#export_form')[0];
         if (!form.reportValidity()) {
             return;
@@ -817,6 +803,7 @@
                 } else if (data.hasOwnProperty('id')) {
                     alert('Lưu thông tin thành công');
                 }
+                $('#sourceTable [required]').attr('required', true);
             }
         })
     })
@@ -969,33 +956,33 @@
             }
 
             // Kiểm tra nếu ID sản phẩm đã chọn đã có trong danh sách các sản phẩm đã chọn
-            if (selectedProductIDs.includes(selectedID)) {
-                $(this).val('');
-            } else {
-                selectedProductIDs.push(selectedID); // Lưu ID sản phẩm đã chọn
-            }
+            // if (selectedProductIDs.includes(selectedID)) {
+            //     $(this).val('');
+            // } else {
+            //     selectedProductIDs.push(selectedID); // Lưu ID sản phẩm đã chọn
+            // }
 
-            // Ẩn tên sản phẩm đã chọn từ các tùy chọn khác
-            hideSelectedProductNames(row);
+            // // Ẩn tên sản phẩm đã chọn từ các tùy chọn khác
+            // hideSelectedProductNames(row);
         });
 
         // Function to hide selected product names from other child select options
-        function hideSelectedProductNames(row) {
-            var selectedIDs = row.find('.child-select').map(function() {
-                return $(this).val();
-            }).get();
+        // function hideSelectedProductNames(row) {
+        //     var selectedIDs = row.find('.child-select').map(function() {
+        //         return $(this).val();
+        //     }).get();
 
-            row.find('.child-select').each(function() {
-                var currentID = $(this).val();
-                $(this).find('option').each(function() {
-                    if ($(this).val() !== currentID && selectedIDs.includes($(this).val())) {
-                        $(this).hide();
-                    } else {
-                        $(this).show();
-                    }
-                });
-            });
-        }
+        //     row.find('.child-select').each(function() {
+        //         var currentID = $(this).val();
+        //         $(this).find('option').each(function() {
+        //             if ($(this).val() !== currentID && selectedIDs.includes($(this).val())) {
+        //                 $(this).hide();
+        //             } else {
+        //                 $(this).show();
+        //             }
+        //         });
+        //     });
+        // }
     });
 
     //tính thành tiền của sản phẩm
@@ -1122,59 +1109,173 @@
 
     //in báo giá
     function toggleDiv() {
-        var sourceTable = document.getElementById('sourceTable');
-        var destinationTable = document.getElementById('destinationTable');
+        var selectElements = document.querySelectorAll(".child-select");
+        var quantity_input = document.querySelectorAll(".quantity-input");
+        var product_price = document.querySelectorAll(".product_price");
+        var product_tax = document.querySelectorAll(".product_tax");
+        var total_amount = document.querySelectorAll(".total-amount");
+        var destinationTable = document.getElementById("destinationTable");
+        var tableBody = destinationTable.querySelector("tbody");
 
-        // Clear the content of the destination table
-        destinationTable.innerHTML = '';
-
-        // Clone the <thead> section from the source table
-        var sourceHeader = sourceTable.querySelector('thead');
-        var destinationHeader = sourceHeader.cloneNode(true);
-        destinationTable.appendChild(destinationHeader);
-
-        // Get the rows from the source table
-        var rows = sourceTable.tBodies[0].rows;
-
-        // Clone the data rows from the source table to the destination table
-        for (var i = 0; i < rows.length; i++) {
-            var row = document.createElement('tr');
-
-            // Get the <select> element from the source table
-            var selectElement = rows[i].querySelector('select');
-
-            // Check if a <select> element exists
-            if (selectElement) {
-                // Get the selected option from the <select> element
-                var selectedOption = selectElement.value;
-
-                // Create a new <td> element for the selected option
-                var cell1 = document.createElement('td');
-                cell1.textContent = selectedOption;
-
-                // Clone the other cells in the row
-                var cell2 = rows[i].cells[2].cloneNode(true); // Column "Mã sản phẩm"
-                var cell3 = rows[i].cells[3].cloneNode(true); // Column "Tên sản phẩm"
-                var cell4 = rows[i].cells[5].cloneNode(true); // Column "Số lượng"
-                var cell5 = rows[i].cells[6].cloneNode(true); // Column "Giá bán"
-                var cell6 = rows[i].cells[9].cloneNode(true); // Column "Thành tiền"
-
-                // Append the cells to the row
-                row.appendChild(cell1);
-                row.appendChild(cell2);
-                row.appendChild(cell3);
-                row.appendChild(cell4);
-                row.appendChild(cell5);
-                row.appendChild(cell6);
-
-                // Append the row to the destination table
-                destinationTable.tBodies[0].appendChild(row);
-            }
+        // Clear existing data in the destination table body
+        if (tableBody) {
+            tableBody.innerHTML = "";
+        } else {
+            tableBody = destinationTable.createTBody();
         }
 
-        // Print the content
-        window.print();
+        // Copy selected data from select elements to destination table
+        for (var i = 0; i < selectElements.length; i++) {
+            var selectElement = selectElements[i];
+            var selectedOption = selectElement.options[selectElement.selectedIndex].text;
+
+            var newRow = tableBody.insertRow(i);
+            var cellA = newRow.insertCell(0);
+            var cellB = newRow.insertCell(1);
+
+            cellA.innerHTML = i + 1; // Example value for column A
+            cellB.innerHTML = selectedOption; // Selected option text for column B
+        }
+
+        // Copy quantity data from quantity inputs to destination table
+        for (var j = 0; j < quantity_input.length; j++) {
+            var quantityInput = quantity_input[j];
+            var inputValue = quantityInput.value;
+
+            var existingRow = tableBody.rows[j];
+
+            // If the row doesn't exist, create a new row
+            if (!existingRow) {
+                existingRow = tableBody.insertRow(j);
+                existingRow.insertCell(0);
+                existingRow.insertCell(1);
+            }
+
+            var quantityCell = existingRow.cells[2];
+            if (!quantityCell) {
+                quantityCell = existingRow.insertCell(2);
+            }
+            quantityCell.innerHTML = inputValue;
+        }
+
+        // Copy price data from price inputs to destination table
+        for (var k = 0; k < product_price.length; k++) {
+            var priceInput = product_price[k];
+            var inputValue = priceInput.value;
+
+            var existingRow = tableBody.rows[k];
+
+            // If the row doesn't exist, create a new row
+            if (!existingRow) {
+                existingRow = tableBody.insertRow(k);
+                existingRow.insertCell(0);
+                existingRow.insertCell(1);
+            }
+
+            var priceCell = existingRow.cells[3];
+            if (!priceCell) {
+                priceCell = existingRow.insertCell(3);
+            }
+            priceCell.innerHTML = inputValue;
+        }
+
+        // Copy tax data from select elements to destination table
+        for (var m = 0; m < product_tax.length; m++) {
+            var taxElement = product_tax[m];
+            var selectedOption = taxElement.options[taxElement.selectedIndex].text;
+
+            var existingRow = tableBody.rows[m];
+
+            // If the row doesn't exist, create a new row
+            if (!existingRow) {
+                existingRow = tableBody.insertRow(m);
+                existingRow.insertCell(0);
+                existingRow.insertCell(1);
+                existingRow.insertCell(2);
+                existingRow.insertCell(3);
+            }
+
+            var taxCell = existingRow.cells[4];
+            if (!taxCell) {
+                taxCell = existingRow.insertCell(4);
+            }
+            taxCell.innerHTML = selectedOption;
+        }
+
+        //thành tiền
+        for (var n = 0; n < total_amount.length; n++) {
+            var amountSpan = total_amount[n];
+            var amountValue = amountSpan.innerText;
+
+            var existingRow = tableBody.rows[n];
+
+            // Nếu hàng không tồn tại, tạo một hàng mới
+            if (!existingRow) {
+                existingRow = tableBody.insertRow(n);
+                existingRow.insertCell(0);
+                existingRow.insertCell(1);
+                existingRow.insertCell(2);
+                existingRow.insertCell(3);
+                existingRow.insertCell(4);
+            }
+
+            var amountCell = existingRow.cells[5];
+            if (!amountCell) {
+                amountCell = existingRow.insertCell(5);
+            }
+            amountCell.innerHTML = amountValue;
+        }
+
+        //lấy thông tin khách hàng
+        var guest_name = document.getElementById("guest_name");
+        var guest_addressInvoice = document.getElementById("guest_addressInvoice");
+        var guest_code = document.getElementById("guest_code");
+        var guest_receiver = document.getElementById("guest_receiver");
+        var guest_phoneReceiver = document.getElementById("guest_phoneReceiver");
+        //
+        var name_cty = document.querySelector(".guest-name");
+        var dia_chi = document.querySelector(".guest-addressDeliver");
+        var mst = document.querySelector(".guest-code");
+        var nguoi_nhan = document.querySelector(".guest-receiver");
+        var phone = document.querySelector(".guest-phoneReceiver");
+        //
+        var productList = $('.productName');
+        //tổng tiền, thuế, thành tiền
+        var tong_tien = document.querySelector(".tong-tien");
+        var thue_vat = document.querySelector(".thue-vat");
+        var tong_cong = document.querySelector(".tong-cong");
+        //
+        var total_amount_sum = document.getElementById("total-amount-sum");
+        var product_tax = document.getElementById("product-tax");
+        var grand_total = document.getElementById("grand-total");
+        //ghi chú
+        var note_form = document.getElementById("note_form");
+        var ghi_chu = document.querySelector(".noteForm");
+
+        if (guest_name) {
+            if (productList.length === 0) {
+                alert('Lỗi: Chưa thêm sản phẩm!');
+            } else {
+                //thông tin khách hàng
+                name_cty.innerHTML = "<b>" + guest_name.value + "</b>";
+                dia_chi.innerHTML = guest_addressInvoice.value;
+                mst.innerHTML = guest_code.value;
+                nguoi_nhan.innerHTML = "<b>" + guest_receiver.value + "</b>";
+                phone.innerHTML = "<b>" + guest_phoneReceiver.value + "</b>";
+                //thành tiền, thuế, tổng tiền
+                tong_tien.innerHTML = total_amount_sum.innerText;
+                thue_vat.innerHTML = product_tax.innerText;
+                tong_cong.innerHTML = grand_total.innerText;
+                //ghi chú
+                ghi_chu.innerHTML = note_form.value.replace(/\n/g, "<br>");
+                // Print the content
+                window.print();
+            }
+        } else {
+            alert("Chưa nhập thông tin khách hàng");
+        }
     }
+
     //format giá
     var inputElement = document.getElementById('product_price');
     $('body').on('input', '.product_price', function(event) {

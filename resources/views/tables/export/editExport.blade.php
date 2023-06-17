@@ -1,5 +1,5 @@
 <x-navbar :title="$title"></x-navbar>
-<div class="content-wrapper">
+<div class="content-wrapper export-add">
     <div class="row">
         <div class="col-sm-6 breadcrumb">
             <span><a href="{{ route('exports.index') }}">Xuất hàng</a></span>
@@ -121,15 +121,16 @@
             <div class="d-flex mb-1 action-don">
                 @if ($exports->export_status == 1)
                     @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
-                        <button type="submit" class="btn btn-danger text-white" name="submitBtn"
-                            value="action1" onclick="validateAndSubmit(event)">Chốt
+                        <button type="submit" class="btn btn-danger text-white" name="submitBtn" value="action1"
+                            onclick="validateAndSubmit(event)">Chốt
                             đơn</button>
-                        <button type="submit" class="btn btn-secondary mx-4" name="submitBtn" value="action2" onclick="validateAndSubmit(event)">Hủy
+                        <button type="submit" class="btn btn-secondary mx-4" name="submitBtn" value="action2"
+                            onclick="validateAndSubmit(event)">Hủy
                             đơn</button>
                     @endif
                 @endif
                 {{-- <a href="#" class="btn border border-secondary mr-4">Xuất file</a> --}}
-                <a href="#" class="btn border border-secondary mr-4">
+                <a class="btn border border-secondary mr-4" onclick="toggleDiv()">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
                         <path
@@ -555,6 +556,126 @@
 </div>
 </section>
 </div>
+<div id="print-price">
+    <div class="container">
+        <div class="text-center">
+            <img src='../../dist/img/print/Print1.jpg' width="100%">
+        </div>
+        <div class="text-center my-4">
+            <h1><b>ĐƠN ĐẶT HÀNG</b></h1>
+        </div>
+        <div class="row">
+            <div class="col-md-9">
+                <div class>
+                    <span>Kính gửi:</span>
+                    <span class="guest-name"><b></b></span>
+                </div>
+                <div class>
+                    <span>Địa chỉ:</span>
+                    <span class="guest-addressDeliver"></span>
+                </div>
+                <div class>
+                    <span>MST:</span>
+                    <span class="guest-code"></span>
+                </div>
+                <div class>
+                    <span>
+                        Người liên hệ:
+                    </span>
+                    <span class="guest-receiver">
+                        <b></b>
+                    </span>
+                    <span>-</span>
+                    <span>Phone:</span>
+                    <span class="guest-phoneReceiver"><b></b></span>
+                </div>
+                <div class>
+                    <span><b><u><i>Kính gửi:</i></u></b></span>
+                    <span><b>Quý khách hàng</b></span>
+                    <p>Công ty Khang Yến trân trọng gởi đến quý khách
+                        hàng
+                        báo giá chi tiết sau:</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class>
+                    <span><i>Date:</i></span>
+                    <span><i><?php $ngayHienTai = date('d/m/Y');
+                    echo $ngayHienTai; ?></i></span>
+                </div>
+                <div class>
+                    <span><i>From:</i></span>
+                    <span><i>{{ Auth::user()->name }}</i></span>
+                </div>
+                <div class>
+                    <span><i>Email:</i></span>
+                    <span><i>{{ Auth::user()->email }}</i></span>
+                </div>
+                <div class>
+                    <span><i>Mobile:</i></span>
+                    <span><i>{{ Auth::user()->phonenumber }}</i></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <table id="destinationTable">
+            <thead>
+                <tr>
+                    <th class="text-center">P/N</th>
+                    <th class="text-center">CHI TIẾT CẤU HÌNH KỸ THUẬT</th>
+                    <th class="text-center">SL</th>
+                    <th class="text-center">ĐƠN GIÁ</th>
+                    <th class="text-center">THUẾ</th>
+                    <th class="text-center">THÀNH TIỀN</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="5" class="text-center">
+                        <b style="color: #EC212D;">Tổng cộng tiền hàng:</b>
+                    </td>
+                    <td style="color: #EC212D;" class="text-right tong-tien"><b></b></td>
+                </tr>
+                <tr>
+                    <td colspan="5" class="text-center" style="color: #EC212D;">
+                        <b>Thuế VAT:</b>
+                    </td>
+                    <td style="color: #EC212D;" class="text-right thue-vat"><b></b></td>
+                </tr>
+                <tr>
+                    <td colspan="5" class="text-center"><b style="color: #EC212D;">Thành tiền:</b></td>
+                    <td style="color: #EC212D;" class="text-right tong-cong"><b></b></td>
+                </tr>
+                <tr>
+                    <td colspan="6" class="text-center">
+                        <b>(Bằng chữ: Ba mươi chín triệu ba trăm tám mươi
+                            ngàn đồng chẵn).
+                        </b>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+        <div class="mt-4">
+            <p class="p-0 m-0"><b><u><i>*Ghi chú:</i></u></b></p>
+            <?php
+            $noteForm = nl2br(e(Auth::user()->note_form)); // Sử dụng hàm nl2br để chuyển xuống dòng thành thẻ <br>
+            ?>
+            <div class="noteForm"><?php echo $noteForm; ?></div>
+        </div>
+        <div class="p-4" style="border: 2px solid black;">
+            <div class="text-center"><b>Công ty TNHH Công Nghệ Khanh Yến</b></div>
+            <div class="text-center">Số tài khoản: 3334449988</div>
+            <div class="text-center">Tại: Ngân hàng ACB - CN Tây Sài Gòn</div>
+        </div>
+        <div class="d-flex justify-content-between p-5">
+            <span><b><i>Khách hàng xác nhận đặt hàng</i></b></span>
+            <span><b>Nhân viên</b></span>
+        </div>
+    </div>
+</div>
 <script>
     //hiển thị thông tin sản phảm
     $('.productMD').on('click', function() {
@@ -784,7 +905,7 @@
             '<div class="border-bottom p-3 d-flex justify-content-between align-items-center">' +
             '<b>Thông tin khách hàng</b>' +
             '<button id="btn-addCustomer" type="submit" class="btn btn-primary d-flex align-items-center">' +
-            '<img src="../dist/img/icon/Union.png">' +
+            '<img src="../../dist/img/icon/Union.png">' +
             '<span class="ml-1">Lưu thông tin</span></button></div>' +
             '<input type="hidden" name="click" id="click" value="">' +
             '<div class="row p-3">' +
@@ -882,7 +1003,8 @@
                 "<option value='0'>NOVAT</option>" +
                 "</select>" +
                 "</td>");
-            const thanhTienInput = $("<td><span class='total-amount form-control text-center'>0</span></td>");
+            const thanhTienInput = $(
+                "<td><span class='total-amount form-control text-center'>0</span></td>");
             const sn = $(
                 "<td data-toggle='modal' data-target='#snModal'><img src='../../dist/img/icon/list.png'></td>"
             );
@@ -1064,6 +1186,7 @@
     //hiển thị thông tin khách hàng
     $(document).ready(function() {
         $('.search-info').click(function() {
+            $('#form-edit').hide();
             var idCustomer = $(this).attr('id');
             $('#radio1').prop('checked', true);
             $.ajax({
@@ -1078,7 +1201,7 @@
                         '<div class="border-bottom p-3 d-flex justify-content-between align-items-center">' +
                         '<b>Thông tin khách hàng</b>' +
                         '<button id="btn-customer" type="submit" class="btn btn-primary d-flex align-items-center">' +
-                        '<img src="../dist/img/icon/Union.png">' +
+                        '<img src="../../dist/img/icon/Union.png">' +
                         '<span class="ml-1">Lưu thông tin</span></button></div>' +
                         '<div class="row p-3">' +
                         '<div class="col-sm-6">' +
@@ -1143,10 +1266,6 @@
     //cập nhật thông tin khách hàng
     $(document).on('click', '#btn-customer', function(e) {
         e.preventDefault();
-        var form = $('#export_form')[0];
-        if (!form.reportValidity()) {
-            return;
-        }
         $('#updateClick').val(1);
         var updateClick = $('#updateClick').val();
         var id = $('#id').val();
@@ -1475,6 +1594,175 @@
             formattedIntegerPart;
 
         return formattedNumber;
+    }
+
+    //in báo giá
+    function toggleDiv() {
+        var selectElements = document.querySelectorAll(".child-select");
+        var quantity_input = document.querySelectorAll(".quantity-input");
+        var product_price = document.querySelectorAll(".product_price");
+        var product_tax = document.querySelectorAll(".product_tax");
+        var total_amount = document.querySelectorAll(".total-amount");
+        var destinationTable = document.getElementById("destinationTable");
+        var tableBody = destinationTable.querySelector("tbody");
+
+        // Clear existing data in the destination table body
+        if (tableBody) {
+            tableBody.innerHTML = "";
+        } else {
+            tableBody = destinationTable.createTBody();
+        }
+
+        // Copy selected data from select elements to destination table
+        for (var i = 0; i < selectElements.length; i++) {
+            var selectElement = selectElements[i];
+            var selectedOption = selectElement.options[selectElement.selectedIndex].text;
+
+            var newRow = tableBody.insertRow(i);
+            var cellA = newRow.insertCell(0);
+            var cellB = newRow.insertCell(1);
+
+            cellA.innerHTML = i + 1; // Example value for column A
+            cellB.innerHTML = selectedOption; // Selected option text for column B
+        }
+
+        // Copy quantity data from quantity inputs to destination table
+        for (var j = 0; j < quantity_input.length; j++) {
+            var quantityInput = quantity_input[j];
+            var inputValue = quantityInput.value;
+
+            var existingRow = tableBody.rows[j];
+
+            // If the row doesn't exist, create a new row
+            if (!existingRow) {
+                existingRow = tableBody.insertRow(j);
+                existingRow.insertCell(0);
+                existingRow.insertCell(1);
+            }
+
+            var quantityCell = existingRow.cells[2];
+            if (!quantityCell) {
+                quantityCell = existingRow.insertCell(2);
+            }
+            quantityCell.innerHTML = inputValue;
+        }
+
+        // Copy price data from price inputs to destination table
+        for (var k = 0; k < product_price.length; k++) {
+            var priceInput = product_price[k];
+            var inputValue = priceInput.value;
+
+            var existingRow = tableBody.rows[k];
+
+            // If the row doesn't exist, create a new row
+            if (!existingRow) {
+                existingRow = tableBody.insertRow(k);
+                existingRow.insertCell(0);
+                existingRow.insertCell(1);
+            }
+
+            var priceCell = existingRow.cells[3];
+            if (!priceCell) {
+                priceCell = existingRow.insertCell(3);
+            }
+            priceCell.innerHTML = inputValue;
+        }
+
+        // Copy tax data from select elements to destination table
+        for (var m = 0; m < product_tax.length; m++) {
+            var taxElement = product_tax[m];
+            var selectedOption = taxElement.options[taxElement.selectedIndex].text;
+
+            var existingRow = tableBody.rows[m];
+
+            // If the row doesn't exist, create a new row
+            if (!existingRow) {
+                existingRow = tableBody.insertRow(m);
+                existingRow.insertCell(0);
+                existingRow.insertCell(1);
+                existingRow.insertCell(2);
+                existingRow.insertCell(3);
+            }
+
+            var taxCell = existingRow.cells[4];
+            if (!taxCell) {
+                taxCell = existingRow.insertCell(4);
+            }
+            taxCell.innerHTML = selectedOption;
+        }
+
+        //thành tiền
+        for (var n = 0; n < total_amount.length; n++) {
+            var amountSpan = total_amount[n];
+            var amountValue = amountSpan.innerText;
+
+            var existingRow = tableBody.rows[n];
+
+            // Nếu hàng không tồn tại, tạo một hàng mới
+            if (!existingRow) {
+                existingRow = tableBody.insertRow(n);
+                existingRow.insertCell(0);
+                existingRow.insertCell(1);
+                existingRow.insertCell(2);
+                existingRow.insertCell(3);
+                existingRow.insertCell(4);
+            }
+
+            var amountCell = existingRow.cells[5];
+            if (!amountCell) {
+                amountCell = existingRow.insertCell(5);
+            }
+            amountCell.innerHTML = amountValue;
+        }
+
+        //lấy thông tin khách hàng
+        var guest_name = document.getElementById("guest_name");
+        var guest_addressInvoice = document.getElementById("guest_addressInvoice");
+        var guest_code = document.getElementById("guest_code");
+        var guest_receiver = document.getElementById("guest_receiver");
+        var guest_phoneReceiver = document.getElementById("guest_phoneReceiver");
+        //
+        var name_cty = document.querySelector(".guest-name");
+        var dia_chi = document.querySelector(".guest-addressDeliver");
+        var mst = document.querySelector(".guest-code");
+        var nguoi_nhan = document.querySelector(".guest-receiver");
+        var phone = document.querySelector(".guest-phoneReceiver");
+        //
+        var productList = $('.productName');
+        //tổng tiền, thuế, thành tiền
+        var tong_tien = document.querySelector(".tong-tien");
+        var thue_vat = document.querySelector(".thue-vat");
+        var tong_cong = document.querySelector(".tong-cong");
+        //
+        var total_amount_sum = document.getElementById("total-amount-sum");
+        var product_tax = document.getElementById("product-tax");
+        var grand_total = document.getElementById("grand-total");
+        //ghi chú
+        var note_form = document.getElementById("note_form");
+        var ghi_chu = document.querySelector(".noteForm");
+
+        if (guest_name) {
+            if (productList.length === 0) {
+                alert('Lỗi: Chưa thêm sản phẩm!');
+            } else {
+                //thông tin khách hàng
+                name_cty.innerHTML = "<b>" + guest_name.value + "</b>";
+                dia_chi.innerHTML = guest_addressInvoice.value;
+                mst.innerHTML = guest_code.value;
+                nguoi_nhan.innerHTML = "<b>" + guest_receiver.value + "</b>";
+                phone.innerHTML = "<b>" + guest_phoneReceiver.value + "</b>";
+                //thành tiền, thuế, tổng tiền
+                tong_tien.innerHTML = total_amount_sum.innerText;
+                thue_vat.innerHTML = product_tax.innerText;
+                tong_cong.innerHTML = grand_total.innerText;
+                //ghi chú
+                ghi_chu.innerHTML = note_form.value.replace(/\n/g, "<br>");
+                // Print the content
+                window.print();
+            }
+        } else {
+            alert("Chưa nhập thông tin khách hàng");
+        }
     }
 </script>
 </body>
