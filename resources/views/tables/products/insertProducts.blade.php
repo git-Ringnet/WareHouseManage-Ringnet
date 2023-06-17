@@ -19,7 +19,7 @@
             <div class="row">
                 <div class="col col-12">
                     <!-- /.card-header -->
-                    <form action="{{ route('storeProducts') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('storeProducts') }}" method="POST" enctype="multipart/form-data" id="add_product">
                         @csrf
                         <div class="row">
                             <div class="col-md-2">
@@ -72,7 +72,7 @@
                                             <div class="title-edit-item">Mã sản phẩm</div>
 
                                             <input required type="text" name="products_code"
-                                                class="w-100 p-1 form-control mb-4">
+                                                class="w-100 p-1 form-control mb-4" id="products_code">
                                         </div>
                                         <!-- <div class="product_id">
                                             <div class="title-edit-item">ID</div>
@@ -121,6 +121,24 @@
 </section>
 </div>
 <script>
+    $(document).on('submit','#add_product',function(e){
+        e.preventDefault();
+        var products_code =  $('#products_code').val();
+        $.ajax({
+                url: "{{route('checkProducts_code')}}",
+                type: "get",
+                data: {
+                    products_code: products_code,
+                },
+                success: function(data) {
+                  if(data.success == true){
+                    alert(data.msg);
+                  }else{
+                    $('#add_product')[0].submit();
+                  }
+                }
+            })
+    })
     function readURL(input) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();

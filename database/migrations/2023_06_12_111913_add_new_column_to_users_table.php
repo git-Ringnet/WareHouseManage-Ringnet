@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::table('serinumbers', function (Blueprint $table) {
             $table->integer('products_id')->nullable();
             $table->integer('order_id')->nullable();
+            $table->integer('check')->nullable();
         });
     }
 

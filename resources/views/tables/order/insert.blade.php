@@ -185,7 +185,6 @@
 </div>
 <script>
     var rowCount = $('tbody tr').length;
-    var last = "<?php echo $lastId; ?>";
 
     $(document).on('input', '.quantity-input, [name^="product_price"]', function(e) {
         var productQty = parseInt($(this).closest('tr').find('.quantity-input').val());
@@ -258,6 +257,9 @@
         $('#total').val(formatCurrency(grandTotal));
     }
 
+
+   
+
     $(document).on('click', '#deleteRowTable', function() {
         $('tbody input[type="checkbox"]:checked').closest('tr').remove();
     });
@@ -294,15 +296,14 @@
                 var titlesValue = THHDVu[i].textContent;
                 var numberssValue = Math.floor(SLuong[i].textContent).toString();
                 var typeValue = DVTinh[i].textContent;
-                var price = Math.floor(DGia[i].textContent).toString();
-                var totalPrice = numberssValue * price;
-                totalProducts += numberssValue * price;
-                totalTax += numberssValue * price * tax / 100;
-                $('#total-amount-sum').text(totalProducts);
-                $('#product-tax').text(totalTax);
-                $('#grand-total').text(totalProducts + totalTax);
+                var price = formatCurrency(Math.floor(DGia[i].textContent).toString());
+                var totalPrice = formatCurrency(numberssValue * (price.replace(/[^0-9.-]+/g, "")));
+                totalProducts += numberssValue * (price.replace(/[^0-9.-]+/g, ""));
+                totalTax += numberssValue * (price.replace(/[^0-9.-]+/g, "")) * tax / 100 ;
+                $('#total-amount-sum').text(formatCurrency(totalProducts));
+                $('#product-tax').text(formatCurrency(totalTax));
+                $('#grand-total').text(formatCurrency(totalProducts + totalTax));
                 var tr = '<tr>' +
-                    // '<input type="hidden" name="product_id[]" value="' + last + '">' +
                     '<td scope="row"><input type="checkbox" id=' + rowCount + '" class="cb-element"></td>' +
                     '<td>' +
                     '<select class="form-control w-auto" name="products_id[]">' +
@@ -312,18 +313,25 @@
                     '@endforeach' +
                     '</select> ' +
                     '</td>' +
-                    '<td><input required type="text" name="product_name[]" value="' + titlesValue +
+                    '<td><input required type="text" class="search_product form-control" name="product_name[]" value="' + titlesValue +
                     '"></td>' +
                     '<td><input required type="text" class="form-control" style="width:120px" name="product_category[]"></td>' +
                     '<td><input required type="text" class="form-control" style="width:70px" name="product_unit[]" value="' + typeValue +
                     '"></td>' +
                     '<td><input required type="number" name="product_qty[]" class="quantity-input form-control" value="' +
                     numberssValue + '"></td>' +
-                    '<td><input required type="number" class="form-control" style="width:120px" name="product_price[]" value="' + price + '"></td>' +
-                    '<td><input required type="number" name="product_tax[]" class="product_tax form-control" style="width:70px" value=' + tax +
-                    '></td>' +
+                    '<td><input required type="text" class="form-control product_price" style="width:140px" name="product_price[]" value="' + price + '"></td>' +
+                    // '<td><input required type="number" name="product_tax[]" class="product_tax form-control" style="width:80px" value=' + tax + '></td>' +
+                    '<td>' +
+                    '<select style="width:80px;" name="product_tax[]"class="product_tax form-control" >' +
+                    '<option value="10"' + (tax == 10 ? "selected" : "") + '>10%</option>' +
+                    '<option value="0" ' + (tax == 0 ? "selected" : "") + '>0%</option>' +
+                    '<option value="8" ' + (tax == 8 ? "selected" : "") + '>8%</option>' +
+                    '<option value="0" ' + (tax == 0 ? "selected" : "") + '>NOVAT</option>' +
+                    '</select' +
+                    '</td>' +
                     '<td><input readonly type="text" class="form-control" name="product_total[]" value="' + totalPrice + '"></td>' +
-                    '<td><input type="text" class="form-control" style="width:120px" name="product_trademark[]"></td>' +
+                    '<td><input type="text" class="form-control" style="width:140px" name="product_trademark[]"></td>' +
                     '<td>' +
                     '<button class="exampleModal" name="btn_add_SN[]" type="button" data-toggle="modal" data-target="#exampleModal' +
                     rowCount + '" style="background:transparent; border:none;">' +
@@ -585,9 +593,7 @@
     });
 
     $('.addRow').on('click', function() {
-        last++;
         var tr = '<tr>' +
-            // '<input type="hidden" name="product_id[]" value="' + last + '">' +
             '<td scope="row"><input type="checkbox" id=' + rowCount + '" class="cb-element"></td>' +
             '<td>' +
             '<select name="products_id[]" class="list_products form-control">' +
@@ -911,29 +917,51 @@
 
     $(document).on('click', '#btn-addProvide', function(e) {
         e.preventDefault();
-        var provides_id = $('#provide_id').val();
-        var provide_name = $('#provide_name').val();
-        var provide_address = $('#provide_address').val();
-        var provide_represent = $('#provide_represent').val();
-        var provide_email = $('#provide_email').val();
-        var provide_phone = $('#provide_phone').val();
-        var provide_code = $('#provide_code').val();
-        $.ajax({
-            url: "{{ route('update_provide') }}",
-            type: "get",
-            data: {
-                provides_id: provides_id,
-                provide_name: provide_name,
-                provide_address: provide_address,
-                provide_represent: provide_represent,
-                provide_email: provide_email,
-                provide_phone: provide_phone,
-                provide_code: provide_code
-            },
-            success: function(data) {
-                alert('Lưu thông tin thành công');
-            }
-        })
+        var err = false;
+        if ($('#provide_name').val() == "") {
+            err = true;
+            alert("Vui lòng nhập tên công ty");
+        } else if ($('#provide_address').val() == "") {
+            err = true;
+            alert("Vui lòng nhập địa chỉ xuất hóa đơn");
+        } else if ($('#provide_represent').val == "") {
+            err = true;
+            alert("Vui lòng nhập người đại diện");
+        } else if ($('#provide_email').val() == "") {
+            err = true;
+            alert("Vui lòng nhập email");
+        } else if ($('#provide_phone').val() == "") {
+            err = true;
+            alert("Vui lòng nhập số điện thoại");
+        } else if ($('#provide_code').val() == "") {
+            err = true;
+            alert("Vui lòng nhập mã số thuế");
+        }
+        if (err === false) {
+            var provides_id = $('#provide_id').val();
+            var provide_name = $('#provide_name').val();
+            var provide_address = $('#provide_address').val();
+            var provide_represent = $('#provide_represent').val();
+            var provide_email = $('#provide_email').val();
+            var provide_phone = $('#provide_phone').val();
+            var provide_code = $('#provide_code').val();
+            $.ajax({
+                url: "{{ route('update_provide') }}",
+                type: "get",
+                data: {
+                    provides_id: provides_id,
+                    provide_name: provide_name,
+                    provide_address: provide_address,
+                    provide_represent: provide_represent,
+                    provide_email: provide_email,
+                    provide_phone: provide_phone,
+                    provide_code: provide_code
+                },
+                success: function(data) {
+                    alert('Lưu thông tin thành công');
+                }
+            })
+        }
     })
     // Hiển thị danh sách nhà cung cấp cũ
     $('.search-info').click(function() {
@@ -1010,6 +1038,10 @@
         });
 
         return error;
+    }
+
+    function checkDuplicate(){
+        
     }
 
     // Kiểm tra dữ liệu trước khi submit
@@ -1159,7 +1191,6 @@
         return formattedValue;
     }
 
-
     // Thêm nhanh nhà cung cấp
     $(document).on('click', '#btn-addCustomer', function(e) {
         e.preventDefault();
@@ -1220,6 +1251,7 @@
             input.value = '';
         }
     }
+
 </script>
 @endif
 </body>

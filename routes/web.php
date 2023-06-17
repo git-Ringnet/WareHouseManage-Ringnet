@@ -79,6 +79,7 @@ Route::PUT('/editProduct/{id}', [ProductsController::class, 'editProduct'])->nam
 Route::delete('/delete_product/{id}', [ProductsController::class, 'delete_product'])->name('delete_product');
 Route::post('/import_products',[ProductsController::class,'import_products'])->name('import_products');
 
+Route::get('/checkProducts_code',[ProductsController::class,'checkProducts_code'])->name('checkProducts_code');
 
 Route::PUT('/updateProduct/{id}', [ProductsController::class, 'updateProduct'])->name('updateProduct');
 
