@@ -489,7 +489,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <td><input type="checkbox" class="cb-element" name="ids[]"
                                                         value="{{ $value->id }}"></td>
                                                 <td>{{ $value->id }}</td>
-                                                <td>{{ $value->guest_represent }}</td>
+                                                <td>{{ $value->guest_receiver }}</td>
                                                 <td>{{ date_format(new DateTime($value->updated_at), 'd-m-Y') }}</td>
                                                 <td>{{ $value->name }}</td>
                                                 <td class="text-right">

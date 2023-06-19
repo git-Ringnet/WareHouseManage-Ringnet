@@ -30,11 +30,11 @@
                                     <input type="text" class="form-control" value="{{ $guests->guest_name }}"
                                         name="guest_name" placeholder="Nhập tên đơn vị" required>
                                 </div>
-                                <div class="form-group">
+                                {{-- <div class="form-group">
                                     <label for="pwd">Đại diện:</label>
                                     <input type="text" class="form-control" value="{{ $guests->guest_represent }}"
                                         name="guest_represent" placeholder="Nhập tên người đại diện" required>
-                                </div>
+                                </div> --}}
                                 <div class="form-group">
                                     <label for="pwd">Số điện thoại:</label>
                                     <input type="text" class="form-control" oninput=validateNumberInput(this)
@@ -87,8 +87,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="email">Hình thức thanh toán:</label>
-                                    <select class="form-control" name="guest_pay" id="guest_pay"
-                                        required>
+                                    <select class="form-control" name="guest_pay" id="guest_pay" required>
                                         <option value="0" <?php if ($guests->guest_pay == 0) {
                                             echo 'selected';
                                         } ?>>Chuyển khoản</option>
@@ -97,18 +96,22 @@
                                         } ?>>Thanh toán bằng tiền mặt</option>
                                     </select>
                                 </div>
-                                @if(Auth::user()->can('isAdmin'))
-                                <div class="form-group">
-                                    <label for="email">Người phụ trách:</label>
-                                    <select class="form-control" name="user_id" id="user_id" required>
-                                        <option value="{{$guests->user_id ?? Auth::user()->id}}">{{Auth::user()->name}}</option>
-                                        @foreach($usersSale as $user)
-                                        <option value="{{$user->id ?? old('user_id')}}" {{$user->id==$guests->user_id ?? old('user_id') ? 'selected' : false}}>{{$user->name}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
+                                @if (Auth::user()->can('isAdmin'))
+                                    <div class="form-group">
+                                        <label for="email">Người phụ trách:</label>
+                                        <select class="form-control" name="user_id" id="user_id" required>
+                                            <option value="{{ $guests->user_id ?? Auth::user()->id }}">
+                                                {{ Auth::user()->name }}</option>
+                                            @foreach ($usersSale as $user)
+                                                <option value="{{ $user->id ?? old('user_id') }}"
+                                                    {{ $user->id == $guests->user_id ?? old('user_id') ? 'selected' : false }}>
+                                                    {{ $user->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 @else
-                                    <input type="hidden" name="user_id" id="user_id" value="{{Auth::user()->id}}">
+                                    <input type="hidden" name="user_id" id="user_id"
+                                        value="{{ Auth::user()->id }}">
                                 @endif
                                 <div class="form-group">
                                     <label for="pwd">Trạng thái:</label>
@@ -141,10 +144,9 @@
 <script>
     //cho phép nhập số 
     function validateNumberInput(input) {
-        const regex = /^[-+]?[0-9]{1,3}(?:,?[0-9]{3})*(?:\.[0-9]+)?$/;
-        const value = input.value.replace(/,/g, '');
-        if (!regex.test(value)) {
-            input.value = '';
+        var regex = /^[0-9]*$/;
+        if (!regex.test(input.value)) {
+            input.value = input.value.replace(/[^0-9]/g, '');
         }
     }
 </script>

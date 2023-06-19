@@ -11,7 +11,6 @@ class Guests extends Model
     use HasFactory;
     protected $fillable = [
         'guest_name',
-        'guest_represent',
         'guest_phone',
         'guest_email',
         'guest_status',
@@ -24,6 +23,7 @@ class Guests extends Model
         'guest_payTerm',
         'guest_note',
         'user_id',
+        'debt'
     ];
     protected $table = 'guests';
     public function getAllGuests($filter = [],$users_name=[],$name = null,$represent = null,$phonenumber = null,$email = null, $status = [], $keywords = null, $sortByArr = null)

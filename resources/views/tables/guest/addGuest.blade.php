@@ -30,11 +30,11 @@
                                     <input type="text" class="form-control" name="guest_name"
                                         placeholder="Nhập đơn vị" required>
                                 </div>
-                                <div class="form-group">
+                                {{-- <div class="form-group">
                                     <label for="pwd">Đại diện:</label>
                                     <input type="text" class="form-control" name="guest_represent"
                                         placeholder="Nhập đại diện" required>
-                                </div>
+                                </div> --}}
                                 <div class="form-group">
                                     <label for="pwd">Số điện thoại:</label>
                                     <input type="text" class="form-control" name="guest_phone" oninput=validateNumberInput(this)
@@ -113,10 +113,9 @@
 <script>
     //cho phép nhập số 
     function validateNumberInput(input) {
-        const regex = /^[-+]?[0-9]{1,3}(?:,?[0-9]{3})*(?:\.[0-9]+)?$/;
-        const value = input.value.replace(/,/g, '');
-        if (!regex.test(value)) {
-            input.value = '';
+        var regex = /^[0-9]*$/;
+        if (!regex.test(input.value)) {
+            input.value = input.value.replace(/[^0-9]/g, '');
         }
     }
 </script>

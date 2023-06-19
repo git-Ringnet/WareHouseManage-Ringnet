@@ -137,7 +137,6 @@ class GuestsController extends Controller
         } else {
             Guests::create([
                 'guest_name' => $request->guest_name,
-                'guest_represent' => $request->guest_represent,
                 'guest_phone' => $request->guest_phone,
                 'guest_email' => $request->guest_email,
                 'guest_status' => $request->guest_status,
@@ -189,21 +188,23 @@ class GuestsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $existingCustomer = Guests::find($id)->where('guest_name', $request->guest_name)
-            ->where('guest_email', $request->guest_email)
-            ->where('guest_code', $request->guest_code)
-            ->where('guest_receiver', $request->guest_receiver)
-            ->where('guest_phoneReceiver', $request->guest_phoneReceiver)
-            ->where('guest_represent', $request->guest_represent)
-            ->where('guest_phone', $request->guest_phone)
-            ->first();
-        if ($existingCustomer) {
-            return redirect()->route('guests.index')->with('warning', 'Cập nhật thất bại, do trùng thông tin khách hàng đã có trong hệ thống!');
-        } else {
-            $guests = Guests::find($id);
-            $guests->update($request->all());
-            return redirect()->route('guests.index')->with('msg', 'Cập nhật thành công!');
-        }
+        // $existingCustomer = Guests::find($id)->where('guest_name', $request->guest_name)
+        //     ->where('guest_email', $request->guest_email)
+        //     ->where('guest_code', $request->guest_code)
+        //     ->where('guest_receiver', $request->guest_receiver)
+        //     ->where('guest_phoneReceiver', $request->guest_phoneReceiver)
+        //     ->where('guest_phone', $request->guest_phone)
+        //     ->first();
+        // if ($existingCustomer) {
+        //     return redirect()->route('guests.index')->with('warning', 'Cập nhật thất bại, do trùng thông tin khách hàng đã có trong hệ thống!');
+        // } else {
+        //     $guests = Guests::find($id);
+        //     $guests->update($request->all());
+        //     return redirect()->route('guests.index')->with('msg', 'Cập nhật thành công!');
+        // }
+        $guests = Guests::find($id);
+        $guests->update($request->all());
+        return redirect()->route('guests.index')->with('msg', 'Cập nhật thành công!');
     }
 
     /**

@@ -89,7 +89,7 @@
                     </svg>
                     In báo giá
                 </a>
-                
+
             </div>
             <div class="container-fluided position-relative">
                 <div class="row my-3">
@@ -124,7 +124,7 @@
                                         <a href="#"
                                             class="text-dark d-flex justify-content-between p-2 search-info"
                                             id="{{ $item->id }}" name="search-info">
-                                            <span>{{ $item->guest_represent }}</span>
+                                            <span>{{ $item->guest_receiver }}</span>
                                             <span class="mr-5">{{ $item->guest_name }}</span>
                                         </a>
                                     </li>
@@ -429,34 +429,47 @@
             '<input type="text" oninput="validateNumberInput(this)" pattern="/^(0|\+84)(3[2-9]|5[2689]|7[0|6-9]|8[1-9]|9[0-9])\d{7,9}$/" class="form-control" id="guest_phoneReceiver" placeholder="Nhập thông tin" name="guest_phoneReceiver" value="" required>' +
             '</div>' + '</div>' + '<div class="col-sm-6">' +
             '<div class="form-group">' +
-            '<label for="email">Người đại diện:</label>' +
-            '<input type="text" class="form-control" id="guest_represent" placeholder="Nhập thông tin" name="guest_represent" value="" required>' +
-            '</div>' + '<div class="form-group">' +
             '<label for="email">Email:</label>' +
             '<input type="email" class="form-control" pattern="/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/" id="guest_email" placeholder="Nhập thông tin" name="guest_email" value="" required>' +
             '</div>' + '<div class="form-group">' +
             '<label>Số điện thoại:</label>' +
             '<input type="text" class="form-control" oninput="validateNumberInput(this)" pattern="/^(0|\+84)(3[2-9]|5[2689]|7[0|6-9]|8[1-9]|9[0-9])\d{7,9}$/" id="guest_phone" placeholder="Nhập thông tin" name="guest_phone" value="" required>' +
             '</div>' + '<div class="form-group">' +
-            ' <label for="email">Hình thức thanh toán:</label>' +
+            ' <label for="email">Phương thức thanh toán:</label>' +
             '<select name="guest_pay" class="form-control" id="guest_pay">' +
             '<option value="0">Chuyển khoản</option>' +
             '<option value="1">Thanh toán bằng tiền mặt</option>' +
             '</select>' +
             '</div>' + '<div class="form-group">' +
+            '<label>Công nợ:</label>' +
+            '<div class="d-flex align-items-center" style="width:101%;">' +
+            '<input type="text" oninput="validateNumberInput(this)" class="form-control" id="debtInput" value="" name="debt" style="width:15%;">' +
+            '<span class="ml-2" id="data-debt">ngày</span>' +
+            '<input type="checkbox" id="debtCheckbox" value="0" name="debt" style="margin-left:10%;">' +
+            '<span class="ml-2">Thanh toán tiền mặt</span>' +
+            '</div>' + '</div>' +
+            '<div class="form-group">' +
             '<label for="email">Ghi chú:</label>' +
             '<input type="text" class="form-control" id="guest_note" placeholder="Nhập thông tin" name="guest_note" value="">' +
             '</div>' + '</div></div></div>'
         );
-
+        //Công nợ
+        $(document).on('change', '#debtCheckbox', function() {
+            if ($(this).is(':checked')) {
+                $('#debtInput').prop('disabled', true);
+                $("#data-debt").css("color", "#D6D6D6");
+            } else {
+                $('#debtInput').prop('disabled', false);
+                $("#data-debt").css("color", "#1D1C20");
+            }
+        });
     });
 
     //nhập số
     function validateNumberInput(input) {
-        const regex = /^[-+]?[0-9]{1,3}(?:,?[0-9]{3})*(?:\.[0-9]+)?$/;
-        const value = input.value.replace(/,/g, '');
-        if (!regex.test(value)) {
-            input.value = '';
+        var regex = /^[0-9]*$/;
+        if (!regex.test(input.value)) {
+            input.value = input.value.replace(/[^0-9]/g, '');
         }
     }
 
@@ -718,10 +731,6 @@
                         data.guest_phoneReceiver + '" required>' +
                         '</div>' + '</div>' + '<div class="col-sm-6">' +
                         '<div class="form-group">' +
-                        '<label for="email">Người đại diện:</label>' +
-                        '<input type="text" class="form-control" id="guest_represent" placeholder="Nhập thông tin" name="guest_represent" value="' +
-                        data.guest_represent + '" required>' +
-                        '</div>' + '<div class="form-group">' +
                         '<label for="email">Email:</label>' +
                         '<input type="email" class="form-control" pattern="/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/" id="guest_email" placeholder="Nhập thông tin" name="guest_email" value="' +
                         data.guest_email + '" required>' +
@@ -730,7 +739,7 @@
                         '<input type="text" class="form-control" oninput="validateNumberInput(this)" pattern="/^(0|\+84)(3[2-9]|5[2689]|7[0|6-9]|8[1-9]|9[0-9])\d{7,9}$/" id="guest_phone" placeholder="Nhập thông tin" name="guest_phone" value="' +
                         data.guest_phone + '" required>' +
                         '</div>' + '<div class="form-group">' +
-                        '<label for="email">Hình thức thanh toán:</label>' +
+                        '<label for="email">Phương thức thanh toán:</label>' +
                         '<select name="guest_pay" class="form-control" id="guest_pay" required>' +
                         '<option value="0"' + (data.guest_pay == 0 ? ' selected' : '') +
                         '>Chuyển khoản</option>' +
@@ -738,11 +747,30 @@
                         '>Thanh toán bằng tiền mặt</option>' +
                         '</select>' +
                         '</div>' + '<div class="form-group">' +
+                        '<label>Công nợ:</label>' +
+                        '<div class="d-flex align-items-center" style="width:101%;">' +
+                        '<input type="text" oninput="validateNumberInput(this)" class="form-control" pattern="^[0-9]+$" id="debtInput" value="' +
+                        (data.debt) + '" style="width:15%;" required>' +
+                        '<span class="ml-2" id="data-debt">ngày</span>' +
+                        '<input type="checkbox" id="debtCheckbox" value="0" ' + (data
+                            .debt == 0 ? 'checked' : '') +
+                        ' style="margin-left:10%;">' +
+                        '<span class="ml-2">Thanh toán tiền mặt</span>' +
+                        '</div>' + '</div>' + '<div class="form-group">' +
                         '<label for="email">Ghi chú:</label>' +
                         '<input type="text" class="form-control" id="guest_note" placeholder="Nhập thông tin" name="guest_note" value="' +
                         (data.guest_note == null ? '' : data.guest_note) + '">' +
                         '</div>' + '</div></div><div>'
                     );
+                    //Công nợ
+                    var isChecked = $('#debtCheckbox').is(':checked');
+                    // Đặt trạng thái của input dựa trên checkbox
+                    $('#debtInput').prop('disabled', isChecked);
+                    // Xử lý sự kiện khi checkbox thay đổi
+                    $(document).on('change', '#debtCheckbox', function() {
+                        var isChecked = $(this).is(':checked');
+                        $('#debtInput').prop('disabled', isChecked);
+                    });
                 }
             });
         });
@@ -759,7 +787,7 @@
     //cập nhật thông tin khách hàng
     $(document).on('click', '#btn-customer', function(e) {
         e.preventDefault();
-        $('#sourceTable [required]').removeAttr('required');        
+        $('#sourceTable [required]').removeAttr('required');
         var form = $('#export_form')[0];
         if (!form.reportValidity()) {
             return;
@@ -773,11 +801,18 @@
         var guest_addressDeliver = $('#guest_addressDeliver').val();
         var guest_receiver = $('#guest_receiver').val();
         var guest_phoneReceiver = $('#guest_phoneReceiver').val();
-        var guest_represent = $('#guest_represent').val();
         var guest_email = $('#guest_email').val();
         var guest_phone = $('#guest_phone').val();
         var guest_pay = $('#guest_pay').val();
         var guest_note = $('#guest_note').val();
+        var debt = "";
+        if ($('#debtCheckbox').is(':checked')) {
+            debt = "0";
+            $('#debtInput').prop('disabled', true);
+        } else {
+            debt = $('#debtInput').val();
+            $('#debtInput').prop('disabled', false);
+        }
 
         $.ajax({
             url: "{{ route('updateCustomer') }}",
@@ -790,12 +825,12 @@
                 guest_addressDeliver,
                 guest_receiver,
                 guest_phoneReceiver,
-                guest_represent,
                 guest_email,
                 guest_phone,
                 guest_pay,
                 guest_note,
-                updateClick
+                updateClick,
+                debt
             },
             success: function(data) {
                 if (data.hasOwnProperty('message')) {
@@ -827,7 +862,7 @@
 
     //thêm thông tin khách hàng
     $(document).on('click', '#btn-addCustomer', function(e) {
-        e.preventDefault()
+        e.preventDefault();
         var form = $('#export_form')[0];
         if (!form.reportValidity()) {
             return;
@@ -840,11 +875,18 @@
         var guest_addressDeliver = $('#guest_addressDeliver').val();
         var guest_receiver = $('#guest_receiver').val();
         var guest_phoneReceiver = $('#guest_phoneReceiver').val();
-        var guest_represent = $('#guest_represent').val();
         var guest_email = $('#guest_email').val();
         var guest_phone = $('#guest_phone').val();
         var guest_pay = $('#guest_pay').val();
         var guest_note = $('#guest_note').val();
+        var debt = "";
+        if ($('#debtCheckbox').is(':checked')) {
+            debt = "0";
+            $('#debtInput').prop('disabled', true);
+        } else {
+            debt = $('#debtInput').val();
+            $('#debtInput').prop('disabled', false);
+        }
 
         $.ajax({
             url: "{{ route('addCustomer') }}",
@@ -856,12 +898,12 @@
                 guest_addressDeliver,
                 guest_receiver,
                 guest_phoneReceiver,
-                guest_represent,
                 guest_email,
                 guest_phone,
                 guest_pay,
                 guest_note,
                 click,
+                debt
             },
             success: function(data) {
                 if (data.hasOwnProperty('message')) {
@@ -871,8 +913,8 @@
                     $('#form-guest input[name="id"]').val(data.id);
                 }
             }
-        })
-    })
+        });
+    });
     //
     $(document).ready(function() {
         //lấy thông tin sản phẩm từ mã sản phẩm

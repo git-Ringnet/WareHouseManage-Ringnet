@@ -187,7 +187,6 @@ class ExportController extends Controller
                                     ->where('guest_addressDeliver', $request->guest_addressDeliver)
                                     ->where('guest_receiver', $request->guest_receiver)
                                     ->where('guest_phoneReceiver', $request->guest_phoneReceiver)
-                                    ->where('guest_represent', $request->guest_represent)
                                     ->where('guest_phone', $request->guest_phone)
                                     ->first();
                                 if (!$existingCustomer) {
@@ -198,7 +197,6 @@ class ExportController extends Controller
                                     $guest->guest_addressDeliver = $request->guest_addressDeliver;
                                     $guest->guest_receiver = $request->guest_receiver;
                                     $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
-                                    $guest->guest_represent = $request->guest_represent;
                                     $guest->guest_email = $request->guest_email;
                                     $guest->guest_status = 1;
                                     $guest->guest_phone = $request->guest_phone;
@@ -230,7 +228,6 @@ class ExportController extends Controller
                                     ->where('guest_addressDeliver', $request->guest_addressDeliver)
                                     ->where('guest_receiver', $request->guest_receiver)
                                     ->where('guest_phoneReceiver', $request->guest_phoneReceiver)
-                                    ->where('guest_represent', $request->guest_represent)
                                     ->where('guest_phone', $request->guest_phone)
                                     ->first();
                                 if (!$existingCustomer) {
@@ -241,7 +238,6 @@ class ExportController extends Controller
                                     $guest->guest_addressDeliver = $request->guest_addressDeliver;
                                     $guest->guest_receiver = $request->guest_receiver;
                                     $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
-                                    $guest->guest_represent = $request->guest_represent;
                                     $guest->guest_email = $request->guest_email;
                                     $guest->guest_status = 1;
                                     $guest->guest_phone = $request->guest_phone;
@@ -419,7 +415,6 @@ class ExportController extends Controller
                                     ->where('guest_addressDeliver', $request->guest_addressDeliver)
                                     ->where('guest_receiver', $request->guest_receiver)
                                     ->where('guest_phoneReceiver', $request->guest_phoneReceiver)
-                                    ->where('guest_represent', $request->guest_represent)
                                     ->where('guest_phone', $request->guest_phone)
                                     ->first();
                                 if (!$existingCustomer) {
@@ -430,7 +425,6 @@ class ExportController extends Controller
                                     $guest->guest_addressDeliver = $request->guest_addressDeliver;
                                     $guest->guest_receiver = $request->guest_receiver;
                                     $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
-                                    $guest->guest_represent = $request->guest_represent;
                                     $guest->guest_email = $request->guest_email;
                                     $guest->guest_status = 1;
                                     $guest->guest_phone = $request->guest_phone;
@@ -464,7 +458,6 @@ class ExportController extends Controller
                                     ->where('guest_addressDeliver', $request->guest_addressDeliver)
                                     ->where('guest_receiver', $request->guest_receiver)
                                     ->where('guest_phoneReceiver', $request->guest_phoneReceiver)
-                                    ->where('guest_represent', $request->guest_represent)
                                     ->where('guest_phone', $request->guest_phone)
                                     ->first();
                                 if (!$existingCustomer) {
@@ -475,7 +468,6 @@ class ExportController extends Controller
                                     $guest->guest_addressDeliver = $request->guest_addressDeliver;
                                     $guest->guest_receiver = $request->guest_receiver;
                                     $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
-                                    $guest->guest_represent = $request->guest_represent;
                                     $guest->guest_email = $request->guest_email;
                                     $guest->guest_status = 1;
                                     $guest->guest_phone = $request->guest_phone;
@@ -746,7 +738,6 @@ class ExportController extends Controller
                                 ->where('guest_addressDeliver', $request->guest_addressDeliver)
                                 ->where('guest_receiver', $request->guest_receiver)
                                 ->where('guest_phoneReceiver', $request->guest_phoneReceiver)
-                                ->where('guest_represent', $request->guest_represent)
                                 ->where('guest_phone', $request->guest_phone)
                                 ->first();
                             if (!$existingCustomer) {
@@ -757,7 +748,6 @@ class ExportController extends Controller
                                 $guest->guest_addressDeliver = $request->guest_addressDeliver;
                                 $guest->guest_receiver = $request->guest_receiver;
                                 $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
-                                $guest->guest_represent = $request->guest_represent;
                                 $guest->guest_email = $request->guest_email;
                                 $guest->guest_status = 1;
                                 $guest->guest_phone = $request->guest_phone;
@@ -789,7 +779,6 @@ class ExportController extends Controller
                                 ->where('guest_addressDeliver', $request->guest_addressDeliver)
                                 ->where('guest_receiver', $request->guest_receiver)
                                 ->where('guest_phoneReceiver', $request->guest_phoneReceiver)
-                                ->where('guest_represent', $request->guest_represent)
                                 ->where('guest_phone', $request->guest_phone)
                                 ->first();
                             if (!$existingCustomer) {
@@ -800,7 +789,6 @@ class ExportController extends Controller
                                 $guest->guest_addressDeliver = $request->guest_addressDeliver;
                                 $guest->guest_receiver = $request->guest_receiver;
                                 $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
-                                $guest->guest_represent = $request->guest_represent;
                                 $guest->guest_email = $request->guest_email;
                                 $guest->guest_status = 1;
                                 $guest->guest_phone = $request->guest_phone;
@@ -998,27 +986,26 @@ class ExportController extends Controller
                     $totalQtyNeeded += $productQty;
                 }
 
-                // Serinumbers::whereIn('product_id', $productIDs)
-                //     ->where('seri_status', 2)
-                //     ->update(['seri_status' => 1]);
+                Serinumbers::whereIn('product_id', $productIDs)
+                    ->where('seri_status', 2)
+                    ->update(['seri_status' => 1]);
 
-                for ($i = 0; $i < count($productIDs); $i++) {
-                    $productID = $productIDs[$i];
-                    $productQty = $productQtys[$i];
+                // for ($i = 0; $i < count($productIDs); $i++) {
+                //     $productID = $productIDs[$i];
+                //     $productQty = $productQtys[$i];
 
-                    // Cập nhật seri_status theo số lượng đã nhập
-                    $serinumbers = Serinumbers::where('product_id', $productID)
-                        ->where('seri_status', 2)
-                        ->limit($productQty)
-                        ->get();
+                //     // Cập nhật seri_status theo số lượng đã nhập
+                //     $serinumbers = Serinumbers::where('product_id', $productID)
+                //         ->where('seri_status', 2)
+                //         ->get();
 
-                    foreach ($serinumbers as $serinumber) {
-                        if ($serinumber->seri_status == 2) {
-                            $serinumber->seri_status = 1;
-                            $serinumber->save();
-                        }
-                    }
-                }
+                //     foreach ($serinumbers as $serinumber) {
+                //         if ($serinumber->seri_status == 2) {
+                //             $serinumber->seri_status = 1;
+                //             $serinumber->save();
+                //         }
+                //     }
+                // }
 
                 // Cập nhật trạng thái và tổng giá trị của export
                 $exports->export_status = 0;
@@ -1158,7 +1145,6 @@ class ExportController extends Controller
                             ->where('guest_addressDeliver', $request->guest_addressDeliver)
                             ->where('guest_receiver', $request->guest_receiver)
                             ->where('guest_phoneReceiver', $request->guest_phoneReceiver)
-                            ->where('guest_represent', $request->guest_represent)
                             ->where('guest_phone', $request->guest_phone)
                             ->first();
                         if (!$existingCustomer) {
@@ -1169,7 +1155,6 @@ class ExportController extends Controller
                             $guest->guest_addressDeliver = $request->guest_addressDeliver;
                             $guest->guest_receiver = $request->guest_receiver;
                             $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
-                            $guest->guest_represent = $request->guest_represent;
                             $guest->guest_email = $request->guest_email;
                             $guest->guest_status = 1;
                             $guest->guest_phone = $request->guest_phone;
@@ -1201,7 +1186,6 @@ class ExportController extends Controller
                             ->where('guest_addressDeliver', $request->guest_addressDeliver)
                             ->where('guest_receiver', $request->guest_receiver)
                             ->where('guest_phoneReceiver', $request->guest_phoneReceiver)
-                            ->where('guest_represent', $request->guest_represent)
                             ->where('guest_phone', $request->guest_phone)
                             ->first();
                         if (!$existingCustomer) {
@@ -1212,7 +1196,6 @@ class ExportController extends Controller
                             $guest->guest_addressDeliver = $request->guest_addressDeliver;
                             $guest->guest_receiver = $request->guest_receiver;
                             $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
-                            $guest->guest_represent = $request->guest_represent;
                             $guest->guest_email = $request->guest_email;
                             $guest->guest_status = 1;
                             $guest->guest_phone = $request->guest_phone;
@@ -1286,37 +1269,46 @@ class ExportController extends Controller
         $data = $request->all();
         if ($data['updateClick'] == 1) {
             // Kiểm tra xem dữ liệu đã tồn tại trong cơ sở dữ liệu hay chưa
-            $existingCustomer = Guests::where('guest_name', $request->guest_name)
-                ->where('guest_email', $request->guest_email)
-                ->where('guest_addressInvoice', $request->guest_addressInvoice)
-                ->where('guest_code', $request->guest_code)
-                ->where('guest_addressDeliver', $request->guest_addressDeliver)
-                ->where('guest_receiver', $request->guest_receiver)
-                ->where('guest_phoneReceiver', $request->guest_phoneReceiver)
-                ->where('guest_represent', $request->guest_represent)
-                ->where('guest_phone', $request->guest_phone)
-                ->first();
+            // $existingCustomer = Guests::where('guest_name', $request->guest_name)
+            //     ->where('guest_email', $request->guest_email)
+            //     ->where('guest_code', $request->guest_code)
+            //     ->where('guest_phone', $request->guest_phone)
+            //     ->first();
 
-            if ($existingCustomer) {
-                // Dữ liệu đã tồn tại, trả về thông báo
-                // session()->flash('warning', 'Thông tin khách hàng đã có trong hệ thống');
-                return response()->json(['message' => 'Thông tin khách hàng đã có trong hệ thống']);
-            } else {
-                $update_guest = Guests::findOrFail($data['id']);
-                $update_guest->guest_name = $data['guest_name'];
-                $update_guest->guest_addressInvoice = $data['guest_addressInvoice'];
-                $update_guest->guest_code = $data['guest_code'];
-                $update_guest->guest_addressDeliver = $data['guest_addressDeliver'];
-                $update_guest->guest_receiver = $data['guest_receiver'];
-                $update_guest->guest_phoneReceiver = $data['guest_phoneReceiver'];
-                $update_guest->guest_represent = $data['guest_represent'];
-                $update_guest->guest_email = $data['guest_email'];
-                $update_guest->guest_phone = $data['guest_phone'];
-                $update_guest->guest_pay = $data['guest_pay'];
-                $update_guest->guest_note = $data['guest_note'];
-                $update_guest->save();
-                return response()->json(['message' => 'Lưu thông tin thành công!']);
-            }
+            // if ($existingCustomer) {
+            //     // Dữ liệu đã tồn tại, trả về thông báo
+            //     // session()->flash('warning', 'Thông tin khách hàng đã có trong hệ thống');
+            //     return response()->json(['message' => 'Thông tin khách hàng đã có trong hệ thống']);
+            // } else {
+            //     $update_guest = Guests::findOrFail($data['id']);
+            //     $update_guest->guest_name = $data['guest_name'];
+            //     $update_guest->guest_addressInvoice = $data['guest_addressInvoice'];
+            //     $update_guest->guest_code = $data['guest_code'];
+            //     $update_guest->guest_addressDeliver = $data['guest_addressDeliver'];
+            //     $update_guest->guest_receiver = $data['guest_receiver'];
+            //     $update_guest->guest_phoneReceiver = $data['guest_phoneReceiver'];
+            //     $update_guest->guest_email = $data['guest_email'];
+            //     $update_guest->guest_phone = $data['guest_phone'];
+            //     $update_guest->guest_pay = $data['guest_pay'];
+            //     $update_guest->guest_note = $data['guest_note'];
+            //     $update_guest->debt = $data['debt'];
+            //     $update_guest->save();
+            //     return response()->json(['message' => 'Lưu thông tin thành công!']);
+            // }
+            $update_guest = Guests::findOrFail($data['id']);
+            $update_guest->guest_name = $data['guest_name'];
+            $update_guest->guest_addressInvoice = $data['guest_addressInvoice'];
+            $update_guest->guest_code = $data['guest_code'];
+            $update_guest->guest_addressDeliver = $data['guest_addressDeliver'];
+            $update_guest->guest_receiver = $data['guest_receiver'];
+            $update_guest->guest_phoneReceiver = $data['guest_phoneReceiver'];
+            $update_guest->guest_email = $data['guest_email'];
+            $update_guest->guest_phone = $data['guest_phone'];
+            $update_guest->guest_pay = $data['guest_pay'];
+            $update_guest->guest_note = $data['guest_note'];
+            $update_guest->debt = $data['debt'];
+            $update_guest->save();
+            return response()->json(['message' => 'Lưu thông tin thành công!']);
         }
     }
     public function addCustomer(Request $request)
@@ -1329,9 +1321,7 @@ class ExportController extends Controller
                 ->where('guest_addressInvoice', $request->guest_addressInvoice)
                 ->where('guest_code', $request->guest_code)
                 ->where('guest_addressDeliver', $request->guest_addressDeliver)
-                ->where('guest_receiver', $request->guest_receiver)
                 ->where('guest_phoneReceiver', $request->guest_phoneReceiver)
-                ->where('guest_represent', $request->guest_represent)
                 ->where('guest_phone', $request->guest_phone)
                 ->first();
 
@@ -1348,12 +1338,12 @@ class ExportController extends Controller
                 $guest->guest_addressDeliver = $data['guest_addressDeliver'];
                 $guest->guest_receiver = $data['guest_receiver'];
                 $guest->guest_phoneReceiver = $data['guest_phoneReceiver'];
-                $guest->guest_represent = $data['guest_represent'];
                 $guest->guest_email = $data['guest_email'];
                 $guest->guest_status = 1;
                 $guest->guest_phone = $data['guest_phone'];
                 $guest->guest_pay = $data['guest_pay'];
                 $guest->guest_note = $data['guest_note'];
+                $guest->debt = $data['debt'];
                 $guest->save();
 
                 // Trả về giá trị id của khách hàng vừa lưu
