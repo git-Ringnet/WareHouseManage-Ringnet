@@ -910,7 +910,7 @@ $index = array_search($item['label'], $numberedLabels);
                         </div>
                     </div>
                     <div class="paginator mt-4 d-flex justify-content-end">
-                        {{ $products->appends(request()->except('page'))->links() }}
+                        {{ $products->appends(request()->except('page'))->onEachSide(1)->links() }}
                     </div>
                 </div>
             </div>
