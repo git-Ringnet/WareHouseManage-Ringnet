@@ -263,20 +263,30 @@ class ProductsController extends Controller
         $products = Products::findOrFail($id);
         $cate = Category::all();
         $title = 'Chỉnh sửa sản phẩm';
-        $listProduct = Product::with('getSerinumbers')->where('products_id', $products->id)->paginate(8);
-     
-        // var_dump($listProduct[1]->getSerinumbers);
-        // die();
-        // $listProduct = Product::join('serinumber', 'product.id', 'serinumbers.product_id')
-        //     ->where('product.products_id', $products->id)
-        //     ->distinct()
-        //     ->paginate(8);
-        // var_dump($listProduct)
-        // foreach($listProduct as $va){
-        //     var_dump($va->getSerinumbers);
-        // }
-        // die();
-
+        // $listProduct = Product::with('getSerinumbers')->where('products_id', $products->id)->paginate(8);
+        $listProduct = Product::with(['getNameProducts', 'getNameProvide', 'getSerinumbers'])
+            ->select('product.*', DB::raw('SUM(CASE WHEN serinumbers.seri_status = 2 THEN 1 ELSE 0 END) as countSerial'))
+            ->leftJoin('serinumbers', 'product.id', '=', 'serinumbers.product_id')
+            ->leftJoin('products', 'product.products_id', '=', 'products.id') 
+            ->leftJoin('provides', 'product.provide_id', '=', 'provides.id')
+            ->where('product.products_id', $products->id)
+            ->groupBy(
+                'product.id',
+                'product.products_id',
+                'product.product_name',
+                'product.product_category',
+                'product.product_unit',
+                'product.product_trademark',
+                'product.product_qty',
+                'product.product_price',
+                'product.tax',
+                'product.total',
+                'product.provide_id',
+                'product.product_orderid',
+                'product.created_at',
+                'product.updated_at'
+            )
+            ->paginate(8);
         return view('tables.products.edit_products', compact('products', 'cate', 'title', 'listProduct'))->with('msg', 'Chỉnh sửa sản phẩm thành công!!');
     }
 
@@ -388,7 +398,7 @@ class ProductsController extends Controller
                 }
             }
             if ($hasProductWithInventory) {
-            session()->flash('warning', 'Còn sản phẩm con');
+                session()->flash('warning', 'Còn sản phẩm con');
                 return response()->json(['success' => false, 'msg' => 'Còn sản phẩm con']);
             }
             session()->flash('msg', 'Xóa sản phẩm thành công');
@@ -429,7 +439,7 @@ class ProductsController extends Controller
         }
         $relatedProduct->save();
 
-        return redirect()->route('data.index')->with('msg','Chỉnh sửa sản phẩm thành công!');
+        return redirect()->route('data.index')->with('msg', 'Chỉnh sửa sản phẩm thành công!');
     }
     // Xóa sản phẩm con
     public function delete_product($id)
@@ -486,13 +496,14 @@ class ProductsController extends Controller
         return response()->json(['message' => 'Import thành công!']);
     }
 
-    public function checkProducts_code(Request $request){
+    public function checkProducts_code(Request $request)
+    {
         $data = $request->input('products_code');
         $check = Products::where('products_code', $data)->first();
-        if($check === null){
+        if ($check === null) {
             return response()->json(['success' => false]);
-        }else{
-            return response()->json(['success' => true ,'msg' => "Mã sản phẩm đã tồn tại"]);
+        } else {
+            return response()->json(['success' => true, 'msg' => "Mã sản phẩm đã tồn tại"]);
         }
     }
 }
