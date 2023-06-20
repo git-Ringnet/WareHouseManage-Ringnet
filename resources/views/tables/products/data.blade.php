@@ -584,10 +584,10 @@ $index = array_search($item['label'], $numberedLabels);
                         <div class="card-body">
                             <table id="example2" class="table table-hover">
                                 <thead>
-                                    <tr>
-                                        <input type="hidden" id="sortByInput" name="sort-by" value="id">
+                                <input type="hidden" id="sortByInput" name="sort-by" value="id">
                                         <input type="hidden" id="sortTypeInput" name="sort-type"
                                             value="{{ $sortType }}">
+                                    <tr>
                                         @can('view-provides')
                                             <th scope="col" style="width:2%">
                                                 <span class="d-flex">
@@ -684,9 +684,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             @endcan
                                             <td scope="row">{{ $value->id }}</td>
                                             <td>
-                                                <!-- <a href="{{ route('data.show', $value->id) }}"> -->
                                                 {{ $value->products_code }}
-                                                <!-- </a> -->
                                             </td>
                                             <td>{{ $value->products_name }}</td>
                                             <td>
@@ -794,7 +792,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     @can('view-provides')
                                                         <td></td>
                                                     @endcan
-                                                    <td>{{ $value->id }} - {{ $item->id }}</td>
+                                                    <td style="width:6%;">{{ $value->id }} - {{ $item->id }}</td>
                                                     <td>{{ $value->products_code }}</td>
                                                     <td>{{ $item->product_name }}</td>
                                                     <td>
@@ -975,6 +973,7 @@ $index = array_search($item['label'], $numberedLabels);
         }, 1000);
     }
 
+    
     // Import file excel
     function importExcel() {
         var input = document.getElementById("import_file");

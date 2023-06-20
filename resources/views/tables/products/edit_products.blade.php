@@ -142,17 +142,10 @@
                                     <td>{{ $va->product_unit }}</td>
                                     <td>{{ $va->product_qty }}</td>
                                     <td>
-                                    @foreach($va->getSerinumbers as $val)
-                                    @if($val->order_id == $va->product_orderid)
-                                        @if($val->seri_status == 2)
-                                            <?php $count++; ?>
-                                        @endif
-                                        @endif
-                                    @endforeach
-                                    {{$count}}
+                                    {{$va->countSerial}}
                                     </td>
                                     <td>{{ number_format($va->product_price) }}</td>
-                                    <td>{{ $va->tax }}</td>
+                                    <td>{{ $va->tax }}%</td>
                                     <td>{{ number_format($va->total) }}</td>
                                     <td>{{ $va->product_trademark }}</td>
                                     <td>
