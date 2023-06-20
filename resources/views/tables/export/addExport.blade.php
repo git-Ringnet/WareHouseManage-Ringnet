@@ -194,11 +194,14 @@
                         {{-- <div class="d-flex justify-content-between mt-2">
                             <span class="text-primary">Giảm giá:</span>
                             <span>0đ</span>
-                        </div>
-                        <div class="d-flex justify-content-between mt-2">
-                            <span class="text-primary">Phí vận chuyển:</span>
-                            <span>0đ</span>
                         </div> --}}
+                        <div class="d-flex justify-content-between align-items-center mt-2">
+                            <span class="text-primary">Phí vận chuyển:</span>
+                            <div class="w-50">
+                                <input type="text" class="form-control text-right" name="transport_fee"
+                                    id="transport_fee">
+                            </div>
+                        </div>
                         <div class="d-flex justify-content-between mt-2">
                             <span class="text-lg"><b>Tổng cộng:</b></span>
                             <span><b id="grand-total" data-value="0">{{ number_format(0) }}đ</b></span>
@@ -749,10 +752,10 @@
                         '</div>' + '<div class="form-group">' +
                         '<label>Công nợ:</label>' +
                         '<div class="d-flex align-items-center" style="width:101%;">' +
-                        '<input type="text" oninput="validateNumberInput(this)" class="form-control" pattern="^[0-9]+$" id="debtInput" value="' +
+                        '<input type="text" name="debt" oninput="validateNumberInput(this)" class="form-control" pattern="^[0-9]+$" id="debtInput" value="' +
                         (data.debt) + '" style="width:15%;" required>' +
                         '<span class="ml-2" id="data-debt">ngày</span>' +
-                        '<input type="checkbox" id="debtCheckbox" value="0" ' + (data
+                        '<input type="checkbox" name="debt" id="debtCheckbox" value="0" ' + (data
                             .debt == 0 ? 'checked' : '') +
                         ' style="margin-left:10%;">' +
                         '<span class="ml-2">Thanh toán tiền mặt</span>' +
@@ -1052,6 +1055,10 @@
         calculateGrandTotal();
     });
 
+    $(document).on('input', '#transport_fee', function() {
+        calculateGrandTotal();
+    });
+
     function updateTaxAmount(row) {
         var productQty = parseInt(row.find('.quantity-input').val().replace(/[^0-9.-]+/g, ""));
         var productPrice = parseFloat(row.find('input[name^="product_price"]').val().replace(/[^0-9.-]+/g, ""));
@@ -1090,28 +1097,27 @@
     function calculateGrandTotal() {
         var totalAmount = parseFloat($('#total-amount-sum').text().replace(/[^0-9.-]+/g, ""));
         var totalTax = parseFloat($('#product-tax').text().replace(/[^0-9.-]+/g, ""));
+        var transportFee = parseFloat($('#transport_fee').val().replace(/[^0-9.-]+/g, ""));
 
-        var grandTotal = totalAmount + totalTax;
+        if (isNaN(transportFee)) {
+            transportFee = 0;
+        }
+
+        var grandTotal = totalAmount + totalTax + transportFee;
         var formattedGrandTotal = formatCurrency(grandTotal.toFixed(2));
-
-        // Xóa ký tự "," khỏi giá trị trước khi hiển thị
-        var totalValue = formattedGrandTotal.replace(/,/g, '');
 
         $('#grand-total').text(formattedGrandTotal);
         $('#grand-total').attr('data-value', formattedGrandTotal);
-        $('#total').val(totalValue);
+        $('#total').val(grandTotal.toFixed(2));
     }
 
     function formatCurrency(value) {
-        // Làm tròn đến 2 chữ số thập phân
         value = Math.round(value * 100) / 100;
 
-        // Xử lý phần nguyên
         var parts = value.toString().split(".");
         var integerPart = parts[0];
         var formattedValue = "";
 
-        // Định dạng phần nguyên
         var count = 0;
         for (var i = integerPart.length - 1; i >= 0; i--) {
             formattedValue = integerPart.charAt(i) + formattedValue;
@@ -1121,7 +1127,6 @@
             }
         }
 
-        // Nếu có phần thập phân, thêm vào sau phần nguyên
         if (parts.length > 1) {
             formattedValue += "." + parts[1];
         }
@@ -1135,7 +1140,7 @@
         var productList = $('.productName');
 
         if (formGuest.length && productList.length > 0) {
-            $('.quantity-input, [name^="product_price"]').each(function() {
+            $('.quantity-input, [name^="product_price"], #transport_fee').each(function() {
                 var newValue = $(this).val().replace(/,/g, '');
                 $(this).val(newValue);
             });
@@ -1320,7 +1325,7 @@
 
     //format giá
     var inputElement = document.getElementById('product_price');
-    $('body').on('input', '.product_price', function(event) {
+    $('body').on('input', '.product_price,#transport_fee', function(event) {
         // Lấy giá trị đã nhập
         var value = event.target.value;
 

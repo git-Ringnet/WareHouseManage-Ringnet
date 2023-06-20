@@ -296,15 +296,15 @@
                             <div class="form-group">
                                 <label>Công nợ:</label>
                                 <div class="d-flex align-items-center" style="width:101%;">
-                                    <input type="text" class="form-control" id="debtInput"
+                                    <input type="text" class="form-control" id="debtInput" name="debt"
                                         value="{{ $guest->debt }}" style="width:15%;" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                             echo 'disabled';
                                         } ?>>
                                     <span class="ml-2" id="data-debt">ngày</span>
-                                    <input type="checkbox" id="debtCheckbox" <?php if ($guest->debt == 0) {
+                                    <input type="checkbox" id="debtCheckbox" name="debt" <?php if ($guest->debt == 0) {
                                         echo 'checked';
-                                    } ?> value="0"
-                                        style="margin-left:10%;" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                    } ?>
+                                        value="0" style="margin-left:10%;" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                             echo 'disabled';
                                         } ?>>
                                     <span class="ml-2">Thanh toán tiền mặt</span>
@@ -498,11 +498,15 @@
                         {{-- <div class="d-flex justify-content-between mt-2">
                             <span class="text-primary">Giảm giá:</span>
                             <span>0đ</span>
-                        </div>
-                        <div class="d-flex justify-content-between mt-2">
-                            <span class="text-primary">Phí vận chuyển:</span>
-                            <span>0đ</span>
                         </div> --}}
+                        <div class="d-flex justify-content-between align-items-center mt-2">
+                            <span class="text-primary">Phí vận chuyển:</span>
+                            <div class="w-50">
+                                <input type="text" class="form-control text-right"
+                                    value="{{ number_format($exports->transport_fee) }}" name="transport_fee"
+                                    id="transport_fee">
+                            </div>
+                        </div>
                         <div class="d-flex justify-content-between mt-2">
                             <span class="text-lg"><b>Tổng cộng:</b></span>
                             <span><b id="grand-total" data-value="0">{{ number_format(0) }}</b></span>
@@ -1274,10 +1278,11 @@
                         '</div>' + '<div class="form-group">' +
                         '<label>Công nợ:</label>' +
                         '<div class="d-flex align-items-center" style="width:101%;">' +
-                        '<input type="text" oninput="validateNumberInput(this)" class="form-control" pattern="^[0-9]+$" id="debtInput" value="' +
+                        '<input type="text" oninput="validateNumberInput(this)" name="debt" class="form-control" pattern="^[0-9]+$" id="debtInput" value="' +
                         (data.debt) + '" style="width:15%;" required>' +
                         '<span class="ml-2" id="data-debt">ngày</span>' +
-                        '<input type="checkbox" id="debtCheckbox" value="0" ' + (data
+                        '<input type="checkbox" id="debtCheckbox" value="0" name="debt" ' +
+                        (data
                             .debt == 0 ? 'checked' : '') +
                         ' style="margin-left:10%;">' +
                         '<span class="ml-2">Thanh toán tiền mặt</span>' +
@@ -1529,10 +1534,12 @@
     //tính thành tiền của sản phẩm
     $(document).ready(function() {
         calculateTotals();
+        calculateGrandTotalWithTransportFee();
     });
 
-    $(document).on('input', '.quantity-input, [name^="product_price"], .product_tax', function() {
+    $(document).on('input', '.quantity-input, [name^="product_price"], .product_tax,#transport_fee', function() {
         calculateTotals();
+        calculateGrandTotalWithTransportFee();
     });
 
     function calculateTotals() {
@@ -1584,6 +1591,24 @@
         $('#total').val(grandTotal.toFixed(2));
     }
 
+    function calculateGrandTotalWithTransportFee() {
+        var totalAmount = parseFloat($('#total-amount-sum').text().replace(/[^0-9.-]+/g, ''));
+        var totalTax = parseFloat($('#product-tax').text().replace(/[^0-9.-]+/g, ''));
+        var transportFee = parseFloat($('#transport_fee').val().replace(/[^0-9.-]+/g, ''));
+
+        // Check if transportFee is NaN, set it to 0
+        if (isNaN(transportFee)) {
+            transportFee = 0;
+        }
+
+        var grandTotal = totalAmount + totalTax + transportFee;
+        $('#grand-total').text(formatCurrency(grandTotal.toFixed(2)));
+
+        // Update the input value with the grand total
+        $('#total').val(grandTotal.toFixed(2));
+    }
+
+
     function formatCurrency(value) {
         // Làm tròn đến 2 chữ số thập phân
         value = Math.round(value * 100) / 100;
@@ -1617,7 +1642,7 @@
         var productList = $('.productName');
 
         if (formGuest.length && productList.length > 0) {
-            $('.product_price, [name^="product_price"]').each(function() {
+            $('.product_price, [name^="product_price"],#transport_fee').each(function() {
                 var newValue = $(this).val().replace(/,/g, '');
                 $(this).val(newValue);
             });
@@ -1633,7 +1658,7 @@
 
     //format giá
     var inputElement = document.getElementById('product_price');
-    $('body').on('input', '.product_price', function(event) {
+    $('body').on('input', '.product_price,#transport_fee', function(event) {
         // Lấy giá trị đã nhập
         var value = event.target.value;
 
