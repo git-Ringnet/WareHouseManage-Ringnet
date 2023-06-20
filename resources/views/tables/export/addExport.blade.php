@@ -170,7 +170,7 @@
                         <div class="position-relative">
                             <input type="hidden" name="creator" id="creator" value="{{ Auth::user()->id }}">
                             <textarea name="note_form" id="note_form" class="form-control" rows="8">{{ Auth::user()->note_form }}</textarea>
-                            <div id="btn-addNoteForm">
+                            <div id="btn-addNoteForm" class="disable">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd" clip-rule="evenodd"

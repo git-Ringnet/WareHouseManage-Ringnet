@@ -85,7 +85,7 @@ class Products extends Model
             });
         }
 
-        $products = $products->orderBy('products.created_at', 'asc')->paginate(8);
+        $products = $products->orderBy('products.created_at', 'asc')->paginate(1);
         // dd($products);
 
         return $products;

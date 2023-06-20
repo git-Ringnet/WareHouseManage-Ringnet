@@ -473,7 +473,7 @@
                                 echo 'readonly';
                             } ?>>{{ $exports->note_form }}</textarea>
                             @if ($exports->export_status == 1)
-                                <div id="btn-addNoteForm">
+                                <div id="btn-addNoteForm" class="disable">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <path fill-rule="evenodd" clip-rule="evenodd"
@@ -690,6 +690,36 @@
     </div>
 </div>
 <script>
+    // Thay đổi màu nút save note_form
+    $(document).ready(function() {
+        $('#note_form').on('input', function() {
+            if ($(this).val().trim() !== '') {
+                // Thêm class cho nút
+                $('#btn-addNoteForm').removeClass('disable');
+                $('#btn-addNoteForm').addClass('active');
+            } else {
+                $('#btn-addNoteForm').addClass('disable');
+                $('#btn-addNoteForm').removeClass('active');
+            }
+        });
+    });
+    //Thêm form ghi chú cho nhân viên
+    $(document).on('click', '#btn-addNoteForm', function(e) {
+        e.preventDefault()
+        var note_form = $('#note_form').val();
+        var creator = $('#creator').val();
+        $.ajax({
+            url: '{{ route('addNoteFormSale') }}',
+            type: 'GET',
+            data: {
+                note_form: note_form,
+                creator: creator,
+            },
+            success: function(data) {
+                alert('Lưu biểu mẫu thành công!');
+            }
+        });
+    });
     //hiển thị thông tin sản phảm
     $('.productMD').on('click', function() {
         var idProduct = $(this).closest('tr').find('.productName').val();
