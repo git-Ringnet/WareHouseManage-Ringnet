@@ -181,13 +181,9 @@ class ExportController extends Controller
                             //thêm khách hàng
                             if ($clickValue === null) {
                                 $existingCustomer = Guests::where('guest_name', $request->guest_name)
-                                    ->where('guest_email', $request->guest_email)
-                                    ->where('guest_addressInvoice', $request->guest_addressInvoice)
-                                    ->where('guest_code', $request->guest_code)
-                                    ->where('guest_addressDeliver', $request->guest_addressDeliver)
-                                    ->where('guest_receiver', $request->guest_receiver)
-                                    ->where('guest_phoneReceiver', $request->guest_phoneReceiver)
-                                    ->where('guest_phone', $request->guest_phone)
+                                    ->orwhere('guest_email', $request->guest_email)
+                                    ->orwhere('guest_code', $request->guest_code)
+                                    ->orwhere('guest_phone', $request->guest_phone)
                                     ->first();
                                 if (!$existingCustomer) {
                                     $guest = new Guests();
@@ -202,6 +198,7 @@ class ExportController extends Controller
                                     $guest->guest_phone = $request->guest_phone;
                                     $guest->guest_pay = $request->guest_pay;
                                     $guest->guest_note = $request->guest_note;
+                                    $guest->debt = $request->debt;
                                     $guest->save();
                                     // Tạo đơn xuất hàng
                                     $export = new Exports();
@@ -209,6 +206,8 @@ class ExportController extends Controller
                                     $export->user_id = Auth::user()->id;
                                     $export->total = $request->totalValue;
                                     $export->export_status = 2;
+                                    $export->note_form = $request->note_form;
+                                    $export->transport_fee = $request->transport_fee;
                                     $export->save();
                                 } else {
                                     $export = new Exports();
@@ -216,49 +215,36 @@ class ExportController extends Controller
                                     $export->user_id = Auth::user()->id;
                                     $export->total = $request->totalValue;
                                     $export->export_status = 2;
+                                    $export->note_form = $request->note_form;
+                                    $export->transport_fee = $request->transport_fee;
                                     $export->save();
                                 }
                             }
                             //cập nhật khách hàng
                             else if ($updateClick == null) {
-                                $existingCustomer = Guests::where('guest_name', $request->guest_name)
-                                    ->where('guest_email', $request->guest_email)
-                                    ->where('guest_addressInvoice', $request->guest_addressInvoice)
-                                    ->where('guest_code', $request->guest_code)
-                                    ->where('guest_addressDeliver', $request->guest_addressDeliver)
-                                    ->where('guest_receiver', $request->guest_receiver)
-                                    ->where('guest_phoneReceiver', $request->guest_phoneReceiver)
-                                    ->where('guest_phone', $request->guest_phone)
-                                    ->first();
-                                if (!$existingCustomer) {
-                                    $guest = Guests::find($request->id);
-                                    $guest->guest_name = $request->guest_name;
-                                    $guest->guest_addressInvoice = $request->guest_addressInvoice;
-                                    $guest->guest_code = $request->guest_code;
-                                    $guest->guest_addressDeliver = $request->guest_addressDeliver;
-                                    $guest->guest_receiver = $request->guest_receiver;
-                                    $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
-                                    $guest->guest_email = $request->guest_email;
-                                    $guest->guest_status = 1;
-                                    $guest->guest_phone = $request->guest_phone;
-                                    $guest->guest_pay = $request->guest_pay;
-                                    $guest->guest_note = $request->guest_note;
-                                    $guest->save();
-                                    // Tạo đơn xuất hàng
-                                    $export = new Exports();
-                                    $export->guest_id = $guest->id;
-                                    $export->user_id = Auth::user()->id;
-                                    $export->total = $request->totalValue;
-                                    $export->export_status = 1;
-                                    $export->save();
-                                } else {
-                                    $export = new Exports();
-                                    $export->guest_id = $existingCustomer->id;
-                                    $export->user_id = Auth::user()->id;
-                                    $export->total = $request->totalValue;
-                                    $export->export_status = 2;
-                                    $export->save();
-                                }
+                                $guest = Guests::find($request->id);
+                                $guest->guest_name = $request->guest_name;
+                                $guest->guest_addressInvoice = $request->guest_addressInvoice;
+                                $guest->guest_code = $request->guest_code;
+                                $guest->guest_addressDeliver = $request->guest_addressDeliver;
+                                $guest->guest_receiver = $request->guest_receiver;
+                                $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
+                                $guest->guest_email = $request->guest_email;
+                                $guest->guest_status = 1;
+                                $guest->guest_phone = $request->guest_phone;
+                                $guest->guest_pay = $request->guest_pay;
+                                $guest->guest_note = $request->guest_note;
+                                $guest->debt = $request->debt;
+                                $guest->save();
+                                // Tạo đơn xuất hàng
+                                $export = new Exports();
+                                $export->guest_id = $guest->id;
+                                $export->user_id = Auth::user()->id;
+                                $export->total = $request->totalValue;
+                                $export->export_status = 2;
+                                $export->note_form = $request->note_form;
+                                $export->transport_fee = $request->transport_fee;
+                                $export->save();
                             } else {
                                 // Tạo đơn xuất hàng
                                 $export = new Exports();
@@ -266,6 +252,8 @@ class ExportController extends Controller
                                 $export->user_id = Auth::user()->id;
                                 $export->total = $request->totalValue;
                                 $export->export_status = 2;
+                                $export->note_form = $request->note_form;
+                                $export->transport_fee = $request->transport_fee;
                                 $export->save();
                             }
                             // Tạo các bản ghi trong bảng product export
@@ -409,13 +397,9 @@ class ExportController extends Controller
                             //thêm khách hàng
                             if ($clickValue === null) {
                                 $existingCustomer = Guests::where('guest_name', $request->guest_name)
-                                    ->where('guest_email', $request->guest_email)
-                                    ->where('guest_addressInvoice', $request->guest_addressInvoice)
-                                    ->where('guest_code', $request->guest_code)
-                                    ->where('guest_addressDeliver', $request->guest_addressDeliver)
-                                    ->where('guest_receiver', $request->guest_receiver)
-                                    ->where('guest_phoneReceiver', $request->guest_phoneReceiver)
-                                    ->where('guest_phone', $request->guest_phone)
+                                    ->orwhere('guest_email', $request->guest_email)
+                                    ->orwhere('guest_code', $request->guest_code)
+                                    ->orwhere('guest_phone', $request->guest_phone)
                                     ->first();
                                 if (!$existingCustomer) {
                                     $guest = new Guests();
@@ -430,6 +414,7 @@ class ExportController extends Controller
                                     $guest->guest_phone = $request->guest_phone;
                                     $guest->guest_pay = $request->guest_pay;
                                     $guest->guest_note = $request->guest_note;
+                                    $guest->debt = $request->debt;
                                     $guest->save();
                                     // Tạo đơn xuất hàng
                                     $export = new Exports();
@@ -438,6 +423,7 @@ class ExportController extends Controller
                                     $export->total = $request->totalValue;
                                     $export->export_status = 1;
                                     $export->note_form = $request->note_form;
+                                    $export->transport_fee = $request->transport_fee;
                                     $export->save();
                                 } else {
                                     $export = new Exports();
@@ -446,51 +432,35 @@ class ExportController extends Controller
                                     $export->total = $request->totalValue;
                                     $export->export_status = 1;
                                     $export->note_form = $request->note_form;
+                                    $export->transport_fee = $request->transport_fee;
                                     $export->save();
                                 }
                             }
                             //cập nhật khách hàng
                             else if ($updateClick == null) {
-                                $existingCustomer = Guests::where('guest_name', $request->guest_name)
-                                    ->where('guest_email', $request->guest_email)
-                                    ->where('guest_addressInvoice', $request->guest_addressInvoice)
-                                    ->where('guest_code', $request->guest_code)
-                                    ->where('guest_addressDeliver', $request->guest_addressDeliver)
-                                    ->where('guest_receiver', $request->guest_receiver)
-                                    ->where('guest_phoneReceiver', $request->guest_phoneReceiver)
-                                    ->where('guest_phone', $request->guest_phone)
-                                    ->first();
-                                if (!$existingCustomer) {
-                                    $guest = Guests::find($request->id);
-                                    $guest->guest_name = $request->guest_name;
-                                    $guest->guest_addressInvoice = $request->guest_addressInvoice;
-                                    $guest->guest_code = $request->guest_code;
-                                    $guest->guest_addressDeliver = $request->guest_addressDeliver;
-                                    $guest->guest_receiver = $request->guest_receiver;
-                                    $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
-                                    $guest->guest_email = $request->guest_email;
-                                    $guest->guest_status = 1;
-                                    $guest->guest_phone = $request->guest_phone;
-                                    $guest->guest_pay = $request->guest_pay;
-                                    $guest->guest_note = $request->guest_note;
-                                    $guest->save();
-                                    // Tạo đơn xuất hàng
-                                    $export = new Exports();
-                                    $export->guest_id = $guest->id;
-                                    $export->user_id = Auth::user()->id;
-                                    $export->total = $request->totalValue;
-                                    $export->export_status = 1;
-                                    $export->note_form = $request->note_form;
-                                    $export->save();
-                                } else {
-                                    $export = new Exports();
-                                    $export->guest_id = $existingCustomer->id;
-                                    $export->user_id = Auth::user()->id;
-                                    $export->total = $request->totalValue;
-                                    $export->export_status = 1;
-                                    $export->note_form = $request->note_form;
-                                    $export->save();
-                                }
+                                $guest = Guests::find($request->id);
+                                $guest->guest_name = $request->guest_name;
+                                $guest->guest_addressInvoice = $request->guest_addressInvoice;
+                                $guest->guest_code = $request->guest_code;
+                                $guest->guest_addressDeliver = $request->guest_addressDeliver;
+                                $guest->guest_receiver = $request->guest_receiver;
+                                $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
+                                $guest->guest_email = $request->guest_email;
+                                $guest->guest_status = 1;
+                                $guest->guest_phone = $request->guest_phone;
+                                $guest->guest_pay = $request->guest_pay;
+                                $guest->guest_note = $request->guest_note;
+                                $guest->debt = $request->debt;
+                                $guest->save();
+                                // Tạo đơn xuất hàng
+                                $export = new Exports();
+                                $export->guest_id = $guest->id;
+                                $export->user_id = Auth::user()->id;
+                                $export->total = $request->totalValue;
+                                $export->export_status = 1;
+                                $export->note_form = $request->note_form;
+                                $export->transport_fee = $request->transport_fee;
+                                $export->save();
                             } else {
                                 // Tạo đơn xuất hàng
                                 $export = new Exports();
@@ -499,6 +469,7 @@ class ExportController extends Controller
                                 $export->total = $request->totalValue;
                                 $export->export_status = 1;
                                 $export->note_form = $request->note_form;
+                                $export->transport_fee = $request->transport_fee;
                                 $export->save();
                             }
                             // Tạo các bản ghi trong bảng product export
@@ -732,13 +703,9 @@ class ExportController extends Controller
                         //thêm khách hàng
                         if ($clickValue === null) {
                             $existingCustomer = Guests::where('guest_name', $request->guest_name)
-                                ->where('guest_email', $request->guest_email)
-                                ->where('guest_addressInvoice', $request->guest_addressInvoice)
-                                ->where('guest_code', $request->guest_code)
-                                ->where('guest_addressDeliver', $request->guest_addressDeliver)
-                                ->where('guest_receiver', $request->guest_receiver)
-                                ->where('guest_phoneReceiver', $request->guest_phoneReceiver)
-                                ->where('guest_phone', $request->guest_phone)
+                                ->orwhere('guest_email', $request->guest_email)
+                                ->orwhere('guest_code', $request->guest_code)
+                                ->orwhere('guest_phone', $request->guest_phone)
                                 ->first();
                             if (!$existingCustomer) {
                                 $guest = new Guests();
@@ -753,6 +720,7 @@ class ExportController extends Controller
                                 $guest->guest_phone = $request->guest_phone;
                                 $guest->guest_pay = $request->guest_pay;
                                 $guest->guest_note = $request->guest_note;
+                                $guest->debt = $request->debt;
                                 $guest->save();
                                 // Tạo đơn xuất hàng
                                 $exports->guest_id = $guest->id;
@@ -760,6 +728,7 @@ class ExportController extends Controller
                                 $exports->total = $request->totalValue;
                                 $exports->export_status = 2;
                                 $exports->note_form = $request->note_form;
+                                $exports->transport_fee = $request->transport_fee;
                                 $exports->save();
                             } else {
                                 $exports->guest_id = $existingCustomer->id;
@@ -767,49 +736,34 @@ class ExportController extends Controller
                                 $exports->total = $request->totalValue;
                                 $exports->export_status = 2;
                                 $exports->note_form = $request->note_form;
+                                $exports->transport_fee = $request->transport_fee;
                                 $exports->save();
                             }
                         }
                         //cập nhật khách hàng
                         else if ($updateClick == null) {
-                            $existingCustomer = Guests::where('guest_name', $request->guest_name)
-                                ->where('guest_email', $request->guest_email)
-                                ->where('guest_addressInvoice', $request->guest_addressInvoice)
-                                ->where('guest_code', $request->guest_code)
-                                ->where('guest_addressDeliver', $request->guest_addressDeliver)
-                                ->where('guest_receiver', $request->guest_receiver)
-                                ->where('guest_phoneReceiver', $request->guest_phoneReceiver)
-                                ->where('guest_phone', $request->guest_phone)
-                                ->first();
-                            if (!$existingCustomer) {
-                                $guest = Guests::find($request->id);
-                                $guest->guest_name = $request->guest_name;
-                                $guest->guest_addressInvoice = $request->guest_addressInvoice;
-                                $guest->guest_code = $request->guest_code;
-                                $guest->guest_addressDeliver = $request->guest_addressDeliver;
-                                $guest->guest_receiver = $request->guest_receiver;
-                                $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
-                                $guest->guest_email = $request->guest_email;
-                                $guest->guest_status = 1;
-                                $guest->guest_phone = $request->guest_phone;
-                                $guest->guest_pay = $request->guest_pay;
-                                $guest->guest_note = $request->guest_note;
-                                $guest->save();
-                                // Tạo đơn xuất hàng
-                                $exports->guest_id = $guest->id;
-                                $exports->user_id = Auth::user()->id;
-                                $exports->total = $request->totalValue;
-                                $exports->export_status = 2;
-                                $exports->note_form = $request->note_form;
-                                $exports->save();
-                            } else {
-                                $exports->guest_id = $existingCustomer->id;
-                                $exports->user_id = Auth::user()->id;
-                                $exports->total = $request->totalValue;
-                                $exports->export_status = 2;
-                                $exports->note_form = $request->note_form;
-                                $exports->save();
-                            }
+                            $guest = Guests::find($request->id);
+                            $guest->guest_name = $request->guest_name;
+                            $guest->guest_addressInvoice = $request->guest_addressInvoice;
+                            $guest->guest_code = $request->guest_code;
+                            $guest->guest_addressDeliver = $request->guest_addressDeliver;
+                            $guest->guest_receiver = $request->guest_receiver;
+                            $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
+                            $guest->guest_email = $request->guest_email;
+                            $guest->guest_status = 1;
+                            $guest->guest_phone = $request->guest_phone;
+                            $guest->guest_pay = $request->guest_pay;
+                            $guest->guest_note = $request->guest_note;
+                            $guest->debt = $request->debt;
+                            $guest->save();
+                            // Tạo đơn xuất hàng
+                            $exports->guest_id = $guest->id;
+                            $exports->user_id = Auth::user()->id;
+                            $exports->total = $request->totalValue;
+                            $exports->export_status = 2;
+                            $exports->note_form = $request->note_form;
+                            $exports->transport_fee = $request->transport_fee;
+                            $exports->save();
                         } else {
                             // Tạo đơn xuất hàng
                             $exports->guest_id = $request->id;
@@ -817,6 +771,7 @@ class ExportController extends Controller
                             $exports->total = $request->totalValue;
                             $exports->export_status = 2;
                             $exports->note_form = $request->note_form;
+                            $exports->transport_fee = $request->transport_fee;
                             $exports->save();
                         }
 
@@ -1011,6 +966,7 @@ class ExportController extends Controller
                 $exports->export_status = 0;
                 $exports->total = $request->totalValue;
                 $exports->note_form = $request->note_form;
+                $exports->transport_fee = $request->transport_fee;
                 $exports->save();
 
                 return redirect()->route('exports.index')->with('msg', 'Hủy đơn thành công!');
@@ -1139,13 +1095,9 @@ class ExportController extends Controller
                     //thêm khách hàng
                     if ($clickValue === null) {
                         $existingCustomer = Guests::where('guest_name', $request->guest_name)
-                            ->where('guest_email', $request->guest_email)
-                            ->where('guest_addressInvoice', $request->guest_addressInvoice)
-                            ->where('guest_code', $request->guest_code)
-                            ->where('guest_addressDeliver', $request->guest_addressDeliver)
-                            ->where('guest_receiver', $request->guest_receiver)
-                            ->where('guest_phoneReceiver', $request->guest_phoneReceiver)
-                            ->where('guest_phone', $request->guest_phone)
+                            ->orwhere('guest_email', $request->guest_email)
+                            ->orwhere('guest_code', $request->guest_code)
+                            ->orwhere('guest_phone', $request->guest_phone)
                             ->first();
                         if (!$existingCustomer) {
                             $guest = new Guests();
@@ -1160,6 +1112,7 @@ class ExportController extends Controller
                             $guest->guest_phone = $request->guest_phone;
                             $guest->guest_pay = $request->guest_pay;
                             $guest->guest_note = $request->guest_note;
+                            $guest->debt = $request->debt;
                             $guest->save();
                             // Tạo đơn xuất hàng
                             $exports->guest_id = $guest->id;
@@ -1167,6 +1120,7 @@ class ExportController extends Controller
                             $exports->total = $request->totalValue;
                             $exports->export_status = 1;
                             $exports->note_form = $request->note_form;
+                            $exports->transport_fee = $request->transport_fee;
                             $exports->save();
                         } else {
                             $exports->guest_id = $existingCustomer->id;
@@ -1174,49 +1128,34 @@ class ExportController extends Controller
                             $exports->total = $request->totalValue;
                             $exports->export_status = 1;
                             $exports->note_form = $request->note_form;
+                            $exports->transport_fee = $request->transport_fee;
                             $exports->save();
                         }
                     }
                     //cập nhật khách hàng
                     else if ($updateClick == null) {
-                        $existingCustomer = Guests::where('guest_name', $request->guest_name)
-                            ->where('guest_email', $request->guest_email)
-                            ->where('guest_addressInvoice', $request->guest_addressInvoice)
-                            ->where('guest_code', $request->guest_code)
-                            ->where('guest_addressDeliver', $request->guest_addressDeliver)
-                            ->where('guest_receiver', $request->guest_receiver)
-                            ->where('guest_phoneReceiver', $request->guest_phoneReceiver)
-                            ->where('guest_phone', $request->guest_phone)
-                            ->first();
-                        if (!$existingCustomer) {
-                            $guest = Guests::find($request->id);
-                            $guest->guest_name = $request->guest_name;
-                            $guest->guest_addressInvoice = $request->guest_addressInvoice;
-                            $guest->guest_code = $request->guest_code;
-                            $guest->guest_addressDeliver = $request->guest_addressDeliver;
-                            $guest->guest_receiver = $request->guest_receiver;
-                            $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
-                            $guest->guest_email = $request->guest_email;
-                            $guest->guest_status = 1;
-                            $guest->guest_phone = $request->guest_phone;
-                            $guest->guest_pay = $request->guest_pay;
-                            $guest->guest_note = $request->guest_note;
-                            $guest->save();
-                            // Tạo đơn xuất hàng
-                            $exports->guest_id = $guest->id;
-                            $exports->user_id = Auth::user()->id;
-                            $exports->total = $request->totalValue;
-                            $exports->export_status = 1;
-                            $exports->note_form = $request->note_form;
-                            $exports->save();
-                        } else {
-                            $exports->guest_id = $existingCustomer->id;
-                            $exports->user_id = Auth::user()->id;
-                            $exports->total = $request->totalValue;
-                            $exports->export_status = 1;
-                            $exports->note_form = $request->note_form;
-                            $exports->save();
-                        }
+                        $guest = Guests::find($request->id);
+                        $guest->guest_name = $request->guest_name;
+                        $guest->guest_addressInvoice = $request->guest_addressInvoice;
+                        $guest->guest_code = $request->guest_code;
+                        $guest->guest_addressDeliver = $request->guest_addressDeliver;
+                        $guest->guest_receiver = $request->guest_receiver;
+                        $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
+                        $guest->guest_email = $request->guest_email;
+                        $guest->guest_status = 1;
+                        $guest->guest_phone = $request->guest_phone;
+                        $guest->guest_pay = $request->guest_pay;
+                        $guest->guest_note = $request->guest_note;
+                        $guest->debt = $request->debt;
+                        $guest->save();
+                        // Tạo đơn xuất hàng
+                        $exports->guest_id = $guest->id;
+                        $exports->user_id = Auth::user()->id;
+                        $exports->total = $request->totalValue;
+                        $exports->export_status = 1;
+                        $exports->note_form = $request->note_form;
+                        $exports->transport_fee = $request->transport_fee;
+                        $exports->save();
                     } else {
                         // Tạo đơn xuất hàng
                         $exports->guest_id = $request->id;
@@ -1224,6 +1163,7 @@ class ExportController extends Controller
                         $exports->total = $request->totalValue;
                         $exports->export_status = 1;
                         $exports->note_form = $request->note_form;
+                        $exports->transport_fee = $request->transport_fee;
                         $exports->save();
                     }
                     return redirect()->route('exports.index')->with('msg', 'Cập nhật thành công!');
@@ -1317,12 +1257,9 @@ class ExportController extends Controller
         if ($data['click'] == 1) {
             // Kiểm tra xem dữ liệu đã tồn tại trong cơ sở dữ liệu hay chưa
             $existingCustomer = Guests::where('guest_name', $request->guest_name)
-                ->where('guest_email', $request->guest_email)
-                ->where('guest_addressInvoice', $request->guest_addressInvoice)
-                ->where('guest_code', $request->guest_code)
-                ->where('guest_addressDeliver', $request->guest_addressDeliver)
-                ->where('guest_phoneReceiver', $request->guest_phoneReceiver)
-                ->where('guest_phone', $request->guest_phone)
+                ->orwhere('guest_email', $request->guest_email)
+                ->orwhere('guest_code', $request->guest_code)
+                ->orwhere('guest_phone', $request->guest_phone)
                 ->first();
 
             if ($existingCustomer) {
