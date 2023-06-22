@@ -35,6 +35,19 @@
                             </svg>
                             <span>Xuất Excel</span>
                         </button>
+                       <!-- <a href="{{route('export_products')}}" class="custom-btn btn btn-outline-primary btn-file d-flex align-items-center">
+                            <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none">
+                                <path
+                                    d="M15.0003 7.80054H16.5001C16.8979 7.80054 17.2794 7.95857 17.5607 8.23984C17.842 8.52112 18 8.9026 18 9.30039V17.1006C18 17.4983 17.842 17.8798 17.5607 18.1611C17.2794 18.4424 16.8979 18.6004 16.5001 18.6004H7.49986C7.10207 18.6004 6.72058 18.4424 6.4393 18.1611C6.15802 17.8798 6 17.4983 6 17.1006V9.30039C6 8.9026 6.15802 8.52112 6.4393 8.23984C6.72058 7.95857 7.10207 7.80054 7.49986 7.80054H8.99972"
+                                    stroke="#0095F6" stroke-linecap="round" stroke-linejoin="round" />
+                                <path d="M8.99976 11.3997L11.9995 14.3994L15.0003 11.3997" stroke="#0095F6"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                                <path d="M12.0006 3V13.7999" stroke="#0095F6" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                            <span>Xuất Excel</span>
+                            </a> -->
                     </div>
                     <div class="custom-btn btn btn-outline-primary btn-file d-flex align-items-center">
                         <div>
@@ -1033,7 +1046,7 @@ $index = array_search($item['label'], $numberedLabels);
         updateMultipleActionVisibility()
     });
     $('.cb-element').change(function() {
-        updateMultipleActionVisibility()
+        updateMultipleActionVisibility();
         if ($('.cb-element:checked').length == $('.cb-element').length) {
             $('#checkall').prop('checked', true);
         } else {

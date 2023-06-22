@@ -195,10 +195,12 @@
                                                         <?php $sttt = 1; ?>
                                                         @foreach($va->getSerinumbers as $val)
                                                         <tr>
+                                                            @if($val->seri_status != 3)
                                                             <!-- <td><input type="checkbox" id="checkbox_0"></td> -->
                                                             <td><span class="stt_SN">{{$sttt}}</span></td>
                                                             <td>{{ $val->serinumber}}</td>
                                                             <td></td>
+                                                            @endif
                                                         </tr>
                                                         <?php $sttt++; ?>
                                                         @endforeach
