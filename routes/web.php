@@ -3,6 +3,7 @@
 use App\Http\Controllers\AddProductController;
 use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DebtController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\GuestsController;
 use App\Http\Controllers\InsertProductController;
@@ -67,6 +68,8 @@ Route::get('getSN1', [ExportController::class, 'getSN1'])->name('getSN1');
 Route::get('getSN2', [ExportController::class, 'getSN2'])->name('getSN2');
 Route::get('/deleteExports', [ExportController::class, 'deleteExports'])->name('deleteExports');
 Route::get('/cancelBillExport', [ExportController::class, 'cancelBillExport'])->name('cancelBillExport');
+//Công nợ
+Route::resource('debt', DebtController::class);
 
 Route::resource('data', ProductsController::class);
 Route::get('/insertProducts', [ProductsController::class, 'insertProducts'])->name('insertProducts');

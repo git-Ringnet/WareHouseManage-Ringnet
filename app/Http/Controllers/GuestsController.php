@@ -128,7 +128,6 @@ class GuestsController extends Controller
             ->where('guest_code', $request->guest_code)
             ->where('guest_receiver', $request->guest_receiver)
             ->where('guest_phoneReceiver', $request->guest_phoneReceiver)
-            ->where('guest_represent', $request->guest_represent)
             ->where('guest_phone', $request->guest_phone)
             ->first();
 
@@ -149,6 +148,7 @@ class GuestsController extends Controller
                 'guest_payTerm' => $request->guest_payTerm,
                 'guest_note' => $request->guest_note,
                 'user_id' =>  $request->user_id,
+                'debt' =>  $request->debt,
             ]);
             return redirect()->route('guests.index')->with('msg', 'Thêm khách hàng thành công!');
         }
