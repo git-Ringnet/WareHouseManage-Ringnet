@@ -75,7 +75,7 @@
                                 <div class="form-group">
                                     <label for="email">SĐT người nhận:</label>
                                     <input type="text" class="form-control" id="guest_phoneReceiver"
-                                        oninput=validateNumberInput(this) placeholder="Nhập Số điện thoại người nhận"
+                                        oninput=validateNumberInput(this) placeholder="Nhập số điện thoại người nhận"
                                         name="guest_phoneReceiver" pattern="^(?:\+?84|0)(?:\d{9}|\d{10})$"
                                         title="Số điện thoại không hợp lệ" value="{{ $guests->guest_phoneReceiver }}"
                                         required="">
@@ -114,7 +114,7 @@
                                     <div class="form-group">
                                         <label for="email">Người phụ trách:</label>
                                         <select class="form-control" name="user_id" id="user_id" required>
-                                            <option value="{{ $guests->user_id ?? Auth::user()->id }}">
+                                            <option value="{{ $user->id ?? Auth::user()->id }}">
                                                 {{ Auth::user()->name }}</option>
                                             @foreach ($usersSale as $user)
                                                 <option value="{{ $user->id ?? old('user_id') }}"

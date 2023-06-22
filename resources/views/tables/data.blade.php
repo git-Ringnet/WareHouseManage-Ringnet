@@ -16,7 +16,7 @@
                     <div class="row">
                         <div class="col-5">
                             <input type="search" name="keywords" class="form-control" value="{{request()->keywords}}"
-                                placeholder="Tìm kiếm đơn vị, đại diện hoặc email">
+                                placeholder="Tìm kiếm đơn vị hoặc email">
                         </div>
                         <div class="col-2 d-none">
                   <button type="submit" class="btn btn-primary btn-block">Tìm kiếm</button>

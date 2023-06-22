@@ -831,3 +831,17 @@ input[type="search"] {
 input[type="checkbox"] {
     accent-color: #555555;
 }
+.labelform{
+    padding-left: 10px;
+    font-weight: 600;
+    font-size: 13px;
+    color: #1D1C20;
+}
+.labelform16{
+    font-weight: 600;
+    font-size: 16px;
+    color: #1D1C20;
+}
+.leftspacing{
+    width: 5%;
+}

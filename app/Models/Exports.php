@@ -37,7 +37,7 @@ class Exports extends Model
         if (!empty($keywords)) {
             $exports = $exports->where(function ($query) use ($keywords) {
                 $query->orWhere('exports.id', 'like', '%' . $keywords . '%');
-                $query->orWhere('guests.guest_represent', 'like', '%' . $keywords . '%');
+                // $query->orWhere('guests.guest_represent', 'like', '%' . $keywords . '%');
                 $query->orWhere('users.name', 'like', '%' . $keywords . '%');
             });
         }

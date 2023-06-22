@@ -440,10 +440,10 @@ $index = array_search($item['label'], $numberedLabels);
                                         </th>
                                         <th scope="col">
                                             <span class="d-flex">
-                                                <a href="#" class="sort-link" data-sort-by="guest_represent"
+                                                <a href="#" class="sort-link" data-sort-by="guest_receiver"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Khách hàng</button></a>
-                                                <div class="icon" id="icon-guest_represent"></div>
+                                                <div class="icon" id="icon-guest_receiver"></div>
                                             </span>
                                         </th>
                                         <th scope="col">

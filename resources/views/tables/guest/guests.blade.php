@@ -25,7 +25,7 @@
                     <div class="row mr-0">
                         <div class="col-5">
                             <input type="text" name="keywords" class="form-control h-100" value="{{ request()->keywords }}"
-                                placeholder="Tìm kiếm đơn vị, người phụ trách hoặc email">
+                                placeholder="Tìm kiếm đơn vị hoặc email">
                             <span class="search-icon"><i class="fas fa-search"></i></span>
                         </div>
                         <div class="col-2 d-none">
@@ -819,7 +819,7 @@ $index = array_search($item['label'], $numberedLabels);
     )
 
     function myFunction() {
-        let text = "Bạn có muốn xóa nhân viên đã chọn không?";
+        let text = "Bạn có muốn xóa khách hàng đã chọn không?";
         if (confirm(text) == true) {
             return true
         } else {
