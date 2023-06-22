@@ -74,9 +74,10 @@
                                 <div class="form-group">
                                     <label for="email">SĐT người nhận:</label>
                                     <input type="text" class="form-control" id="guest_phoneReceiver" value=""
-                                        oninput=validateNumberInput(this) placeholder="Nhập Số điện thoại người nhận"
+                                        oninput=validateNumberInput(this) placeholder="Nhập số điện thoại người nhận"
                                         name="guest_phoneReceiver" pattern="^(?:\+?84|0)(?:\d{9}|\d{10})$"
                                         title="Số điện thoại không hợp lệ" required>
+
                                 </div>
                                 <div class="form-group">
                                     <label for="email">Ghi chú:</label>
