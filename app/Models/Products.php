@@ -15,7 +15,7 @@ class Products extends Model
     }
     public function getProducts()
     {
-        return $this->hasMany(Product::class);
+        return $this->hasMany(Product::class,'products_id','id');
     }
     protected $table = 'products';
     protected $fillable = [

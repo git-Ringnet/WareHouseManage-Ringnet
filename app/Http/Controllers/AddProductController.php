@@ -437,6 +437,7 @@ class AddProductController extends Controller
                     $Seri->serinumber = $seri_number;
                     $Seri->products_id = $newProductOrder->products_id;
                     $Seri->seri_status = 0;
+                    $Seri->check = $order->id;
                     $Seri->save();
                 }
             } else {
@@ -447,6 +448,7 @@ class AddProductController extends Controller
                 $Seri->serinumber = $request->{'product_SN' . $i}[0];
                 $Seri->products_id = $newProductOrder->products_id;
                 $Seri->seri_status = 0;
+                $Seri->check = $order->id;
                 $Seri->save();
             }
         }
@@ -524,72 +526,6 @@ class AddProductController extends Controller
             $updateOrder->order_status = 1;
             $updateOrder->save();
 
-
-            // $updateOrder = Orders::find($order->id);
-            // if ($updateOrder->order_status == 0) {
-            //     $product_id = $request->product_id;
-            //     $products_id = $request->products_id;
-            //     $product_name = $request->product_name;
-            //     $product_category = $request->product_category;
-            //     $product_unit = $request->product_unit;
-            //     $product_trademark = $request->product_trademark;
-            //     $product_qty = $request->product_qty;
-            //     $product_tax = $request->product_tax;
-            //     $product_price = str_replace(',', '', $request->product_price);
-            //     $product_total = str_replace(',', '', $request->product_total);
-            //     for ($i = 0; $i < count($product_name); $i++) {
-            //         $checkProduc = ProductOrders::where('product_id', $id_new[$i])->first();
-            //         $check = Product::where('product_name', $product_name[$i])
-            //             ->where('product_category', $product_category[$i])
-            //             ->where('provide_id', $updateOrder->provide_id)
-            //             ->where('product_price', $product_price[$i])
-            //             ->first();
-            //         $serinumbers = Serinumbers::where('product_orderid', $checkProduc->id)->get();
-            //         $products = Products::where('id', $products_id[$i])->first();
-            //         if ($check === NULL) {
-            //             $pro = new Product();
-            //             $pro->products_id = $products_id[$i];
-            //             $pro->product_name = $product_name[$i];
-            //             $pro->product_category = $product_category[$i];
-            //             $pro->product_unit = $product_unit[$i];
-            //             $pro->product_trademark = $product_trademark[$i];
-            //             $pro->product_qty = $product_qty[$i];
-            //             $pro->product_price = $product_price[$i];
-            //             $pro->tax = $product_tax[$i];
-            //             $pro->total = $product_total[$i];
-            //             $pro->provide_id = $updateOrder->provide_id;
-            //             $pro->save();
-            //             $pro->product_orderid = $checkProduc->id;
-            //             $pro->save();
-            //             foreach ($serinumbers as $serinumber) {
-            //                 $serinumber->product_id = $pro->id;
-            //                 $serinumber->seri_status = 1;
-            //                 $serinumber->save();
-            //             }
-            //             $products->inventory += $product_qty[$i];
-            //             $products->price_inventory += $product_total[$i];
-            //             $products->price_avg = ($products->price_inventory / $products->inventory);
-            //             $products->update();
-            //         } else {
-            //             $updateProduct = Product::findOrFail($check->id);
-            //             $updateProduct->product_qty += $product_qty[$i];
-            //             $updateProduct->total += $updateProduct->product_price * $product_qty[$i];
-            //             $updateProduct->save();
-            //             $serinumbers = Serinumbers::where('product_orderid', $checkProduc->id)->get();
-            //             foreach ($serinumbers as $serinumber) {
-            //                 $serinumber->product_id = $updateProduct->id;
-            //                 $serinumber->product_orderid = $updateProduct->product_orderid;
-            //                 $serinumber->seri_status = 1;
-            //                 $serinumber->save();
-            //             }
-            //             $products->inventory += $product_qty[$i];
-            //             $products->price_inventory += $product_total[$i];
-            //             $products->price_avg = ($products->price_inventory / $products->inventory);
-            //             $products->update();
-            //         }
-            //     }
-            //     $updateOrder->order_status = 1;
-            //     $updateOrder->save();
         } else {
             return redirect()->route('insertProduct.index')->with('warning', 'Đơn hàng đã được duyệt trước đó');
         }
@@ -617,6 +553,7 @@ class AddProductController extends Controller
     // Thêm hàng mới vào Order
     public function addBillEdit(Request $request)
     {
+        $array_products_id = [];
         $product_SN_array = [];
         $listSNS = [];
         $order = Orders::findOrFail($request->order_id);
@@ -636,12 +573,6 @@ class AddProductController extends Controller
             $product_tax = $request->product_tax;
             $product_price = str_replace(',', '', $request->product_price);
             $product_total = str_replace(',', '', $request->product_total);
-
-            // $count = count($products_id);
-            // if (count($product_id) < $count) {
-            //     $product_id = array_pad($product_id, $count, null);
-            // }
-
             $arr_new_product = [];
             for ($i = 0; $i < count($product_name); $i++) {
                 // Kiểm tra sản phẩm đã tồn tại chưa
@@ -695,6 +626,7 @@ class AddProductController extends Controller
                         array_push($product_SN_array, $Seri->serinumber);
                     }
                 } else {
+                    $checkOld = $check->products_id;
                     $check->products_id = $products_id[$i];
                     $check->product_name = $product_name[$i];
                     $check->product_category = $product_category[$i];
@@ -709,9 +641,11 @@ class AddProductController extends Controller
                     $order->provide_id = $request->provide_id;
                     $order->total += $product_total[$i];
                     $order->save();
+                    array_push($array_products_id,$check->products_id);
                 }
                 // Lấy ra tất cả Seri
                 $product_SN = $request->{'product_SN' . $i};
+
                 $checkSeri = ProductOrders::where('product_id', isset($product_id[$i]) ? $product_id[$i] : "")
                     ->where('product_name', $product_name[$i])
                     ->where('product_category', $product_category[$i])
@@ -721,8 +655,10 @@ class AddProductController extends Controller
                 if ($product_SN && $checkSeri) {
                     if (count($product_SN) > 1) {
                         foreach ($product_SN as $seri_number) {
-                            $checkSN = Serinumbers::where('products_id', $checkSeri->products_id)
-                                ->where('serinumber', $seri_number)->first();
+                            $checkSN = Serinumbers::where('products_id', $checkOld)
+                                ->where('serinumber', $seri_number)
+                                ->where('check', $order->id)
+                                ->first();
                             if ($checkSN === null) {
                                 $Seri = new Serinumbers();
                                 $Seri->order_id = $checkSeri->id;
@@ -736,12 +672,15 @@ class AddProductController extends Controller
                                 array_push($product_SN_array, $Seri->serinumber);
                             } else {
                                 $checkSN->serinumber = $seri_number;
+                                $checkSN->products_id = $checkSeri->products_id;
                                 $checkSN->save();
                             }
                         }
                     } else {
-                        $checkSN = Serinumbers::where('products_id', $checkSeri->products_id)
-                            ->where('serinumber', $product_SN)->first();
+                        $checkSN = Serinumbers::where('products_id', $checkOld)
+                            ->where('serinumber', $product_SN)
+                            ->where('check', $order->id)
+                            ->first();
                         if ($checkSN === null) {
                             $Seri = new Serinumbers();
                             $Seri->order_id = $checkSeri->id;
@@ -754,6 +693,7 @@ class AddProductController extends Controller
                             $Seri->save();
                             array_push($product_SN_array, $Seri->serinumber);
                         } else {
+                            $checkSN->products_id = $checkSeri->products_id;
                             $checkSN->serinumber = $request->{'product_SN' . $i}[0];
                             $checkSN->save();
                         }
@@ -763,15 +703,17 @@ class AddProductController extends Controller
                     $listSNS[] = $v;
                 }
             }
-            //  Kiểm tra product_SN chưa tồn tại sẽ tiến hành thêm mới
+            $checkDupSN = Serinumbers::where('check',$order->id)
+            ->whereNotIn('products_id',$array_products_id)->delete();
+    
             // Lấy danh sách SN theo id sản phẩm
             $arrSN = Serinumbers::where('check', $request->order_id)->get();
             foreach ($arrSN as $product_SN) {
                 $serinumber = $product_SN->serinumber;
                 array_push($product_SN_array, $serinumber);
             }
+
             // Xóa SN người dùng xóa khỏi danh sách
-            // $deleteSN = array_diff($product_SN_array, $request->{'product_SN' . $j});
             $deleteSN = array_diff($product_SN_array, $listSNS);
             foreach ($deleteSN as $delete) {
                 $del = Serinumbers::where('serinumber', $delete)->get();
@@ -779,7 +721,7 @@ class AddProductController extends Controller
                     $va->delete();
                 }
             }
-
+            
             // Xóa sản phẩm không tồn tại trong array
             $arrProduct = ProductOrders::where('order_id', $request->order_id)->get();
 

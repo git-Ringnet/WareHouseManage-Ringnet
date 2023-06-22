@@ -267,7 +267,7 @@ class ProductsController extends Controller
         $listProduct = Product::with(['getNameProducts', 'getNameProvide', 'getSerinumbers'])
             ->select('product.*', DB::raw('SUM(CASE WHEN serinumbers.seri_status = 2 THEN 1 ELSE 0 END) as countSerial'))
             ->leftJoin('serinumbers', 'product.id', '=', 'serinumbers.product_id')
-            ->leftJoin('products', 'product.products_id', '=', 'products.id') 
+            ->leftJoin('products', 'product.products_id', '=', 'products.id')
             ->leftJoin('provides', 'product.provide_id', '=', 'provides.id')
             ->where('product.products_id', $products->id)
             ->groupBy(
@@ -505,5 +505,35 @@ class ProductsController extends Controller
         } else {
             return response()->json(['success' => true, 'msg' => "Mã sản phẩm đã tồn tại"]);
         }
+    }
+
+    public function export_products()
+    {
+        $filename = 'export.csv';
+        $filePath = storage_path('app/' . $filename);
+
+        // Retrieve data from the table
+        $data = Products::all();
+
+        // Open the file in write mode
+        $file = fopen($filePath, 'w,encoding=UTF-16LE');
+
+        // Write the headers to the CSV file
+        fputcsv($file, ['ID', 'Mã sản phẩm', 'Tên sản phẩm','Danh mục','Thương hiệu','Tồn kho','Trị trung bình','Trị tồn kho']);
+
+        // Write the data rows to the CSV file
+        foreach ($data as $row) {
+            fputcsv($file, [$row->id, $row->products_code, $row->products_name,$row->ID_category,$row->products_trademark,$row->inventory,$row->price_avg,$row->price_inventory]);
+            $child =  $row->getProducts;
+            foreach($child as $value){
+                fputcsv($file, ['',$value->id,$value->product_name,$value->product_category,$value->product_unit,$value->product_trademark,$value->product_qty,$value->product_price]);
+            }
+        }
+        
+        // Close the file
+        fclose($file);
+
+        // Return the CSV file as a download response
+        return response()->download($filePath, $filename)->deleteFileAfterSend(true);
     }
 }

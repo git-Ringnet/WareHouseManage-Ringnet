@@ -25,7 +25,7 @@
                     <div class="row mr-0">
                         <div class="col-5">
                             <input type="text" name="keywords" class="form-control h-100" value="{{ request()->keywords }}"
-                                placeholder="Tìm kiếm đơn vị, đại diện hoặc email">
+                                placeholder="Tìm kiếm đơn vị, người phụ trách hoặc email">
                             <span class="search-icon"><i class="fas fa-search"></i></span>
                         </div>
                         <div class="col-2 d-none">
