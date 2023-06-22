@@ -441,7 +441,6 @@
             ' <label for="email">Phương thức thanh toán:</label>' +
             '<select name="guest_pay" class="form-control" id="guest_pay">' +
             '<option value="0">Chuyển khoản</option>' +
-            '<option value="1">Thanh toán bằng tiền mặt</option>' +
             '</select>' +
             '</div>' + '<div class="form-group">' +
             '<label>Công nợ:</label>' +

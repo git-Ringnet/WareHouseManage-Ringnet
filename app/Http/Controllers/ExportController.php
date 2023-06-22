@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Debt;
 use App\Models\Exports;
 use App\Models\Guests;
 use App\Models\Product;
@@ -348,6 +349,41 @@ class ExportController extends Controller
       )
       WHERE `products`.`id` IN (" . implode(',', $products_id) . ")";
                             DB::statement($query);
+                            // Lấy thông tin từ bảng productExport và Export
+                            $productExports = $export->productExports;
+
+                            // Tính toán giá trị total_sales
+                            $totalSales = 0;
+                            foreach ($productExports as $productExport) {
+                                $totalSales += $productExport->product_price * $productExport->product_qty;
+                            }
+
+                            // Tính toán giá trị total_import
+                            $totalImport = 0;
+                            foreach ($productExports as $productExport) {
+                                $product = Product::find($productExport->product_id);
+                                $totalImport += $product->product_price * $productExport->product_qty;
+                            }
+
+                            // Tính toán giá trị total_difference
+                            $debtTransportFee = $export->transport_fee;
+                            $totalDifference = $totalSales - $totalImport - $debtTransportFee;
+
+                            // Lấy thông tin từ bảng Guests
+                            $guest = Guests::find($export->guest_id);
+
+                            // Tạo đối tượng Debt và cập nhật giá trị
+                            $debt = new Debt();
+                            $debt->guest_id = $guest->id;
+                            $debt->user_id = Auth::user()->id;
+                            $debt->export_id = $export->id;
+                            $debt->total_sales = $totalSales;
+                            $debt->total_import = $totalImport;
+                            $debt->debt_transport_fee = $debtTransportFee;
+                            $debt->total_difference = $totalDifference;
+                            $debt->debt = $guest->debt;
+                            $debt->debt_status = 1;
+                            $debt->save();
                             return redirect()->route('exports.index')->with('msg', 'Duyệt đơn thành công!');
                         }
                     }
@@ -730,6 +766,10 @@ class ExportController extends Controller
                                 $exports->note_form = $request->note_form;
                                 $exports->transport_fee = $request->transport_fee;
                                 $exports->save();
+                                //công nợ
+                                $debt = new Debt();
+                                $debt->guest_id = $guest->id;
+                                $debt->user_id = Auth::user()->id;
                             } else {
                                 $exports->guest_id = $existingCustomer->id;
                                 $exports->user_id = Auth::user()->id;
@@ -828,6 +868,41 @@ class ExportController extends Controller
           )
           WHERE `products`.`id` IN (" . implode(',', $products_id) . ")";
                         DB::statement($query);
+                        // Lấy thông tin từ bảng productExport và Export
+                        $productExports = $exports->productExports;
+
+                        // Tính toán giá trị total_sales
+                        $totalSales = 0;
+                        foreach ($productExports as $productExport) {
+                            $totalSales += $productExport->product_price * $productExport->product_qty;
+                        }
+
+                        // Tính toán giá trị total_import
+                        $totalImport = 0;
+                        foreach ($productExports as $productExport) {
+                            $product = Product::find($productExport->product_id);
+                            $totalImport += $product->product_price * $productExport->product_qty;
+                        }
+
+                        // Tính toán giá trị total_difference
+                        $debtTransportFee = $exports->transport_fee;
+                        $totalDifference = $totalSales - $totalImport - $debtTransportFee;
+
+                        // Lấy thông tin từ bảng Guests
+                        $guest = Guests::find($exports->guest_id);
+
+                        // Tạo đối tượng Debt và cập nhật giá trị
+                        $debt = new Debt();
+                        $debt->guest_id = $guest->id;
+                        $debt->user_id = Auth::user()->id;
+                        $debt->export_id = $exports->id;
+                        $debt->total_sales = $totalSales;
+                        $debt->total_import = $totalImport;
+                        $debt->debt_transport_fee = $debtTransportFee;
+                        $debt->total_difference = $totalDifference;
+                        $debt->debt = $guest->debt;
+                        $debt->debt_status = 1;
+                        $debt->save();
                         return redirect()->route('exports.index')->with('msg', 'Duyệt đơn thành công!');
                     }
                 } else {
