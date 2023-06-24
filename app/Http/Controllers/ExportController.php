@@ -767,9 +767,9 @@ class ExportController extends Controller
                                 $exports->transport_fee = $request->transport_fee;
                                 $exports->save();
                                 //công nợ
-                                $debt = new Debt();
-                                $debt->guest_id = $guest->id;
-                                $debt->user_id = Auth::user()->id;
+                                // $debt = new Debt();
+                                // $debt->guest_id = $guest->id;
+                                // $debt->user_id = Auth::user()->id;
                             } else {
                                 $exports->guest_id = $existingCustomer->id;
                                 $exports->user_id = Auth::user()->id;
