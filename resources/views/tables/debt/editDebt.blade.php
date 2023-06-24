@@ -17,10 +17,12 @@
         @csrf
         @method('PUT')
         <section class="content">
-            <div class="d-flex mb-1 action-don">
-                <button type="submit" class="btn btn-danger text-white" name="submitBtn" value="action1"
-                    onclick="">Thanh Toán</button>
-            </div>
+            @if ($debts->debt_status != 1)
+                <div class="d-flex mb-1 action-don">
+                    <button type="submit" class="btn btn-danger text-white" name="submitBtn" value="action1"
+                        onclick="">Thanh Toán</button>
+                </div>
+            @endif
             <div class="row">
                 <div class="col-md-3 col-sm-6">
                     <div class="form-group">
@@ -146,7 +148,9 @@
             </div>
         </section>
         <div class="btn-fixed">
-            <button class="btn btn-primary" type="submit" name="submitBtn" value="action2">Lưu</button>
-            <button class="btn btn-default">Hủy</button>
+            @if ($debts->debt_status != 1)
+                <button class="btn btn-primary" type="submit" name="submitBtn" value="action2">Lưu</button>
+            @endif
+            <a href="{{ route('debt.index') }}"><span class="btn border-secondary ml-1">Hủy</span></a>
         </div>
     </form>
