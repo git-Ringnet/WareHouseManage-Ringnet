@@ -223,7 +223,7 @@ $index = array_search($item['label'], $numberedLabels);
                                     <div class="block-options" id="users_name-options" style="display:none">
                                         <div class="wrap w-100">
                                             <div class="heading-title title-wrap">
-                                                <h5>Người tạo</h5>
+                                                <h5>Người phụ trách</h5>
                                             </div>
                                             <div class="search-container px-2 mt-2">
                                                 <input type="text" placeholder="Tìm kiếm" id="myInput-users_name"
