@@ -784,7 +784,7 @@ $index = array_search($item['label'], $numberedLabels);
     )
 
     function myFunction() {
-        let text = "Bạn có muốn xóa nhà cung cấp đã chọn không?";
+        let text = "Bạn có muốn xóa nhân viên đã chọn không?";
         if (confirm(text) == true) {
             return true
         } else {

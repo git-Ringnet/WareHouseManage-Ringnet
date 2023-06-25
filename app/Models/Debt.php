@@ -21,4 +21,45 @@ class Debt extends Model
         'debt_status',
         'debt_note'
     ];
+    public function getAllDebts($filter=[],$keywords=null,$name=[], $orderBy = null, $orderType = null)
+    {
+        $debts = Debt::select('debts.*', 'debts.id as madon', 'guests.guest_name as khachhang', 'users.name as nhanvien','exports.updated_at as debtdate')
+            ->leftJoin('guests', 'guests.id', 'debts.guest_id')
+            ->leftJoin('users', 'users.id', 'debts.user_id')
+            ->leftJoin('exports', 'exports.id', 'debts.export_id');
+        if (!empty($filter)) {
+            $debts = $debts->where($filter);
+        }
+        if (!empty($keywords)) {
+            $debts = $debts->where(function ($query) use ($keywords) {
+                $query->orWhere('debts.id', 'like', '%' . $keywords . '%');
+                $query->orWhere('guests.guest_name', 'like', '%' . $keywords . '%');
+            });
+        }
+
+        if (!empty($name)) {
+            $debts = $debts->whereIn('users.name', $name);
+        }
+
+        if (!empty($orderBy) && !empty($orderType)) {
+            if ($orderBy == 'updated_at') {
+                $orderBy = "debts." . $orderBy;
+            };
+            $debts = $debts->orderBy($orderBy, $orderType);
+        }
+
+        $debts = $debts->orderBy('debts.id', 'desc')->paginate(8);
+
+        return $debts;
+    }
+    public function getAllProductsDebts()
+    {
+        $product = Debt::select('debts.*', 'product_exports.id as madon', 'product_exports.product_qty as soluong', 'product_exports.product_price as giaban', 'product.product_price as gianhap')
+            ->leftJoin('guests', 'guests.id', 'debts.guest_id')
+            ->leftJoin('users', 'users.id', 'debts.user_id')
+            ->leftJoin('exports', 'exports.id', 'debts.export_id')
+            ->leftJoin('product_exports', 'exports.id', 'product_exports.export_id')
+            ->leftJoin('product', 'product.id', 'product_exports.product_id')->get();
+        return $product;
+    }
 }
