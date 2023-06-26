@@ -707,6 +707,10 @@ $index = array_search($item['label'], $numberedLabels);
                                             <td class="text-center">
                                                 @if ($value->debt_status == 1)
                                                     <span class="p-2 bg-success rounded">Thanh toán đủ</span>
+                                                @elseif ($value->debt_status == 2)
+                                                    <span class="p-2 bg-warning rounded">Gần đến hạn</span>
+                                                @elseif ($value->debt_status == 3)
+                                                    <span class="p-2 bg-secondary rounded">Công nợ</span>
                                                 @elseif($value->debt_status == 0)
                                                     <span class="p-2 bg-danger rounded">Quá hạn</span>
                                                 @endif

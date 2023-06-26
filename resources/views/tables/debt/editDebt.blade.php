@@ -123,7 +123,7 @@
                     <div class="labelform16">Công nợ:</div>
                 </div>
                 <div class="d-flex align-items-center ml-4">
-                    <input type="text" class="form-control text-center mr-1" style="width: 50px" name=""
+                    <input type="text" class="form-control text-center mr-1" style="width: 50px" name="debt"
                         id="" value="{{ $debts->debt }}">
                 </div>
                 <span>ngày</span>

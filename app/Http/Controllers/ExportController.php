@@ -222,7 +222,7 @@ class ExportController extends Controller
                                 }
                             }
                             //cập nhật khách hàng
-                            else if ($updateClick == null) {
+                            if ($updateClick == null) {
                                 $guest = Guests::find($request->id);
                                 $guest->guest_name = $request->guest_name;
                                 $guest->guest_addressInvoice = $request->guest_addressInvoice;
@@ -766,10 +766,6 @@ class ExportController extends Controller
                                 $exports->note_form = $request->note_form;
                                 $exports->transport_fee = $request->transport_fee;
                                 $exports->save();
-                                //công nợ
-                                // $debt = new Debt();
-                                // $debt->guest_id = $guest->id;
-                                // $debt->user_id = Auth::user()->id;
                             } else {
                                 $exports->guest_id = $existingCustomer->id;
                                 $exports->user_id = Auth::user()->id;
@@ -781,17 +777,17 @@ class ExportController extends Controller
                             }
                         }
                         //cập nhật khách hàng
-                        else if ($updateClick == null) {
+                        if ($updateClick == null) {
                             $guest = Guests::find($request->id);
                             $guest->guest_name = $request->guest_name;
+                            $guest->guest_phone = $request->guest_phone;
+                            $guest->guest_email = $request->guest_email;
+                            $guest->guest_status = 1;
                             $guest->guest_addressInvoice = $request->guest_addressInvoice;
                             $guest->guest_code = $request->guest_code;
                             $guest->guest_addressDeliver = $request->guest_addressDeliver;
                             $guest->guest_receiver = $request->guest_receiver;
                             $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
-                            $guest->guest_email = $request->guest_email;
-                            $guest->guest_status = 1;
-                            $guest->guest_phone = $request->guest_phone;
                             $guest->guest_pay = $request->guest_pay;
                             $guest->guest_note = $request->guest_note;
                             $guest->debt = $request->debt;
@@ -901,7 +897,13 @@ class ExportController extends Controller
                         $debt->debt_transport_fee = $debtTransportFee;
                         $debt->total_difference = $totalDifference;
                         $debt->debt = $guest->debt;
-                        $debt->debt_status = 1;
+                        if ($guest->debt == 0) {
+                            $debt->debt_status = 1;
+                        } elseif ($guest->debt <= 5) {
+                            $debt->debt_status = 2;
+                        } elseif ($guest->debt > 5) {
+                            $debt->debt_status = 3;
+                        }
                         $debt->save();
                         return redirect()->route('exports.index')->with('msg', 'Duyệt đơn thành công!');
                     }
@@ -909,6 +911,12 @@ class ExportController extends Controller
                     return redirect()->route('exports.index')->with('warning', 'Chưa được thêm sản phẩm nào!');
                 }
             } elseif ($action === 'action2') {
+                // Lấy danh sách sản phẩm đã tồn tại trong xuất hàng
+                if ($exports->productExports != null) {
+                    foreach ($exports->productExports as $productExport) {
+                        $existingProductIDs[] = $productExport->product_id;
+                    }
+                }
                 // Xóa các sản phẩm đã bị xóa
                 $productExportsToDelete = ProductExports::where('export_id', $exports->id)
                     ->whereNotIn('product_id', $productIDs)
@@ -1208,7 +1216,7 @@ class ExportController extends Controller
                         }
                     }
                     //cập nhật khách hàng
-                    else if ($updateClick == null) {
+                    if ($updateClick == null) {
                         $guest = Guests::find($request->id);
                         $guest->guest_name = $request->guest_name;
                         $guest->guest_addressInvoice = $request->guest_addressInvoice;

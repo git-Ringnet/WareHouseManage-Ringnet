@@ -95,7 +95,7 @@
                                     <label>Công nợ:</label>
                                     <div class="d-flex align-items-center">
                                         <input type="text" oninput="validateNumberInput(this)" class="form-control"
-                                            id="debtInput" value="" name="debt" style="width:15%;">
+                                            id="debtInput" value="" name="debt" style="width:15%;" required>
                                         <span class="ml-2" id="data-debt">ngày</span>
                                         <input type="checkbox" id="debtCheckbox" value="0" name="debt"
                                             class="ml-3">

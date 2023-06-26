@@ -504,7 +504,9 @@
                             <div class="w-50">
                                 <input type="text" class="form-control text-right"
                                     value="{{ number_format($exports->transport_fee) }}" name="transport_fee"
-                                    id="transport_fee">
+                                    id="transport_fee" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                        echo 'readonly';
+                                    } ?>>
                             </div>
                         </div>
                         <div class="d-flex justify-content-between mt-2">

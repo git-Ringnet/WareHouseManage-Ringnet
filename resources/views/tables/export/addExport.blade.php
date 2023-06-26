@@ -445,9 +445,9 @@
             '</div>' + '<div class="form-group">' +
             '<label>Công nợ:</label>' +
             '<div class="d-flex align-items-center" style="width:101%;">' +
-            '<input type="text" oninput="validateNumberInput(this)" class="form-control" id="debtInput" value="" name="debt" style="width:15%;">' +
+            '<input type="text" oninput="validateNumberInput(this)" class="form-control" id="debtInput" value="" name="debt" style="width:15%;" required>' +
             '<span class="ml-2" id="data-debt">ngày</span>' +
-            '<input type="checkbox" id="debtCheckbox" value="0" name="debt" style="margin-left:10%;">' +
+            '<input type="checkbox" id="debtCheckbox" value="0" style="margin-left:10%;">' +
             '<span class="ml-2">Thanh toán tiền mặt</span>' +
             '</div>' + '</div>' +
             '<div class="form-group">' +
@@ -754,7 +754,7 @@
                         '<input type="text" name="debt" oninput="validateNumberInput(this)" class="form-control" pattern="^[0-9]+$" id="debtInput" value="' +
                         (data.debt) + '" style="width:15%;" required>' +
                         '<span class="ml-2" id="data-debt">ngày</span>' +
-                        '<input type="checkbox" name="debt" id="debtCheckbox" value="0" ' + (data
+                        '<input type="checkbox" id="debtCheckbox" value="0" ' + (data
                             .debt == 0 ? 'checked' : '') +
                         ' style="margin-left:10%;">' +
                         '<span class="ml-2">Thanh toán tiền mặt</span>' +
@@ -789,11 +789,11 @@
     //cập nhật thông tin khách hàng
     $(document).on('click', '#btn-customer', function(e) {
         e.preventDefault();
-        $('#sourceTable [required]').removeAttr('required');
-        var form = $('#export_form')[0];
-        if (!form.reportValidity()) {
-            return;
-        }
+        // $('#sourceTable [required]').removeAttr('required');
+        // var form = $('#export_form')[0];
+        // if (!form.reportValidity()) {
+        //     return;
+        // }
         $('#updateClick').val(1);
         var updateClick = $('#updateClick').val();
         var id = $('#id').val();
@@ -840,7 +840,6 @@
                 } else if (data.hasOwnProperty('id')) {
                     alert('Lưu thông tin thành công');
                 }
-                $('#sourceTable [required]').attr('required', true);
             }
         })
     })
