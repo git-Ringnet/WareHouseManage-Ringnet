@@ -101,10 +101,10 @@
                                     <div class="d-flex align-items-center">
                                         <input type="text" oninput="validateNumberInput(this)"
                                             class="form-control" id="debtInput" value="{{ $guests->debt }}"
-                                            name="debt" style="width:15%;">
+                                            name="debt" style="width:15%;" required>
                                         <span class="ml-2" id="data-debt">ngày</span>
-                                        <input type="checkbox" id="debtCheckbox" value="0" name="debt"
-                                            class="ml-3" <?php if ($guests->debt == 0) {
+                                        <input type="checkbox" id="debtCheckbox" value="0" name="debt" class="ml-3"
+                                            <?php if ($guests->debt == 0) {
                                                 echo 'checked';
                                             } ?>>
                                         <span class="ml-2">Thanh toán tiền mặt</span>

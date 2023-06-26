@@ -89,13 +89,22 @@ class DebtController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $debt = Debt::find($id);
         if ($request->has('submitBtn')) {
             $action = $request->input('submitBtn');
             if ($action === 'action1') {
+                $debt->debt_status = 1;
+                $debt->update($request->all());
                 return redirect()->route('debt.index')->with('msg', 'Thanh toán thành công!');
             }
             if ($action === 'action2') {
-                $debt = Debt::find($id);
+                if ($request->debt == 0) {
+                    $debt->debt_status = 1;
+                } elseif ($request->debt <= 5) {
+                    $debt->debt_status = 2;
+                } elseif ($request->debt > 5) {
+                    $debt->debt_status = 3;
+                }
                 $debt->update($request->all());
                 return redirect()->route('debt.index')->with('msg', 'Cập nhật thành công!');
             }
