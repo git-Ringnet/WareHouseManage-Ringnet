@@ -7,30 +7,29 @@
             <div class="row m-0 mb-1">
                 <a href="{{ route('exports.create') }}">
                     <button type="button" class="custom-btn btn btn-primary d-flex align-items-center h-100">
-                        <svg class="mr-1" width="24" height="24" viewBox="0 0 24 24"
-                        fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" clip-rule="evenodd"
-                            d="M12 6C12.3879 6 12.7024 6.31446 12.7024 6.70237L12.7024 17.2976C12.7024 17.6855 12.3879 18 12 18C11.6121 18 11.2976 17.6855 11.2976 17.2976V6.70237C11.2976 6.31446 11.6121 6 12 6Z"
-                            fill="#ffff" />
-                        <path fill-rule="evenodd" clip-rule="evenodd"
-                            d="M18 12C18 12.3879 17.6855 12.7024 17.2976 12.7024H6.70237C6.31446 12.7024 6 12.3879 6 12C6 11.6121 6.31446 11.2976 6.70237 11.2976H17.2976C17.6855 11.2976 18 11.6121 18 12Z"
-                            fill="#ffff" />
-                    </svg>
+                        <svg class="mr-1" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M12 6C12.3879 6 12.7024 6.31446 12.7024 6.70237L12.7024 17.2976C12.7024 17.6855 12.3879 18 12 18C11.6121 18 11.2976 17.6855 11.2976 17.2976V6.70237C11.2976 6.31446 11.6121 6 12 6Z"
+                                fill="#ffff" />
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M18 12C18 12.3879 17.6855 12.7024 17.2976 12.7024H6.70237C6.31446 12.7024 6 12.3879 6 12C6 11.6121 6.31446 11.2976 6.70237 11.2976H17.2976C17.6855 11.2976 18 11.6121 18 12Z"
+                                fill="#ffff" />
+                        </svg>
                         <span>Tạo đơn</span>
                     </button>
                 </a>
                 <button style="margin-left:24px" type="button" onclick="exportToExcel()"
                     class="custom-btn btn btn-outline-primary border-primary d-flex align-items-center">
                     <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                viewBox="0 0 24 24" fill="none">
-                <path
-                    d="M15.0003 7.80054H16.5001C16.8979 7.80054 17.2794 7.95857 17.5607 8.23984C17.842 8.52112 18 8.9026 18 9.30039V17.1006C18 17.4983 17.842 17.8798 17.5607 18.1611C17.2794 18.4424 16.8979 18.6004 16.5001 18.6004H7.49986C7.10207 18.6004 6.72058 18.4424 6.4393 18.1611C6.15802 17.8798 6 17.4983 6 17.1006V9.30039C6 8.9026 6.15802 8.52112 6.4393 8.23984C6.72058 7.95857 7.10207 7.80054 7.49986 7.80054H8.99972"
-                    stroke="#0095F6" stroke-linecap="round" stroke-linejoin="round" />
-                <path d="M8.99976 11.3997L11.9995 14.3994L15.0003 11.3997" stroke="#0095F6"
-                    stroke-linecap="round" stroke-linejoin="round" />
-                <path d="M12.0006 3V13.7999" stroke="#0095F6" stroke-linecap="round"
-                    stroke-linejoin="round" />
-            </svg>
+                        viewBox="0 0 24 24" fill="none">
+                        <path
+                            d="M15.0003 7.80054H16.5001C16.8979 7.80054 17.2794 7.95857 17.5607 8.23984C17.842 8.52112 18 8.9026 18 9.30039V17.1006C18 17.4983 17.842 17.8798 17.5607 18.1611C17.2794 18.4424 16.8979 18.6004 16.5001 18.6004H7.49986C7.10207 18.6004 6.72058 18.4424 6.4393 18.1611C6.15802 17.8798 6 17.4983 6 17.1006V9.30039C6 8.9026 6.15802 8.52112 6.4393 8.23984C6.72058 7.95857 7.10207 7.80054 7.49986 7.80054H8.99972"
+                            stroke="#0095F6" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M8.99976 11.3997L11.9995 14.3994L15.0003 11.3997" stroke="#0095F6"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M12.0006 3V13.7999" stroke="#0095F6" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
                     <span>Xuất excel</span>
                 </button>
             </div>
@@ -161,7 +160,9 @@ $index = array_search($item['label'], $numberedLabels);
                                             <button class="dropdown-item" id="btn-id">Mã đơn hàng</button>
                                             <button class="dropdown-item" id="btn-guest">Khách hàng</button>
                                             <button class="dropdown-item" id="btn-update_at">Chỉnh sửa cuối</button>
+                                            @if (Auth::user()->can('isAdmin'))
                                             <button class="dropdown-item" id="btn-creator">Người tạo</button>
+                                            @endif
                                             <button class="dropdown-item" id="btn-sum">Tổng tiền</button>
                                             <button class="dropdown-item" id="btn-status">Trạng thái</button>
                                         </div>
@@ -333,7 +334,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('comparison_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity sum-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -388,18 +389,24 @@ $index = array_search($item['label'], $numberedLabels);
                     <div class="btn-xoahang my-2 ml-3">
                         <button id="deleteExports" type="button"
                             class="btn btn-group btn-light d-flex align-items-center h-100">
-                            <svg class="mr-1" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" clip-rule="evenodd" d="M10.5454 5C10.2442 5 9.99999 5.24421 9.99999 5.54545C9.99999 5.8467 10.2442 6.09091 10.5454 6.09091H13.4545C13.7558 6.09091 14 5.8467 14 5.54545C14 5.24421 13.7558 5 13.4545 5H10.5454ZM6 7.72726C6 7.42601 6.24421 7.18181 6.54545 7.18181H7.63637H16.3636H17.4545C17.7558 7.18181 18 7.42601 18 7.72726C18 8.02851 17.7558 8.27272 17.4545 8.27272H16.9091V17C16.9091 18.2113 15.9118 19.1818 14.7135 19.1818H9.25891C8.97278 19.1816 8.68906 19.1247 8.42499 19.0145C8.16092 18.9044 7.92126 18.7431 7.71979 18.5399C7.51833 18.3367 7.35905 18.0957 7.25112 17.8307C7.14347 17.5664 7.08903 17.2834 7.09091 16.9981V8.27272H6.54545C6.24421 8.27272 6 8.02851 6 7.72726ZM8.18182 17.0041V8.27272H15.8182V17C15.8182 17.5966 15.3216 18.0909 14.7135 18.0909H9.25938C9.11713 18.0908 8.97632 18.0625 8.84503 18.0077C8.71375 17.953 8.5946 17.8728 8.49444 17.7718C8.39429 17.6707 8.3151 17.5509 8.26144 17.4192C8.20779 17.2874 8.18074 17.1464 8.18182 17.0041ZM13.4545 10.0909C13.7558 10.0909 14 10.3351 14 10.6364V15.7273C14 16.0285 13.7558 16.2727 13.4545 16.2727C13.1533 16.2727 12.9091 16.0285 12.9091 15.7273V10.6364C12.9091 10.3351 13.1533 10.0909 13.4545 10.0909ZM11.0909 10.6364C11.0909 10.3351 10.8467 10.0909 10.5454 10.0909C10.2442 10.0909 9.99999 10.3351 9.99999 10.6364V15.7273C9.99999 16.0285 10.2442 16.2727 10.5454 16.2727C10.8467 16.2727 11.0909 16.0285 11.0909 15.7273V10.6364Z" fill="#555555"/>
-                                </svg>                                
+                            <svg class="mr-1" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M10.5454 5C10.2442 5 9.99999 5.24421 9.99999 5.54545C9.99999 5.8467 10.2442 6.09091 10.5454 6.09091H13.4545C13.7558 6.09091 14 5.8467 14 5.54545C14 5.24421 13.7558 5 13.4545 5H10.5454ZM6 7.72726C6 7.42601 6.24421 7.18181 6.54545 7.18181H7.63637H16.3636H17.4545C17.7558 7.18181 18 7.42601 18 7.72726C18 8.02851 17.7558 8.27272 17.4545 8.27272H16.9091V17C16.9091 18.2113 15.9118 19.1818 14.7135 19.1818H9.25891C8.97278 19.1816 8.68906 19.1247 8.42499 19.0145C8.16092 18.9044 7.92126 18.7431 7.71979 18.5399C7.51833 18.3367 7.35905 18.0957 7.25112 17.8307C7.14347 17.5664 7.08903 17.2834 7.09091 16.9981V8.27272H6.54545C6.24421 8.27272 6 8.02851 6 7.72726ZM8.18182 17.0041V8.27272H15.8182V17C15.8182 17.5966 15.3216 18.0909 14.7135 18.0909H9.25938C9.11713 18.0908 8.97632 18.0625 8.84503 18.0077C8.71375 17.953 8.5946 17.8728 8.49444 17.7718C8.39429 17.6707 8.3151 17.5509 8.26144 17.4192C8.20779 17.2874 8.18074 17.1464 8.18182 17.0041ZM13.4545 10.0909C13.7558 10.0909 14 10.3351 14 10.6364V15.7273C14 16.0285 13.7558 16.2727 13.4545 16.2727C13.1533 16.2727 12.9091 16.0285 12.9091 15.7273V10.6364C12.9091 10.3351 13.1533 10.0909 13.4545 10.0909ZM11.0909 10.6364C11.0909 10.3351 10.8467 10.0909 10.5454 10.0909C10.2442 10.0909 9.99999 10.3351 9.99999 10.6364V15.7273C9.99999 16.0285 10.2442 16.2727 10.5454 16.2727C10.8467 16.2727 11.0909 16.0285 11.0909 15.7273V10.6364Z"
+                                    fill="#555555" />
+                            </svg>
                             <span>Xóa đơn</span>
                         </button>
                     </div>
                     <div class="btn-huy my-2 ml-4">
                         <button id="cancelBillExport" class="btn btn-group btn-light d-flex align-items-center h-100">
-                            <svg class="mr-1" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M18 18L6 6" stroke="#555555" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M18 6L6 18" stroke="#555555" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>                                
+                            <svg class="mr-1" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M18 18L6 6" stroke="#555555" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                                <path d="M18 6L6 18" stroke="#555555" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
                             <span class="px-1">Hủy đơn</span>
                         </button>
                     </div>
@@ -454,6 +461,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <div class="icon" id="icon-updated_at"></div>
                                             </span>
                                         </th>
+                                        @if (Auth::user()->can('isAdmin'))
                                         <th scope="col">
                                             <span class="d-flex">
                                                 <a href="#" class="sort-link" data-sort-by="name"
@@ -462,6 +470,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <div class="icon" id="icon-name"></div>
                                             </span>
                                         </th>
+                                        @endif
                                         <th scope="col">
                                             <span class="d-flex justify-content-end">
                                                 <a href="#" class="sort-link" data-sort-by="total"
@@ -491,7 +500,9 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <td>{{ $value->id }}</td>
                                                 <td>{{ $value->guest_receiver }}</td>
                                                 <td>{{ date_format(new DateTime($value->updated_at), 'd-m-Y') }}</td>
+                                            @if (Auth::user()->can('isAdmin'))
                                                 <td>{{ $value->name }}</td>
+                                                @endif
                                                 <td class="text-right">
                                                     {{ number_format($value->total) }}
                                                 </td>
@@ -559,7 +570,11 @@ $index = array_search($item['label'], $numberedLabels);
                         <!-- /.card-body -->
                     </div>
                     <div class="paginator mt-4 d-flex justify-content-end">
-                        {{ $export->appends(request()->except('page'))->links() }}
+                        @if (!Auth::user()->can('isAdmin'))
+                            {{ $exportCreator->appends(request()->except('page'))->links() }}
+                        @else
+                            {{ $export->appends(request()->except('page'))->links() }}
+                        @endif
                     </div>
                 </div>
                 <!-- /.col -->

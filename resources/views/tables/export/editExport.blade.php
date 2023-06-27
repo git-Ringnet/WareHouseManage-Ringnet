@@ -298,7 +298,7 @@
                                 <div class="d-flex align-items-center" style="width:101%;">
                                     <input type="text" class="form-control" id="debtInput" name="debt"
                                         value="{{ $guest->debt }}" style="width:15%;" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                            echo 'disabled';
+                                            echo 'readonly';
                                         } ?>>
                                     <span class="ml-2" id="data-debt">ngày</span>
                                     <input type="checkbox" id="debtCheckbox" name="debt" <?php if ($guest->debt == 0) {

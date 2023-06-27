@@ -5,7 +5,7 @@
     <section class="content-header">
         <div class="container-fluided">
             <div class="d-flex mb-1">
-                @can('view-provides')
+                @can('view-guests')
                     <div class="class">
                         <button onclick="exportToExcel()" type="button"
                             class="custom-btn btn btn-outline-primary d-flex align-items-center">
@@ -105,7 +105,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     echo 0;
                                                 } @endphp">
                                     {{ $item['label'] }}
-                                    @if ($item['label'] === 'Chỉnh sửa cuối:')
+                                    @if ($item['label'] === 'Công nợ:')
                                         {{ $item['values'][0] }} đến {{ $item['values'][1] }}
                                     @else
                                         <span class="filter-values">{{ implode(', ', $item['values']) }}</span>
@@ -148,7 +148,9 @@ $index = array_search($item['label'], $numberedLabels);
                                             </div>
                                             <button class="dropdown-item" id="btn-id">Mã đơn hàng</button>
                                             <button class="dropdown-item" id="btn-guest">Khách hàng</button>
-                                            <button class="dropdown-item" id="btn-creator">Nhân viên</button>
+                                            @if (Auth::user()->can('isAdmin'))
+                                                <button class="dropdown-item" id="btn-creator">Nhân viên</button>
+                                            @endif
                                             <button class="dropdown-item" id="btn-sum-sale">Tổng tiền bán</button>
                                             <button class="dropdown-item" id="btn-sum-import">Tổng tiền nhập</button>
                                             <button class="dropdown-item" id="btn-sum-fee">Phí vận chuyển</button>
@@ -278,21 +280,27 @@ $index = array_search($item['label'], $numberedLabels);
                                             <ul class="ks-cboxtags-status p-0 mb-1 px-2">
                                                 <li>
                                                     <input type="checkbox" id="status_active"
-                                                        {{ in_array(0, $status) ? 'checked' : '' }} name="status[]"
-                                                        value="0">
-                                                    <label for="">Đã hủy</label>
+                                                        {{ in_array(1, $status) ? 'checked' : '' }} name="status[]"
+                                                        value="1">
+                                                    <label for="">Thanh toán đủ</label>
                                                 </li>
                                                 <li>
                                                     <input type="checkbox" id="status_inactive"
-                                                        {{ in_array(1, $status) ? 'checked' : '' }} name="status[]"
-                                                        value="1">
-                                                    <label for="">Đã báo giá</label>
+                                                        {{ in_array(3, $status) ? 'checked' : '' }} name="status[]"
+                                                        value="3">
+                                                    <label for="">Công nợ</label>
                                                 </li>
                                                 <li>
                                                     <input type="checkbox" id="status_inactive"
                                                         {{ in_array(2, $status) ? 'checked' : '' }} name="status[]"
                                                         value="2">
-                                                    <label for="">Đã chốt</label>
+                                                    <label for="">Gần đến hạn</label>
+                                                </li>
+                                                <li>
+                                                    <input type="checkbox" id="status_inactive"
+                                                        {{ in_array(0, $status) ? 'checked' : '' }} name="status[]"
+                                                        value="0">
+                                                    <label for="">Quá hạn</label>
                                                 </li>
                                             </ul>
                                         </div>
@@ -475,50 +483,20 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <h5>Công nợ</h5>
                                             </div>
                                             <div class="input-group p-2 justify-content-around">
-                                                <select class="debt_operator input-so" name="debt_operator"
-                                                    style="width: 40%">
-                                                    <option value=">="
-                                                        {{ request('debt_operator') === '>=' ? 'selected' : '' }}>
-                                                        >=
-                                                    </option>
-                                                    <option value="<="
-                                                        {{ request('debt_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
-                                                </select>
-                                                <input class="w-50 input-quantity debt-input" type="text"
-                                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-                                                    name="debt" value="{{ request()->debt }}"
-                                                    placeholder="Nhập số ngày">
+                                                <label for="start">Từ ngày:</label>
+                                                <input type="date" id="start" name="date_start"
+                                                    value="{{ request()->date_start }}" min="2018-01-01"
+                                                    max="2050-12-31">
+                                                <label for="start">Đến ngày:</label>
+                                                <input type="date" id="end" name="date_end"
+                                                    value="{{ request()->date_end }}" min="2018-01-01"
+                                                    max="2050-12-31">
                                             </div>
                                         </div>
                                         <div class="d-flex justify-contents-center align-items-baseline p-2">
                                             <button type="submit" class="btn btn-primary btn-block mr-2">Xác
                                                 Nhận</button>
                                             <button type="button" id="cancel-debt"
-                                                class="btn btn-default btn-block">Hủy</button>
-                                        </div>
-                                    </div>
-                                    {{-- Chỉnh sửa cuối --}}
-                                    <div class="block-options" id="update_at-options" style="display:none">
-                                        <div class="wrap w-100">
-                                            <div class="heading-title title-wrap">
-                                                <h5>Chỉnh sửa cuối</h5>
-                                            </div>
-                                            <div class="input-group p-2 justify-content-around">
-                                                <label for="start">Từ ngày:</label>
-                                                <input type="date" id="start" name="trip_start"
-                                                    value="{{ request()->trip_start }}" min="2018-01-01"
-                                                    max="2050-12-31">
-                                                <label for="start">Đến ngày:</label>
-                                                <input type="date" id="end" name="trip_end"
-                                                    value="{{ request()->trip_end }}" min="2018-01-01"
-                                                    max="2050-12-31">
-                                            </div>
-                                        </div>
-                                        <div class="d-flex justify-contents-center align-items-baseline p-2">
-                                            <button type="submit" class="btn btn-primary btn-block mr-2">Xác
-                                                Nhận</button>
-                                            <button type="button" id="cancel-update_at"
                                                 class="btn btn-default btn-block">Hủy</button>
                                         </div>
                                     </div>
@@ -574,7 +552,7 @@ $index = array_search($item['label'], $numberedLabels);
                                     <input type="hidden" id="sortByInput" name="sort-by" value="id">
                                     <input type="hidden" id="sortTypeInput" name="sort-type">
                                     <tr>
-                                        @can('view-provides')
+                                        @can('view-guests')
                                             <th scope="col" style="width:2%">
                                                 <span class="d-flex align-items-center">
                                                     <input type="checkbox" id="checkall">
@@ -600,15 +578,17 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <div class="icon" id="icon-guest_id"></div>
                                             </span>
                                         </th>
-                                        <th scope="col">
-                                            <span class="d-flex align-items-center">
-                                                <a href="#" class="sort-link" data-sort-by="user_id"
-                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
-                                                        type="submit">Nhân
-                                                        viên</button></a>
-                                                <div class="icon" id="icon-user_id"></div>
-                                            </span>
-                                        </th>
+                                        @if (Auth::user()->can('isAdmin'))
+                                            <th scope="col">
+                                                <span class="d-flex align-items-center">
+                                                    <a href="#" class="sort-link" data-sort-by="user_id"
+                                                        data-sort-type="{{ $sortType }}"><button class="btn-sort"
+                                                            type="submit">Nhân
+                                                            viên</button></a>
+                                                    <div class="icon" id="icon-user_id"></div>
+                                                </span>
+                                            </th>
+                                        @endif
                                         <th scope="col">
                                             <span class="d-flex justify-content-end align-items-center">
                                                 <a href="#" class="sort-link" data-sort-by="total_sales"
@@ -646,7 +626,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             </span>
                                         </th>
                                         <th scope="col">
-                                            <span class="d-flex justify-content-end align-items-center">
+                                            <span class="d-flex justify-content-start align-items-center">
                                                 <a href="#" class="sort-link" data-sort-by="debt"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Công
@@ -679,8 +659,9 @@ $index = array_search($item['label'], $numberedLabels);
                                 </thead>
                                 <tbody>
                                     @foreach ($debts as $value)
+                                    @if (Auth::user()->id == $value->user_id || Auth::user()->can('isAdmin'))
                                         <tr class="{{ $value->id }}">
-                                            @can('view-provides')
+                                            @can('view-guests')
                                                 <td><input type="checkbox" name="ids[]" class="cb-element"
                                                         value="{{ $value->id }}"></td>
                                             @endcan
@@ -688,7 +669,9 @@ $index = array_search($item['label'], $numberedLabels);
                                             <td class="">
                                                 {{ $value->khachhang }}
                                             </td>
-                                            <td class="text-center">{{ $value->nhanvien }}</td>
+                                            @if (Auth::user()->can('isAdmin'))
+                                                <td class="text-center">{{ $value->nhanvien }}</td>
+                                            @endif
                                             <td class="text-center">
                                                 {{ number_format($value->total_sales) }}
                                             </td>
@@ -697,12 +680,19 @@ $index = array_search($item['label'], $numberedLabels);
                                                 {{ number_format($value->debt_transport_fee) }}
                                             </td>
                                             <td class="text-right">{{ number_format($value->total_difference) }}</td>
-                                            <td class="text-center">
-                                                {{ $value->debt }}
-                                                <span>
-                                                <br>
-                                                {{ date_format(new DateTime($value->debtdate), 'd-m-Y') }}
-                                                </span>
+                                            <td class="text-left">
+                                                @if ($value->debt != 0)
+                                                    {{ $value->debt . ' ' }}ngày
+                                                    <span>
+                                                        <br>
+                                                        {{ date_format(new DateTime($value->date_start), 'd-m-Y') }}
+                                                        <br>
+
+                                                        {{ date_format(new DateTime($value->date_end), 'd-m-Y') }}
+                                                    </span>
+                                                @else
+                                                    Thanh toán tiền mặt
+                                                @endif
                                             </td>
                                             <td class="text-center">
                                                 @if ($value->debt_status == 1)
@@ -718,7 +708,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             <td class="text-center">{{ $value->debt_note }}</td>
                                             <td class="text-center">
                                                 <div class="icon">
-                                                    @if (Auth::user()->can('view-provides'))
+                                                    @if (Auth::user()->can('view-guests'))
                                                         <a href="{{ route('debt.edit', $value->id) }}">
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="32"
                                                                 height="32" viewBox="0 0 32 32" fill="none">
@@ -780,7 +770,7 @@ $index = array_search($item['label'], $numberedLabels);
                                         <tr id="product-details-{{ $value->id }}"
                                             class="collapse product-details">
                                             @if ($value->export_id == $item->export_id)
-                                                @can('view-provides')
+                                                @can('view-guests')
                                                     <td></td>
                                                 @endcan
                                                 <td class="text-center" style="width:6%;">{{ $item->madon }}
@@ -801,7 +791,9 @@ $index = array_search($item['label'], $numberedLabels);
                                                     <p>Chênh lệch</p>
                                                     {{ number_format($item->giaban * $item->soluong - $item->gianhap * $item->soluong) }}
                                                 </td>
-                                                <td></td>
+                                                @if (Auth::user()->can('isAdmin'))
+                                                    <td></td>
+                                                @endif
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>
@@ -811,13 +803,18 @@ $index = array_search($item['label'], $numberedLabels);
                                     @endforeach
                                     </td>
                                     </tr>
+                                    @endif
                                     @endforeach
                                 </tbody>
                             </table>
                         </div>
                     </div>
                     <div class="paginator mt-4 d-flex justify-content-end">
+                        @if (Auth::user()->can('isAdmin'))
                         {{ $debts->appends(request()->except('page'))->links() }}
+                        @else
+                        {{ $debtsCreator->appends(request()->except('page'))->links() }}
+                        @endif
                     </div>
                 </div>
             </div>
@@ -1042,7 +1039,8 @@ $index = array_search($item['label'], $numberedLabels);
     // Công nợ
     $(document).ready(function() {
         $('.filter-results').on('click', '.delete-btn-debt', function() {
-            $('.debt-input').val('');
+            $('#start').val('');
+            $('#end').val('');
             document.getElementById('search-filter').submit();
         });
     });

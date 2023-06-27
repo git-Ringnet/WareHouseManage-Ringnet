@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class Guests extends Model
@@ -81,6 +82,12 @@ class Guests extends Model
         }
         // dd($guests);
         $guests = $guests->orderBy('id', 'asc')->paginate(8);
+        return $guests;
+    }
+    public function guestsCreator()
+    {
+        $userId = Auth::user()->id;
+        $guests = DB::table($this->table)->where('user_id', $userId)->paginate(8);
         return $guests;
     }
 }

@@ -10,7 +10,9 @@ use App\Models\productExports;
 use App\Models\Products;
 use App\Models\Serinumbers;
 use App\Models\User;
+use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -103,7 +105,8 @@ class ExportController extends Controller
             ->leftjoin('users', 'exports.user_id', '=', 'users.id')->get();
         $export = $this->exports->getAllExports($filters, $status, $name, $date, $keywords, $sortBy, $sortType);
         $title = 'Xuất hàng';
-        return view('tables.export.exports', compact('export', 'exports', 'sortType', 'string', 'title'));
+        $exportCreator = $this->exports->productsCreator();
+        return view('tables.export.exports', compact('export', 'exports', 'sortType', 'string', 'title','exportCreator'));
     }
 
     /**
@@ -382,7 +385,31 @@ class ExportController extends Controller
                             $debt->debt_transport_fee = $debtTransportFee;
                             $debt->total_difference = $totalDifference;
                             $debt->debt = $guest->debt;
-                            $debt->debt_status = 1;
+                            
+                            $debt->date_start = now();
+                            // //Xử lí workingday
+                            $startDate = $debt->debt_start;
+                            $daysToAdd = $debt->debt;
+                            $newDate = ($this->calculateWorkingDate($startDate, $daysToAdd));
+                            $debt->date_end = $newDate;
+
+                            // Xử lí status debt
+                            $endDate = new DateTime($debt->date_end);
+                            $now = new DateTime();
+                            $interval = $endDate->diff($now);
+                            $daysDiff = $interval->format('%R%a');
+                            $daysDiff = intval($daysDiff);
+                            $daysDiff = -$daysDiff;
+
+                            if ($guest->debt == 0) {
+                                $debt->debt_status = 1;
+                            } elseif ($daysDiff <= 3) {
+                                $debt->debt_status = 2;
+                            } elseif ($daysDiff < 0) {
+                                $debt->debt_status = 0;
+                            }else{
+                                $debt->debt_status = 3;
+                            }
                             $debt->save();
                             return redirect()->route('exports.index')->with('msg', 'Duyệt đơn thành công!');
                         }
@@ -534,6 +561,27 @@ class ExportController extends Controller
         } else {
             return redirect()->back();
         }
+    }
+    function calculateWorkingDate($startDate, $daysToAdd)
+    {
+        $createdDate = Carbon::parse($startDate);
+        $daysRemaining = $daysToAdd;
+
+        $currentDate = $createdDate->copy();
+
+        while ($daysRemaining > 0) {
+            $currentDate = $currentDate->addDay();
+
+            if ($currentDate->isWeekday()) {
+                $daysRemaining--;
+            }
+        }
+
+        if ($currentDate->isWeekend()) {
+            $currentDate = $currentDate->nextWeekday();
+        }
+
+        return $currentDate->format('Y-m-d');
     }
 
     /**
@@ -897,11 +945,29 @@ class ExportController extends Controller
                         $debt->debt_transport_fee = $debtTransportFee;
                         $debt->total_difference = $totalDifference;
                         $debt->debt = $guest->debt;
+
+                        $debt->date_start = now();
+                        // //Xử lí workingday
+                        $startDate = $debt->debt_start;
+                        $daysToAdd = $debt->debt;
+                        $newDate = ($this->calculateWorkingDate($startDate, $daysToAdd));
+                        $debt->date_end = $newDate;
+
+                        // Xử lí status debt
+                        $endDate = new DateTime($debt->date_end);
+                        $now = new DateTime();
+                        $interval = $endDate->diff($now);
+                        $daysDiff = $interval->format('%R%a');
+                        $daysDiff = intval($daysDiff);
+                        $daysDiff = -$daysDiff;
+
                         if ($guest->debt == 0) {
                             $debt->debt_status = 1;
-                        } elseif ($guest->debt <= 5) {
+                        } elseif ($daysDiff <= 3) {
                             $debt->debt_status = 2;
-                        } elseif ($guest->debt > 5) {
+                        } elseif ($daysDiff < 0) {
+                            $debt->debt_status = 0;
+                        }else{
                             $debt->debt_status = 3;
                         }
                         $debt->save();

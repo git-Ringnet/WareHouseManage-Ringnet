@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class Debt extends Model
 {
@@ -19,9 +22,11 @@ class Debt extends Model
         'total_difference',
         'debt',
         'debt_status',
-        'debt_note'
+        'debt_note',
+        'date_end',
+        'date_start',
     ];
-    public function getAllDebts($filter=[],$keywords=null,$name=[], $orderBy = null, $orderType = null)
+    public function getAllDebts($filter=[],$keywords=null,$name=[],$date=[],$status=[], $orderBy = null, $orderType = null)
     {
         $debts = Debt::select('debts.*', 'debts.id as madon', 'guests.guest_name as khachhang', 'users.name as nhanvien','exports.updated_at as debtdate')
             ->leftJoin('guests', 'guests.id', 'debts.guest_id')
@@ -40,6 +45,18 @@ class Debt extends Model
         if (!empty($name)) {
             $debts = $debts->whereIn('users.name', $name);
         }
+        // dd($date[0][0]);
+        if (!empty($date)) {
+            $debts = $debts->where(function ($query) use ($date) {
+                $query->where('debts.date_start', '>=', $date[0][0])
+                    ->where('debts.date_end', '<=', $date[0][1]);
+            });
+        }
+              
+
+        if (!empty($status)) {
+            $debts = $debts->whereIn('debts.debt_status', $status);
+        }
 
         if (!empty($orderBy) && !empty($orderType)) {
             if ($orderBy == 'updated_at') {
@@ -47,8 +64,10 @@ class Debt extends Model
             };
             $debts = $debts->orderBy($orderBy, $orderType);
         }
+        
 
         $debts = $debts->orderBy('debts.id', 'desc')->paginate(8);
+
 
         return $debts;
     }
@@ -62,4 +81,11 @@ class Debt extends Model
             ->leftJoin('product', 'product.id', 'product_exports.product_id')->get();
         return $product;
     }
+    public function debtsCreator()
+    {
+        $userId = Auth::user()->id;
+        $debtsCreator = DB::table($this->table)->where('user_id', $userId)->paginate(8);
+        return $debtsCreator;
+    }
+   
 }
