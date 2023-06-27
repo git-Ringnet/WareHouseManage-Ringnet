@@ -21,7 +21,7 @@
                         </button>
                     </a>
                     <div class="class mx-4">
-                        <button onclick="exportToExcel()" type="button"
+                        <!-- <button onclick="exportToExcel()" type="button"
                             class="custom-btn btn btn-outline-primary d-flex align-items-center">
                             <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24" fill="none">
@@ -34,8 +34,8 @@
                                     stroke-linejoin="round" />
                             </svg>
                             <span>Xuất Excel</span>
-                        </button>
-                       <!-- <a href="{{route('export_products')}}" class="custom-btn btn btn-outline-primary btn-file d-flex align-items-center">
+                        </button> -->
+                       <a href="{{route('export_products')}}" class="custom-btn btn btn-outline-primary btn-file d-flex align-items-center">
                             <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24" fill="none">
                                 <path
@@ -47,7 +47,7 @@
                                     stroke-linejoin="round" />
                             </svg>
                             <span>Xuất Excel</span>
-                            </a> -->
+                            </a>
                     </div>
                     <div class="custom-btn btn btn-outline-primary btn-file d-flex align-items-center">
                         <div>
@@ -805,9 +805,9 @@ $index = array_search($item['label'], $numberedLabels);
                                                 @can('view-provides')
                                                     <td></td>
                                                 @endcan
-                                                <td style="width:6%;">{{ $value->id }} - {{ $item->id }}</td>
-                                                <td>{{ $value->products_code }}</td>
-                                                <td>{{ $item->product_name }}</td>
+                                                <td style="width:6%;"><p></p> {{ $value->id }} - {{ $item->id }}</td>
+                                                <td><p></p> {{ $value->products_code }}</td>
+                                                <td><p></p> {{ $item->product_name }}</td>
                                                 <td>
                                                     <p>Loại hàng</p>{{ $item->product_category }}
                                                 </td>
@@ -822,7 +822,6 @@ $index = array_search($item['label'], $numberedLabels);
                                                     <p>Đơn giá nhập</p>{{ number_format($item->product_price) }}
                                                 </td>
                                                 <td class="text-right">
-
                                                     <p>Trị tồn kho</p>
                                                     {{ number_format($item->product_qty * $item->product_price) }}
                                                 </td>

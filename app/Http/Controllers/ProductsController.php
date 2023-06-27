@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Details;
 use App\Models\Product;
+use App\Models\productExports;
 use App\Models\Products;
 use App\Models\Provides;
 use App\Models\Serinumbers;
@@ -441,21 +442,22 @@ class ProductsController extends Controller
 
         return redirect()->route('data.index')->with('msg', 'Chỉnh sửa sản phẩm thành công!');
     }
+
     // Xóa sản phẩm con
     public function delete_product($id)
     {
         $del = Product::where('id', $id)->first();
         $current_id = $del->products_id;
-        $check = Serinumbers::where('product_id', $del->id)->get();
-        $block = false;
-        foreach ($check as $ck) {
-            if ($ck->seri_status == 2) {
-                $block = true;
-            }
-        }
-        if ($block) {
-            return redirect()->route('data.index')->with('warning', 'Sản phẩm còn tồn tại trong đơn nhập hàng!');
-        } else {
+        // $check = Serinumbers::where('product_id', $del->id)->get();
+        $check = productExports::where('product_id', $del->id)->get();
+        // $block = false;
+        // if ($check->isEmpty()) {
+        //     $block = true;
+        // }
+        if ($check === null) {
+            Serinumbers::where('product_id', $del->id)
+                ->where('seri_status', 1)
+                ->delete();
             $del->delete();
             $updatePrice = Product::where('products_id', $current_id)->get();
             $relatedProduct = Products::findOrFail($current_id);
@@ -468,6 +470,8 @@ class ProductsController extends Controller
             }
             $relatedProduct->save();
             return redirect()->route('data.index')->with('msg', 'Xóa sản phẩm thành công!');
+        } else {
+            return redirect()->route('data.index')->with('warning', 'Sản phẩm còn tồn tại trong đơn xuất hàng!');
         }
     }
 
@@ -516,20 +520,42 @@ class ProductsController extends Controller
         $data = Products::all();
 
         // Open the file in write mode
-        $file = fopen($filePath, 'w,encoding=UTF-16LE');
-
+        $file = fopen($filePath, 'w,encoding=UTF-8');
         // Write the headers to the CSV file
-        fputcsv($file, ['ID', 'Mã sản phẩm', 'Tên sản phẩm','Danh mục','Thương hiệu','Tồn kho','Trị trung bình','Trị tồn kho']);
+        fputcsv($file, ['ID', 'Mã sản phẩm', 'Tên sản phẩm', 'Danh mục', 'Thương hiệu', 'Tồn kho', 'Trị trung bình', 'Trị tồn kho']);
 
         // Write the data rows to the CSV file
-        foreach ($data as $row) {
-            fputcsv($file, [$row->id, $row->products_code, $row->products_name,$row->ID_category,$row->products_trademark,$row->inventory,$row->price_avg,$row->price_inventory]);
-            $child =  $row->getProducts;
-            foreach($child as $value){
-                fputcsv($file, ['',$value->id,$value->product_name,$value->product_category,$value->product_unit,$value->product_trademark,$value->product_qty,$value->product_price]);
-            }
-        }
+        Products::chunk(500, function ($data) use ($file) {
+            // Write the data rows to the CSV file
+            foreach ($data as $row) {
+                // Write the row data to the CSV file
+                fputcsv($file, [
+                    $row->id,
+                    $row->products_code,
+                    $row->products_name,
+                    $row->ID_category,
+                    $row->products_trademark,
+                    $row->inventory,
+                    $row->price_avg,
+                    $row->price_inventory,
+                ]);
         
+                // Write child rows if any
+                $child = $row->getProducts;
+                foreach ($child as $value) {
+                    fputcsv($file, [
+                        $row->id . '-' . $value->id,
+                        $value->product_name,
+                        $value->product_category,
+                        $value->product_unit,
+                        $value->product_trademark,
+                        $value->product_qty,
+                        $value->product_price,
+                    ]);
+                }
+            }
+        });
+
         // Close the file
         fclose($file);
 
