@@ -266,6 +266,7 @@
     });
 
     $("#radio2").on("click", function() {
+        $('#provide_id').val("");
         $('#infor_provide').html(
             '<div class="border-bottom p-3 d-flex justify-content-between">' +
             '<b>Thông tin nhà cung cấp</b>' +
@@ -415,7 +416,6 @@
     });
 
 
-
     $('#checkall').change(function() {
         $('.cb-element').prop('checked', this.checked);
         updateMultipleActionVisibility();
@@ -438,7 +438,7 @@
         }
     }
 
-
+    // Xử lý tạo Tr, modal
     $('.addRow').on('click', function() {
         var tr = '<tr>' +
             '<td scope="row"><input type="checkbox" id=' + rowCount + '" class="cb-element"></td>' +
@@ -470,7 +470,7 @@
             '</td>' +
             // '<td><span readonly class="form-control total-amount text-center" style="width:140px" name="product_total[]"> </span></td>'+
             '<td><input readonly type="text" class="form-control total-amount text-center" style="width:140px" name="product_total[]"></td>' +
-            '<td><input type="text" class="form-control" style="width:140px" name="product_trademark[]"></td>' +
+            '<td><input type="text" class="form-control" style="width:150px" name="product_trademark[]"></td>' +
             '<td>' +
             '<button class="exampleModal" name="btn_add_SN[]" type="button" data-toggle="modal" data-target="#exampleModal' +
             rowCount + '" style="background:transparent; border:none;">' +
@@ -509,7 +509,7 @@
             '</thead>' +
             '<tbody>' +
             '<tr>' +
-            '<td>' + (rowCount + 1) + '</td>' +
+            '<td class="sttRowTable"></td>' +
             '<td class="code_product"></td>' +
             '<td class="name_product"></td>' +
             '<td class="provide_name"></td>' +
@@ -538,7 +538,7 @@
             // '<div class="btn btn-danger ml-2" id="deleteSNS"> Xóa SN </div>' +
             '</div>' +
             '<div class="modal-footer">' +
-            '<button type="button" class="btn btn-secondary" data-dismiss="modal">Lưu</button>' +
+            '<button type="button" class="btn btn-secondary" onclick="checkData(event)" data-dismiss="modal">Lưu</button>' +
             '</div>' +
             '</div>' +
             '</div>' +
@@ -693,6 +693,7 @@
 
     }
 
+    // Chỉnh sửa thông tin nhà cung cấp
     $(document).on('click', '#btn-addProvide', function(e) {
         e.preventDefault();
         var err = false;
@@ -741,6 +742,7 @@
             })
         }
     })
+
     // Hiển thị danh sách nhà cung cấp cũ
     $('.search-info').click(function() {
         var provides_id = $(this).attr('id');
@@ -935,7 +937,7 @@
             alert('Vui lòng nhập địa chỉ xuất hóa đơn');
             check = true;
         } else if (provide_represent == "") {
-            alert('Vui lòng nhập người nhận hàng');
+            alert('Vui lòng nhập người đại diện');
             check = true;
         } else if (provide_email == "") {
             alert('Vui lòng nhập email');
@@ -970,6 +972,7 @@
 
     })
 
+    // Import file XML
     var fileImport = document.getElementById('import_file');
     if (fileImport) {
         fileImport.addEventListener('change', function(event) {
@@ -990,7 +993,7 @@
                 for (var i = 0; i < THHDVu.length; i++) {
                     var tax = 0;
                     if (TSuat[i].textContent == "KCT") {
-                        tax = 0;
+                        tax = 99;
                     } else {
                         tax = parseInt(TSuat[i].textContent.match(/\d+/)[0]);
                     }
@@ -1024,11 +1027,11 @@
                         '<option value="10"' + (tax == 10 ? "selected" : "") + '>10%</option>' +
                         '<option value="0" ' + (tax == 0 ? "selected" : "") + '>0%</option>' +
                         '<option value="8" ' + (tax == 8 ? "selected" : "") + '>8%</option>' +
-                        '<option value="00" ' + (tax == 0 ? "selected" : "") + '>NOVAT</option>' +
+                        '<option value="99" ' + (tax == 99 ? "selected" : "") + '>NOVAT</option>' +
                         '</select' +
                         '</td>' +
                         '<td><input readonly type="text" style="width:140px" class="form-control text-center total-amount" name="product_total[]" value=""></td>' +
-                        '<td><input type="text" class="form-control" style="width:140px" name="product_trademark[]"></td>' +
+                        '<td><input type="text" class="form-control" style="width:150px" name="product_trademark[]"></td>' +
                         '<td>' +
                         '<button class="exampleModal" name="btn_add_SN[]" type="button" data-toggle="modal" data-target="#exampleModal' +
                         rowCount + '" style="background:transparent; border:none;">' +
@@ -1095,7 +1098,7 @@
                         '<div class="btn btn-danger ml-2" id="deleteSNS"> Xóa SN </div>' +
                         '</div>' +
                         '<div class="modal-footer">' +
-                        '<button type="button" class="btn btn-secondary" data-dismiss="modal">Lưu</button>' +
+                        '<button type="button" class="btn btn-secondary" onclick="checkData(event)" data-dismiss="modal">Lưu</button>' +
                         '</div>' +
                         '</div>' +
                         '</div>' +

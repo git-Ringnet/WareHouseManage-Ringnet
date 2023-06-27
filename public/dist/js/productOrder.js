@@ -30,6 +30,7 @@ $(document).on('change', '.list_products', function (e) {
     }
 })
 
+// Hàm kiểm tra tr có trùng nhau
 function checkDuplicateRows() {
     var table = document.getElementById("inputContainer");
     var rows = table.getElementsByTagName("tr");
@@ -52,9 +53,9 @@ function checkDuplicateRows() {
 
             var input = cells[j].querySelector("input[type='text']");
             if (input) {
-                cellValue = input.value;
+                cellValue = input.value.trim();
             } else {
-                cellValue = cells[j].innerText;
+                cellValue = cells[j].innerText.trim();
             }
 
             var select = cells[j].getElementsByTagName("select")[0];
@@ -83,6 +84,7 @@ function checkDuplicateRows() {
     return isDuplicate;
 }
 
+// Hàm cập nhật lại thứ tự SN trước khi submit
 function updateProductSN() {
     $('.modal-body').each(function (index) {
         var productSN = $(this).find('input[name^="product_SN"]');
@@ -114,8 +116,10 @@ $('body').on('click', '.deleteRow', function () {
     calculateTotals();
     updateRowNumbers();
     checkRow();
+    fillDataToModal();
 });
 
+// Hàm kiểm tra số lượng tr trong table
 function checkRow() {
     var rowLength = $('#inputContainer tbody tr').length;
     if (rowLength < 1) {
@@ -170,6 +174,7 @@ function formatCurrency(value) {
     return formattedValue;
 }
 
+// Hàm điền dữ liệu từ input vào modal
 function fillDataToModal() {
     var info = document.querySelectorAll('.exampleModal');
     for (let k = 0; k < info.length; k++) {
@@ -178,7 +183,13 @@ function fillDataToModal() {
             var productName = $(this).closest('tr').find('[name^="product_name"]').val();
             var productType = $(this).closest('tr').find('[name^="product_category"]').val();
             var productQty = $(this).closest('tr').find('[name^="product_qty"]').val();
-            var provide_name = $('#provide_name').val();
+            var provide_name;
+            if($('#provide_id').val() === ""){
+                provide_name = $('#provide_name_new').val();
+            }else{
+                provide_name = $('#provide_name').val();
+            }
+            $('.sttRowTable').text(k + 1);
             $('.code_product').text(productCode);
             $('.name_product').text(productName);
             $('.provide_name').text(provide_name);
@@ -188,6 +199,7 @@ function fillDataToModal() {
     }
 }
 
+// Hàm tính tổng tiền
 function calculateTotals() {
     var totalAmount = 0;
     var totalTax = 0;
@@ -198,7 +210,7 @@ function calculateTotals() {
         var productPriceElement = $(this).find('[name^="product_price"]');
         var productPrice = 0;
         var taxValue = parseFloat($(this).find('.product_tax option:selected').val());
-        if(taxValue == 99){
+        if (taxValue == 99) {
             taxValue = 0;
         }
         if (productPriceElement.length > 0) {
@@ -229,6 +241,7 @@ function calculateTotals() {
     calculateGrandTotal(totalAmount, totalTax);
 }
 
+// Hàm kiểm tra duplicate tr trong table sản phẩm
 function deleteDuplicateTr() {
     var table = document.getElementById("inputContainer");
     var rows = table.getElementsByTagName("tr");
@@ -271,8 +284,7 @@ function deleteDuplicateTr() {
     return isDuplicate;
 }
 
-
-
+// Format giá tiền
 $('body').on('input', '.product_price', function (event) {
     // Lấy giá trị đã nhập
     var value = event.target.value;
@@ -286,6 +298,7 @@ $('body').on('input', '.product_price', function (event) {
     event.target.value = formattedNumber;
 });
 
+// Hàm lấy dữ liệu khi người dùng chọn sản phẩm con
 function setValueOfInput(e) {
     var selectedProductName = $(e).text();
     var row = $(e).closest('tr');
@@ -302,7 +315,6 @@ $(document).click(function (event) {
     }
 });
 
-
 //hiện danh sách khách hàng khi click trường tìm kiếm
 $("#myUL").hide();
 $("#myInput").on("click", function () {
@@ -316,20 +328,22 @@ $(document).click(function (event) {
     }
 });
 
-$(document).ready(function() {
-    $("#myInput").on("keyup", function() {
+// Hàm search thông tin sản phẩm con
+$(document).ready(function () {
+    $("#myInput").on("keyup", function () {
         var value = $(this).val().toUpperCase();
-        $("#myUL li").each(function() {
+        $("#myUL li").each(function () {
             var text = $(this).find("a").text().toUpperCase();
             $(this).toggle(text.indexOf(value) > -1);
         });
     });
 });
 
+// Hàm search thông tin nhà cung cấp
 function filterFunction() {
     var filter = $(".search_product").val().toUpperCase();
     var a = $("#dropdown-values ul li");
-    a.each(function() {
+    a.each(function () {
         var txtValue = $(this).text();
         if (txtValue.toUpperCase().indexOf(filter) > -1) {
             $(this).show();
@@ -339,7 +353,22 @@ function filterFunction() {
     });
 }
 
+// Hàm kiểm tra Seri trùng trong modal
+function checkData(e) {
+    var clickedDiv = $(e.target).closest('.modal-dialog');
+    var inputs = clickedDiv.find('.modal-body #table_SNS input[name^="product_SN"]');
+    var values = [];
+    inputs.each(function () {
+        var value = $(this).val().trim();
+        if (values.includes(value)) {
+            alert('Đã nhập trùng seri ' + value);
+            e.stopPropagation();
+            return false;
+        }
+        values.push(value);
+    })
 
+}
 
 // Hàm chỉ cho phép nhập số
 function validateNumberInput(input) {

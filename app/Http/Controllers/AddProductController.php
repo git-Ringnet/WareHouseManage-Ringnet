@@ -138,7 +138,6 @@ class AddProductController extends Controller
         $provide = Provides::all();
         $products = Products::all();
         $lastId = DB::table('productorders')->latest('id')->value('id');
-        // $las = DB::table('productorders')->get()->last()->id;
         $title = 'Tạo đơn nhập hàng';
         return view('tables.order.insert', compact('provide', 'products', 'lastId', 'title'));
     }
@@ -211,7 +210,6 @@ class AddProductController extends Controller
                     $Seri->serinumber = $seri_number;
                     $Seri->products_id = $newProductOrder->products_id;
                     $Seri->seri_status = 0;
-                    // Thêm mới
                     $Seri->check = $order->id;
                     $Seri->save();
                 }
@@ -223,7 +221,6 @@ class AddProductController extends Controller
                 $Seri->serinumber = $request->{'product_SN' . $i}[0];
                 $Seri->products_id = $newProductOrder->products_id;
                 $Seri->seri_status = 0;
-                // Thêm mới
                 $Seri->check = $order->id;
                 $Seri->save();
             }
@@ -525,7 +522,6 @@ class AddProductController extends Controller
             }
             $updateOrder->order_status = 1;
             $updateOrder->save();
-
         } else {
             return redirect()->route('insertProduct.index')->with('warning', 'Đơn hàng đã được duyệt trước đó');
         }
@@ -641,7 +637,7 @@ class AddProductController extends Controller
                     $order->provide_id = $request->provide_id;
                     $order->total += $product_total[$i];
                     $order->save();
-                    array_push($array_products_id,$check->products_id);
+                    array_push($array_products_id, $check->products_id);
                 }
                 // Lấy ra tất cả Seri
                 $product_SN = $request->{'product_SN' . $i};
@@ -703,9 +699,11 @@ class AddProductController extends Controller
                     $listSNS[] = $v;
                 }
             }
-            $checkDupSN = Serinumbers::where('check',$order->id)
-            ->whereNotIn('products_id',$array_products_id)->delete();
-    
+            if ($check) {
+                $checkDupSN = Serinumbers::where('check', $order->id)
+                    ->whereNotIn('products_id', $array_products_id)->delete();
+            }
+
             // Lấy danh sách SN theo id sản phẩm
             $arrSN = Serinumbers::where('check', $request->order_id)->get();
             foreach ($arrSN as $product_SN) {
@@ -716,12 +714,13 @@ class AddProductController extends Controller
             // Xóa SN người dùng xóa khỏi danh sách
             $deleteSN = array_diff($product_SN_array, $listSNS);
             foreach ($deleteSN as $delete) {
-                $del = Serinumbers::where('serinumber', $delete)->get();
+                $del = Serinumbers::where('serinumber', $delete)
+                    ->get();
                 foreach ($del as $va) {
                     $va->delete();
                 }
             }
-            
+
             // Xóa sản phẩm không tồn tại trong array
             $arrProduct = ProductOrders::where('order_id', $request->order_id)->get();
 
@@ -783,7 +782,13 @@ class AddProductController extends Controller
     {
         if (isset($request->list_id)) {
             $list = $request->list_id;
-            Orders::whereIn('id', $list)->delete();
+            $listOrder = Orders::whereIn('id', $list)->get();
+            foreach ($listOrder as $l) {
+                if ($l->order_status == 0) {
+                    Serinumbers::where('check', $l->id)->delete();
+                }
+            }
+            $listOrder->each->delete();
             session()->flash('msg', 'Xóa đơn hàng thành công');
             return response()->json(['success' => true, 'msg' => 'Xóa đơn hàng thành công', 'ids' => $list]);
         }
@@ -835,6 +840,7 @@ class AddProductController extends Controller
         return response()->json(['success' => false, 'msg' => 'Not fount']);
     }
 
+    // Hiển thị sản phẩm
     public function showProduct(Request $request)
     {
         if (isset($request->id)) {
@@ -842,20 +848,28 @@ class AddProductController extends Controller
             return $pro;
         }
     }
+
+    // Thêm mới nhà cung cấp
     public function add_newProvide(Request $request)
     {
         $data = $request->all();
-        $add_newProvide = new Provides();
-        $add_newProvide->provide_name = $data['provide_name'];
-        $add_newProvide->provide_represent = $data['provide_represent'];
-        $add_newProvide->provide_phone = $data['provide_phone'];
-        $add_newProvide->provide_email = $data['provide_email'];
-        $add_newProvide->provide_status = 1;
-        $add_newProvide->provide_address = $data['provide_address'];
-        $add_newProvide->provide_code = $data['provide_code'];
-        $add_newProvide->save();
-        session()->flash('msg', 'Thêm mới nhà cung cấp thành công!');
-        return response()->json(['success' => true, 'msg' => 'Thêm mới nhà cung cấp thành công !', 'data' => $add_newProvide]);
+        $checkProvides = Provides::where('provide_code', $data['provide_code'])->first();
+        if ($checkProvides === NULL) {
+            $add_newProvide = new Provides();
+            $add_newProvide->provide_name = $data['provide_name'];
+            $add_newProvide->provide_represent = $data['provide_represent'];
+            $add_newProvide->provide_phone = $data['provide_phone'];
+            $add_newProvide->provide_email = $data['provide_email'];
+            $add_newProvide->provide_status = 1;
+            $add_newProvide->provide_address = $data['provide_address'];
+            $add_newProvide->provide_code = $data['provide_code'];
+            $add_newProvide->save();
+            session()->flash('msg', 'Thêm mới nhà cung cấp thành công!');
+            return response()->json(['success' => true, 'msg' => 'Thêm mới nhà cung cấp thành công !', 'data' => $add_newProvide]);
+        } else {
+            session()->flash('msg', 'Mã số thuế đã tồn tại!');
+            return response()->json(['success' => true, 'msg' => 'Mã số thuế đã tồn tại !']);
+        }
     }
 
     // Kiểm tra serial number đã tồn tại chưa
@@ -865,7 +879,8 @@ class AddProductController extends Controller
         $products_id = $request->input('products_id');
         $existingSN = [];
         $check = Serinumbers::whereIn('products_id', $products_id)
-            ->whereIN('serinumber', $listSN)->first();
+            ->whereIN('serinumber', $listSN)
+            ->first();
         if (!$check) {
             return response()->json(['success' => true, 'msg' => 'Thêm sản phẩm thành công!']);
         } else {

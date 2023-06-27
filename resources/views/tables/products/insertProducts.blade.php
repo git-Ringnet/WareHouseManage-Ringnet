@@ -84,7 +84,7 @@
                                     <div class="col-md-3">
                                         <div class="product_category">
                                           <div class="title-edit-item">Danh mục</div>
-                                            <input type="text" name="product_category" class="w-100 form-control mb-4">
+                                            <input required type="text" name="product_category" class="w-100 form-control mb-4">
                                         </div>
                                         <div class="product_trademark">
                                             <div class="title-edit-item">Thương hiệu</div>

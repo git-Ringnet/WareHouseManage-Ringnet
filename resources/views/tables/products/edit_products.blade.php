@@ -145,7 +145,14 @@
                                     {{$va->countSerial}}
                                     </td>
                                     <td>{{ number_format($va->product_price) }}</td>
-                                    <td>{{ $va->tax }}%</td>
+                                    <td>
+                                    <?php
+                                        if($va->tax == 99){
+                                            echo 0;
+                                        }else{
+                                            echo $va->tax;
+                                        }
+                                    ?>%</td>
                                     <td>{{ number_format($va->total) }}</td>
                                     <td>{{ $va->product_trademark }}</td>
                                     <td>
