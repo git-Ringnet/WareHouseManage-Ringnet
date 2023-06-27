@@ -101,7 +101,8 @@ class GuestsController extends Controller
         $guests = $this->guests->getAllguests($filters, $users_name, $name, $represent, $phonenumber, $email, $status, $keywords, $sortByArr);
         // dd($guests);
         $title = 'Khách hàng';
-        return view('tables.guest.guests', compact('guests', 'users', 'sortType', 'string', 'title'));
+        $guestsCreator = $this->guests->guestsCreator();
+        return view('tables.guest.guests', compact('guests', 'users', 'sortType', 'string', 'title','guestsCreator'));
     }
 
     /**

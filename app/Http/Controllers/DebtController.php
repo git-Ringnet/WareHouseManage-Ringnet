@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Debt;
 use App\Models\User;
+use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class DebtController extends Controller
 {
@@ -84,6 +86,25 @@ class DebtController extends Controller
             $inventoryArray = explode(',.@', $sum);
             array_push($string, ['label' => 'Ngày công nợ' . $debt_operator, 'values' => $inventoryArray, 'class' => 'debt']);
         }
+        //Trạng thái
+        $status = [];
+        if (!empty($request->status)) {
+            $statusValues = [0 => 'Quá hạn', 1 => 'Thanh toán đủ', 2 => 'Gần đến hạn', 3 => 'Công nợ'];
+            $status = $request->input('status', []);
+            $statusLabels = array_map(function ($value) use ($statusValues) {
+                return $statusValues[$value];
+            }, $status);
+            array_push($string, ['label' => 'Trạng thái:', 'values' => $statusLabels, 'class' => 'status']);
+        }
+
+        $date = [];
+        if (!empty($request->date_start) && !empty($request->date_end)) {
+            $date_start = $request->input('date_start');
+            $date_end = $request->input('date_end');
+            $date[] = [$date_start, $date_end];
+            $datearr = ['label' => 'Công nợ:', 'values' => [$date_start, $date_end], 'class' => 'debt'];
+            array_push($string, $datearr);
+        }
 
         //Search
         $keywords = null;
@@ -103,10 +124,13 @@ class DebtController extends Controller
         } else {
             $sortType = 'desc';
         }
+
+
         $debtsSale = User::whereIn('roleid', [1, 3])->get();
-        $debts = $this->debts->getAllDebts($filters, $keywords, $nhanvien, $sortBy, $sortType);
+        $debts = $this->debts->getAllDebts($filters, $keywords, $nhanvien, $date, $status, $sortBy, $sortType);
         $product = $this->debts->getAllProductsDebts();
-        return view('tables.debt.debts', compact('title', 'debts','debtsSale', 'product', 'string', 'sortType'));
+        $debtsCreator = $this->debts->debtsCreator();
+        return view('tables.debt.debts', compact('title', 'debts', 'debtsSale', 'product', 'string', 'sortType','debtsCreator'));
     }
 
     /**
@@ -157,7 +181,8 @@ class DebtController extends Controller
             ->leftJoin('product_exports', 'exports.id', 'product_exports.export_id')
             ->leftJoin('products', 'products.id', 'product_exports.products_id')
             ->leftJoin('product', 'product.id', 'product_exports.product_id')->where('debts.id', $id)->get();
-        return view('tables.debt.editDebt', compact('debts', 'product'));
+        $title = "Chi tiết đơn hàng";
+        return view('tables.debt.editDebt', compact('debts', 'product', 'title'));
     }
 
     /**
@@ -170,6 +195,7 @@ class DebtController extends Controller
     public function update(Request $request, $id)
     {
         $debt = Debt::find($id);
+        // dd($request);
         if ($request->has('submitBtn')) {
             $action = $request->input('submitBtn');
             if ($action === 'action1') {
@@ -178,11 +204,20 @@ class DebtController extends Controller
                 return redirect()->route('debt.index')->with('msg', 'Thanh toán thành công!');
             }
             if ($action === 'action2') {
+                // Xử lí status debt
+                $endDate = new DateTime($request->date_end);
+                $now = new DateTime();
+                $interval = $endDate->diff($now);
+                $daysDiff = $interval->format('%R%a');
+                $daysDiff = intval($daysDiff);
+                $daysDiff = -$daysDiff;
                 if ($request->debt == 0) {
                     $debt->debt_status = 1;
-                } elseif ($request->debt <= 5) {
+                } elseif ($daysDiff <= 3) {
                     $debt->debt_status = 2;
-                } elseif ($request->debt > 5) {
+                } elseif ($daysDiff < 0) {
+                    $debt->debt_status = 0;
+                } else {
                     $debt->debt_status = 3;
                 }
                 $debt->update($request->all());

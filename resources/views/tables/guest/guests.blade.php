@@ -7,15 +7,15 @@
             <div class="row mb-1 m-0">
                 <a href="{{ route('guests.create') }}">
                     <button type="button" class="custom-btn btn btn-primary d-flex align-items-center">
-                        <svg class="mr-1" width="24" height="24" viewBox="0 0 24 24"
-                        fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" clip-rule="evenodd"
-                            d="M12 6C12.3879 6 12.7024 6.31446 12.7024 6.70237L12.7024 17.2976C12.7024 17.6855 12.3879 18 12 18C11.6121 18 11.2976 17.6855 11.2976 17.2976V6.70237C11.2976 6.31446 11.6121 6 12 6Z"
-                            fill="#ffff" />
-                        <path fill-rule="evenodd" clip-rule="evenodd"
-                            d="M18 12C18 12.3879 17.6855 12.7024 17.2976 12.7024H6.70237C6.31446 12.7024 6 12.3879 6 12C6 11.6121 6.31446 11.2976 6.70237 11.2976H17.2976C17.6855 11.2976 18 11.6121 18 12Z"
-                            fill="#ffff" />
-                    </svg>
+                        <svg class="mr-1" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M12 6C12.3879 6 12.7024 6.31446 12.7024 6.70237L12.7024 17.2976C12.7024 17.6855 12.3879 18 12 18C11.6121 18 11.2976 17.6855 11.2976 17.2976V6.70237C11.2976 6.31446 11.6121 6 12 6Z"
+                                fill="#ffff" />
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M18 12C18 12.3879 17.6855 12.7024 17.2976 12.7024H6.70237C6.31446 12.7024 6 12.3879 6 12C6 11.6121 6.31446 11.2976 6.70237 11.2976H17.2976C17.6855 11.2976 18 11.6121 18 12Z"
+                                fill="#ffff" />
+                        </svg>
                         <span>Thêm khách hàng</span>
                     </button>
                 </a>
@@ -24,8 +24,8 @@
                 <form class="w-100" action="" method="get" id='search-filter'>
                     <div class="row mr-0">
                         <div class="col-5">
-                            <input type="text" name="keywords" class="form-control h-100" value="{{ request()->keywords }}"
-                                placeholder="Tìm kiếm đơn vị hoặc email">
+                            <input type="text" name="keywords" class="form-control h-100"
+                                value="{{ request()->keywords }}" placeholder="Tìm kiếm đơn vị hoặc email">
                             <span class="search-icon"><i class="fas fa-search"></i></span>
                         </div>
                         <div class="col-2 d-none">
@@ -138,10 +138,10 @@ $index = array_search($item['label'], $numberedLabels);
                                             <div class="scrollbar">
                                                 <button class="dropdown-item" id="btn-name">Đơn vị</button>
                                                 {{-- <button class="dropdown-item" id="btn-represent">Đại diện</button> --}}
-                                                @if(Auth::user()->can('isAdmin'))
-                                                <button class="dropdown-item" id="btn-users_name">Người phụ
-                                                    trách</button>
-                                                    @endif
+                                                @if (Auth::user()->can('isAdmin'))
+                                                    <button class="dropdown-item" id="btn-users_name">Người phụ
+                                                        trách</button>
+                                                @endif
                                                 <button class="dropdown-item" id="btn-phonenumber">Số điện
                                                     thoại</button>
                                                 <button class="dropdown-item" id="btn-email">Email</button>
@@ -245,8 +245,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                             <li>
                                                                 <input type="checkbox" id="name_active"
                                                                     {{ in_array($value->name, $users_name) ? 'checked' : '' }}
-                                                                    name="users_name[]"
-                                                                    value="{{ $value->name }}">
+                                                                    name="users_name[]" value="{{ $value->name }}">
                                                                 <label id="users_name"
                                                                     for="">{{ $value->name }}</label>
                                                             </li>
@@ -343,9 +342,12 @@ $index = array_search($item['label'], $numberedLabels);
                     <div class="btn-nhanvien my-2 ml-3">
                         <button id="deleteListGuest" type="button"
                             class="btn btn-group btn-light d-flex align-items-center h-100">
-                            <svg class="mr-1" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" clip-rule="evenodd" d="M10.5454 5C10.2442 5 9.99999 5.24421 9.99999 5.54545C9.99999 5.8467 10.2442 6.09091 10.5454 6.09091H13.4545C13.7558 6.09091 14 5.8467 14 5.54545C14 5.24421 13.7558 5 13.4545 5H10.5454ZM6 7.72726C6 7.42601 6.24421 7.18181 6.54545 7.18181H7.63637H16.3636H17.4545C17.7558 7.18181 18 7.42601 18 7.72726C18 8.02851 17.7558 8.27272 17.4545 8.27272H16.9091V17C16.9091 18.2113 15.9118 19.1818 14.7135 19.1818H9.25891C8.97278 19.1816 8.68906 19.1247 8.42499 19.0145C8.16092 18.9044 7.92126 18.7431 7.71979 18.5399C7.51833 18.3367 7.35905 18.0957 7.25112 17.8307C7.14347 17.5664 7.08903 17.2834 7.09091 16.9981V8.27272H6.54545C6.24421 8.27272 6 8.02851 6 7.72726ZM8.18182 17.0041V8.27272H15.8182V17C15.8182 17.5966 15.3216 18.0909 14.7135 18.0909H9.25938C9.11713 18.0908 8.97632 18.0625 8.84503 18.0077C8.71375 17.953 8.5946 17.8728 8.49444 17.7718C8.39429 17.6707 8.3151 17.5509 8.26144 17.4192C8.20779 17.2874 8.18074 17.1464 8.18182 17.0041ZM13.4545 10.0909C13.7558 10.0909 14 10.3351 14 10.6364V15.7273C14 16.0285 13.7558 16.2727 13.4545 16.2727C13.1533 16.2727 12.9091 16.0285 12.9091 15.7273V10.6364C12.9091 10.3351 13.1533 10.0909 13.4545 10.0909ZM11.0909 10.6364C11.0909 10.3351 10.8467 10.0909 10.5454 10.0909C10.2442 10.0909 9.99999 10.3351 9.99999 10.6364V15.7273C9.99999 16.0285 10.2442 16.2727 10.5454 16.2727C10.8467 16.2727 11.0909 16.0285 11.0909 15.7273V10.6364Z" fill="#555555"/>
-                                </svg>
+                            <svg class="mr-1" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M10.5454 5C10.2442 5 9.99999 5.24421 9.99999 5.54545C9.99999 5.8467 10.2442 6.09091 10.5454 6.09091H13.4545C13.7558 6.09091 14 5.8467 14 5.54545C14 5.24421 13.7558 5 13.4545 5H10.5454ZM6 7.72726C6 7.42601 6.24421 7.18181 6.54545 7.18181H7.63637H16.3636H17.4545C17.7558 7.18181 18 7.42601 18 7.72726C18 8.02851 17.7558 8.27272 17.4545 8.27272H16.9091V17C16.9091 18.2113 15.9118 19.1818 14.7135 19.1818H9.25891C8.97278 19.1816 8.68906 19.1247 8.42499 19.0145C8.16092 18.9044 7.92126 18.7431 7.71979 18.5399C7.51833 18.3367 7.35905 18.0957 7.25112 17.8307C7.14347 17.5664 7.08903 17.2834 7.09091 16.9981V8.27272H6.54545C6.24421 8.27272 6 8.02851 6 7.72726ZM8.18182 17.0041V8.27272H15.8182V17C15.8182 17.5966 15.3216 18.0909 14.7135 18.0909H9.25938C9.11713 18.0908 8.97632 18.0625 8.84503 18.0077C8.71375 17.953 8.5946 17.8728 8.49444 17.7718C8.39429 17.6707 8.3151 17.5509 8.26144 17.4192C8.20779 17.2874 8.18074 17.1464 8.18182 17.0041ZM13.4545 10.0909C13.7558 10.0909 14 10.3351 14 10.6364V15.7273C14 16.0285 13.7558 16.2727 13.4545 16.2727C13.1533 16.2727 12.9091 16.0285 12.9091 15.7273V10.6364C12.9091 10.3351 13.1533 10.0909 13.4545 10.0909ZM11.0909 10.6364C11.0909 10.3351 10.8467 10.0909 10.5454 10.0909C10.2442 10.0909 9.99999 10.3351 9.99999 10.6364V15.7273C9.99999 16.0285 10.2442 16.2727 10.5454 16.2727C10.8467 16.2727 11.0909 16.0285 11.0909 15.7273V10.6364Z"
+                                    fill="#555555" />
+                            </svg>
                             <span>Xóa khách hàng đã chọn</span>
                         </button>
                     </div>
@@ -402,14 +404,16 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <div class="icon" id="icon-guest_name"></div>
                                             </span>
                                         </th>
-                                        <th>
-                                            <span class="d-flex">
-                                                <a href="#" class="sort-link" data-sort-by="user_id"
-                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
-                                                        type="submit">Người phụ trách</button></a>
-                                                <div class="icon" id="icon-user_id"></div>
-                                            </span>
-                                        </th>
+                                        @if (Auth::user()->can('isAdmin'))
+                                            <th>
+                                                <span class="d-flex">
+                                                    <a href="#" class="sort-link" data-sort-by="user_id"
+                                                        data-sort-type="{{ $sortType }}"><button class="btn-sort"
+                                                            type="submit">Người phụ trách</button></a>
+                                                    <div class="icon" id="icon-user_id"></div>
+                                                </span>
+                                            </th>
+                                        @endif
                                         <th>
                                             <span class="d-flex">
                                                 <a href="#" class="sort-link" data-sort-by="guest_phone"
@@ -445,8 +449,11 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <td><input type="checkbox" class="cb-element" name="ids[]"
                                                         value="{{ $item->id }}"></td>
                                                 <td>{{ $item->id }}</td>
+
                                                 <td>{{ $item->guest_name }}</td>
-                                                <td>{{ $item->users_name }}</td>
+                                                @if (Auth::user()->can('isAdmin'))
+                                                    <td>{{ $item->users_name }}</td>
+                                                @endif
                                                 <td>{{ $item->guest_phone }}</td>
                                                 <td>{{ $item->guest_email }}</td>
                                                 <td>
@@ -500,8 +507,13 @@ $index = array_search($item['label'], $numberedLabels);
                         <!-- /.card-body -->
                     </div>
                     <div class="paginator mt-4 d-flex justify-content-end">
-                        {{ $guests->appends(request()->except('page'))->links() }}
+                        @if (Auth::user()->can('isAdmin'))
+                            {{ $guests->appends(request()->except('page'))->links() }}
+                        @else
+                            {{ $guestsCreator->appends(request()->except('page'))->links() }}
+                        @endif
                     </div>
+
                 </div>
                 <!-- /.col -->
             </div>

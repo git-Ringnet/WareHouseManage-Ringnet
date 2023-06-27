@@ -1,5 +1,5 @@
 <!-- Công nợ -->
-<x-navbar></x-navbar>
+<x-navbar :title="$title"></x-navbar>
 <div class="content-wrapper">
     <div class="breadcrumb">
         <span><a href="{{ route('admin.userslist') }}">Công Nợ</a></span>
@@ -20,7 +20,7 @@
             @if ($debts->debt_status != 1)
                 <div class="d-flex mb-1 action-don">
                     <button type="submit" class="btn btn-danger text-white" name="submitBtn" value="action1"
-                        onclick="">Thanh Toán</button>
+                        onclick="" onkeydown="return event.key != 'Enter';">Thanh Toán</button>
                 </div>
             @endif
             <div class="row">
@@ -124,7 +124,7 @@
                 </div>
                 <div class="d-flex align-items-center ml-4">
                     <input type="text" class="form-control text-center mr-1" style="width: 50px" name="debt"
-                        id="" value="{{ $debts->debt }}">
+                        id="daysToAdd" value="{{ $debts->debt }}">
                 </div>
                 <span>ngày</span>
             </div>
@@ -132,10 +132,10 @@
                 <div class="leftspacing">
                 </div>
                 <div class="d-flex align-items-center ml-4">
-                    <input type="date" class="form-control text-center mr-1" name="" id=""
-                        value="">
-                    <input type="date" class="form-control text-center mr-1" name="" id=""
-                        value="">
+                    <input type="date" class="form-control text-center mr-1" name="date_start" id="startDate"
+                        value="{{ strftime('%Y-%m-%d', strtotime($debts->date_start)) }}">
+                    <input type="date" class="form-control text-center mr-1" name="date_end" id="endDate"
+                        value="{{ strftime('%Y-%m-%d', strtotime($debts->date_end)) }}" readonly>
                 </div>
             </div>
             <div class="form-group d-flex">
@@ -149,8 +149,45 @@
         </section>
         <div class="btn-fixed">
             @if ($debts->debt_status != 1)
-                <button class="btn btn-primary" type="submit" name="submitBtn" value="action2">Lưu</button>
+                <button class="btn btn-primary" type="submit" name="submitBtn" value="action2" onkeydown="return event.key != 'Enter';">Lưu</button>
             @endif
             <a href="{{ route('debt.index') }}"><span class="btn border-secondary ml-1">Hủy</span></a>
         </div>
     </form>
+    <script>
+        $(document).ready(function() {
+            // Bắt sự kiện thay đổi giá trị của daysToAdd và startDate
+            $("#daysToAdd, #startDate").change(function() {
+                var daysToAdd = parseInt($("#daysToAdd").val(), 10);
+                var startDate = new Date($("#startDate").val());
+
+                // Kiểm tra tính hợp lệ của giá trị nhập vào
+                if (isNaN(daysToAdd) || isNaN(startDate.getTime())) {
+                    return;
+                }
+
+                var count = 0;
+                var currentDay = new Date(startDate);
+
+                while (count < daysToAdd) {
+                    currentDay.setDate(currentDay.getDate() + 1);
+
+                    if (currentDay.getDay() !== 0 && currentDay.getDay() !== 6) {
+                        count++;
+                    }
+                }
+
+                // Cập nhật giá trị của endDate
+                $("#endDate").val(formatDate(currentDay));
+            });
+
+            // Hàm chuyển đổi ngày thành chuỗi ngày/tháng/năm (dd/mm/yyyy)
+            function formatDate(date) {
+                var day = date.getDate();
+                var month = date.getMonth() + 1;
+                var year = date.getFullYear();
+
+                return year + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
+            }
+        });
+    </script>

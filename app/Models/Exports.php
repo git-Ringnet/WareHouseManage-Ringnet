@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class Exports extends Model
@@ -56,7 +57,8 @@ class Exports extends Model
     {
         return $this->hasMany(ProductExports::class, 'export_id');
     }
-    public function allExports(){
+    public function allExports()
+    {
         $exports = DB::table($this->table)->get();
         return $exports;
     }
@@ -67,8 +69,15 @@ class Exports extends Model
         'export_status',
         'note_form',
     ];
-    public function sumTotalExports(){
+    public function sumTotalExports()
+    {
         $totalSum = DB::table($this->table)->sum('total');
         return $totalSum;
+    }
+    public function productsCreator()
+    {
+        $userId = Auth::user()->id;
+        $products = DB::table($this->table)->where('user_id', $userId)->paginate(8);
+        return $products;
     }
 }
