@@ -102,7 +102,8 @@ class DebtController extends Controller
             $date_start = $request->input('date_start');
             $date_end = $request->input('date_end');
             $date[] = [$date_start, $date_end];
-            $datearr = ['label' => 'Công nợ:', 'values' => [$date_start, $date_end], 'class' => 'debt'];
+            $datearr = ['label' => 'Công nợ:', 'values' => [date('d/m/Y', strtotime($date_start)),
+            date('d/m/Y', strtotime($date_end))], 'class' => 'debt'];
             array_push($string, $datearr);
         }
 
@@ -173,7 +174,10 @@ class DebtController extends Controller
      */
     public function edit($id)
     {
-        $debts = Debt::findorFail($id);
+        $debts = Debt::select('debts.*','guests.guest_name as khachhang', 'users.name as nhanvien')
+        ->join('guests', 'debts.guest_id', '=', 'guests.id')
+        ->join('users', 'debts.user_id', '=', 'users.id')
+        ->findOrFail($id);
         $product = Debt::select('debts.*', 'products.products_code as maSanPham', 'product_exports.id as madon', 'product_exports.product_qty as soluong', 'product_exports.product_price as giaban', 'product.product_price as gianhap')
             ->leftJoin('guests', 'guests.id', 'debts.guest_id')
             ->leftJoin('users', 'users.id', 'debts.user_id')
