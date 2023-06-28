@@ -448,16 +448,7 @@ class ProductsController extends Controller
     {
         $del = Product::where('id', $id)->first();
         $current_id = $del->products_id;
-        // $check = Serinumbers::where('product_id', $del->id)->get();
-        $check = productExports::where('product_id', $del->id)->get();
-        // $block = false;
-        // if ($check->isEmpty()) {
-        //     $block = true;
-        // }
-        if ($check === null) {
-            Serinumbers::where('product_id', $del->id)
-                ->where('seri_status', 1)
-                ->delete();
+        if($del->product_qty === 0){
             $del->delete();
             $updatePrice = Product::where('products_id', $current_id)->get();
             $relatedProduct = Products::findOrFail($current_id);
@@ -470,9 +461,29 @@ class ProductsController extends Controller
             }
             $relatedProduct->save();
             return redirect()->route('data.index')->with('msg', 'Xóa sản phẩm thành công!');
-        } else {
-            return redirect()->route('data.index')->with('warning', 'Sản phẩm còn tồn tại trong đơn xuất hàng!');
+        }else{
+            return redirect()->route('data.index')->with('warning', 'Sản phẩm còn tồn kho không thể xóa!');
         }
+        // $check = productExports::where('product_id', $del->id)->get();
+        // if ($check === null) {
+        //     Serinumbers::where('product_id', $del->id)
+        //         ->where('seri_status', 1)
+        //         ->delete();
+        //     $del->delete();
+        //     $updatePrice = Product::where('products_id', $current_id)->get();
+        //     $relatedProduct = Products::findOrFail($current_id);
+        //     $relatedProduct->price_inventory = 0;
+        //     $relatedProduct->inventory = 0;
+        //     foreach ($updatePrice as $up) {
+        //         $relatedProduct->inventory += $up->product_qty;
+        //         $relatedProduct->price_inventory += $up->total;
+        //         $relatedProduct->price_avg = ($relatedProduct->price_inventory / $relatedProduct->inventory);
+        //     }
+        //     $relatedProduct->save();
+        //     return redirect()->route('data.index')->with('msg', 'Xóa sản phẩm thành công!');
+        // } else {
+        //     return redirect()->route('data.index')->with('warning', 'Sản phẩm còn tồn tại trong đơn xuất hàng!');
+        // }
     }
 
     //  Import data to products

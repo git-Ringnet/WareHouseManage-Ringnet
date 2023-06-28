@@ -370,7 +370,7 @@
                         if (previousSnValues.includes(snValues[k])) {
                             var duplicateSn = snValues[k];
                             isDuplicate = true;
-                            alert("Seri number " + duplicateSn + " đã tồn tại với product_id " + product_id);
+                            alert("Seri number " + duplicateSn + " đã tồn tại");
                             break;
                         }
                     }
@@ -456,9 +456,8 @@
             '</td>' +
             '<td><input required type="text" class="form-control type_product" style="width:120px" name="product_category[]"></td>' +
             '<td><input required type="text" class="form-control text-center unit_product" style="width:70px" name="product_unit[]"></td>' +
-            '<td><input required type="number" oninput="validateNumberInput(this)" name="product_qty[]" class="quantity-input form-control text-center"></td>' +
+            '<td><input required type="text" oninput="validatQtyInput(this)" name="product_qty[]" class="quantity-input form-control text-center"></td>' +
             '<td><input required type="text" class="form-control text-center product_price" style="width:140px"" name="product_price[]" ></td>' +
-            // '<td><input required type="number" name="product_tax[]" class="product_tax"></td>' +
             '<td>' +
             '<input type="hidden" class="product_tax1">' +
             '<select name="product_tax[]" style="width:80px" class="product_tax form-control">' +
@@ -468,7 +467,6 @@
             '<option value="99">NOVAT</option>' +
             '</select>' +
             '</td>' +
-            // '<td><span readonly class="form-control total-amount text-center" style="width:140px" name="product_total[]"> </span></td>'+
             '<td><input readonly type="text" class="form-control total-amount text-center" style="width:140px" name="product_total[]"></td>' +
             '<td><input type="text" class="form-control" style="width:150px" name="product_trademark[]"></td>' +
             '<td>' +
@@ -839,9 +837,6 @@
         var countQTY = 0;
         // Kiểm tra số lượng và seri number
         $('input[name^="product_qty"]').each(function() {
-            if ($(this).val() <= 0) {
-                alert('Vui lòng nhập số lượng');
-            }
             countQTY += parseInt($(this).val());
         })
 
@@ -1017,10 +1012,9 @@
                         '<td><input required type="text" class="form-control" style="width:120px" name="product_category[]"></td>' +
                         '<td><input required type="text" class="form-control text-center" style="width:70px" name="product_unit[]" value="' + typeValue +
                         '"></td>' +
-                        '<td><input required type="number" name="product_qty[]" class="quantity-input form-control text-center" value="' +
+                        '<td><input required type="text" oninput="validatQtyInput(this)" name="product_qty[]" class="quantity-input form-control text-center" value="' +
                         numberssValue + '"></td>' +
                         '<td><input required type="text" class="form-control product_price text-center" style="width:140px" name="product_price[]" value="' + price + '"></td>' +
-                        // '<td><input required type="number" name="product_tax[]" class="product_tax form-control" style="width:80px" value=' + tax + '></td>' +
                         '<input type="hidden" class="product_tax1">' +
                         '<td>' +
                         '<select style="width:80px;" name="product_tax[]"class="product_tax form-control" >' +

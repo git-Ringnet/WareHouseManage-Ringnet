@@ -378,7 +378,13 @@ function validateNumberInput(input) {
     }
 }
 
-
+// Hàm nhập số lượng
+function validatQtyInput(input) {
+    var regex = /^[1-9][0-9]*$/;
+    if (!regex.test(input.value)) {
+        input.value = input.value.replace(/[^1-9][0-9]*$/g, '');
+    }
+}
 
 
 
