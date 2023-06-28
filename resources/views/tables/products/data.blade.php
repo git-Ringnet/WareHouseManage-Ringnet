@@ -540,7 +540,7 @@ $index = array_search($item['label'], $numberedLabels);
             <div class="d-flex justify-content-between align-items-center">
                 <span class="count_checkbox mr-5"></span>
                 <div class="row action">
-                    <div class="btn-taodon my-2 ml-3">
+                    <!-- <div class="btn-taodon my-2 ml-3">
                         <button type="button" class="btn-group btn btn-light d-flex align-items-center">
                             <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24" fill="none">
@@ -553,9 +553,9 @@ $index = array_search($item['label'], $numberedLabels);
                             </svg>
                             <span>Tạo đơn bán</span>
                         </button>
-                    </div>
+                    </div> -->
                     <div class="btn-nhaphang my-2">
-                        <button type="button" class="btn-group btn btn-light d-flex align-items-center ml-4">
+                        <!-- <button type="button" class="btn-group btn btn-light d-flex align-items-center ml-4">
                             <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24" fill="none">
                                 <path fill-rule="evenodd" clip-rule="evenodd"
@@ -566,7 +566,7 @@ $index = array_search($item['label'], $numberedLabels);
                                     fill="#555555" />
                             </svg>
                             <span>Nhập hàng</span>
-                        </button>
+                        </button> -->
                     </div>
                     <div class="dropdown my-2 ml-4">
                         <button class="custom-btn btn btn-light dropdown-toggle align-items-center d-flex h-100"

@@ -182,7 +182,7 @@
 <script src="{{ asset('dist/js/productOrder.js') }}"></script>
 <script>
     var rowCount = $('tbody tr').length;
-
+  
     $(document).on('input', '.quantity-input, [name^="product_price"]', function(e) {
         var productQty = parseInt($(this).closest('tr').find('.quantity-input').val());
         var productPrice = parseFloat($(this).closest('tr').find('input[name^="product_price"]').val().replace(/[^0-9.-]+/g, ""));
@@ -196,7 +196,7 @@
             calculateTotalTax();
         }
     });
-
+  
     $(document).on('change', '.product_tax', function() {
         updateTaxAmount($(this).closest('tr'));
         calculateTotalAmount();
@@ -480,7 +480,7 @@
         $('#inputContainer tbody').append(tr);
         updateRowNumbers();
         var modal = '<div class="modal fade" id="exampleModal' + rowCount +
-            '" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">' +
+            '" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">' +
             '<div class="modal-dialog" role="document">' +
             '<div class="modal-content">' +
             '<div class="modal-header align-items-center">' +
@@ -489,7 +489,7 @@
             '<p>Thông tin chi tiết về số S/N của mỗi sản phẩm </p>' +
             '</div>' +
             '<button type="button" class="close" data-dismiss="modal" aria-label="Close">' +
-            '<span aria-hidden="true">&times;</span>' +
+            '<span aria-hidden="true" onclick="checkData(event)">&times;</span>' +
             '</button>' +
             '</div>' +
             '<div class="modal-body">' +
@@ -801,13 +801,14 @@
             alert('Vui lòng nhập ít nhất 1 sản phẩm');
             error = true;
         }
+
         $('select[name="products_id[]"]').each(function() {
             if ($(this).val() === "") {
                 error = true;
                 alert('Vui lòng chọn sản phẩm cần thêm');
             }
         });
-
+       
         if ($('#provide_id').val().trim() == '' && $('#radio1').prop('checked') == true) {
             error = true;
             alert('Vui lòng chọn nhà cung cấp');
@@ -831,7 +832,6 @@
                     listSN.push(sn);
                 }
             }
-
         });
 
         var countQTY = 0;
@@ -884,7 +884,7 @@
                         if (previousSnValues.includes(snValues[k])) {
                             var duplicateSn = snValues[k];
                             isDuplicate = true;
-                            alert("Seri number " + duplicateSn + " đã tồn tại với product_id " + product_id);
+                            alert("Seri number " + duplicateSn + " đã tồn tại ");
                             break;
                         }
                     }
@@ -1036,7 +1036,7 @@
                         '</tr>';
                     $('#inputContainer tbody').append(tr);
                     var modal = '<div class="modal fade" id="exampleModal' + rowCount +
-                        '" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">' +
+                        '" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >' +
                         '<div class="modal-dialog" role="document">' +
                         '<div class="modal-content">' +
                         '<div class="modal-header align-items-center">' +
@@ -1045,7 +1045,7 @@
                         '<p>Thông tin chi tiết về số S/N của mỗi sản phẩm </p>' +
                         '</div>' +
                         '<button type="button" class="close" data-dismiss="modal" aria-label="Close">' +
-                        '<span aria-hidden="true">&times;</span>' +
+                        '<span aria-hidden="true" onclick="checkData(event)">&times;</span>' +
                         '</button>' +
                         '</div>' +
                         '<div class="modal-body">' +

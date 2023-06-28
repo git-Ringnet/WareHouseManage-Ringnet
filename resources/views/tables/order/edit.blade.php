@@ -329,7 +329,7 @@
             <div id="list_modal">
                 <?php $stt = 0; ?>
                 @foreach ($product_order as $pro)
-                <div class="modal fade" id="exampleModal{{ $stt }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">'
+                <div class="modal fade" id="exampleModal{{ $stt }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">'
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header align-items-center">
@@ -338,7 +338,7 @@
                                     <p>Thông tin chi tiết về số S/N của mỗi sản phẩm </p>
                                 </div>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
+                                    <span aria-hidden="true" onclick="checkData(event)">&times;</span>
                                 </button>
                             </div>
                             <div class="modal-body">
@@ -709,7 +709,7 @@
             '</tr>';
         $('#inputContainer tbody').append(tr);
         var modal = '<div class="modal fade" id="exampleModal' + rowCount +
-            '" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">' +
+            '" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">' +
             '<div class="modal-dialog" role="document">' +
             '<div class="modal-content">' +
             '<div class="modal-header align-items-center">' +
@@ -718,7 +718,7 @@
             '<p>Thông tin chi tiết về số S/N của mỗi sản phẩm </p>' +
             '</div>' +
             '<button type="button" class="close" data-dismiss="modal" aria-label="Close">' +
-            '<span aria-hidden="true">&times;</span>' +
+            '<span aria-hidden="true" onclick="checkData(event)">&times;</span>' +
             '</button>' +
             '</div>' +
             '<div class="modal-body">' +
@@ -1223,7 +1223,7 @@
                         '</tr>';
                     $('#inputContainer tbody').append(tr);
                     var modal = '<div class="modal fade" id="exampleModal' + rowCount +
-                        '" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">' +
+                        '" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">' +
                         '<div class="modal-dialog" role="document">' +
                         '<div class="modal-content">' +
                         '<div class="modal-header align-items-center">' +
@@ -1232,7 +1232,7 @@
                         '<p>Thông tin chi tiết về số S/N của mỗi sản phẩm </p>' +
                         '</div>' +
                         '<button type="button" class="close" data-dismiss="modal" aria-label="Close">' +
-                        '<span aria-hidden="true">&times;</span>' +
+                        '<span aria-hidden="true" onclick="checkData(event)">&times;</span>' +
                         '</button>' +
                         '</div>' +
                         '<div class="modal-body">' +
