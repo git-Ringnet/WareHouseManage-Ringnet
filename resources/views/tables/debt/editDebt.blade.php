@@ -34,14 +34,14 @@
                 <div class="col-md-3 col-sm-6">
                     <div class="form-group">
                         <div class="labelform">Khách hàng</div>
-                        <input type="text" class="form-control" value="{{ $debts->guest_id }}" name=""
+                        <input type="text" class="form-control" value="{{ $debts->khachhang }}" name=""
                             id="" readonly>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-6">
                     <div class="form-group">
                         <div class="labelform">Nhân viên</div>
-                        <input type="text" class="form-control" value="{{ $debts->user_id }}" name=""
+                        <input type="text" class="form-control" value="{{ $debts->nhanvien }}" name=""
                             id="" readonly>
                     </div>
                 </div>

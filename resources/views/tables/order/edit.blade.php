@@ -131,8 +131,8 @@
                                             echo 'class="d-none"';
                                         } ?>>
                                         <a href="#" class="text-dark d-flex justify-content-between p-2 search-info select_page" id="{{ $value->id }}" name="select_page">
-                                            <span>{{ $value->provide_represent }}</span>
-                                            <span class="mr-5">{{ $value->provide_name }}</span>
+                                            <span class="w-50">{{ $value->provide_represent }}</span>
+                                            <span class="w-50">{{ $value->provide_name }}</span>
                                         </a>
                                     </li>
                                     @endforeach

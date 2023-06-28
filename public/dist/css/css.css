@@ -668,7 +668,7 @@ input[type="number"] {
 
 .list_products.form-control,
 .maProduct.form-control,
-.child-select.form-control,
+/* .child-select.form-control, */
 .search_product.form-control {
     width: auto !important;
 }

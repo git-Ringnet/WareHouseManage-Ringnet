@@ -124,8 +124,8 @@
                                         <a href="#"
                                             class="text-dark d-flex justify-content-between p-2 search-info"
                                             id="{{ $item->id }}" name="search-info">
-                                            <span>{{ $item->guest_receiver }}</span>
-                                            <span class="mr-5">{{ $item->guest_name }}</span>
+                                            <span class="w-50">{{ $item->guest_receiver }}</span>
+                                            <span class="w-50">{{ $item->guest_name }}</span>
                                         </a>
                                     </li>
                                 @endforeach
