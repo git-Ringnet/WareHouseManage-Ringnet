@@ -21,7 +21,7 @@
                         </button>
                     </a>
                     <div class="class mx-4">
-                        <!-- <button onclick="exportToExcel()" type="button"
+                        <button onclick="exportToExcel()" type="button"
                             class="custom-btn btn btn-outline-primary d-flex align-items-center">
                             <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24" fill="none">
@@ -34,7 +34,7 @@
                                     stroke-linejoin="round" />
                             </svg>
                             <span>Xuất Excel</span>
-                        </button> -->
+                        <!-- </button>
                        <a href="{{route('export_products')}}" class="custom-btn btn btn-outline-primary btn-file d-flex align-items-center">
                             <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24" fill="none">
@@ -47,7 +47,7 @@
                                     stroke-linejoin="round" />
                             </svg>
                             <span>Xuất Excel</span>
-                            </a>
+                            </a> -->
                     </div>
                     <div class="custom-btn btn btn-outline-primary btn-file d-flex align-items-center">
                         <div>
@@ -1096,7 +1096,6 @@ $index = array_search($item['label'], $numberedLabels);
                     updateMultipleActionVisibility();
                     location.reload();
                 } else {
-                    alert(data.msg);
                     location.reload();
                 }
             }
