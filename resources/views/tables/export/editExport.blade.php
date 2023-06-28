@@ -356,6 +356,7 @@
                                 @endif
                                 <td class="soTT"><?php echo $stt++; ?></td>
                                 <td>
+                                    <input type="hidden" id="export_id" value="{{ $value_export->id }}">
                                     <select id="maProduct" class="p-1 maProduct form-control" name="products_id[]"
                                         <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                             echo 'disabled';
@@ -421,7 +422,7 @@
                                         <option value="10" <?php if ($value_export->product_tax == 10) {
                                             echo 'selected';
                                         } ?>>10%</option>
-                                        <option value="00" <?php if ($value_export->product_tax == 00) {
+                                        <option value="99" <?php if ($value_export->product_tax == 99) {
                                             echo 'selected';
                                         } ?>>NOVAT</option>
                                     </select>
@@ -661,16 +662,20 @@
                     <td style="color: #EC212D;" class="text-right thue-vat"><b></b></td>
                 </tr>
                 <tr>
+                    <td colspan="5" class="text-center"><b style="color: #EC212D;">Vận chuyển:</b></td>
+                    <td style="color: #EC212D;" class="text-right van-chuyen"><b></b></td>
+                </tr>
+                <tr>
                     <td colspan="5" class="text-center"><b style="color: #EC212D;">Thành tiền:</b></td>
                     <td style="color: #EC212D;" class="text-right tong-cong"><b></b></td>
                 </tr>
-                <tr>
+                {{-- <tr>
                     <td colspan="6" class="text-center">
                         <b>(Bằng chữ: Ba mươi chín triệu ba trăm tám mươi
                             ngàn đồng chẵn).
                         </b>
                     </td>
-                </tr>
+                </tr> --}}
             </tfoot>
         </table>
         <div class="mt-4">
@@ -878,6 +883,7 @@
             }
         });
     });
+
     //hiển thị thông tin S/N cho duyet
     $('.sn2').on('click', function() {
         var qty = $(this).closest('tr').find('.quantity-input').val();
@@ -897,15 +903,17 @@
             .text();
         var giaNhap = $(this).closest('tr').find('.price_import').val();
         var tonKho = $(this).closest('tr').find('.tonkho').val();
+        var export_id = $('#export_id').val();
+
         $.ajax({
             url: '{{ route('getSN2') }}',
             type: 'GET',
             data: {
                 qty: qty,
                 productCode: productCode,
+                export_id: export_id,
             },
             success: function(response) {
-                console.log(response);
                 var modalBody = $('#snModal').find('.modal-body');
                 let count = 1;
                 modalBody.empty();
@@ -1002,10 +1010,11 @@
         //Công nợ
         $(document).on('change', '#debtCheckbox', function() {
             if ($(this).is(':checked')) {
-                $('#debtInput').prop('disabled', true);
+                $('#debtInput').prop('readonly', true);
+                $('#debtInput').val(0);
                 $("#data-debt").css("color", "#D6D6D6");
             } else {
-                $('#debtInput').prop('disabled', false);
+                $('#debtInput').prop('readonly', false);
                 $("#data-debt").css("color", "#1D1C20");
             }
         });
@@ -1043,7 +1052,7 @@
             const slInput = $(
                 "<td>" +
                 "<div class='d-flex'>" +
-                "<input type='number' oninput='limitMaxValue(this)' id='product_qty' class='quantity-input form-control text-center' name='product_qty[]' required style='width:50px;'>" +
+                "<input type='text' oninput='validatQtyInput(this)' id='product_qty' class='quantity-input form-control text-center' name='product_qty[]' required style='width:50px;'>" +
                 "<input type='text' readonly class='quantity-exist' required style='width:50px;background:#D6D6D6;border:none;'>" +
                 "</div>" +
                 "</td>"
@@ -1059,7 +1068,7 @@
                 "<option value='0'>0%</option>" +
                 "<option value='8'>8%</option>" +
                 "<option value='10'>10%</option>" +
-                "<option value='0'>NOVAT</option>" +
+                "<option value='99'>NOVAT</option>" +
                 "</select>" +
                 "</td>");
             const thanhTienInput = $(
@@ -1182,7 +1191,7 @@
                             response.trading +
                             '<br>' + '<b>Giá nhập: </b>' + formattedPrice +
                             '<br>' + '<b>Thuế: </b>' +
-                            thue + '%');
+                            (thue == 99 ? "NOVAT" : thue + '%') + '%');
                     },
                 });
             });
@@ -1228,6 +1237,14 @@
         var regex = /^[0-9]*$/;
         if (!regex.test(input.value)) {
             input.value = input.value.replace(/[^0-9]/g, '');
+        }
+    }
+
+    //số lượng
+    function validatQtyInput(input) {
+        var regex = /^[1-9][0-9]*$/;
+        if (!regex.test(input.value)) {
+            input.value = input.value.replace(/[^1-9]*$/g, '');
         }
     }
 
@@ -1331,6 +1348,7 @@
                     $(document).on('change', '#debtCheckbox', function() {
                         var isChecked = $(this).is(':checked');
                         $('#debtInput').prop('disabled', isChecked);
+                        $('#debtInput').val(0);
                     });
                 }
             });
@@ -1583,7 +1601,9 @@
             var productPriceElement = $(this).find('[name^="product_price"]');
             var productPrice = 0;
             var taxValue = parseFloat($(this).find('.product_tax option:selected').val());
-
+            if (taxValue == 99) {
+                taxValue = 0;
+            }
             if (productPriceElement.length > 0) {
                 var rawPrice = productPriceElement.val();
                 if (rawPrice !== "") {
@@ -1855,9 +1875,11 @@
         var tong_tien = document.querySelector(".tong-tien");
         var thue_vat = document.querySelector(".thue-vat");
         var tong_cong = document.querySelector(".tong-cong");
+        var van_chuyen = document.querySelector(".van-chuyen");
         //
         var total_amount_sum = document.getElementById("total-amount-sum");
         var product_tax = document.getElementById("product-tax");
+        var transport_fee = document.getElementById("transport_fee");
         var grand_total = document.getElementById("grand-total");
         //ghi chú
         var note_form = document.getElementById("note_form");
@@ -1876,6 +1898,7 @@
                 //thành tiền, thuế, tổng tiền
                 tong_tien.innerHTML = total_amount_sum.innerText;
                 thue_vat.innerHTML = product_tax.innerText;
+                van_chuyen.innerHTML = transport_fee.value;
                 tong_cong.innerHTML = grand_total.innerText;
                 //ghi chú
                 ghi_chu.innerHTML = note_form.value.replace(/\n/g, "<br>");

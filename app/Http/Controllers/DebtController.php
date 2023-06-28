@@ -200,6 +200,7 @@ class DebtController extends Controller
             $action = $request->input('submitBtn');
             if ($action === 'action1') {
                 $debt->debt_status = 1;
+                $debt->debt = 0;
                 $debt->update($request->all());
                 return redirect()->route('debt.index')->with('msg', 'Thanh toán thành công!');
             }

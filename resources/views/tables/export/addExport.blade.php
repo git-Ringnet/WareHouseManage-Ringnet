@@ -349,16 +349,22 @@
                     <td style="color: #EC212D;" class="text-right thue-vat"><b></b></td>
                 </tr>
                 <tr>
+                    <td colspan="5" class="text-center" style="color: #EC212D;">
+                        <b>Phí vận chuyển:</b>
+                    </td>
+                    <td style="color: #EC212D;" class="text-right van-chuyen"><b></b></td>
+                </tr>
+                <tr>
                     <td colspan="5" class="text-center"><b style="color: #EC212D;">Thành tiền:</b></td>
                     <td style="color: #EC212D;" class="text-right tong-cong"><b></b></td>
                 </tr>
-                <tr>
+                {{-- <tr>
                     <td colspan="6" class="text-center">
                         <b>(Bằng chữ: Ba mươi chín triệu ba trăm tám mươi
                             ngàn đồng chẵn).
                         </b>
                     </td>
-                </tr>
+                </tr> --}}
             </tfoot>
         </table>
         <div class="mt-4">
@@ -397,8 +403,11 @@
     //form thong tin khach hang xuất hàng
     var radio1 = document.getElementById("radio1");
     var radio2 = document.getElementById("radio2");
+
     $("#radio1").on("click", function() {
         $('#data-container').empty();
+        $('#click').val(null);
+        $('#updateClick').val(2);
     });
     $("#radio2").on("click", function() {
         $('#data-container').html(
@@ -455,10 +464,13 @@
             '<input type="text" class="form-control" id="guest_note" placeholder="Nhập thông tin" name="guest_note" value="">' +
             '</div>' + '</div></div></div>'
         );
+        $('#click').val(2);
+        $('#updateClick').val(null);
         //Công nợ
         $(document).on('change', '#debtCheckbox', function() {
             if ($(this).is(':checked')) {
                 $('#debtInput').prop('disabled', true);
+                $('#debtInput').val(0);
                 $("#data-debt").css("color", "#D6D6D6");
             } else {
                 $('#debtInput').prop('disabled', false);
@@ -472,6 +484,14 @@
         var regex = /^[0-9]*$/;
         if (!regex.test(input.value)) {
             input.value = input.value.replace(/[^0-9]/g, '');
+        }
+    }
+
+    //số lượng
+    function validatQtyInput(input) {
+        var regex = /^[1-9][0-9]*$/;
+        if (!regex.test(input.value)) {
+            input.value = input.value.replace(/[^1-9]*$/g, '');
         }
     }
 
@@ -507,7 +527,7 @@
             const slInput = $(
                 "<td>" +
                 "<div class='d-flex'>" +
-                "<input type='text' oninput='validateNumberInput(this)' id='product_qty' class='quantity-input form-control' name='product_qty[]' required style='width:50px;'>" +
+                "<input type='text' oninput='validatQtyInput(this)' id='product_qty' class='quantity-input form-control' name='product_qty[]' required style='width:50px;'>" +
                 "<input type='text' readonly class='quantity-exist form-control' required style='width:50px;background:#D6D6D6;border:none;'>" +
                 "</div>" +
                 "</td>"
@@ -523,7 +543,7 @@
                 "<option value='0'>0%</option>" +
                 "<option value='8'>8%</option>" +
                 "<option value='10'>10%</option>" +
-                "<option value='00'>NOVAT</option>" +
+                "<option value='99'>NOVAT</option>" +
                 "</select>" +
                 "</td>");
             const thanhTienInput = $("<td><span class='px-5 total-amount'>0</span></td>");
@@ -643,7 +663,6 @@
                 var tonKho = $(this).closest('tr').find('.tonkho').val();
                 var loaihang = $(this).closest('tr').find('.loaihang').val();
                 var dangGD = $(this).closest('tr').find('.dangGD').val();
-
                 $('#productModal').find('.modal-body').html('<b>Mã sản phẩm: </b> ' +
                     productCode +
                     '<br>' + '<b>Tên sản phẩm: </b> ' + productName + '<br>' +
@@ -651,7 +670,7 @@
                     '<b>Tồn kho: </b>' + tonKho + '<br>' + '<b>Đang giao dịch: </b>' +
                     dangGD +
                     '<br>' + '<b>Giá nhập: </b>' + giaNhap + '<br>' + '<b>Thuế: </b>' +
-                    thue + '%');
+                    (thue == 99 ? "NOVAT" : thue + '%'));
             });
             // Gắn các phần tử vào hàng mới
             newRow.append(checkbox, MaInput, TenInput, ProInput, dvtInput, slInput,
@@ -688,6 +707,8 @@
         $('.search-info').click(function() {
             var idCustomer = $(this).attr('id');
             $('#radio1').prop('checked', true);
+            $('#click').val(null);
+            $('#updateClick').val(2);
             $.ajax({
                 url: '{{ route('searchExport') }}',
                 type: 'GET',
@@ -772,10 +793,20 @@
                     $(document).on('change', '#debtCheckbox', function() {
                         var isChecked = $(this).is(':checked');
                         $('#debtInput').prop('disabled', isChecked);
+                        $('#debtInput').val(0);
                     });
                 }
             });
         });
+    });
+    //Công nợ
+    var isChecked = $('#debtCheckbox').is(':checked');
+    // Đặt trạng thái của input dựa trên checkbox
+    $('#debtInput').prop('disabled', isChecked);
+    // Xử lý sự kiện khi checkbox thay đổi
+    $(document).on('change', '#debtCheckbox', function() {
+        var isChecked = $(this).is(':checked');
+        $('#debtInput').prop('disabled', isChecked);
     });
     //Giới hạn số lượng
     var qty_exist = $('.quantity-exist').val();
@@ -811,6 +842,7 @@
         if ($('#debtCheckbox').is(':checked')) {
             debt = "0";
             $('#debtInput').prop('disabled', true);
+            $('#debtInput').val(0);
         } else {
             debt = $('#debtInput').val();
             $('#debtInput').prop('disabled', false);
@@ -884,6 +916,7 @@
         if ($('#debtCheckbox').is(':checked')) {
             debt = "0";
             $('#debtInput').prop('disabled', true);
+            $('#debtInput').val(0);
         } else {
             debt = $('#debtInput').val();
             $('#debtInput').prop('disabled', false);
@@ -1061,6 +1094,9 @@
         var productQty = parseInt(row.find('.quantity-input').val().replace(/[^0-9.-]+/g, ""));
         var productPrice = parseFloat(row.find('input[name^="product_price"]').val().replace(/[^0-9.-]+/g, ""));
         var taxValue = parseFloat(row.find('.product_tax').val().replace(/[^0-9.-]+/g, ""));
+        if (taxValue == 99) {
+            taxValue = 0;
+        }
 
         if (!isNaN(productQty) && !isNaN(productPrice) && !isNaN(taxValue)) {
             var totalAmount = productQty * productPrice;
@@ -1142,13 +1178,35 @@
                 var newValue = $(this).val().replace(/,/g, '');
                 $(this).val(newValue);
             });
+
+            // Lấy giá trị product_id và product_qty từ các phần tử trong form
+            var productIDs = [];
+            var productQtys = [];
+
+            $('.maProduct').each(function() {
+                var productID = $(this).val();
+                if (productID !== '') {
+                    productIDs.push(productID);
+                }
+            });
+
+            $('.quantity-input').each(function() {
+                var productQty = $(this).val();
+                if (productQty !== '') {
+                    productQtys.push(productQty);
+                }
+            });
+
+            console.log(productIDs);
+
+            // Thực hiện yêu cầu Ajax
         } else {
             if (formGuest.length === 0) {
                 alert('Lỗi: Chưa nhập thông tin khách hàng!');
             } else if (productList.length === 0) {
                 alert('Lỗi: Chưa thêm sản phẩm!');
             }
-            event.preventDefault();
+            event.preventDefault(); // Ngăn chặn việc submit form
         }
     }
 
@@ -1289,10 +1347,12 @@
         var tong_tien = document.querySelector(".tong-tien");
         var thue_vat = document.querySelector(".thue-vat");
         var tong_cong = document.querySelector(".tong-cong");
+        var van_chuyen = document.querySelector(".van-chuyen");
         //
         var total_amount_sum = document.getElementById("total-amount-sum");
         var product_tax = document.getElementById("product-tax");
         var grand_total = document.getElementById("grand-total");
+        var transport_fee = document.getElementById("transport_fee");
         //ghi chú
         var note_form = document.getElementById("note_form");
         var ghi_chu = document.querySelector(".noteForm");
@@ -1310,6 +1370,7 @@
                 //thành tiền, thuế, tổng tiền
                 tong_tien.innerHTML = total_amount_sum.innerText;
                 thue_vat.innerHTML = product_tax.innerText;
+                van_chuyen.innerHTML = transport_fee.value;
                 tong_cong.innerHTML = grand_total.innerText;
                 //ghi chú
                 ghi_chu.innerHTML = note_form.value.replace(/\n/g, "<br>");

@@ -123,8 +123,8 @@
                     <div class="labelform16">Công nợ:</div>
                 </div>
                 <div class="d-flex align-items-center ml-4">
-                    <input type="text" class="form-control text-center mr-1" style="width: 50px" name="debt"
-                        id="daysToAdd" value="{{ $debts->debt }}">
+                    <input type="text" oninput="validateNumberInput(this)" class="form-control text-center mr-1" style="width: 50px"
+                        name="debt" id="daysToAdd" value="{{ $debts->debt }}">
                 </div>
                 <span>ngày</span>
             </div>
@@ -149,7 +149,8 @@
         </section>
         <div class="btn-fixed">
             @if ($debts->debt_status != 1)
-                <button class="btn btn-primary" type="submit" name="submitBtn" value="action2" onkeydown="return event.key != 'Enter';">Lưu</button>
+                <button class="btn btn-primary" type="submit" name="submitBtn" value="action2"
+                    onkeydown="return event.key != 'Enter';">Lưu</button>
             @endif
             <a href="{{ route('debt.index') }}"><span class="btn border-secondary ml-1">Hủy</span></a>
         </div>
@@ -190,4 +191,11 @@
                 return year + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
             }
         });
+
+        function validateNumberInput(input) {
+            var regex = /^[0-9]*$/;
+            if (!regex.test(input.value)) {
+                input.value = input.value.replace(/[^0-9]/g, '');
+            }
+        }
     </script>
