@@ -184,9 +184,9 @@ function fillDataToModal() {
             var productType = $(this).closest('tr').find('[name^="product_category"]').val();
             var productQty = $(this).closest('tr').find('[name^="product_qty"]').val();
             var provide_name;
-            if($('#provide_id').val() === ""){
+            if ($('#provide_id').val() === "") {
                 provide_name = $('#provide_name_new').val();
-            }else{
+            } else {
                 provide_name = $('#provide_name').val();
             }
             $('.sttRowTable').text(k + 1);
@@ -360,6 +360,11 @@ function checkData(e) {
     var values = [];
     inputs.each(function () {
         var value = $(this).val().trim();
+        if (value == "") {
+            alert('Vui lòng nhập seri number');
+            e.stopPropagation();
+            return false;
+        }
         if (values.includes(value)) {
             alert('Đã nhập trùng seri ' + value);
             e.stopPropagation();
@@ -367,8 +372,39 @@ function checkData(e) {
         }
         values.push(value);
     })
-
 }
+
+// $(document).click(function (e) {
+//     if (!$(e.target).closest(".modal-content").length) {
+//         var clickedDiv = $(e.target).closest('.modal-dialog');
+//         var inputs = clickedDiv.find('.modal-body #table_SNS input[name^="product_SN"]');
+//         var values = [];
+//         inputs.each(function () {
+//             var value = $(this).val().trim();
+//             if (value == "") {
+//                 e.stopPropagation();
+//                 alert('Vui lòng nhập seri number');
+//                 return false;
+//             }
+//             if (values.includes(value)) {
+//                 e.stopPropagation();
+//                 alert('Đã nhập trùng seri ' + value);
+//                 return false;
+//             }
+//             values.push(value);
+//         })
+//     }
+// });
+
+// function checkClick(event) {
+//     var div = $(event.target);
+//     event.stopPropagation();
+//     if(div[0].is(event.target)){
+//         alert('trong');
+//     }else{
+//         alert('ngoài');
+//     }
+// }
 
 // Hàm chỉ cho phép nhập số
 function validateNumberInput(input) {
