@@ -46,9 +46,6 @@ $("#radio2").on("click", function() {
         ' <label for="email">Hình thức thanh toán:</label>' +
         '<input type="text" class="form-control" id="guest_pay" placeholder="Nhập thông tin" name="guest_pay" value="">' +
         '</div>' + '<div class="form-group">' +
-        '<label for="email">Điều kiện thanh toán:</label>' +
-        '<input type="text" class="form-control" id="guest_payTerm" placeholder="Nhập thông tin" name="guest_payTerm" value="">' +
-        '</div>' + '<div class="form-group">' +
         '<label for="email">Ghi chú:</label>' +
         '<input type="text" class="form-control" id="guest_note" placeholder="Nhập thông tin" name="guest_note" value="">' +
         '</div></div></div>'
@@ -193,10 +190,6 @@ $(document).ready(function() {
                     ' <label for="email">Hình thức thanh toán:</label>' +
                     '<input type="text" class="form-control" id="guest_pay" placeholder="Nhập thông tin" name="guest_pay" value="' +
                     data.guest_pay + '">' +
-                    '</div>' + '<div class="form-group">' +
-                    '<label for="email">Điều kiện thanh toán:</label>' +
-                    '<input type="text" class="form-control" id="guest_payTerm" placeholder="Nhập thông tin" name="guest_payTerm" value="' +
-                    data.guest_payTerm + '">' +
                     '</div>' + '<div class="form-group">' +
                     '<label for="email">Ghi chú:</label>' +
                     '<input type="text" class="form-control" id="guest_note" placeholder="Nhập thông tin" name="guest_note" value="' +

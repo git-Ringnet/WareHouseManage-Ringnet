@@ -4,38 +4,52 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <div class="container-fluided">
-            <div class="row mb-1 m-0">
+            <div class="d-flex mb-1">
                 @can('view-provides')
                     <a href="{{ route('insertProducts') }}">
-                        <button type="button" class="btn btn-primary d-flex align-items-center">
-                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                        <button type="button" class="custom-btn btn btn-primary d-flex align-items-center">
+                            <svg class="mr-1" width="24" height="24" viewBox="0 0 24 24" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M6 0C6.38791 -1.97352e-08 6.70237 0.314463 6.70237 0.702373L6.70237 11.2976C6.70237 11.6855 6.38791 12 6 12C5.61209 12 5.29763 11.6855 5.29763 11.2976V0.702373C5.29763 0.314463 5.61209 -1.97352e-08 6 0Z"
-                                    fill="white" />
+                                    d="M12 6C12.3879 6 12.7024 6.31446 12.7024 6.70237L12.7024 17.2976C12.7024 17.6855 12.3879 18 12 18C11.6121 18 11.2976 17.6855 11.2976 17.2976V6.70237C11.2976 6.31446 11.6121 6 12 6Z"
+                                    fill="#ffff" />
                                 <path fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M12 6C12 6.38791 11.6855 6.70237 11.2976 6.70237H0.702373C0.314463 6.70237 -1.38146e-07 6.38791 0 6C-5.13115e-07 5.61209 0.314463 5.29763 0.702373 5.29763H11.2976C11.6855 5.29763 12 5.61209 12 6Z"
-                                    fill="white" />
+                                    d="M18 12C18 12.3879 17.6855 12.7024 17.2976 12.7024H6.70237C6.31446 12.7024 6 12.3879 6 12C6 11.6121 6.31446 11.2976 6.70237 11.2976H17.2976C17.6855 11.2976 18 11.6121 18 12Z"
+                                    fill="#ffff" />
                             </svg>
-                            <span class="ml-2">Thêm sản phẩm</span>
+                            <span>Thêm sản phẩm</span>
                         </button>
                     </a>
-                    <button onclick="exportToExcel()" type="button"
-                        class="btn btn-outline-primary mx-3 d-flex align-items-center">
-                        <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                            viewBox="0 0 24 24" fill="none">
-                            <path
-                                d="M15.0003 7.80054H16.5001C16.8979 7.80054 17.2794 7.95857 17.5607 8.23984C17.842 8.52112 18 8.9026 18 9.30039V17.1006C18 17.4983 17.842 17.8798 17.5607 18.1611C17.2794 18.4424 16.8979 18.6004 16.5001 18.6004H7.49986C7.10207 18.6004 6.72058 18.4424 6.4393 18.1611C6.15802 17.8798 6 17.4983 6 17.1006V9.30039C6 8.9026 6.15802 8.52112 6.4393 8.23984C6.72058 7.95857 7.10207 7.80054 7.49986 7.80054H8.99972"
-                                stroke="#0095F6" stroke-linecap="round" stroke-linejoin="round" />
-                            <path d="M8.99976 11.3997L11.9995 14.3994L15.0003 11.3997" stroke="#0095F6"
-                                stroke-linecap="round" stroke-linejoin="round" />
-                            <path d="M12.0006 3V13.7999" stroke="#0095F6" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                        <span>Xuất Excel</span>
-                    </button>
-                    <!-- <input type="file" id="excelFile" />
-                        <button ></button> -->
-                    <label class="btn btn-outline-primary btn-file mx-3 d-flex align-items-center" onclick="importExcel()">
+                    <div class="class mx-4">
+                        <button onclick="exportToExcel()" type="button"
+                            class="custom-btn btn btn-outline-primary d-flex align-items-center">
+                            <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none">
+                                <path
+                                    d="M15.0003 7.80054H16.5001C16.8979 7.80054 17.2794 7.95857 17.5607 8.23984C17.842 8.52112 18 8.9026 18 9.30039V17.1006C18 17.4983 17.842 17.8798 17.5607 18.1611C17.2794 18.4424 16.8979 18.6004 16.5001 18.6004H7.49986C7.10207 18.6004 6.72058 18.4424 6.4393 18.1611C6.15802 17.8798 6 17.4983 6 17.1006V9.30039C6 8.9026 6.15802 8.52112 6.4393 8.23984C6.72058 7.95857 7.10207 7.80054 7.49986 7.80054H8.99972"
+                                    stroke="#0095F6" stroke-linecap="round" stroke-linejoin="round" />
+                                <path d="M8.99976 11.3997L11.9995 14.3994L15.0003 11.3997" stroke="#0095F6"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                                <path d="M12.0006 3V13.7999" stroke="#0095F6" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                            <span>Xuất Excel</span>
+                        <!-- </button>
+                       <a href="{{route('export_products')}}" class="custom-btn btn btn-outline-primary btn-file d-flex align-items-center">
+                            <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none">
+                                <path
+                                    d="M15.0003 7.80054H16.5001C16.8979 7.80054 17.2794 7.95857 17.5607 8.23984C17.842 8.52112 18 8.9026 18 9.30039V17.1006C18 17.4983 17.842 17.8798 17.5607 18.1611C17.2794 18.4424 16.8979 18.6004 16.5001 18.6004H7.49986C7.10207 18.6004 6.72058 18.4424 6.4393 18.1611C6.15802 17.8798 6 17.4983 6 17.1006V9.30039C6 8.9026 6.15802 8.52112 6.4393 8.23984C6.72058 7.95857 7.10207 7.80054 7.49986 7.80054H8.99972"
+                                    stroke="#0095F6" stroke-linecap="round" stroke-linejoin="round" />
+                                <path d="M8.99976 11.3997L11.9995 14.3994L15.0003 11.3997" stroke="#0095F6"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                                <path d="M12.0006 3V13.7999" stroke="#0095F6" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                            <span>Xuất Excel</span>
+                            </a> -->
+                    </div>
+                    <div class="custom-btn btn btn-outline-primary btn-file d-flex align-items-center">
                         <div>
                             <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24" fill="none">
@@ -48,8 +62,9 @@
                                     stroke-linejoin="round" />
                             </svg>
                         </div>
-                        <span>Nhập Excel</span> <input type="file" id="import_file">
-                    </label>
+                        <span>Nhập Excel</span> <input type="file" id="import_file" onchange="importExcel()"
+                            accept=".xlsx">
+                    </div>
                 @endcan
             </div>
             <div class="row m-auto filter pt-2">
@@ -57,7 +72,7 @@
                     <div class="row mr-0">
                         <div class="col-5">
                             <input type="text" placeholder="Tìm kiếm theo mã sản phẩm hoặc tên sản phẩm"
-                                name="keywords" class="pr-4 input-search w-100 form-control"
+                                name="keywords" class="pr-4 input-search w-100 form-control h-100"
                                 value="{{ request()->keywords }}">
                             <span class="search-icon"><i class="fas fa-search"></i></span>
                         </div>
@@ -71,7 +86,7 @@
                                         d="M6 5.4643C6 5.34116 6.04863 5.22306 6.13518 5.13599C6.22174 5.04892 6.33913 5 6.46154 5H17.5385C17.6609 5 17.7783 5.04892 17.8648 5.13599C17.9514 5.22306 18 5.34116 18 5.4643V7.32149C18 7.43599 17.9579 7.54645 17.8818 7.63164L13.8462 12.1428V16.6075C13.8461 16.7049 13.8156 16.7998 13.7589 16.8788C13.7022 16.9578 13.6223 17.0168 13.5305 17.0476L10.7612 17.9762C10.6919 17.9994 10.618 18.0058 10.5458 17.9947C10.4735 17.9836 10.4049 17.9554 10.3456 17.9124C10.2863 17.8695 10.238 17.8129 10.2047 17.7475C10.1713 17.682 10.1539 17.6096 10.1538 17.5361V12.1428L6.11815 7.63164C6.0421 7.54645 6.00002 7.43599 6 7.32149V5.4643Z"
                                         fill="#555555" />
                                 </svg>
-                            </span>Tắt bộ lọc</a>
+                            </span><span>Tắt bộ lọc</span></a>
                     </div>
                     <div class="d-flex justify-contents-center align-items-center mr-auto row-filter my-3 m-0">
                         <div class="icon-filter mr-3">
@@ -291,24 +306,24 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <a class="cursor select-all mr-auto">Chọn tất cả</a>
                                                 <a class="cursor deselect-all">Hủy chọn</a>
                                             </div>
-                                            <ul class="ks-cboxtags-status p-0 m-0 px-2">
+                                            <ul class="ks-cboxtags-status p-0 mb-1 px-2">
                                                 <li>
                                                     <input type="checkbox" id="status_active"
                                                         {{ in_array(2, $status) ? 'checked' : '' }} name="status[]"
                                                         value="2">
-                                                    <label for="status_active">Sẵn hàng</label>
+                                                    <label id="status_value" for="">Sẵn hàng</label>
                                                 </li>
                                                 <li>
                                                     <input type="checkbox" id="status_inactive"
                                                         {{ in_array(1, $status) ? 'checked' : '' }} name="status[]"
                                                         value="1">
-                                                    <label for="status_inactive">Gần hết</label>
+                                                    <label id="status_value" for="">Gần hết</label>
                                                 </li>
                                                 <li>
-                                                    <input type="checkbox" id="status_inactive"
+                                                    <input type="checkbox" id="status"
                                                         {{ in_array(0, $status) ? 'checked' : '' }} name="status[]"
                                                         value="0">
-                                                    <label for="status_inactive">Hết hàng</label>
+                                                    <label for="">Hết hàng</label>
                                                 </li>
                                             </ul>
                                         </div>
@@ -335,7 +350,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <a class="cursor select-all-category mr-auto">Chọn tất cả</a>
                                                 <a class="cursor deselect-all-category">Hủy chọn</a>
                                             </div>
-                                            <ul class="ks-cboxtags-category p-0 m-0 px-2">
+                                            <ul class="ks-cboxtags-category p-0 mb-1 px-2">
                                                 @if (!empty($trademarks))
                                                     @php
                                                         $seenValues = [];
@@ -344,11 +359,12 @@ $index = array_search($item['label'], $numberedLabels);
                                                         @if (!in_array($value->ID_category, $seenValues))
                                                             <li>
                                                                 <input type="checkbox" id="roles_active"
+                                                                    class="category-checkbox"
                                                                     {{ in_array($value->ID_category, $categoryarr) ? 'checked' : '' }}
                                                                     name="categoryarr[]"
                                                                     value="{{ $value->ID_category }}">
                                                                 <label id="category_value"
-                                                                    for="category_active">{{ $value->ID_category }}</label>
+                                                                    for="">{{ $value->ID_category }}</label>
                                                             </li>
                                                             @php
                                                                 $seenValues[] = $value->ID_category;
@@ -392,7 +408,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <a class="cursor select-all-trademark mr-auto">Chọn tất cả</a>
                                                 <a class="cursor deselect-all-trademark">Hủy chọn</a>
                                             </div>
-                                            <ul class="ks-cboxtags-trademark p-0 m-0 px-2">
+                                            <ul class="ks-cboxtags-trademark p-0 mb-1 px-2">
                                                 @if (!empty($trademarks))
                                                     @php
                                                         $seenValues = [];
@@ -405,7 +421,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                                     name="trademarkarr[]"
                                                                     value="{{ $value->products_trademark }}">
                                                                 <label id="trademark_value"
-                                                                    for="trademark_active">{{ $value->products_trademark }}</label>
+                                                                    for="">{{ $value->products_trademark }}</label>
                                                             </li>
                                                             @php
                                                                 $seenValues[] = $value->products_trademark;
@@ -437,9 +453,10 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('comparison_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
-                                                <input class="w-50 quantity-input input-so" type="number"
+                                                <input class="w-50 quantity-input input-so" type="text"
+                                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                                     name="quantity" value="{{ request()->quantity }}"
                                                     placeholder="Số lượng">
                                             </div>
@@ -454,6 +471,7 @@ $index = array_search($item['label'], $numberedLabels);
                                     {{-- filter trị trung bình --}}
                                     <div class="block-options" id="avg-options" style="display:none">
                                         <div class="wrap w-100">
+                                            </option>
                                             <div class="heading-title title-wrap">
                                                 <h5>Trị trung bình</h5>
                                             </div>
@@ -464,9 +482,10 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('avg_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
-                                                <input class="w-50 avg-input" type="number" name="avg"
+                                                <input class="w-50 avg-input" type="text" name="avg"
+                                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                                     value="{{ request()->avg }}" placeholder="Nhập giá trị">
                                             </div>
                                         </div>
@@ -492,9 +511,10 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('price_inven_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
-                                                <input class="w-50 price_inven-input input-so" type="number"
+                                                <input class="w-50 price_inven-input input-so" type="text"
+                                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                                     name="price_inven" value="{{ request()->price_inven }}"
                                                     placeholder="Nhập giá trị">
                                             </div>
@@ -520,9 +540,9 @@ $index = array_search($item['label'], $numberedLabels);
             <div class="d-flex justify-content-between align-items-center">
                 <span class="count_checkbox mr-5"></span>
                 <div class="row action">
-                    <div class="btn-taodon my-2">
-                        <button type="button" class="btn-group btn btn-light">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    <!-- <div class="btn-taodon my-2 ml-3">
+                        <button type="button" class="btn-group btn btn-light d-flex align-items-center">
+                            <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24" fill="none">
                                 <path fill-rule="evenodd" clip-rule="evenodd"
                                     d="M12 6C12.3879 6 12.7024 6.31446 12.7024 6.70237L12.7024 17.2976C12.7024 17.6855 12.3879 18 12 18C11.6121 18 11.2976 17.6855 11.2976 17.2976V6.70237C11.2976 6.31446 11.6121 6 12 6Z"
@@ -533,10 +553,10 @@ $index = array_search($item['label'], $numberedLabels);
                             </svg>
                             <span>Tạo đơn bán</span>
                         </button>
-                    </div>
+                    </div> -->
                     <div class="btn-nhaphang my-2">
-                        <button type="button" class="btn-group btn btn-light mx-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                        <!-- <button type="button" class="btn-group btn btn-light d-flex align-items-center ml-4">
+                            <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24" fill="none">
                                 <path fill-rule="evenodd" clip-rule="evenodd"
                                     d="M12 6C12.3879 6 12.7024 6.31446 12.7024 6.70237L12.7024 17.2976C12.7024 17.6855 12.3879 18 12 18C11.6121 18 11.2976 17.6855 11.2976 17.2976V6.70237C11.2976 6.31446 11.6121 6 12 6Z"
@@ -546,15 +566,16 @@ $index = array_search($item['label'], $numberedLabels);
                                     fill="#555555" />
                             </svg>
                             <span>Nhập hàng</span>
-                        </button>
+                        </button> -->
                     </div>
-                    <div class="dropdown my-2">
-                        <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Hành động khác
+                    <div class="dropdown my-2 ml-4">
+                        <button class="custom-btn btn btn-light dropdown-toggle align-items-center d-flex h-100"
+                            type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+                            <span>Hành động khác</span>
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a href="#" id="deleteProducts" class="dropdown-item">Xóa nhiều</a>
+                            <a href="#" id="deleteProducts" class="dropdown-item">Xóa sản phẩm</a>
                         </div>
                     </div>
                 </div>
@@ -581,16 +602,18 @@ $index = array_search($item['label'], $numberedLabels);
                         <div class="card-body">
                             <table id="example2" class="table table-hover">
                                 <thead>
+                                    <input type="hidden" id="sortByInput" name="sort-by" value="id">
+                                    <input type="hidden" id="sortTypeInput" name="sort-type"
+                                        value="{{ $sortType }}">
                                     <tr>
-                                        <input type="hidden" id="sortByInput" name="sort-by" value="id">
-                                        <input type="hidden" id="sortTypeInput" name="sort-type"
-                                            value="{{ $sortType }}">
-                                        <th scope="col" style="width:2%">
-                                            <span class="d-flex">
-                                                <input type="checkbox" id="checkall">
-                                            </span>
-                                        </th>
-                                        <th scope="col">
+                                        @can('view-provides')
+                                            <th scope="col" style="width:2%">
+                                                <span class="d-flex">
+                                                    <input type="checkbox" id="checkall">
+                                                </span>
+                                            </th>
+                                        @endcan
+                                        <th>
                                             <span class="d-flex">
                                                 <a href="#" class="sort-link" data-sort-by="id"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
@@ -662,7 +685,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <a href="#" class="sort-link" data-sort-by="inventory"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Trạng thái</button></a>
-                                                <div class="icon" id="icon-status_"></div>
+                                                <div class="icon" id="icon-status"></div>
                                             </span>
                                         </th>
                                         <th scope="col"></th>
@@ -671,15 +694,15 @@ $index = array_search($item['label'], $numberedLabels);
                                     </form>
                                 </thead>
                                 <tbody>
-                                    @foreach ($products as $value)
+                                @foreach ($products as $value)
                                         <tr class="{{ $value->id }}">
-                                            <td><input type="checkbox" name="ids[]" class="cb-element"
-                                                    value="{{ $value->id }}"></td>
+                                            @can('view-provides')
+                                                <td><input type="checkbox" name="ids[]" class="cb-element"
+                                                        value="{{ $value->id }}"></td>
+                                            @endcan
                                             <td scope="row">{{ $value->id }}</td>
                                             <td>
-                                                <!-- <a href="{{ route('data.show', $value->id) }}"> -->
                                                 {{ $value->products_code }}
-                                                <!-- </a> -->
                                             </td>
                                             <td>{{ $value->products_name }}</td>
                                             <td>
@@ -700,7 +723,8 @@ $index = array_search($item['label'], $numberedLabels);
                                                     <div class="py-1 rounded  pb-1 bg-danger">
                                                         <span class="text-light">Hết hàng</span>
                                                     </div>
-                                                @elseif($value->inventory < 5)
+                                                    {{-- Fix lỗi tìm kiếm gần hết --}}
+                                                @elseif($value->inventory < 6)
                                                     <div class="py-1 rounded  pb-1 bg-warning">
                                                         <span class="text-light">Gần hết</span>
                                                     </div>
@@ -759,16 +783,11 @@ $index = array_search($item['label'], $numberedLabels);
 
                                                 </div>
                                             </td>
-                                            <td>
+                                            <td class="text-center">
                                                 @if ($value->inventory != 0)
                                                     <div id="dropdown_item{{ $value->id }}" data-toggle="collapse"
                                                         class="dropdownitem"
                                                         data-target="#product-details-<?php echo $value->id; ?>">
-                                                        {{-- <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
-                                    <rect width="32" height="32" rx="4" fill="white" />
-                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M22.3582 19.6917C21.9471 20.1028 21.2806 20.1028 20.8695 19.6917L15.9998 14.822L11.1301 19.6917C10.719 20.1028 10.0526 20.1028 9.64148 19.6917C9.2304 19.2806 9.2304 18.6141 9.64148 18.203L15.2555 12.589C15.6666 12.1779 16.3331 12.1779 16.7442 12.589L22.3582 18.203C22.7693 18.6141 22.7693 19.2806 22.3582 19.6917Z" fill="#555555" />
-                                </svg> --}}
-
                                                         <svg width="32" height="32" viewBox="0 0 32 32"
                                                             fill="none" xmlns="http://www.w3.org/2000/svg">
                                                             <path fill-rule="evenodd" clip-rule="evenodd"
@@ -779,34 +798,40 @@ $index = array_search($item['label'], $numberedLabels);
                                                 @endif
                                             </td>
                                         </tr>
-                                        @foreach ($product as $item)
-                                            <tr id="product-details-{{ $value->id }}"
-                                                class="collapse product-details">
-                                                @if ($value->id == $item->products_id)
+                                    @foreach ($product as $item)
+                                        <tr id="product-details-{{ $value->id }}"
+                                            class="collapse product-details">
+                                            @if ($value->id == $item->products_id)
+                                                @can('view-provides')
                                                     <td></td>
-                                                    <td>{{ $value->id }} - {{ $item->id }}</td>
-                                                    <td>{{ $value->products_code }}</td>
-                                                    <td>{{ $item->product_name }}</td>
-                                                    <td>
-                                                        <p>Loại hàng</p>{{ $item->product_category }}
-                                                    </td>
-                                                    <td>
-                                                        <p>Đang giao dịch</p>
-                                                        {{ $item->trading }}
-                                                    </td>
-                                                    <td class="text-right">
-                                                        <p>Tồn kho</p>{{ $item->product_qty }}
-                                                    </td>
-                                                    <td class="text-right">
-                                                        <p>Đơn giá nhập</p>{{ number_format($item->product_price) }}
-                                                    </td>
-                                                    <td class="text-right">
-                                                        <p>Trị tồn kho</p>{{ number_format($item->total) }}
-                                                    </td>
-                                                    <td>
+                                                @endcan
+                                                <td style="width:6%;"><p></p> {{ $value->id }} - {{ $item->id }}</td>
+                                                <td><p></p> {{ $value->products_code }}</td>
+                                                <td><p></p> {{ $item->product_name }}</td>
+                                                <td>
+                                                    <p>Loại hàng</p>{{ $item->product_category }}
+                                                </td>
+                                                <td class="text-right">
+                                                    <p>Đang giao dịch</p>
+                                                    {{ $item->trading }}
+                                                </td>
+                                                <td class="text-right">
+                                                    <p>Tồn kho</p>{{ $item->product_qty }}
+                                                </td>
+                                                <td class="text-right">
+                                                    <p>Đơn giá nhập</p>{{ number_format($item->product_price) }}
+                                                </td>
+                                                <td class="text-right">
+                                                    <p>Trị tồn kho</p>
+                                                    {{ number_format($item->product_qty * $item->product_price) }}
+                                                </td>
+                                                <td class="text-left">
+                                                    @if (!empty($item->product_trademark))
                                                         <p>Ghi chú</p>{{ $item->product_trademark }}
-                                                    </td>
-                                                    <td>
+                                                    @endif
+                                                </td>
+                                                <td class="text-center">
+                                                    @if (Auth::user()->can('view-provides'))
                                                         <form action="{{ route('editProduct', $item->id) }}"
                                                             method="post">
                                                             @csrf
@@ -821,12 +846,59 @@ $index = array_search($item['label'], $numberedLabels);
                                                                         fill="#555555"></path>
                                                                 </svg>
                                                             </button>
-
                                                         </form>
-                                                    </td>
-                                                    <td>
-                                                        <form action="{{ route('delete_product', $item->id) }}"
+                                                    @else
+                                                        <form action="{{ route('editProduct', $item->id) }}"
                                                             method="post">
+                                                            @csrf
+                                                            @method('PUT')
+                                                            <button type="submit"
+                                                                style="background: transparent; border:none;">
+                                                                <svg width="32" height="32"
+                                                                    viewBox="0 0 32 32" fill="none"
+                                                                    xmlns="http://www.w3.org/2000/svg">
+                                                                    <path
+                                                                        d="M24.9033 14.1636V7.89258C24.9033 7.33819 24.6831 6.8065 24.2911 6.41449C23.8991 6.02248 23.3674 5.80225 22.813 5.80225H9.22583C8.67144 5.80225 8.13976 6.02248 7.74774 6.41449C7.35573 6.8065 7.1355 7.33819 7.1355 7.89258V22.5249C7.1355 23.0793 7.35573 23.611 7.74774 24.003C8.13976 24.395 8.67144 24.6152 9.22583 24.6152H14.4517"
+                                                                        stroke="#555555" stroke-width="1.5"
+                                                                        stroke-linecap="round"
+                                                                        stroke-linejoin="round" />
+                                                                    <path d="M13.6678 18.3442H14.4517"
+                                                                        stroke="#555555" stroke-width="1.5"
+                                                                        stroke-linecap="round"
+                                                                        stroke-linejoin="round" />
+                                                                    <path d="M13.6678 14.1631H17.5872"
+                                                                        stroke="#555555" stroke-width="1.5"
+                                                                        stroke-linecap="round"
+                                                                        stroke-linejoin="round" />
+                                                                    <path d="M13.6678 10.1133H20.7227"
+                                                                        stroke="#555555" stroke-width="1.5"
+                                                                        stroke-linecap="round"
+                                                                        stroke-linejoin="round" />
+                                                                    <path
+                                                                        d="M11.0549 10.8187C11.2099 10.8187 11.3615 10.7727 11.4904 10.6866C11.6193 10.6005 11.7197 10.4781 11.7791 10.3348C11.8384 10.1916 11.8539 10.034 11.8237 9.88192C11.7934 9.72987 11.7188 9.59019 11.6092 9.48057C11.4995 9.37094 11.3599 9.29629 11.2078 9.26604C11.0557 9.23579 10.8981 9.25131 10.7549 9.31064C10.6117 9.36997 10.4892 9.47044 10.4031 9.59935C10.317 9.72826 10.271 9.87981 10.271 10.0349C10.271 10.2427 10.3536 10.4421 10.5006 10.5891C10.6476 10.7361 10.847 10.8187 11.0549 10.8187Z"
+                                                                        fill="#555555" />
+                                                                    <path
+                                                                        d="M11.0549 14.9994C11.2099 14.9994 11.3615 14.9534 11.4904 14.8673C11.6193 14.7811 11.7197 14.6587 11.7791 14.5155C11.8384 14.3723 11.8539 14.2146 11.8237 14.0626C11.7934 13.9105 11.7188 13.7709 11.6092 13.6612C11.4995 13.5516 11.3599 13.477 11.2078 13.4467C11.0557 13.4165 10.8981 13.432 10.7549 13.4913C10.6117 13.5506 10.4892 13.6511 10.4031 13.78C10.317 13.9089 10.271 14.0605 10.271 14.2155C10.271 14.4234 10.3536 14.6228 10.5006 14.7698C10.6476 14.9168 10.847 14.9994 11.0549 14.9994Z"
+                                                                        fill="#555555" />
+                                                                    <path
+                                                                        d="M11.0549 19.0756C11.2099 19.0756 11.3615 19.0296 11.4904 18.9435C11.6193 18.8573 11.7197 18.7349 11.7791 18.5917C11.8384 18.4484 11.8539 18.2908 11.8237 18.1388C11.7934 17.9867 11.7188 17.847 11.6092 17.7374C11.4995 17.6278 11.3599 17.5531 11.2078 17.5229C11.0557 17.4926 10.8981 17.5081 10.7549 17.5675C10.6117 17.6268 10.4892 17.7273 10.4031 17.8562C10.317 17.9851 10.271 18.1367 10.271 18.2917C10.271 18.4996 10.3536 18.699 10.5006 18.846C10.6476 18.993 10.847 19.0756 11.0549 19.0756Z"
+                                                                        fill="#555555" />
+                                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                        d="M24.2994 17.5757C22.6613 15.9376 20.0054 15.9376 18.3672 17.5757C16.7291 19.2139 16.7291 21.8698 18.3672 23.5079C20.0054 25.1461 22.6613 25.1461 24.2994 23.5079C25.9376 21.8698 25.9376 19.2139 24.2994 17.5757ZM25.1046 16.7706C23.0218 14.6878 19.6449 14.6878 17.5621 16.7706C15.4793 18.8534 15.4793 22.2303 17.5621 24.3131C19.6449 26.3959 23.0218 26.3959 25.1046 24.3131C27.1874 22.2303 27.1874 18.8534 25.1046 16.7706Z"
+                                                                        fill="#555555" />
+                                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                        d="M24.1834 24.1834C24.428 23.9389 24.8246 23.9389 25.0692 24.1834L27.8166 26.9308C28.0611 27.1754 28.0611 27.572 27.8166 27.8166C27.572 28.0611 27.1754 28.0611 26.9308 27.8166L24.1834 25.0692C23.9389 24.8246 23.9389 24.428 24.1834 24.1834Z"
+                                                                        fill="#555555" />
+                                                                </svg>
+                                                            </button>
+                                                        </form>
+                                                    @endif
+                                                </td>
+                                                <td class="text-center">
+                                                    @if (Auth::user()->can('view-provides'))
+                                                        <form action="{{ route('delete_product', $item->id) }}"
+                                                            method="post"
+                                                            onsubmit="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')">
                                                             @csrf
                                                             @method('delete')
                                                             <button type="submit"
@@ -840,17 +912,18 @@ $index = array_search($item['label'], $numberedLabels);
                                                                 </svg>
                                                             </button>
                                                         </form>
-                                                    </td>
-                                                @endif
-                                            </tr>
-                                        @endforeach
+                                                    @endif
+                                                </td>
+                                            @endif
+                                        </tr>
                                     @endforeach
+                                @endforeach
                                 </tbody>
                             </table>
                         </div>
                     </div>
                     <div class="paginator mt-4 d-flex justify-content-end">
-                        {{ $products->appends(request()->except('page'))->links() }}
+                        {{ $products->appends(request()->except('page'))->onEachSide(1)->links() }}
                     </div>
                 </div>
             </div>
@@ -862,6 +935,25 @@ $index = array_search($item['label'], $numberedLabels);
 </div>
 <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
 <script>
+    $('.ks-cboxtags-trademark li').on('click', function(event) {
+        if (event.target.tagName !== 'INPUT') {
+            var checkbox = $(this).find('input[type="checkbox"]');
+            checkbox.prop('checked', !checkbox.prop('checked')); // Đảo ngược trạng thái checked
+        }
+    });
+    $('.ks-cboxtags-category li').on('click', function() {
+        if (event.target.tagName !== 'INPUT') {
+            var checkbox = $(this).find('input[type="checkbox"]');
+            checkbox.prop('checked', !checkbox.prop('checked')); // Đảo ngược trạng thái checked
+        }
+    });
+    $('.ks-cboxtags-status li').on('click', function() {
+        if (event.target.tagName !== 'INPUT') {
+            var checkbox = $(this).find('input[type="checkbox"]');
+            checkbox.prop('checked', !checkbox.prop('checked')); // Đảo ngược trạng thái checked
+        }
+    });
+
     // Xuất file excel
     function exportToExcel() {
         // Lấy dữ liệu từ bảng HTML
@@ -894,9 +986,10 @@ $index = array_search($item['label'], $numberedLabels);
         }, 1000);
     }
 
+
     // Import file excel
     function importExcel() {
-        var input = document.getElementById("excelFile");
+        var input = document.getElementById("import_file");
         var file = input.files[0];
         var reader = new FileReader();
 
@@ -937,7 +1030,7 @@ $index = array_search($item['label'], $numberedLabels);
                     if (response.ok) {
                         location.reload();
                     } else {
-                        console.log("Có lỗi xảy ra trong quá trình import.");
+                        alert('Có lỗi xảy ra trong quá trình import.');
                     }
                 })
                 .catch(function(error) {
@@ -953,7 +1046,7 @@ $index = array_search($item['label'], $numberedLabels);
         updateMultipleActionVisibility()
     });
     $('.cb-element').change(function() {
-        updateMultipleActionVisibility()
+        updateMultipleActionVisibility();
         if ($('.cb-element:checked').length == $('.cb-element').length) {
             $('#checkall').prop('checked', true);
         } else {
@@ -1001,8 +1094,8 @@ $index = array_search($item['label'], $numberedLabels);
                         $('.' + id[i]).remove();
                     }
                     updateMultipleActionVisibility();
+                    location.reload();
                 } else {
-                    alert(data.msg);
                     location.reload();
                 }
             }
@@ -1034,12 +1127,14 @@ $index = array_search($item['label'], $numberedLabels);
         $('.btn-filter').prop('disabled', true);
         $('#status-options').toggle();
         $('#category-options').hide();
+        $('#status-options input').addClass('status-checkbox');
     });
     //Trademarks
     $('#btn-trademark').click(function(event) {
         event.preventDefault();
         $('.btn-filter').prop('disabled', true);
         $('#trademark-options').toggle();
+        $('#trademark-options input').addClass('trademark-checkbox');
     });
     $('#cancel-trademark').click(function(event) {
         event.preventDefault();
@@ -1108,6 +1203,7 @@ $index = array_search($item['label'], $numberedLabels);
         event.preventDefault();
         $('.btn-filter').prop('disabled', true);
         $('#category-options').toggle();
+        $('#category-options input').addClass('category-checkbox');
     });
     $('#cancel-status').click(function(event) {
         event.preventDefault();
@@ -1192,8 +1288,6 @@ $index = array_search($item['label'], $numberedLabels);
             var sortType = $(this).data('sort-type');
             var iconId = 'icon-' + sortBy;
             var iconElement = $('#' + iconId);
-
-
             var svgHTML =
                 "<svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>";
             if (sortType === 'desc') {
@@ -1261,6 +1355,95 @@ $index = array_search($item['label'], $numberedLabels);
                     transition: 'transform 0.3s ease'
                 });
             }
+        });
+    });
+
+    // Tắt bộ lọc commit by nqv
+    $(document).ready(function() {
+        // Chọn tất cả các checkbox
+        $('.select-all-category').click(function() {
+            $('#category-options input[type="checkbox"]').prop('checked', true);
+        });
+
+        // Hủy tất cả các checkbox
+        $('.deselect-all-category').click(function() {
+            $('#category-options input[type="checkbox"]').prop('checked', false);
+        });
+    });
+    $(document).ready(function() {
+        // Chọn tất cả các checkbox
+        $('.select-all').click(function() {
+            $('#status-options input[type="checkbox"]').prop('checked', true);
+        });
+
+        // Hủy tất cả các checkbox
+        $('.deselect-all').click(function() {
+            $('#status-options input[type="checkbox"]').prop('checked', false);
+        });
+    });
+    $(document).ready(function() {
+        // Chọn tất cả các checkbox
+        $('.select-all-trademark').click(function() {
+            $('#trademark-options input[type="checkbox"]').prop('checked', true);
+        });
+
+        // Hủy tất cả các checkbox
+        $('.deselect-all-trademark').click(function() {
+            $('#trademark-options input[type="checkbox"]').prop('checked', false);
+        });
+    });
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-status', function() {
+            $('.deselect-all').click();
+            document.getElementById('search-filter').submit();
+        });
+    });
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-category', function() {
+            $('.deselect-all-category').click();
+            document.getElementById('search-filter').submit();
+        });
+    });
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-trademark', function() {
+            $('.deselect-all-trademark').click();
+            document.getElementById('search-filter').submit();
+        });
+    });
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-quantity', function() {
+            $('.quantity-input').val('');
+            document.getElementById('search-filter').submit();
+        });
+    });
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-avg', function() {
+            $('.avg-input').val('');
+            document.getElementById('search-filter').submit();
+        });
+    });
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-price_inven', function() {
+            $('.price_inven-input').val('');
+            document.getElementById('search-filter').submit();
+        });
+    });
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-id', function() {
+            $('.deselect-all-id').click();
+            document.getElementById('search-filter').submit();
+        });
+    });
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-code', function() {
+            $('.code-input').val('');
+            document.getElementById('search-filter').submit();
+        });
+    });
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-products_name', function() {
+            $('.products_name-input').val('');
+            document.getElementById('search-filter').submit();
         });
     });
 </script>

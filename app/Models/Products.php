@@ -15,7 +15,7 @@ class Products extends Model
     }
     public function getProducts()
     {
-        return $this->hasMany(Product::class);
+        return $this->hasMany(Product::class,'products_id','id');
     }
     protected $table = 'products';
     protected $fillable = [
@@ -96,7 +96,7 @@ class Products extends Model
     }
     public function productsNearEnd(){
         $products = DB::table($this->table);
-        $products = $products->whereBetween('inventory', [0, 5])->get();
+        $products = $products->whereBetween('inventory', [1, 5])->get();
         return $products;
     }
     public function productsStock(){
@@ -106,7 +106,11 @@ class Products extends Model
     }
     public function productsEnd(){
         $products = DB::table($this->table);
-        $products = $products->where('inventory', '=', 0)->get();
+        $products = $products->where(function ($query) {
+            $query->orWhere('inventory', '=', null);
+            $query->orWhere('inventory', '=', 0);
+        });
+        $products = $products->get();
         return $products;
     }
     public function sumTotalInventory(){

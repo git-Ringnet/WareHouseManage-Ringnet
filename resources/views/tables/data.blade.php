@@ -16,7 +16,7 @@
                     <div class="row">
                         <div class="col-5">
                             <input type="search" name="keywords" class="form-control" value="{{request()->keywords}}"
-                                placeholder="Tìm kiếm đơn vị, đại diện hoặc email">
+                                placeholder="Tìm kiếm đơn vị hoặc email">
                         </div>
                         <div class="col-2 d-none">
                   <button type="submit" class="btn btn-primary btn-block">Tìm kiếm</button>
@@ -102,7 +102,7 @@
                                         <a class="cursor select-all mr-auto">Chọn tất cả</a>
                                         <a class="cursor deselect-all">Hủy chọn</a>
                                     </div>
-                                    <ul class="ks-cboxtags p-0 m-0 px-2">
+                                    <ul class="ks-cboxtags p-0 mb-1 px-2">
                                         <li>
                                             <input type="checkbox" id="status_active" {{ in_array(1, $status)
                                                 ? 'checked' : '' }} name="status[]" value="1">
@@ -111,7 +111,7 @@
                                         <li>
                                             <input type="checkbox" id="status_inactive" {{ in_array(0, $status)
                                                 ? 'checked' : '' }} name="status[]" value="0">
-                                            <label for="status_inactive">Disable</label>
+                                            <label for="">Disable</label>
                                         </li>
                                     </ul>
                                 </div>
@@ -131,7 +131,7 @@
                                         <a class="cursor select-all-category mr-auto">Chọn tất cả</a>
                                         <a class="cursor deselect-all-category">Hủy chọn</a>
                                     </div>
-                                    <ul class="ks-cboxtags p-0 m-0 px-2">
+                                    <ul class="ks-cboxtags p-0 mb-1 px-2">
                                         @if(!empty($categories))
                                         @foreach($categories as $category)
                                         <li>

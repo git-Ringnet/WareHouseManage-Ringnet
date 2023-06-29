@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class Exports extends Model
@@ -16,7 +17,7 @@ class Exports extends Model
         $exports = DB::table($this->table)
             ->leftJoin('guests', 'exports.guest_id', '=', 'guests.id')
             ->leftJoin('users', 'exports.user_id', '=', 'users.id')
-            ->select('exports.id', 'guests.guest_represent', 'users.name', 'exports.total', 'exports.updated_at', 'export_status');
+            ->select('exports.id', 'guests.guest_receiver', 'users.name', 'exports.total', 'exports.updated_at', 'export_status');
         // Các điều kiện tìm kiếm và lọc dữ liệu ở đây
 
         if (!empty($filter)) {
@@ -37,7 +38,7 @@ class Exports extends Model
         if (!empty($keywords)) {
             $exports = $exports->where(function ($query) use ($keywords) {
                 $query->orWhere('exports.id', 'like', '%' . $keywords . '%');
-                $query->orWhere('guests.guest_represent', 'like', '%' . $keywords . '%');
+                // $query->orWhere('guests.guest_represent', 'like', '%' . $keywords . '%');
                 $query->orWhere('users.name', 'like', '%' . $keywords . '%');
             });
         }
@@ -56,7 +57,8 @@ class Exports extends Model
     {
         return $this->hasMany(ProductExports::class, 'export_id');
     }
-    public function allExports(){
+    public function allExports()
+    {
         $exports = DB::table($this->table)->get();
         return $exports;
     }
@@ -65,9 +67,17 @@ class Exports extends Model
         'user_id',
         'total',
         'export_status',
+        'note_form',
     ];
-    public function sumTotalExports(){
+    public function sumTotalExports()
+    {
         $totalSum = DB::table($this->table)->sum('total');
         return $totalSum;
+    }
+    public function productsCreator()
+    {
+        $userId = Auth::user()->id;
+        $products = DB::table($this->table)->where('user_id', $userId)->paginate(8);
+        return $products;
     }
 }

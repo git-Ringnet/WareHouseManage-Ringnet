@@ -38,21 +38,25 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="pwd">Số điện thoại:</label>
-                                    <input type="number" class="form-control" value="{{ $provides->provide_phone }}"
+                                    <input type="text" class="form-control" oninput=validateNumberInput(this)
+                                        pattern="^(?:\+?84|0)(?:\d{9}|\d{10})$" value="{{ $provides->provide_phone }}"
                                         name="provide_phone" placeholder="Nhập số điện thoại" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="pwd">Email:</label>
                                     <input type="email" class="form-control" value="{{ $provides->provide_email }}"
-                                    pattern="/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/" name="provide_email" placeholder="Nhập email" required>
+                                        pattern="/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/" name="provide_email"
+                                        placeholder="Nhập email" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="pwd">Địa chỉ:</label>
-                                    <input type="text" class="form-control" value="{{ $provides->provide_address }}" name="provide_address" placeholder="Nhập địa chỉ" required="">
+                                    <input type="text" class="form-control" value="{{ $provides->provide_address }}"
+                                        name="provide_address" placeholder="Nhập địa chỉ" required="">
                                 </div>
                                 <div class="form-group">
-                                    <label for="pwd">Mã nhà cung cấp:</label>
-                                    <input type="text" class="form-control" name="provide_code" value="{{ $provides->provide_code }}" placeholder="Nhập mã nhà cung cấp" required="">
+                                    <label for="pwd">Mã số thuế:</label>
+                                    <input type="text" class="form-control" name="provide_code" oninput=validateNumberInput(this)
+                                        value="{{ $provides->provide_code }}" placeholder="Nhập mã số thuế" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="pwd">Trạng thái:</label>
@@ -83,6 +87,16 @@
     </section>
     <!-- /.content -->
 </div>
+<script>
+    //cho phép nhập số 
+    function validateNumberInput(input) {
+        const regex = /^[-+]?[0-9]{1,3}(?:,?[0-9]{3})*(?:\.[0-9]+)?$/;
+        const value = input.value.replace(/,/g, '');
+        if (!regex.test(value)) {
+            input.value = '';
+        }
+    }
+</script>
 </body>
 
 </html>

@@ -3,6 +3,7 @@
 use App\Http\Controllers\AddProductController;
 use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DebtController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\GuestsController;
 use App\Http\Controllers\InsertProductController;
@@ -34,6 +35,7 @@ Route::prefix('admin')->name('admin.')->middleware('permission:admin')->group(fu
     Route::get('/activeStatusUser', [UsersController::class, 'activeStatusUser'])->name('activeStatusUser');
     Route::get('/disableStatusUser', [UsersController::class, 'disableStatusUser'])->name('disableStatusUser');
 });
+Route::get('addNoteFormSale', [UsersController::class, 'addNoteFormSale'])->name('addNoteFormSale');
 
 //nha cung cap
 Route::resource('provides', provideController::class)->middleware('permission:admin,manager');
@@ -62,8 +64,14 @@ Route::get('nameProducts', [ExportController::class, 'nameProduct'])->name('name
 Route::get('getProduct', [ExportController::class, 'getProduct'])->name('getProduct');
 //lấy thông tin SN của sản phẩm con
 Route::get('getSN', [ExportController::class, 'getSN'])->name('getSN');
+Route::get('getSN1', [ExportController::class, 'getSN1'])->name('getSN1');
+Route::get('getSN2', [ExportController::class, 'getSN2'])->name('getSN2');
 Route::get('/deleteExports', [ExportController::class, 'deleteExports'])->name('deleteExports');
 Route::get('/cancelBillExport', [ExportController::class, 'cancelBillExport'])->name('cancelBillExport');
+//Công nợ
+Route::resource('debt', DebtController::class);
+//kiểm tra số lượng trong xuất hàng
+Route::get('checkqty', [ExportController::class, 'checkqty'])->name('checkqty');
 
 Route::resource('data', ProductsController::class);
 Route::get('/insertProducts', [ProductsController::class, 'insertProducts'])->name('insertProducts');
@@ -72,10 +80,12 @@ Route::get('/data_edit', [ProductsController::class, 'edit_ajax'])->name('ajax')
 Route::get('/data_show', [ProductsController::class, 'show_ajax'])->name('show_ajax');
 Route::get('/deleteProducts', [ProductsController::class, 'deleteProducts'])->name('deleteProducts');
 Route::PUT('/editProduct/{id}', [ProductsController::class, 'editProduct'])->name('editProduct');
+Route::get('/export_products',[ProductsController::class,'export_products'])->name('export_products');
 
 Route::delete('/delete_product/{id}', [ProductsController::class, 'delete_product'])->name('delete_product');
 Route::post('/import_products',[ProductsController::class,'import_products'])->name('import_products');
 
+Route::get('/checkProducts_code',[ProductsController::class,'checkProducts_code'])->name('checkProducts_code');
 
 Route::PUT('/updateProduct/{id}', [ProductsController::class, 'updateProduct'])->name('updateProduct');
 
@@ -90,6 +100,11 @@ Route::get('/cancelBill', [AddProductController::class, 'cancelBill'])->name('ca
 Route::get('/confirmBill', [AddProductController::class, 'confirmBill'])->name('confirmBill');
 Route::get('/showProduct', [AddProductController::class, 'showProduct'])->name('showProduct');
 Route::get('/add_newProvide', [AddProductController::class, 'add_newProvide'])->name('add_newProvide');
+
+
+// Kiểm tra serial number tồn tại chưa
+Route::get('/checkSN',[AddProductController::class, 'checkSN'])->name('checkSN');
+
 
 Route::get('/simple', function () {
     return view('tables.simple');

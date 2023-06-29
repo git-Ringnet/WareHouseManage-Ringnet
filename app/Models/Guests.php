@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class Guests extends Model
@@ -11,7 +12,6 @@ class Guests extends Model
     use HasFactory;
     protected $fillable = [
         'guest_name',
-        'guest_represent',
         'guest_phone',
         'guest_email',
         'guest_status',
@@ -23,12 +23,16 @@ class Guests extends Model
         'guest_pay',
         'guest_payTerm',
         'guest_note',
+        'user_id',
+        'debt'
     ];
     protected $table = 'guests';
-    public function getAllGuests($filter = [],$name = null,$represent = null,$phonenumber = null,$email = null, $status = [], $keywords = null, $sortByArr = null)
+    public function getAllGuests($filter = [],$users_name=[],$name = null,$represent = null,$phonenumber = null,$email = null, $status = [], $keywords = null, $sortByArr = null)
     {
         $guests = DB::table($this->table)
-            ->select('guests.*');
+            ->leftJoin('users', 'guests.user_id', '=', 'users.id')
+            ->select('guests.*', 'users.name as users_name');
+
 
         $orderBy = 'created_at';
         $orderType = 'desc';
@@ -47,6 +51,9 @@ class Guests extends Model
             $guests = $guests->where(function ($query) use ($name) {
                 $query->orWhere('guest_name', 'like', '%' . $name . '%');
             });
+        }
+        if (!empty($users_name)) {
+            $guests = $guests->whereIn('users.name', $users_name);
         }
         if (!empty($represent)) {
             $guests = $guests->where(function ($query) use ($represent) {
@@ -75,6 +82,12 @@ class Guests extends Model
         }
         // dd($guests);
         $guests = $guests->orderBy('id', 'asc')->paginate(8);
+        return $guests;
+    }
+    public function guestsCreator()
+    {
+        $userId = Auth::user()->id;
+        $guests = DB::table($this->table)->where('user_id', $userId)->paginate(8);
         return $guests;
     }
 }

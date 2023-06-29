@@ -2,8 +2,8 @@
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <div class="breadcrumb">
-        <span>Sản phẩm</span>
-        <span>/</span>
+        <span><a href="{{ route('data.index') }}">Sản phẩm</a></span>
+        <span class="px-1">/</span>
         <span><b>Chỉnh sửa sản phẩm</b></span>
     </div>
     <!-- Content Header (Page header) -->
@@ -111,7 +111,7 @@
                         <h3 class="card-title">Sản phẩm / Sửa sản phẩm</h3>
                     </div>
                     <!-- /.card-header -->
-                    <div class="card-body">
+                    <div class="card-body" style="overflow-x: auto;">
                         <table id="example2" class="table table-hover bg-white rounded">
                             <thead>
                                 <tr>
@@ -131,7 +131,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php $stt = 0; ?>
+                                <?php $stt = 0; $count =0; ?>
                                 @foreach ($listProduct as $va)
                                 <tr>
                                     <td>{{ $va->id }}</td>
@@ -141,10 +141,19 @@
                                     <td>{{ $va->product_category }}</td>
                                     <td>{{ $va->product_unit }}</td>
                                     <td>{{ $va->product_qty }}</td>
-                                    <td></td>
-                                    <td>{{ $va->product_price }}</td>
-                                    <td>{{ $va->tax }}</td>
-                                    <td>{{ $va->total }}</td>
+                                    <td>
+                                    {{$va->countSerial}}
+                                    </td>
+                                    <td>{{ number_format($va->product_price) }}</td>
+                                    <td>
+                                    <?php
+                                        if($va->tax == 99){
+                                            echo 0;
+                                        }else{
+                                            echo $va->tax;
+                                        }
+                                    ?>%</td>
+                                    <td>{{ number_format($va->total) }}</td>
                                     <td>{{ $va->product_trademark }}</td>
                                     <td>
                                         <button class="exampleModal" name="btn_add_SN[]" type="button" data-toggle="modal" data-target="#exampleModal{{$stt}}" style="background: transparent; border:none;">
@@ -183,7 +192,7 @@
                                                 <table class="table">
                                                     <thead>
                                                         <tr>
-                                                            <td style="width:2%;"><input type="checkbox"></td>
+                                                            <!-- <td style="width:2%;"><input type="checkbox"></td> -->
                                                             <td style="width:5%;"><span>STT</span></td>
                                                             <td><span>Serial Number</span></td>
                                                             <td style="width:3%;"></td>
@@ -193,10 +202,12 @@
                                                         <?php $sttt = 1; ?>
                                                         @foreach($va->getSerinumbers as $val)
                                                         <tr>
-                                                            <td><input type="checkbox" id="checkbox_0"></td>
+                                                            @if($val->seri_status != 3)
+                                                            <!-- <td><input type="checkbox" id="checkbox_0"></td> -->
                                                             <td><span class="stt_SN">{{$sttt}}</span></td>
                                                             <td>{{ $val->serinumber}}</td>
                                                             <td></td>
+                                                            @endif
                                                         </tr>
                                                         <?php $sttt++; ?>
                                                         @endforeach

@@ -24,7 +24,7 @@
     height: 100%;
     position: absolute;
     top: 0;
-    margin-left: -5px;
+    margin-left: 5px;
 }
 
 /* Order */
@@ -50,6 +50,9 @@
 }
 .order_content .multiple_action{
     display: none;
+}
+.highlight {
+    border: 2px solid red;
 }
 
 
