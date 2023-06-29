@@ -398,6 +398,10 @@
                 $('#btn-addNoteForm').removeClass('active');
             }
         });
+        if ($('#radio1:checked').length > 0) {
+            $('#click').val(2);
+            $('#updateClick').val(null);
+        }
     });
 
     //form thong tin khach hang xuất hàng
@@ -707,8 +711,6 @@
         $('.search-info').click(function() {
             var idCustomer = $(this).attr('id');
             $('#radio1').prop('checked', true);
-            $('#click').val(null);
-            $('#updateClick').val(2);
             $.ajax({
                 url: '{{ route('searchExport') }}',
                 type: 'GET',
@@ -785,6 +787,8 @@
                         (data.guest_note == null ? '' : data.guest_note) + '">' +
                         '</div>' + '</div></div><div>'
                     );
+                    $('#click').val(null);
+                    $('#updateClick').val(2);
                     //Công nợ
                     var isChecked = $('#debtCheckbox').is(':checked');
                     // Đặt trạng thái của input dựa trên checkbox
@@ -1179,6 +1183,8 @@
                 $(this).val(newValue);
             });
 
+            $('#btn-customer').click();
+
             // Lấy giá trị product_id và product_qty từ các phần tử trong form
             var productIDs = [];
             var productQtys = [];
@@ -1196,10 +1202,6 @@
                     productQtys.push(productQty);
                 }
             });
-
-            console.log(productIDs);
-
-            // Thực hiện yêu cầu Ajax
         } else {
             if (formGuest.length === 0) {
                 alert('Lỗi: Chưa nhập thông tin khách hàng!');

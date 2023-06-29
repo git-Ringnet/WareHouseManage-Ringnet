@@ -356,7 +356,7 @@
                                 @endif
                                 <td class="soTT"><?php echo $stt++; ?></td>
                                 <td>
-                                    <input type="hidden" id="export_id" value="{{ $value_export->id }}">
+                                    <input type="hidden" id="export_id" value="{{ $exports->id }}">
                                     <select id="maProduct" class="p-1 maProduct form-control" name="products_id[]"
                                         <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                             echo 'disabled';
@@ -711,6 +711,10 @@
                 $('#btn-addNoteForm').removeClass('active');
             }
         });
+        if ($('#radio1:checked').length > 0) {
+            $('#click').val(2);
+            $('#updateClick').val(2);
+        }
     });
     //Thêm form ghi chú cho nhân viên
     $(document).on('click', '#btn-addNoteForm', function(e) {
@@ -1009,6 +1013,8 @@
             '<input type="text" class="form-control" id="guest_note" placeholder="Nhập thông tin" name="guest_note" value="">' +
             '</div>' + '</div></div></div>'
         );
+        $('#click').val(2);
+        $('#updateClick').val(2);
         //Công nợ
         $(document).on('change', '#debtCheckbox', function() {
             if ($(this).is(':checked')) {
@@ -1342,6 +1348,8 @@
                         (data.guest_note == null ? '' : data.guest_note) + '">' +
                         '</div>' + '</div></div><div>'
                     );
+                    $('#click').val(null);
+                    $('#updateClick').val(2);
                     //Công nợ
                     var isChecked = $('#debtCheckbox').is(':checked');
                     // Đặt trạng thái của input dựa trên checkbox
@@ -1364,6 +1372,7 @@
     $(document).on('change', '#debtCheckbox', function() {
         var isChecked = $(this).is(':checked');
         $('#debtInput').prop('disabled', isChecked);
+        $('#debtInput').val(0);
     });
     //cập nhật thông tin khách hàng
     $(document).on('click', '#btn-customer', function(e) {
@@ -1390,6 +1399,7 @@
         if ($('#debtCheckbox').is(':checked')) {
             debt = "0";
             $('#debtInput').prop('disabled', true);
+            $('#debtInput').val(0);
         } else {
             debt = $('#debtInput').val();
             $('#debtInput').prop('disabled', false);
@@ -1446,6 +1456,7 @@
         if ($('#debtCheckbox').is(':checked')) {
             debt = "0";
             $('#debtInput').prop('disabled', true);
+            $('#debtInput').val(0);
         } else {
             debt = $('#debtInput').val();
             $('#debtInput').prop('disabled', false);
@@ -1699,6 +1710,7 @@
                 var newValue = $(this).val().replace(/,/g, '');
                 $(this).val(newValue);
             });
+            $('#btn-customer').click();
         } else {
             if (formGuest.length === 0) {
                 alert('Lỗi: Chưa nhập thông tin khách hàng!');
