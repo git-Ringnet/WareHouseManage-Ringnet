@@ -73,8 +73,8 @@
         @csrf
         <section class="content">
             <div class="d-flex mb-1 action-don">
-                <button type="submit" class="btn btn-danger text-white mr-3" name="submitBtn" value="action1"
-                    onclick="validateAndSubmit(event)">Chốt đơn</button>
+                <button type="submit" class="btn btn-danger text-white mr-3" id="chot_don" name="submitBtn"
+                    value="action1" onclick="validateAndSubmit(event)">Chốt đơn</button>
                 {{-- <a href="#" class="btn btn-secondary ml-4">Hủy đơn</a> --}}
                 {{-- <a href="#" class="btn border border-secondary mx-4">Xuất file</a> --}}
                 <a class="btn border border-secondary" onclick="toggleDiv()">
@@ -148,9 +148,9 @@
                             <th>ĐVT</th>
                             <th>Số lượng</th>
                             <th>Giá bán</th>
-                            <th>Ghi chú</th>
                             <th>Thuế</th>
                             <th>Thành tiền</th>
+                            <th>Ghi chú</th>
                             <th>S/N</th>
                             <th></th>
                             <th></th>
@@ -212,7 +212,7 @@
             </div>
             <div class="btn-fixed">
                 <button type="submit" name="submitBtn" value="action2" class="btn btn-primary mr-1"
-                    onclick="validateAndSubmit(event)">Lưu</button>
+                    onclick="validateAndSubmit(event)" id="luu">Lưu</button>
                 <a href="{{ route('exports.index') }}"><span class="btn border-secondary ml-1">Hủy</span></a>
             </div>
             {{-- Modal Product --}}
@@ -678,7 +678,7 @@
             });
             // Gắn các phần tử vào hàng mới
             newRow.append(checkbox, MaInput, TenInput, ProInput, dvtInput, slInput,
-                giaInput, ghichuInput, thueInput, thanhTienInput, sn, info, deleteBtn, option);
+                giaInput, thueInput, thanhTienInput, ghichuInput, sn, info, deleteBtn, option);
             $("#dynamic-fields").before(newRow);
             // Tăng giá trị fieldCounter
             fieldCounter++;
@@ -824,11 +824,6 @@
     //cập nhật thông tin khách hàng
     $(document).on('click', '#btn-customer', function(e) {
         e.preventDefault();
-        // $('#sourceTable [required]').removeAttr('required');
-        // var form = $('#export_form')[0];
-        // if (!form.reportValidity()) {
-        //     return;
-        // }
         $('#updateClick').val(1);
         var updateClick = $('#updateClick').val();
         var id = $('#id').val();
@@ -1090,10 +1085,6 @@
         calculateGrandTotal();
     });
 
-    $(document).on('input', '#transport_fee', function() {
-        calculateGrandTotal();
-    });
-
     function updateTaxAmount(row) {
         var productQty = parseInt(row.find('.quantity-input').val().replace(/[^0-9.-]+/g, ""));
         var productPrice = parseFloat(row.find('input[name^="product_price"]').val().replace(/[^0-9.-]+/g, ""));
@@ -1135,13 +1126,8 @@
     function calculateGrandTotal() {
         var totalAmount = parseFloat($('#total-amount-sum').text().replace(/[^0-9.-]+/g, ""));
         var totalTax = parseFloat($('#product-tax').text().replace(/[^0-9.-]+/g, ""));
-        var transportFee = parseFloat($('#transport_fee').val().replace(/[^0-9.-]+/g, ""));
 
-        if (isNaN(transportFee)) {
-            transportFee = 0;
-        }
-
-        var grandTotal = totalAmount + totalTax + transportFee;
+        var grandTotal = totalAmount + totalTax;
         var formattedGrandTotal = formatCurrency(grandTotal.toFixed(2));
 
         $('#grand-total').text(formattedGrandTotal);
@@ -1176,7 +1162,6 @@
     function validateAndSubmit(event) {
         var formGuest = $('#form-guest');
         var productList = $('.productName');
-
         if (formGuest.length && productList.length > 0) {
             $('.quantity-input, [name^="product_price"], #transport_fee').each(function() {
                 var newValue = $(this).val().replace(/,/g, '');
@@ -1184,6 +1169,11 @@
             });
 
             $('#btn-customer').click();
+            $('#btn-addCustomer').click();
+            window.backupAlert = window.alert;
+            window.alert = function() {
+                return true
+            };
 
             // Lấy giá trị product_id và product_qty từ các phần tử trong form
             var productIDs = [];
@@ -1211,6 +1201,34 @@
             event.preventDefault(); // Ngăn chặn việc submit form
         }
     }
+
+    //ngăn chặn click
+    $(document).ready(function() {
+        let isFirstClick = true;
+
+        $('#chot_don').on('click', function() {
+            if (isFirstClick) {
+                isFirstClick = false;
+
+                setTimeout(function() {
+                    isFirstClick = true;
+                }, 1000);
+            } else {
+                return;
+            }
+        });
+        $('#luu').on('click', function() {
+            if (isFirstClick) {
+                isFirstClick = false;
+
+                setTimeout(function() {
+                    isFirstClick = true;
+                }, 1000);
+            } else {
+                return;
+            }
+        });
+    });
 
     //in báo giá
     function toggleDiv() {
