@@ -4,33 +4,33 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <div class="container-fluided">
-            <div class="d-flex mb-1">
+            <div class="row m-0 mb-1">
                 <a href="{{ route('exports.create') }}">
-                    <button type="button" class="btn btn-primary d-flex align-items-center">
-                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                    <button type="button" class="custom-btn btn btn-primary d-flex align-items-center h-100">
+                        <svg class="mr-1" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" clip-rule="evenodd"
-                                d="M6 0C6.38791 -1.97352e-08 6.70237 0.314463 6.70237 0.702373L6.70237 11.2976C6.70237 11.6855 6.38791 12 6 12C5.61209 12 5.29763 11.6855 5.29763 11.2976V0.702373C5.29763 0.314463 5.61209 -1.97352e-08 6 0Z"
-                                fill="white" />
+                                d="M12 6C12.3879 6 12.7024 6.31446 12.7024 6.70237L12.7024 17.2976C12.7024 17.6855 12.3879 18 12 18C11.6121 18 11.2976 17.6855 11.2976 17.2976V6.70237C11.2976 6.31446 11.6121 6 12 6Z"
+                                fill="#ffff" />
                             <path fill-rule="evenodd" clip-rule="evenodd"
-                                d="M12 6C12 6.38791 11.6855 6.70237 11.2976 6.70237H0.702373C0.314463 6.70237 -1.38146e-07 6.38791 0 6C-5.13115e-07 5.61209 0.314463 5.29763 0.702373 5.29763H11.2976C11.6855 5.29763 12 5.61209 12 6Z"
-                                fill="white" />
+                                d="M18 12C18 12.3879 17.6855 12.7024 17.2976 12.7024H6.70237C6.31446 12.7024 6 12.3879 6 12C6 11.6121 6.31446 11.2976 6.70237 11.2976H17.2976C17.6855 11.2976 18 11.6121 18 12Z"
+                                fill="#ffff" />
                         </svg>
-                        <span class="ml-2">Tạo đơn</span>
+                        <span>Tạo đơn</span>
                     </button>
                 </a>
                 <button style="margin-left:24px" type="button" onclick="exportToExcel()"
-                    class="btn bg-transparent border-primary d-flex align-items-center">
-                    <svg width="14" height="18" viewBox="0 0 14 18" fill="none"
-                        xmlns="http://www.w3.org/2000/svg">
+                    class="custom-btn btn btn-outline-primary border-primary d-flex align-items-center">
+                    <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                        viewBox="0 0 24 24" fill="none">
                         <path
-                            d="M10.0003 5.80078H11.5001C11.8979 5.80078 12.2794 5.95881 12.5607 6.24009C12.842 6.52137 13 6.90285 13 7.30063V15.1008C13 15.4986 12.842 15.8801 12.5607 16.1614C12.2794 16.4426 11.8979 16.6007 11.5001 16.6007H2.49986C2.10207 16.6007 1.72058 16.4426 1.4393 16.1614C1.15802 15.8801 1 15.4986 1 15.1008V7.30063C1 6.90285 1.15802 6.52137 1.4393 6.24009C1.72058 5.95881 2.10207 5.80078 2.49986 5.80078H3.99972"
+                            d="M15.0003 7.80054H16.5001C16.8979 7.80054 17.2794 7.95857 17.5607 8.23984C17.842 8.52112 18 8.9026 18 9.30039V17.1006C18 17.4983 17.842 17.8798 17.5607 18.1611C17.2794 18.4424 16.8979 18.6004 16.5001 18.6004H7.49986C7.10207 18.6004 6.72058 18.4424 6.4393 18.1611C6.15802 17.8798 6 17.4983 6 17.1006V9.30039C6 8.9026 6.15802 8.52112 6.4393 8.23984C6.72058 7.95857 7.10207 7.80054 7.49986 7.80054H8.99972"
                             stroke="#0095F6" stroke-linecap="round" stroke-linejoin="round" />
-                        <path d="M3.99976 9.39941L6.99948 12.3991L10.0003 9.39941" stroke="#0095F6"
+                        <path d="M8.99976 11.3997L11.9995 14.3994L15.0003 11.3997" stroke="#0095F6"
                             stroke-linecap="round" stroke-linejoin="round" />
-                        <path d="M7.00055 1V11.7999" stroke="#0095F6" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M12.0006 3V13.7999" stroke="#0095F6" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
-                    <span class="ml-2">Xuất excel</span>
+                    <span>Xuất excel</span>
                 </button>
             </div>
             <div class="row m-auto filter pt-2">
@@ -38,7 +38,7 @@
                     <div class="row  mr-0">
                         <div class="col-5">
                             <input type="text" placeholder="Tìm kiếm theo mã đơn hàng hoặc tên khách hàng"
-                                name="keywords" class="pr-4 form-control input-search w-100"
+                                name="keywords" class="pr-4 form-control input-search w-100 h-100"
                                 value="{{ request()->keywords }}">
                             <span class="search-icon"><i class="fas fa-search"></i></span>
                         </div>
@@ -160,7 +160,9 @@ $index = array_search($item['label'], $numberedLabels);
                                             <button class="dropdown-item" id="btn-id">Mã đơn hàng</button>
                                             <button class="dropdown-item" id="btn-guest">Khách hàng</button>
                                             <button class="dropdown-item" id="btn-update_at">Chỉnh sửa cuối</button>
+                                            @if (Auth::user()->can('isAdmin'))
                                             <button class="dropdown-item" id="btn-creator">Người tạo</button>
+                                            @endif
                                             <button class="dropdown-item" id="btn-sum">Tổng tiền</button>
                                             <button class="dropdown-item" id="btn-status">Trạng thái</button>
                                         </div>
@@ -244,24 +246,24 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <a class="cursor select-all mr-auto">Chọn tất cả</a>
                                                 <a class="cursor deselect-all">Hủy chọn</a>
                                             </div>
-                                            <ul class="ks-cboxtags-status p-0 m-0 px-2">
+                                            <ul class="ks-cboxtags-status p-0 mb-1 px-2">
                                                 <li>
                                                     <input type="checkbox" id="status_active"
                                                         {{ in_array(0, $status) ? 'checked' : '' }} name="status[]"
                                                         value="0">
-                                                    <label for="status_active">Đã hủy</label>
+                                                    <label for="">Đã hủy</label>
                                                 </li>
                                                 <li>
                                                     <input type="checkbox" id="status_inactive"
                                                         {{ in_array(1, $status) ? 'checked' : '' }} name="status[]"
                                                         value="1">
-                                                    <label for="status_inactive">Đã báo giá</label>
+                                                    <label for="">Đã báo giá</label>
                                                 </li>
                                                 <li>
                                                     <input type="checkbox" id="status_inactive"
                                                         {{ in_array(2, $status) ? 'checked' : '' }} name="status[]"
                                                         value="2">
-                                                    <label for="status_inactive">Đã chốt</label>
+                                                    <label for="">Đã chốt</label>
                                                 </li>
                                             </ul>
                                         </div>
@@ -288,7 +290,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <a class="cursor select-all-creator mr-auto">Chọn tất cả</a>
                                                 <a class="cursor deselect-all-creator">Hủy chọn</a>
                                             </div>
-                                            <ul class="ks-cboxtags-creator p-0 m-0 px-2">
+                                            <ul class="ks-cboxtags-creator p-0 mb-1 px-2">
                                                 @if (!empty($exports))
                                                     @php
                                                         $seenValues = [];
@@ -332,9 +334,10 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('comparison_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
-                                                <input class="w-50 input-quantity sum-input" type="number"
+                                                <input class="w-50 input-quantity sum-input" type="text"
+                                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                                     name="sum" value="{{ request()->sum }}"
                                                     placeholder="Số lượng">
                                             </div>
@@ -383,32 +386,28 @@ $index = array_search($item['label'], $numberedLabels);
             <div class="d-flex justify-content-between align-items-center">
                 <span class="count_checkbox mr-5"></span>
                 <div class="row action">
-                    <div class="btn-xoahang my-2 mr-2">
+                    <div class="btn-xoahang my-2 ml-3">
                         <button id="deleteExports" type="button"
-                            class="btn btn-group btn-light d-flex align-items-center">
-                            <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24"
-                                stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em"
-                                width="1em" xmlns="http://www.w3.org/2000/svg">
-                                <polyline points="3 6 5 6 21 6"></polyline>
-                                <path
-                                    d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
-                                </path>
-                                <line x1="10" y1="11" x2="10" y2="17"></line>
-                                <line x1="14" y1="11" x2="14" y2="17"></line>
+                            class="btn btn-group btn-light d-flex align-items-center h-100">
+                            <svg class="mr-1" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M10.5454 5C10.2442 5 9.99999 5.24421 9.99999 5.54545C9.99999 5.8467 10.2442 6.09091 10.5454 6.09091H13.4545C13.7558 6.09091 14 5.8467 14 5.54545C14 5.24421 13.7558 5 13.4545 5H10.5454ZM6 7.72726C6 7.42601 6.24421 7.18181 6.54545 7.18181H7.63637H16.3636H17.4545C17.7558 7.18181 18 7.42601 18 7.72726C18 8.02851 17.7558 8.27272 17.4545 8.27272H16.9091V17C16.9091 18.2113 15.9118 19.1818 14.7135 19.1818H9.25891C8.97278 19.1816 8.68906 19.1247 8.42499 19.0145C8.16092 18.9044 7.92126 18.7431 7.71979 18.5399C7.51833 18.3367 7.35905 18.0957 7.25112 17.8307C7.14347 17.5664 7.08903 17.2834 7.09091 16.9981V8.27272H6.54545C6.24421 8.27272 6 8.02851 6 7.72726ZM8.18182 17.0041V8.27272H15.8182V17C15.8182 17.5966 15.3216 18.0909 14.7135 18.0909H9.25938C9.11713 18.0908 8.97632 18.0625 8.84503 18.0077C8.71375 17.953 8.5946 17.8728 8.49444 17.7718C8.39429 17.6707 8.3151 17.5509 8.26144 17.4192C8.20779 17.2874 8.18074 17.1464 8.18182 17.0041ZM13.4545 10.0909C13.7558 10.0909 14 10.3351 14 10.6364V15.7273C14 16.0285 13.7558 16.2727 13.4545 16.2727C13.1533 16.2727 12.9091 16.0285 12.9091 15.7273V10.6364C12.9091 10.3351 13.1533 10.0909 13.4545 10.0909ZM11.0909 10.6364C11.0909 10.3351 10.8467 10.0909 10.5454 10.0909C10.2442 10.0909 9.99999 10.3351 9.99999 10.6364V15.7273C9.99999 16.0285 10.2442 16.2727 10.5454 16.2727C10.8467 16.2727 11.0909 16.0285 11.0909 15.7273V10.6364Z"
+                                    fill="#555555" />
                             </svg>
-                            <span>Xóa các đơn hàng đã chọn</span>
+                            <span>Xóa đơn</span>
                         </button>
                     </div>
-                    <div class="btn-huy my-2">
-                        <button id="cancelBillExport" class="btn btn-group btn-light d-flex align-items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
-                                viewBox="0 0 14 14" fill="none">
-                                <path d="M13 13L1 1" stroke="#555555" stroke-width="1.5" stroke-linecap="round"
+                    <div class="btn-huy my-2 ml-4">
+                        <button id="cancelBillExport" class="btn btn-group btn-light d-flex align-items-center h-100">
+                            <svg class="mr-1" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M18 18L6 6" stroke="#555555" stroke-width="1.5" stroke-linecap="round"
                                     stroke-linejoin="round" />
-                                <path d="M13 1L1 13" stroke="#555555" stroke-width="1.5" stroke-linecap="round"
+                                <path d="M18 6L6 18" stroke="#555555" stroke-width="1.5" stroke-linecap="round"
                                     stroke-linejoin="round" />
                             </svg>
-                            <span class="px-1">Hủy đơn hàng đã chọn</span>
+                            <span class="px-1">Hủy đơn</span>
                         </button>
                     </div>
                 </div>
@@ -448,10 +447,10 @@ $index = array_search($item['label'], $numberedLabels);
                                         </th>
                                         <th scope="col">
                                             <span class="d-flex">
-                                                <a href="#" class="sort-link" data-sort-by="guest_represent"
+                                                <a href="#" class="sort-link" data-sort-by="guest_receiver"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Khách hàng</button></a>
-                                                <div class="icon" id="icon-guest_represent"></div>
+                                                <div class="icon" id="icon-guest_receiver"></div>
                                             </span>
                                         </th>
                                         <th scope="col">
@@ -462,6 +461,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <div class="icon" id="icon-updated_at"></div>
                                             </span>
                                         </th>
+                                        @if (Auth::user()->can('isAdmin'))
                                         <th scope="col">
                                             <span class="d-flex">
                                                 <a href="#" class="sort-link" data-sort-by="name"
@@ -470,6 +470,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <div class="icon" id="icon-name"></div>
                                             </span>
                                         </th>
+                                        @endif
                                         <th scope="col">
                                             <span class="d-flex justify-content-end">
                                                 <a href="#" class="sort-link" data-sort-by="total"
@@ -492,72 +493,76 @@ $index = array_search($item['label'], $numberedLabels);
                                 </thead>
                                 <tbody>
                                     @foreach ($export as $value)
-                                        <tr>
-                                            <td><input type="checkbox" class="cb-element" name="ids[]"
-                                                    value="{{ $value->id }}"></td>
-                                            <td>{{ $value->id }}</td>
-                                            <td>{{ $value->guest_represent }}</td>
-                                            <td>{{ date_format(new DateTime($value->updated_at), 'd-m-Y') }}</td>
-                                            <td>{{ $value->name }}</td>
-                                            <td class="text-right">
-                                                {{ number_format($value->total)}}
-                                            </td>
-                                            <td class="text-center">
-                                                @if ($value->export_status == 0)
-                                                    <span class="p-2 bg-danger rounded">Đã hủy</span>
-                                                @elseif($value->export_status == 1)
-                                                    <span class="p-2 bg-warning rounded">Đã báo giá</span>
-                                                @elseif($value->export_status == 2)
-                                                    <span class="p-2 bg-success rounded">Đã chốt</span>
+                                        @if (Auth::user()->name == $value->name || Auth::user()->can('isAdmin'))
+                                            <tr>
+                                                <td><input type="checkbox" class="cb-element" name="ids[]"
+                                                        value="{{ $value->id }}"></td>
+                                                <td>{{ $value->id }}</td>
+                                                <td>{{ $value->guest_receiver }}</td>
+                                                <td>{{ date_format(new DateTime($value->updated_at), 'd-m-Y') }}</td>
+                                            @if (Auth::user()->can('isAdmin'))
+                                                <td>{{ $value->name }}</td>
                                                 @endif
-                                            </td>
-                                            <td>
-                                                @if ($value->export_status == 1 && (Auth::user()->name == $value->name || Auth::user()->can('isAdmin')))
-                                                    <a href="{{ route('exports.edit', $value->id) }}">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="32"
-                                                            height="32" viewBox="0 0 32 32" fill="none">
-                                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                                d="M18.7832 6.79483C18.987 6.71027 19.2056 6.66675 19.4263 6.66675C19.6471 6.66675 19.8656 6.71027 20.0695 6.79483C20.2734 6.87938 20.4586 7.00331 20.6146 7.15952L21.9607 8.50563C22.1169 8.66165 22.2408 8.84693 22.3253 9.05087C22.4099 9.25482 22.4534 9.47342 22.4534 9.69419C22.4534 9.91495 22.4099 10.1336 22.3253 10.3375C22.2408 10.5414 22.1169 10.7267 21.9607 10.8827L20.2809 12.5626C20.2711 12.5736 20.2609 12.5844 20.2503 12.595C20.2397 12.6056 20.2289 12.6158 20.2178 12.6256L11.5607 21.2827C11.4257 21.4177 11.2426 21.4936 11.0516 21.4936H8.34644C7.94881 21.4936 7.62647 21.1712 7.62647 20.7736V18.0684C7.62647 17.8775 7.70233 17.6943 7.83737 17.5593L16.4889 8.9086C16.5003 8.89532 16.5124 8.88235 16.525 8.86973C16.5376 8.8571 16.5506 8.84504 16.5639 8.83354L18.2381 7.15952C18.394 7.00352 18.5795 6.8793 18.7832 6.79483ZM17.0354 10.3984L9.06641 18.3667V20.0536H10.7534L18.7221 12.085L17.0354 10.3984ZM19.7402 11.0668L18.0537 9.38022L19.2572 8.17685C19.2794 8.15461 19.3057 8.13696 19.3348 8.12493C19.3638 8.11289 19.3949 8.10669 19.4263 8.10669C19.4578 8.10669 19.4889 8.11289 19.5179 8.12493C19.5469 8.13697 19.5737 8.15504 19.5959 8.17728L20.9428 9.52411C20.9651 9.5464 20.9831 9.57315 20.9951 9.60228C21.0072 9.63141 21.0134 9.66264 21.0134 9.69419C21.0134 9.72573 21.0072 9.75696 20.9951 9.78609C20.9831 9.81522 20.9651 9.84197 20.9428 9.86426L19.7402 11.0668ZM6.6665 24.6134C6.6665 24.2158 6.98885 23.8935 7.38648 23.8935H24.6658C25.0634 23.8935 25.3858 24.2158 25.3858 24.6134C25.3858 25.0111 25.0634 25.3334 24.6658 25.3334H7.38648C6.98885 25.3334 6.6665 25.0111 6.6665 24.6134Z"
-                                                                fill="#555555"></path>
-                                                        </svg>
-                                                    </a>
-                                                @else
-                                                    <a href="{{ route('exports.edit', $value->id) }}">
-                                                        <svg width="32" height="32" viewBox="0 0 32 32"
-                                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <path
-                                                                d="M24.9033 14.1636V7.89258C24.9033 7.33819 24.6831 6.8065 24.2911 6.41449C23.8991 6.02248 23.3674 5.80225 22.813 5.80225H9.22583C8.67144 5.80225 8.13976 6.02248 7.74774 6.41449C7.35573 6.8065 7.1355 7.33819 7.1355 7.89258V22.5249C7.1355 23.0793 7.35573 23.611 7.74774 24.003C8.13976 24.395 8.67144 24.6152 9.22583 24.6152H14.4517"
-                                                                stroke="#555555" stroke-width="1.5"
-                                                                stroke-linecap="round" stroke-linejoin="round" />
-                                                            <path d="M13.6678 18.3442H14.4517" stroke="#555555"
-                                                                stroke-width="1.5" stroke-linecap="round"
-                                                                stroke-linejoin="round" />
-                                                            <path d="M13.6678 14.1631H17.5872" stroke="#555555"
-                                                                stroke-width="1.5" stroke-linecap="round"
-                                                                stroke-linejoin="round" />
-                                                            <path d="M13.6678 10.1133H20.7227" stroke="#555555"
-                                                                stroke-width="1.5" stroke-linecap="round"
-                                                                stroke-linejoin="round" />
-                                                            <path
-                                                                d="M11.0549 10.8187C11.2099 10.8187 11.3615 10.7727 11.4904 10.6866C11.6193 10.6005 11.7197 10.4781 11.7791 10.3348C11.8384 10.1916 11.8539 10.034 11.8237 9.88192C11.7934 9.72987 11.7188 9.59019 11.6092 9.48057C11.4995 9.37094 11.3599 9.29629 11.2078 9.26604C11.0557 9.23579 10.8981 9.25131 10.7549 9.31064C10.6117 9.36997 10.4892 9.47044 10.4031 9.59935C10.317 9.72826 10.271 9.87981 10.271 10.0349C10.271 10.2427 10.3536 10.4421 10.5006 10.5891C10.6476 10.7361 10.847 10.8187 11.0549 10.8187Z"
-                                                                fill="#555555" />
-                                                            <path
-                                                                d="M11.0549 14.9994C11.2099 14.9994 11.3615 14.9534 11.4904 14.8673C11.6193 14.7811 11.7197 14.6587 11.7791 14.5155C11.8384 14.3723 11.8539 14.2146 11.8237 14.0626C11.7934 13.9105 11.7188 13.7709 11.6092 13.6612C11.4995 13.5516 11.3599 13.477 11.2078 13.4467C11.0557 13.4165 10.8981 13.432 10.7549 13.4913C10.6117 13.5506 10.4892 13.6511 10.4031 13.78C10.317 13.9089 10.271 14.0605 10.271 14.2155C10.271 14.4234 10.3536 14.6228 10.5006 14.7698C10.6476 14.9168 10.847 14.9994 11.0549 14.9994Z"
-                                                                fill="#555555" />
-                                                            <path
-                                                                d="M11.0549 19.0756C11.2099 19.0756 11.3615 19.0296 11.4904 18.9435C11.6193 18.8573 11.7197 18.7349 11.7791 18.5917C11.8384 18.4484 11.8539 18.2908 11.8237 18.1388C11.7934 17.9867 11.7188 17.847 11.6092 17.7374C11.4995 17.6278 11.3599 17.5531 11.2078 17.5229C11.0557 17.4926 10.8981 17.5081 10.7549 17.5675C10.6117 17.6268 10.4892 17.7273 10.4031 17.8562C10.317 17.9851 10.271 18.1367 10.271 18.2917C10.271 18.4996 10.3536 18.699 10.5006 18.846C10.6476 18.993 10.847 19.0756 11.0549 19.0756Z"
-                                                                fill="#555555" />
-                                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                                d="M24.2994 17.5757C22.6613 15.9376 20.0054 15.9376 18.3672 17.5757C16.7291 19.2139 16.7291 21.8698 18.3672 23.5079C20.0054 25.1461 22.6613 25.1461 24.2994 23.5079C25.9376 21.8698 25.9376 19.2139 24.2994 17.5757ZM25.1046 16.7706C23.0218 14.6878 19.6449 14.6878 17.5621 16.7706C15.4793 18.8534 15.4793 22.2303 17.5621 24.3131C19.6449 26.3959 23.0218 26.3959 25.1046 24.3131C27.1874 22.2303 27.1874 18.8534 25.1046 16.7706Z"
-                                                                fill="#555555" />
-                                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                                d="M24.1834 24.1834C24.428 23.9389 24.8246 23.9389 25.0692 24.1834L27.8166 26.9308C28.0611 27.1754 28.0611 27.572 27.8166 27.8166C27.572 28.0611 27.1754 28.0611 26.9308 27.8166L24.1834 25.0692C23.9389 24.8246 23.9389 24.428 24.1834 24.1834Z"
-                                                                fill="#555555" />
-                                                        </svg>
-                                                    </a>
-                                                @endif
-                                            </td>
-                                        </tr>
+                                                <td class="text-right">
+                                                    {{ number_format($value->total) }}
+                                                </td>
+                                                <td class="text-center">
+                                                    @if ($value->export_status == 0)
+                                                        <span class="p-2 bg-danger rounded">Đã hủy</span>
+                                                    @elseif($value->export_status == 1)
+                                                        <span class="p-2 bg-warning rounded">Đã báo giá</span>
+                                                    @elseif($value->export_status == 2)
+                                                        <span class="p-2 bg-success rounded">Đã chốt</span>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($value->export_status == 1 && (Auth::user()->name == $value->name || Auth::user()->can('isAdmin')))
+                                                        <a href="{{ route('exports.edit', $value->id) }}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="32"
+                                                                height="32" viewBox="0 0 32 32" fill="none">
+                                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                    d="M18.7832 6.79483C18.987 6.71027 19.2056 6.66675 19.4263 6.66675C19.6471 6.66675 19.8656 6.71027 20.0695 6.79483C20.2734 6.87938 20.4586 7.00331 20.6146 7.15952L21.9607 8.50563C22.1169 8.66165 22.2408 8.84693 22.3253 9.05087C22.4099 9.25482 22.4534 9.47342 22.4534 9.69419C22.4534 9.91495 22.4099 10.1336 22.3253 10.3375C22.2408 10.5414 22.1169 10.7267 21.9607 10.8827L20.2809 12.5626C20.2711 12.5736 20.2609 12.5844 20.2503 12.595C20.2397 12.6056 20.2289 12.6158 20.2178 12.6256L11.5607 21.2827C11.4257 21.4177 11.2426 21.4936 11.0516 21.4936H8.34644C7.94881 21.4936 7.62647 21.1712 7.62647 20.7736V18.0684C7.62647 17.8775 7.70233 17.6943 7.83737 17.5593L16.4889 8.9086C16.5003 8.89532 16.5124 8.88235 16.525 8.86973C16.5376 8.8571 16.5506 8.84504 16.5639 8.83354L18.2381 7.15952C18.394 7.00352 18.5795 6.8793 18.7832 6.79483ZM17.0354 10.3984L9.06641 18.3667V20.0536H10.7534L18.7221 12.085L17.0354 10.3984ZM19.7402 11.0668L18.0537 9.38022L19.2572 8.17685C19.2794 8.15461 19.3057 8.13696 19.3348 8.12493C19.3638 8.11289 19.3949 8.10669 19.4263 8.10669C19.4578 8.10669 19.4889 8.11289 19.5179 8.12493C19.5469 8.13697 19.5737 8.15504 19.5959 8.17728L20.9428 9.52411C20.9651 9.5464 20.9831 9.57315 20.9951 9.60228C21.0072 9.63141 21.0134 9.66264 21.0134 9.69419C21.0134 9.72573 21.0072 9.75696 20.9951 9.78609C20.9831 9.81522 20.9651 9.84197 20.9428 9.86426L19.7402 11.0668ZM6.6665 24.6134C6.6665 24.2158 6.98885 23.8935 7.38648 23.8935H24.6658C25.0634 23.8935 25.3858 24.2158 25.3858 24.6134C25.3858 25.0111 25.0634 25.3334 24.6658 25.3334H7.38648C6.98885 25.3334 6.6665 25.0111 6.6665 24.6134Z"
+                                                                    fill="#555555"></path>
+                                                            </svg>
+                                                        </a>
+                                                    @else
+                                                        <a href="{{ route('exports.edit', $value->id) }}">
+                                                            <svg width="32" height="32" viewBox="0 0 32 32"
+                                                                fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path
+                                                                    d="M24.9033 14.1636V7.89258C24.9033 7.33819 24.6831 6.8065 24.2911 6.41449C23.8991 6.02248 23.3674 5.80225 22.813 5.80225H9.22583C8.67144 5.80225 8.13976 6.02248 7.74774 6.41449C7.35573 6.8065 7.1355 7.33819 7.1355 7.89258V22.5249C7.1355 23.0793 7.35573 23.611 7.74774 24.003C8.13976 24.395 8.67144 24.6152 9.22583 24.6152H14.4517"
+                                                                    stroke="#555555" stroke-width="1.5"
+                                                                    stroke-linecap="round" stroke-linejoin="round" />
+                                                                <path d="M13.6678 18.3442H14.4517" stroke="#555555"
+                                                                    stroke-width="1.5" stroke-linecap="round"
+                                                                    stroke-linejoin="round" />
+                                                                <path d="M13.6678 14.1631H17.5872" stroke="#555555"
+                                                                    stroke-width="1.5" stroke-linecap="round"
+                                                                    stroke-linejoin="round" />
+                                                                <path d="M13.6678 10.1133H20.7227" stroke="#555555"
+                                                                    stroke-width="1.5" stroke-linecap="round"
+                                                                    stroke-linejoin="round" />
+                                                                <path
+                                                                    d="M11.0549 10.8187C11.2099 10.8187 11.3615 10.7727 11.4904 10.6866C11.6193 10.6005 11.7197 10.4781 11.7791 10.3348C11.8384 10.1916 11.8539 10.034 11.8237 9.88192C11.7934 9.72987 11.7188 9.59019 11.6092 9.48057C11.4995 9.37094 11.3599 9.29629 11.2078 9.26604C11.0557 9.23579 10.8981 9.25131 10.7549 9.31064C10.6117 9.36997 10.4892 9.47044 10.4031 9.59935C10.317 9.72826 10.271 9.87981 10.271 10.0349C10.271 10.2427 10.3536 10.4421 10.5006 10.5891C10.6476 10.7361 10.847 10.8187 11.0549 10.8187Z"
+                                                                    fill="#555555" />
+                                                                <path
+                                                                    d="M11.0549 14.9994C11.2099 14.9994 11.3615 14.9534 11.4904 14.8673C11.6193 14.7811 11.7197 14.6587 11.7791 14.5155C11.8384 14.3723 11.8539 14.2146 11.8237 14.0626C11.7934 13.9105 11.7188 13.7709 11.6092 13.6612C11.4995 13.5516 11.3599 13.477 11.2078 13.4467C11.0557 13.4165 10.8981 13.432 10.7549 13.4913C10.6117 13.5506 10.4892 13.6511 10.4031 13.78C10.317 13.9089 10.271 14.0605 10.271 14.2155C10.271 14.4234 10.3536 14.6228 10.5006 14.7698C10.6476 14.9168 10.847 14.9994 11.0549 14.9994Z"
+                                                                    fill="#555555" />
+                                                                <path
+                                                                    d="M11.0549 19.0756C11.2099 19.0756 11.3615 19.0296 11.4904 18.9435C11.6193 18.8573 11.7197 18.7349 11.7791 18.5917C11.8384 18.4484 11.8539 18.2908 11.8237 18.1388C11.7934 17.9867 11.7188 17.847 11.6092 17.7374C11.4995 17.6278 11.3599 17.5531 11.2078 17.5229C11.0557 17.4926 10.8981 17.5081 10.7549 17.5675C10.6117 17.6268 10.4892 17.7273 10.4031 17.8562C10.317 17.9851 10.271 18.1367 10.271 18.2917C10.271 18.4996 10.3536 18.699 10.5006 18.846C10.6476 18.993 10.847 19.0756 11.0549 19.0756Z"
+                                                                    fill="#555555" />
+                                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                    d="M24.2994 17.5757C22.6613 15.9376 20.0054 15.9376 18.3672 17.5757C16.7291 19.2139 16.7291 21.8698 18.3672 23.5079C20.0054 25.1461 22.6613 25.1461 24.2994 23.5079C25.9376 21.8698 25.9376 19.2139 24.2994 17.5757ZM25.1046 16.7706C23.0218 14.6878 19.6449 14.6878 17.5621 16.7706C15.4793 18.8534 15.4793 22.2303 17.5621 24.3131C19.6449 26.3959 23.0218 26.3959 25.1046 24.3131C27.1874 22.2303 27.1874 18.8534 25.1046 16.7706Z"
+                                                                    fill="#555555" />
+                                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                    d="M24.1834 24.1834C24.428 23.9389 24.8246 23.9389 25.0692 24.1834L27.8166 26.9308C28.0611 27.1754 28.0611 27.572 27.8166 27.8166C27.572 28.0611 27.1754 28.0611 26.9308 27.8166L24.1834 25.0692C23.9389 24.8246 23.9389 24.428 24.1834 24.1834Z"
+                                                                    fill="#555555" />
+                                                            </svg>
+                                                        </a>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endif
                                     @endforeach
                                 </tbody>
                             </table>
@@ -565,7 +570,11 @@ $index = array_search($item['label'], $numberedLabels);
                         <!-- /.card-body -->
                     </div>
                     <div class="paginator mt-4 d-flex justify-content-end">
-                        {{ $export->appends(request()->except('page'))->links() }}
+                        @if (!Auth::user()->can('isAdmin'))
+                            {{ $exportCreator->appends(request()->except('page'))->links() }}
+                        @else
+                            {{ $export->appends(request()->except('page'))->links() }}
+                        @endif
                     </div>
                 </div>
                 <!-- /.col -->
@@ -577,6 +586,18 @@ $index = array_search($item['label'], $numberedLabels);
     <!-- /.content -->
 </div>
 <script>
+    $('.ks-cboxtags-status li').on('click', function(event) {
+        if (event.target.tagName !== 'INPUT') {
+            var checkbox = $(this).find('input[type="checkbox"]');
+            checkbox.prop('checked', !checkbox.prop('checked')); // Đảo ngược trạng thái checked
+        }
+    });
+    $('.ks-cboxtags-creator li').on('click', function(event) {
+        if (event.target.tagName !== 'INPUT') {
+            var checkbox = $(this).find('input[type="checkbox"]');
+            checkbox.prop('checked', !checkbox.prop('checked')); // Đảo ngược trạng thái checked
+        }
+    });
     $('#btn-update_at').click(function(event) {
         event.preventDefault();
         $('.btn-filter').prop('disabled', true);
@@ -602,6 +623,7 @@ $index = array_search($item['label'], $numberedLabels);
     });
     $('#btn-creator').click(function(event) {
         event.preventDefault();
+        $('#creator-options input').addClass('creator-checkbox');
         $('.btn-filter').prop('disabled', true);
         $('#creator-options').toggle();
     });
@@ -613,6 +635,8 @@ $index = array_search($item['label'], $numberedLabels);
     });
     $('#btn-status').click(function(event) {
         event.preventDefault();
+        $('#status-options input').addClass('status-checkbox');
+        $('.btn-filter').prop('disabled', true);
         $('.btn-filter').prop('disabled', true);
         $('#status-options').toggle();
     });

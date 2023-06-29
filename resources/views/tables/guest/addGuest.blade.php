@@ -21,23 +21,26 @@
                 <div class="col-12">
                     <div class="card">
                         <!-- /.card-header -->
-                        <div class="card-body p-3">
+                        <div class="card-body p-3 mb-5">
                             <form action="{{ route('guests.store') }}" method="POST">
                                 @csrf
+                                <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
                                 <div class="form-group">
                                     <label for="email">Đơn vị:</label>
                                     <input type="text" class="form-control" name="guest_name"
                                         placeholder="Nhập đơn vị" required>
                                 </div>
-                                <div class="form-group">
+                                {{-- <div class="form-group">
                                     <label for="pwd">Đại diện:</label>
                                     <input type="text" class="form-control" name="guest_represent"
                                         placeholder="Nhập đại diện" required>
-                                </div>
+                                </div> --}}
                                 <div class="form-group">
                                     <label for="pwd">Số điện thoại:</label>
-                                    <input type="number" class="form-control" name="guest_phone"
-                                        placeholder="Nhập số điện thoại" required>
+                                    <input type="text" class="form-control" name="guest_phone"
+                                        oninput=validateNumberInput(this) placeholder="Nhập số điện thoại"
+                                        pattern="^(?:\+?84|0)(?:\d{9}|\d{10})$" title="Số điện thoại không hợp lệ"
+                                        required>
                                 </div>
                                 <div class="form-group">
                                     <label for="pwd">Email:</label>
@@ -48,30 +51,33 @@
                                     <label>Địa chỉ xuất hóa đơn:</label>
                                     <input type="text" class="form-control" id="guest_addressInvoice"
                                         placeholder="Nhập địa chỉ xuất hóa đơn" name="guest_addressInvoice"
-                                        value="" required="">
+                                        value="" required>
                                 </div>
                                 <div class="form-group">
                                     <label>Mã số thuế:</label>
                                     <input type="number" class="form-control" id="guest_code"
-                                        placeholder="Nhập mã số thuế" name="guest_code" value="" required="">
+                                        oninput=validateNumberInput(this) placeholder="Nhập mã số thuế"
+                                        name="guest_code" value="" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="email">Địa chỉ giao hàng:</label>
                                     <input type="text" class="form-control" id="guest_addressDeliver"
                                         placeholder="Nhập địa chỉ giao hàng" name="guest_addressDeliver" value=""
-                                        required="">
+                                        required>
                                 </div>
                                 <div class="form-group">
                                     <label for="email">Người nhận hàng:</label>
                                     <input type="text" class="form-control" id="guest_receiver"
                                         placeholder="Nhập người nhận hàng" name="guest_receiver" value=""
-                                        required="">
+                                        required>
                                 </div>
                                 <div class="form-group">
                                     <label for="email">SĐT người nhận:</label>
-                                    <input type="number" class="form-control" id="guest_phoneReceiver"
-                                        placeholder="Nhập Số điện thoại người nhận" name="guest_phoneReceiver"
-                                        value="" required="">
+                                    <input type="text" class="form-control" id="guest_phoneReceiver" value=""
+                                        oninput=validateNumberInput(this) placeholder="Nhập số điện thoại người nhận"
+                                        name="guest_phoneReceiver" pattern="^(?:\+?84|0)(?:\d{9}|\d{10})$"
+                                        title="Số điện thoại không hợp lệ" required>
+
                                 </div>
                                 <div class="form-group">
                                     <label for="email">Ghi chú:</label>
@@ -80,14 +86,21 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="email">Hình thức thanh toán:</label>
-                                    <select name="guest_pay" class="form-control" name="guest_pay" id="guest_pay" required>
+                                    <select name="guest_pay" class="form-control" name="guest_pay" id="guest_pay"
+                                        required>
                                         <option value="0">Chuyển khoản</option>
-                                        <option value="1">Thanh toán bằng tiền mặt</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="email">Điều kiện thanh toán:</label>
-                                    <textarea class="form-control" name="guest_payTerm" id="guest_payTerm"></textarea>
+                                    <label>Công nợ:</label>
+                                    <div class="d-flex align-items-center">
+                                        <input type="text" oninput="validateNumberInput(this)" class="form-control"
+                                            id="debtInput" value="" name="debt" style="width:15%;" required>
+                                        <span class="ml-2" id="data-debt">ngày</span>
+                                        <input type="checkbox" id="debtCheckbox" value="0" name="debt"
+                                            class="ml-3">
+                                        <span class="ml-2">Thanh toán tiền mặt</span>
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="pwd">Trạng thái:</label>
@@ -114,6 +127,24 @@
     </section>
     <!-- /.content -->
 </div>
+<script>
+    //cho phép nhập số 
+    function validateNumberInput(input) {
+        var regex = /^[0-9]*$/;
+        if (!regex.test(input.value)) {
+            input.value = input.value.replace(/[^0-9]/g, '');
+        }
+    }
+    //Công nợ
+    var isChecked = $('#debtCheckbox').is(':checked');
+    // Đặt trạng thái của input dựa trên checkbox
+    $('#debtInput').prop('disabled', isChecked);
+    // Xử lý sự kiện khi checkbox thay đổi
+    $(document).on('change', '#debtCheckbox', function() {
+        var isChecked = $(this).is(':checked');
+        $('#debtInput').prop('disabled', isChecked);
+    });
+</script>
 </body>
 
 </html>

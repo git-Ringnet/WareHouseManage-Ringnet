@@ -21,30 +21,32 @@
                 <div class="col-12">
                     <div class="card">
                         <!-- /.card-header -->
-                        <div class="card-body p-3">
+                        <div class="card-body p-3 mb-5">
                             <form action="{{ route('guests.update', $guests->id) }}" method="POST">
                                 @csrf
                                 @method('PUT')
                                 <div class="form-group">
                                     <label for="email">Đơn vị:</label>
                                     <input type="text" class="form-control" value="{{ $guests->guest_name }}"
-                                        name="guest_name" placeholder="Enter guest name" required>
+                                        name="guest_name" placeholder="Nhập tên đơn vị" required>
                                 </div>
-                                <div class="form-group">
+                                {{-- <div class="form-group">
                                     <label for="pwd">Đại diện:</label>
                                     <input type="text" class="form-control" value="{{ $guests->guest_represent }}"
-                                        name="guest_represent" placeholder="Enter guest represent" required>
-                                </div>
+                                        name="guest_represent" placeholder="Nhập tên người đại diện" required>
+                                </div> --}}
                                 <div class="form-group">
                                     <label for="pwd">Số điện thoại:</label>
-                                    <input type="number" class="form-control" value="{{ $guests->guest_phone }}"
-                                        name="guest_phone" placeholder="Enter guest phone" required>
+                                    <input type="text" class="form-control" oninput=validateNumberInput(this)
+                                        value="{{ $guests->guest_phone }}" name="guest_phone"
+                                        pattern="^(?:\+?84|0)(?:\d{9}|\d{10})$" title="Số điện thoại không hợp lệ"
+                                        placeholder="Nhập số điện thoại" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="pwd">Email:</label>
                                     <input type="email" class="form-control" value="{{ $guests->guest_email }}"
                                         pattern="/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/" name="guest_email"
-                                        placeholder="Enter guest email" required>
+                                        placeholder="Nhập email" required>
                                 </div>
                                 <div class="form-group">
                                     <label>Địa chỉ xuất hóa đơn:</label>
@@ -72,9 +74,11 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="email">SĐT người nhận:</label>
-                                    <input type="number" class="form-control" id="guest_phoneReceiver"
-                                        placeholder="Nhập Số điện thoại người nhận" name="guest_phoneReceiver"
-                                        value="{{ $guests->guest_phoneReceiver }}" required="">
+                                    <input type="text" class="form-control" id="guest_phoneReceiver"
+                                        oninput=validateNumberInput(this) placeholder="Nhập số điện thoại người nhận"
+                                        name="guest_phoneReceiver" pattern="^(?:\+?84|0)(?:\d{9}|\d{10})$"
+                                        title="Số điện thoại không hợp lệ" value="{{ $guests->guest_phoneReceiver }}"
+                                        required="">
                                 </div>
                                 <div class="form-group">
                                     <label for="email">Ghi chú:</label>
@@ -83,8 +87,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="email">Hình thức thanh toán:</label>
-                                    <select name="guest_pay" class="form-control" name="guest_pay" id="guest_pay"
-                                        equired>
+                                    <select class="form-control" name="guest_pay" id="guest_pay" required>
                                         <option value="0" <?php if ($guests->guest_pay == 0) {
                                             echo 'selected';
                                         } ?>>Chuyển khoản</option>
@@ -94,9 +97,36 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="email">Điều kiện thanh toán:</label>
-                                    <textarea class="form-control" name="guest_payTerm" id="guest_payTerm">{{ $guests->guest_payTerm }}</textarea>
+                                    <label>Công nợ:</label>
+                                    <div class="d-flex align-items-center">
+                                        <input type="text" oninput="validateNumberInput(this)"
+                                            class="form-control" id="debtInput" value="{{ $guests->debt }}"
+                                            name="debt" style="width:15%;" required>
+                                        <span class="ml-2" id="data-debt">ngày</span>
+                                        <input type="checkbox" id="debtCheckbox" value="0" name="debt" class="ml-3"
+                                            <?php if ($guests->debt == 0) {
+                                                echo 'checked';
+                                            } ?>>
+                                        <span class="ml-2">Thanh toán tiền mặt</span>
+                                    </div>
                                 </div>
+                                @if (Auth::user()->can('isAdmin'))
+                                    <div class="form-group">
+                                        <label for="email">Người phụ trách:</label>
+                                        <select class="form-control" name="user_id" id="user_id" required>
+                                            <option value="{{ $user->id ?? Auth::user()->id }}">
+                                                {{ Auth::user()->name }}</option>
+                                            @foreach ($usersSale as $user)
+                                                <option value="{{ $user->id ?? old('user_id') }}"
+                                                    {{ $user->id == $guests->user_id ?? old('user_id') ? 'selected' : false }}>
+                                                    {{ $user->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                @else
+                                    <input type="hidden" name="user_id" id="user_id"
+                                        value="{{ Auth::user()->id }}">
+                                @endif
                                 <div class="form-group">
                                     <label for="pwd">Trạng thái:</label>
                                     <select name="guest_status" class="form-control">
@@ -125,6 +155,24 @@
     </section>
     <!-- /.content -->
 </div>
+<script>
+    //cho phép nhập số 
+    function validateNumberInput(input) {
+        var regex = /^[0-9]*$/;
+        if (!regex.test(input.value)) {
+            input.value = input.value.replace(/[^0-9]/g, '');
+        }
+    }
+    //Công nợ
+    var isChecked = $('#debtCheckbox').is(':checked');
+    // Đặt trạng thái của input dựa trên checkbox
+    $('#debtInput').prop('disabled', isChecked);
+    // Xử lý sự kiện khi checkbox thay đổi
+    $(document).on('change', '#debtCheckbox', function() {
+        var isChecked = $(this).is(':checked');
+        $('#debtInput').prop('disabled', isChecked);
+    });
+</script>
 </body>
 
 </html>
