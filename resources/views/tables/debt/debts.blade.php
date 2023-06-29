@@ -680,7 +680,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 {{ number_format($value->debt_transport_fee) }}
                                             </td>
                                             <td class="text-right">{{ number_format($value->total_difference) }}</td>
-                                            <td class="text-left">
+                                            <td class="text-left" style="width: 125px">
                                                 @if ($value->debt != 0)
                                                     {{ $value->debt . ' ' }}ngày
                                                     <span>

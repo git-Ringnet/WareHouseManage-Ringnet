@@ -521,7 +521,7 @@
                 "</select>"
             );
             const ProInput = $("<td>" +
-                "<select class='child-select p-1 productName form-control' required name='product_id[]'>" +
+                "<select class='child-select p-1 productName form-control' style='width:220px' required name='product_id[]'>" +
                 "<option value=''>Lựa chọn sản phẩm</option>" +
                 "</select>" +
                 "</td>");
