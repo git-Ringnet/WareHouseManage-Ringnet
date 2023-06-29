@@ -184,7 +184,7 @@ class ExportController extends Controller
                             return redirect()->route('exports.index')->with('warning', 'Vượt quá số lượng tồn kho!');
                         } else {
                             //thêm khách hàng
-                            if ($clickValue === null) {
+                            if ($clickValue === 2) {
                                 $guest = new Guests();
                                 $guest->guest_name = $request->guest_name;
                                 $guest->guest_addressInvoice = $request->guest_addressInvoice;
@@ -214,7 +214,7 @@ class ExportController extends Controller
                                 $export->save();
                             }
                             //cập nhật khách hàng
-                            elseif ($updateClick === null) {
+                            if ($updateClick === 2 && $clickValue === null) {
                                 $guest = Guests::find($request->id);
                                 $guest->guest_name = $request->guest_name;
                                 $guest->guest_addressInvoice = $request->guest_addressInvoice;
@@ -242,7 +242,7 @@ class ExportController extends Controller
                                 $export->note_form = $request->note_form;
                                 $export->transport_fee = $request->transport_fee;
                                 $export->save();
-                            } else {
+                            } elseif ($updateClick == 1) {
                                 // Tạo đơn xuất hàng
                                 $export = new Exports();
                                 $export->guest_id = $request->id;
@@ -448,37 +448,68 @@ class ExportController extends Controller
                             return redirect()->route('exports.index')->with('warning', 'Vượt quá số lượng tồn kho!');
                         } else {
                             //thêm khách hàng
-                            if ($clickValue == 2 && $updateClick == null) {
-                                $guest = new Guests();
-                                $guest->guest_name = $request->guest_name;
-                                $guest->guest_addressInvoice = $request->guest_addressInvoice;
-                                $guest->guest_code = $request->guest_code;
-                                $guest->guest_addressDeliver = $request->guest_addressDeliver;
-                                $guest->guest_receiver = $request->guest_receiver;
-                                $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
-                                $guest->guest_email = $request->guest_email;
-                                $guest->guest_status = 1;
-                                $guest->guest_phone = $request->guest_phone;
-                                $guest->guest_pay = $request->guest_pay;
-                                $guest->guest_note = $request->guest_note;
-                                if ($request->debt == null) {
-                                    $guest->debt = 0;
-                                } else {
-                                    $guest->debt = $request->debt;
+                            if ($clickValue === 2) {
+                                $existingCustomer = Guests::orwhere('guest_phone', $request->guest_phone)
+                                    ->first();
+                                if (!$existingCustomer) {
+                                    $guest = new Guests();
+                                    $guest->guest_name = $request->guest_name;
+                                    $guest->guest_addressInvoice = $request->guest_addressInvoice;
+                                    $guest->guest_code = $request->guest_code;
+                                    $guest->guest_addressDeliver = $request->guest_addressDeliver;
+                                    $guest->guest_receiver = $request->guest_receiver;
+                                    $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
+                                    $guest->guest_email = $request->guest_email;
+                                    $guest->guest_status = 1;
+                                    $guest->guest_phone = $request->guest_phone;
+                                    $guest->guest_pay = $request->guest_pay;
+                                    $guest->guest_note = $request->guest_note;
+                                    if ($request->debt == null) {
+                                        $guest->debt = 0;
+                                    } else {
+                                        $guest->debt = $request->debt;
+                                    }
+                                    $guest->save();
+                                    $guestId = $guest->id;
+                                    // Tạo đơn xuất hàng
+                                    $export = new Exports();
+                                    $export->guest_id = $guestId;
+                                    $export->user_id = Auth::user()->id;
+                                    $export->total = $request->totalValue;
+                                    $export->export_status = 1;
+                                    $export->note_form = $request->note_form;
+                                    $export->transport_fee = $request->transport_fee;
+                                    $export->save();
+                                    // Tạo các bản ghi trong bảng product export
+                                    for ($i = 0; $i < count($productIDs); $i++) {
+                                        $productID = $productIDs[$i];
+                                        $productQty = $productQtys[$i];
+                                        $nameProduct = Product::where('id', $productID)->value('product_name');
+                                        $proExport = new ProductExports();
+                                        $proExport->products_id = $request->products_id[$i];
+                                        $proExport->product_id = $productID;
+                                        $proExport->export_id = $export->id;
+                                        $proExport->product_name = $nameProduct;
+                                        $proExport->product_unit = $request->product_unit[$i];
+                                        $proExport->product_qty = $productQty;
+                                        $proExport->product_price = $request->product_price[$i];
+                                        $proExport->product_note = $request->product_note[$i];
+                                        $proExport->product_tax = $request->product_tax[$i];
+                                        $proExport->product_total = $request->totalValue;
+                                        $proExport->save();
+                                    }
+                                    // Cập nhật seri_status bằng 2 cho các sản phẩm
+                                    foreach ($serinumbers as $serinumber) {
+                                        if ($serinumber->seri_status == 1) {
+                                            $serinumber->seri_status = 2;
+                                            $serinumber->export_seri = $export->id;
+                                            $serinumber->save();
+                                        }
+                                    }
                                 }
-                                $guest->save();
-                                // Tạo đơn xuất hàng
-                                $export = new Exports();
-                                $export->guest_id = $guest->id;
-                                $export->user_id = Auth::user()->id;
-                                $export->total = $request->totalValue;
-                                $export->export_status = 1;
-                                $export->note_form = $request->note_form;
-                                $export->transport_fee = $request->transport_fee;
-                                $export->save();
                             }
                             //cập nhật khách hàng
-                            if ($updateClick == 2 && $clickValue == null) {
+                            if ($updateClick === 2 && $clickValue === null) {
                                 $guest = Guests::find($request->id);
                                 $guest->guest_name = $request->guest_name;
                                 $guest->guest_addressInvoice = $request->guest_addressInvoice;
@@ -506,8 +537,33 @@ class ExportController extends Controller
                                 $export->note_form = $request->note_form;
                                 $export->transport_fee = $request->transport_fee;
                                 $export->save();
-                            }
-                            if ($updateClick == null && $clickValue == null) {
+                                // Tạo các bản ghi trong bảng product export
+                                for ($i = 0; $i < count($productIDs); $i++) {
+                                    $productID = $productIDs[$i];
+                                    $productQty = $productQtys[$i];
+                                    $nameProduct = Product::where('id', $productID)->value('product_name');
+                                    $proExport = new ProductExports();
+                                    $proExport->products_id = $request->products_id[$i];
+                                    $proExport->product_id = $productID;
+                                    $proExport->export_id = $export->id;
+                                    $proExport->product_name = $nameProduct;
+                                    $proExport->product_unit = $request->product_unit[$i];
+                                    $proExport->product_qty = $productQty;
+                                    $proExport->product_price = $request->product_price[$i];
+                                    $proExport->product_note = $request->product_note[$i];
+                                    $proExport->product_tax = $request->product_tax[$i];
+                                    $proExport->product_total = $request->totalValue;
+                                    $proExport->save();
+                                }
+                                // Cập nhật seri_status bằng 2 cho các sản phẩm
+                                foreach ($serinumbers as $serinumber) {
+                                    if ($serinumber->seri_status == 1) {
+                                        $serinumber->seri_status = 2;
+                                        $serinumber->export_seri = $export->id;
+                                        $serinumber->save();
+                                    }
+                                }
+                            } elseif ($updateClick == 1) {
                                 // Tạo đơn xuất hàng
                                 $export = new Exports();
                                 $export->guest_id = $request->id;
@@ -517,29 +573,29 @@ class ExportController extends Controller
                                 $export->note_form = $request->note_form;
                                 $export->transport_fee = $request->transport_fee;
                                 $export->save();
-                            }
-                            // Tạo các bản ghi trong bảng product export
-                            for ($i = 0; $i < count($productIDs); $i++) {
-                                $productID = $productIDs[$i];
-                                $productQty = $productQtys[$i];
-                                $nameProduct = Product::where('id', $productID)->value('product_name');
-                                $proExport = new ProductExports();
-                                $proExport->products_id = $request->products_id[$i];
-                                $proExport->product_id = $productID;
-                                $proExport->export_id = $export->id;
-                                $proExport->product_name = $nameProduct;
-                                $proExport->product_unit = $request->product_unit[$i];
-                                $proExport->product_qty = $productQty;
-                                $proExport->product_price = $request->product_price[$i];
-                                $proExport->product_note = $request->product_note[$i];
-                                $proExport->product_tax = $request->product_tax[$i];
-                                $proExport->product_total = $request->totalValue;
-                                $proExport->save();
+                                // Tạo các bản ghi trong bảng product export
+                                for ($i = 0; $i < count($productIDs); $i++) {
+                                    $productID = $productIDs[$i];
+                                    $productQty = $productQtys[$i];
+                                    $nameProduct = Product::where('id', $productID)->value('product_name');
+                                    $proExport = new ProductExports();
+                                    $proExport->products_id = $request->products_id[$i];
+                                    $proExport->product_id = $productID;
+                                    $proExport->export_id = $export->id;
+                                    $proExport->product_name = $nameProduct;
+                                    $proExport->product_unit = $request->product_unit[$i];
+                                    $proExport->product_qty = $productQty;
+                                    $proExport->product_price = $request->product_price[$i];
+                                    $proExport->product_note = $request->product_note[$i];
+                                    $proExport->product_tax = $request->product_tax[$i];
+                                    $proExport->product_total = $request->totalValue;
+                                    $proExport->save();
+                                }
                                 // Cập nhật seri_status bằng 2 cho các sản phẩm
                                 foreach ($serinumbers as $serinumber) {
                                     if ($serinumber->seri_status == 1) {
                                         $serinumber->seri_status = 2;
-                                        $serinumber->export_seri = $proExport->id;
+                                        $serinumber->export_seri = $export->id;
                                         $serinumber->save();
                                     }
                                 }
@@ -776,11 +832,8 @@ class ExportController extends Controller
                         return redirect()->route('exports.index')->with('warning', 'Vượt quá tổng số lượng sản phẩm!');
                     } else {
                         //thêm khách hàng
-                        if ($clickValue === null) {
-                            $existingCustomer = Guests::where('guest_name', $request->guest_name)
-                                ->orwhere('guest_email', $request->guest_email)
-                                ->orwhere('guest_code', $request->guest_code)
-                                ->orwhere('guest_phone', $request->guest_phone)
+                        if ($clickValue === 2) {
+                            $existingCustomer = Guests::orwhere('guest_code', $request->guest_code)
                                 ->first();
                             if (!$existingCustomer) {
                                 $guest = new Guests();
@@ -820,7 +873,7 @@ class ExportController extends Controller
                             }
                         }
                         //cập nhật khách hàng
-                        if ($updateClick == null) {
+                        if ($updateClick == 2 && $clickValue === null) {
                             $guest = Guests::find($request->id);
                             $guest->guest_name = $request->guest_name;
                             $guest->guest_phone = $request->guest_phone;
@@ -843,7 +896,7 @@ class ExportController extends Controller
                             $exports->note_form = $request->note_form;
                             $exports->transport_fee = $request->transport_fee;
                             $exports->save();
-                        } else {
+                        } elseif ($updateClick == 1) {
                             // Tạo đơn xuất hàng
                             $exports->guest_id = $request->id;
                             $exports->user_id = Auth::user()->id;
@@ -866,6 +919,7 @@ class ExportController extends Controller
                             // Cập nhật seri_status theo số lượng đã nhập
                             $serinumbers = Serinumbers::where('product_id', $productID)
                                 ->where('seri_status', 2)
+                                ->where('export_seri', $id)
                                 ->limit($productQty)
                                 ->get();
 
@@ -1087,7 +1141,15 @@ class ExportController extends Controller
 
                 Serinumbers::whereIn('product_id', $productIDs)
                     ->where('seri_status', 2)
+                    ->where('export_seri', $id)
                     ->update(['seri_status' => 1]);
+
+                // Cập nhật trạng thái và tổng giá trị của export
+                $exports->export_status = 0;
+                $exports->total = $request->totalValue;
+                $exports->note_form = $request->note_form;
+                $exports->transport_fee = $request->transport_fee;
+                $exports->save();
 
                 // for ($i = 0; $i < count($productIDs); $i++) {
                 //     $productID = $productIDs[$i];
@@ -1105,13 +1167,6 @@ class ExportController extends Controller
                 //         }
                 //     }
                 // }
-
-                // Cập nhật trạng thái và tổng giá trị của export
-                $exports->export_status = 0;
-                $exports->total = $request->totalValue;
-                $exports->note_form = $request->note_form;
-                $exports->transport_fee = $request->transport_fee;
-                $exports->save();
 
                 return redirect()->route('exports.index')->with('msg', 'Hủy đơn thành công!');
             } elseif ($action === 'action3') {
@@ -1192,17 +1247,6 @@ class ExportController extends Controller
                             $proExport->product_tax = $request->product_tax[$i];
                             $proExport->product_total = $request->totalValue;
                             $proExport->save();
-
-                            // Cập nhật seri_status bằng 2 cho sản phẩm mới
-                            $serinumbersToUpdate = Serinumbers::where('product_id', $productID)
-                                ->where('seri_status', 1)
-                                ->limit($productQty)
-                                ->get();
-
-                            foreach ($serinumbersToUpdate as $serinumber) {
-                                $serinumber->seri_status = 2;
-                                $serinumber->save();
-                            }
                         }
 
                         $totalQtyNeeded += $productQty;
@@ -1233,11 +1277,8 @@ class ExportController extends Controller
                     $availableQtyTotal = $this->getAvailableProductQtyTotal();
 
                     //thêm khách hàng
-                    if ($clickValue === null) {
-                        $existingCustomer = Guests::where('guest_name', $request->guest_name)
-                            ->orwhere('guest_email', $request->guest_email)
-                            ->orwhere('guest_code', $request->guest_code)
-                            ->orwhere('guest_phone', $request->guest_phone)
+                    if ($clickValue === 2) {
+                        $existingCustomer = Guests::orwhere('guest_code', $request->guest_phone)
                             ->first();
                         if (!$existingCustomer) {
                             $guest = new Guests();
@@ -1252,7 +1293,11 @@ class ExportController extends Controller
                             $guest->guest_phone = $request->guest_phone;
                             $guest->guest_pay = $request->guest_pay;
                             $guest->guest_note = $request->guest_note;
-                            $guest->debt = $request->debt;
+                            if ($request->debt == null) {
+                                $guest->debt = 0;
+                            } else {
+                                $guest->debt = $request->debt;
+                            }
                             $guest->save();
                             // Tạo đơn xuất hàng
                             $exports->guest_id = $guest->id;
@@ -1273,7 +1318,7 @@ class ExportController extends Controller
                         }
                     }
                     //cập nhật khách hàng
-                    if ($updateClick == null) {
+                    if ($updateClick === 2 && $clickValue === null) {
                         $guest = Guests::find($request->id);
                         $guest->guest_name = $request->guest_name;
                         $guest->guest_addressInvoice = $request->guest_addressInvoice;
@@ -1286,7 +1331,11 @@ class ExportController extends Controller
                         $guest->guest_phone = $request->guest_phone;
                         $guest->guest_pay = $request->guest_pay;
                         $guest->guest_note = $request->guest_note;
-                        $guest->debt = $request->debt;
+                        if ($request->debt == null) {
+                            $guest->debt = 0;
+                        } else {
+                            $guest->debt = $request->debt;
+                        }
                         $guest->save();
                         // Tạo đơn xuất hàng
                         $exports->guest_id = $guest->id;
@@ -1296,7 +1345,7 @@ class ExportController extends Controller
                         $exports->note_form = $request->note_form;
                         $exports->transport_fee = $request->transport_fee;
                         $exports->save();
-                    } else {
+                    } elseif ($updateClick == 1) {
                         // Tạo đơn xuất hàng
                         $exports->guest_id = $request->id;
                         $exports->user_id = Auth::user()->id;
@@ -1396,10 +1445,7 @@ class ExportController extends Controller
         $data = $request->all();
         if ($data['click'] == 1) {
             // Kiểm tra xem dữ liệu đã tồn tại trong cơ sở dữ liệu hay chưa
-            $existingCustomer = Guests::where('guest_name', $request->guest_name)
-                ->orwhere('guest_email', $request->guest_email)
-                ->orwhere('guest_code', $request->guest_code)
-                ->orwhere('guest_phone', $request->guest_phone)
+            $existingCustomer = Guests::orwhere('guest_code', $request->guest_code)
                 ->first();
 
             if ($existingCustomer) {
@@ -1508,7 +1554,7 @@ class ExportController extends Controller
             return;
         } else {
             $sn = Serinumbers::where('product_id', $data['productCode'])
-                ->where('export_seri', $data['export_id'])
+                // ->where('export_seri', $data['export_id'])
                 ->orderByRaw("CASE WHEN seri_status = 2 THEN 0 ELSE 1 END")
                 ->limit($data['qty'])
                 ->get();
