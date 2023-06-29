@@ -122,10 +122,10 @@
                 @if ($exports->export_status == 1)
                     @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
                         <button type="submit" class="btn btn-danger text-white" name="submitBtn" value="action1"
-                            onclick="validateAndSubmit(event)">Chốt
+                            onclick="validateAndSubmit(event)" id="chot_don">Chốt
                             đơn</button>
                         <button type="submit" class="btn btn-secondary mx-4" name="submitBtn" value="action2"
-                            onclick="validateAndSubmit(event)">Hủy
+                            onclick="validateAndSubmit(event)" id="huy">Hủy
                             đơn</button>
                     @endif
                 @endif
@@ -337,9 +337,9 @@
                             <th>ĐVT</th>
                             <th>Số lượng</th>
                             <th>Giá bán</th>
-                            <th>Ghi chú</th>
                             <th>Thuế</th>
                             <th>Thành tiền</th>
+                            <th>Ghi chú</th>
                             <th>S/N</th>
                             <th></th>
                             <th></th>
@@ -369,16 +369,16 @@
                                     </select>
                                 </td>
                                 <td>
-                                    
-                                   @if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin')))
-                                        <input type="text" title="{{ $value_export->product_name }}" style="width: 220px" class="child-select p-1 form-control productName" readonly value="{{ $value_export->product_name }}">
-                                    @else
-                                    <select class="child-select p-1 form-control productName" style="width: 220px" name="product_id[]"
-                                        >
+                                    {{-- <input type="text" title="{{ $value_export->product_name }}"
+                                            style="width: 220px" class="child-select p-1 form-control productName"
+                                            readonly value="{{ $value_export->product_name }}"> --}}
+                                    <select class="child-select p-1 form-control productName" style="width: 220px"
+                                        name="product_id[]" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                            echo 'disabled';
+                                        } ?>>
                                         <option value="{{ $value_export->product_id }}">
                                             {{ $value_export->product_name }}</option>
                                     </select>
-                                    @endif
                                 </td>
                                 <td>
                                     <input type="text" id="product_unit" style="width: 80px"
@@ -390,11 +390,12 @@
                                 </td>
                                 <td>
                                     <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-                                        id="product_qty" class="quantity-input form-control text-center" style="width: 50px"
-                                        <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                        id="product_qty" class="quantity-input form-control text-center"
+                                        style="width: 50px" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                             echo 'readonly';
-                                        } ?> value="{{ $value_export->product_qty }}"
-                                        name="product_qty[]" required="">
+                                        } ?>
+                                        value="{{ $value_export->product_qty }}" name="product_qty[]"
+                                        required="">
                                 </td>
                                 <td>
                                     <input type="text" id="product_price" name="product_price[]"
@@ -403,12 +404,6 @@
                                             echo 'readonly';
                                         } ?> value={{ number_format($value_export->product_price) }}
                                         required="">
-                                </td>
-                                <td>
-                                    <input type="text" id="" name="product_note[]" class="form-control w-auto" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                            echo 'readonly';
-                                        } ?>
-                                        value="{{ $value_export->product_note }}">
                                 </td>
                                 <td>
                                     <select name="product_tax[]" class="product_tax form-control text-center"
@@ -431,6 +426,13 @@
                                 </td>
                                 <td><span class="total-amount form-control text-center"
                                         style="background:#e9ecef; width:140px">0</span>
+                                </td>
+                                <td>
+                                    <input type="text" id="" name="product_note[]"
+                                        class="form-control w-auto" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                            echo 'readonly';
+                                        } ?>
+                                        value="{{ $value_export->product_note }}">
                                 </td>
                                 @if ($exports->export_status == 2)
                                     <td data-toggle='modal' data-target='#snModal' class='sn'><img
@@ -524,7 +526,7 @@
                 @if ($exports->export_status == 1)
                     @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
                         <button type="submit" value="action3" name="submitBtn" class="btn btn-primary mr-1"
-                            onclick="validateAndSubmit(event)">Lưu</button>
+                            onclick="validateAndSubmit(event)" id="luu">Lưu</button>
                     @endif
                 @endif
                 <a href="{{ route('exports.index') }}"><span class="btn border-secondary ml-1">Hủy</span></a>
@@ -745,6 +747,9 @@
             .val();
         var thue = $(this).closest('tr').find('.product_tax')
             .val();
+        if (thue == 99) {
+            thue = 0;
+        }
         $.ajax({
             url: "{{ route('getProduct') }}",
             type: "get",
@@ -849,12 +854,14 @@
             .text();
         var giaNhap = $(this).closest('tr').find('.price_import').val();
         var tonKho = $(this).closest('tr').find('.tonkho').val();
+        var export_id = $('#export_id').val();
         $.ajax({
             url: '{{ route('getSN') }}',
             type: 'GET',
             data: {
                 qty: qty,
                 productCode: productCode,
+                export_id: export_id,
             },
             success: function(response) {
                 console.log(response);
@@ -1068,9 +1075,6 @@
             const giaInput = $(
                 "<td><input type='text' class='product_price form-control text-center' style='width:140px;' id='product_price' name='product_price[]' required></td>"
             );
-            const ghichuInput = $(
-                "<td><input type='text' class='note_product form-control text-left' name='product_note[]'></td>"
-            );
             const thueInput = $("<td>" +
                 "<select name='product_tax[]' class='product_tax p-1 form-control text-center' style='width:100px' id='product_tax' required>" +
                 "<option value='0'>0%</option>" +
@@ -1081,6 +1085,9 @@
                 "</td>");
             const thanhTienInput = $(
                 "<td><span class='total-amount form-control text-center'>0</span></td>");
+            const ghichuInput = $(
+                "<td><input type='text' class='note_product form-control text-left' name='product_note[]'></td>"
+            );
             const sn = $(
                 "<td data-toggle='modal' data-target='#snModal'><img src='../../dist/img/icon/list.png'></td>"
             );
@@ -1204,7 +1211,7 @@
                 });
             });
             newRow.append(checkbox, MaInput, TenInput, ProInput, dvtInput, slInput,
-                giaInput, ghichuInput, thueInput, thanhTienInput, sn, info, deleteBtn, option);
+                giaInput, thueInput, thanhTienInput, ghichuInput, sn, info, deleteBtn, option);
             $("#dynamic-fields").before(newRow);
             fieldCounter++;
         });
@@ -1599,7 +1606,7 @@
         calculateGrandTotalWithTransportFee();
     });
 
-    $(document).on('input', '.quantity-input, [name^="product_price"], .product_tax,#transport_fee', function() {
+    $(document).on('input', '.quantity-input, [name^="product_price"], .product_tax', function() {
         calculateTotals();
         calculateGrandTotalWithTransportFee();
     });
@@ -1658,7 +1665,6 @@
     function calculateGrandTotalWithTransportFee() {
         var totalAmount = parseFloat($('#total-amount-sum').text().replace(/[^0-9.-]+/g, ''));
         var totalTax = parseFloat($('#product-tax').text().replace(/[^0-9.-]+/g, ''));
-        var transportFee = parseFloat($('#transport_fee').val().replace(/[^0-9.-]+/g, ''));
 
         // Check if transportFee is NaN, set it to 0
         if (isNaN(transportFee)) {
@@ -1671,7 +1677,6 @@
         // Update the input value with the grand total
         $('#total').val(grandTotal.toFixed(2));
     }
-
 
     function formatCurrency(value) {
         // Làm tròn đến 2 chữ số thập phân
@@ -1923,6 +1928,44 @@
             alert("Chưa nhập thông tin khách hàng");
         }
     }
+    //ngăn chặn click
+    $(document).ready(function() {
+        let isFirstClick = true;
+
+        $('#chot_don').on('click', function() {
+            if (isFirstClick) {
+                isFirstClick = false;
+
+                setTimeout(function() {
+                    isFirstClick = true;
+                }, 1000);
+            } else {
+                return;
+            }
+        });
+        $('#luu').on('click', function() {
+            if (isFirstClick) {
+                isFirstClick = false;
+
+                setTimeout(function() {
+                    isFirstClick = true;
+                }, 1000);
+            } else {
+                return;
+            }
+        });
+        $('#huy').on('click', function() {
+            if (isFirstClick) {
+                isFirstClick = false;
+
+                setTimeout(function() {
+                    isFirstClick = true;
+                }, 1000);
+            } else {
+                return;
+            }
+        });
+    });
 </script>
 </body>
 
