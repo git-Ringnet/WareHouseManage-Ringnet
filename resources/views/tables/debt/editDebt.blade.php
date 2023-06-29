@@ -5,14 +5,8 @@
         <span><a href="{{ route('admin.userslist') }}">Công Nợ</a></span>
         <span class="px-1">/</span>
         <span><b>Đơn Hàng</b></span>
-        <span class="ml-1">{{ $debts->id }}</span>
+        <span class="ml-1">#{{ $debts->id }}</span>
     </div>
-    <section class="content-header">
-        <div class="container-fluided">
-            <div class="row mb-2">
-            </div>
-        </div><!-- /.container-fluided -->
-    </section>
     <form action="{{ route('debt.update', $debts->id) }}" method="POST">
         @csrf
         @method('PUT')
@@ -23,7 +17,7 @@
                         onclick="" onkeydown="return event.key != 'Enter';">Thanh Toán</button>
                 </div>
             @endif
-            <div class="row">
+            <div class="row  mt-2">
                 <div class="col-md-3 col-sm-6">
                     <div class="form-group">
                         <div class="labelform">Mã đơn</div>

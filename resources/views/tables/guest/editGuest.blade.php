@@ -26,7 +26,7 @@
                                 @csrf
                                 @method('PUT')
                                 <div class="form-group">
-                                    <label for="email">Đơn vị:</label>
+                                    <label class="required-label" for="email">Đơn vị:</label>
                                     <input type="text" class="form-control" value="{{ $guests->guest_name }}"
                                         name="guest_name" placeholder="Nhập tên đơn vị" required>
                                 </div>
@@ -36,44 +36,44 @@
                                         name="guest_represent" placeholder="Nhập tên người đại diện" required>
                                 </div> --}}
                                 <div class="form-group">
-                                    <label for="pwd">Số điện thoại:</label>
+                                    <label class="required-label" for="pwd">Số điện thoại:</label>
                                     <input type="text" class="form-control" oninput=validateNumberInput(this)
                                         value="{{ $guests->guest_phone }}" name="guest_phone"
                                         pattern="^(?:\+?84|0)(?:\d{9}|\d{10})$" title="Số điện thoại không hợp lệ"
                                         placeholder="Nhập số điện thoại" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="pwd">Email:</label>
+                                    <label class="required-label" for="pwd">Email:</label>
                                     <input type="email" class="form-control" value="{{ $guests->guest_email }}"
                                         pattern="/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/" name="guest_email"
                                         placeholder="Nhập email" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Địa chỉ xuất hóa đơn:</label>
+                                    <label class="required-label">Địa chỉ xuất hóa đơn:</label>
                                     <input type="text" class="form-control" id="guest_addressInvoice"
                                         placeholder="Nhập địa chỉ xuất hóa đơn" name="guest_addressInvoice"
                                         value="{{ $guests->guest_addressInvoice }}" required="">
                                 </div>
                                 <div class="form-group">
-                                    <label>Mã số thuế:</label>
+                                    <label class="required-label">Mã số thuế:</label>
                                     <input type="number" class="form-control" id="guest_code"
                                         placeholder="Nhập mã số thuế" name="guest_code"
                                         value="{{ $guests->guest_code }}" required="">
                                 </div>
                                 <div class="form-group">
-                                    <label for="email">Địa chỉ giao hàng:</label>
+                                    <label class="required-label" for="email">Địa chỉ giao hàng:</label>
                                     <input type="text" class="form-control" id="guest_addressDeliver"
                                         placeholder="Nhập địa chỉ giao hàng" name="guest_addressDeliver"
                                         value="{{ $guests->guest_addressDeliver }}" required="">
                                 </div>
                                 <div class="form-group">
-                                    <label for="email">Người nhận hàng:</label>
+                                    <label class="required-label" for="email">Người nhận hàng:</label>
                                     <input type="text" class="form-control" id="guest_receiver"
                                         placeholder="Nhập người nhận hàng" name="guest_receiver"
                                         value="{{ $guests->guest_receiver }}" required="">
                                 </div>
                                 <div class="form-group">
-                                    <label for="email">SĐT người nhận:</label>
+                                    <label class="required-label" for="email">SĐT người nhận:</label>
                                     <input type="text" class="form-control" id="guest_phoneReceiver"
                                         oninput=validateNumberInput(this) placeholder="Nhập số điện thoại người nhận"
                                         name="guest_phoneReceiver" pattern="^(?:\+?84|0)(?:\d{9}|\d{10})$"
@@ -86,7 +86,7 @@
                                         placeholder="Nhập ghi chú" name="guest_note" value="{{ $guests->guest_note }}">
                                 </div>
                                 <div class="form-group">
-                                    <label for="email">Hình thức thanh toán:</label>
+                                    <label class="required-label" for="email">Hình thức thanh toán:</label>
                                     <select class="form-control" name="guest_pay" id="guest_pay" required>
                                         <option value="0" <?php if ($guests->guest_pay == 0) {
                                             echo 'selected';
@@ -97,7 +97,7 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label>Công nợ:</label>
+                                    <label class="required-label">Công nợ:</label>
                                     <div class="d-flex align-items-center">
                                         <input type="text" oninput="validateNumberInput(this)"
                                             class="form-control" id="debtInput" value="{{ $guests->debt }}"
@@ -112,7 +112,7 @@
                                 </div>
                                 @if (Auth::user()->can('isAdmin'))
                                     <div class="form-group">
-                                        <label for="email">Người phụ trách:</label>
+                                        <label class="required-label" for="email">Người phụ trách:</label>
                                         <select class="form-control" name="user_id" id="user_id" required>
                                             <option value="{{ $user->id ?? Auth::user()->id }}">
                                                 {{ Auth::user()->name }}</option>

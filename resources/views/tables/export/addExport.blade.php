@@ -120,6 +120,7 @@
                             <ul id="myUL" class="bg-white position-absolute w-50 rounded shadow p-0"
                                 style="z-index: 99;">
                                 @foreach ($customer as $item)
+                                @if (Auth::user()->id == $item->user_id || Auth::user()->can('isAdmin'))
                                     <li>
                                         <a href="#"
                                             class="text-dark d-flex justify-content-between p-2 search-info"
@@ -128,6 +129,7 @@
                                             <span class="w-50">{{ $item->guest_name }}</span>
                                         </a>
                                     </li>
+                                @endif
                                 @endforeach
                             </ul>
                         </div>

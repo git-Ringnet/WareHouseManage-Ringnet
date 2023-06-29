@@ -142,7 +142,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <button class="dropdown-item" id="btn-phonenumber">Số điện
                                                     thoại</button>
                                                 <button class="dropdown-item" id="btn-email">Email</button>
-                                                <button class="dropdown-item" id="btn-status">Trạng thái</button>
+                                                <button class="dropdown-item d-none" id="btn-status">Trạng thái</button>
                                             </div>
                                         </div>
                                     </div>
@@ -366,7 +366,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <div class="icon" id="icon-provide_email"></div>
                                             </span>
                                         </th>
-                                        <th>
+                                        <th class="d-none">
                                             <span class="d-flex">
                                                 <a href="#" class="sort-link" data-sort-by="provide_status"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
@@ -388,7 +388,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             <td>{{ $item->provide_represent }}</td>
                                             <td>{{ $item->provide_phone }}</td>
                                             <td>{{ $item->provide_email }}</td>
-                                            <td>
+                                            <td class="d-none">
                                                 <select class="p-1 px-2 status-select"
                                                     style="border: 1px solid #D6D6D6; <?php if ($item->provide_status == 1) {
                                                         echo 'color:#09BD3C;';
