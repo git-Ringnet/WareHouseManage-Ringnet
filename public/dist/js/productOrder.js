@@ -423,7 +423,18 @@ function validatQtyInput(input) {
 }
 
 
+function delayButtonClick(button) {
+    $(button).prop('disabled', true);
 
+    var countDown = 10;
+    var countdownInterval = setInterval(function () {
+        countDown--;
+        if (countDown <= 0) {
+            clearInterval(countdownInterval);
+            $(button).prop('disabled', false);
+        }
+    }, 100);
+}
 
 
 

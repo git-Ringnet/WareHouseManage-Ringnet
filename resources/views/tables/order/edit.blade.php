@@ -329,7 +329,7 @@
             <div id="list_modal">
                 <?php $stt = 0; ?>
                 @foreach ($product_order as $pro)
-                <div class="modal fade" id="exampleModal{{ $stt }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">'
+                <div class="modal fade" id="exampleModal{{ $stt }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"   @if ($order->order_status == 0) data-backdrop="static" @endif>'
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header align-items-center">
@@ -532,6 +532,16 @@
 
     // Hủy đơn hàng
     $(document).on('click', '#deleteBill', function(e) {
+        this.classList.add('disabled');
+        var countDown = 10;
+        var countdownInterval = setInterval(function() {
+            countDown--;
+            if (countDown <= 0) {
+                clearInterval(countdownInterval);
+                $('#deleteBill').removeClass('disabled');
+            }
+        }, 100);
+
         e.preventDefault();
         if (myFunction()) {
             var order_id = <?php echo $order->id; ?>;
@@ -546,6 +556,16 @@
 
     // Chuyển hướng form để thêm dữ liệu
     $(document).on('click', '.addBillEdit', function(e) {
+        this.classList.add('disabled');
+        var countDown = 10;
+        var countdownInterval = setInterval(function() {
+            countDown--;
+            if (countDown <= 0) {
+                clearInterval(countdownInterval);
+                $('.addBillEdit').removeClass('disabled');
+            }
+        }, 100);
+
         e.preventDefault();
         if ($('#form_submit')[0].checkValidity()) {
             var products_id = [];
@@ -1017,6 +1037,18 @@
     })
 
     $('#add_bill').on('click', function(e) {
+        this.classList.add('disabled');
+        var countDown = 10;
+        var countdownInterval = setInterval(function() {
+            countDown--;
+            if (countDown <= 0) {
+                clearInterval(countdownInterval);
+                $('#add_bill').removeClass('disabled');
+            }
+        }, 100);
+
+
+
         e.preventDefault();
         if (myFunction()) {
             if ($('#form_submit')[0].checkValidity()) {

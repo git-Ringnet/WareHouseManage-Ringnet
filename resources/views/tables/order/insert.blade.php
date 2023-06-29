@@ -182,7 +182,7 @@
 <script src="{{ asset('dist/js/productOrder.js') }}"></script>
 <script>
     var rowCount = $('tbody tr').length;
-  
+
     $(document).on('input', '.quantity-input, [name^="product_price"]', function(e) {
         var productQty = parseInt($(this).closest('tr').find('.quantity-input').val());
         var productPrice = parseFloat($(this).closest('tr').find('input[name^="product_price"]').val().replace(/[^0-9.-]+/g, ""));
@@ -196,7 +196,7 @@
             calculateTotalTax();
         }
     });
-  
+
     $(document).on('change', '.product_tax', function() {
         updateTaxAmount($(this).closest('tr'));
         calculateTotalAmount();
@@ -301,6 +301,16 @@
 
     var add_bill = document.getElementById('add_bill');
     add_bill.addEventListener('click', function(e) {
+        this.classList.add('disabled');
+        var countDown = 10;
+        var countdownInterval = setInterval(function() {
+            countDown--;
+            if (countDown <= 0) {
+                clearInterval(countdownInterval);
+                add_bill.classList.remove('disabled');
+            }
+        }, 100);
+
         e.preventDefault();
         var error = false;
         var isDuplicate = false;
@@ -432,9 +442,9 @@
 
     function updateMultipleActionVisibility() {
         if ($('.cb-element:checked').length > 0) {
-            $('#deleteRowTable').css('opacity',1);
+            $('#deleteRowTable').css('opacity', 1);
         } else {
-            $('#deleteRowTable').css('opacity',0);
+            $('#deleteRowTable').css('opacity', 0);
         }
     }
 
@@ -795,6 +805,16 @@
 
     // Kiểm tra dữ liệu trước khi submit
     $(document).on('submit', '#form_submit', function(e) {
+        $(e.target).find('.btn.btn-primary.mr-2').prop('disabled', true);
+        var countDown = 10;
+        var countdownInterval = setInterval(function() {
+            countDown--;
+            if (countDown <= 0) {
+                clearInterval(countdownInterval);
+                $(e.target).find('.btn.btn-primary.mr-2').prop('disabled', false);
+            }
+        }, 100);
+
         e.preventDefault();
         var error = false;
         if (checkRow() == false) {
@@ -808,7 +828,7 @@
                 alert('Vui lòng chọn sản phẩm cần thêm');
             }
         });
-       
+
         if ($('#provide_id').val().trim() == '' && $('#radio1').prop('checked') == true) {
             error = true;
             alert('Vui lòng chọn nhà cung cấp');
@@ -1036,7 +1056,7 @@
                         '</tr>';
                     $('#inputContainer tbody').append(tr);
                     var modal = '<div class="modal fade" id="exampleModal' + rowCount +
-                        '" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >' +
+                        '" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">' +
                         '<div class="modal-dialog" role="document">' +
                         '<div class="modal-content">' +
                         '<div class="modal-header align-items-center">' +
@@ -1089,7 +1109,7 @@
                         '</table>' +
                         '</div>' +
                         '<div class="AddSN btn btn-secondary" style="border:1px solid gray;">Thêm dòng</div>' +
-                        '<div class="btn btn-danger ml-2" id="deleteSNS"> Xóa SN </div>' +
+                        // '<div class="btn btn-danger ml-2" id="deleteSNS"> Xóa SN </div>' +
                         '</div>' +
                         '<div class="modal-footer">' +
                         '<button type="button" class="btn btn-secondary" onclick="checkData(event)" data-dismiss="modal">Lưu</button>' +
