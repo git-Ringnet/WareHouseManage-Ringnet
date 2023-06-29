@@ -22,7 +22,7 @@
           <div class="card">
             <!-- /.card-header -->
             @if ($errors->any())
-            <div class="alert alert-danger">Dữ liệu nhập vào không đúng</div>
+            <div class="alert alert-danger">Dữ liệu nhập vào không hợp lệ</div>
             @endif
 
             <div class="card-body p-3">
@@ -49,6 +49,13 @@
                   <span style="color:red">{{$message}}</span>
                   @enderror
                 </div>
+                <div class="mb-3">
+                  <label for="confirm_password">Xác nhận mật khẩu</label>
+                  <input type="password" id="confirm_password" class="form-control" name="confirm_password" id="confirm_password" placeholder="Xác nhận mật khẩu">
+                  @error('confirm_password')
+                      <span style="color: red">{{ $message }}</span>
+                  @enderror
+              </div>
                 <div class="mb-3">
                   <label for="">Vai trò</label>
                   <select class="form-control" name="role" id="">

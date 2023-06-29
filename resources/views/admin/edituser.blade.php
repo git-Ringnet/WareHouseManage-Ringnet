@@ -22,7 +22,7 @@
                     <div class="card">
                         <!-- /.card-header -->
                         @if ($errors->any())
-                            <div class="alert alert-danger">Dữ liệu nhập vào không đúng</div>
+                            <div class="alert alert-danger">Dữ liệu nhập vào không hợp lệ</div>
                         @endif
                         <div class="card-body p-3">
                             <form action="{{ route('admin.edituser') }}" method="post">

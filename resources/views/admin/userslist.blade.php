@@ -142,7 +142,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <button class="dropdown-item" id="btn-phonenumber">Số điện
                                                     thoại</button>
                                                 <button class="dropdown-item" id="btn-email">Email</button>
-                                                <button class="dropdown-item" id="btn-status">Trạng thái</button>
+                                                <button class="dropdown-item d-none" id="btn-status">Trạng thái</button>
                                             </div>
                                         </div>
                                     </div>
@@ -392,8 +392,8 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <div class="icon" id="icon-email"></div>
                                             </span>
                                         </th>
-                                        <th>
-                                            <span class="d-flex  justify-content-center">
+                                        <th class="d-none">
+                                            <span class="d-flex  justify-content-center d-none">
                                                 <a href="#" class="sort-link" data-sort-by="status"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Trạng thái</button></a>
@@ -423,7 +423,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             {{-- <td>{!!$value->status==0?'<button type="submit"
                         class="btn btn-sm btn-secondary">Active</button>':' <button type="submit"
                         class="btn btn-sm btn-primary">Disable</button>'!!}</td> --}}
-                                            <td class="text-center">
+                                            <td class="text-center d-none">
                                                 @if ($value->id != Auth::user()->id)
                                                     <select class="p-1 px-2 status-select"
                                                         style="border: 1px solid #D6D6D6; <?php if ($value->status == 1) {

@@ -845,3 +845,7 @@ input[type="checkbox"] {
 .leftspacing{
     width: 5%;
 }
+.required-label::after {
+    content: "*";
+    color: red;
+}
