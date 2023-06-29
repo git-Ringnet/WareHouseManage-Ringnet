@@ -425,11 +425,10 @@ class ProductsController extends Controller
         $product->product_category = $request->product_type;
         $product->product_unit = $request->product_unit;
         $product->product_trademark = $request->product_trademark;
-        $product->product_price = $request->product_price;
+        $product->product_price = str_replace(',','',$request->product_price);
         $product->tax = $request->product_tax;
-        $product->total = ($request->product_price * $product->product_qty);
+        $product->total = (str_replace(',','',$request->product_price) * $product->product_qty);
         $product->save();
-
         // Recalculate average price and inventory
         $updatePrice = Product::where('products_id', $product->products_id)->get();
         $relatedProduct = Products::findOrFail($product->products_id);
