@@ -270,7 +270,6 @@ class ExportController extends Controller
                                 $debt->debt_transport_fee = $debtTransportFee;
                                 $debt->total_difference = $totalDifference;
                                 $debt->debt = $guest->debt;
-
                                 $debt->date_start = now();
                                 // //Xử lí workingday
                                 $startDate = $debt->debt_start;
@@ -285,7 +284,7 @@ class ExportController extends Controller
                                 $daysDiff = $interval->format('%R%a');
                                 $daysDiff = intval($daysDiff);
                                 $daysDiff = -$daysDiff;
-
+                                    
                                 if ($guest->debt == 0) {
                                     $debt->debt_status = 1;
                                 } elseif ($daysDiff <= 3) {
@@ -1160,7 +1159,7 @@ class ExportController extends Controller
                         $debt->debt_transport_fee = $debtTransportFee;
                         $debt->total_difference = $totalDifference;
                         $debt->debt = $guest->debt;
-
+                        
                         $debt->date_start = now();
                         // //Xử lí workingday
                         $startDate = $debt->debt_start;
@@ -1644,6 +1643,7 @@ class ExportController extends Controller
                 $guest->guest_pay = $data['guest_pay'];
                 $guest->guest_note = $data['guest_note'];
                 $guest->debt = $data['debt'];
+                $guest->user_id = Auth::user()->id;
                 $guest->save();
 
                 // Trả về giá trị id của khách hàng vừa lưu
