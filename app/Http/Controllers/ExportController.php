@@ -270,7 +270,12 @@ class ExportController extends Controller
                                 $debt->debt_transport_fee = $debtTransportFee;
                                 $debt->total_difference = $totalDifference;
                                 $debt->debt = $guest->debt;
+                                if($guest->debt==0){
+                                    $debt->date_start = null;
+                                }
+                                else{
                                 $debt->date_start = now();
+                                }
                                 // //Xử lí workingday
                                 $startDate = $debt->debt_start;
                                 $daysToAdd = $debt->debt;
@@ -382,7 +387,12 @@ class ExportController extends Controller
                                 $debt->total_difference = $totalDifference;
                                 $debt->debt = $guest->debt;
 
+                                if($guest->debt==0){
+                                    $debt->date_start = null;
+                                }
+                                else{
                                 $debt->date_start = now();
+                                }
                                 // //Xử lí workingday
                                 $startDate = $debt->debt_start;
                                 $daysToAdd = $debt->debt;
@@ -474,7 +484,12 @@ class ExportController extends Controller
                                 $debt->total_difference = $totalDifference;
                                 $debt->debt = $guest->debt;
 
+                                if($guest->debt==0){
+                                    $debt->date_start = null;
+                                }
+                                else{
                                 $debt->date_start = now();
+                                }
                                 // //Xử lí workingday
                                 $startDate = $debt->debt_start;
                                 $daysToAdd = $debt->debt;
@@ -1159,8 +1174,12 @@ class ExportController extends Controller
                         $debt->debt_transport_fee = $debtTransportFee;
                         $debt->total_difference = $totalDifference;
                         $debt->debt = $guest->debt;
-                        
+                        if($guest->debt==0){
+                            $debt->date_start = null;
+                        }
+                        else{
                         $debt->date_start = now();
+                        }
                         // //Xử lí workingday
                         $startDate = $debt->debt_start;
                         $daysToAdd = $debt->debt;
