@@ -586,6 +586,18 @@ $index = array_search($item['label'], $numberedLabels);
     <!-- /.content -->
 </div>
 <script>
+     // Xử lí filter ngày tháng
+     $(document).ready(function() {
+        $('#end').change(function() {
+            var startDate = new Date($('#start').val());
+            var endDate = new Date($(this).val());
+
+            if (endDate < startDate) {
+                alert('Ngày kết thúc không được nhỏ hơn ngày bắt đầu!');
+                $(this).val('');
+            }
+        });
+    });
     $('.ks-cboxtags-status li').on('click', function(event) {
         if (event.target.tagName !== 'INPUT') {
             var checkbox = $(this).find('input[type="checkbox"]');

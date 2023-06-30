@@ -117,16 +117,20 @@
                     <div class="labelform16">Công nợ:</div>
                 </div>
                 <div class="d-flex align-items-center ml-4">
-                    <input type="text" oninput="validateNumberInput(this)" class="form-control text-center mr-1" style="width: 50px"
-                        name="debt" id="daysToAdd" value="{{ $debts->debt }}">
+                    <input type="text" oninput="validateNumberInput(this)" class="form-control text-center mr-1"
+                        style="width: 50px" name="debt" id="daysToAdd"
+                        @if ($debts->debt_status == 1) readonly @endif value="{{ $debts->debt }}">
                 </div>
                 <span>ngày</span>
+                <div class="checkbox ml-5"><input type="checkbox" id="debtCheckbox" value="0"><span
+                        class="ml-2">Thanh toán tiền mặt</span></div>
             </div>
             <div class="form-group d-flex align-items-center">
                 <div class="leftspacing">
                 </div>
                 <div class="d-flex align-items-center ml-4">
-                    <input type="date" class="form-control text-center mr-1" name="date_start" id="startDate"
+                    <input type="date" @if ($debts->debt_status == 1) readonly @endif
+                        class="form-control text-center mr-1" name="date_start" id="startDate"
                         value="{{ strftime('%Y-%m-%d', strtotime($debts->date_start)) }}">
                     <input type="date" class="form-control text-center mr-1" name="date_end" id="endDate"
                         value="{{ strftime('%Y-%m-%d', strtotime($debts->date_end)) }}" readonly>
@@ -137,7 +141,8 @@
                     <div class="labelform16">Ghi chú:</div>
                 </div>
                 <div class="d-flex align-items-center ml-4">
-                    <textarea name="debt_note" id="" class="form-control" cols="50" rows="8">{{ $debts->debt_note }}</textarea>
+                    <textarea name="debt_note" id="" class="form-control" @if ($debts->debt_status == 1) disabled @endif
+                        cols="50" rows="8">{{ $debts->debt_note }}</textarea>
                 </div>
             </div>
         </section>
@@ -150,6 +155,28 @@
         </div>
     </form>
     <script>
+        // Checkbox
+        $(document).on('change', '#debtCheckbox', function() {
+            if ($(this).is(':checked')) {
+                $('#daysToAdd').prop('disabled', true);
+                $('#daysToAdd').val(0);
+                $('#startDate').prop('disabled', true);
+            } else {
+                $('#daysToAdd').prop('disabled', false);
+                $('#startDate').prop('disabled', false);
+            }
+        });
+        $('#daysToAdd').on('change', function() {
+            var daysToAddValue = $(this).val();
+            console.log(daysToAddValue);
+            if (daysToAddValue == 0) {
+                $('#debtCheckbox').prop('checked', true).trigger('change');
+            } else {
+                $('#debtCheckbox').prop('checked', false).trigger('change');
+            }
+        });
+
+
         $(document).ready(function() {
             // Bắt sự kiện thay đổi giá trị của daysToAdd và startDate
             $("#daysToAdd, #startDate").change(function() {

@@ -156,7 +156,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             <button class="dropdown-item" id="btn-sum-fee">Phí vận chuyển</button>
                                             <button class="dropdown-item" id="btn-sum-difference">Tổng tiền chênh
                                                 lệch</button>
-                                            <button class="dropdown-item" id="btn-debt">Công nợ</button>
+                                            {{-- <button class="dropdown-item" id="btn-debt">Công nợ</button> --}}
                                             <button class="dropdown-item" id="btn-status">Trạng thái</button>
                                         </div>
                                     </div>
@@ -213,7 +213,7 @@ $index = array_search($item['label'], $numberedLabels);
                                         $difference_operator = null;
                                         $sum = null;
                                     }
-                                    //công nợ
+                                    // Công nợ
                                     if (isset(request()->debt_operator) && isset(request()->debt)) {
                                         $debt_operator = request()->debt_operator;
                                         $sum = request()->debt;
@@ -279,6 +279,12 @@ $index = array_search($item['label'], $numberedLabels);
                                             </div>
                                             <ul class="ks-cboxtags-status p-0 mb-1 px-2">
                                                 <li>
+                                                    <li>
+                                                        <input type="checkbox" id="status_inactive"
+                                                            {{ in_array(4, $status) ? 'checked' : '' }} name="status[]"
+                                                            value="4">
+                                                        <label for="">Chưa thanh toán</label>
+                                                    </li>
                                                     <input type="checkbox" id="status_active"
                                                         {{ in_array(1, $status) ? 'checked' : '' }} name="status[]"
                                                         value="1">
@@ -682,7 +688,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <td class="text-right">{{ number_format($value->total_difference) }}
                                                 </td>
                                                 <td class="text-left" style="width: 125px">
-                                                    @if ($value->debt != 0)
+                                                    @if ($value->debt != 0 && $value->debt_status != 1)
                                                         {{ $value->debt . ' ' }}ngày
                                                         <span>
                                                             <br>
@@ -691,9 +697,11 @@ $index = array_search($item['label'], $numberedLabels);
 
                                                             {{ date_format(new DateTime($value->date_end), 'd-m-Y') }}
                                                         </span>
-                                                    @else
+                                                    @elseif($value->debt_status == 4)
                                                         <div id="payment" class="payment">Thanh toán tiền mặt</div>
-                                                        <input id="payment" type="hidden" value="1">
+                                                    @elseif($value->debt_status == 1)
+                                                        Đã thanh toán ngày <br>
+                                                        {{ date_format(new DateTime($value->updated_at), 'd-m-Y') }}
                                                     @endif
                                                     @php
                                                         $input_value = request('payment');
@@ -701,17 +709,15 @@ $index = array_search($item['label'], $numberedLabels);
                                                 </td>
                                                 <td class="text-center">
                                                     @if ($value->debt_status == 1)
-                                                        @if ($value->date_start == null)
-                                                            <span></span>
-                                                        @else
-                                                            <span class="p-2 bg-success rounded">Thanh toán đủ</span>
-                                                        @endif
+                                                        <span class="p-2 bg-success rounded">Thanh toán đủ</span>
                                                     @elseif ($value->debt_status == 2)
                                                         <span class="p-2 bg-warning rounded">Gần đến hạn</span>
                                                     @elseif ($value->debt_status == 3)
                                                         <span class="p-2 bg-secondary rounded">Công nợ</span>
                                                     @elseif($value->debt_status == 0)
                                                         <span class="p-2 bg-danger rounded">Quá hạn</span>
+                                                    @elseif($value->debt_status == 4)
+                                                        <span class="p-2 bg-danger rounded">Chưa thanh toán</span>
                                                     @endif
                                                 </td>
                                                 <td class="text-center">{{ $value->debt_note }}</td>
@@ -841,6 +847,18 @@ $index = array_search($item['label'], $numberedLabels);
 </div>
 <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
 <script>
+    // Xử lí filter ngày tháng
+    $(document).ready(function() {
+        $('#end').change(function() {
+            var startDate = new Date($('#start').val());
+            var endDate = new Date($(this).val());
+
+            if (endDate < startDate) {
+                alert('Ngày kết thúc không được nhỏ hơn ngày bắt đầu!');
+                $(this).val('');
+            }
+        });
+    });
     $('.ks-cboxtags-status li').on('click', function(event) {
         if (event.target.tagName !== 'INPUT') {
             var checkbox = $(this).find('input[type="checkbox"]');
