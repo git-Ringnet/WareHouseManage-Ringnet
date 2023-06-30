@@ -89,7 +89,7 @@ class DebtController extends Controller
         //Trạng thái
         $status = [];
         if (!empty($request->status)) {
-            $statusValues = [0 => 'Quá hạn', 1 => 'Thanh toán đủ', 2 => 'Gần đến hạn', 3 => 'Công nợ'];
+            $statusValues = [0 => 'Quá hạn', 1 => 'Thanh toán đủ', 2 => 'Gần đến hạn', 3 => 'Công nợ', 4 => 'Chưa thanh toán'];
             $status = $request->input('status', []);
             $statusLabels = array_map(function ($value) use ($statusValues) {
                 return $statusValues[$value];
@@ -102,8 +102,22 @@ class DebtController extends Controller
             $date_start = $request->input('date_start');
             $date_end = $request->input('date_end');
             $date[] = [$date_start, $date_end];
-            $datearr = ['label' => 'Công nợ:', 'values' => [date('d/m/Y', strtotime($date_start)),
-            date('d/m/Y', strtotime($date_end))], 'class' => 'debt'];
+            $datearr = ['label' => 'Công nợ:', 'values' => [
+                date('d/m/Y', strtotime($date_start)),
+                date('d/m/Y', strtotime($date_end))
+            ], 'class' => 'debt'];
+            array_push($string, $datearr);
+        }
+        // Công nợ đã thanh toán
+        $datepaid = [];
+        if (!empty($request->paid_date_start) && !empty($request->paid_date_end)) {
+            $date_start = $request->input('paid_date_start');
+            $date_end = $request->input('paid_date_end');
+            $datepaid[] = [$date_start, $date_end];
+            $datearr = ['label' => 'Đã thanh toán:', 'values' => [
+                date('d/m/Y', strtotime($date_start)),
+                date('d/m/Y', strtotime($date_end))
+            ], 'class' => 'debt-paid'];
             array_push($string, $datearr);
         }
 
@@ -128,10 +142,10 @@ class DebtController extends Controller
 
 
         $debtsSale = User::whereIn('roleid', [1, 3])->get();
-        $debts = $this->debts->getAllDebts($filters, $keywords, $nhanvien, $date, $status, $sortBy, $sortType);
+        $debts = $this->debts->getAllDebts($filters, $keywords, $nhanvien, $date,$datepaid, $status, $sortBy, $sortType);
         $product = $this->debts->getAllProductsDebts();
         $debtsCreator = $this->debts->debtsCreator();
-        return view('tables.debt.debts', compact('title', 'debts', 'debtsSale', 'product', 'string', 'sortType','debtsCreator'));
+        return view('tables.debt.debts', compact('title', 'debts', 'debtsSale', 'product', 'string', 'sortType', 'debtsCreator'));
     }
 
     /**
@@ -174,10 +188,10 @@ class DebtController extends Controller
      */
     public function edit($id)
     {
-        $debts = Debt::select('debts.*','guests.guest_name as khachhang', 'users.name as nhanvien')
-        ->join('guests', 'debts.guest_id', '=', 'guests.id')
-        ->join('users', 'debts.user_id', '=', 'users.id')
-        ->findOrFail($id);
+        $debts = Debt::select('debts.*', 'guests.guest_name as khachhang', 'users.name as nhanvien')
+            ->join('guests', 'debts.guest_id', '=', 'guests.id')
+            ->join('users', 'debts.user_id', '=', 'users.id')
+            ->findOrFail($id);
         $product = Debt::select('debts.*', 'products.products_code as maSanPham', 'product_exports.id as madon', 'product_exports.product_qty as soluong', 'product_exports.product_price as giaban', 'product.product_price as gianhap')
             ->leftJoin('guests', 'guests.id', 'debts.guest_id')
             ->leftJoin('users', 'users.id', 'debts.user_id')
@@ -216,9 +230,10 @@ class DebtController extends Controller
                 $daysDiff = $interval->format('%R%a');
                 $daysDiff = intval($daysDiff);
                 $daysDiff = -$daysDiff;
+
                 if ($request->debt == 0) {
-                    $debt->debt_status = 1;
-                } elseif ($daysDiff <= 3) {
+                    $debt->debt_status = 4;
+                } elseif ($daysDiff <= 3 && $daysDiff > 0) {
                     $debt->debt_status = 2;
                 } elseif ($daysDiff < 0) {
                     $debt->debt_status = 0;

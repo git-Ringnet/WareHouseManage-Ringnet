@@ -43,7 +43,7 @@ class ExportController extends Controller
         //Khách hàng
         if (!empty($request->guest)) {
             $guest = $request->guest;
-            array_push($filters, ['guests.guest_represent', 'like', '%' . $guest . '%']);
+            array_push($filters, ['guests.guest_receiver', 'like', '%' . $guest . '%']);
             $nameArr = explode(',.@', $guest);
             array_push($string, ['label' => 'Khách hàng:', 'values' => $nameArr, 'class' => 'guest']);
         }
@@ -270,12 +270,9 @@ class ExportController extends Controller
                                 $debt->debt_transport_fee = $debtTransportFee;
                                 $debt->total_difference = $totalDifference;
                                 $debt->debt = $guest->debt;
-                                if($guest->debt==0){
-                                    $debt->date_start = null;
-                                }
-                                else{
+                               
                                 $debt->date_start = now();
-                                }
+                                
                                 // //Xử lí workingday
                                 $startDate = $debt->debt_start;
                                 $daysToAdd = $debt->debt;
@@ -291,7 +288,7 @@ class ExportController extends Controller
                                 $daysDiff = -$daysDiff;
                                     
                                 if ($guest->debt == 0) {
-                                    $debt->debt_status = 1;
+                                    $debt->debt_status = 4;
                                 } elseif ($daysDiff <= 3) {
                                     $debt->debt_status = 2;
                                 } elseif ($daysDiff < 0) {
@@ -387,12 +384,8 @@ class ExportController extends Controller
                                 $debt->total_difference = $totalDifference;
                                 $debt->debt = $guest->debt;
 
-                                if($guest->debt==0){
-                                    $debt->date_start = null;
-                                }
-                                else{
                                 $debt->date_start = now();
-                                }
+                                
                                 // //Xử lí workingday
                                 $startDate = $debt->debt_start;
                                 $daysToAdd = $debt->debt;
@@ -408,7 +401,7 @@ class ExportController extends Controller
                                 $daysDiff = -$daysDiff;
 
                                 if ($guest->debt == 0) {
-                                    $debt->debt_status = 1;
+                                    $debt->debt_status = 4;
                                 } elseif ($daysDiff <= 3) {
                                     $debt->debt_status = 2;
                                 } elseif ($daysDiff < 0) {
@@ -484,12 +477,8 @@ class ExportController extends Controller
                                 $debt->total_difference = $totalDifference;
                                 $debt->debt = $guest->debt;
 
-                                if($guest->debt==0){
-                                    $debt->date_start = null;
-                                }
-                                else{
                                 $debt->date_start = now();
-                                }
+                                
                                 // //Xử lí workingday
                                 $startDate = $debt->debt_start;
                                 $daysToAdd = $debt->debt;
@@ -505,7 +494,7 @@ class ExportController extends Controller
                                 $daysDiff = -$daysDiff;
 
                                 if ($guest->debt == 0) {
-                                    $debt->debt_status = 1;
+                                    $debt->debt_status = 4;
                                 } elseif ($daysDiff <= 3) {
                                     $debt->debt_status = 2;
                                 } elseif ($daysDiff < 0) {
@@ -1174,12 +1163,9 @@ class ExportController extends Controller
                         $debt->debt_transport_fee = $debtTransportFee;
                         $debt->total_difference = $totalDifference;
                         $debt->debt = $guest->debt;
-                        if($guest->debt==0){
-                            $debt->date_start = null;
-                        }
-                        else{
+
                         $debt->date_start = now();
-                        }
+                        
                         // //Xử lí workingday
                         $startDate = $debt->debt_start;
                         $daysToAdd = $debt->debt;
@@ -1195,7 +1181,7 @@ class ExportController extends Controller
                         $daysDiff = -$daysDiff;
 
                         if ($guest->debt == 0) {
-                            $debt->debt_status = 1;
+                            $debt->debt_status = 4;
                         } elseif ($daysDiff <= 3) {
                             $debt->debt_status = 2;
                         } elseif ($daysDiff < 0) {

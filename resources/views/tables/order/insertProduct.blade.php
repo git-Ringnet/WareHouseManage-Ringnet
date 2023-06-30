@@ -642,7 +642,18 @@ $index = array_search($item['label'], $numberedLabels);
     //     })
     // })
 
+         // Xử lí filter ngày tháng
+    $(document).ready(function() {
+        $('#end').change(function() {
+            var startDate = new Date($('#start').val());
+            var endDate = new Date($(this).val());
 
+            if (endDate < startDate) {
+                alert('Ngày kết thúc không được nhỏ hơn ngày bắt đầu!');
+                $(this).val('');
+            }
+        });
+    });
     // AJAX Hủy bill
     $(document).on('click', '#cancelBill', function(e) {
         e.preventDefault();
