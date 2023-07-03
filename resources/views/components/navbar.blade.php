@@ -5,6 +5,7 @@
 @endif
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -150,20 +151,23 @@
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     {{ Auth::user()->name }}
                                 </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <div class="block px-4 text-xs text-gray-400">
-                                        {{ __('Manage Account') }}
+                                <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
+                                    <div class="px-4 text-xs text-gray-400">
+                                        Quản lý tài khoản
                                     </div>
                                     <hr>
-                                    <a class="px-4 text-sm" href="{{ route('profile.show') }}"> {{ __('Profile') }}
-                                    </a>
-                                    <form class="px-4" method="POST" action="{{ route('logout') }}" x-data>
-                                        @csrf
-                                        <button class="btn btn-primary text-sm" type="submit">
-                                            {{ __('Log Out') }}
-                                        </button>
-                                    </form>
-
+                                    <div class="px-4 pb-2">
+                                        <a class="text-sm btn btn-primary" href="{{ route('profile.show') }}"> Thông tin
+                                        </a>
+                                    </div>
+                                    <div class="px-4">
+                                        <form class="" method="POST" action="{{ route('logout') }}" x-data>
+                                            @csrf
+                                            <button class="btn btn-primary text-sm" type="submit">
+                                                Đăng xuất
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
         </div>

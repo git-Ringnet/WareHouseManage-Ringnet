@@ -76,7 +76,7 @@ class Guests extends Model
         if (!empty($keywords)) {
             $guests = $guests->where(function ($query) use ($keywords) {
                 $query->orWhere('guest_name', 'like', '%' . $keywords . '%');
-                $query->orWhere('guest_represent', 'like', '%' . $keywords . '%');
+                // $query->orWhere('guest_represent', 'like', '%' . $keywords . '%');
                 $query->orWhere('guest_email', 'like', '%' . $keywords . '%');
             });
         }

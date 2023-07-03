@@ -279,12 +279,12 @@ $index = array_search($item['label'], $numberedLabels);
                                             </div>
                                             <ul class="ks-cboxtags-status p-0 mb-1 px-2">
                                                 <li>
-                                                    <li>
-                                                        <input type="checkbox" id="status_inactive"
-                                                            {{ in_array(4, $status) ? 'checked' : '' }} name="status[]"
-                                                            value="4">
-                                                        <label for="">Chưa thanh toán</label>
-                                                    </li>
+                                                    <input type="checkbox" id="status_inactive"
+                                                        {{ in_array(4, $status) ? 'checked' : '' }} name="status[]"
+                                                        value="4">
+                                                    <label for="">Chưa thanh toán</label>
+                                                </li>
+                                                <li>
                                                     <input type="checkbox" id="status_active"
                                                         {{ in_array(1, $status) ? 'checked' : '' }} name="status[]"
                                                         value="1">
@@ -520,7 +520,8 @@ $index = array_search($item['label'], $numberedLabels);
                 <span class="count_checkbox mr-5"></span>
                 <div class="row action">
                     <div class="btn-taodon my-2 ml-3">
-                        <button type="button" class="btn-group btn btn-light d-flex align-items-center">
+                        <button type="button" class="btn-group btn btn-light d-flex align-items-center"
+                            id="paymentdebt">
                             <svg width="18" height="13" viewBox="0 0 18 13" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" clip-rule="evenodd"
@@ -1303,6 +1304,39 @@ $index = array_search($item['label'], $numberedLabels);
             }
         });
     });
+
+    function myFunction() {
+        let text = "Bạn có chắc chắn thanh toán các đơn đã chọn không?";
+        if (confirm(text) == true) {
+            return true
+        } else {
+            return false
+        }
+
+    }
+    // AJAX Thanh toán Payment
+    $(document).on('click', '#paymentdebt', function(e) {
+        e.preventDefault();
+        if (myFunction()) {
+            const list_id = [];
+            $('input[name="ids[]"]').each(function() {
+                if ($(this).is(':checked')) {
+                    var value = $(this).val();
+                    list_id.push(value);
+                }
+            });
+            $.ajax({
+                url: "{{ route('paymentdebt') }}",
+                type: "get",
+                data: {
+                    list_id: list_id,
+                },
+                success: function(data) {
+                    location.reload();
+                }
+            })
+        }
+    })
 </script>
 </body>
 

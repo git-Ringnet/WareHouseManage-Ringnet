@@ -80,7 +80,7 @@
                                 </svg>
                             </div>
                         </div>
-                        <ul id="myUL" class="bg-white position-absolute w-50 rounded shadow p-0" style="z-index: 99;">
+                        <ul id="myUL" class="bg-white position-absolute w-50 rounded shadow p-0 scroll-data" style="z-index: 99;">
                             @foreach ($provide as $value)
                             <li>
                                 <a href="#" class="text-dark d-flex justify-content-between p-2 search-info" id="{{ $value->id }}" name="search-info">
@@ -1143,6 +1143,9 @@
             checkRow();
         });
     }
+    $(document).on('keypress', 'form', function(event) {
+            return event.keyCode != 13; 
+        });
 </script>
 @endif
 </body>

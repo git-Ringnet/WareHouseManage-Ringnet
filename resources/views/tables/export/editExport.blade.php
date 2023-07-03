@@ -185,7 +185,7 @@
                                             </svg>
                                         </div>
                                     </div>
-                                    <ul id="myUL" class="bg-white position-absolute w-50 rounded shadow p-0"
+                                    <ul id="myUL" class="bg-white position-absolute w-50 rounded shadow p-0 scroll-data"
                                         style="z-index: 99;">
                                         @foreach ($customer as $item)
                                         @if (Auth::user()->id == $item->user_id || Auth::user()->can('isAdmin'))
@@ -2057,6 +2057,9 @@
     } else {
         console.log("Số điện thoại không hợp lệ.");
     }
+    $(document).on('keypress', 'form', function(event) {
+            return event.keyCode != 13; 
+        });
 </script>
 </body>
 

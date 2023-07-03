@@ -118,7 +118,7 @@
                 </div>
                 <div class="d-flex align-items-center ml-4">
                     <input type="text" oninput="validateNumberInput(this)" class="form-control text-center mr-1"
-                        style="width: 50px" name="debt" id="daysToAdd"
+                        style="width: 50px" name="debt_debt" id="daysToAdd"
                         @if ($debts->debt_status == 1) readonly @endif value="{{ $debts->debt }}">
                 </div>
                 <span>ngày</span>
@@ -219,4 +219,7 @@
                 input.value = input.value.replace(/[^0-9]/g, '');
             }
         }
+        $(document).on('keypress', 'form', function(event) {
+            return event.keyCode != 13; 
+        });
     </script>

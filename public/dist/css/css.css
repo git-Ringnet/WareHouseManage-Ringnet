@@ -849,3 +849,7 @@ input[type="checkbox"] {
     content: "*";
     color: red;
 }
+.scroll-data{
+    overflow-y: auto;
+    max-height: 200px;
+}
