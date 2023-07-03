@@ -733,7 +733,8 @@ input[type="number"] {
 }
 
 .filter-options li:hover,
-.filter-options label:hover {
+.filter-options label:hover,
+.profile-li:hover,.logout-li:hover{
     background-color: #ebebeb;
     transition: background-color 0.3s ease;
     cursor: pointer;
@@ -852,4 +853,15 @@ input[type="checkbox"] {
 .scroll-data{
     overflow-y: auto;
     max-height: 200px;
+}
+.text-custom{
+    color: #000000;
+}
+@media (max-width: 768px) {
+    .index-dashboard .col-6 {
+        width: 100%;
+        max-width: 100%;
+        flex: 0 0 100%;
+
+    }
 }

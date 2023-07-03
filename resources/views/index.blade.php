@@ -12,7 +12,7 @@
         <!-- /.content-header -->
 
         <!-- Main content -->
-        <section class="content">
+        <section class="content index-dashboard">
             <div class="container">
                 <div class="container-fluid box border bg-light">
                     <div class="title-box">
