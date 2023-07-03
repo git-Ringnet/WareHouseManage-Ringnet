@@ -837,7 +837,7 @@
         // AJAX Kiểm tra Serial number đã tồn tại chưa
         var listSN = [];
         var products_id = [];
-        var listProducts = {};
+        // var listProducts = {};
         $('select[name^="products_id[]"]').each(function() {
             products_id.push($(this).val());
         })
@@ -876,44 +876,57 @@
 
         // Kiểm tra xem các giá trị SN có giống nhau hay không
         var isDuplicate = false;
-        var duplicateSerialNumbers = {};
-        for (var i = 0; i < listSN.length; i++) {
-            var product_id = products_id[i];
-            var snValues = [];
-            $('input[name^="product_SN' + i + '"]').each(function() {
-                var snValue = $(this).val();
-                snValues.push(snValue);
-            });
 
-            if (!listProducts[product_id]) {
-                listProducts[product_id] = [];
-            }
-
-            var productData = {
-                sn: snValues
-            };
-
-            listProducts[product_id].push(productData);
-
-            if (!duplicateSerialNumbers[product_id]) {
-                duplicateSerialNumbers[product_id] = new Set();
-            } else {
-                for (var j = 0; j < listProducts[product_id].length - 1; j++) {
-                    var previousSnValues = listProducts[product_id][j].sn;
-                    for (var k = 0; k < snValues.length; k++) {
-                        if (previousSnValues.includes(snValues[k])) {
-                            var duplicateSn = snValues[k];
-                            isDuplicate = true;
-                            alert("Seri number " + duplicateSn + " đã tồn tại ");
-                            break;
-                        }
-                    }
-                    if (isDuplicate) {
-                        break;
-                    }
+        for (var i = 0; i < listSN.length - 1; i++) {
+            for (var j = i + 1; j < listSN.length; j++) {
+                if (listSN[i].trim() === listSN[j].trim()) {
+                    isDuplicate = true;
+                    alert("Đã nhập trùng serial number " + " " + listSN[j]);
+                    break;
                 }
             }
+            if (isDuplicate) {
+                break;
+            }
         }
+        // var duplicateSerialNumbers = {};
+        // for (var i = 0; i < listSN.length; i++) {
+        //     var product_id = products_id[i];
+        //     var snValues = [];
+        //     $('input[name^="product_SN' + i + '"]').each(function() {
+        //         var snValue = $(this).val();
+        //         snValues.push(snValue);
+        //     });
+
+        //     if (!listProducts[product_id]) {
+        //         listProducts[product_id] = [];
+        //     }
+
+        //     var productData = {
+        //         sn: snValues
+        //     };
+
+        //     listProducts[product_id].push(productData);
+
+        //     if (!duplicateSerialNumbers[product_id]) {
+        //         duplicateSerialNumbers[product_id] = new Set();
+        //     } else {
+        //         for (var j = 0; j < listProducts[product_id].length - 1; j++) {
+        //             var previousSnValues = listProducts[product_id][j].sn;
+        //             for (var k = 0; k < snValues.length; k++) {
+        //                 if (previousSnValues.includes(snValues[k])) {
+        //                     var duplicateSn = snValues[k];
+        //                     isDuplicate = true;
+        //                     alert("Seri number " + duplicateSn + " đã tồn tại ");
+        //                     break;
+        //                 }
+        //             }
+        //             if (isDuplicate) {
+        //                 break;
+        //             }
+        //         }
+        //     }
+        // }
         if (isDuplicate == false) {
             $.ajax({
                 url: "{{route('checkSN')}}",
