@@ -71,6 +71,7 @@
     </div>
     <form action="{{ route('exports.store') }}" method="POST" id="export_form">
         @csrf
+        <input type="hidden" name="checkguest" value="" id="checkguest">
         <section class="content">
             <div class="d-flex mb-1 action-don">
                 <button type="submit" class="btn btn-danger text-white mr-3" id="chot_don" name="submitBtn"
@@ -89,7 +90,6 @@
                     </svg>
                     In báo giá
                 </a>
-
             </div>
             <div class="container-fluided position-relative">
                 <div class="row my-3">
@@ -138,13 +138,17 @@
             </div>
             {{-- Form thông tin khách hàng --}}
             <section id="data-container" class="container-fluided bg-white rounded"></section>
+            {{-- Button xóa nhiều --}}
+            <div class="d-flex justify-content-between align-items-center my-2">
+                <div class="btn btn-danger" id="deleteRowTable" style="opacity: 0;">Xóa hàng</div>
+            </div>
             {{-- Bảng thêm sản phẩm --}}
             <div class="mt-4" style="overflow-x: auto;">
                 <table class="table table-hover bg-white rounded" id="sourceTable">
                     <thead class="">
                         <tr>
-                            <th><input type="checkbox"></th>
-                            <th>STT</th>
+                            <th><input type="checkbox" id="checkall"></th>
+                            {{-- <th>STT</th> --}}
                             <th>Mã sản phẩm</th>
                             <th>Tên sản phẩm</th>
                             <th>ĐVT</th>
@@ -189,7 +193,7 @@
                             <span><b>Giá trị trước thuế:</b></span>
                             <span id="total-amount-sum">{{ number_format(0) }}đ</span>
                         </div>
-                        <div class="d-flex justify-content-between mt-2">
+                        <div class="d-flex justify-content-between mt-2 align-items-center">
                             <span><b>Thuế VAT:</b></span>
                             <span id="product-tax">{{ number_format(0) }}đ</span>
                         </div>
@@ -351,12 +355,6 @@
                     <td style="color: #EC212D;" class="text-right thue-vat"><b></b></td>
                 </tr>
                 <tr>
-                    <td colspan="5" class="text-center" style="color: #EC212D;">
-                        <b>Phí vận chuyển:</b>
-                    </td>
-                    <td style="color: #EC212D;" class="text-right van-chuyen"><b></b></td>
-                </tr>
-                <tr>
                     <td colspan="5" class="text-center"><b style="color: #EC212D;">Thành tiền:</b></td>
                     <td style="color: #EC212D;" class="text-right tong-cong"><b></b></td>
                 </tr>
@@ -400,10 +398,6 @@
                 $('#btn-addNoteForm').removeClass('active');
             }
         });
-        if ($('#radio1:checked').length > 0) {
-            $('#click').val(2);
-            $('#updateClick').val(null);
-        }
     });
 
     //form thong tin khach hang xuất hàng
@@ -412,8 +406,7 @@
 
     $("#radio1").on("click", function() {
         $('#data-container').empty();
-        $('#click').val(null);
-        $('#updateClick').val(2);
+        $('#checkguest').val(1);
     });
     $("#radio2").on("click", function() {
         $('#data-container').html(
@@ -470,8 +463,7 @@
             '<input type="text" class="form-control" id="guest_note" placeholder="Nhập thông tin" name="guest_note" value="">' +
             '</div>' + '</div></div></div>'
         );
-        $('#click').val(2);
-        $('#updateClick').val(null);
+        $('#checkguest').val(2);
         //Công nợ
         $(document).on('change', '#debtCheckbox', function() {
             if ($(this).is(':checked')) {
@@ -509,7 +501,7 @@
             const newRow = $("<tr>", {
                 "id": `dynamic-row-${fieldCounter}`
             });
-            const checkbox = $("<td><input type='checkbox'></td>");
+            const checkbox = $("<td><input type='checkbox' class='cb-element'></td>");
             const MaInput = $("<td>", {
                 "class": "row-number",
                 "text": `${fieldCounter}`
@@ -552,7 +544,9 @@
                 "<option value='99'>NOVAT</option>" +
                 "</select>" +
                 "</td>");
-            const thanhTienInput = $("<td><span class='px-5 total-amount'>0</span></td>");
+            const thanhTienInput = $(
+                "<td><input readonly class='total-amount form-control text-center' value='' style='width:140px;'></td>"
+            );
             const sn = $(
                 "<td data-toggle='modal' data-target='#snModal' class='sn'><img src='../dist/img/icon/list.png'></td>"
             );
@@ -603,7 +597,7 @@
                     .val();
                 var thue = $(this).closest('tr').find('.product_tax option:selected').text();
                 var thanhTien = $(this).closest('tr').find('.total-amount')
-                    .text();
+                    .val();
                 var giaNhap = $(this).closest('tr').find('.price_import').val();
                 var tonKho = $(this).closest('tr').find('.tonkho').val();
                 $.ajax({
@@ -679,11 +673,38 @@
                     (thue == 99 ? "NOVAT" : thue + '%'));
             });
             // Gắn các phần tử vào hàng mới
-            newRow.append(checkbox, MaInput, TenInput, ProInput, dvtInput, slInput,
+            newRow.append(checkbox, TenInput, ProInput, dvtInput, slInput,
                 giaInput, thueInput, thanhTienInput, ghichuInput, sn, info, deleteBtn, option);
             $("#dynamic-fields").before(newRow);
             // Tăng giá trị fieldCounter
             fieldCounter++;
+            //xóa nhiều
+            $(document).on('click', '#deleteRowTable', function() {
+                $('tbody input[type="checkbox"]:checked').closest('tr').remove();
+                $('#checkall').prop('checked', false);
+                $('#deleteRowTable').css('opacity', 0);
+            });
+            $('#checkall').change(function() {
+                $('.cb-element').prop('checked', this.checked);
+                updateMultipleActionVisibility();
+            });
+
+            $('.cb-element').change(function() {
+                updateMultipleActionVisibility();
+                if ($('.cb-element:checked').length == $('.cb-element').length) {
+                    $('#checkall').prop('checked', true);
+                } else {
+                    $('#checkall').prop('checked', false);
+                }
+            });
+
+            function updateMultipleActionVisibility() {
+                if ($('.cb-element:checked').length > 0) {
+                    $('#deleteRowTable').css('opacity', 1);
+                } else {
+                    $('#deleteRowTable').css('opacity', 0);
+                }
+            }
         });
 
         //hiện danh sách khách hàng khi click trường tìm kiếm
@@ -711,6 +732,8 @@
     //hiển thị thông tin khách hàng
     $(document).ready(function() {
         $('.search-info').click(function() {
+            //biến cập nhật
+            $('#checkguest').val(1);
             var idCustomer = $(this).attr('id');
             $('#radio1').prop('checked', true);
             $.ajax({
@@ -789,8 +812,6 @@
                         (data.guest_note == null ? '' : data.guest_note) + '">' +
                         '</div>' + '</div></div><div>'
                     );
-                    $('#click').val(null);
-                    $('#updateClick').val(2);
                     //Công nợ
                     var isChecked = $('#debtCheckbox').is(':checked');
                     // Đặt trạng thái của input dựa trên checkbox
@@ -826,6 +847,10 @@
     //cập nhật thông tin khách hàng
     $(document).on('click', '#btn-customer', function(e) {
         e.preventDefault();
+        var form = $('#export_form')[0];
+        if (!form.reportValidity()) {
+            return;
+        }
         $('#updateClick').val(1);
         var updateClick = $('#updateClick').val();
         var id = $('#id').val();
@@ -1033,50 +1058,60 @@
             }
 
             // Kiểm tra nếu ID sản phẩm đã chọn đã có trong danh sách các sản phẩm đã chọn
-            // if (selectedProductIDs.includes(selectedID)) {
-            //     $(this).val('');
-            // } else {
-            //     selectedProductIDs.push(selectedID); // Lưu ID sản phẩm đã chọn
-            // }
+            if (selectedProductIDs.includes(selectedID)) {
+                $(this).val(''); // Đặt giá trị của tùy chọn thành trống
 
-            // // Ẩn tên sản phẩm đã chọn từ các tùy chọn khác
-            // hideSelectedProductNames(row);
+                var productNameElement = $(this).closest('tr').find('.product_name');
+                productNameElement.prop('disabled', true); // Disable ô input chứa tên sản phẩm
+            } else {
+                var previousID = $(this).data('previous-id'); // Lấy ID trước đó của tùy chọn
+                if (previousID && previousID !== selectedID) {
+                    var index = selectedProductIDs.indexOf(previousID);
+                    if (index !== -1) {
+                        selectedProductIDs.splice(index, 1); // Xóa ID trước đó khỏi mảng
+                    }
+                }
+
+                selectedProductIDs.push(selectedID); // Lưu ID sản phẩm đã chọn vào mảng
+                $(this).data('previous-id',
+                    selectedID); // Lưu ID hiện tại vào thuộc tính data của tùy chọn
+
+                hideSelectedProductNames(row); // Ẩn tên sản phẩm đã chọn từ các tùy chọn khác
+            }
         });
 
         // Function to hide selected product names from other child select options
-        // function hideSelectedProductNames(row) {
-        //     var selectedIDs = row.find('.child-select').map(function() {
-        //         return $(this).val();
-        //     }).get();
+        function hideSelectedProductNames(row) {
+            var selectedIDs = row.find('.child-select').map(function() {
+                return $(this).val();
+            }).get();
 
-        //     row.find('.child-select').each(function() {
-        //         var currentID = $(this).val();
-        //         $(this).find('option').each(function() {
-        //             if ($(this).val() !== currentID && selectedIDs.includes($(this).val())) {
-        //                 $(this).hide();
-        //             } else {
-        //                 $(this).show();
-        //             }
-        //         });
-        //     });
-        // }
+            row.find('.child-select').each(function() {
+                var currentID = $(this).val();
+                $(this).find('option').each(function() {
+                    if ($(this).val() !== currentID && selectedIDs.includes($(this).val())) {
+                        $(this).hide();
+                    } else {
+                        $(this).show();
+                    }
+                });
+            });
+        }
     });
 
     //tính thành tiền của sản phẩm
-    $(document).on('input', '.quantity-input, [name^="product_price"]', function() {
-        var productQty = parseInt($(this).closest('tr').find('.quantity-input').val().replace(/[^0-9.-]+/g,
-            ""));
+    $(document).on('input', '.quantity-input, [name^="product_price"]', function(e) {
+        var productQty = parseInt($(this).closest('tr').find('.quantity-input').val());
         var productPrice = parseFloat($(this).closest('tr').find('input[name^="product_price"]').val().replace(
             /[^0-9.-]+/g, ""));
         updateTaxAmount($(this).closest('tr'));
 
         if (!isNaN(productQty) && !isNaN(productPrice)) {
             var totalAmount = productQty * productPrice;
+            $(this).closest('tr').find('.total-amount').val(formatCurrency(totalAmount));
 
-            $(this).closest('tr').find('.total-amount').text(formatCurrency(totalAmount.toFixed(2)));
             calculateTotalAmount();
             calculateTotalTax();
-            calculateGrandTotal();
         }
     });
 
@@ -1084,34 +1119,34 @@
         updateTaxAmount($(this).closest('tr'));
         calculateTotalAmount();
         calculateTotalTax();
-        calculateGrandTotal();
     });
 
     function updateTaxAmount(row) {
-        var productQty = parseInt(row.find('.quantity-input').val().replace(/[^0-9.-]+/g, ""));
+        var productQty = parseInt(row.find('.quantity-input').val());
         var productPrice = parseFloat(row.find('input[name^="product_price"]').val().replace(/[^0-9.-]+/g, ""));
-        var taxValue = parseFloat(row.find('.product_tax').val().replace(/[^0-9.-]+/g, ""));
+        var taxValue = parseFloat(row.find('.product_tax').val());
         if (taxValue == 99) {
             taxValue = 0;
         }
-
         if (!isNaN(productQty) && !isNaN(productPrice) && !isNaN(taxValue)) {
             var totalAmount = productQty * productPrice;
             var taxAmount = (totalAmount * taxValue) / 100;
 
-            row.find('.product_tax1').text(formatCurrency(taxAmount.toFixed(2)));
+            row.find('.product_tax1').text(taxAmount);
         }
     }
 
     function calculateTotalAmount() {
         var totalAmount = 0;
         $('tr').each(function() {
-            var rowTotal = parseFloat($(this).find('.total-amount').text().replace(/[^0-9.-]+/g, ""));
+            var rowTotal = parseFloat(String($(this).find('.total-amount').val()).replace(/[^0-9.-]+/g, ""));
             if (!isNaN(rowTotal)) {
                 totalAmount += rowTotal;
             }
         });
-        $('#total-amount-sum').text(formatCurrency(totalAmount.toFixed(2)));
+        $('#total-amount-sum').text(formatCurrency(totalAmount));
+        calculateTotalTax();
+        calculateGrandTotal();
     }
 
     function calculateTotalTax() {
@@ -1122,7 +1157,9 @@
                 totalTax += rowTax;
             }
         });
-        $('#product-tax').text(formatCurrency(totalTax.toFixed(2)));
+        $('#product-tax').text(formatCurrency(totalTax));
+
+        calculateGrandTotal();
     }
 
     function calculateGrandTotal() {
@@ -1130,11 +1167,11 @@
         var totalTax = parseFloat($('#product-tax').text().replace(/[^0-9.-]+/g, ""));
 
         var grandTotal = totalAmount + totalTax;
-        var formattedGrandTotal = formatCurrency(grandTotal.toFixed(2));
+        $('#grand-total').text(formatCurrency(grandTotal));
 
-        $('#grand-total').text(formattedGrandTotal);
-        $('#grand-total').attr('data-value', formattedGrandTotal);
-        $('#total').val(grandTotal.toFixed(2));
+        // Update data-value attribute
+        $('#grand-total').attr('data-value', grandTotal);
+        $('#total').val(grandTotal);
     }
 
     function formatCurrency(value) {
@@ -1169,31 +1206,23 @@
                 var newValue = $(this).val().replace(/,/g, '');
                 $(this).val(newValue);
             });
+            // // Lấy giá trị product_id và product_qty từ các phần tử trong form
+            // var productIDs = [];
+            // var productQtys = [];
 
-            $('#btn-customer').click();
-            $('#btn-addCustomer').click();
-            window.backupAlert = window.alert;
-            window.alert = function() {
-                return true
-            };
+            // $('.maProduct').each(function() {
+            //     var productID = $(this).val();
+            //     if (productID !== '') {
+            //         productIDs.push(productID);
+            //     }
+            // });
 
-            // Lấy giá trị product_id và product_qty từ các phần tử trong form
-            var productIDs = [];
-            var productQtys = [];
-
-            $('.maProduct').each(function() {
-                var productID = $(this).val();
-                if (productID !== '') {
-                    productIDs.push(productID);
-                }
-            });
-
-            $('.quantity-input').each(function() {
-                var productQty = $(this).val();
-                if (productQty !== '') {
-                    productQtys.push(productQty);
-                }
-            });
+            // $('.quantity-input').each(function() {
+            //     var productQty = $(this).val();
+            //     if (productQty !== '') {
+            //         productQtys.push(productQty);
+            //     }
+            // });
         } else {
             if (formGuest.length === 0) {
                 alert('Lỗi: Chưa nhập thông tin khách hàng!');
@@ -1369,12 +1398,10 @@
         var tong_tien = document.querySelector(".tong-tien");
         var thue_vat = document.querySelector(".thue-vat");
         var tong_cong = document.querySelector(".tong-cong");
-        var van_chuyen = document.querySelector(".van-chuyen");
         //
         var total_amount_sum = document.getElementById("total-amount-sum");
         var product_tax = document.getElementById("product-tax");
         var grand_total = document.getElementById("grand-total");
-        var transport_fee = document.getElementById("transport_fee");
         //ghi chú
         var note_form = document.getElementById("note_form");
         var ghi_chu = document.querySelector(".noteForm");
@@ -1392,7 +1419,6 @@
                 //thành tiền, thuế, tổng tiền
                 tong_tien.innerHTML = total_amount_sum.innerText;
                 thue_vat.innerHTML = product_tax.innerText;
-                van_chuyen.innerHTML = transport_fee.value;
                 tong_cong.innerHTML = grand_total.innerText;
                 //ghi chú
                 ghi_chu.innerHTML = note_form.value.replace(/\n/g, "<br>");

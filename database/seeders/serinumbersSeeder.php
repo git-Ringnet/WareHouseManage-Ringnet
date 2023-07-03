@@ -28,7 +28,7 @@ class SerinumbersSeeder extends Seeder
             ['id' => 12, 'serinumber' => "SP04-03",'product_id'=>4,'seri_status' => 1],
             ['id' => 13, 'serinumber' => "SP05-01",'product_id'=>5,'seri_status' => 1],
             ['id' => 14, 'serinumber' => "SP05-02",'product_id'=>5,'seri_status' => 1],
-            ['id' => 15, 'serinumber' => "SP05-02",'product_id'=>5,'seri_status' => 1],
+            ['id' => 15, 'serinumber' => "SP05-03",'product_id'=>5,'seri_status' => 1],
             ['id' => 16, 'serinumber' => "SP06-01",'product_id'=>6,'seri_status' => 1],
             ['id' => 17, 'serinumber' => "SP01-04",'product_id'=>1,'seri_status' => 1],
         ]);
