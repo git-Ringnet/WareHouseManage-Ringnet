@@ -381,9 +381,9 @@ class ExportController extends Controller
                                 $debt->debt_transport_fee = $debtTransportFee;
                                 $debt->total_difference = $totalDifference;
                                 $debt->debt = $guest->debt;
-                               
+
                                 $debt->date_start = now();
-                                
+
                                 // //Xử lí workingday
                                 $startDate = $debt->debt_start;
                                 $daysToAdd = $debt->debt;
@@ -397,7 +397,7 @@ class ExportController extends Controller
                                 $daysDiff = $interval->format('%R%a');
                                 $daysDiff = intval($daysDiff);
                                 $daysDiff = -$daysDiff;
-                                    
+
                                 if ($guest->debt == 0) {
                                     $debt->debt_status = 4;
                                 } elseif ($daysDiff <= 3) {
@@ -486,7 +486,7 @@ class ExportController extends Controller
                                 $debt->debt = $guest->debt;
 
                                 $debt->date_start = now();
-                                
+
                                 // //Xử lí workingday
                                 $startDate = $debt->debt_start;
                                 $daysToAdd = $debt->debt;
@@ -589,7 +589,7 @@ class ExportController extends Controller
                                 $debt->debt = $guest->debt;
 
                                 $debt->date_start = now();
-                                
+
                                 // //Xử lí workingday
                                 $startDate = $debt->debt_start;
                                 $daysToAdd = $debt->debt;
@@ -1058,11 +1058,8 @@ class ExportController extends Controller
                                 ->where('product_id', $productID)
                                 ->first();
 
-                            // Lấy số lượng hiện tại của sản phẩm
-                            $currentQty = Product::where('id', $productID)->value('product_qty');
-
                             // Kiểm tra số lượng sản phẩm mới được cập nhật
-                            $availableQty = $currentQty + $proExport->product_qty - $productQty;
+                            $availableQty = $this->getAvailableProductQty($productID) + $proExport->product_qty - $productQty;
 
                             if ($availableQty < 0) {
                                 return redirect()->route('exports.index')->with('warning', 'Vượt quá số lượng cho sản phẩm ' . $nameProduct . '!');
@@ -1077,6 +1074,7 @@ class ExportController extends Controller
 
                                 foreach ($serinumbersToUpdate as $serinumber) {
                                     $serinumber->seri_status = 2;
+                                    $serinumber->export_seri = $exports->id;
                                     $serinumber->save();
                                 }
                             } elseif ($productQty < $proExport->product_qty) {
@@ -1091,7 +1089,6 @@ class ExportController extends Controller
                                 }
                             }
 
-                            // Cập nhật thông tin sản phẩm
                             $proExport->products_id = $request->products_id[$i];
                             $proExport->product_unit = $request->product_unit[$i];
                             $proExport->product_qty = $productQty;
@@ -1102,10 +1099,12 @@ class ExportController extends Controller
                             $proExport->save();
                         } else {
                             // Kiểm tra số lượng sản phẩm mới được thêm
-                            $currentQty = Product::where('id', $productID)->value('product_qty');
-                            if ($productQty > $currentQty) {
+                            $availableQty = $this->getAvailableProductQty($productID);
+
+                            if ($productQty > $availableQty) {
                                 return redirect()->route('exports.index')->with('warning', 'Vượt quá số lượng cho sản phẩm ' . $nameProduct . '!');
                             }
+
                             $proExport = new ProductExports();
                             $proExport->products_id = $request->products_id[$i];
                             $proExport->product_id = $productID;
@@ -1119,13 +1118,13 @@ class ExportController extends Controller
                             $proExport->product_total = $request->totalValue;
                             $proExport->save();
 
-                            // Cập nhật seri_status bằng 2 cho sản phẩm mới
-                            $serinumbersToUpdate = Serinumbers::where('product_id', $productID)
+                            $serinumbersToUpdate = Serinumbers::where('product_id', $proExport->product_id)
                                 ->where('seri_status', 1)
                                 ->limit($productQty)
                                 ->get();
 
                             foreach ($serinumbersToUpdate as $serinumber) {
+                                $serinumber->export_seri = $proExport->export_id;
                                 $serinumber->seri_status = 2;
                                 $serinumber->save();
                             }
@@ -1153,32 +1152,6 @@ class ExportController extends Controller
 
                         // Xóa sản phẩm
                         $productExport->delete();
-                    }
-
-                    // Giảm số lượng của sản phẩm trong bảng product
-                    for ($i = 0; $i < count($productIDs); $i++) {
-                        $productID = $productIDs[$i];
-                        $productQty = $productQtys[$i];
-
-                        // Lấy số lượng hiện tại của sản phẩm
-                        $currentQty = Product::where('id', $productID)->value('product_qty');
-
-                        // Giảm số lượng sản phẩm
-                        $newQty = $currentQty - $productQty;
-
-                        // Lấy giá sản phẩm
-                        $product = Product::find($productID);
-                        $productPrice = $product->product_price;
-
-                        // Tính toán giá trị total
-                        $total = $newQty * $productPrice;
-
-                        // Cập nhật số lượng và trường 'total'
-                        Product::where('id', $productID)
-                            ->update([
-                                'product_qty' => $newQty,
-                                'total' => $total
-                            ]);
                     }
 
                     // Kiểm tra số lượng tổng cần thiết
@@ -1266,8 +1239,7 @@ class ExportController extends Controller
                             $exports->save();
                         }
                         //thêm
-                        if($request->checkguest == 2 && $clickValue == 1)
-                        {
+                        if ($request->checkguest == 2 && $clickValue == 1) {
                             // Tạo đơn xuất hàng
                             $exports->guest_id = $request->id;
                             $exports->user_id = Auth::user()->id;
@@ -1372,7 +1344,7 @@ class ExportController extends Controller
                         $debt->debt = $guest->debt;
 
                         $debt->date_start = now();
-                        
+
                         // //Xử lí workingday
                         $startDate = $debt->debt_start;
                         $daysToAdd = $debt->debt;
@@ -1664,6 +1636,7 @@ class ExportController extends Controller
 
                     // Kiểm tra số lượng tổng cần thiết
                     $availableQtyTotal = $this->getAvailableProductQtyTotal();
+
                     //thêm khách hàng khi lưu nhanh
                     if ($request->checkguest == 2 && $clickValue == null) {
                         $existingCustomer = Guests::orwhere('guest_code', $request->guest_code)
