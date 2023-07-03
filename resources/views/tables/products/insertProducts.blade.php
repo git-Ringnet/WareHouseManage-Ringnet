@@ -125,6 +125,16 @@
             return event.keyCode != 13; 
         });
     $(document).on('submit','#add_product',function(e){
+         $(e.target).find('.btn.btn-primary').prop('disabled', true);
+        var countDown = 10;
+        var countdownInterval = setInterval(function() {
+            countDown--;
+            if (countDown <= 0) {
+                clearInterval(countdownInterval);
+                $(e.target).find('.btn.btn-primary').prop('disabled', false);
+            }
+        }, 100);
+        
         e.preventDefault();
         var products_code =  $('#products_code').val();
         $.ajax({
