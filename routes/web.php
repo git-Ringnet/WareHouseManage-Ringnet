@@ -71,6 +71,7 @@ Route::get('/deleteExports', [ExportController::class, 'deleteExports'])->name('
 Route::get('/cancelBillExport', [ExportController::class, 'cancelBillExport'])->name('cancelBillExport');
 //Công nợ
 Route::resource('debt', DebtController::class);
+Route::get('/paymentdebt', [DebtController::class, 'paymentdebt'])->name('paymentdebt');
 //kiểm tra số lượng trong xuất hàng
 Route::get('checkqty', [ExportController::class, 'checkqty'])->name('checkqty');
 

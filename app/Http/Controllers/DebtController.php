@@ -226,19 +226,25 @@ class DebtController extends Controller
                 // Xử lí status debt
                 $endDate = new DateTime($request->date_end);
                 $now = new DateTime();
+
                 $interval = $endDate->diff($now);
                 $daysDiff = $interval->format('%R%a');
                 $daysDiff = intval($daysDiff);
                 $daysDiff = -$daysDiff;
-
-                if ($request->debt == 0) {
+                // dd($request->debt_debt);
+                // dd($daysDiff);
+                if ($request->debt_debt == null || $request->debt_debt == 0) {
                     $debt->debt_status = 4;
-                } elseif ($daysDiff <= 3 && $daysDiff > 0) {
+                    $debt->debt = 0;
+                } elseif ($daysDiff <= 3 && $daysDiff >= 0) {
                     $debt->debt_status = 2;
+                    $debt->debt = $request->debt_debt;
                 } elseif ($daysDiff < 0) {
                     $debt->debt_status = 0;
+                    $debt->debt = $request->debt_debt;
                 } else {
                     $debt->debt_status = 3;
+                    $debt->debt = $request->debt_debt;
                 }
                 $debt->update($request->all());
                 return redirect()->route('debt.index')->with('msg', 'Cập nhật thành công!');
@@ -255,5 +261,20 @@ class DebtController extends Controller
     public function destroy($id)
     {
         //
+    }
+    public function paymentdebt(Request $request)
+    {
+        if (isset($request->list_id)) {
+            $list = $request->list_id;
+            $listOrder = Debt::whereIn('id', $list)->get();
+            foreach ($listOrder as $value) {
+                $value->debt_status = 1;
+                $value->save();
+            }
+            session()->flash('msg', 'Thanh toán thành công');
+            return response()->json(['success' => true, 'msg' => 'Thanh toán thành công']);
+        }
+        return response()->json(['success' => false, 'warning' => 'Thanh toán thất bại!']);
+        session()->flash('msg', 'Thanh toán thất bại!');
     }
 }

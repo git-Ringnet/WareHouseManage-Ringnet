@@ -125,7 +125,7 @@
                                         </svg>
                                     </div>
                                 </div>
-                                <ul id="myUL" class="bg-white position-absolute w-50 rounded shadow p-0 " style="z-index: 99;">
+                                <ul id="myUL" class="bg-white position-absolute w-50 rounded shadow p-0 scroll-data " style="z-index: 99;">
                                     @foreach ($provide as $value)
                                     <li <?php if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) {
                                             echo 'class="d-none"';
@@ -1342,6 +1342,9 @@
             fileImport.value = "";
         });
     }
+    $(document).on('keypress', 'form', function(event) {
+            return event.keyCode != 13; 
+        });
 </script>
 </body>
 
