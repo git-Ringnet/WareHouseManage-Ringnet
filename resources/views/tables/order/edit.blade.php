@@ -356,7 +356,7 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>{{ ($stt + 1) }}</td>
+                                            <td class="sttRowTable"></td>
                                             <td class="code_product"></td>
                                             <td class="name_product"></td>
                                             <td class="name_provide"></td>
@@ -769,7 +769,7 @@
             '</thead>' +
             '<tbody>' +
             '<tr>' +
-            '<td>' + rowCount + '</td>' +
+            '<td class="sttRowTable"></td>' +
             '<td class="code_product"></td>' +
             '<td class="name_product"></td>' +
             '<td class="name_provide"></td>' +
@@ -816,7 +816,7 @@
                 });
             }
         }
-        addDataToModal();
+        fillDataToModal();
         checkRow();
     });
 
@@ -868,31 +868,7 @@
         createInput();
     })
 
-    function addDataToModal() {
-        var info = document.querySelectorAll('.exampleModal');
-        for (let k = 0; k < info.length; k++) {
-            info[k].addEventListener('click', function() {
-                var productCode = $(this).closest('tr').find('.list_products option:selected').text();
-                var productName = $(this).closest('tr').find('[name^="product_name"]').val();
-                var productType = $(this).closest('tr').find('[name^="product_category"]').val();
-                var productQty = $(this).closest('tr').find('[name^="product_qty"]').val();
-                var provide_name = $('#provide_name').val();
-                $('.name_provide').text(provide_name);
-                $('.code_product').text(productCode);
-                $('.name_product').text(productName);
-                $('.type_product').text(productType);
-                $('.qty_product').text(productQty);
-                var id_modal = $(info[k]).attr('data-target').match(/\d+/)[0];
-                var div_value = $('.div_value' + id_modal);
-                div_value.closest('.modal-body').find('.SNCount').text(div_value.find('table tbody .stt_SN').length);
-                var setSTT = div_value.closest('.modal-body').find('.stt_SN');
-                for (let i = 0; i < setSTT.length; i++) {
-                    $(setSTT[i]).eq(0).text(i + 1);
-                }
-            })
-        }
-    }
-    addDataToModal();
+    fillDataToModal();
 
     // Hiển thị sản phẩm con 
     $(document).on('change', '.list_products', function(e) {
@@ -1295,7 +1271,7 @@
                         '</thead>' +
                         '<tbody>' +
                         '<tr>' +
-                        '<td>' + rowCount + '</td>' +
+                        '<td class="sttRowTable"></td>' +
                         '<td class="code_product"></td>' +
                         '<td class="name_product"></td>' +
                         '<td class="provide_name"></td>' +
