@@ -129,6 +129,7 @@
     <form action="{{ route('exports.update', $exports->id) }}" method="POST" id="export_form">
         @csrf
         @method('PUT')
+        <input type="hidden" name="checkguest" value="" id="checkguest">
         <section class="content">
             <div class="d-flex mb-1 action-don">
                 @if ($exports->export_status == 1)
@@ -335,6 +336,10 @@
                     </div>
                     <div>
             </section>
+            {{-- Button xóa nhiều --}}
+            <div class="d-flex justify-content-between align-items-center my-2">
+                <div class="btn btn-danger" id="deleteRowTable" style="opacity: 0;">Xóa hàng</div>
+            </div>
             {{-- Bảng thêm sản phẩm --}}
             <div class="mt-4" style="overflow-x: auto;">
                 <table class="table">
@@ -342,10 +347,10 @@
                         <tr>
                             @if ($exports->export_status == 1)
                                 @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
-                                    <th><input type="checkbox"></th>
+                                    <th><input type="checkbox" id="checkall"></th>
                                 @endif
                             @endif
-                            <th>STT</th>
+                            {{-- <th>STT</th> --}}
                             <th>Mã sản phẩm</th>
                             <th>Tên sản phẩm</th>
                             <th>ĐVT</th>
@@ -360,15 +365,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php $stt = 1; ?>
                         @foreach ($productExport as $index => $value_export)
                             <tr id="dynamic-row-{{ $index }}">
                                 @if ($exports->export_status == 1)
                                     @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
-                                        <td><input type="checkbox"></td>
+                                        <td><input type="checkbox" class="cb-element"></td>
                                     @endif
                                 @endif
-                                <td class="soTT"><?php echo $stt++; ?></td>
                                 <td>
                                     <input type="hidden" id="export_id" value="{{ $exports->id }}">
                                     <select id="maProduct" class="p-1 maProduct form-control" name="products_id[]"
@@ -680,10 +683,6 @@
                     <td style="color: #EC212D;" class="text-right thue-vat"><b></b></td>
                 </tr>
                 <tr>
-                    <td colspan="5" class="text-center"><b style="color: #EC212D;">Vận chuyển:</b></td>
-                    <td style="color: #EC212D;" class="text-right van-chuyen"><b></b></td>
-                </tr>
-                <tr>
                     <td colspan="5" class="text-center"><b style="color: #EC212D;">Thành tiền:</b></td>
                     <td style="color: #EC212D;" class="text-right tong-cong"><b></b></td>
                 </tr>
@@ -727,10 +726,6 @@
                 $('#btn-addNoteForm').removeClass('active');
             }
         });
-        if ($('#radio1:checked').length > 0) {
-            $('#click').val(2);
-            $('#updateClick').val(2);
-        }
     });
     //Thêm form ghi chú cho nhân viên
     $(document).on('click', '#btn-addNoteForm', function(e) {
@@ -761,9 +756,6 @@
             .val();
         var thue = $(this).closest('tr').find('.product_tax')
             .val();
-        if (thue == 99) {
-            thue = 0;
-        }
         $.ajax({
             url: "{{ route('getProduct') }}",
             type: "get",
@@ -786,7 +778,7 @@
                     '<b>Đang giao dịch: </b>' +
                     response.trading +
                     '<br>' + '<b>Giá nhập: </b>' + formattedPrice + '<br>' + '<b>Thuế: </b>' +
-                    thue + '%');
+                    (thue == 99 ? "NOVAT" : thue + "%"));
             },
         });
     });
@@ -809,12 +801,14 @@
             .text();
         var giaNhap = $(this).closest('tr').find('.price_import').val();
         var tonKho = $(this).closest('tr').find('.tonkho').val();
+        var export_id = $('#export_id').val();
         $.ajax({
             url: '{{ route('getSN1') }}',
             type: 'GET',
             data: {
                 qty: qty,
                 productCode: productCode,
+                export_id: export_id,
             },
             success: function(response) {
                 console.log(response);
@@ -870,7 +864,7 @@
         var tonKho = $(this).closest('tr').find('.tonkho').val();
         var export_id = $('#export_id').val();
         $.ajax({
-            url: '{{ route('getSN') }}',
+            url: '{{ route('getSN3') }}',
             type: 'GET',
             data: {
                 qty: qty,
@@ -978,6 +972,7 @@
     $("#radio1").on("click", function() {
         $('#data-container').empty();
         $('#form-edit').show();
+        $('#checkguest').val(1);
     });
     $("#radio2").on("click", function() {
         $('#data-container').html(
@@ -1034,8 +1029,6 @@
             '<input type="text" class="form-control" id="guest_note" placeholder="Nhập thông tin" name="guest_note" value="">' +
             '</div>' + '</div></div></div>'
         );
-        $('#click').val(2);
-        $('#updateClick').val(2);
         //Công nợ
         $(document).on('change', '#debtCheckbox', function() {
             if ($(this).is(':checked')) {
@@ -1048,6 +1041,7 @@
             }
         });
         $('#form-edit').hide();
+        $('#checkguest').val(2);
     });
     //add sản phẩm
     $(document).ready(function() {
@@ -1220,11 +1214,11 @@
                             response.trading +
                             '<br>' + '<b>Giá nhập: </b>' + formattedPrice +
                             '<br>' + '<b>Thuế: </b>' +
-                            (thue == 99 ? "NOVAT" : thue + '%') + '%');
+                            (thue == 99 ? "NOVAT" : thue + '%'));
                     },
                 });
             });
-            newRow.append(checkbox, MaInput, TenInput, ProInput, dvtInput, slInput,
+            newRow.append(checkbox, TenInput, ProInput, dvtInput, slInput,
                 giaInput, thueInput, thanhTienInput, ghichuInput, sn, info, deleteBtn, option);
             $("#dynamic-fields").before(newRow);
             fieldCounter++;
@@ -1287,10 +1281,29 @@
             });
         });
     });
+    //
+    $(document).ready(function() {
+        $('#radio1').prop('checked', true);
+        updateCheckguestValue();
+
+        $('input[name="options"]').change(function() {
+            updateCheckguestValue();
+        });
+    });
+
+    function updateCheckguestValue() {
+        if ($('#radio1').is(':checked')) {
+            $('#checkguest').val(1);
+        }
+    }
+
     //hiển thị thông tin khách hàng
     $(document).ready(function() {
         $('.search-info').click(function() {
             var idCustomer = $(this).attr('id');
+            //biến cập nhật
+            $('#checkguest').val(1);
+            $('#form-edit').remove();
             $('#radio1').prop('checked', true);
             $.ajax({
                 url: '{{ route('searchExport') }}',
@@ -1369,8 +1382,6 @@
                         (data.guest_note == null ? '' : data.guest_note) + '">' +
                         '</div>' + '</div></div><div>'
                     );
-                    $('#click').val(null);
-                    $('#updateClick').val(2);
                     //Công nợ
                     var isChecked = $('#debtCheckbox').is(':checked');
                     // Đặt trạng thái của input dựa trên checkbox
@@ -1398,7 +1409,6 @@
     //cập nhật thông tin khách hàng
     $(document).on('click', '#btn-customer', function(e) {
         e.preventDefault();
-        $('#sourceTable [required]').removeAttr('required');
         var form = $('#export_form')[0];
         if (!form.reportValidity()) {
             return;
@@ -1450,7 +1460,6 @@
                 } else if (data.hasOwnProperty('id')) {
                     alert('Lưu thông tin thành công');
                 }
-                $('#sourceTable [required]').attr('required', true);
             }
         })
     })
@@ -1587,32 +1596,46 @@
                 });
             }
 
-            // Check if the selected product name is already in use
-            // if (selectedProductNames.includes(selectedName)) {
-            //     $(this).val('');
-            // } else {
-            //     selectedProductNames.push(selectedName);
-            // }
+            // Kiểm tra nếu ID sản phẩm đã chọn đã có trong danh sách các sản phẩm đã chọn
+            if (selectedProductIDs.includes(selectedID)) {
+                $(this).val(''); // Đặt giá trị của tùy chọn thành trống
+
+                var productNameElement = $(this).closest('tr').find('.product_name');
+                productNameElement.prop('disabled', true); // Disable ô input chứa tên sản phẩm
+            } else {
+                var previousID = $(this).data('previous-id'); // Lấy ID trước đó của tùy chọn
+                if (previousID && previousID !== selectedID) {
+                    var index = selectedProductIDs.indexOf(previousID);
+                    if (index !== -1) {
+                        selectedProductIDs.splice(index, 1); // Xóa ID trước đó khỏi mảng
+                    }
+                }
+
+                selectedProductIDs.push(selectedID); // Lưu ID sản phẩm đã chọn vào mảng
+                $(this).data('previous-id',
+                    selectedID); // Lưu ID hiện tại vào thuộc tính data của tùy chọn
+
+                hideSelectedProductNames(row); // Ẩn tên sản phẩm đã chọn từ các tùy chọn khác
+            }
         });
 
         // Function to hide selected product names from other child select options
-        // function hideSelectedProductNames(row) {
-        //     var selectedNames = row.find('.child-select').map(function() {
-        //         return $(this).val();
-        //     }).get();
+        function hideSelectedProductNames(row) {
+            var selectedIDs = row.find('.child-select').map(function() {
+                return $(this).val();
+            }).get();
 
-        //     row.find('.child-select').each(function() {
-        //         var currentName = $(this).val();
-        //         $(this).find('option').each(function() {
-        //             if ($(this).val() !== currentName && selectedNames.includes($(this)
-        //                     .val())) {
-        //                 $(this).hide();
-        //             } else {
-        //                 $(this).show();
-        //             }
-        //         });
-        //     });
-        // }
+            row.find('.child-select').each(function() {
+                var currentID = $(this).val();
+                $(this).find('option').each(function() {
+                    if ($(this).val() !== currentID && selectedIDs.includes($(this).val())) {
+                        $(this).hide();
+                    } else {
+                        $(this).show();
+                    }
+                });
+            });
+        }
     });
     //tính thành tiền của sản phẩm
     $(document).ready(function() {
@@ -1729,7 +1752,6 @@
                 var newValue = $(this).val().replace(/,/g, '');
                 $(this).val(newValue);
             });
-            $('#btn-customer').click();
         } else {
             if (formGuest.length === 0) {
                 alert('Lỗi: Chưa nhập thông tin khách hàng!');
@@ -1908,11 +1930,9 @@
         var tong_tien = document.querySelector(".tong-tien");
         var thue_vat = document.querySelector(".thue-vat");
         var tong_cong = document.querySelector(".tong-cong");
-        var van_chuyen = document.querySelector(".van-chuyen");
         //
         var total_amount_sum = document.getElementById("total-amount-sum");
         var product_tax = document.getElementById("product-tax");
-        var transport_fee = document.getElementById("transport_fee");
         var grand_total = document.getElementById("grand-total");
         //ghi chú
         var note_form = document.getElementById("note_form");
@@ -1931,7 +1951,6 @@
                 //thành tiền, thuế, tổng tiền
                 tong_tien.innerHTML = total_amount_sum.innerText;
                 thue_vat.innerHTML = product_tax.innerText;
-                van_chuyen.innerHTML = transport_fee.value;
                 tong_cong.innerHTML = grand_total.innerText;
                 //ghi chú
                 ghi_chu.innerHTML = note_form.value.replace(/\n/g, "<br>");
@@ -1960,7 +1979,6 @@
         $('#luu').on('click', function() {
             if (isFirstClick) {
                 isFirstClick = false;
-
                 setTimeout(function() {
                     isFirstClick = true;
                 }, 1000);
@@ -1980,6 +1998,65 @@
             }
         });
     });
+    //xóa nhiều
+    $(document).on('click', '#deleteRowTable', function() {
+        $('tbody input[type="checkbox"]:checked').closest('tr').remove();
+        $('#checkall').prop('checked', false);
+        $('#deleteRowTable').css('opacity', 0);
+    });
+    $('#checkall').change(function() {
+        $('.cb-element').prop('checked', this.checked);
+        updateMultipleActionVisibility();
+    });
+
+    $('.cb-element').change(function() {
+        updateMultipleActionVisibility();
+        if ($('.cb-element:checked').length == $('.cb-element').length) {
+            $('#checkall').prop('checked', true);
+        } else {
+            $('#checkall').prop('checked', false);
+        }
+    });
+
+    function updateMultipleActionVisibility() {
+        if ($('.cb-element:checked').length > 0) {
+            $('#deleteRowTable').css('opacity', 1);
+        } else {
+            $('#deleteRowTable').css('opacity', 0);
+        }
+    }
+    //kiểm tra số điện thoại VN
+    function isValidPhoneNumber(phoneNumber) {
+        // Loại bỏ khoảng trắng và dấu '-' trong số điện thoại
+        phoneNumber = phoneNumber.replace(/\s+/g, '').replace(/-/g, '');
+
+        // Số điện thoại phải có độ dài từ 10 đến 11 chữ số
+        if (phoneNumber.length < 10 || phoneNumber.length > 11) {
+            return false;
+        }
+
+        // Số điện thoại phải bắt đầu bằng các số từ 0 đến 9
+        if (!/^[0-9]+$/.test(phoneNumber.charAt(0))) {
+            return false;
+        }
+
+        // Kiểm tra số điện thoại có hợp lệ
+        // Số điện thoại Việt Nam bắt đầu bằng 0 và theo sau là 9 chữ số nếu độ dài là 10
+        // hoặc bắt đầu bằng 84 và theo sau là 9 chữ số nếu độ dài là 11
+        if (phoneNumber.length === 10 && phoneNumber.charAt(0) === '0') {
+            return true;
+        } else if (phoneNumber.length === 11 && phoneNumber.substr(0, 2) === '84') {
+            return true;
+        }
+
+        return false;
+    }
+    var phoneNumber = "0123456789"; // Thay đổi số điện thoại tại đây
+    if (isValidPhoneNumber(phoneNumber)) {
+        console.log("Số điện thoại hợp lệ.");
+    } else {
+        console.log("Số điện thoại không hợp lệ.");
+    }
 </script>
 </body>
 
