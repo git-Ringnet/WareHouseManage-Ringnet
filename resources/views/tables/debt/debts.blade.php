@@ -788,16 +788,14 @@ $index = array_search($item['label'], $numberedLabels);
                                                                 fill="#555555" />
                                                         </svg>
                                                     </div>
+                                                    <?php $stt = 0; ?>
                                                     @foreach ($product as $item)
-                                                    @php
-                                                    $stt = 1;
-                                                    @endphp
                                             <tr id="product-details-{{ $value->id }}"
                                                 class="collapse product-details">
                                                 @if ($value->export_id == $item->export_id)
                                                     @can('view-guests')
                                                     @endcan
-                                                    <td class="text-left" style="width:6%;">{{ $stt++ }}
+                                                    <td class="text-left"><?php echo $stt += 1; ?>
                                                     </td>
                                                     <td class="text-left w-auto"><p>Mã sản phẩm</p>{{$item->masanpham}}</td>
                                                     <td></td>

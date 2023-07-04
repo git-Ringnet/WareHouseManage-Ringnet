@@ -225,7 +225,7 @@
             </div>
         </div>
         <section class="content mt-3">
-            <div style="overflow-x: auto;" class="container-fluided">
+             <div style="overflow-x: auto;" class="container-fluided">
                 <table class="table table-hover bg-white rounded" id="inputContainer">
                     <thead>
                         <tr>

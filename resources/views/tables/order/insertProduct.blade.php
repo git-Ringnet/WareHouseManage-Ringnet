@@ -584,10 +584,14 @@ $index = array_search($item['label'], $numberedLabels);
                                             @if ($va->id == $item->id)
                                                 <td></td>
                                                 <td></td>
-                                                <td></td>
                                                 <td>
-                                                    <p>{{ $item->product_name }}</p>
-                                                     @if($item->getCodeProduct != null) {{$item->getCodeProduct->products_code}} @endif 
+                                                    <p>Mã / Tên sản phẩn</p>
+                                                    @if($item->getCodeProduct != null) {{$item->getCodeProduct->products_code}} @endif 
+                                                </td>
+                                                <td>
+                                                    <p>Thông tin sản phẩm</p>
+                                                    {{ $item->product_name }}
+                                                 
                                                 </td>
                                                 <td>
                                                     <p>Số lượng</p>
