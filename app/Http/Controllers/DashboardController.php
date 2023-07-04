@@ -40,9 +40,9 @@ class DashboardController extends Controller
         //Tổng đơn xuất
         $exports = $this->exports->allExports();
         $exports = count($exports);
-        //Tổng đơn nhập
+        //Tổng tiền đơn nhập
         $sumTotalOrders = $this->orders->sumTotalOrders();
-        //Tổng đơn xuất
+        //Tổng tiền đơn xuất
         $sumTotalExports = $this->exports->sumTotalExports();
         //Tổng đơn tồn kho
         $sumTotalInventory = $this->products->sumTotalInventory();

@@ -70,13 +70,28 @@ class Orders extends Model
     // {
     //     return $this->hasOne(Provides::class,'id','provide_id');
     // }
-    public function allOrders(){
-        $orders = DB::table($this->table)->get();
+    public function allOrders()
+    {
+        $startDate = now()->subDays(30); // Ngày bắt đầu là ngày hiện tại trừ đi 30 ngày
+        $endDate = now(); // Ngày kết thúc là ngày hiện tại
+        $orders = DB::table($this->table)
+            ->where('order_status', 1)
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->get();
+        
         return $orders;
+        
     }
     public function sumTotalOrders(){
-        $totalSum = DB::table($this->table)->sum('total');
-        return $totalSum;
+        $startDate = now()->subDays(30); // Ngày bắt đầu là ngày hiện tại trừ đi 30 ngày
+        $endDate = now(); // Ngày kết thúc là ngày hiện tại
+        
+        $totalSum = DB::table($this->table)
+            ->where('order_status', 1)
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->sum('total');
+        
+        return $totalSum;        
     }
  
 }

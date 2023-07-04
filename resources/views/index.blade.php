@@ -210,7 +210,7 @@
                                 <div class="total">
                                     {{ number_format($sumTotalInventory)}}đ
                                 </div>
-                                <p>Trong 30 ngày vừa qua</p>
+                                {{-- <p>Trong 30 ngày vừa qua</p> --}}
                                  </div>
                                   <div class="icon-total d-none d-lg-block">
                                     <svg width="94" height="94" viewBox="0 0 94 94" fill="none"

@@ -59,7 +59,12 @@ class Exports extends Model
     }
     public function allExports()
     {
-        $exports = DB::table($this->table)->get();
+        $startDate = now()->subDays(30); // Ngày bắt đầu là ngày hiện tại trừ đi 30 ngày
+        $endDate = now(); // Ngày kết thúc là ngày hiện tại
+        $exports = DB::table($this->table)
+        ->where('export_status', 2)
+        ->whereBetween('created_at', [$startDate, $endDate])
+        ->get();
         return $exports;
     }
     protected $fillable = [
@@ -71,8 +76,16 @@ class Exports extends Model
     ];
     public function sumTotalExports()
     {
-        $totalSum = DB::table($this->table)->sum('total');
+        $startDate = now()->subDays(30); // Ngày bắt đầu là ngày hiện tại trừ đi 30 ngày
+        $endDate = now(); // Ngày kết thúc là ngày hiện tại
+        
+        $totalSum = DB::table($this->table)
+            ->where('export_status', 2)
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->sum('total');
+        
         return $totalSum;
+        
     }
     public function productsCreator()
     {

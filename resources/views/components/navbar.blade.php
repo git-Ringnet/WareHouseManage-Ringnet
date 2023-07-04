@@ -146,31 +146,35 @@
                 <li class="nav-item">
                     @if (Route::has('login'))
                         @auth
-                        <div class="dropdown">
-                            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
-                              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              {{ Auth::user()->name }}
-                            </button>
-                            <div class="dropdown-menu" style="width:200px;border-radius:8px;opacity: .9" aria-labelledby="dropdownMenuButton">
-                              <ul class="list-unstyled">
-                                <li class="px-4 pb-2 text-xs text-gray-400" style="opacity: .8">
-                                  Quản lý tài khoản
-                                </li>
-                                <li class="profile-li px-3 py-1">
-                                    <a class="text-sm text-custom" href="{{ route('profile.show') }}">Thông tin</a>
-                                </li>
-                                <hr class="m-0">
-                                <li class="logout-li px-3 py-1">
-                                    <form class="" method="POST" action="{{ route('logout') }}" x-data>
-                                        @csrf
-                                        <a class="text-sm text-custom" href="#" onclick="event.preventDefault(); this.closest('form').submit();">Đăng xuất</a>
-                                    </form>                                    
-                                </li>
-                                
-                              </ul>
+                            <div class="dropdown">
+                                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    {{ Auth::user()->name }}
+                                </button>
+                                <div class="dropdown-menu" style="width:200px;border-radius:8px;opacity: .9"
+                                    aria-labelledby="dropdownMenuButton">
+                                    <ul class="list-unstyled">
+                                        <li class="px-4 pb-2 text-xs text-gray-400" style="opacity: .8">
+                                            Quản lý tài khoản
+                                        </li>
+                                        <li class="profile-li px-3 py-1">
+                                            <a class="text-sm text-custom" href="{{ route('profile.show') }}">Thông
+                                                tin</a>
+                                        </li>
+                                        <hr class="m-0">
+                                        <li class="logout-li px-3 py-1">
+                                            <form class="" method="POST" action="{{ route('logout') }}" x-data>
+                                                @csrf
+                                                <a class="text-sm text-custom" href="#"
+                                                    onclick="event.preventDefault(); this.closest('form').submit();">Đăng
+                                                    xuất</a>
+                                            </form>
+                                        </li>
+
+                                    </ul>
+                                </div>
                             </div>
-                          </div>
-                          
+
         </div>
     @else
         <a href="{{ route('login') }}" class="text-sm text-gray-700 underline">Đăng nhập</a>
@@ -500,12 +504,15 @@
             }, 4000);
         });
         $(document).ready(function() {
-        $('.profile-li, .logout-li').on('click', function(event) {
-            var link = $(this).find('a');
-            if (link.length > 0) {
-                event.preventDefault(); // Chặn chuyển hướng trang mặc định
-                window.location.href = link.attr('href');
-            }
+            $('.profile-li, .logout-li').on('click', function(event) {
+                var link = $(this).find('a');
+                var form = $(this).find('form');
+                if (link.length > 0 && link.attr('href') !== '#') {
+                    window.location.href = link.attr('href');
+                } else if (form.length > 0) {
+                    event.preventDefault(); 
+                    form.submit(); 
+                }
+            });
         });
-    });
     </script>
