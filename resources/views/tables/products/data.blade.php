@@ -806,8 +806,8 @@ $index = array_search($item['label'], $numberedLabels);
                                                     <td></td>
                                                 @endcan
                                                 <td style="width:6%;"><p></p> {{ $value->id }} - {{ $item->id }}</td>
-                                                <td><p></p> {{ $value->products_code }}</td>
-                                                <td><p></p> {{ $item->product_name }}</td>
+                                                <td><p>Mã sản phẩm</p> {{ $value->products_code }}</td>
+                                                <td><p>Tên sản phẩm</p> {{ $item->product_name }}</td>
                                                 <td>
                                                     <p>Loại hàng</p>{{ $item->product_category }}
                                                 </td>

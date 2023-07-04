@@ -377,7 +377,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('sale_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
                                                 <input class="w-50 input-quantity sale-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -407,7 +407,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('import_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
                                                 <input class="w-50 input-quantity import-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -437,7 +437,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('fee_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
                                                 <input class="w-50 input-quantity fee-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -467,7 +467,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('difference_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
                                                 <input class="w-50 input-quantity difference-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -789,14 +789,17 @@ $index = array_search($item['label'], $numberedLabels);
                                                         </svg>
                                                     </div>
                                                     @foreach ($product as $item)
+                                                    @php
+                                                    $stt = 1;
+                                                    @endphp
                                             <tr id="product-details-{{ $value->id }}"
                                                 class="collapse product-details">
                                                 @if ($value->export_id == $item->export_id)
                                                     @can('view-guests')
                                                     @endcan
-                                                    <td class="text-center" style="width:6%;">{{ $item->madon }}
+                                                    <td class="text-left" style="width:6%;">{{ $stt++ }}
                                                     </td>
-                                                    <td>{{$item->masanpham}}</td>
+                                                    <td class="text-left w-auto"><p>Mã sản phẩm</p>{{$item->masanpham}}</td>
                                                     <td></td>
                                                     <td class="text-right">
                                                         <p>Số lượng</p>{{ $item->soluong }}
