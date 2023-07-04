@@ -498,7 +498,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <td><input type="checkbox" class="cb-element" name="ids[]"
                                                         value="{{ $value->id }}"></td>
                                                 <td>{{ $value->id }}</td>
-                                                <td>{{ $value->guest_receiver }}</td>
+                                                <td>{{ $value->guest_name }}</td>
                                                 <td>{{ date_format(new DateTime($value->updated_at), 'd-m-Y') }}</td>
                                             @if (Auth::user()->can('isAdmin'))
                                                 <td>{{ $value->name }}</td>
