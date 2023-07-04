@@ -585,7 +585,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <td></td>
                                                 <td></td>
                                                 <td>
-                                                    <p>Mã / Tên sản phẩn</p>
+                                                    <p>Mã sản phẩm</p>
                                                     @if($item->getCodeProduct != null) {{$item->getCodeProduct->products_code}} @endif 
                                                 </td>
                                                 <td>
