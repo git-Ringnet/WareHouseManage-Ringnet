@@ -1297,7 +1297,7 @@
                         '</table>' +
                         '</div>' +
                         '<div class="AddSN btn btn-secondary" style="border:1px solid gray;">Thêm dòng</div>' +
-                        '<div class="btn btn-danger ml-2" id="deleteSNS"> Xóa SN </div>' +
+                        // '<div class="btn btn-danger ml-2" id="deleteSNS"> Xóa SN </div>' +
                         '</div>' +
                         '<div class="modal-footer">' +
                         '<button type="button" class="btn btn-secondary" onclick="checkData(event)" data-dismiss="modal">Lưu</button>' +
