@@ -152,10 +152,10 @@ class UsersController extends Controller
                 'status' => $request->status,
             ];
         }
-       
+        
         // dd($id);
-
         $this->users->updateUser($data, $id);
+        session()->forget('id');
         return redirect(route('admin.userslist'))->with('msg', 'Sửa người dùng thành công');
     }
     public function deleteUser(Request $request)
