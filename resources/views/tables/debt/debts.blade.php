@@ -793,10 +793,10 @@ $index = array_search($item['label'], $numberedLabels);
                                                 class="collapse product-details">
                                                 @if ($value->export_id == $item->export_id)
                                                     @can('view-guests')
-                                                        <td></td>
                                                     @endcan
                                                     <td class="text-center" style="width:6%;">{{ $item->madon }}
                                                     </td>
+                                                    <td>{{$item->masanpham}}</td>
                                                     <td></td>
                                                     <td class="text-right">
                                                         <p>Số lượng</p>{{ $item->soluong }}
