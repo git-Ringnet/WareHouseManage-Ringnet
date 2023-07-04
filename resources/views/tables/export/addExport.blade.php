@@ -1171,7 +1171,7 @@
 
         // Update data-value attribute
         $('#grand-total').attr('data-value', grandTotal);
-        $('#total').val(grandTotal);
+        $('#total').val(totalAmount);
     }
 
     function formatCurrency(value) {
@@ -1460,9 +1460,9 @@
 
         return formattedNumber;
     }
-    $(document).on('keypress', 'form', function(event) {
-            return event.keyCode != 13; 
-        });
+    // $(document).on('keypress', 'form', function(event) {
+    //         return event.keyCode != 13; 
+    //     });
 </script>
 </body>
 

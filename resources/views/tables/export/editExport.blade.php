@@ -135,6 +135,7 @@
     <form action="{{ route('exports.update', $exports->id) }}" method="POST" id="export_form">
         @csrf
         @method('PUT')
+        <input type="hidden" name="checkguest" value="" id="checkguest">
         <section class="content">
             <div class="d-flex mb-1 action-don">
                 @if ($exports->export_status == 1)
@@ -229,8 +230,6 @@
                     <div class="row p-3">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <input type="text" hidden class="form-control" id="id" name="id"
-                                    value="{{ $guest->id }}" required>
                                 <label for="congty">Công ty:</label>
                                 <input type="text" class="form-control" id="guest_name" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                     echo 'readonly';
@@ -688,10 +687,10 @@
                     </td>
                     <td style="color: #EC212D;" class="text-right thue-vat"><b></b></td>
                 </tr>
-                <tr>
+                {{-- <tr>
                     <td colspan="5" class="text-center"><b style="color: #EC212D;">Vận chuyển:</b></td>
                     <td style="color: #EC212D;" class="text-right van-chuyen"><b></b></td>
-                </tr>
+                </tr> --}}
                 <tr>
                     <td colspan="5" class="text-center"><b style="color: #EC212D;">Thành tiền:</b></td>
                     <td style="color: #EC212D;" class="text-right tong-cong"><b></b></td>
@@ -739,6 +738,7 @@
         if ($('#radio1:checked').length > 0) {
             $('#click').val(2);
             $('#updateClick').val(2);
+            $('#checkguest').val(1);
         }
     });
     //Thêm form ghi chú cho nhân viên
@@ -986,6 +986,7 @@
     $("#radio1").on("click", function() {
         $('#data-container').empty();
         $('#form-edit').show();
+        $('#form-guest').remove();
     });
     $("#radio2").on("click", function() {
         $('#data-container').html(
@@ -1044,6 +1045,7 @@
         );
         $('#click').val(2);
         $('#updateClick').val(2);
+        $('#checkguest').val(2);
         //Công nợ
         $(document).on('change', '#debtCheckbox', function() {
             if ($(this).is(':checked')) {
@@ -1055,7 +1057,7 @@
                 $("#data-debt").css("color", "#1D1C20");
             }
         });
-        $('#form-edit').hide();
+        $('#form-edit').remove();
     });
     //add sản phẩm
     $(document).ready(function() {
@@ -1065,7 +1067,7 @@
             const newRow = $("<tr>", {
                 "id": `dynamic-row-${fieldCounter}`
             });
-            const checkbox = $("<td><input type='checkbox'></td>");
+            const checkbox = $("<td><input type='checkbox' class='cb-element'></td>");
             const MaInput = $("<td>", {
                 "class": "soTT",
                 "text": nextSoTT
@@ -1299,6 +1301,8 @@
     $(document).ready(function() {
         $('.search-info').click(function() {
             var idCustomer = $(this).attr('id');
+            $('#checkguest').val(1);
+            $('#form-edit').remove();
             $('#radio1').prop('checked', true);
             $.ajax({
                 url: '{{ route('searchExport') }}',
@@ -1595,32 +1599,46 @@
                 });
             }
 
-            // Check if the selected product name is already in use
-            // if (selectedProductNames.includes(selectedName)) {
-            //     $(this).val('');
-            // } else {
-            //     selectedProductNames.push(selectedName);
-            // }
+            // Kiểm tra nếu ID sản phẩm đã chọn đã có trong danh sách các sản phẩm đã chọn
+            if (selectedProductIDs.includes(selectedID)) {
+                $(this).val(''); // Đặt giá trị của tùy chọn thành trống
+
+                var productNameElement = $(this).closest('tr').find('.product_name');
+                productNameElement.prop('disabled', true); // Disable ô input chứa tên sản phẩm
+            } else {
+                var previousID = $(this).data('previous-id'); // Lấy ID trước đó của tùy chọn
+                if (previousID && previousID !== selectedID) {
+                    var index = selectedProductIDs.indexOf(previousID);
+                    if (index !== -1) {
+                        selectedProductIDs.splice(index, 1); // Xóa ID trước đó khỏi mảng
+                    }
+                }
+
+                selectedProductIDs.push(selectedID); // Lưu ID sản phẩm đã chọn vào mảng
+                $(this).data('previous-id',
+                    selectedID); // Lưu ID hiện tại vào thuộc tính data của tùy chọn
+
+                hideSelectedProductNames(row); // Ẩn tên sản phẩm đã chọn từ các tùy chọn khác
+            }
         });
 
         // Function to hide selected product names from other child select options
-        // function hideSelectedProductNames(row) {
-        //     var selectedNames = row.find('.child-select').map(function() {
-        //         return $(this).val();
-        //     }).get();
+        function hideSelectedProductNames(row) {
+            var selectedIDs = row.find('.child-select').map(function() {
+                return $(this).val();
+            }).get();
 
-        //     row.find('.child-select').each(function() {
-        //         var currentName = $(this).val();
-        //         $(this).find('option').each(function() {
-        //             if ($(this).val() !== currentName && selectedNames.includes($(this)
-        //                     .val())) {
-        //                 $(this).hide();
-        //             } else {
-        //                 $(this).show();
-        //             }
-        //         });
-        //     });
-        // }
+            row.find('.child-select').each(function() {
+                var currentID = $(this).val();
+                $(this).find('option').each(function() {
+                    if ($(this).val() !== currentID && selectedIDs.includes($(this).val())) {
+                        $(this).hide();
+                    } else {
+                        $(this).show();
+                    }
+                });
+            });
+        }
     });
     //tính thành tiền của sản phẩm
     $(document).ready(function() {
@@ -1681,23 +1699,18 @@
 
         // Cập nhật giá trị data-value
         $('#grand-total').attr('data-value', grandTotal.toFixed(2));
-        $('#total').val(grandTotal.toFixed(2));
+        $('#total').val(totalAmount);
     }
 
     function calculateGrandTotalWithTransportFee() {
         var totalAmount = parseFloat($('#total-amount-sum').text().replace(/[^0-9.-]+/g, ''));
         var totalTax = parseFloat($('#product-tax').text().replace(/[^0-9.-]+/g, ''));
 
-        // Check if transportFee is NaN, set it to 0
-        if (isNaN(transportFee)) {
-            transportFee = 0;
-        }
-
-        var grandTotal = totalAmount + totalTax + transportFee;
+        var grandTotal = totalAmount + totalTax;
         $('#grand-total').text(formatCurrency(grandTotal.toFixed(2)));
 
         // Update the input value with the grand total
-        $('#total').val(grandTotal.toFixed(2));
+        $('#total').val(totalAmount);
     }
 
     function formatCurrency(value) {
@@ -1731,6 +1744,7 @@
     function validateAndSubmit(event) {
         var formGuest = $('#form-guest');
         var productList = $('.productName');
+        var checkguest = $('#checkguest').val();
 
         if (formGuest.length && productList.length > 0) {
             $('.product_price, [name^="product_price"],#transport_fee').each(function() {
@@ -1920,11 +1934,9 @@
         var tong_tien = document.querySelector(".tong-tien");
         var thue_vat = document.querySelector(".thue-vat");
         var tong_cong = document.querySelector(".tong-cong");
-        var van_chuyen = document.querySelector(".van-chuyen");
         //
         var total_amount_sum = document.getElementById("total-amount-sum");
         var product_tax = document.getElementById("product-tax");
-        var transport_fee = document.getElementById("transport_fee");
         var grand_total = document.getElementById("grand-total");
         //ghi chú
         var note_form = document.getElementById("note_form");
@@ -1943,7 +1955,6 @@
                 //thành tiền, thuế, tổng tiền
                 tong_tien.innerHTML = total_amount_sum.innerText;
                 thue_vat.innerHTML = product_tax.innerText;
-                van_chuyen.innerHTML = transport_fee.value;
                 tong_cong.innerHTML = grand_total.innerText;
                 //ghi chú
                 ghi_chu.innerHTML = note_form.value.replace(/\n/g, "<br>");
@@ -2019,40 +2030,40 @@
         }
     }
     //kiểm tra số điện thoại VN
-    function isValidPhoneNumber(phoneNumber) {
-        // Loại bỏ khoảng trắng và dấu '-' trong số điện thoại
-        phoneNumber = phoneNumber.replace(/\s+/g, '').replace(/-/g, '');
+    // function isValidPhoneNumber(phoneNumber) {
+    //     // Loại bỏ khoảng trắng và dấu '-' trong số điện thoại
+    //     phoneNumber = phoneNumber.replace(/\s+/g, '').replace(/-/g, '');
 
-        // Số điện thoại phải có độ dài từ 10 đến 11 chữ số
-        if (phoneNumber.length < 10 || phoneNumber.length > 11) {
-            return false;
-        }
+    //     // Số điện thoại phải có độ dài từ 10 đến 11 chữ số
+    //     if (phoneNumber.length < 10 || phoneNumber.length > 11) {
+    //         return false;
+    //     }
 
-        // Số điện thoại phải bắt đầu bằng các số từ 0 đến 9
-        if (!/^[0-9]+$/.test(phoneNumber.charAt(0))) {
-            return false;
-        }
+    //     // Số điện thoại phải bắt đầu bằng các số từ 0 đến 9
+    //     if (!/^[0-9]+$/.test(phoneNumber.charAt(0))) {
+    //         return false;
+    //     }
 
-        // Kiểm tra số điện thoại có hợp lệ
-        // Số điện thoại Việt Nam bắt đầu bằng 0 và theo sau là 9 chữ số nếu độ dài là 10
-        // hoặc bắt đầu bằng 84 và theo sau là 9 chữ số nếu độ dài là 11
-        if (phoneNumber.length === 10 && phoneNumber.charAt(0) === '0') {
-            return true;
-        } else if (phoneNumber.length === 11 && phoneNumber.substr(0, 2) === '84') {
-            return true;
-        }
+    //     // Kiểm tra số điện thoại có hợp lệ
+    //     // Số điện thoại Việt Nam bắt đầu bằng 0 và theo sau là 9 chữ số nếu độ dài là 10
+    //     // hoặc bắt đầu bằng 84 và theo sau là 9 chữ số nếu độ dài là 11
+    //     if (phoneNumber.length === 10 && phoneNumber.charAt(0) === '0') {
+    //         return true;
+    //     } else if (phoneNumber.length === 11 && phoneNumber.substr(0, 2) === '84') {
+    //         return true;
+    //     }
 
-        return false;
-    }
-    var phoneNumber = "0123456789"; // Thay đổi số điện thoại tại đây
-    if (isValidPhoneNumber(phoneNumber)) {
-        console.log("Số điện thoại hợp lệ.");
-    } else {
-        console.log("Số điện thoại không hợp lệ.");
-    }
-    $(document).on('keypress', 'form', function(event) {
-        return event.keyCode != 13;
-    });
+    //     return false;
+    // }
+    // var phoneNumber = "0123456789"; // Thay đổi số điện thoại tại đây
+    // if (isValidPhoneNumber(phoneNumber)) {
+    //     console.log("Số điện thoại hợp lệ.");
+    // } else {
+    //     console.log("Số điện thoại không hợp lệ.");
+    // }
+    // $(document).on('keypress', 'form', function(event) {
+    //     return event.keyCode != 13;
+    // });
 </script>
 </body>
 

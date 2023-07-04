@@ -55,8 +55,9 @@ class Exports extends Model
     }
     public function productExports()
     {
-        return $this->hasMany(ProductExports::class, 'export_id');
+        return $this->hasMany(productExports::class, 'export_id');
     }
+
     public function allExports()
     {
         $startDate = now()->subDays(30); // Ngày bắt đầu là ngày hiện tại trừ đi 30 ngày
