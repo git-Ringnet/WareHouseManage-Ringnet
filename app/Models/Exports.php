@@ -14,12 +14,18 @@ class Exports extends Model
     use HasFactory;
     public function getAllExports($filter = [], $status = [], $name = [], $date = [], $keywords = null, $orderBy = null, $orderType = null)
     {
+        
         $exports = DB::table($this->table)
             ->leftJoin('guests', 'exports.guest_id', '=', 'guests.id')
             ->leftJoin('users', 'exports.user_id', '=', 'users.id')
-            ->select('exports.id', 'guests.guest_receiver', 'users.name', 'exports.total', 'exports.updated_at', 'export_status');
+            ->select('exports.id','exports.user_id', 'guests.guest_receiver', 'users.name', 'exports.total', 'exports.updated_at', 'export_status');
         // Các điều kiện tìm kiếm và lọc dữ liệu ở đây
 
+        $userId = Auth::user()->id;
+        if( Auth::user()->roleid != 1){
+            $exports = $exports->where('exports.user_id',$userId);
+        }
+        
         if (!empty($filter)) {
             $exports = $exports->where($filter);
         }
@@ -92,6 +98,7 @@ class Exports extends Model
     {
         $userId = Auth::user()->id;
         $products = DB::table($this->table)->where('user_id', $userId)->paginate(8);
+        // dd($products);
         return $products;
     }
 }

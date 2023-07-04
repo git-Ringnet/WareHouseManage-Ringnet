@@ -108,8 +108,9 @@ class ExportController extends Controller
             ->leftjoin('users', 'exports.user_id', '=', 'users.id')->get();
         $export = $this->exports->getAllExports($filters, $status, $name, $date, $keywords, $sortBy, $sortType);
         $title = 'Xuất hàng';
-        $exportCreator = $this->exports->productsCreator();
-        return view('tables.export.exports', compact('export', 'exports', 'sortType', 'string', 'title', 'exportCreator'));
+        $productsCreator = $this->exports->productsCreator();
+        // dd($productsCreator);
+        return view('tables.export.exports', compact('export', 'exports', 'sortType', 'string', 'title', 'productsCreator'));
     }
 
     /**

@@ -493,7 +493,7 @@ $index = array_search($item['label'], $numberedLabels);
                                 </thead>
                                 <tbody>
                                     @foreach ($export as $value)
-                                        @if (Auth::user()->name == $value->name || Auth::user()->can('isAdmin'))
+                                        {{-- @if (Auth::user()->name == $value->name || Auth::user()->can('isAdmin')) --}}
                                             <tr>
                                                 <td><input type="checkbox" class="cb-element" name="ids[]"
                                                         value="{{ $value->id }}"></td>
@@ -562,7 +562,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     @endif
                                                 </td>
                                             </tr>
-                                        @endif
+                                        {{-- @endif --}}
                                     @endforeach
                                 </tbody>
                             </table>
@@ -570,11 +570,7 @@ $index = array_search($item['label'], $numberedLabels);
                         <!-- /.card-body -->
                     </div>
                     <div class="paginator mt-4 d-flex justify-content-end">
-                        @if (!Auth::user()->can('isAdmin'))
-                            {{ $exportCreator->appends(request()->except('page'))->links() }}
-                        @else
-                            {{ $export->appends(request()->except('page'))->links() }}
-                        @endif
+                        {{ $export->appends(request()->except('page'))->links() }}
                     </div>
                 </div>
                 <!-- /.col -->
