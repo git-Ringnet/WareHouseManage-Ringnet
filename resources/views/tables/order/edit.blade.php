@@ -359,7 +359,7 @@
                                             <td class="sttRowTable"></td>
                                             <td class="code_product"></td>
                                             <td class="name_product"></td>
-                                            <td class="name_provide"></td>
+                                            <td class="provide_name"></td>
                                             <td class="type_product"></td>
                                             <td class="qty_product text-right"></td>
                                             <td class="SNCount text-right">1</td>
@@ -772,7 +772,7 @@
             '<td class="sttRowTable"></td>' +
             '<td class="code_product"></td>' +
             '<td class="name_product"></td>' +
-            '<td class="name_provide"></td>' +
+            '<td class="provide_name"></td>' +
             '<td class="type_product"></td>' +
             '<td class="qty_product"></td>' +
             '<td class="SNCount">1</td>' +
