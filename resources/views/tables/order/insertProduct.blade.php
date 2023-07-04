@@ -913,6 +913,12 @@ $index = array_search($item['label'], $numberedLabels);
             document.getElementById('search-filter').submit();
         });
     });
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-name', function() {
+            $('.deselect-all-creator').click();
+            document.getElementById('search-filter').submit();
+        });
+    });
 
     $('#btn-provide_name').click(function(event) {
         event.preventDefault();
