@@ -24,38 +24,38 @@
                         <div class="card-body p-3">
                             <form action="{{ route('provides.store') }}" method="POST">
                                 @csrf
-                                <div class="form-group">
-                                    <label class="required-label" for="email">Đơn vị cung cấp:</label>
+                                <div class="mb-3">
+                                    <label class="required-label" for="email">Đơn vị cung cấp</label>
                                     <input type="text" class="form-control" name="provide_name"
                                         placeholder="Nhập đơn vị cung cấp" required>
                                 </div>
-                                <div class="form-group">
-                                    <label class="required-label" for="pwd">Đại diện:</label>
+                                <div class="mb-3">
+                                    <label class="required-label" for="pwd">Đại diện</label>
                                     <input type="text" class="form-control" name="provide_represent"
                                         placeholder="Nhập tên đại diện" required>
                                 </div>
-                                <div class="form-group">
-                                    <label class="required-label" for="pwd">Số điện thoại:</label>
+                                <div class="mb-3">
+                                    <label class="required-label" for="pwd">Số điện thoại</label>
                                     <input type="text" class="form-control" name="provide_phone"
                                         oninput=validateNumberInput(this) pattern="^(?:\+?84|0)(?:\d{9}|\d{10})$"
                                         placeholder="Nhập số điện thoại" required>
                                 </div>
-                                <div class="form-group">
-                                    <label class="required-label" for="pwd">Email:</label>
+                                <div class="mb-3">
+                                    <label class="required-label" for="pwd">Email</label>
                                     <input type="email" pattern="/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/"
                                         class="form-control" name="provide_email" placeholder="Nhập email" required>
                                 </div>
-                                <div class="form-group">
-                                    <label class="required-label" for="pwd">Địa chỉ:</label>
+                                <div class="mb-3">
+                                    <label class="required-label" for="pwd">Địa chỉ</label>
                                     <input type="text" class="form-control" name="provide_address"
                                         placeholder="Nhập địa chỉ" required>
                                 </div>
-                                <div class="form-group">
-                                    <label class="required-label" for="pwd">Mã số thuế:</label>
+                                <div class="mb-3">
+                                    <label class="required-label" for="pwd">Mã số thuế</label>
                                     <input type="text" class="form-control" name="provide_code"
                                         oninput=validateNumberInput(this) placeholder="Nhập mã số thuế" required>
                                 </div>
-                                <div class="form-group">
+                                <div class="mb-3 d-none">
                                     <label for="pwd">Trạng thái:</label>
                                     <select name="provide_status" class="form-control">
                                         <option value="1">Active</option>

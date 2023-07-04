@@ -52,7 +52,7 @@ class DebtController extends Controller
             $sale_operator = $request->input('sale_operator');
             $filters[] = ['debts.total_sales', $sale_operator, $sum];
             $saleArray = explode(',.@', $sum);
-            array_push($string, ['label' => 'Tổng tiền bán' . $sale_operator, 'values' => $saleArray, 'class' => 'sum-sale']);
+            array_push($string, ['label' => 'Tổng tiền bán ' . $sale_operator, 'values' => $saleArray, 'class' => 'sum-sale']);
         }
         // nhập
         if (!empty($request->import_operator) && !empty($request->sum_import)) {
@@ -60,7 +60,7 @@ class DebtController extends Controller
             $import_operator = $request->input('import_operator');
             $filters[] = ['debts.total_import', $import_operator, $sum];
             $importArray = explode(',.@', $sum);
-            array_push($string, ['label' => 'Tổng tiền nhập' . $import_operator, 'values' => $importArray, 'class' => 'sum-import']);
+            array_push($string, ['label' => 'Tổng tiền nhập ' . $import_operator, 'values' => $importArray, 'class' => 'sum-import']);
         }
         // phí
         if (!empty($request->fee_operator) && !empty($request->sum_fee)) {
@@ -68,7 +68,7 @@ class DebtController extends Controller
             $fee_operator = $request->input('fee_operator');
             $filters[] = ['debts.debt_transport_fee', $fee_operator, $sum];
             $feeArray = explode(',.@', $sum);
-            array_push($string, ['label' => 'Phí vận chuyển' . $fee_operator, 'values' => $feeArray, 'class' => 'sum-fee']);
+            array_push($string, ['label' => 'Phí vận chuyển ' . $fee_operator, 'values' => $feeArray, 'class' => 'sum-fee']);
         }
         // Chênh lệch
         if (!empty($request->difference_operator) && !empty($request->sum_difference)) {
@@ -76,7 +76,7 @@ class DebtController extends Controller
             $difference_operator = $request->input('difference_operator');
             $filters[] = ['debts.total_difference', $difference_operator, $sum];
             $inventoryArray = explode(',.@', $sum);
-            array_push($string, ['label' => 'Tổng tiền chênh lệch' . $difference_operator, 'values' => $inventoryArray, 'class' => 'sum-difference']);
+            array_push($string, ['label' => 'Tổng tiền chênh lệch ' . $difference_operator, 'values' => $inventoryArray, 'class' => 'sum-difference']);
         }
         // Công nợ
         if (!empty($request->debt_operator) && !empty($request->debt)) {

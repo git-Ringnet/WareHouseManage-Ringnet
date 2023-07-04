@@ -380,7 +380,7 @@
                                 @endif
                                 <td>
                                     <input type="hidden" id="export_id" value="{{ $exports->id }}">
-                                    <select id="maProduct" class="p-1 maProduct form-control" name="products_id[]"
+                                    <select id="maProduct" class="p-1 maProduct form-control" style="width: 220px" name="products_id[]"
                                         <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                             echo 'disabled';
                                         } ?>>

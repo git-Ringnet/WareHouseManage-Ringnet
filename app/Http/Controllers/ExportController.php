@@ -54,7 +54,7 @@ class ExportController extends Controller
             $comparison_operator = $request->input('comparison_operator');
             $filters[] = ['exports.total', $comparison_operator, $sum];
             $inventoryArray = explode(',.@', $sum);
-            array_push($string, ['label' => 'Tổng tiền' . $comparison_operator, 'values' => $inventoryArray, 'class' => 'sum']);
+            array_push($string, ['label' => 'Tổng tiền ' . $comparison_operator, 'values' => $inventoryArray, 'class' => 'sum']);
         }
 
         //Trạng thái
