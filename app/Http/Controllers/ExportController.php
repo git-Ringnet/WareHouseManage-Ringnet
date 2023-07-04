@@ -776,13 +776,17 @@ class ExportController extends Controller
                                     $proExport->product_tax = $request->product_tax[$i];
                                     $proExport->product_total = $request->totalValue;
                                     $proExport->save();
-                                }
-                                // Cập nhật seri_status bằng 2 cho các sản phẩm
-                                foreach ($serinumbers as $serinumber) {
-                                    if ($serinumber->seri_status == 1) {
-                                        $serinumber->seri_status = 2;
-                                        $serinumber->export_seri = $export->id;
-                                        $serinumber->save();
+                                    $serinumbers = Serinumbers::where('product_id', $productID)
+                                        ->where('seri_status', 1)
+                                        ->limit($productQty)
+                                        ->get();
+                                    // Cập nhật seri_status bằng 2 cho các sản phẩm
+                                    foreach ($serinumbers as $serinumber) {
+                                        if ($serinumber->seri_status == 1) {
+                                            $serinumber->seri_status = 2;
+                                            $serinumber->export_seri = $export->id;
+                                            $serinumber->save();
+                                        }
                                     }
                                 }
                             }
@@ -832,13 +836,17 @@ class ExportController extends Controller
                                     $proExport->product_tax = $request->product_tax[$i];
                                     $proExport->product_total = $request->totalValue;
                                     $proExport->save();
-                                }
-                                // Cập nhật seri_status bằng 2 cho các sản phẩm
-                                foreach ($serinumbers as $serinumber) {
-                                    if ($serinumber->seri_status == 1) {
-                                        $serinumber->seri_status = 2;
-                                        $serinumber->export_seri = $export->id;
-                                        $serinumber->save();
+                                    $serinumbers = Serinumbers::where('product_id', $productID)
+                                        ->where('seri_status', 1)
+                                        ->limit($productQty)
+                                        ->get();
+                                    // Cập nhật seri_status bằng 2 cho các sản phẩm
+                                    foreach ($serinumbers as $serinumber) {
+                                        if ($serinumber->seri_status == 1) {
+                                            $serinumber->seri_status = 2;
+                                            $serinumber->export_seri = $export->id;
+                                            $serinumber->save();
+                                        }
                                     }
                                 }
                             }
@@ -870,13 +878,17 @@ class ExportController extends Controller
                                     $proExport->product_tax = $request->product_tax[$i];
                                     $proExport->product_total = $request->totalValue;
                                     $proExport->save();
-                                }
-                                // Cập nhật seri_status bằng 2 cho các sản phẩm
-                                foreach ($serinumbers as $serinumber) {
-                                    if ($serinumber->seri_status == 1) {
-                                        $serinumber->seri_status = 2;
-                                        $serinumber->export_seri = $export->id;
-                                        $serinumber->save();
+                                    $serinumbers = Serinumbers::where('product_id', $productID)
+                                        ->where('seri_status', 1)
+                                        ->limit($productQty)
+                                        ->get();
+                                    // Cập nhật seri_status bằng 2 cho các sản phẩm
+                                    foreach ($serinumbers as $serinumber) {
+                                        if ($serinumber->seri_status == 1) {
+                                            $serinumber->seri_status = 2;
+                                            $serinumber->export_seri = $export->id;
+                                            $serinumber->save();
+                                        }
                                     }
                                 }
                             }
@@ -908,13 +920,17 @@ class ExportController extends Controller
                                     $proExport->product_tax = $request->product_tax[$i];
                                     $proExport->product_total = $request->totalValue;
                                     $proExport->save();
-                                }
-                                // Cập nhật seri_status bằng 2 cho các sản phẩm
-                                foreach ($serinumbers as $serinumber) {
-                                    if ($serinumber->seri_status == 1) {
-                                        $serinumber->seri_status = 2;
-                                        $serinumber->export_seri = $export->id;
-                                        $serinumber->save();
+                                    $serinumbers = Serinumbers::where('product_id', $productID)
+                                        ->where('seri_status', 1)
+                                        ->limit($productQty)
+                                        ->get();
+                                    // Cập nhật seri_status bằng 2 cho các sản phẩm
+                                    foreach ($serinumbers as $serinumber) {
+                                        if ($serinumber->seri_status == 1) {
+                                            $serinumber->seri_status = 2;
+                                            $serinumber->export_seri = $export->id;
+                                            $serinumber->save();
+                                        }
                                     }
                                 }
                             }
