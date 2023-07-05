@@ -140,7 +140,7 @@ class GuestsController extends Controller
                 'guest_phone' => $request->guest_phone,
                 'guest_email' => $request->guest_email,
                 'guest_status' => $request->guest_status,
-                'guest_addressInvoice' => $request->guest_addressInvoice,
+                'guest_address' => $request->guest_address,
                 'guest_code' => $request->guest_code,
                 'guest_addressDeliver' => $request->guest_addressDeliver,
                 'guest_receiver' => $request->guest_receiver,

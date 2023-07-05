@@ -120,11 +120,11 @@ class ExportController extends Controller
      */
     public function create()
     {
-        $products = Products::all();
+        $product = Product::all();
         $customer = Guests::where('guest_status', 1)->get();
         $guest_id = DB::table('guests')->select('id')->orderBy('id', 'DESC')->first();
         $title = 'Tạo đơn xuất hàng';
-        return view('tables.export.addExport', compact('customer', 'products', 'title'));
+        return view('tables.export.addExport', compact('customer', 'product', 'title'));
     }
 
     /**
@@ -162,539 +162,467 @@ class ExportController extends Controller
                             }
                             $productQtyMap[$productID] += $productQty;
                         }
-
-                        // Kiểm tra và cập nhật seri_status
-                        foreach ($productQtyMap as $productID => $productQty) {
-                            $serinumbers = Serinumbers::where('product_id', $productID)
-                                ->where('seri_status', 1)
-                                ->limit($productQty)
-                                ->get();
-
-                            if (count($serinumbers) < $productQty) {
-                                $hasEnoughQty = false;
-                                break;
+                        //thêm khách hàng khi lưu nhanh
+                        if ($request->checkguest == 2 && $clickValue == null) {
+                            $guest = new Guests();
+                            $guest->guest_name = $request->guest_name;
+                            $guest->guest_address = $request->guest_address;
+                            $guest->guest_code = $request->guest_code;
+                            $guest->guest_addressDeliver = $request->guest_addressDeliver;
+                            $guest->guest_receiver = $request->guest_receiver;
+                            $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
+                            $guest->guest_email = $request->guest_email;
+                            $guest->guest_status = 1;
+                            $guest->guest_phone = $request->guest_phone;
+                            $guest->guest_pay = $request->guest_pay;
+                            $guest->guest_note = $request->guest_note;
+                            if ($request->debt == null) {
+                                $guest->debt = 0;
+                            } else {
+                                $guest->debt = $request->debt;
                             }
-                        }
-                        if (!$hasEnoughQty) {
-                            return redirect()->route('exports.index')->with('warning', 'Vượt quá số lượng tồn kho!');
-                        } else {
-                            //thêm khách hàng khi lưu nhanh
-                            if ($request->checkguest == 2 && $clickValue == null) {
-                                $guest = new Guests();
-                                $guest->guest_name = $request->guest_name;
-                                $guest->guest_addressInvoice = $request->guest_addressInvoice;
-                                $guest->guest_code = $request->guest_code;
-                                $guest->guest_addressDeliver = $request->guest_addressDeliver;
-                                $guest->guest_receiver = $request->guest_receiver;
-                                $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
-                                $guest->guest_email = $request->guest_email;
-                                $guest->guest_status = 1;
-                                $guest->guest_phone = $request->guest_phone;
-                                $guest->guest_pay = $request->guest_pay;
-                                $guest->guest_note = $request->guest_note;
-                                if ($request->debt == null) {
-                                    $guest->debt = 0;
-                                } else {
-                                    $guest->debt = $request->debt;
-                                }
-                                $guest->save();
-                                // Tạo đơn xuất hàng
-                                $export = new Exports();
-                                $export->guest_id = $guest->id;
-                                $export->user_id = Auth::user()->id;
-                                $export->total = $request->totalValue;
-                                $export->export_status = 2;
-                                $export->note_form = $request->note_form;
-                                $export->transport_fee = $request->transport_fee;
-                                $export->save();
-                                // Cập nhật seri_status
-                                foreach ($serinumbers as $serinumber) {
-                                    if ($serinumber->seri_status == 1) {
-                                        $serinumber->seri_status = 3;
-                                        $serinumber->export_seri = $export->id;
-                                        $serinumber->save();
-                                    }
-                                }
-                                // Tạo các bản ghi trong bảng product export
-                                for ($i = 0; $i < count($productIDs); $i++) {
-                                    $productID = $productIDs[$i];
-                                    $productQty = $productQtys[$i];
-                                    $nameProduct = Product::where('id', $productID)->value('product_name');
-                                    $proExport = new ProductExports();
-                                    $proExport->products_id = $request->products_id[$i];
-                                    $proExport->product_id = $productID;
-                                    $proExport->export_id = $export->id;
-                                    $proExport->product_name = $nameProduct;
-                                    $proExport->product_unit = $request->product_unit[$i];
-                                    $proExport->product_qty = $productQty;
-                                    $proExport->product_price = $request->product_price[$i];
-                                    $proExport->product_note = $request->product_note[$i];
-                                    $proExport->product_tax = $request->product_tax[$i];
-                                    $proExport->product_total = $request->totalValue;
-                                    $proExport->save();
-                                }
-                                // Lấy thông tin từ bảng productExport và Export
-                                $productExports = $export->productExports;
-                                // Tính toán giá trị total_sales
-                                $totalSales = 0;
-                                foreach ($productExports as $productExport) {
-                                    $totalSales += $productExport->product_price * $productExport->product_qty;
-                                }
-                                // Tính toán giá trị total_import
-                                $totalImport = 0;
-                                foreach ($productExports as $productExport) {
-                                    $product = Product::find($productExport->product_id);
-                                    $totalImport += $product->product_price * $productExport->product_qty;
-                                }
-                                // Tính toán giá trị total_difference
-                                if ($export->transport_fee === null) {
-                                    $debtTransportFee = 0;
-                                } else {
-                                    $debtTransportFee = $export->transport_fee;
-                                }
-                                $totalDifference = $totalSales - $totalImport - $debtTransportFee;
-                                // Lấy thông tin từ bảng Guests
-                                $guest = Guests::find($export->guest_id);
-                                // Tạo đối tượng Debt và cập nhật giá trị
-                                $debt = new Debt();
-                                $debt->guest_id = $guest->id;
-                                $debt->user_id = Auth::user()->id;
-                                $debt->export_id = $export->id;
-                                $debt->total_sales = $totalSales;
-                                $debt->total_import = $totalImport;
-                                $debt->debt_transport_fee = $debtTransportFee;
-                                $debt->total_difference = $totalDifference;
-                                $debt->debt = $guest->debt;
-                                $debt->date_start = now();
-
-                                // //Xử lí workingday
-                                $startDate = $debt->debt_start;
-                                $daysToAdd = $debt->debt;
-                                $newDate = ($this->calculateWorkingDate($startDate, $daysToAdd));
-                                $debt->date_end = $newDate;
-
-                                // Xử lí status debt
-                                $endDate = new DateTime($debt->date_end);
-                                $now = new DateTime();
-                                $interval = $endDate->diff($now);
-                                $daysDiff = $interval->format('%R%a');
-                                $daysDiff = intval($daysDiff);
-                                $daysDiff = -$daysDiff;
-
-                                if ($guest->debt == 0) {
-                                    $debt->debt_status = 4;
-                                } elseif ($daysDiff <= 3) {
-                                    $debt->debt_status = 2;
-                                } elseif ($daysDiff < 0) {
-                                    $debt->debt_status = 0;
-                                } else {
-                                    $debt->debt_status = 3;
-                                }
-                                $debt->save();
-                            }
-                            //cập nhật khách hàng khi lưu nhanh
-                            if ($request->checkguest == 1 && $updateClick == null) {
-                                $guest = Guests::find($request->id);
-                                $guest->guest_name = $request->guest_name;
-                                $guest->guest_addressInvoice = $request->guest_addressInvoice;
-                                $guest->guest_code = $request->guest_code;
-                                $guest->guest_addressDeliver = $request->guest_addressDeliver;
-                                $guest->guest_receiver = $request->guest_receiver;
-                                $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
-                                $guest->guest_email = $request->guest_email;
-                                $guest->guest_status = 1;
-                                $guest->guest_phone = $request->guest_phone;
-                                $guest->guest_pay = $request->guest_pay;
-                                $guest->guest_note = $request->guest_note;
-                                if ($request->debt == null) {
-                                    $guest->debt = 0;
-                                } else {
-                                    $guest->debt = $request->debt;
-                                }
-                                $guest->save();
-                                // Tạo đơn xuất hàng
-                                $export = new Exports();
-                                $export->guest_id = $guest->id;
-                                $export->user_id = Auth::user()->id;
-                                $export->total = $request->totalValue;
-                                $export->export_status = 2;
-                                $export->note_form = $request->note_form;
-                                $export->transport_fee = $request->transport_fee;
-                                $export->save();
-                                // Cập nhật seri_status
-                                foreach ($serinumbers as $serinumber) {
-                                    if ($serinumber->seri_status == 1) {
-                                        $serinumber->seri_status = 3;
-                                        $serinumber->export_seri = $export->id;
-                                        $serinumber->save();
-                                    }
-                                }
-                                // Tạo các bản ghi trong bảng product export
-                                for ($i = 0; $i < count($productIDs); $i++) {
-                                    $productID = $productIDs[$i];
-                                    $productQty = $productQtys[$i];
-                                    $nameProduct = Product::where('id', $productID)->value('product_name');
-                                    $proExport = new ProductExports();
-                                    $proExport->products_id = $request->products_id[$i];
-                                    $proExport->product_id = $productID;
-                                    $proExport->export_id = $export->id;
-                                    $proExport->product_name = $nameProduct;
-                                    $proExport->product_unit = $request->product_unit[$i];
-                                    $proExport->product_qty = $productQty;
-                                    $proExport->product_price = $request->product_price[$i];
-                                    $proExport->product_note = $request->product_note[$i];
-                                    $proExport->product_tax = $request->product_tax[$i];
-                                    $proExport->product_total = $request->totalValue;
-                                    $proExport->save();
-                                }
-                                // Lấy thông tin từ bảng productExport và Export
-                                $productExports = $export->productExports;
-
-                                // Tính toán giá trị total_sales
-                                $totalSales = 0;
-                                foreach ($productExports as $productExport) {
-                                    $totalSales += $productExport->product_price * $productExport->product_qty;
-                                }
-
-                                // Tính toán giá trị total_import
-                                $totalImport = 0;
-                                foreach ($productExports as $productExport) {
-                                    $product = Product::find($productExport->product_id);
-                                    $totalImport += $product->product_price * $productExport->product_qty;
-                                }
-
-                                // Tính toán giá trị total_difference
-                                if ($export->transport_fee === null) {
-                                    $debtTransportFee = 0;
-                                } else {
-                                    $debtTransportFee = $export->transport_fee;
-                                }
-
-                                $totalDifference = $totalSales - $totalImport - $debtTransportFee;
-
-                                // Lấy thông tin từ bảng Guests
-                                $guest = Guests::find($export->guest_id);
-
-                                // Tạo đối tượng Debt và cập nhật giá trị
-                                $debt = new Debt();
-                                $debt->guest_id = $guest->id;
-                                $debt->user_id = Auth::user()->id;
-                                $debt->export_id = $export->id;
-                                $debt->total_sales = $totalSales;
-                                $debt->total_import = $totalImport;
-                                $debt->debt_transport_fee = $debtTransportFee;
-                                $debt->total_difference = $totalDifference;
-                                $debt->debt = $guest->debt;
-
-                                $debt->date_start = now();
-
-                                // //Xử lí workingday
-                                $startDate = $debt->debt_start;
-                                $daysToAdd = $debt->debt;
-                                $newDate = ($this->calculateWorkingDate($startDate, $daysToAdd));
-                                $debt->date_end = $newDate;
-
-                                // Xử lí status debt
-                                $endDate = new DateTime($debt->date_end);
-                                $now = new DateTime();
-                                $interval = $endDate->diff($now);
-                                $daysDiff = $interval->format('%R%a');
-                                $daysDiff = intval($daysDiff);
-                                $daysDiff = -$daysDiff;
-
-                                if ($guest->debt == 0) {
-                                    $debt->debt_status = 4;
-                                } elseif ($daysDiff <= 3) {
-                                    $debt->debt_status = 2;
-                                } elseif ($daysDiff < 0) {
-                                    $debt->debt_status = 0;
-                                } else {
-                                    $debt->debt_status = 3;
-                                }
-                                $debt->save();
-                            }
-                            //tạo đơn khi đã nhấn cập nhật
-                            if ($request->checkguest == 1 && $updateClick == 1) {
-                                // Tạo đơn xuất hàng
-                                $export = new Exports();
-                                $export->guest_id = $request->id;
-                                $export->user_id = Auth::user()->id;
-                                $export->total = $request->totalValue;
-                                $export->export_status = 2;
-                                $export->note_form = $request->note_form;
-                                $export->transport_fee = $request->transport_fee;
-                                $export->save();
-                                // Cập nhật seri_status
-                                foreach ($serinumbers as $serinumber) {
-                                    if ($serinumber->seri_status == 1) {
-                                        $serinumber->seri_status = 3;
-                                        $serinumber->export_seri = $export->id;
-                                        $serinumber->save();
-                                    }
-                                }
-                                // Tạo các bản ghi trong bảng product export
-                                for ($i = 0; $i < count($productIDs); $i++) {
-                                    $productID = $productIDs[$i];
-                                    $productQty = $productQtys[$i];
-                                    $nameProduct = Product::where('id', $productID)->value('product_name');
-                                    $proExport = new ProductExports();
-                                    $proExport->products_id = $request->products_id[$i];
-                                    $proExport->product_id = $productID;
-                                    $proExport->export_id = $export->id;
-                                    $proExport->product_name = $nameProduct;
-                                    $proExport->product_unit = $request->product_unit[$i];
-                                    $proExport->product_qty = $productQty;
-                                    $proExport->product_price = $request->product_price[$i];
-                                    $proExport->product_note = $request->product_note[$i];
-                                    $proExport->product_tax = $request->product_tax[$i];
-                                    $proExport->product_total = $request->totalValue;
-                                    $proExport->save();
-                                }
-                                // Lấy thông tin từ bảng productExport và Export
-                                $productExports = $export->productExports;
-
-                                // Tính toán giá trị total_sales
-                                $totalSales = 0;
-                                foreach ($productExports as $productExport) {
-                                    $totalSales += $productExport->product_price * $productExport->product_qty;
-                                }
-
-                                // Tính toán giá trị total_import
-                                $totalImport = 0;
-                                foreach ($productExports as $productExport) {
-                                    $product = Product::find($productExport->product_id);
-                                    $totalImport += $product->product_price * $productExport->product_qty;
-                                }
-
-                                // Tính toán giá trị total_difference
-                                if ($export->transport_fee === null) {
-                                    $debtTransportFee = 0;
-                                } else {
-                                    $debtTransportFee = $export->transport_fee;
-                                }
-
-                                $totalDifference = $totalSales - $totalImport - $debtTransportFee;
-
-                                // Lấy thông tin từ bảng Guests
-                                $guest = Guests::find($export->guest_id);
-
-                                // Tạo đối tượng Debt và cập nhật giá trị
-                                $debt = new Debt();
-                                $debt->guest_id = $guest->id;
-                                $debt->user_id = Auth::user()->id;
-                                $debt->export_id = $export->id;
-                                $debt->total_sales = $totalSales;
-                                $debt->total_import = $totalImport;
-                                $debt->debt_transport_fee = $debtTransportFee;
-                                $debt->total_difference = $totalDifference;
-                                $debt->debt = $guest->debt;
-
-                                $debt->date_start = now();
-
-                                // //Xử lí workingday
-                                $startDate = $debt->debt_start;
-                                $daysToAdd = $debt->debt;
-                                $newDate = ($this->calculateWorkingDate($startDate, $daysToAdd));
-                                $debt->date_end = $newDate;
-
-                                // Xử lí status debt
-                                $endDate = new DateTime($debt->date_end);
-                                $now = new DateTime();
-                                $interval = $endDate->diff($now);
-                                $daysDiff = $interval->format('%R%a');
-                                $daysDiff = intval($daysDiff);
-                                $daysDiff = -$daysDiff;
-
-                                if ($guest->debt == 0) {
-                                    $debt->debt_status = 4;
-                                } elseif ($daysDiff <= 3) {
-                                    $debt->debt_status = 2;
-                                } elseif ($daysDiff < 0) {
-                                    $debt->debt_status = 0;
-                                } else {
-                                    $debt->debt_status = 3;
-                                }
-                                $debt->save();
-                            }
-                            //tạo đơn khi đã nhấn thêm
-                            if ($clickValue == 1 && $request->checkguest == 2) {
-                                // Tạo đơn xuất hàng
-                                $export = new Exports();
-                                $export->guest_id = $request->id;
-                                $export->user_id = Auth::user()->id;
-                                $export->total = $request->totalValue;
-                                $export->export_status = 1;
-                                $export->note_form = $request->note_form;
-                                $export->transport_fee = $request->transport_fee;
-                                $export->save();
-                                // Cập nhật seri_status
-                                foreach ($serinumbers as $serinumber) {
-                                    if ($serinumber->seri_status == 1) {
-                                        $serinumber->seri_status = 3;
-                                        $serinumber->export_seri = $export->id;
-                                        $serinumber->save();
-                                    }
-                                }
-                                // Tạo các bản ghi trong bảng product export
-                                for ($i = 0; $i < count($productIDs); $i++) {
-                                    $productID = $productIDs[$i];
-                                    $productQty = $productQtys[$i];
-                                    $nameProduct = Product::where('id', $productID)->value('product_name');
-                                    $proExport = new ProductExports();
-                                    $proExport->products_id = $request->products_id[$i];
-                                    $proExport->product_id = $productID;
-                                    $proExport->export_id = $export->id;
-                                    $proExport->product_name = $nameProduct;
-                                    $proExport->product_unit = $request->product_unit[$i];
-                                    $proExport->product_qty = $productQty;
-                                    $proExport->product_price = $request->product_price[$i];
-                                    $proExport->product_note = $request->product_note[$i];
-                                    $proExport->product_tax = $request->product_tax[$i];
-                                    $proExport->product_total = $request->totalValue;
-                                    $proExport->save();
-                                }
-                                // Lấy thông tin từ bảng productExport và Export
-                                $productExports = $export->productExports;
-
-                                // Tính toán giá trị total_sales
-                                $totalSales = 0;
-                                foreach ($productExports as $productExport) {
-                                    $totalSales += $productExport->product_price * $productExport->product_qty;
-                                }
-
-                                // Tính toán giá trị total_import
-                                $totalImport = 0;
-                                foreach ($productExports as $productExport) {
-                                    $product = Product::find($productExport->product_id);
-                                    $totalImport += $product->product_price * $productExport->product_qty;
-                                }
-
-                                // Tính toán giá trị total_difference
-                                if ($export->transport_fee === null) {
-                                    $debtTransportFee = 0;
-                                } else {
-                                    $debtTransportFee = $export->transport_fee;
-                                }
-
-                                $totalDifference = $totalSales - $totalImport - $debtTransportFee;
-
-                                // Lấy thông tin từ bảng Guests
-                                $guest = Guests::find($export->guest_id);
-
-                                // Tạo đối tượng Debt và cập nhật giá trị
-                                $debt = new Debt();
-                                $debt->guest_id = $guest->id;
-                                $debt->user_id = Auth::user()->id;
-                                $debt->export_id = $export->id;
-                                $debt->total_sales = $totalSales;
-                                $debt->total_import = $totalImport;
-                                $debt->debt_transport_fee = $debtTransportFee;
-                                $debt->total_difference = $totalDifference;
-                                $debt->debt = $guest->debt;
-
-                                $debt->date_start = now();
-
-                                // //Xử lí workingday
-                                $startDate = $debt->debt_start;
-                                $daysToAdd = $debt->debt;
-                                $newDate = ($this->calculateWorkingDate($startDate, $daysToAdd));
-                                $debt->date_end = $newDate;
-
-                                // Xử lí status debt
-                                $endDate = new DateTime($debt->date_end);
-                                $now = new DateTime();
-                                $interval = $endDate->diff($now);
-                                $daysDiff = $interval->format('%R%a');
-                                $daysDiff = intval($daysDiff);
-                                $daysDiff = -$daysDiff;
-
-                                if ($guest->debt == 0) {
-                                    $debt->debt_status = 4;
-                                } elseif ($daysDiff <= 3) {
-                                    $debt->debt_status = 2;
-                                } elseif ($daysDiff < 0) {
-                                    $debt->debt_status = 0;
-                                } else {
-                                    $debt->debt_status = 3;
-                                }
-                                $debt->save();
-                            }
-                            // Giảm số lượng của sản phẩm trong bảng product
+                            $guest->save();
+                            // Tạo đơn xuất hàng
+                            $export = new Exports();
+                            $export->guest_id = $guest->id;
+                            $export->user_id = Auth::user()->id;
+                            $export->total = $request->totalValue;
+                            $export->export_status = 2;
+                            $export->note_form = $request->note_form;
+                            $export->transport_fee = $request->transport_fee;
+                            $export->save();
+                            // Tạo các bản ghi trong bảng product export
                             for ($i = 0; $i < count($productIDs); $i++) {
                                 $productID = $productIDs[$i];
                                 $productQty = $productQtys[$i];
-
-                                // Lấy số lượng hiện tại của sản phẩm
-                                $currentQty = Product::where('id', $productID)->value('product_qty');
-
-                                // Giảm số lượng sản phẩm
-                                $newQty = $currentQty - $productQty;
-
-                                // Lấy giá sản phẩm
-                                $product = Product::find($productID);
-                                $productPrice = $product->product_price;
-
-                                // Tính toán giá trị total
-                                $total = $newQty * $productPrice;
-
-                                // Cập nhật số lượng và trường 'total'
-                                Product::where('id', $productID)
-                                    ->update([
-                                        'product_qty' => $newQty,
-                                        'total' => $total
-                                    ]);
+                                $nameProduct = Product::where('id', $productID)->value('product_name');
+                                $proExport = new ProductExports();
+                                $proExport->product_id = $productID;
+                                $proExport->export_id = $export->id;
+                                $proExport->product_name = $nameProduct;
+                                $proExport->product_unit = $request->product_unit[$i];
+                                $proExport->product_qty = $productQty;
+                                $proExport->product_price = $request->product_price[$i];
+                                $proExport->product_note = $request->product_note[$i];
+                                $proExport->product_tax = $request->product_tax[$i];
+                                $proExport->product_total = $request->totalValue;
+                                $proExport->save();
                             }
-                            // Cập nhật tình trạng seri sau khi chốt
-                            // for ($i = 0; $i < count($productIDs); $i++) {
-                            //     $productID = $productIDs[$i];
-                            //     $productQty = $productQtys[$i];
+                            // Lấy thông tin từ bảng productExport và Export
+                            $productExports = $export->productExports;
+                            // Tính toán giá trị total_sales
+                            $totalSales = 0;
+                            foreach ($productExports as $productExport) {
+                                $totalSales += $productExport->product_price * $productExport->product_qty;
+                            }
+                            // Tính toán giá trị total_import
+                            $totalImport = 0;
+                            foreach ($productExports as $productExport) {
+                                $product = Product::find($productExport->product_id);
+                                $totalImport += $product->product_price * $productExport->product_qty;
+                            }
+                            // Tính toán giá trị total_difference
+                            if ($export->transport_fee === null) {
+                                $debtTransportFee = 0;
+                            } else {
+                                $debtTransportFee = $export->transport_fee;
+                            }
+                            $totalDifference = $totalSales - $totalImport - $debtTransportFee;
+                            // Lấy thông tin từ bảng Guests
+                            $guest = Guests::find($export->guest_id);
+                            // Tạo đối tượng Debt và cập nhật giá trị
+                            $debt = new Debt();
+                            $debt->guest_id = $guest->id;
+                            $debt->user_id = Auth::user()->id;
+                            $debt->export_id = $export->id;
+                            $debt->total_sales = $totalSales;
+                            $debt->total_import = $totalImport;
+                            $debt->debt_transport_fee = $debtTransportFee;
+                            $debt->total_difference = $totalDifference;
+                            $debt->debt = $guest->debt;
+                            $debt->date_start = now();
 
-                            //     // Cập nhật seri_status theo số lượng đã nhập
-                            //     $serinumbers = Serinumbers::where('product_id', $productID)
-                            //         ->where('seri_status', 1)
-                            //         ->limit($productQty)
-                            //         ->get();
+                            // //Xử lí workingday
+                            $startDate = $debt->debt_start;
+                            $daysToAdd = $debt->debt;
+                            $newDate = ($this->calculateWorkingDate($startDate, $daysToAdd));
+                            $debt->date_end = $newDate;
 
-                            //     foreach ($serinumbers as $serinumber) {
-                            //         if ($serinumber->seri_status == 1) {
-                            //             $serinumber->seri_status = 3;
-                            //             $serinumber->save();
-                            //         }
-                            //     }
-                            // }
+                            // Xử lí status debt
+                            $endDate = new DateTime($debt->date_end);
+                            $now = new DateTime();
+                            $interval = $endDate->diff($now);
+                            $daysDiff = $interval->format('%R%a');
+                            $daysDiff = intval($daysDiff);
+                            $daysDiff = -$daysDiff;
 
-                            //cập nhật số lượng tồn kho sản phẩm cha
-                            $query = "UPDATE `products` 
-      INNER JOIN `product` ON `products`.`id` = `product`.`products_id` 
-      SET `products`.`inventory` = (
-          SELECT SUM(`product`.`product_qty`) 
-          FROM `product` 
-          WHERE `product`.`products_id` = `products`.`id`
-      ),
-      `products`.`price_inventory` = (
-          SELECT SUM(`product`.`total`) 
-          FROM `product` 
-          WHERE `product`.`products_id` = `products`.`id`
-      ),
-      `products`.`price_avg` = (
-          SELECT CASE WHEN (
-              SELECT SUM(`product`.`product_qty`) 
-              FROM `product` 
-              WHERE `product`.`products_id` = `products`.`id`
-          ) = 0 THEN 0 ELSE (
-              SELECT SUM(`product`.`total`) 
-              FROM `product` 
-              WHERE `product`.`products_id` = `products`.`id`
-          ) / (
-              SELECT SUM(`product`.`product_qty`) 
-              FROM `product` 
-              WHERE `product`.`products_id` = `products`.`id`
-          ) END
-      )
-      WHERE `products`.`id` IN (" . implode(',', $products_id) . ")";
-                            DB::statement($query);
-                            return redirect()->route('exports.index')->with('msg', 'Duyệt đơn thành công!');
+                            if ($guest->debt == 0) {
+                                $debt->debt_status = 4;
+                            } elseif ($daysDiff <= 3) {
+                                $debt->debt_status = 2;
+                            } elseif ($daysDiff < 0) {
+                                $debt->debt_status = 0;
+                            } else {
+                                $debt->debt_status = 3;
+                            }
+                            $debt->save();
                         }
+                        //cập nhật khách hàng khi lưu nhanh
+                        if ($request->checkguest == 1 && $updateClick == null) {
+                            $guest = Guests::find($request->id);
+                            $guest->guest_name = $request->guest_name;
+                            $guest->guest_address = $request->guest_address;
+                            $guest->guest_code = $request->guest_code;
+                            $guest->guest_addressDeliver = $request->guest_addressDeliver;
+                            $guest->guest_receiver = $request->guest_receiver;
+                            $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
+                            $guest->guest_email = $request->guest_email;
+                            $guest->guest_status = 1;
+                            $guest->guest_phone = $request->guest_phone;
+                            $guest->guest_pay = $request->guest_pay;
+                            $guest->guest_note = $request->guest_note;
+                            if ($request->debt == null) {
+                                $guest->debt = 0;
+                            } else {
+                                $guest->debt = $request->debt;
+                            }
+                            $guest->save();
+                            // Tạo đơn xuất hàng
+                            $export = new Exports();
+                            $export->guest_id = $guest->id;
+                            $export->user_id = Auth::user()->id;
+                            $export->total = $request->totalValue;
+                            $export->export_status = 2;
+                            $export->note_form = $request->note_form;
+                            $export->transport_fee = $request->transport_fee;
+                            $export->save();
+                            // Tạo các bản ghi trong bảng product export
+                            for ($i = 0; $i < count($productIDs); $i++) {
+                                $productID = $productIDs[$i];
+                                $productQty = $productQtys[$i];
+                                $nameProduct = Product::where('id', $productID)->value('product_name');
+                                $proExport = new ProductExports();
+                                $proExport->product_id = $productID;
+                                $proExport->export_id = $export->id;
+                                $proExport->product_name = $nameProduct;
+                                $proExport->product_unit = $request->product_unit[$i];
+                                $proExport->product_qty = $productQty;
+                                $proExport->product_price = $request->product_price[$i];
+                                $proExport->product_note = $request->product_note[$i];
+                                $proExport->product_tax = $request->product_tax[$i];
+                                $proExport->product_total = $request->totalValue;
+                                $proExport->save();
+                            }
+                            // Lấy thông tin từ bảng productExport và Export
+                            $productExports = $export->productExports;
+
+                            // Tính toán giá trị total_sales
+                            $totalSales = 0;
+                            foreach ($productExports as $productExport) {
+                                $totalSales += $productExport->product_price * $productExport->product_qty;
+                            }
+
+                            // Tính toán giá trị total_import
+                            $totalImport = 0;
+                            foreach ($productExports as $productExport) {
+                                $product = Product::find($productExport->product_id);
+                                $totalImport += $product->product_price * $productExport->product_qty;
+                            }
+
+                            // Tính toán giá trị total_difference
+                            if ($export->transport_fee === null) {
+                                $debtTransportFee = 0;
+                            } else {
+                                $debtTransportFee = $export->transport_fee;
+                            }
+
+                            $totalDifference = $totalSales - $totalImport - $debtTransportFee;
+
+                            // Lấy thông tin từ bảng Guests
+                            $guest = Guests::find($export->guest_id);
+
+                            // Tạo đối tượng Debt và cập nhật giá trị
+                            $debt = new Debt();
+                            $debt->guest_id = $guest->id;
+                            $debt->user_id = Auth::user()->id;
+                            $debt->export_id = $export->id;
+                            $debt->total_sales = $totalSales;
+                            $debt->total_import = $totalImport;
+                            $debt->debt_transport_fee = $debtTransportFee;
+                            $debt->total_difference = $totalDifference;
+                            $debt->debt = $guest->debt;
+
+                            $debt->date_start = now();
+
+                            // //Xử lí workingday
+                            $startDate = $debt->debt_start;
+                            $daysToAdd = $debt->debt;
+                            $newDate = ($this->calculateWorkingDate($startDate, $daysToAdd));
+                            $debt->date_end = $newDate;
+
+                            // Xử lí status debt
+                            $endDate = new DateTime($debt->date_end);
+                            $now = new DateTime();
+                            $interval = $endDate->diff($now);
+                            $daysDiff = $interval->format('%R%a');
+                            $daysDiff = intval($daysDiff);
+                            $daysDiff = -$daysDiff;
+
+                            if ($guest->debt == 0) {
+                                $debt->debt_status = 4;
+                            } elseif ($daysDiff <= 3) {
+                                $debt->debt_status = 2;
+                            } elseif ($daysDiff < 0) {
+                                $debt->debt_status = 0;
+                            } else {
+                                $debt->debt_status = 3;
+                            }
+                            $debt->save();
+                        }
+                        //tạo đơn khi đã nhấn cập nhật
+                        if ($request->checkguest == 1 && $updateClick == 1) {
+                            // Tạo đơn xuất hàng
+                            $export = new Exports();
+                            $export->guest_id = $request->id;
+                            $export->user_id = Auth::user()->id;
+                            $export->total = $request->totalValue;
+                            $export->export_status = 2;
+                            $export->note_form = $request->note_form;
+                            $export->transport_fee = $request->transport_fee;
+                            $export->save();
+                            // Tạo các bản ghi trong bảng product export
+                            for ($i = 0; $i < count($productIDs); $i++) {
+                                $productID = $productIDs[$i];
+                                $productQty = $productQtys[$i];
+                                $nameProduct = Product::where('id', $productID)->value('product_name');
+                                $proExport = new ProductExports();
+                                $proExport->product_id = $productID;
+                                $proExport->export_id = $export->id;
+                                $proExport->product_name = $nameProduct;
+                                $proExport->product_unit = $request->product_unit[$i];
+                                $proExport->product_qty = $productQty;
+                                $proExport->product_price = $request->product_price[$i];
+                                $proExport->product_note = $request->product_note[$i];
+                                $proExport->product_tax = $request->product_tax[$i];
+                                $proExport->product_total = $request->totalValue;
+                                $proExport->save();
+                            }
+                            // Lấy thông tin từ bảng productExport và Export
+                            $productExports = $export->productExports;
+
+                            // Tính toán giá trị total_sales
+                            $totalSales = 0;
+                            foreach ($productExports as $productExport) {
+                                $totalSales += $productExport->product_price * $productExport->product_qty;
+                            }
+
+                            // Tính toán giá trị total_import
+                            $totalImport = 0;
+                            foreach ($productExports as $productExport) {
+                                $product = Product::find($productExport->product_id);
+                                $totalImport += $product->product_price * $productExport->product_qty;
+                            }
+
+                            // Tính toán giá trị total_difference
+                            if ($export->transport_fee === null) {
+                                $debtTransportFee = 0;
+                            } else {
+                                $debtTransportFee = $export->transport_fee;
+                            }
+
+                            $totalDifference = $totalSales - $totalImport - $debtTransportFee;
+
+                            // Lấy thông tin từ bảng Guests
+                            $guest = Guests::find($export->guest_id);
+
+                            // Tạo đối tượng Debt và cập nhật giá trị
+                            $debt = new Debt();
+                            $debt->guest_id = $guest->id;
+                            $debt->user_id = Auth::user()->id;
+                            $debt->export_id = $export->id;
+                            $debt->total_sales = $totalSales;
+                            $debt->total_import = $totalImport;
+                            $debt->debt_transport_fee = $debtTransportFee;
+                            $debt->total_difference = $totalDifference;
+                            $debt->debt = $guest->debt;
+
+                            $debt->date_start = now();
+
+                            // //Xử lí workingday
+                            $startDate = $debt->debt_start;
+                            $daysToAdd = $debt->debt;
+                            $newDate = ($this->calculateWorkingDate($startDate, $daysToAdd));
+                            $debt->date_end = $newDate;
+
+                            // Xử lí status debt
+                            $endDate = new DateTime($debt->date_end);
+                            $now = new DateTime();
+                            $interval = $endDate->diff($now);
+                            $daysDiff = $interval->format('%R%a');
+                            $daysDiff = intval($daysDiff);
+                            $daysDiff = -$daysDiff;
+
+                            if ($guest->debt == 0) {
+                                $debt->debt_status = 4;
+                            } elseif ($daysDiff <= 3) {
+                                $debt->debt_status = 2;
+                            } elseif ($daysDiff < 0) {
+                                $debt->debt_status = 0;
+                            } else {
+                                $debt->debt_status = 3;
+                            }
+                            $debt->save();
+                        }
+                        //tạo đơn khi đã nhấn thêm
+                        if ($clickValue == 1 && $request->checkguest == 2) {
+                            // Tạo đơn xuất hàng
+                            $export = new Exports();
+                            $export->guest_id = $request->id;
+                            $export->user_id = Auth::user()->id;
+                            $export->total = $request->totalValue;
+                            $export->export_status = 1;
+                            $export->note_form = $request->note_form;
+                            $export->transport_fee = $request->transport_fee;
+                            $export->save();
+                            // Tạo các bản ghi trong bảng product export
+                            for ($i = 0; $i < count($productIDs); $i++) {
+                                $productID = $productIDs[$i];
+                                $productQty = $productQtys[$i];
+                                $nameProduct = Product::where('id', $productID)->value('product_name');
+                                $proExport = new ProductExports();
+                                $proExport->product_id = $productID;
+                                $proExport->export_id = $export->id;
+                                $proExport->product_name = $nameProduct;
+                                $proExport->product_unit = $request->product_unit[$i];
+                                $proExport->product_qty = $productQty;
+                                $proExport->product_price = $request->product_price[$i];
+                                $proExport->product_note = $request->product_note[$i];
+                                $proExport->product_tax = $request->product_tax[$i];
+                                $proExport->product_total = $request->totalValue;
+                                $proExport->save();
+                            }
+                            // Lấy thông tin từ bảng productExport và Export
+                            $productExports = $export->productExports;
+
+                            // Tính toán giá trị total_sales
+                            $totalSales = 0;
+                            foreach ($productExports as $productExport) {
+                                $totalSales += $productExport->product_price * $productExport->product_qty;
+                            }
+
+                            // Tính toán giá trị total_import
+                            $totalImport = 0;
+                            foreach ($productExports as $productExport) {
+                                $product = Product::find($productExport->product_id);
+                                $totalImport += $product->product_price * $productExport->product_qty;
+                            }
+
+                            // Tính toán giá trị total_difference
+                            if ($export->transport_fee === null) {
+                                $debtTransportFee = 0;
+                            } else {
+                                $debtTransportFee = $export->transport_fee;
+                            }
+
+                            $totalDifference = $totalSales - $totalImport - $debtTransportFee;
+
+                            // Lấy thông tin từ bảng Guests
+                            $guest = Guests::find($export->guest_id);
+
+                            // Tạo đối tượng Debt và cập nhật giá trị
+                            $debt = new Debt();
+                            $debt->guest_id = $guest->id;
+                            $debt->user_id = Auth::user()->id;
+                            $debt->export_id = $export->id;
+                            $debt->total_sales = $totalSales;
+                            $debt->total_import = $totalImport;
+                            $debt->debt_transport_fee = $debtTransportFee;
+                            $debt->total_difference = $totalDifference;
+                            $debt->debt = $guest->debt;
+
+                            $debt->date_start = now();
+
+                            // //Xử lí workingday
+                            $startDate = $debt->debt_start;
+                            $daysToAdd = $debt->debt;
+                            $newDate = ($this->calculateWorkingDate($startDate, $daysToAdd));
+                            $debt->date_end = $newDate;
+
+                            // Xử lí status debt
+                            $endDate = new DateTime($debt->date_end);
+                            $now = new DateTime();
+                            $interval = $endDate->diff($now);
+                            $daysDiff = $interval->format('%R%a');
+                            $daysDiff = intval($daysDiff);
+                            $daysDiff = -$daysDiff;
+
+                            if ($guest->debt == 0) {
+                                $debt->debt_status = 4;
+                            } elseif ($daysDiff <= 3) {
+                                $debt->debt_status = 2;
+                            } elseif ($daysDiff < 0) {
+                                $debt->debt_status = 0;
+                            } else {
+                                $debt->debt_status = 3;
+                            }
+                            $debt->save();
+                        }
+                        // Giảm số lượng của sản phẩm trong bảng product
+                        for ($i = 0; $i < count($productIDs); $i++) {
+                            $productID = $productIDs[$i];
+                            $productQty = $productQtys[$i];
+
+                            // Lấy số lượng hiện tại của sản phẩm
+                            $currentQty = Product::where('id', $productID)->value('product_qty');
+
+                            // Giảm số lượng sản phẩm
+                            $newQty = $currentQty - $productQty;
+
+                            // Lấy giá sản phẩm
+                            $product = Product::find($productID);
+                            $productPrice = $product->product_price;
+
+                            // Tính toán giá trị total
+                            $total = $newQty * $productPrice;
+
+                            // Cập nhật số lượng và trường 'total'
+                            Product::where('id', $productID)
+                                ->update([
+                                    'product_qty' => $newQty,
+                                    'total' => $total
+                                ]);
+                        }
+                        //cập nhật số lượng tồn kho sản phẩm cha
+                        $query = "UPDATE `products` 
+                        INNER JOIN `product` ON `products`.`id` = `product`.`products_id` 
+                        SET `products`.`inventory` = (
+                        SELECT SUM(`product`.`product_qty`) 
+                        FROM `product` 
+                        WHERE `product`.`products_id` = `products`.`id`
+                        ),
+                        `products`.`price_inventory` = (
+                        SELECT SUM(`product`.`total`) 
+                        FROM `product` 
+                        WHERE `product`.`products_id` = `products`.`id`
+                        ),
+                        `products`.`price_avg` = (
+                        SELECT CASE WHEN (
+                        SELECT SUM(`product`.`product_qty`) 
+                        FROM `product` 
+                        WHERE `product`.`products_id` = `products`.`id`
+                        ) = 0 THEN 0 ELSE (
+                        SELECT SUM(`product`.`total`) 
+                        FROM `product` 
+                        WHERE `product`.`products_id` = `products`.`id`
+                        ) / (
+                        SELECT SUM(`product`.`product_qty`) 
+                        FROM `product` 
+                        WHERE `product`.`products_id` = `products`.`id`
+                        ) END
+                        )
+                        WHERE `products`.`id` IN (" . implode(',', $products_id) . ")";
+                        DB::statement($query);
+                        return redirect()->route('exports.index')->with('msg', 'Duyệt đơn thành công!');
                     }
                 }
                 if ($action === 'action2') {
@@ -716,225 +644,171 @@ class ExportController extends Controller
                             $productQtyMap[$productID] += $productQty;
                         }
 
-                        // Kiểm tra và cập nhật seri_status
-                        foreach ($productQtyMap as $productID => $productQty) {
-                            $serinumbers = Serinumbers::where('product_id', $productID)
-                                ->where('seri_status', 1)
-                                ->limit($productQty)
-                                ->get();
-
-                            if (count($serinumbers) < $productQty) {
-                                $hasEnoughQty = false;
-                                break;
+                        //thêm khách hàng khi lưu nhanh
+                        if ($request->checkguest == 2 && $clickValue == null) {
+                            $guest = new Guests();
+                            $guest->guest_name = $request->guest_name;
+                            $guest->guest_address = $request->guest_address;
+                            $guest->guest_code = $request->guest_code;
+                            $guest->guest_receiver = $request->guest_receiver;
+                            $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
+                            $guest->guest_email = $request->guest_email;
+                            $guest->guest_status = 1;
+                            $guest->guest_phone = $request->guest_phone;
+                            $guest->guest_email_personal = $request->guest_email_personal;
+                            $guest->guest_note = $request->guest_note;
+                            if ($request->debt == null) {
+                                $guest->debt = 0;
+                            } else {
+                                $guest->debt = $request->debt;
+                            }
+                            $guest->save();
+                            // Tạo đơn xuất hàng
+                            $export = new Exports();
+                            $export->guest_id = $guest->id;
+                            $export->user_id = Auth::user()->id;
+                            $export->total = $request->totalValue;
+                            $export->export_status = 1;
+                            $export->note_form = $request->note_form;
+                            $export->transport_fee = $request->transport_fee;
+                            $export->save();
+                            // Tạo các bản ghi trong bảng product export
+                            for ($i = 0; $i < count($productIDs); $i++) {
+                                $productID = $productIDs[$i];
+                                $productQty = $productQtys[$i];
+                                $nameProduct = Product::where('id', $productID)->value('product_name');
+                                $proExport = new ProductExports();
+                                $proExport->product_id = $productID;
+                                $proExport->export_id = $export->id;
+                                $proExport->product_name = $nameProduct;
+                                $proExport->product_unit = $request->product_unit[$i];
+                                $proExport->product_qty = $productQty;
+                                $proExport->product_price = $request->product_price[$i];
+                                $proExport->product_note = $request->product_note[$i];
+                                $proExport->product_tax = $request->product_tax[$i];
+                                $proExport->product_total = $request->totalValue;
+                                $proExport->save();
+                                $product = Product::findorfail($productID);
+                                $product->product_trade += $productQty;
+                                $product->save();
+                            }
+                        }
+                        //cập nhật khách hàng khi lưu nhanh
+                        if ($request->checkguest == 1 && $updateClick == null) {
+                            $guest = Guests::find($request->id);
+                            $guest->guest_name = $request->guest_name;
+                            $guest->guest_address = $request->guest_address;
+                            $guest->guest_code = $request->guest_code;
+                            $guest->guest_receiver = $request->guest_receiver;
+                            $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
+                            $guest->guest_email = $request->guest_email;
+                            $guest->guest_status = 1;
+                            $guest->guest_phone = $request->guest_phone;
+                            $guest->guest_email_personal = $request->guest_email_personal;
+                            $guest->guest_note = $request->guest_note;
+                            if ($request->debt == null) {
+                                $guest->debt = 0;
+                            } else {
+                                $guest->debt = $request->debt;
+                            }
+                            $guest->save();
+                            // Tạo đơn xuất hàng
+                            $export = new Exports();
+                            $export->guest_id = $guest->id;
+                            $export->user_id = Auth::user()->id;
+                            $export->total = $request->totalValue;
+                            $export->export_status = 1;
+                            $export->note_form = $request->note_form;
+                            $export->transport_fee = $request->transport_fee;
+                            $export->save();
+                            // Tạo các bản ghi trong bảng product export
+                            for ($i = 0; $i < count($productIDs); $i++) {
+                                $productID = $productIDs[$i];
+                                $productQty = $productQtys[$i];
+                                $nameProduct = Product::where('id', $productID)->value('product_name');
+                                $proExport = new ProductExports();
+                                $proExport->product_id = $productID;
+                                $proExport->export_id = $export->id;
+                                $proExport->product_name = $nameProduct;
+                                $proExport->product_unit = $request->product_unit[$i];
+                                $proExport->product_qty = $productQty;
+                                $proExport->product_price = $request->product_price[$i];
+                                $proExport->product_note = $request->product_note[$i];
+                                $proExport->product_tax = $request->product_tax[$i];
+                                $proExport->product_total = $request->totalValue;
+                                $proExport->save();
+                                $product = Product::findorfail($productID);
+                                $product->product_trade += $productQty;
+                                $product->save();
+                            }
+                        }
+                        //tạo đơn khi đã click nút thêm
+                        if ($request->checkguest == 2 && $clickValue == 1) {
+                            // Tạo đơn xuất hàng
+                            $export = new Exports();
+                            $export->guest_id = $request->id;
+                            $export->user_id = Auth::user()->id;
+                            $export->total = $request->totalValue;
+                            $export->export_status = 1;
+                            $export->note_form = $request->note_form;
+                            $export->transport_fee = $request->transport_fee;
+                            $export->save();
+                            // Tạo các bản ghi trong bảng product export
+                            for ($i = 0; $i < count($productIDs); $i++) {
+                                $productID = $productIDs[$i];
+                                $productQty = $productQtys[$i];
+                                $nameProduct = Product::where('id', $productID)->value('product_name');
+                                $proExport = new ProductExports();
+                                $proExport->product_id = $productID;
+                                $proExport->export_id = $export->id;
+                                $proExport->product_name = $nameProduct;
+                                $proExport->product_unit = $request->product_unit[$i];
+                                $proExport->product_qty = $productQty;
+                                $proExport->product_price = $request->product_price[$i];
+                                $proExport->product_note = $request->product_note[$i];
+                                $proExport->product_tax = $request->product_tax[$i];
+                                $proExport->product_total = $request->totalValue;
+                                $proExport->save();
+                                $product = Product::findorfail($productID);
+                                $product->product_trade += $productQty;
+                                $product->save();
+                            }
+                        }
+                        //tạo đơn khi đã click nút cập nhật
+                        if ($updateClick == 1 && $request->checkguest == 1) {
+                            // Tạo đơn xuất hàng
+                            $export = new Exports();
+                            $export->guest_id = $request->id;
+                            $export->user_id = Auth::user()->id;
+                            $export->total = $request->totalValue;
+                            $export->export_status = 1;
+                            $export->note_form = $request->note_form;
+                            $export->transport_fee = $request->transport_fee;
+                            $export->save();
+                            // Tạo các bản ghi trong bảng product export
+                            for ($i = 0; $i < count($productIDs); $i++) {
+                                $productID = $productIDs[$i];
+                                $productQty = $productQtys[$i];
+                                $nameProduct = Product::where('id', $productID)->value('product_name');
+                                $proExport = new ProductExports();
+                                $proExport->product_id = $productID;
+                                $proExport->export_id = $export->id;
+                                $proExport->product_name = $nameProduct;
+                                $proExport->product_unit = $request->product_unit[$i];
+                                $proExport->product_qty = $productQty;
+                                $proExport->product_price = $request->product_price[$i];
+                                $proExport->product_note = $request->product_note[$i];
+                                $proExport->product_tax = $request->product_tax[$i];
+                                $proExport->product_total = $request->totalValue;
+                                $proExport->save();
+                                $product = Product::findorfail($productID);
+                                $product->product_trade += $productQty;
+                                $product->save();
                             }
                         }
                         if (!$hasEnoughQty) {
                             return redirect()->route('exports.index')->with('warning', 'Vượt quá số lượng tồn kho!');
                         } else {
-                            //thêm khách hàng khi lưu nhanh
-                            if ($request->checkguest == 2 && $clickValue == null) {
-                                $guest = new Guests();
-                                $guest->guest_name = $request->guest_name;
-                                $guest->guest_addressInvoice = $request->guest_addressInvoice;
-                                $guest->guest_code = $request->guest_code;
-                                $guest->guest_addressDeliver = $request->guest_addressDeliver;
-                                $guest->guest_receiver = $request->guest_receiver;
-                                $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
-                                $guest->guest_email = $request->guest_email;
-                                $guest->guest_status = 1;
-                                $guest->guest_phone = $request->guest_phone;
-                                $guest->guest_pay = $request->guest_pay;
-                                $guest->guest_note = $request->guest_note;
-                                if ($request->debt == null) {
-                                    $guest->debt = 0;
-                                } else {
-                                    $guest->debt = $request->debt;
-                                }
-                                $guest->save();
-                                // Tạo đơn xuất hàng
-                                $export = new Exports();
-                                $export->guest_id = $guest->id;
-                                $export->user_id = Auth::user()->id;
-                                $export->total = $request->totalValue;
-                                $export->export_status = 1;
-                                $export->note_form = $request->note_form;
-                                $export->transport_fee = $request->transport_fee;
-                                $export->save();
-                                // Tạo các bản ghi trong bảng product export
-                                for ($i = 0; $i < count($productIDs); $i++) {
-                                    $productID = $productIDs[$i];
-                                    $productQty = $productQtys[$i];
-                                    $nameProduct = Product::where('id', $productID)->value('product_name');
-                                    $proExport = new ProductExports();
-                                    $proExport->products_id = $request->products_id[$i];
-                                    $proExport->product_id = $productID;
-                                    $proExport->export_id = $export->id;
-                                    $proExport->product_name = $nameProduct;
-                                    $proExport->product_unit = $request->product_unit[$i];
-                                    $proExport->product_qty = $productQty;
-                                    $proExport->product_price = $request->product_price[$i];
-                                    $proExport->product_note = $request->product_note[$i];
-                                    $proExport->product_tax = $request->product_tax[$i];
-                                    $proExport->product_total = $request->totalValue;
-                                    $proExport->save();
-                                    $serinumbers = Serinumbers::where('product_id', $productID)
-                                        ->where('seri_status', 1)
-                                        ->limit($productQty)
-                                        ->get();
-                                    // Cập nhật seri_status bằng 2 cho các sản phẩm
-                                    foreach ($serinumbers as $serinumber) {
-                                        if ($serinumber->seri_status == 1) {
-                                            $serinumber->seri_status = 2;
-                                            $serinumber->export_seri = $export->id;
-                                            $serinumber->save();
-                                        }
-                                    }
-                                }
-                            }
-                            //cập nhật khách hàng khi lưu nhanh
-                            if ($request->checkguest == 1 && $updateClick == null) {
-                                $guest = Guests::find($request->id);
-                                $guest->guest_name = $request->guest_name;
-                                $guest->guest_addressInvoice = $request->guest_addressInvoice;
-                                $guest->guest_code = $request->guest_code;
-                                $guest->guest_addressDeliver = $request->guest_addressDeliver;
-                                $guest->guest_receiver = $request->guest_receiver;
-                                $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
-                                $guest->guest_email = $request->guest_email;
-                                $guest->guest_status = 1;
-                                $guest->guest_phone = $request->guest_phone;
-                                $guest->guest_pay = $request->guest_pay;
-                                $guest->guest_note = $request->guest_note;
-                                if ($request->debt == null) {
-                                    $guest->debt = 0;
-                                } else {
-                                    $guest->debt = $request->debt;
-                                }
-                                $guest->save();
-                                // Tạo đơn xuất hàng
-                                $export = new Exports();
-                                $export->guest_id = $guest->id;
-                                $export->user_id = Auth::user()->id;
-                                $export->total = $request->totalValue;
-                                $export->export_status = 1;
-                                $export->note_form = $request->note_form;
-                                $export->transport_fee = $request->transport_fee;
-                                $export->save();
-                                // Tạo các bản ghi trong bảng product export
-                                for ($i = 0; $i < count($productIDs); $i++) {
-                                    $productID = $productIDs[$i];
-                                    $productQty = $productQtys[$i];
-                                    $nameProduct = Product::where('id', $productID)->value('product_name');
-                                    $proExport = new ProductExports();
-                                    $proExport->products_id = $request->products_id[$i];
-                                    $proExport->product_id = $productID;
-                                    $proExport->export_id = $export->id;
-                                    $proExport->product_name = $nameProduct;
-                                    $proExport->product_unit = $request->product_unit[$i];
-                                    $proExport->product_qty = $productQty;
-                                    $proExport->product_price = $request->product_price[$i];
-                                    $proExport->product_note = $request->product_note[$i];
-                                    $proExport->product_tax = $request->product_tax[$i];
-                                    $proExport->product_total = $request->totalValue;
-                                    $proExport->save();
-                                    $serinumbers = Serinumbers::where('product_id', $productID)
-                                        ->where('seri_status', 1)
-                                        ->limit($productQty)
-                                        ->get();
-                                    // Cập nhật seri_status bằng 2 cho các sản phẩm
-                                    foreach ($serinumbers as $serinumber) {
-                                        if ($serinumber->seri_status == 1) {
-                                            $serinumber->seri_status = 2;
-                                            $serinumber->export_seri = $export->id;
-                                            $serinumber->save();
-                                        }
-                                    }
-                                }
-                            }
-                            //tạo đơn khi đã click nút thêm
-                            if ($request->checkguest == 2 && $clickValue == 1) {
-                                // Tạo đơn xuất hàng
-                                $export = new Exports();
-                                $export->guest_id = $request->id;
-                                $export->user_id = Auth::user()->id;
-                                $export->total = $request->totalValue;
-                                $export->export_status = 1;
-                                $export->note_form = $request->note_form;
-                                $export->transport_fee = $request->transport_fee;
-                                $export->save();
-                                // Tạo các bản ghi trong bảng product export
-                                for ($i = 0; $i < count($productIDs); $i++) {
-                                    $productID = $productIDs[$i];
-                                    $productQty = $productQtys[$i];
-                                    $nameProduct = Product::where('id', $productID)->value('product_name');
-                                    $proExport = new ProductExports();
-                                    $proExport->products_id = $request->products_id[$i];
-                                    $proExport->product_id = $productID;
-                                    $proExport->export_id = $export->id;
-                                    $proExport->product_name = $nameProduct;
-                                    $proExport->product_unit = $request->product_unit[$i];
-                                    $proExport->product_qty = $productQty;
-                                    $proExport->product_price = $request->product_price[$i];
-                                    $proExport->product_note = $request->product_note[$i];
-                                    $proExport->product_tax = $request->product_tax[$i];
-                                    $proExport->product_total = $request->totalValue;
-                                    $proExport->save();
-                                    $serinumbers = Serinumbers::where('product_id', $productID)
-                                        ->where('seri_status', 1)
-                                        ->limit($productQty)
-                                        ->get();
-                                    // Cập nhật seri_status bằng 2 cho các sản phẩm
-                                    foreach ($serinumbers as $serinumber) {
-                                        if ($serinumber->seri_status == 1) {
-                                            $serinumber->seri_status = 2;
-                                            $serinumber->export_seri = $export->id;
-                                            $serinumber->save();
-                                        }
-                                    }
-                                }
-                            }
-                            //tạo đơn khi đã click nút cập nhật
-                            if ($updateClick == 1 && $request->checkguest == 1) {
-                                // Tạo đơn xuất hàng
-                                $export = new Exports();
-                                $export->guest_id = $request->id;
-                                $export->user_id = Auth::user()->id;
-                                $export->total = $request->totalValue;
-                                $export->export_status = 1;
-                                $export->note_form = $request->note_form;
-                                $export->transport_fee = $request->transport_fee;
-                                $export->save();
-                                // Tạo các bản ghi trong bảng product export
-                                for ($i = 0; $i < count($productIDs); $i++) {
-                                    $productID = $productIDs[$i];
-                                    $productQty = $productQtys[$i];
-                                    $nameProduct = Product::where('id', $productID)->value('product_name');
-                                    $proExport = new ProductExports();
-                                    $proExport->products_id = $request->products_id[$i];
-                                    $proExport->product_id = $productID;
-                                    $proExport->export_id = $export->id;
-                                    $proExport->product_name = $nameProduct;
-                                    $proExport->product_unit = $request->product_unit[$i];
-                                    $proExport->product_qty = $productQty;
-                                    $proExport->product_price = $request->product_price[$i];
-                                    $proExport->product_note = $request->product_note[$i];
-                                    $proExport->product_tax = $request->product_tax[$i];
-                                    $proExport->product_total = $request->totalValue;
-                                    $proExport->save();
-                                    $serinumbers = Serinumbers::where('product_id', $productID)
-                                        ->where('seri_status', 1)
-                                        ->limit($productQty)
-                                        ->get();
-                                    // Cập nhật seri_status bằng 2 cho các sản phẩm
-                                    foreach ($serinumbers as $serinumber) {
-                                        if ($serinumber->seri_status == 1) {
-                                            $serinumber->seri_status = 2;
-                                            $serinumber->export_seri = $export->id;
-                                            $serinumber->save();
-                                        }
-                                    }
-                                }
-                            }
                             return redirect()->route('exports.index')->with('msg', 'Tạo đơn thành công!');
                         }
                     }
@@ -988,11 +862,13 @@ class ExportController extends Controller
         $exports = Exports::find($id);
         $guest = Guests::find($exports->guest_id);
         $customer = Guests::all();
-        $productExport = productExports::select('product_exports.*')->join('exports', 'product_exports.export_id', '=', 'exports.id')
-            ->join('products', 'products.id', 'product_exports.products_id')
+        $productExport = productExports::select('product_exports.*', 'product.product_qty as tonkho')
+            ->join('exports', 'product_exports.export_id', '=', 'exports.id')
+            ->join('product', 'product.id', '=', 'product_exports.product_id')
+            ->selectRaw('(product.product_qty - product.product_trade) as tonkho')
             ->where('export_id', $id)
             ->get();
-        $product_code = Products::all();
+        $product_code = Product::all();
         $title = 'Chi tiết đơn hàng';
         return view('tables.export.editExport', compact('exports', 'guest', 'productExport', 'product_code', 'customer', 'title'));
     }
@@ -1071,7 +947,6 @@ class ExportController extends Controller
                             }
 
                             // Cập nhật thông tin sản phẩm
-                            $proExport->products_id = $request->products_id[$i];
                             $proExport->product_unit = $request->product_unit[$i];
                             $proExport->product_qty = $productQty;
                             $proExport->product_price = $request->product_price[$i];
@@ -1086,7 +961,6 @@ class ExportController extends Controller
                                 return redirect()->route('exports.index')->with('warning', 'Vượt quá số lượng cho sản phẩm ' . $nameProduct . '!');
                             }
                             $proExport = new ProductExports();
-                            $proExport->products_id = $request->products_id[$i];
                             $proExport->product_id = $productID;
                             $proExport->export_id = $exports->id;
                             $proExport->product_name = $nameProduct;
@@ -1160,167 +1034,159 @@ class ExportController extends Controller
                                 'total' => $total
                             ]);
                     }
-
-                    // Kiểm tra số lượng tổng cần thiết
-                    $availableQtyTotal = $this->getAvailableProductQtyTotal();
-
-                    if ($totalQtyNeeded > $availableQtyTotal) {
-                        return redirect()->route('exports.index')->with('warning', 'Vượt quá tổng số lượng sản phẩm!');
-                    } else {
-                        if ($request->id != null) {
-                            // Tạo đơn xuất hàng
-                            $exports->guest_id = $request->id;
-                            $exports->user_id = Auth::user()->id;
-                            $exports->total = $request->totalValue;
-                            $exports->export_status = 2;
-                            $exports->note_form = $request->note_form;
-                            $exports->transport_fee = $request->transport_fee;
-                            $exports->save();
-                        } else if ($clickValue != 1) {
-                            $guest = new Guests();
-                            $guest->guest_name = $request->guest_name;
-                            $guest->guest_addressInvoice = $request->guest_addressInvoice;
-                            $guest->guest_code = $request->guest_code;
-                            $guest->guest_addressDeliver = $request->guest_addressDeliver;
-                            $guest->guest_receiver = $request->guest_receiver;
-                            $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
-                            $guest->guest_email = $request->guest_email;
-                            $guest->guest_status = 1;
-                            $guest->guest_phone = $request->guest_phone;
-                            $guest->guest_pay = $request->guest_pay;
-                            $guest->guest_note = $request->guest_note;
-                            if ($request->debt == 0) {
-                                $guest->debt = 0;
-                            } else {
-                                $guest->debt = $request->debt;
-                            }
-                            $guest->save();
-                            // Tạo đơn xuất hàng
-                            $exports->guest_id = $guest->id;
-                            $exports->user_id = Auth::user()->id;
-                            $exports->total = $request->totalValue;
-                            $exports->export_status = 2;
-                            $exports->note_form = $request->note_form;
-                            $exports->transport_fee = $request->transport_fee;
-                            $exports->save();
+                    if ($request->id != null) {
+                        // Tạo đơn xuất hàng
+                        $exports->guest_id = $request->id;
+                        $exports->user_id = Auth::user()->id;
+                        $exports->total = $request->totalValue;
+                        $exports->export_status = 2;
+                        $exports->note_form = $request->note_form;
+                        $exports->transport_fee = $request->transport_fee;
+                        $exports->save();
+                    } else if ($clickValue != 1) {
+                        $guest = new Guests();
+                        $guest->guest_name = $request->guest_name;
+                        $guest->guest_address = $request->guest_address;
+                        $guest->guest_code = $request->guest_code;
+                        $guest->guest_addressDeliver = $request->guest_addressDeliver;
+                        $guest->guest_receiver = $request->guest_receiver;
+                        $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
+                        $guest->guest_email = $request->guest_email;
+                        $guest->guest_status = 1;
+                        $guest->guest_phone = $request->guest_phone;
+                        $guest->guest_pay = $request->guest_pay;
+                        $guest->guest_note = $request->guest_note;
+                        if ($request->debt == 0) {
+                            $guest->debt = 0;
+                        } else {
+                            $guest->debt = $request->debt;
                         }
+                        $guest->save();
+                        // Tạo đơn xuất hàng
+                        $exports->guest_id = $guest->id;
+                        $exports->user_id = Auth::user()->id;
+                        $exports->total = $request->totalValue;
+                        $exports->export_status = 2;
+                        $exports->note_form = $request->note_form;
+                        $exports->transport_fee = $request->transport_fee;
+                        $exports->save();
+                    }
 
-                        for ($i = 0; $i < count($productIDs); $i++) {
-                            $productID = $productIDs[$i];
-                            $productQty = $productQtys[$i];
+                    for ($i = 0; $i < count($productIDs); $i++) {
+                        $productID = $productIDs[$i];
+                        $productQty = $productQtys[$i];
 
-                            // Cập nhật seri_status theo số lượng đã nhập
-                            $serinumbers = Serinumbers::where('product_id', $productID)
-                                ->where('seri_status', 2)
-                                ->where('export_seri', $id)
-                                ->limit($productQty)
-                                ->get();
+                        // Cập nhật seri_status theo số lượng đã nhập
+                        $serinumbers = Serinumbers::where('product_id', $productID)
+                            ->where('seri_status', 2)
+                            ->where('export_seri', $id)
+                            ->limit($productQty)
+                            ->get();
 
-                            foreach ($serinumbers as $serinumber) {
-                                if ($serinumber->seri_status == 2) {
-                                    $serinumber->seri_status = 3;
-                                    $serinumber->export_seri = $exports->id;
-                                    $serinumber->save();
-                                }
+                        foreach ($serinumbers as $serinumber) {
+                            if ($serinumber->seri_status == 2) {
+                                $serinumber->seri_status = 3;
+                                $serinumber->export_seri = $exports->id;
+                                $serinumber->save();
                             }
                         }
-                        //cập nhật số lượng tồn kho sản phẩm cha
-                        $query = "UPDATE `products` 
-          INNER JOIN `product` ON `products`.`id` = `product`.`products_id` 
-          SET `products`.`inventory` = (
+                    }
+                    //cập nhật số lượng tồn kho sản phẩm cha
+                    $query = "UPDATE `products` 
+      INNER JOIN `product` ON `products`.`id` = `product`.`products_id` 
+      SET `products`.`inventory` = (
+          SELECT SUM(`product`.`product_qty`) 
+          FROM `product` 
+          WHERE `product`.`products_id` = `products`.`id`
+      ),
+      `products`.`price_inventory` = (
+          SELECT SUM(`product`.`total`) 
+          FROM `product` 
+          WHERE `product`.`products_id` = `products`.`id`
+      ),
+      `products`.`price_avg` = (
+          SELECT CASE WHEN (
               SELECT SUM(`product`.`product_qty`) 
               FROM `product` 
               WHERE `product`.`products_id` = `products`.`id`
-          ),
-          `products`.`price_inventory` = (
+          ) = 0 THEN 0 ELSE (
               SELECT SUM(`product`.`total`) 
               FROM `product` 
               WHERE `product`.`products_id` = `products`.`id`
-          ),
-          `products`.`price_avg` = (
-              SELECT CASE WHEN (
-                  SELECT SUM(`product`.`product_qty`) 
-                  FROM `product` 
-                  WHERE `product`.`products_id` = `products`.`id`
-              ) = 0 THEN 0 ELSE (
-                  SELECT SUM(`product`.`total`) 
-                  FROM `product` 
-                  WHERE `product`.`products_id` = `products`.`id`
-              ) / (
-                  SELECT SUM(`product`.`product_qty`) 
-                  FROM `product` 
-                  WHERE `product`.`products_id` = `products`.`id`
-              ) END
-          )
-          WHERE `products`.`id` IN (" . implode(',', $products_id) . ")";
-                        DB::statement($query);
-                        // Lấy lại thông tin exports từ cơ sở dữ liệu (nếu cần)
-                        $exports = Exports::find($exports->id);
+          ) / (
+              SELECT SUM(`product`.`product_qty`) 
+              FROM `product` 
+              WHERE `product`.`products_id` = `products`.`id`
+          ) END
+      )
+      WHERE `products`.`id` IN (" . implode(',', $products_id) . ")";
+                    DB::statement($query);
+                    // Lấy lại thông tin exports từ cơ sở dữ liệu (nếu cần)
+                    $exports = Exports::find($exports->id);
 
-                        // Lấy thông tin productExports từ exports
-                        $productExports = $exports->productExports;
+                    // Lấy thông tin productExports từ exports
+                    $productExports = $exports->productExports;
 
-                        // Tiếp tục tính toán các giá trị mong muốn
-                        $totalSales = 0;
-                        $totalImport = 0;
-                        $totalDifference = 0;
+                    // Tiếp tục tính toán các giá trị mong muốn
+                    $totalSales = 0;
+                    $totalImport = 0;
+                    $totalDifference = 0;
 
-                        foreach ($productExports as $productExport) {
-                            // Tính toán giá trị total_sales
-                            $totalSales += $productExport->product_price * $productExport->product_qty;
+                    foreach ($productExports as $productExport) {
+                        // Tính toán giá trị total_sales
+                        $totalSales += $productExport->product_price * $productExport->product_qty;
 
-                            // Tính toán giá trị total_import
-                            $product = Product::find($productExport->product_id);
-                            $totalImport += $product->product_price * $productExport->product_qty;
-                        }
-
-                        // Tính toán giá trị total_difference
-                        if ($exports->transport_fee === null) {
-                            $debtTransportFee = 0;
-                        } else {
-                            $debtTransportFee = $exports->transport_fee;
-                        }
-                        $totalDifference = $totalSales - $totalImport - $debtTransportFee;
-                        // Lấy thông tin từ bảng Guests
-                        $guest = Guests::find($exports->guest_id);
-                        // Tạo đối tượng Debt và cập nhật giá trị
-                        $debt = new Debt();
-                        $debt->guest_id = $guest->id;
-                        $debt->user_id = Auth::user()->id;
-                        $debt->export_id = $exports->id;
-                        $debt->total_sales = $totalSales;
-                        $debt->total_import = $totalImport;
-                        $debt->debt_transport_fee = $debtTransportFee;
-                        $debt->total_difference = $totalDifference;
-                        $debt->debt = $guest->debt;
-                        $debt->date_start = now();
-
-                        // //Xử lí workingday
-                        $startDate = $debt->debt_start;
-                        $daysToAdd = $debt->debt;
-                        $newDate = ($this->calculateWorkingDate($startDate, $daysToAdd));
-                        $debt->date_end = $newDate;
-
-                        // Xử lí status debt
-                        $endDate = new DateTime($debt->date_end);
-                        $now = new DateTime();
-                        $interval = $endDate->diff($now);
-                        $daysDiff = $interval->format('%R%a');
-                        $daysDiff = intval($daysDiff);
-                        $daysDiff = -$daysDiff;
-
-                        if ($guest->debt == 0) {
-                            $debt->debt_status = 4;
-                        } elseif ($daysDiff <= 3) {
-                            $debt->debt_status = 2;
-                        } elseif ($daysDiff < 0) {
-                            $debt->debt_status = 0;
-                        } else {
-                            $debt->debt_status = 3;
-                        }
-                        $debt->save();
-                        return redirect()->route('exports.index')->with('msg', 'Duyệt đơn thành công!');
+                        // Tính toán giá trị total_import
+                        $product = Product::find($productExport->product_id);
+                        $totalImport += $product->product_price * $productExport->product_qty;
                     }
+
+                    // Tính toán giá trị total_difference
+                    if ($exports->transport_fee === null) {
+                        $debtTransportFee = 0;
+                    } else {
+                        $debtTransportFee = $exports->transport_fee;
+                    }
+                    $totalDifference = $totalSales - $totalImport - $debtTransportFee;
+                    // Lấy thông tin từ bảng Guests
+                    $guest = Guests::find($exports->guest_id);
+                    // Tạo đối tượng Debt và cập nhật giá trị
+                    $debt = new Debt();
+                    $debt->guest_id = $guest->id;
+                    $debt->user_id = Auth::user()->id;
+                    $debt->export_id = $exports->id;
+                    $debt->total_sales = $totalSales;
+                    $debt->total_import = $totalImport;
+                    $debt->debt_transport_fee = $debtTransportFee;
+                    $debt->total_difference = $totalDifference;
+                    $debt->debt = $guest->debt;
+                    $debt->date_start = now();
+
+                    // //Xử lí workingday
+                    $startDate = $debt->debt_start;
+                    $daysToAdd = $debt->debt;
+                    $newDate = ($this->calculateWorkingDate($startDate, $daysToAdd));
+                    $debt->date_end = $newDate;
+
+                    // Xử lí status debt
+                    $endDate = new DateTime($debt->date_end);
+                    $now = new DateTime();
+                    $interval = $endDate->diff($now);
+                    $daysDiff = $interval->format('%R%a');
+                    $daysDiff = intval($daysDiff);
+                    $daysDiff = -$daysDiff;
+
+                    if ($guest->debt == 0) {
+                        $debt->debt_status = 4;
+                    } elseif ($daysDiff <= 3) {
+                        $debt->debt_status = 2;
+                    } elseif ($daysDiff < 0) {
+                        $debt->debt_status = 0;
+                    } else {
+                        $debt->debt_status = 3;
+                    }
+                    $debt->save();
+                    return redirect()->route('exports.index')->with('msg', 'Duyệt đơn thành công!');
                 } else {
                     return redirect()->route('exports.index')->with('warning', 'Chưa được thêm sản phẩm nào!');
                 }
@@ -1337,17 +1203,6 @@ class ExportController extends Controller
                     ->get();
 
                 foreach ($productExportsToDelete as $productExport) {
-                    // Cập nhật seri_status thành 1 cho sản phẩm bị xóa
-                    $serinumbersToUpdate = Serinumbers::where('product_id', $productExport->product_id)
-                        ->where('seri_status', 2)
-                        ->limit($productExport->product_qty)
-                        ->get();
-
-                    foreach ($serinumbersToUpdate as $serinumber) {
-                        $serinumber->seri_status = 1;
-                        $serinumber->save();
-                    }
-
                     // Xóa sản phẩm
                     $productExport->delete();
                 }
@@ -1372,31 +1227,7 @@ class ExportController extends Controller
                             return redirect()->route('exports.index')->with('warning', 'Vượt quá số lượng cho sản phẩm ' . $nameProduct . '!');
                         }
 
-                        // Cập nhật seri_status khi số lượng sản phẩm tăng hoặc giảm
-                        if ($productQty > $proExport->product_qty) {
-                            $serinumbersToUpdate = Serinumbers::where('product_id', $productID)
-                                ->where('seri_status', 1)
-                                ->limit($productQty - $proExport->product_qty)
-                                ->get();
-
-                            foreach ($serinumbersToUpdate as $serinumber) {
-                                $serinumber->seri_status = 2;
-                                $serinumber->save();
-                            }
-                        } elseif ($productQty < $proExport->product_qty) {
-                            $serinumbersToUpdate = Serinumbers::where('product_id', $productID)
-                                ->where('seri_status', 2)
-                                ->limit($proExport->product_qty - $productQty)
-                                ->get();
-
-                            foreach ($serinumbersToUpdate as $serinumber) {
-                                $serinumber->seri_status = 1;
-                                $serinumber->save();
-                            }
-                        }
-
                         // Cập nhật thông tin sản phẩm
-                        $proExport->products_id = $request->products_id[$i];
                         $proExport->product_unit = $request->product_unit[$i];
                         $proExport->product_qty = $productQty;
                         $proExport->product_price = $request->product_price[$i];
@@ -1411,7 +1242,6 @@ class ExportController extends Controller
                             return redirect()->route('exports.index')->with('warning', 'Vượt quá số lượng cho sản phẩm ' . $nameProduct . '!');
                         }
                         $proExport = new ProductExports();
-                        $proExport->products_id = $request->products_id[$i];
                         $proExport->product_id = $productID;
                         $proExport->export_id = $exports->id;
                         $proExport->product_name = $nameProduct;
@@ -1449,24 +1279,6 @@ class ExportController extends Controller
                 $exports->note_form = $request->note_form;
                 $exports->transport_fee = $request->transport_fee;
                 $exports->save();
-
-                // for ($i = 0; $i < count($productIDs); $i++) {
-                //     $productID = $productIDs[$i];
-                //     $productQty = $productQtys[$i];
-
-                //     // Cập nhật seri_status theo số lượng đã nhập
-                //     $serinumbers = Serinumbers::where('product_id', $productID)
-                //         ->where('seri_status', 2)
-                //         ->get();
-
-                //     foreach ($serinumbers as $serinumber) {
-                //         if ($serinumber->seri_status == 2) {
-                //             $serinumber->seri_status = 1;
-                //             $serinumber->save();
-                //         }
-                //     }
-                // }
-
                 return redirect()->route('exports.index')->with('msg', 'Hủy đơn thành công!');
             } elseif ($action === 'action3') {
                 // Lấy danh sách sản phẩm đã tồn tại trong xuất hàng
@@ -1486,14 +1298,6 @@ class ExportController extends Controller
                             $proExport = ProductExports::where('export_id', $id)
                                 ->where('product_id', $productID)
                                 ->first();
-
-                            // Kiểm tra số lượng sản phẩm mới được cập nhật
-                            $availableQty = $this->getAvailableProductQty($productID) + $proExport->product_qty - $productQty;
-
-                            if ($availableQty < 0) {
-                                return redirect()->route('exports.index')->with('warning', 'Vượt quá số lượng cho sản phẩm ' . $nameProduct . '!');
-                            }
-
                             // Cập nhật seri_status khi số lượng sản phẩm tăng hoặc giảm
                             if ($productQty > $proExport->product_qty) {
                                 $serinumbersToUpdate = Serinumbers::where('product_id', $productID)
@@ -1516,7 +1320,6 @@ class ExportController extends Controller
                                     $serinumber->save();
                                 }
                             }
-                            $proExport->products_id = $request->products_id[$i];
                             $proExport->product_unit = $request->product_unit[$i];
                             $proExport->product_qty = $productQty;
                             $proExport->product_price = $request->product_price[$i];
@@ -1525,15 +1328,7 @@ class ExportController extends Controller
                             $proExport->product_total = $request->totalValue;
                             $proExport->save();
                         } else {
-                            // Kiểm tra số lượng sản phẩm mới được thêm
-                            $availableQty = $this->getAvailableProductQty($productID);
-
-                            if ($productQty > $availableQty) {
-                                return redirect()->route('exports.index')->with('warning', 'Vượt quá số lượng cho sản phẩm ' . $nameProduct . '!');
-                            }
-
                             $proExport = new ProductExports();
-                            $proExport->products_id = $request->products_id[$i];
                             $proExport->product_id = $productID;
                             $proExport->export_id = $exports->id;
                             $proExport->product_name = $nameProduct;
@@ -1580,10 +1375,6 @@ class ExportController extends Controller
                         // Xóa sản phẩm
                         $productExport->delete();
                     }
-
-                    // Kiểm tra số lượng tổng cần thiết
-                    $availableQtyTotal = $this->getAvailableProductQtyTotal();
-
                     //
                     if ($request->id != null) {
                         $exports->guest_id = $request->id;
@@ -1596,7 +1387,7 @@ class ExportController extends Controller
                     } else if ($clickValue != 1) {
                         $guest = new Guests();
                         $guest->guest_name = $request->guest_name;
-                        $guest->guest_addressInvoice = $request->guest_addressInvoice;
+                        $guest->guest_address = $request->guest_address;
                         $guest->guest_code = $request->guest_code;
                         $guest->guest_addressDeliver = $request->guest_addressDeliver;
                         $guest->guest_receiver = $request->guest_receiver;
@@ -1628,21 +1419,6 @@ class ExportController extends Controller
         }
     }
 
-    // Lấy số lượng sản phẩm có sẵn cho một product_id
-    private function getAvailableProductQty($productID)
-    {
-        return Serinumbers::where('product_id', $productID)
-            ->where('seri_status', 1)
-            ->count();
-    }
-
-    // Lấy tổng số lượng sản phẩm có sẵn
-    private function getAvailableProductQtyTotal()
-    {
-        return Serinumbers::where('seri_status', 1)
-            ->count();
-    }
-
     /**
      * Remove the specified resource from storage.
      *
@@ -1662,43 +1438,15 @@ class ExportController extends Controller
     {
         $data = $request->all();
         if ($data['updateClick'] == 1) {
-            // Kiểm tra xem dữ liệu đã tồn tại trong cơ sở dữ liệu hay chưa
-            // $existingCustomer = Guests::where('guest_name', $request->guest_name)
-            //     ->where('guest_email', $request->guest_email)
-            //     ->where('guest_code', $request->guest_code)
-            //     ->where('guest_phone', $request->guest_phone)
-            //     ->first();
-
-            // if ($existingCustomer) {
-            //     // Dữ liệu đã tồn tại, trả về thông báo
-            //     // session()->flash('warning', 'Thông tin khách hàng đã có trong hệ thống');
-            //     return response()->json(['message' => 'Thông tin khách hàng đã có trong hệ thống']);
-            // } else {
-            //     $update_guest = Guests::findOrFail($data['id']);
-            //     $update_guest->guest_name = $data['guest_name'];
-            //     $update_guest->guest_addressInvoice = $data['guest_addressInvoice'];
-            //     $update_guest->guest_code = $data['guest_code'];
-            //     $update_guest->guest_addressDeliver = $data['guest_addressDeliver'];
-            //     $update_guest->guest_receiver = $data['guest_receiver'];
-            //     $update_guest->guest_phoneReceiver = $data['guest_phoneReceiver'];
-            //     $update_guest->guest_email = $data['guest_email'];
-            //     $update_guest->guest_phone = $data['guest_phone'];
-            //     $update_guest->guest_pay = $data['guest_pay'];
-            //     $update_guest->guest_note = $data['guest_note'];
-            //     $update_guest->debt = $data['debt'];
-            //     $update_guest->save();
-            //     return response()->json(['message' => 'Lưu thông tin thành công!']);
-            // }
             $update_guest = Guests::findOrFail($data['id']);
             $update_guest->guest_name = $data['guest_name'];
-            $update_guest->guest_addressInvoice = $data['guest_addressInvoice'];
+            $update_guest->guest_address = $data['guest_address'];
             $update_guest->guest_code = $data['guest_code'];
-            $update_guest->guest_addressDeliver = $data['guest_addressDeliver'];
             $update_guest->guest_receiver = $data['guest_receiver'];
             $update_guest->guest_phoneReceiver = $data['guest_phoneReceiver'];
             $update_guest->guest_email = $data['guest_email'];
             $update_guest->guest_phone = $data['guest_phone'];
-            $update_guest->guest_pay = $data['guest_pay'];
+            $update_guest->guest_email_personal = $data['guest_email_personal'];
             $update_guest->guest_note = $data['guest_note'];
             $update_guest->debt = $data['debt'];
             $update_guest->save();
@@ -1722,15 +1470,14 @@ class ExportController extends Controller
                 // Tạo mới bản ghi khách hàng
                 $guest = new Guests();
                 $guest->guest_name = $data['guest_name'];
-                $guest->guest_addressInvoice = $data['guest_addressInvoice'];
+                $guest->guest_address = $data['guest_address'];
                 $guest->guest_code = $data['guest_code'];
-                $guest->guest_addressDeliver = $data['guest_addressDeliver'];
                 $guest->guest_receiver = $data['guest_receiver'];
                 $guest->guest_phoneReceiver = $data['guest_phoneReceiver'];
                 $guest->guest_email = $data['guest_email'];
                 $guest->guest_status = 1;
                 $guest->guest_phone = $data['guest_phone'];
-                $guest->guest_pay = $data['guest_pay'];
+                $guest->guest_email_personal = $data['guest_email_personal'];
                 $guest->guest_note = $data['guest_note'];
                 $guest->debt = $data['debt'];
                 $guest->user_id = Auth::user()->id;
@@ -1742,108 +1489,14 @@ class ExportController extends Controller
         }
     }
 
-    public function nameProduct(Request $request)
-    {
-        $data = $request->all();
-        $selectedProductIds = $data['selectedProductIds'] ?? [];
-
-        // Retrieve the parent product ID from the request data
-        $parentId = $data['idProducts'];
-
-        // Retrieve the selected product names based on the selected product IDs
-        $selectedProductNames = Product::whereIn('id', $selectedProductIds)->pluck('product_name')->toArray();
-
-        // Retrieve the child products excluding the selected product IDs and names
-        $products = Product::where('products_id', $parentId)
-            ->whereNotIn('id', $selectedProductIds)
-            ->whereNotIn('product_name', $selectedProductNames)
-            ->get();
-
-        return response()->json($products);
-    }
-
     public function getProduct(Request $request)
     {
         $data = $request->all();
-        $product = Product::join('serinumbers', 'serinumbers.product_id', 'product.id')
+        $product = Product::select('product.*')
+            ->selectRaw('(product.product_qty - product.product_trade) as qty_exist') // Thêm cột tồn kho
             ->where('product.id', $data['idProduct'])
-            ->groupBy(
-                'product.id',
-                'product.products_id',
-                'product.product_name',
-                'product.product_category',
-                'product.product_trademark',
-                'product.product_unit',
-                'product_qty',
-                'product.product_price',
-                'product.product_orderid',
-                'product.created_at',
-                'product.updated_at',
-                'product.provide_id',
-                'product.tax',
-                'product.total',
-            )
-            ->select(
-                'product.*',
-                DB::raw('SUM(CASE WHEN serinumbers.seri_status = 2 THEN 1 ELSE 0 END) as trading'),
-                DB::raw('SUM(CASE WHEN serinumbers.seri_status = 1 THEN 1 ELSE 0 END) as qty_exist')
-            )
             ->first();
         return response()->json($product);
-    }
-
-    public function getSN(Request $request)
-    {
-        $data = $request->all();
-        if ($data['qty'] == null) {
-            return;
-        } else {
-            $sn = Serinumbers::where('product_id', $data['productCode'])
-                ->where('seri_status', '1')->limit($data['qty'])->get();
-            return response()->json($sn);
-        }
-    }
-
-    public function getSN1(Request $request)
-    {
-        $data = $request->all();
-        if ($data['qty'] == null) {
-            return;
-        } else {
-            $sn = Serinumbers::where('product_id', $data['productCode'])
-                ->where('export_seri', $data['export_id'])
-                ->where('seri_status', '3')->limit($data['qty'])->get();
-            return response()->json($sn);
-        }
-    }
-
-    public function getSN2(Request $request)
-    {
-        $data = $request->all();
-        if ($data['qty'] == null) {
-            return;
-        } else {
-            $sn = Serinumbers::where('product_id', $data['productCode'])
-                ->where('export_seri', $data['export_id'])
-                ->orderByRaw("CASE WHEN seri_status = 2 THEN 0 ELSE 1 END")
-                ->limit($data['qty'])
-                ->get();
-            return response()->json($sn);
-        }
-    }
-
-    //lấy seri đơn xuất hàng hủy
-    public function getSN3(Request $request)
-    {
-        $data = $request->all();
-        if ($data['qty'] == null) {
-            return;
-        } else {
-            $sn = Serinumbers::where('product_id', $data['productCode'])
-                ->where('export_seri', $data['export_id'])
-                ->where('seri_status', '1')->limit($data['qty'])->get();
-            return response()->json($sn);
-        }
     }
 
     // Xóa đơn hàng AJAX

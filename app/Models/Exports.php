@@ -18,7 +18,7 @@ class Exports extends Model
         $exports = DB::table($this->table)
             ->leftJoin('guests', 'exports.guest_id', '=', 'guests.id')
             ->leftJoin('users', 'exports.user_id', '=', 'users.id')
-            ->select('exports.id','exports.user_id', 'guests.guest_receiver', 'users.name', 'exports.total', 'exports.updated_at', 'export_status');
+            ->select('exports.*','exports.id','exports.user_id', 'guests.guest_receiver', 'users.name', 'exports.total', 'exports.updated_at', 'export_status');
         // Các điều kiện tìm kiếm và lọc dữ liệu ở đây
 
         $userId = Auth::user()->id;
