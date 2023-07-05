@@ -6,20 +6,6 @@
         <div class="container-fluided">
             <div class="d-flex mb-1">
                 @can('view-provides')
-                    <a href="{{ route('insertProducts') }}">
-                        <button type="button" class="custom-btn btn btn-primary d-flex align-items-center">
-                            <svg class="mr-1" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M12 6C12.3879 6 12.7024 6.31446 12.7024 6.70237L12.7024 17.2976C12.7024 17.6855 12.3879 18 12 18C11.6121 18 11.2976 17.6855 11.2976 17.2976V6.70237C11.2976 6.31446 11.6121 6 12 6Z"
-                                    fill="#ffff" />
-                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M18 12C18 12.3879 17.6855 12.7024 17.2976 12.7024H6.70237C6.31446 12.7024 6 12.3879 6 12C6 11.6121 6.31446 11.2976 6.70237 11.2976H17.2976C17.6855 11.2976 18 11.6121 18 12Z"
-                                    fill="#ffff" />
-                            </svg>
-                            <span>Thêm sản phẩm</span>
-                        </button>
-                    </a>
                     <div class="class mx-4">
                         <button onclick="exportToExcel()" type="button"
                             class="custom-btn btn btn-outline-primary d-flex align-items-center">
@@ -35,19 +21,19 @@
                             </svg>
                             <span>Xuất Excel</span>
                             <!-- </button>
-                           <a href="{{ route('export_products') }}" class="custom-btn btn btn-outline-primary btn-file d-flex align-items-center">
-                                <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                    viewBox="0 0 24 24" fill="none">
-                                    <path
-                                        d="M15.0003 7.80054H16.5001C16.8979 7.80054 17.2794 7.95857 17.5607 8.23984C17.842 8.52112 18 8.9026 18 9.30039V17.1006C18 17.4983 17.842 17.8798 17.5607 18.1611C17.2794 18.4424 16.8979 18.6004 16.5001 18.6004H7.49986C7.10207 18.6004 6.72058 18.4424 6.4393 18.1611C6.15802 17.8798 6 17.4983 6 17.1006V9.30039C6 8.9026 6.15802 8.52112 6.4393 8.23984C6.72058 7.95857 7.10207 7.80054 7.49986 7.80054H8.99972"
-                                        stroke="#0095F6" stroke-linecap="round" stroke-linejoin="round" />
-                                    <path d="M8.99976 11.3997L11.9995 14.3994L15.0003 11.3997" stroke="#0095F6"
-                                        stroke-linecap="round" stroke-linejoin="round" />
-                                    <path d="M12.0006 3V13.7999" stroke="#0095F6" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                </svg>
-                                <span>Xuất Excel</span>
-                                </a> -->
+                               <a href="{{ route('export_products') }}" class="custom-btn btn btn-outline-primary btn-file d-flex align-items-center">
+                                    <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        viewBox="0 0 24 24" fill="none">
+                                        <path
+                                            d="M15.0003 7.80054H16.5001C16.8979 7.80054 17.2794 7.95857 17.5607 8.23984C17.842 8.52112 18 8.9026 18 9.30039V17.1006C18 17.4983 17.842 17.8798 17.5607 18.1611C17.2794 18.4424 16.8979 18.6004 16.5001 18.6004H7.49986C7.10207 18.6004 6.72058 18.4424 6.4393 18.1611C6.15802 17.8798 6 17.4983 6 17.1006V9.30039C6 8.9026 6.15802 8.52112 6.4393 8.23984C6.72058 7.95857 7.10207 7.80054 7.49986 7.80054H8.99972"
+                                            stroke="#0095F6" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M8.99976 11.3997L11.9995 14.3994L15.0003 11.3997" stroke="#0095F6"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M12.0006 3V13.7999" stroke="#0095F6" stroke-linecap="round"
+                                            stroke-linejoin="round" />
+                                    </svg>
+                                    <span>Xuất Excel</span>
+                                    </a> -->
                     </div>
                     <div class="custom-btn btn btn-outline-primary btn-file d-flex align-items-center">
                         <div>
@@ -157,19 +143,37 @@
                                         </th>
                                         <th scope="col">
                                             <span class="d-flex">
-                                                <a href="#" class="sort-link" data-sort-by="products_code"
-                                                    data-sort-type=""><button class="btn-sort" type="submit">Số hóa
-                                                        đơn</button></a>
-                                                <div class="icon" id="icon-products_code"></div>
-                                            </span>
-                                        </th>
-                                        <th scope="col">
-                                            <span class="d-flex">
                                                 <a href="#" class="sort-link" data-sort-by="products_name"
                                                     data-sort-type=""><button class="btn-sort" type="submit">Tên sản
                                                         phẩm</button></a>
 
                                                 <div class="icon" id="icon-products_name"></div>
+                                            </span>
+                                        </th>
+                                        <th scope="col">
+                                            <span class="d-flex">
+                                                <a href="#" class="sort-link" data-sort-by="products_name"
+                                                    data-sort-type=""><button class="btn-sort" type="submit">Nhà
+                                                        cung
+                                                        cấp</button></a>
+                                                <div class="icon" id="icon-products_name"></div>
+                                            </span>
+                                        </th>
+                                        <th scope="col">
+                                            <span class="d-flex">
+                                                <a href="#" class="sort-link" data-sort-by="products_name"
+                                                    data-sort-type=""><button class="btn-sort"
+                                                        type="submit">ĐVT</button></a>
+                                                <div class="icon" id="icon-products_name"></div>
+                                            </span>
+                                        </th>
+                                        <th scope="col">
+                                            <span class="d-flex justify-content-end">
+                                                <a href="#" class="sort-link" data-sort-by="inventory"
+                                                    data-sort-type=""><button class="btn-sort" type="submit">Số
+                                                        lượng</button></a>
+
+                                                <div class="icon" id="icon-inventory"></div>
                                             </span>
                                         </th>
                                         <th scope="col">
@@ -182,19 +186,9 @@
                                         </th>
                                         <th scope="col">
                                             <span class="d-flex justify-content-end">
-                                                <a href="#" class="sort-link" data-sort-by="inventory"
-                                                    data-sort-type=""><button class="btn-sort" type="submit">Tồn
-                                                        kho</button></a>
-
-                                                <div class="icon" id="icon-inventory"></div>
-                                            </span>
-                                        </th>
-                                        <th scope="col">
-                                            <span class="d-flex justify-content-end">
                                                 <a href="#" class="sort-link" data-sort-by="price_avg"
                                                     data-sort-type=""><button class="btn-sort" type="submit">Đơn giá
                                                         nhập</button></a>
-
                                                 <div class="icon" id="icon-price_avg"></div>
                                             </span>
                                         </th>
@@ -203,6 +197,14 @@
                                                 <a href="#" class="sort-link" data-sort-by="price_inventory"
                                                     data-sort-type=""><button class="btn-sort" type="submit">Trị tồn
                                                         kho</button></a>
+                                                <div class="icon" id="icon-price_inventory"></div>
+                                            </span>
+                                        </th>
+                                        <th scope="col">
+                                            <span class="d-flex justify-content-end">
+                                                <a href="#" class="sort-link" data-sort-by="price_inventory"
+                                                    data-sort-type=""><button class="btn-sort" type="submit">Thuế
+                                                        </button></a>
                                                 <div class="icon" id="icon-price_inventory"></div>
                                             </span>
                                         </th>
@@ -222,25 +224,17 @@
                                     @foreach ($products as $value)
                                         <tr>
                                             <td><input type="checkbox"></td>
-
-                                            <td>{{ $value->id }}</td>
-
-                                            <td>{{ $value->product_code }}</td>
-                                            <td>{{ $value->product_name }}</td>
-
-                                            <td>{{ $value->product_unit }}</td>
-
-                                            <td>{{ $value->product_qty }}</td>
-
-                                            <td>{{ $value->product_price }}</td>
-
-                                            <td>{{ $value->total }}</td>
-                                            <td>
-                                                {{$value->status}}
-                                            </td>
-                                            <td>
-
-                                            </td>
+                                            <td>{{$value->id}}</td>
+                                           <td>{{$value->product_name}}</td>
+                                           <td>@if($value->getNameProvide != null) {{ $value->getNameProvide->provide_name}} @endif</td>
+                                           <td>{{$value->product_unit}}</td>
+                                           <td>{{$value->product_qty}}</td>
+                                           <td>{{$value->product_trade}}</td>
+                                           <td>{{$value->product_price}}</td>
+                                           <td>{{$value->total}}</td>
+                                           <td>{{$value->tax}}</td>
+                                           <td></td>
+                                           <td></td>
                                         </tr>
                                     @endforeach
                                 </tbody>
