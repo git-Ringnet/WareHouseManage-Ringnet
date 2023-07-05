@@ -7,6 +7,7 @@ use App\Http\Controllers\DebtController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\GuestsController;
 use App\Http\Controllers\InsertProductController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
@@ -75,7 +76,7 @@ Route::get('/paymentdebt', [DebtController::class, 'paymentdebt'])->name('paymen
 //kiểm tra số lượng trong xuất hàng
 Route::get('checkqty', [ExportController::class, 'checkqty'])->name('checkqty');
 
-Route::resource('data', ProductsController::class);
+Route::resource('data', ProductController::class);
 Route::get('/insertProducts', [ProductsController::class, 'insertProducts'])->name('insertProducts');
 Route::POST('/storeProducts', [ProductsController::class, 'storeProducts'])->name('storeProducts');
 Route::get('/data_edit', [ProductsController::class, 'edit_ajax'])->name('ajax');

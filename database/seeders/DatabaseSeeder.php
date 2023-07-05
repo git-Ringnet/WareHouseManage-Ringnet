@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
             DetailsSeeder::class,
             GuestsSeeder::class,
             ProductSeeder::class,
-            productsSeeder::class,
+            // productsSeeder::class,
             ProvidesSeeder::class,
             SerinumbersSeeder::class,
             UsersTableSeeder::class,
