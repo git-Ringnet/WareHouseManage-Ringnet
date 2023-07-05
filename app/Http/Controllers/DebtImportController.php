@@ -2,28 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Debt;
+use App\Models\DebtImport;
 use App\Models\User;
-use DateTime;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 
-class DebtController extends Controller
+class DebtImportController extends Controller
 {
-
-    private $debts;
-    public function __construct()
-    {
-        $this->debts = new Debt();
-    }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
+    private $debts;
+    public function __construct()
+    {
+        $this->debts = new DebtImport();
+    }
     public function index(Request $request)
     {
-        $title = 'Công nợ';
+        $title = 'Công nợ Xuất hàng';
         $filters = [];
         $string = [];
         //Mã đơn
@@ -142,10 +139,10 @@ class DebtController extends Controller
 
 
         $debtsSale = User::whereIn('roleid', [1, 3])->get();
-        $debts = $this->debts->getAllDebts($filters, $keywords, $nhanvien, $date, $datepaid, $status, $sortBy, $sortType);
+        $debts = $this->debts->getAllDebts($filters, $keywords, $nhanvien, $date,$datepaid, $status, $sortBy, $sortType);
         $product = $this->debts->getAllProductsDebts();
         $debtsCreator = $this->debts->debtsCreator();
-        return view('tables.debt.debts', compact('title', 'debts', 'debtsSale', 'product', 'string', 'sortType', 'debtsCreator'));
+        return view('tables.debtImport.debts-import', compact('title', 'debts', 'debtsSale', 'product', 'string', 'sortType', 'debtsCreator'));
     }
 
     /**
@@ -188,19 +185,7 @@ class DebtController extends Controller
      */
     public function edit($id)
     {
-        $debts = Debt::select('debts.*', 'guests.guest_name as khachhang', 'users.name as nhanvien')
-            ->join('guests', 'debts.guest_id', '=', 'guests.id')
-            ->join('users', 'debts.user_id', '=', 'users.id')
-            ->findOrFail($id);
-        $product = Debt::select('debts.*', 'products.products_code as maSanPham', 'product_exports.id as madon', 'product_exports.product_qty as soluong', 'product_exports.product_price as giaban', 'product.product_price as gianhap')
-            ->leftJoin('guests', 'guests.id', 'debts.guest_id')
-            ->leftJoin('users', 'users.id', 'debts.user_id')
-            ->leftJoin('exports', 'exports.id', 'debts.export_id')
-            ->leftJoin('product_exports', 'exports.id', 'product_exports.export_id')
-            ->leftJoin('products', 'products.id', 'product_exports.products_id')
-            ->leftJoin('product', 'product.id', 'product_exports.product_id')->where('debts.id', $id)->get();
-        $title = "Chi tiết đơn hàng";
-        return view('tables.debt.editDebt', compact('debts', 'product', 'title'));
+        //
     }
 
     /**
@@ -212,43 +197,7 @@ class DebtController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $debt = Debt::find($id);
-        // dd($request);
-        if ($request->has('submitBtn')) {
-            $action = $request->input('submitBtn');
-            if ($action === 'action1') {
-                $debt->debt_status = 1;
-                $debt->debt = 0;
-                $debt->update($request->all());
-                return redirect()->route('debt.index')->with('msg', 'Thanh toán thành công!');
-            }
-            if ($action === 'action2') {
-                // Xử lí status debt
-                $endDate = new DateTime($request->date_end);
-                $now = new DateTime();
-
-                $interval = $endDate->diff($now);
-                $daysDiff = $interval->days; // Số ngày khác nhau giữa hai ngày
-                // dd($request->debt_debt);
-                // dd($daysDiff);
-                if ($request->debt_debt == null || $request->debt_debt == 0) {
-                    $debt->debt_status = 4;
-                    $debt->debt = 0;
-                } elseif ($daysDiff <= 3 && $daysDiff >= 0) {
-                    $debt->debt_status = 2;
-                    $debt->debt = $request->debt_debt;
-                } elseif ($daysDiff < 0) {
-                    $debt->debt_status = 0;
-                    $debt->debt = $request->debt_debt;
-                } else {
-                    $debt->debt_status = 3;
-                    $debt->debt = $request->debt_debt;
-                }
-                $debt->update($request->all());
-
-                return redirect()->route('debt.index')->with('msg', 'Cập nhật thành công!');
-            }
-        }
+        //
     }
 
     /**
@@ -260,20 +209,5 @@ class DebtController extends Controller
     public function destroy($id)
     {
         //
-    }
-    public function paymentdebt(Request $request)
-    {
-        if (isset($request->list_id)) {
-            $list = $request->list_id;
-            $listOrder = Debt::whereIn('id', $list)->get();
-            foreach ($listOrder as $value) {
-                $value->debt_status = 1;
-                $value->save();
-            }
-            session()->flash('msg', 'Thanh toán thành công');
-            return response()->json(['success' => true, 'msg' => 'Thanh toán thành công']);
-        }
-        return response()->json(['success' => false, 'warning' => 'Thanh toán thất bại!']);
-        session()->flash('msg', 'Thanh toán thất bại!');
     }
 }

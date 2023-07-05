@@ -71,7 +71,7 @@ li {
 #myInput-category,
 .input-quantity,
 .input-search,
-.input-so {
+.input-so,.input-operator {
     padding: 5px 10px;
     border: 1px solid #d6d6d6;
     border-radius: 5px;

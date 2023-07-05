@@ -1,4 +1,5 @@
-<x-navbar :title="$title"></x-navbar>
+<x-navbar :title="$title">
+</x-navbar>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -6,7 +7,7 @@
         <div class="container-fluided">
             <div class="d-flex mb-1">
                 @can('view-provides')
-                    <div class="class mx-4">
+                    <div class="class">
                         <button onclick="exportToExcel()" type="button"
                             class="custom-btn btn btn-outline-primary d-flex align-items-center">
                             <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -20,22 +21,8 @@
                                     stroke-linejoin="round" />
                             </svg>
                             <span>Xuất Excel</span>
-                            <!-- </button>
-                               <a href="{{ route('export_products') }}" class="custom-btn btn btn-outline-primary btn-file d-flex align-items-center">
-                                    <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none">
-                                        <path
-                                            d="M15.0003 7.80054H16.5001C16.8979 7.80054 17.2794 7.95857 17.5607 8.23984C17.842 8.52112 18 8.9026 18 9.30039V17.1006C18 17.4983 17.842 17.8798 17.5607 18.1611C17.2794 18.4424 16.8979 18.6004 16.5001 18.6004H7.49986C7.10207 18.6004 6.72058 18.4424 6.4393 18.1611C6.15802 17.8798 6 17.4983 6 17.1006V9.30039C6 8.9026 6.15802 8.52112 6.4393 8.23984C6.72058 7.95857 7.10207 7.80054 7.49986 7.80054H8.99972"
-                                            stroke="#0095F6" stroke-linecap="round" stroke-linejoin="round" />
-                                        <path d="M8.99976 11.3997L11.9995 14.3994L15.0003 11.3997" stroke="#0095F6"
-                                            stroke-linecap="round" stroke-linejoin="round" />
-                                        <path d="M12.0006 3V13.7999" stroke="#0095F6" stroke-linecap="round"
-                                            stroke-linejoin="round" />
-                                    </svg>
-                                    <span>Xuất Excel</span>
-                                    </a> -->
                     </div>
-                    <div class="custom-btn btn btn-outline-primary btn-file d-flex align-items-center">
+                    <div class="custom-btn btn btn-outline-primary btn-file d-flex align-items-center mx-4">
                         <div>
                             <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24" fill="none">
@@ -53,7 +40,540 @@
                     </div>
                 @endcan
             </div>
+            <div class="row m-auto filter pt-2">
+                <form class="w-100" action="" method="get" id='search-filter'>
+                    <div class="row mr-0">
+                        <div class="col-5">
+                            <input type="text" placeholder="Tìm kiếm theo mã sản phẩm hoặc tên sản phẩm"
+                                name="keywords" class="pr-4 input-search w-100 form-control h-100"
+                                value="{{ request()->keywords }}">
+                            <span class="search-icon"><i class="fas fa-search"></i></span>
+                        </div>
+                        <div class="col-2 d-none">
+                            <button type="submit" class="btn btn-primary btn-block">Tìm kiếm</button>
+                        </div>
+                        <a class="btn ml-auto btn-delete-filter btn-light" href="{{ route('data.index') }}"><span><svg
+                                    width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M6 5.4643C6 5.34116 6.04863 5.22306 6.13518 5.13599C6.22174 5.04892 6.33913 5 6.46154 5H17.5385C17.6609 5 17.7783 5.04892 17.8648 5.13599C17.9514 5.22306 18 5.34116 18 5.4643V7.32149C18 7.43599 17.9579 7.54645 17.8818 7.63164L13.8462 12.1428V16.6075C13.8461 16.7049 13.8156 16.7998 13.7589 16.8788C13.7022 16.9578 13.6223 17.0168 13.5305 17.0476L10.7612 17.9762C10.6919 17.9994 10.618 18.0058 10.5458 17.9947C10.4735 17.9836 10.4049 17.9554 10.3456 17.9124C10.2863 17.8695 10.238 17.8129 10.2047 17.7475C10.1713 17.682 10.1539 17.6096 10.1538 17.5361V12.1428L6.11815 7.63164C6.0421 7.54645 6.00002 7.43599 6 7.32149V5.4643Z"
+                                        fill="#555555" />
+                                </svg>
+                            </span><span>Tắt bộ lọc</span></a>
+                    </div>
+                    <div class="d-flex justify-contents-center align-items-center mr-auto row-filter my-3 m-0">
+                        <div class="icon-filter mr-3">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M8.66667 18C8.66667 17.7348 8.75446 17.4804 8.91074 17.2929C9.06702 17.1054 9.27899 17 9.5 17H14.5C14.721 17 14.933 17.1054 15.0893 17.2929C15.2455 17.4804 15.3333 17.7348 15.3333 18C15.3333 18.2652 15.2455 18.5196 15.0893 18.7071C14.933 18.8946 14.721 19 14.5 19H9.5C9.27899 19 9.06702 18.8946 8.91074 18.7071C8.75446 18.5196 8.66667 18.2652 8.66667 18ZM5.33333 12C5.33333 11.7348 5.42113 11.4804 5.57741 11.2929C5.73369 11.1054 5.94565 11 6.16667 11H17.8333C18.0543 11 18.2663 11.1054 18.4226 11.2929C18.5789 11.4804 18.6667 11.7348 18.6667 12C18.6667 12.2652 18.5789 12.5196 18.4226 12.7071C18.2663 12.8946 18.0543 13 17.8333 13H6.16667C5.94565 13 5.73369 12.8946 5.57741 12.7071C5.42113 12.5196 5.33333 12.2652 5.33333 12ZM2 6C2 5.73478 2.0878 5.48043 2.24408 5.29289C2.40036 5.10536 2.61232 5 2.83333 5H21.1667C21.3877 5 21.5996 5.10536 21.7559 5.29289C21.9122 5.48043 22 5.73478 22 6C22 6.26522 21.9122 6.51957 21.7559 6.70711C21.5996 6.89464 21.3877 7 21.1667 7H2.83333C2.61232 7 2.40036 6.89464 2.24408 6.70711C2.0878 6.51957 2 6.26522 2 6Z"
+                                    fill="#555555" />
+                            </svg>
+                        </div>
+                        <?php
+                        session_start();
+                        
+                        $fullUrl = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+                        if ($fullUrl === route('data.index')) {
+                            // Xử lý khi route hiện tại bằng route('data.index')
+                            unset($_SESSION['labels']); // Xóa session
+                        }
+                        if (!isset($_SESSION['labels'])) {
+                            $_SESSION['labels'] = [];
+                        }
+                        
+                        // Lấy mảng labels từ nguồn dữ liệu hoặc quá trình xử lý khác
+                        $labelsToAdd = [];
+                        foreach ($string as $item) {
+                            $labelsToAdd[] = $item['label'];
+                        }
+                        
+                        $deleteItem = request()->delete_item;
+                        // var_dump($deleteItem);
+                        // echo '<br>';
+                        if (($key = array_search($deleteItem, $_SESSION['labels'])) !== false) {
+                            unset($_SESSION['labels'][$key]);
+                        }
+                        // Kiểm tra từng giá trị trong mảng labelsToAdd và thêm vào cuối mảng nếu giá trị đó chưa tồn tại trong mảng labels
+                        foreach ($labelsToAdd as $label) {
+                            if (!in_array($label, $_SESSION['labels'])) {
+                                $_SESSION['labels'][] = $label; // Thêm vào cuối mảng
+                            }
+                        }
+                        
+                        // Đánh số vị trí cho từng phần tử trong mảng session
+                        $numberedLabels = array_values($_SESSION['labels']);
+                        // var_dump(request()->delete_item);
+                        
+                        // var_dump($_SESSION['labels']);
+                        ?>
 
+                        <div class="filter-results d-flex row m-0">
+                            <input id="delete-item-input" type="hidden" name="delete_item" value="">
+                            @foreach ($string as $item)
+                                <span class="filter-group"
+                                    style="order: 
+                                            @php
+$index = array_search($item['label'], $numberedLabels);
+                                                if ($index !== false) {
+                                                    echo $index + 1;
+                                                } else {
+                                                    echo 0;
+                                                } @endphp">
+                                    {{ $item['label'] }}
+                                    @if ($item['label'] === 'Thuế:')
+                                    <span class="filter-values">{{ implode(', ', array_map(function($value) { return $value . '%'; }, $item['values'])) }}
+                                    </span>
+                                @else
+                                    <span class="filter-values">{{ implode(', ', $item['values']) }}</span>
+                                @endif
+                                    <a class="delete-item delete-btn-{{ $item['class'] }}"
+                                        onclick="updateDeleteItemValue('{{ $item['label'] }}')">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M18 18L6 6" stroke="#555555" stroke-width="1.5"
+                                                stroke-linecap="round" stroke-linejoin="round" />
+                                            <path d="M18 6L6 18" stroke="#555555" stroke-width="1.5"
+                                                stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </a>
+                                </span>
+                            @endforeach
+                            <span class="" style="order: 999;">
+                                <div class="filter-options">
+                                    <div class="dropdown">
+                                        <button class="btn btn-filter btn-light" type="button"
+                                            id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false">
+                                            <span><svg width="24" height="24" viewBox="0 0 24 24"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                        d="M12 6C12.3879 6 12.7024 6.31446 12.7024 6.70237L12.7024 17.2976C12.7024 17.6855 12.3879 18 12 18C11.6121 18 11.2976 17.6855 11.2976 17.2976V6.70237C11.2976 6.31446 11.6121 6 12 6Z"
+                                                        fill="#555555" />
+                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                        d="M18 12C18 12.3879 17.6855 12.7024 17.2976 12.7024H6.70237C6.31446 12.7024 6 12.3879 6 12C6 11.6121 6.31446 11.2976 6.70237 11.2976H17.2976C17.6855 11.2976 18 11.6121 18 12Z"
+                                                        fill="#555555" />
+                                                </svg>
+                                                Thêm bộ lọc
+                                            </span>
+                                        </button>
+                                        <div class="dropdown-menu" id="dropdown-menu"
+                                            aria-labelledby="dropdownMenuButton">
+                                            <div class="search-container px-2">
+                                                <input type="text" placeholder="Tìm kiếm" id="myInput"
+                                                    onkeyup="filterFunction()">
+                                                <span class="search-icon"><i class="fas fa-search"></i></span>
+                                            </div>
+                                            <div class="scrollbar">
+                                                <button class="dropdown-item" id="btn-id">Tên sản phẩm</button>
+                                                <button class="dropdown-item" id="btn-category">Nhà cung cấp</button>
+                                                <button class="dropdown-item" id="btn-trademark">Đơn vị tính</button>
+                                                <button class="dropdown-item" id="btn-quantity">Số lượng</button>
+                                                <button class="dropdown-item" id="btn-trade">Đang giao dịch</button>
+                                                <button class="dropdown-item" id="btn-avg">Đơn giá nhập</button>
+                                                <button class="dropdown-item" id="btn-price_inven">Trị tồn
+                                                    kho</button>
+                                                <button class="dropdown-item" id="btn-tax">Thuế</button>
+                                                <button class="dropdown-item" id="btn-status">Trạng thái</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php
+                                    $unitarr = [];
+                                    $status = [];
+                                    if (isset(request()->status)) {
+                                        $status = request()->status;
+                                    } else {
+                                        $status = [];
+                                    }
+                                    if (isset(request()->unitarr)) {
+                                        $unitarr = request()->unitarr;
+                                    } else {
+                                        $unitarr = [];
+                                    }
+                                    $providearr = [];
+                                    
+                                    if (isset(request()->providearr)) {
+                                        $providearr = request()->providearr;
+                                    } else {
+                                        $providearr = [];
+                                    }
+                                    // Thuế
+                                    $taxarr = [];
+                                    
+                                    if (isset(request()->taxarr)) {
+                                        $taxarr = request()->taxarr;
+                                    } else {
+                                        $taxarr = [];
+                                    }
+                                    $comparison_operator = null;
+                                    $quantity = null;
+                                    //Số lượng
+                                    if (isset(request()->comparison_operator) && isset(request()->quantity)) {
+                                        $comparison_operator = request()->comparison_operator;
+                                        $quantity = request()->quantity;
+                                    } else {
+                                        $comparison_operator = null;
+                                        $quantity = null;
+                                    }
+                                    $trade_operator = null;
+                                    $quantity = null;
+                                    //Đang giao dịch
+                                    if (isset(request()->trade_operator) && isset(request()->quantity)) {
+                                        $trade_operator = request()->trade_operator;
+                                        $quantity = request()->quantity;
+                                    } else {
+                                        $trade_operator = null;
+                                        $quantity = null;
+                                    }
+                                    //Đơn giá nhập
+                                    $avg_operator = null;
+                                    $avg = null;
+                                    if (isset(request()->avg_operator) && isset(request()->avg)) {
+                                        $avg_operator = request()->avg_operator;
+                                        $avg = request()->avg;
+                                    } else {
+                                        $avg_operator = null;
+                                        $avg = null;
+                                    }
+                                    //Trị tồn kho
+                                    $price_inven_operator = null;
+                                    $price_inven = null;
+                                    if (isset(request()->price_inven_operator) && isset(request()->price_inven)) {
+                                        $price_inven_operator = request()->price_inven_operator;
+                                        $price_inven = request()->price_inven;
+                                    } else {
+                                        $price_inven_operator = null;
+                                        $price_inven = null;
+                                    }
+                                    ?>
+                                    <div class="block-options" id="id-options" style="display:none">
+                                        <div class="wrap w-100">
+                                            <div class="heading-title title-wrap">
+                                                <h5>Tên sản phẩm</h5>
+                                            </div>
+                                            <div class="input-group p-2">
+                                                <label class="title" for="">Chứa kí tự</label>
+                                                <input type="search" name="products_name"
+                                                    class="form-control  products_name-input"
+                                                    value="{{ request()->products_name }}"
+                                                    placeholder="Nhập thông tin..">
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                            <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                                Nhận</button>
+                                            <button type="button" id="cancel-id"
+                                                class="btn btn-default btn-block">Hủy</button>
+                                        </div>
+                                    </div>
+                                    {{-- filter Status --}}
+                                    <div class="block-options" id="status-options" style="display:none">
+                                        <div class="wrap w-100">
+                                            <div class="heading-title title-wrap">
+                                                <h5>Trạng thái</h5>
+                                            </div>
+                                            <div class="search-container px-2 mt-2">
+                                                <input type="text" placeholder="Tìm kiếm" id="myInput-status"
+                                                    class="pr-4 w-100 input-search" onkeyup="filterStatus()">
+                                                <span class="search-icon"><i class="fas fa-search"></i></span>
+                                            </div>
+                                            <div
+                                                class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
+                                                <a class="cursor select-all mr-auto">Chọn tất cả</a>
+                                                <a class="cursor deselect-all">Hủy chọn</a>
+                                            </div>
+                                            <ul class="ks-cboxtags-status p-0 mb-1 px-2">
+                                                <li>
+                                                    <input type="checkbox" id="status_active"
+                                                        {{ in_array(2, $status) ? 'checked' : '' }} name="status[]"
+                                                        value="2">
+                                                    <label id="status_value" for="">Sẵn hàng</label>
+                                                </li>
+                                                <li>
+                                                    <input type="checkbox" id="status_inactive"
+                                                        {{ in_array(1, $status) ? 'checked' : '' }} name="status[]"
+                                                        value="1">
+                                                    <label id="status_value" for="">Gần hết</label>
+                                                </li>
+                                                <li>
+                                                    <input type="checkbox" id="status"
+                                                        {{ in_array(0, $status) ? 'checked' : '' }} name="status[]"
+                                                        value="0">
+                                                    <label for="">Hết hàng</label>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                            <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                                Nhận</button>
+                                            <button type="button" id="cancel-status"
+                                                class="btn btn-default btn-block">Hủy</button>
+                                        </div>
+                                    </div>
+                                    {{-- filter Nhà cung cấp --}}
+                                    <div class="block-options" id="category-options" style="display:none">
+                                        <div class="wrap w-100">
+                                            <div class="heading-title title-wrap">
+                                                <h5>Nhà cung cấp</h5>
+                                            </div>
+                                            <div class="search-container px-2 mt-2">
+                                                <input type="text" placeholder="Tìm kiếm" id="myInput-category"
+                                                    class="pr-4 w-100" onkeyup="filterCategory()">
+                                                <span class="search-icon"><i class="fas fa-search"></i></span>
+                                            </div>
+                                            <div
+                                                class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
+                                                <a class="cursor select-all-category mr-auto">Chọn tất cả</a>
+                                                <a class="cursor deselect-all-category">Hủy chọn</a>
+                                            </div>
+                                            <ul class="ks-cboxtags-category p-0 mb-1 px-2">
+                                                @if (!empty($provide))
+                                                    @php
+                                                        $seenValues = [];
+                                                    @endphp
+                                                    @foreach ($provide as $value)
+                                                        @if (!in_array($value->provide_name, $seenValues))
+                                                            <li>
+                                                                <input type="checkbox" id="roles_active"
+                                                                    class="category-checkbox"
+                                                                    {{ in_array($value->provide_name, $providearr) ? 'checked' : '' }}
+                                                                    name="providearr[]"
+                                                                    value="{{ $value->provide_name }}">
+                                                                <label id="category_value"
+                                                                    for="">{{ $value->provide_name }}</label>
+                                                            </li>
+                                                            @php
+                                                                $seenValues[] = $value->provide_name;
+                                                            @endphp
+                                                        @endif
+                                                    @endforeach
+                                                @endif
+                                            </ul>
+                                            <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                                <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                                    Nhận</button>
+                                                <button type="button" id="cancel-category"
+                                                    class="btn btn-default btn-block">Hủy</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{-- filter Đơn vị tính --}}
+                                    <div class="block-options" id="trademark-options" style="display:none">
+                                        <div class="wrap w-100">
+                                            <div class="heading-title title-wrap">
+                                                <h5>Đơn vị tính</h5>
+                                            </div>
+                                            <div class="search-container px-2 mt-2">
+                                                <input type="text" placeholder="Tìm kiếm" id="myInput-trademark"
+                                                    class="pr-4 w-100" onkeyup="filterTrademark()">
+                                                <span class="search-icon"><i class="fas fa-search"></i></span>
+                                            </div>
+                                            <div
+                                                class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
+                                                <a class="cursor select-all-trademark mr-auto">Chọn tất cả</a>
+                                                <a class="cursor deselect-all-trademark">Hủy chọn</a>
+                                            </div>
+                                            <ul class="ks-cboxtags-trademark p-0 mb-1 px-2">
+                                                @if (!empty($unit))
+                                                    @php
+                                                        $seenValues = [];
+                                                    @endphp
+                                                    @foreach ($unit as $value)
+                                                        @if (!in_array($value->product_unit, $seenValues))
+                                                            <li>
+                                                                <input type="checkbox" id="unit_active"
+                                                                    {{ in_array($value->product_unit, $unitarr) ? 'checked' : '' }}
+                                                                    name="unitarr[]"
+                                                                    value="{{ $value->product_unit }}">
+                                                                <label id="trademark_value"
+                                                                    for="">{{ $value->product_unit }}</label>
+                                                            </li>
+                                                            @php
+                                                                $seenValues[] = $value->product_unit;
+                                                            @endphp
+                                                        @endif
+                                                    @endforeach
+                                                @endif
+                                            </ul>
+                                            <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                                <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                                    Nhận</button>
+                                                <button type="button" id="cancel-trademark"
+                                                    class="btn btn-default btn-block">Hủy</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{-- filter Thuế --}}
+                                    <div class="block-options" id="tax-options" style="display:none">
+                                        <div class="wrap w-100">
+                                            <div class="heading-title title-wrap">
+                                                <h5>Thuế</h5>
+                                            </div>
+                                            <div class="search-container px-2 mt-2">
+                                                <input type="text" placeholder="Tìm kiếm" id="myInput-tax"
+                                                    class="pr-4 w-100" onkeyup="filtertax()">
+                                                <span class="search-icon"><i class="fas fa-search"></i></span>
+                                            </div>
+                                            <div
+                                                class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
+                                                <a class="cursor select-all-tax mr-auto">Chọn tất cả</a>
+                                                <a class="cursor deselect-all-tax">Hủy chọn</a>
+                                            </div>
+                                            <ul class="ks-cboxtags-tax p-0 mb-1 px-2">
+                                                @if (!empty($unit))
+                                                    @php
+                                                        $seenValues = [];
+                                                    @endphp
+                                                    @foreach ($unit as $value)
+                                                        @if (!in_array($value->tax, $seenValues))
+                                                            <li>
+                                                                <input type="checkbox" id="unit_active"
+                                                                    {{ in_array($value->tax, $taxarr) ? 'checked' : '' }}
+                                                                    name="taxarr[]" value="{{ $value->tax }}">
+                                                                <label id="tax_value"
+                                                                    for="">{{ $value->tax }}%</label>
+                                                            </li>
+                                                            @php
+                                                                $seenValues[] = $value->tax;
+                                                            @endphp
+                                                        @endif
+                                                    @endforeach
+                                                @endif
+                                            </ul>
+                                            <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                                <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                                    Nhận</button>
+                                                <button type="button" id="cancel-tax"
+                                                    class="btn btn-default btn-block">Hủy</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{-- filter Số lượng --}}
+                                    <div class="block-options" id="quantity-options" style="display:none">
+                                        <div class="wrap w-100">
+                                            <div class="heading-title title-wrap">
+                                                <h5>Số lượng</h5>
+                                            </div>
+                                            <div class="input-group p-2 justify-content-around">
+                                                <select class="comparison_operator" name="comparison_operator"
+                                                    style="width: 40%">
+                                                    <option value=">="
+                                                        {{ request('comparison_operator') === '>=' ? 'selected' : '' }}>
+                                                        >=
+                                                    </option>
+                                                    <option value="<="
+                                                        {{ request('comparison_operator') === '<=' ? 'selected' : '' }}>
+                                                        <=< /option>
+                                                </select>
+                                                <input class="w-50 quantity-input input-so" type="text"
+                                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                                    name="quantity" value="{{ request()->quantity }}"
+                                                    placeholder="Số lượng">
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                            <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                                Nhận</button>
+                                            <button type="button" id="cancel-quantity"
+                                                class="btn btn-default btn-block">Hủy</button>
+                                        </div>
+                                    </div>
+                                    {{-- filter Trade --}}
+                                    <div class="block-options" id="trade-options" style="display:none">
+                                        <div class="wrap w-100">
+                                            <div class="heading-title title-wrap">
+                                                <h5>Đang giao dịch</h5>
+                                            </div>
+                                            <div class="input-group p-2 justify-content-around">
+                                                <select class="trade_operator input-operator" name="trade_operator"
+                                                    style="width: 40%">
+                                                    <option value=">="
+                                                        {{ request('trade_operator') === '>=' ? 'selected' : '' }}>
+                                                        >=
+                                                    </option>
+                                                    <option value="<="
+                                                        {{ request('trade_operator') === '<=' ? 'selected' : '' }}>
+                                                        <=< /option>
+                                                </select>
+                                                <input class="w-50 trade-input input-so" type="text"
+                                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                                    name="trade" value="{{ request()->trade }}"
+                                                    placeholder="Số lượng">
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                            <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                                Nhận</button>
+                                            <button type="button" id="cancel-trade"
+                                                class="btn btn-default btn-block">Hủy</button>
+                                        </div>
+                                    </div>
+                                    {{-- filter đơn giá nhập --}}
+                                    <div class="block-options" id="avg-options" style="display:none">
+                                        <div class="wrap w-100">
+                                            </option>
+                                            <div class="heading-title title-wrap">
+                                                <h5>Đơn giá nhập</h5>
+                                            </div>
+                                            <div class="input-group p-2 justify-content-around">
+                                                <select class="avg_operator" name="avg_operator" style="width: 40%">
+                                                    <option value=">="
+                                                        {{ request('avg_operator') === '>=' ? 'selected' : '' }}>>=
+                                                    </option>
+                                                    <option value="<="
+                                                        {{ request('avg_operator') === '<=' ? 'selected' : '' }}>
+                                                        <=< /option>
+                                                </select>
+                                                <input class="w-50 avg-input" type="text" name="avg"
+                                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                                    value="{{ request()->avg }}" placeholder="Nhập giá trị">
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                            <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                                Nhận</button>
+                                            <button type="button" id="cancel-avg"
+                                                class="btn btn-default btn-block">Hủy</button>
+                                        </div>
+                                    </div>
+                                    {{-- filter trị tồn kho --}}
+                                    <div class="block-options" id="price_inven-options" style="display:none">
+                                        <div class="wrap w-100">
+                                            <div class="heading-title title-wrap">
+                                                <h5>Trị tồn kho</h5>
+                                            </div>
+                                            <div class="input-group p-2 justify-content-around">
+                                                <select class="price_inven_operator" name="price_inven_operator"
+                                                    style="width: 40%">
+                                                    <option value=">="
+                                                        {{ request('price_inven_operator') === '>=' ? 'selected' : '' }}>
+                                                        >=
+                                                    </option>
+                                                    <option value="<="
+                                                        {{ request('price_inven_operator') === '<=' ? 'selected' : '' }}>
+                                                        <=< /option>
+                                                </select>
+                                                <input class="w-50 price_inven-input input-so" type="text"
+                                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                                    name="price_inven" value="{{ request()->price_inven }}"
+                                                    placeholder="Nhập giá trị">
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                            <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                                Nhận</button>
+                                            <button type="button" id="cancel-price_inven"
+                                                class="btn btn-default btn-block">Hủy</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </span>
+                        </div>
+
+
+                    </div>
+            </div><!-- /.container-fluided -->
     </section>
     <!-- Main content -->
     <div id="section_products">
@@ -136,87 +656,94 @@
                                         <th>
                                             <span class="d-flex">
                                                 <a href="#" class="sort-link" data-sort-by="id"
-                                                    data-sort-type=""><button class="btn-sort"
+                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">ID</button></a>
                                                 <div class="icon" id="icon-id"></div>
                                             </span>
                                         </th>
                                         <th scope="col">
                                             <span class="d-flex">
-                                                <a href="#" class="sort-link" data-sort-by="products_name"
-                                                    data-sort-type=""><button class="btn-sort" type="submit">Tên sản
+                                                <a href="#" class="sort-link" data-sort-by="product_name"
+                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
+                                                        type="submit">Tên sản
                                                         phẩm</button></a>
 
-                                                <div class="icon" id="icon-products_name"></div>
+                                                <div class="icon" id="icon-product_name"></div>
                                             </span>
                                         </th>
                                         <th scope="col">
                                             <span class="d-flex">
-                                                <a href="#" class="sort-link" data-sort-by="products_name"
-                                                    data-sort-type=""><button class="btn-sort" type="submit">Nhà
+                                                <a href="#" class="sort-link" data-sort-by="provide"
+                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
+                                                        type="submit">Nhà
                                                         cung
                                                         cấp</button></a>
-                                                <div class="icon" id="icon-products_name"></div>
+                                                <div class="icon" id="icon-provide"></div>
                                             </span>
                                         </th>
-                                        <th scope="col">
-                                            <span class="d-flex">
-                                                <a href="#" class="sort-link" data-sort-by="products_name"
-                                                    data-sort-type=""><button class="btn-sort"
+                                        <th scope="col" class="text-center">
+                                            <span class="d-flex align-items-center justify-content-center">
+                                                <a href="#" class="sort-link" data-sort-by="product_unit"
+                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">ĐVT</button></a>
-                                                <div class="icon" id="icon-products_name"></div>
+                                                <div class="icon" id="icon-product_unit"></div>
                                             </span>
                                         </th>
                                         <th scope="col">
                                             <span class="d-flex justify-content-end">
-                                                <a href="#" class="sort-link" data-sort-by="inventory"
-                                                    data-sort-type=""><button class="btn-sort" type="submit">Số
+                                                <a href="#" class="sort-link" data-sort-by="product_qty"
+                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
+                                                        type="submit">Số
                                                         lượng</button></a>
 
-                                                <div class="icon" id="icon-inventory"></div>
+                                                <div class="icon" id="icon-product_qty"></div>
                                             </span>
                                         </th>
                                         <th scope="col">
-                                            <span class="d-flex">
-                                                <a href="#" class="sort-link" data-sort-by="products_trademark"
-                                                    data-sort-type=""><button class="btn-sort" type="submit">Đang
+                                            <span class="d-flex justify-content-end">
+                                                <a href="#" class="sort-link" data-sort-by="product_trade"
+                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
+                                                        type="submit">Đang
                                                         giao dịch</button></a>
-                                                <div class="icon" id="icon-products_trademark"></div>
+                                                <div class="icon" id="icon-product_trade"></div>
                                             </span>
                                         </th>
                                         <th scope="col">
                                             <span class="d-flex justify-content-end">
-                                                <a href="#" class="sort-link" data-sort-by="price_avg"
-                                                    data-sort-type=""><button class="btn-sort" type="submit">Đơn giá
+                                                <a href="#" class="sort-link" data-sort-by="product_price"
+                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
+                                                        type="submit">Đơn giá
                                                         nhập</button></a>
-                                                <div class="icon" id="icon-price_avg"></div>
+                                                <div class="icon" id="icon-product_price"></div>
                                             </span>
                                         </th>
                                         <th scope="col">
                                             <span class="d-flex justify-content-end">
-                                                <a href="#" class="sort-link" data-sort-by="price_inventory"
-                                                    data-sort-type=""><button class="btn-sort" type="submit">Trị tồn
+                                                <a href="#" class="sort-link" data-sort-by="total"
+                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
+                                                        type="submit">Trị tồn
                                                         kho</button></a>
-                                                <div class="icon" id="icon-price_inventory"></div>
+                                                <div class="icon" id="icon-total"></div>
                                             </span>
                                         </th>
                                         <th scope="col">
-                                            <span class="d-flex justify-content-end">
-                                                <a href="#" class="sort-link" data-sort-by="price_inventory"
-                                                    data-sort-type=""><button class="btn-sort" type="submit">Thuế
-                                                        </button></a>
-                                                <div class="icon" id="icon-price_inventory"></div>
+                                            <span class="d-flex justify-content-center">
+                                                <a href="#" class="sort-link" data-sort-by="tax"
+                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
+                                                        type="submit">Thuế
+                                                    </button></a>
+                                                <div class="icon" id="icon-tax"></div>
                                             </span>
                                         </th>
                                         <th scope="col">
-                                            <span class="d-flex">
-                                                <a href="#" class="sort-link" data-sort-by="inventory"
-                                                    data-sort-type=""><button class="btn-sort" type="submit">Trạng
+                                            <span class="d-flex justify-content-center">
+                                                <a href="#" class="sort-link" data-sort-by="soluong"
+                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
+                                                        type="submit">Trạng
                                                         thái</button></a>
-                                                <div class="icon" id="icon-status"></div>
+                                                <div class="icon" id="icon-soluong"></div>
                                             </span>
                                         </th>
-                                        <th scope="col"></th>
                                     </tr>
                                     </form>
                                 </thead>
@@ -224,17 +751,30 @@
                                     @foreach ($products as $value)
                                         <tr>
                                             <td><input type="checkbox"></td>
-                                            <td>{{$value->id}}</td>
-                                           <td>{{$value->product_name}}</td>
-                                           <td>@if($value->getNameProvide != null) {{ $value->getNameProvide->provide_name}} @endif</td>
-                                           <td>{{$value->product_unit}}</td>
-                                           <td>{{$value->product_qty}}</td>
-                                           <td>{{$value->product_trade}}</td>
-                                           <td>{{$value->product_price}}</td>
-                                           <td>{{$value->total}}</td>
-                                           <td>{{$value->tax}}</td>
-                                           <td></td>
-                                           <td></td>
+                                            <td class="text-left">{{ $value->id }}</td>
+                                            <td class="text-left">{{ $value->product_name }}</td>
+                                            <td class="text-left">{{ $value->provide }}</td>
+                                            <td class="text-center">{{ $value->product_unit }}</td>
+                                            <td class="text-right">{{ $value->product_qty }}</td>
+                                            <td class="text-right">{{ $value->product_trade }}</td>
+                                            <td class="text-right">{{ number_format($value->product_price) }}</td>
+                                            <td class="text-right">{{ number_format($value->total) }}</td>
+                                            <td class="text-center">{{ $value->tax }}%</td>
+                                            <td class="text-center">
+                                                @if ($value->product_qty == 0)
+                                                    <div class="py-1 rounded pb-1 bg-danger">
+                                                        <span class="text-light">Hết hàng</span>
+                                                    </div>
+                                                @elseif($value->product_qty < 6)
+                                                    <div class="py-1 rounded pb-1 bg-warning">
+                                                        <span class="text-light">Gần hết</span>
+                                                    </div>
+                                                @else
+                                                    <div class="py-1 rounded pb-1 bg-success">
+                                                        <span class="text-light">Sẵn hàng</span>
+                                                    </div>
+                                                @endif
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -242,6 +782,7 @@
                         </div>
                     </div>
                     <div class="paginator mt-4 d-flex justify-content-end">
+                        {{ $products->appends(request()->except('page'))->links() }}
                     </div>
                 </div>
             </div>
@@ -266,6 +807,12 @@
         }
     });
     $('.ks-cboxtags-status li').on('click', function() {
+        if (event.target.tagName !== 'INPUT') {
+            var checkbox = $(this).find('input[type="checkbox"]');
+            checkbox.prop('checked', !checkbox.prop('checked')); // Đảo ngược trạng thái checked
+        }
+    });
+    $('.ks-cboxtags-tax li').on('click', function() {
         if (event.target.tagName !== 'INPUT') {
             var checkbox = $(this).find('input[type="checkbox"]');
             checkbox.prop('checked', !checkbox.prop('checked')); // Đảo ngược trạng thái checked
@@ -460,29 +1007,18 @@
         $('#trademark-options input[type="checkbox"]').prop('checked', false);
         $('#trademark-options').hide();
     });
-
-    $('#btn-id').click(function(event) {
+    // Thuế
+    $('#btn-tax').click(function(event) {
         event.preventDefault();
         $('.btn-filter').prop('disabled', true);
-        $('#id-options').toggle();
+        $('#tax-options').toggle();
+        $('#tax-options input').addClass('tax-checkbox');
     });
-    $('#cancel-id').click(function(event) {
+    $('#cancel-tax').click(function(event) {
         event.preventDefault();
         $('.btn-filter').prop('disabled', false);
-        $('.products_name-input').val('');
-        $('#id-options').hide();
-    });
-    //Code
-    $('#btn-code').click(function(event) {
-        event.preventDefault();
-        $('.btn-filter').prop('disabled', true);
-        $('#code-options').toggle();
-    });
-    $('#cancel-code').click(function(event) {
-        event.preventDefault();
-        $('.btn-filter').prop('disabled', false);
-        $('.code-input').val('');
-        $('#code-options').hide();
+        $('#tax-options input[type="checkbox"]').prop('checked', false);
+        $('#tax-options').hide();
     });
     $('#btn-price_inven').click(function(event) {
         event.preventDefault();
@@ -516,6 +1052,18 @@
         $('.btn-filter').prop('disabled', false);
         $('.quantity-input').val('');
         $('#quantity-options').hide();
+    });
+    // Đang giao dịch Trade
+    $('#btn-trade').click(function(event) {
+        event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
+        $('#trade-options').toggle();
+    });
+    $('#cancel-trade').click(function(event) {
+        event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
+        $('.trade-input').val('');
+        $('#trade-options').hide();
     });
     $('#btn-category').click(function(event) {
         event.preventDefault();
@@ -711,26 +1259,49 @@
         });
     });
     $(document).ready(function() {
+        // Chọn tất cả các checkbox
+        $('.select-all-tax').click(function() {
+            $('#tax-options input[type="checkbox"]').prop('checked', true);
+        });
+
+        // Hủy tất cả các checkbox
+        $('.deselect-all-tax').click(function() {
+            $('#tax-options input[type="checkbox"]').prop('checked', false);
+        });
+    });
+    $(document).ready(function() {
         $('.filter-results').on('click', '.delete-btn-status', function() {
             $('.deselect-all').click();
             document.getElementById('search-filter').submit();
         });
     });
     $(document).ready(function() {
-        $('.filter-results').on('click', '.delete-btn-category', function() {
+        $('.filter-results').on('click', '.delete-btn-provide', function() {
             $('.deselect-all-category').click();
             document.getElementById('search-filter').submit();
         });
     });
     $(document).ready(function() {
-        $('.filter-results').on('click', '.delete-btn-trademark', function() {
+        $('.filter-results').on('click', '.delete-btn-unit', function() {
             $('.deselect-all-trademark').click();
+            document.getElementById('search-filter').submit();
+        });
+    });
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-tax', function() {
+            $('.deselect-all-tax').click();
             document.getElementById('search-filter').submit();
         });
     });
     $(document).ready(function() {
         $('.filter-results').on('click', '.delete-btn-quantity', function() {
             $('.quantity-input').val('');
+            document.getElementById('search-filter').submit();
+        });
+    });
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-trade', function() {
+            $('.trade-input').val('');
             document.getElementById('search-filter').submit();
         });
     });
@@ -743,18 +1314,6 @@
     $(document).ready(function() {
         $('.filter-results').on('click', '.delete-btn-price_inven', function() {
             $('.price_inven-input').val('');
-            document.getElementById('search-filter').submit();
-        });
-    });
-    $(document).ready(function() {
-        $('.filter-results').on('click', '.delete-btn-id', function() {
-            $('.deselect-all-id').click();
-            document.getElementById('search-filter').submit();
-        });
-    });
-    $(document).ready(function() {
-        $('.filter-results').on('click', '.delete-btn-code', function() {
-            $('.code-input').val('');
             document.getElementById('search-filter').submit();
         });
     });
