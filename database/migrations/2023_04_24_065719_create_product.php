@@ -15,9 +15,8 @@ class CreateProduct extends Migration
     {
         Schema::create('product', function (Blueprint $table) {
             $table->id()->autoIncrement();
-            $table->integer('product_code');
             $table->string('product_name');
-            // $table->integer('provide_id');
+            $table->string('product_notes')->nullable();
             $table->string('product_unit')->nullable();
             $table->integer('product_qty')->nullable();
             $table->decimal('product_price', 15, 4)->nullable();
