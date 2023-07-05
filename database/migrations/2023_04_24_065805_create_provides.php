@@ -22,6 +22,7 @@ class CreateProvides extends Migration
             $table->integer('provide_status');
             $table->string('provide_address');
             $table->string('provide_code');
+            $table->integer('debt')->nullable();
             $table->timestamps();
         });
     }

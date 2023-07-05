@@ -450,7 +450,15 @@ $index = array_search($item['label'], $numberedLabels);
                                         <span class="d-flex">
                                             <a href="#" class="sort-link" data-sort-by="id"
                                                 data-sort-type="{{ $sortType }}"><button class="btn-sort"
-                                                    type="submit">Mã đơn</button></a>
+                                                    type="submit">ID</button></a>
+                                            <div class="icon" id="icon-id"></div>
+                                        </span>
+                                    </th>
+                                    <th scope="col">
+                                        <span class="d-flex">
+                                            <a href="#" class="sort-link" data-sort-by="id"
+                                                data-sort-type="{{ $sortType }}"><button class="btn-sort"
+                                                    type="submit">Số hóa đơn</button></a>
                                             <div class="icon" id="icon-id"></div>
                                         </span>
                                     </th>
@@ -466,7 +474,7 @@ $index = array_search($item['label'], $numberedLabels);
                                         <span class="d-flex">
                                             <a href="#" class="sort-link" data-sort-by="updated_at"
                                                 data-sort-type="{{ $sortType }}"><button class="btn-sort"
-                                                    type="submit">Chỉnh sửa cuối</button></a>
+                                                    type="submit">Ngày nhập hóa đơn</button></a>
                                             <div class="icon" id="icon-updated_at"></div>
                                         </span>
                                     </th>
@@ -505,6 +513,7 @@ $index = array_search($item['label'], $numberedLabels);
                                         <td><input type="checkbox" class="cb-element" name="ids[]"
                                                 value="{{ $va->id }}"></td>
                                         <td>{{ $va->id }}</td>
+                                        <td>{{$va->product_code}}</td>
                                         <td>{{ $va->provide_name }}</td>
                                         <td>{{ date_format(new DateTime($va->updated_at), "d-m-Y") }}</td>
                                         <td>{{ $va->name }}</td>
@@ -584,14 +593,10 @@ $index = array_search($item['label'], $numberedLabels);
                                             @if ($va->id == $item->id)
                                                 <td></td>
                                                 <td></td>
-                                                <td>
-                                                    <p>Mã sản phẩm</p>
-                                                    @if($item->getCodeProduct != null) {{$item->getCodeProduct->products_code}} @endif 
-                                                </td>
+                                                <td></td>
                                                 <td>
                                                     <p>Thông tin sản phẩm</p>
                                                     {{ $item->product_name }}
-                                                 
                                                 </td>
                                                 <td>
                                                     <p>Số lượng</p>
