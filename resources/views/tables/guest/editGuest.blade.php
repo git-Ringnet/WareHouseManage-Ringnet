@@ -50,9 +50,9 @@
                                 </div>
                                 <div class="mb-3">
                                     <label class="required-label">Địa chỉ xuất hóa đơn</label>
-                                    <input type="text" class="form-control" id="guest_addressInvoice"
-                                        placeholder="Nhập địa chỉ xuất hóa đơn" name="guest_addressInvoice"
-                                        value="{{ $guests->guest_addressInvoice }}" required="">
+                                    <input type="text" class="form-control" id="guest_address"
+                                        placeholder="Nhập địa chỉ xuất hóa đơn" name="guest_address"
+                                        value="{{ $guests->guest_address }}" required="">
                                 </div>
                                 <div class="mb-3">
                                     <label class="required-label">Mã số thuế</label>
