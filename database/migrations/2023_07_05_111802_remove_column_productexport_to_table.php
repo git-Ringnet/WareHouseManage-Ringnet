@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        // Schema::table('product_exports', function (Blueprint $table) {
-        //     $table->dropColumn('products_id');
-        // });
+        Schema::table('product_exports', function (Blueprint $table) {
+            $table->dropColumn('products_id');
+        });
     }
 };

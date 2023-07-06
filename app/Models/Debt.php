@@ -26,9 +26,9 @@ class Debt extends Model
         'date_end',
         'date_start',
     ];
-    public function getAllDebts($filter=[],$keywords=null,$name=[],$date=[],$datepaid=[],$status=[], $orderBy = null, $orderType = null)
+    public function getAllDebts($filter = [], $keywords = null, $name = [], $date = [], $datepaid = [], $status = [], $orderBy = null, $orderType = null)
     {
-        $debts = Debt::select('debts.*', 'exports.id as madon', 'guests.guest_name as khachhang', 'users.name as nhanvien','exports.updated_at as debtdate')
+        $debts = Debt::select('debts.*', 'exports.id as madon', 'guests.guest_name as khachhang', 'users.name as nhanvien', 'exports.updated_at as debtdate')
             ->leftJoin('guests', 'guests.id', 'debts.guest_id')
             ->leftJoin('users', 'users.id', 'debts.user_id')
             ->leftJoin('exports', 'exports.id', 'debts.export_id');
@@ -55,7 +55,7 @@ class Debt extends Model
         if (!empty($datepaid)) {
             $debts = $debts->where('debts.debt_status', 1)->wherebetween('debts.updated_at', $datepaid);
         }
-              
+
 
         if (!empty($status)) {
             $debts = $debts->whereIn('debts.debt_status', $status);
@@ -67,7 +67,7 @@ class Debt extends Model
             };
             $debts = $debts->orderBy($orderBy, $orderType);
         }
-        
+
 
         $debts = $debts->orderBy('debts.id', 'desc')->paginate(8);
 
@@ -76,12 +76,11 @@ class Debt extends Model
     }
     public function getAllProductsDebts()
     {
-        $product = Debt::select('debts.*', 'product_exports.id as madon','products.products_code as masanpham', 'product_exports.product_qty as soluong', 'product_exports.product_price as giaban', 'product.product_price as gianhap')
+        $product = Debt::select('debts.*', 'product_exports.id as madon', 'product_exports.product_qty as soluong', 'product_exports.product_price as giaban', 'product.product_price as gianhap', 'product.product_code as masanpham')
             ->leftJoin('guests', 'guests.id', 'debts.guest_id')
             ->leftJoin('users', 'users.id', 'debts.user_id')
             ->leftJoin('exports', 'exports.id', 'debts.export_id')
             ->leftJoin('product_exports', 'exports.id', 'product_exports.export_id')
-            ->leftJoin('products', 'product_exports.products_id', 'products.id')
             ->leftJoin('product', 'product.id', 'product_exports.product_id')->get();
         return $product;
     }
@@ -91,5 +90,4 @@ class Debt extends Model
         $debtsCreator = DB::table($this->table)->where('user_id', $userId)->paginate(8);
         return $debtsCreator;
     }
-   
 }

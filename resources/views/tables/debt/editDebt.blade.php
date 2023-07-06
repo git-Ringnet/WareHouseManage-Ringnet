@@ -94,7 +94,7 @@
                                     @foreach ($product as $item)
                                         <tr>
                                             <td><?php echo $stt += 1; ?></td>
-                                            <td>{{ $item->maSanPham }}</td>
+                                            <td>{{ $item->masanpham }}</td>
                                             <td class="text-right">{{ $item->soluong }}</td>
                                             <td class="text-right">{{ number_format($item->giaban) }}</td>
                                             <td class="text-right">{{ number_format($item->gianhap) }}</td>
