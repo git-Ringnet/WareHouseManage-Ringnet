@@ -120,7 +120,9 @@ class ExportController extends Controller
      */
     public function create()
     {
-        $product = Product::all();
+        $product = Product::where('product.product_qty', '>', 0)
+            ->whereRaw('COALESCE((product.product_qty - COALESCE(product.product_trade, 0)), 0) > 0')
+            ->get();
         $customer = Guests::where('guest_status', 1)->get();
         $guest_id = DB::table('guests')->select('id')->orderBy('id', 'DESC')->first();
         $title = 'Tạo đơn xuất hàng';
@@ -188,6 +190,8 @@ class ExportController extends Controller
                             $export->export_status = 2;
                             $export->note_form = $request->note_form;
                             $export->transport_fee = $request->transport_fee;
+                            $export->export_code = $request->export_code;
+                            $export->created_at = $request->export_create;
                             $export->save();
                             // Tạo các bản ghi trong bảng product export
                             for ($i = 0; $i < count($productIDs); $i++) {
@@ -291,6 +295,8 @@ class ExportController extends Controller
                             $export->export_status = 2;
                             $export->note_form = $request->note_form;
                             $export->transport_fee = $request->transport_fee;
+                            $export->export_code = $request->export_code;
+                            $export->created_at = $request->export_create;
                             $export->save();
                             // Tạo các bản ghi trong bảng product export
                             for ($i = 0; $i < count($productIDs); $i++) {
@@ -385,6 +391,8 @@ class ExportController extends Controller
                             $export->export_status = 2;
                             $export->note_form = $request->note_form;
                             $export->transport_fee = $request->transport_fee;
+                            $export->export_code = $request->export_code;
+                            $export->created_at = $request->export_create;
                             $export->save();
                             // Tạo các bản ghi trong bảng product export
                             for ($i = 0; $i < count($productIDs); $i++) {
@@ -479,6 +487,8 @@ class ExportController extends Controller
                             $export->export_status = 1;
                             $export->note_form = $request->note_form;
                             $export->transport_fee = $request->transport_fee;
+                            $export->export_code = $request->export_code;
+                            $export->created_at = $request->export_create;
                             $export->save();
                             // Tạo các bản ghi trong bảng product export
                             for ($i = 0; $i < count($productIDs); $i++) {
@@ -639,6 +649,8 @@ class ExportController extends Controller
                             $export->export_status = 1;
                             $export->note_form = $request->note_form;
                             $export->transport_fee = $request->transport_fee;
+                            $export->export_code = $request->export_code;
+                            $export->created_at = $request->export_create;
                             $export->save();
                             // Tạo các bản ghi trong bảng product export
                             for ($i = 0; $i < count($productIDs); $i++) {
@@ -688,6 +700,8 @@ class ExportController extends Controller
                             $export->export_status = 1;
                             $export->note_form = $request->note_form;
                             $export->transport_fee = $request->transport_fee;
+                            $export->export_code = $request->export_code;
+                            $export->created_at = $request->export_create;
                             $export->save();
                             // Tạo các bản ghi trong bảng product export
                             for ($i = 0; $i < count($productIDs); $i++) {
@@ -720,6 +734,8 @@ class ExportController extends Controller
                             $export->export_status = 1;
                             $export->note_form = $request->note_form;
                             $export->transport_fee = $request->transport_fee;
+                            $export->export_code = $request->export_code;
+                            $export->created_at = $request->export_create;
                             $export->save();
                             // Tạo các bản ghi trong bảng product export
                             for ($i = 0; $i < count($productIDs); $i++) {
@@ -752,6 +768,8 @@ class ExportController extends Controller
                             $export->export_status = 1;
                             $export->note_form = $request->note_form;
                             $export->transport_fee = $request->transport_fee;
+                            $export->export_code = $request->export_code;
+                            $export->created_at = $request->export_create;
                             $export->save();
                             // Tạo các bản ghi trong bảng product export
                             for ($i = 0; $i < count($productIDs); $i++) {
@@ -856,7 +874,6 @@ class ExportController extends Controller
         $existingProductIDs = [];
         $totalQtyNeeded = 0;
         $serinumbersToUpdate = [];
-        $products_id = $request->input('products_id');
         $clickValue = $request->input('click');
         $updateClick = $request->input('updateClick');
 
@@ -939,18 +956,6 @@ class ExportController extends Controller
                             $proExport->product_tax = $request->product_tax[$i];
                             $proExport->product_total = $request->totalValue;
                             $proExport->save();
-
-                            // Cập nhật seri_status bằng 2 cho sản phẩm mới
-                            $serinumbersToUpdate = Serinumbers::where('product_id', $productID)
-                                ->where('seri_status', 1)
-                                ->limit($productQty)
-                                ->get();
-
-                            foreach ($serinumbersToUpdate as $serinumber) {
-                                $serinumber->seri_status = 3;
-                                $serinumber->export_seri = $exports->id;
-                                $serinumber->save();
-                            }
                         }
 
                         $totalQtyNeeded += $productQty;
@@ -987,6 +992,7 @@ class ExportController extends Controller
 
                         // Giảm số lượng sản phẩm
                         $newQty = $currentQty - $productQty;
+                        $newTrade = 1;
 
                         // Lấy giá sản phẩm
                         $product = Product::find($productID);
@@ -999,7 +1005,8 @@ class ExportController extends Controller
                         Product::where('id', $productID)
                             ->update([
                                 'product_qty' => $newQty,
-                                'total' => $total
+                                'total' => $total,
+                                'product_trade' => $newTrade,
                             ]);
                     }
                     if ($request->id != null) {
@@ -1010,6 +1017,8 @@ class ExportController extends Controller
                         $exports->export_status = 2;
                         $exports->note_form = $request->note_form;
                         $exports->transport_fee = $request->transport_fee;
+                        $exports->export_code = $request->export_code;
+                        $exports->created_at = $request->export_create;
                         $exports->save();
                     } else if ($clickValue != 1) {
                         $guest = new Guests();
@@ -1035,30 +1044,10 @@ class ExportController extends Controller
                         $exports->export_status = 2;
                         $exports->note_form = $request->note_form;
                         $exports->transport_fee = $request->transport_fee;
+                        $exports->export_code = $request->export_code;
+                        $exports->created_at = $request->export_create;
                         $exports->save();
                     }
-
-                    for ($i = 0; $i < count($productIDs); $i++) {
-                        $productID = $productIDs[$i];
-                        $productQty = $productQtys[$i];
-
-                        // Cập nhật seri_status theo số lượng đã nhập
-                        $serinumbers = Serinumbers::where('product_id', $productID)
-                            ->where('seri_status', 2)
-                            ->where('export_seri', $id)
-                            ->limit($productQty)
-                            ->get();
-
-                        foreach ($serinumbers as $serinumber) {
-                            if ($serinumber->seri_status == 2) {
-                                $serinumber->seri_status = 3;
-                                $serinumber->export_seri = $exports->id;
-                                $serinumber->save();
-                            }
-                        }
-                    }
-                    //cập nhật số lượng tồn kho sản phẩm
-                    
                     // Lấy lại thông tin exports từ cơ sở dữ liệu (nếu cần)
                     $exports = Exports::find($exports->id);
 
@@ -1216,6 +1205,8 @@ class ExportController extends Controller
                 $exports->total = $request->totalValue;
                 $exports->note_form = $request->note_form;
                 $exports->transport_fee = $request->transport_fee;
+                $exports->export_code = $request->export_code;
+                $exports->created_at = $request->export_create;
                 $exports->save();
                 return redirect()->route('exports.index')->with('msg', 'Hủy đơn thành công!');
             } elseif ($action === 'action3') {
@@ -1321,6 +1312,8 @@ class ExportController extends Controller
                         $exports->export_status = 1;
                         $exports->note_form = $request->note_form;
                         $exports->transport_fee = $request->transport_fee;
+                        $exports->export_code = $request->export_code;
+                        $exports->created_at = $request->export_create;
                         $exports->save();
                     } else if ($clickValue != 1) {
                         $guest = new Guests();
@@ -1345,6 +1338,8 @@ class ExportController extends Controller
                         $exports->export_status = 1;
                         $exports->note_form = $request->note_form;
                         $exports->transport_fee = $request->transport_fee;
+                        $exports->export_code = $request->export_code;
+                        $exports->created_at = $request->export_create;
                         $exports->save();
                     }
                     return redirect()->route('exports.index')->with('msg', 'Cập nhật thành công!');

@@ -329,6 +329,17 @@
                     </div>
                     <div>
             </section>
+            <div class="d-flex align-items-center my-2">
+                <div class="">
+                    <p class="m-0"><b>Số hóa đơn</b></p>
+                    <input type="number" value="{{$exports->export_code}}" name="export_code" class="form-control"
+                        placeholder="Nhập thông tin">
+                </div>
+                <div class="pl-3">
+                    <p class="m-0"><b>Ngày hóa đơn</b></p>
+                    <input type="date" value="{{ ($exports->created_at)->format('Y-m-d') }}" name="export_create" class="form-control">
+                </div>
+            </div>
             {{-- Bảng thêm sản phẩm --}}
             <div class="mt-4" style="overflow-x: auto;">
                 <table class="table">
@@ -390,7 +401,9 @@
                                             required="">
                                         <input type="text" readonly="" class="quantity-exist" required=""
                                             value="/{{ $value_export->tonkho }}"
-                                            style="width:50px;background:#D6D6D6;border:none;">
+                                            style="width:50px;background:#D6D6D6;border:none;" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                                echo 'hidden';
+                                            } ?>>
                                     </div>
                                 </td>
                                 <td>

@@ -80,6 +80,7 @@ class Exports extends Model
         'total',
         'export_status',
         'note_form',
+        'export_code',
     ];
     public function sumTotalExports()
     {
