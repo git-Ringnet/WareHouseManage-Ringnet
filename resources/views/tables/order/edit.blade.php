@@ -235,6 +235,13 @@
                             value="{{ $provide_order[0]->provide_phone }}"
                             @if ($order->order_status == 1) <?php echo 'readonly'; ?> @endif>
                     </div>
+                    <div class="form-group">
+                        <label for="email">Công nợ:</label>
+                        <div class="d-flex align-items-center" style="width:101%;"> <input name="provide_debt" id="debtInput" class="form-control" type="text" name="debt" style="width:15%;" value="{{$provide_order[0]->debt}}">
+                        <span class="ml-2" id="data-debt" style="color: rgb(29, 28, 32);">ngày</span>
+                        <input type="checkbox" id="debtCheckbox" value="0" <?php echo $provide_order[0]->debt == 0 ? "checked" : "" ?> style="margin-left:10%;" >
+                        <span class="ml-2">Thanh toán tiền mặt</span> </div>
+                        </div>
                 </div>
             </div>
         </section>
@@ -368,6 +375,7 @@
                     <div class="d-flex justify-content-between mt-2">
                         <span class="text-lg"><b>Tổng cộng:</b></span>
                         <span><b id="grand-total">đ</b></span>
+                        <input type="hidden" name="total_import" class="total_import">
                     </div>
                 </div>
             </div>
@@ -378,6 +386,16 @@
 </div>
 <script src="{{ asset('dist/js/productOrder.js') }}"></script>
 <script>
+       var isChecked = $('#debtCheckbox').is(':checked');
+    // Đặt trạng thái của input dựa trên checkbox
+    $('#debtInput').prop('disabled', isChecked);
+    // Xử lý sự kiện khi checkbox thay đổi
+    $(document).on('change', '#debtCheckbox', function() {
+        var isChecked = $(this).is(':checked');
+        $('#debtInput').prop('disabled', isChecked);
+        $('#debtInput').val(0);
+    });
+
     $(document).ready(function() {
         calculateTotals();
     })
@@ -390,6 +408,7 @@
     function calculateGrandTotal(totalAmount, totalTax) {
         var grandTotal = totalAmount + totalTax;
         $('#grand-total').text(formatCurrency(grandTotal));
+        $('.total_import').val(formatCurrency(grandTotal));
     }
 
     // Hủy đơn hàng

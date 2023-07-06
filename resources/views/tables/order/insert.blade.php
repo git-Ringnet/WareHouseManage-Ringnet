@@ -319,13 +319,24 @@
                 '</div>' +
                 '<div class="form-group">' +
                 '<label for="email">Công nợ:</label>' +
-                '<div class="d-flex align-items-center" style="width:101%;"> <input class="form-control" type="text" name="debt" style="width:15%;">' +
+                '<div class="d-flex align-items-center" style="width:101%;"> <input id="debtInput" class="form-control" type="text" name="debt" style="width:15%;">' +
                 '<span class="ml-2" id="data-debt" style="color: rgb(29, 28, 32);">ngày</span>' +
                 '<input type="checkbox" id="debtCheckbox" value="0" style="margin-left:10%;">' +
                 '<span class="ml-2">Thanh toán tiền mặt</span> </div>' +
                 '</div>' +
                 '</div></div>'
             );
+            $(document).on('change', '#debtCheckbox', function() {
+                if ($(this).is(':checked')) {
+                    $('#debtInput').prop('disabled', true);
+                    console.log($('#debtInput'));
+                    $('#debtInput').val(0);
+                    $("#data-debt").css("color", "#D6D6D6");
+                } else {
+                    $('#debtInput').prop('disabled', false);
+                    $("#data-debt").css("color", "#1D1C20");
+                }
+            });
         });
 
 
@@ -402,15 +413,6 @@
             } else if ($('#provide_address').val() == "") {
                 err = true;
                 alert("Vui lòng nhập địa chỉ xuất hóa đơn");
-            } else if ($('#provide_represent').val == "") {
-                err = true;
-                alert("Vui lòng nhập người đại diện");
-            } else if ($('#provide_email').val() == "") {
-                err = true;
-                alert("Vui lòng nhập email");
-            } else if ($('#provide_phone').val() == "") {
-                err = true;
-                alert("Vui lòng nhập số điện thoại");
             } else if ($('#provide_code').val() == "") {
                 err = true;
                 alert("Vui lòng nhập mã số thuế");
@@ -423,6 +425,7 @@
                 var provide_email = $('#provide_email').val();
                 var provide_phone = $('#provide_phone').val();
                 var provide_code = $('#provide_code').val();
+                var debt = $('#debtInput').val();
                 $.ajax({
                     url: "{{ route('update_provide') }}",
                     type: "get",
@@ -433,7 +436,8 @@
                         provide_represent: provide_represent,
                         provide_email: provide_email,
                         provide_phone: provide_phone,
-                        provide_code: provide_code
+                        provide_code: provide_code,
+                        debt: debt
                     },
                     success: function(data) {
                         alert('Lưu thông tin thành công');
@@ -490,13 +494,25 @@
                         '</div>' +
                         '<div class="form-group">' +
                         '<label for="email">Công nợ:</label>' +
-                        '<div class="d-flex align-items-center" style="width:101%;"> <input class="form-control" type="text" name="debt" style="width:15%;">' +
+                        '<div class="d-flex align-items-center" style="width:101%;"> <input name="provide_debt" id="debtInput" class="form-control" type="text" name="debt" style="width:15%;" value="' +
+                        data.debt + '">' +
                         '<span class="ml-2" id="data-debt" style="color: rgb(29, 28, 32);">ngày</span>' +
-                        '<input type="checkbox" id="debtCheckbox" value="0" style="margin-left:10%;">' +
+                        '<input type="checkbox" id="debtCheckbox" value="0" ' + (data
+                            .debt == 0 ? 'checked' : '') + ' style="margin-left:10%;" >' +
                         '<span class="ml-2">Thanh toán tiền mặt</span> </div>' +
                         '</div>' +
                         '</div></div>'
                     );
+                    //Công nợ
+                    var isChecked = $('#debtCheckbox').is(':checked');
+                    // Đặt trạng thái của input dựa trên checkbox
+                    $('#debtInput').prop('disabled', isChecked);
+                    // Xử lý sự kiện khi checkbox thay đổi
+                    $(document).on('change', '#debtCheckbox', function() {
+                        var isChecked = $(this).is(':checked');
+                        $('#debtInput').prop('disabled', isChecked);
+                        $('#debtInput').val(0);
+                    });
                     $('#provide_id').val(data.id);
                 }
             });
@@ -548,6 +564,7 @@
             var provide_email = $('#provide_email_new').val();
             var provide_phone = $('#provide_phone_new').val();
             var provide_code = $('#provide_code_new').val();
+            var debt = $('#debtInput').val();
             var check = false;
             if (provide_name == "") {
                 alert('Vui lòng nhập tên công ty');
@@ -569,7 +586,8 @@
                         provide_represent: provide_represent,
                         provide_email: provide_email,
                         provide_phone: provide_phone,
-                        provide_code: provide_code
+                        provide_code: provide_code,
+                        debt : debt
                     },
                     success: function(data) {
                         if (data.success) {
