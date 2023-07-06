@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\DebtImport;
+use App\Models\Exports;
 use App\Models\Orders;
 use App\Models\Product;
+use App\Models\productExports;
 use App\Models\ProductOrders;
 use App\Models\Products;
 use App\Models\Provides;
@@ -268,7 +270,7 @@ class AddProductController extends Controller
         $update_provide->provide_code = $request->provide_code;
         $update_provide->debt = $request->provide_debt == null ? 0 : $request->provide_debt;
         $update_provide->save();
-    
+
         $updateOrder = Orders::find($id);
         $product_id = $request->product_id;
         $product_name = $request->product_name;
@@ -280,6 +282,7 @@ class AddProductController extends Controller
         $product_total = str_replace(',', '', $request->product_total);
         $total_import =  str_replace(',', '', $request->total_import);
         $arr_new_product = [];
+        $id_product = [];
         // Kiểm tra tình trạng 
         if ($updateOrder->order_status == 2) {
             return redirect()->route('insertProduct.index')->with('msg', 'Đơn hàng đã hủy không thể chỉnh sửa');
@@ -301,9 +304,8 @@ class AddProductController extends Controller
                     $newProductOd->product_total = $product_total[$i];
                     $newProductOd->provide_id = $updateOrder->provide_id;
                     $newProductOd->save();
-                    $newProductOd->product_id = $newProductOd->id;
-                    $newProductOd->save();
                     array_push($arr_new_product, $newProductOd->id);
+                    array_push($id_product, $newProductOd->id);
                 } else {
                     $check->product_name = $product_name[$i];
                     $check->product_unit = $product_unit[$i];
@@ -314,6 +316,7 @@ class AddProductController extends Controller
                     $check->product_total = $product_total[$i];
                     $check->order_id = $request->order_id;
                     $check->save();
+                    array_push($id_product, $check->id);
                 }
                 $updateOrder->provide_id = $request->provide_id;
                 $updateOrder->total += $product_total[$i];
@@ -362,6 +365,9 @@ class AddProductController extends Controller
                 $newP->total = $product_total[$i];
                 $newP->provide_id = $updateOrder->id;
                 $newP->save();
+                $updateP = ProductOrders::where('id', $id_product[$i])->first();
+                $updateP->product_id = $newP->id;
+                $updateP->save();
             }
 
             $updateOrder->order_status = 1;
@@ -405,6 +411,7 @@ class AddProductController extends Controller
     public function addBill(Request $request)
     {
         $new_provide = new Provides();
+        $id_product = [];
         if ($request['provide_id'] == null) {
             if (
                 $request->provide_name_new != null && $request->provide_address_new != null && $request->provide_code_new != null &&
@@ -417,6 +424,7 @@ class AddProductController extends Controller
                 $new_provide->provide_address = $request->provide_address_new;
                 $new_provide->provide_code = $request->provide_code_new;
                 $new_provide->provide_status = 1;
+                $new_provide->debt = $request->debt == null ? 0 : $request->debt;
                 $new_provide->save();
             }
         } else {
@@ -438,6 +446,8 @@ class AddProductController extends Controller
         $product_tax = $request->product_tax;
         $product_price = str_replace(',', '', $request->product_price);
         $product_total = str_replace(',', '', $request->product_total);
+        $total_import =  str_replace(',', '', $request->total_import);
+
         $order = new Orders();
         for ($i = 0; $i < count($product_name); $i++) {
             $order->provide_id = $new_provide->id != null ? $new_provide->id :  $request['provide_id'];
@@ -459,6 +469,7 @@ class AddProductController extends Controller
             $newProductOrder->product_total = $product_total[$i];
             $newProductOrder->provide_id = $order->provide_id;
             $newProductOrder->save();
+            array_push($id_product, $newProductOrder->id);
         }
 
         // Update Product
@@ -483,13 +494,25 @@ class AddProductController extends Controller
                 $pro->total = $product_total[$i];
                 $pro->provide_id = $updateOrder->provide_id;
                 $pro->save();
+                $updateP = ProductOrders::where('id', $id_product[$i])->first();
+                $updateP->product_id = $pro->id;
+                $updateP->save();
             }
             $updateOrder->order_status = 1;
             $updateOrder->save();
+
+            $debt = new DebtImport();
+            $debt->provide_id = $updateOrder->provide_id;
+            $debt->user_id = Auth::user()->id;
+            $debt->import_id = $updateOrder->id;
+            $debt->total_import = $total_import;
+            $debt->debt = $request->provide_debt == null ? 0 : $request->provide_debt;
+            $debt->debt_status = 0;
+            $debt->created_at = $updateOrder->created_at;
+            $debt->save();
         } else {
             return redirect()->route('insertProduct.index')->with('warning', 'Đơn hàng đã được duyệt trước đó');
         }
-
         return redirect()->route('insertProduct.index')->with('msg', 'Duyệt nhanh đơn hàng thành công');
     }
 
@@ -613,23 +636,47 @@ class AddProductController extends Controller
     // Hủy đơn
     public function deleteBill(Request $request)
     {
-        $data = $request->all();
-        $dele = Orders::findOrFail($data['order_id']);
-        if ($dele->order_status != 1) {
-            $dele->order_status = 2;
-            $dele->save();
-            $del_SN = Serinumbers::where('check', $dele->id)->get();
-            if ($del_SN->count() > 1) {
-                foreach ($del_SN as $d) {
-                    $d->delete();
-                }
-            } elseif ($del_SN->count() == 1) {
-                $del_SN->first()->delete();
-            }
+        $check = false;
+        $checkOrder = Orders::findOrFail($request->order_id);
+
+        if ($checkOrder->order_status == 0) {
+            $checkOrder->order_status = 2;
+            $checkOrder->save();
+            return redirect()->route('insertProduct.index')->with('msg', 'Hủy đơn hàng thành công');
         } else {
-            return redirect()->route('insertProduct.index')->with('warning', 'Sản phẩm đã được duyệt không thể hủy');
+            $id_product = ProductOrders::where('order_id', $checkOrder->id)->get();
+            var_dump($id_product);
+            foreach ($id_product as $va) {
+                // Kiểm tra sản phẩm đã tạo đơn chưa
+    
+                $check_PExport = productExports::where('product_id', $va->product_id)->first();
+           
+                if ($check_PExport) {
+                    // Kiểm tra sản phẩm đã bán ra chưa
+                    $check_Exp = Exports::where('id', $check_PExport->export_id)->first();
+
+                    if ($check_Exp) {
+                        $check = true;
+                        return redirect()->route('insertProduct.index')->with('warning', 'Sản phẩm đã bán không thể chỉnh sửa');
+                    }
+
+                    $check = true;
+                    return redirect()->route('insertProduct.index')->with('warning', 'Sản phẩm đã tồn tại trong đơn nhập hàng');
+                }
+            }
+
+            if ($check === false) {
+                $checkOrder->order_status = 2;
+                $checkOrder->save();
+                DebtImport::where('import_id', $checkOrder->id)->delete();
+
+                foreach ($id_product as $check) {
+                    Product::where('id', $check->product_id)->delete();
+                }
+
+                return redirect()->route('insertProduct.index')->with('msg', 'Hủy đơn hàng thành công');
+            }
         }
-        return redirect()->route('insertProduct.index')->with('msg', 'Đã hủy đơn');
     }
 
     // Xóa đơn hàng AJAX
