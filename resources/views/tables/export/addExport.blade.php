@@ -126,9 +126,15 @@
             </div>
             {{-- Form thông tin khách hàng --}}
             <section id="data-container" class="container-fluided bg-white rounded"></section>
-            {{-- Button xóa nhiều --}}
-            <div class="d-flex justify-content-between align-items-center my-2">
-                <div class="btn btn-danger" id="deleteRowTable" style="opacity: 0;">Xóa hàng</div>
+            <div class="d-flex align-items-center my-2">
+                <div class="">
+                    <p class="m-0"><b>Số hóa đơn</b></p>
+                    <input type="number" value="" name="export_code" class="form-control" placeholder="Nhập thông tin">
+                </div>
+                <div class="pl-3">
+                    <p class="m-0"><b>Ngày hóa đơn</b></p>
+                    <input type="date" value="" name="export_create" class="form-control">
+                </div>
             </div>
             {{-- Bảng thêm sản phẩm --}}
             <div class="mt-4" style="overflow-x: auto;">
