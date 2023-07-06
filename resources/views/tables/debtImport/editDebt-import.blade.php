@@ -2,12 +2,12 @@
 <x-navbar :title="$title"></x-navbar>
 <div class="content-wrapper">
     <div class="breadcrumb">
-        <span><a href="{{ route('admin.userslist') }}">Công Nợ</a></span>
+        <span><a href="{{ route('debt_import.index') }}">Công nợ nhập</a></span>
         <span class="px-1">/</span>
         <span><b>Đơn Hàng</b></span>
         <span class="ml-1">#{{ $debts->id }}</span>
     </div>
-    <form action="{{ route('debt.update', $debts->id) }}" method="POST">
+    <form action="{{ route('debt_import.update', $debts->id) }}" method="POST">
         @csrf
         @method('PUT')
         <section class="content">
@@ -20,23 +20,23 @@
             <div class="row  mt-2">
                 <div class="col-md-3 col-sm-6">
                     <div class="form-group">
-                        <div class="labelform">Mã đơn</div>
-                        <input type="text" class="form-control" value="{{ $debts->id }}" name=""
-                            id="" readonly>
+                        <div class="labelform">Số hóa đơn</div>
+                        <input type="text" class="form-control" value="{{$debts->madon}}" name="" id=""
+                            readonly>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-6">
                     <div class="form-group">
-                        <div class="labelform">Khách hàng</div>
-                        <input type="text" class="form-control" value="{{ $debts->khachhang }}" name=""
-                            id="" readonly>
+                        <div class="labelform">Ngày nhập hóa đơn</div>
+                        <input type="text" class="form-control" value="{{$debts->created_at}}" name="" id=""
+                            readonly>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-6">
                     <div class="form-group">
-                        <div class="labelform">Nhân viên</div>
-                        <input type="text" class="form-control" value="{{ $debts->nhanvien }}" name=""
-                            id="" readonly>
+                        <div class="labelform">Nhà cung cấp</div>
+                        <input type="text" class="form-control" value="{{$debts->nhacungcap}}" name="" id=""
+                            readonly>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-6"></div>
@@ -44,32 +44,16 @@
             <div class="row">
                 <div class="col-md-3 col-sm-6">
                     <div class="form-group">
-                        <div class="labelform">Tổng tiền bán</div>
-                        <input type="text" class="form-control" value="{{ number_format($debts->total_sales) }}"
-                            name="" id="" readonly>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <div class="form-group">
-                        <div class="labelform">Tổng tiền nhập</div>
-                        <input type="text" class="form-control" value="{{ number_format($debts->total_import) }}"
-                            name="" id="" readonly>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <div class="form-group">
-                        <div class="labelform">Phí vận chuyển</div>
-                        <input type="text" class="form-control"
-                            value="{{ number_format($debts->debt_transport_fee) }}" name="" id=""
+                        <div class="labelform">Nhân viên</div>
+                        <input type="text" class="form-control" value="{{$debts->nhanvien}}" name="" id=""
                             readonly>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-6">
                     <div class="form-group">
-                        <div class="labelform">Tổng tiền chênh lệch</div>
-                        <input type="text" class="form-control"
-                            value="{{ number_format($debts->total_sales - $debts->total_import - $debts->debt_transport_fee) }}"
-                            name="" id="" readonly>
+                        <div class="labelform">Tổng tiền nhập(+VAT)</div>
+                        <input type="text" class="form-control" value="{{ number_format($debts->soluong * $debts->gianhap * (1 + $debts->thue/100)) }}" name=""
+                            id="" readonly>
                     </div>
                 </div>
             </div>
@@ -82,11 +66,12 @@
                                 <thead>
                                     <tr>
                                         <th></th>
-                                        <th>Mã Sản Phẩm</th>
+                                        <th class="text-left">Tên Sản Phẩm</th>
+                                        <th class="text-center">Đơn vị tính</th>
                                         <th class="text-right">Số lượng</th>
-                                        <th class="text-right">Giá bán</th>
                                         <th class="text-right">Giá nhập</th>
-                                        <th class="text-center">Chênh lệch</th>
+                                        <th class="text-right">Thành tiền</th>
+                                        <th class="text-center">Thuế</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -94,13 +79,14 @@
                                     @foreach ($product as $item)
                                         <tr>
                                             <td><?php echo $stt += 1; ?></td>
-                                            <td>{{ $item->maSanPham }}</td>
-                                            <td class="text-right">{{ $item->soluong }}</td>
-                                            <td class="text-right">{{ number_format($item->giaban) }}</td>
-                                            <td class="text-right">{{ number_format($item->gianhap) }}</td>
-                                            <td class="text-center">
-                                                {{ number_format($item->giaban * $item->soluong - $item->gianhap * $item->soluong) }}
+                                            <td class="text-left">{{$item->tensanpham}}</td>
+                                            <td class="text-center">{{$item->dvt}}</td>
+                                            <td class="text-right">{{$item->soluong}}</td>
+                                            <td class="text-right">{{number_format($item->gianhap)}}</td>
+                                            <td class="text-right">
+                                                {{number_format($item->soluong*$item->gianhap)}}
                                             </td>
+                                            <td class="text-center">{{$item->thue}}%</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -178,37 +164,37 @@
 
 
         $(document).ready(function() {
-  // Bắt sự kiện thay đổi giá trị của daysToAdd và startDate
-  $("#daysToAdd, #startDate").change(function() {
-    var daysToAdd = parseInt($("#daysToAdd").val(), 10);
-    var startDate = new Date($("#startDate").val());
+            // Bắt sự kiện thay đổi giá trị của daysToAdd và startDate
+            $("#daysToAdd, #startDate").change(function() {
+                var daysToAdd = parseInt($("#daysToAdd").val(), 10);
+                var startDate = new Date($("#startDate").val());
 
-    // Kiểm tra tính hợp lệ của giá trị nhập vào
-    if (isNaN(daysToAdd) || isNaN(startDate.getTime())) {
-      return;
-    }
+                // Kiểm tra tính hợp lệ của giá trị nhập vào
+                if (isNaN(daysToAdd) || isNaN(startDate.getTime())) {
+                    return;
+                }
 
-    var count = 0;
-    var currentDay = new Date(startDate);
+                var count = 0;
+                var currentDay = new Date(startDate);
 
-    while (count < daysToAdd) {
-      currentDay.setDate(currentDay.getDate() + 1);
-      count++;
-    }
+                while (count < daysToAdd) {
+                    currentDay.setDate(currentDay.getDate() + 1);
+                    count++;
+                }
 
-    // Cập nhật giá trị của endDate
-    $("#endDate").val(formatDate(currentDay));
-  });
+                // Cập nhật giá trị của endDate
+                $("#endDate").val(formatDate(currentDay));
+            });
 
-  // Hàm chuyển đổi ngày thành chuỗi ngày/tháng/năm (dd/mm/yyyy)
-  function formatDate(date) {
-    var day = date.getDate();
-    var month = date.getMonth() + 1;
-    var year = date.getFullYear();
+            // Hàm chuyển đổi ngày thành chuỗi ngày/tháng/năm (dd/mm/yyyy)
+            function formatDate(date) {
+                var day = date.getDate();
+                var month = date.getMonth() + 1;
+                var year = date.getFullYear();
 
-    return year + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
-  }
-});
+                return year + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
+            }
+        });
 
 
         function validateNumberInput(input) {
@@ -218,6 +204,6 @@
             }
         }
         $(document).on('keypress', 'form', function(event) {
-            return event.keyCode != 13; 
+            return event.keyCode != 13;
         });
     </script>

@@ -12,7 +12,9 @@ use App\Models\Products;
 use App\Models\Provides;
 use App\Models\Serinumbers;
 use App\Models\User;
+use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -379,13 +381,45 @@ class AddProductController extends Controller
             $debt->import_id = $updateOrder->id;
             $debt->total_import = $total_import;
             $debt->debt = $request->provide_debt == null ? 0 : $request->provide_debt;
-            $debt->debt_status = 0;
+            $debt->date_start = now();
+
+            // //Xử lí workingday
+            $startDate = $debt->debt_start;
+            $daysToAdd = $debt->debt;
+            $newDate = ($this->calculateAllDays($startDate, $daysToAdd));
+            $debt->date_end = $newDate;
+
+            // Xử lí status debt
+            $endDate = new DateTime($debt->date_end);
+            $now = new DateTime();
+            $interval = $endDate->diff($now);
+            $daysDiff = $interval->format('%R%a');
+            $daysDiff = intval($daysDiff);
+            $daysDiff = -$daysDiff;
+
+            if ($debt->debt == 0) {
+                $debt->debt_status = 4;
+            } elseif ($daysDiff <= 3) {
+                $debt->debt_status = 2;
+            } elseif ($daysDiff < 0) {
+                $debt->debt_status = 0;
+            } else {
+                $debt->debt_status = 3;
+            }
             $debt->created_at = $updateOrder->created_at;
             $debt->save();
             return redirect()->route('insertProduct.index')->with('msg', 'Đơn hàng đã được duyệt');
         } else {
             return redirect()->route('insertProduct.index')->with('warning', 'Đơn hàng đã được duyệt trước đó');
         }
+    }
+
+    function calculateAllDays($startDate, $daysToAdd)
+    {
+        $createdDate = Carbon::parse($startDate);
+        $currentDate = $createdDate->copy()->addDays($daysToAdd);
+
+        return $currentDate->format('Y-m-d');
     }
 
     /**
@@ -482,6 +516,7 @@ class AddProductController extends Controller
             $product_tax = $request->product_tax;
             $product_price = str_replace(',', '', $request->product_price);
             $product_total = str_replace(',', '', $request->product_total);
+            $total_import =  str_replace(',', '', $request->total_import);
 
             for ($i = 0; $i < count($product_name); $i++) {
                 $pro = new Product();
@@ -500,16 +535,41 @@ class AddProductController extends Controller
             }
             $updateOrder->order_status = 1;
             $updateOrder->save();
-
             $debt = new DebtImport();
             $debt->provide_id = $updateOrder->provide_id;
             $debt->user_id = Auth::user()->id;
             $debt->import_id = $updateOrder->id;
             $debt->total_import = $total_import;
             $debt->debt = $request->provide_debt == null ? 0 : $request->provide_debt;
-            $debt->debt_status = 0;
+
+            $debt->date_start = now();
+
+            // //Xử lí workingday
+            $startDate = $debt->debt_start;
+            $daysToAdd = $debt->debt;
+            $newDate = ($this->calculateAllDays($startDate, $daysToAdd));
+            $debt->date_end = $newDate;
+
+            // Xử lí status debt
+            $endDate = new DateTime($debt->date_end);
+            $now = new DateTime();
+            $interval = $endDate->diff($now);
+            $daysDiff = $interval->format('%R%a');
+            $daysDiff = intval($daysDiff);
+            $daysDiff = -$daysDiff;
+
+            if ($debt->debt == 0) {
+                $debt->debt_status = 4;
+            } elseif ($daysDiff <= 3) {
+                $debt->debt_status = 2;
+            } elseif ($daysDiff < 0) {
+                $debt->debt_status = 0;
+            } else {
+                $debt->debt_status = 3;
+            }
             $debt->created_at = $updateOrder->created_at;
             $debt->save();
+
         } else {
             return redirect()->route('insertProduct.index')->with('warning', 'Đơn hàng đã được duyệt trước đó');
         }

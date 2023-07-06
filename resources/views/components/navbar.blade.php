@@ -359,7 +359,7 @@
                                 </defs>
                             </svg>
                             <p>
-                                Công nợ nhập hàng
+                                Công nợ nhập
                             </p>
                         </a>
                     </li>
@@ -397,7 +397,7 @@
                                     </defs>
                                 </svg>
                                 <p>
-                                    Công nợ Xuất Hàng
+                                    Công nợ xuất
                                 </p>
                             </a>
                         </li>

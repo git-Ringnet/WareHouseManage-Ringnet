@@ -290,8 +290,8 @@
 
             // Update data-value attribute
             $('#grand-total').attr('data-value', grandTotal);
+            $('#total').val(formatCurrency(grandTotal));
             $('.total_import').val(grandTotal);
-            $('#total').val(formatCurrency(grandTotal));    
         }
 
         $("#radio1").on("click", function() {

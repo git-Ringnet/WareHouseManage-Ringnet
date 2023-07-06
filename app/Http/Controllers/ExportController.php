@@ -247,7 +247,7 @@ class ExportController extends Controller
                             // //Xử lí workingday
                             $startDate = $debt->debt_start;
                             $daysToAdd = $debt->debt;
-                            $newDate = ($this->calculateWorkingDate($startDate, $daysToAdd));
+                            $newDate = ($this->calculateAllDays($startDate, $daysToAdd));
                             $debt->date_end = $newDate;
 
                             // Xử lí status debt
@@ -359,7 +359,7 @@ class ExportController extends Controller
                             // //Xử lí workingday
                             $startDate = $debt->debt_start;
                             $daysToAdd = $debt->debt;
-                            $newDate = ($this->calculateWorkingDate($startDate, $daysToAdd));
+                            $newDate = ($this->calculateAllDays($startDate, $daysToAdd));
                             $debt->date_end = $newDate;
 
                             // Xử lí status debt
@@ -455,7 +455,7 @@ class ExportController extends Controller
                             // //Xử lí workingday
                             $startDate = $debt->debt_start;
                             $daysToAdd = $debt->debt;
-                            $newDate = ($this->calculateWorkingDate($startDate, $daysToAdd));
+                            $newDate = ($this->calculateAllDays($startDate, $daysToAdd));
                             $debt->date_end = $newDate;
 
                             // Xử lí status debt
@@ -551,7 +551,7 @@ class ExportController extends Controller
                             // //Xử lí workingday
                             $startDate = $debt->debt_start;
                             $daysToAdd = $debt->debt;
-                            $newDate = ($this->calculateWorkingDate($startDate, $daysToAdd));
+                            $newDate = ($this->calculateAllDays($startDate, $daysToAdd));
                             $debt->date_end = $newDate;
 
                             // Xử lí status debt
@@ -802,24 +802,10 @@ class ExportController extends Controller
             return redirect()->back();
         }
     }
-    function calculateWorkingDate($startDate, $daysToAdd)
+    function calculateAllDays($startDate, $daysToAdd)
     {
         $createdDate = Carbon::parse($startDate);
-        $daysRemaining = $daysToAdd;
-
-        $currentDate = $createdDate->copy();
-
-        while ($daysRemaining > 0) {
-            $currentDate = $currentDate->addDay();
-
-            if ($currentDate->isWeekday()) {
-                $daysRemaining--;
-            }
-        }
-
-        if ($currentDate->isWeekend()) {
-            $currentDate = $currentDate->nextWeekday();
-        }
+        $currentDate = $createdDate->copy()->addDays($daysToAdd);
 
         return $currentDate->format('Y-m-d');
     }
@@ -1090,7 +1076,7 @@ class ExportController extends Controller
                     // //Xử lí workingday
                     $startDate = $debt->debt_start;
                     $daysToAdd = $debt->debt;
-                    $newDate = ($this->calculateWorkingDate($startDate, $daysToAdd));
+                    $newDate = ($this->calculateAllDays($startDate, $daysToAdd));
                     $debt->date_end = $newDate;
 
                     // Xử lí status debt

@@ -672,7 +672,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     <td><input type="checkbox" name="ids[]" class="cb-element"
                                                             value="{{ $value->id }}"></td>
                                                 @endcan
-                                                <td class="text-center">{{ $value->madon }}</td>
+                                                <td class="text-left">{{ $value->madon }}</td>
                                                 <td class="">
                                                     {{ $value->khachhang }}
                                                 </td>
@@ -797,7 +797,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     @endcan
                                                     <td class="text-left"><?php echo $stt += 1; ?>
                                                     </td>
-                                                    <td class="text-left w-auto"><p>Mã sản phẩm</p>{{$item->masanpham}}</td>
+                                                    <td class="text-left w-auto"><p>Mã sản phẩm</p>{{$item->tensanpham}}</td>
                                                     <td></td>
                                                     <td class="text-right">
                                                         <p>Số lượng</p>{{ $item->soluong }}

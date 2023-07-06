@@ -2,7 +2,7 @@
 <x-navbar :title="$title"></x-navbar>
 <div class="content-wrapper">
     <div class="breadcrumb">
-        <span><a href="{{ route('admin.userslist') }}">Công Nợ</a></span>
+        <span><a href="{{ route('debt.index') }}">Công nợ xuất</a></span>
         <span class="px-1">/</span>
         <span><b>Đơn Hàng</b></span>
         <span class="ml-1">#{{ $debts->id }}</span>
