@@ -598,8 +598,6 @@ class ExportController extends Controller
                                     'total' => $total
                                 ]);
                         }
-                        //cập nhật số lượng tồn kho sản phẩm
-
                         return redirect()->route('exports.index')->with('msg', 'Duyệt đơn thành công!');
                     }
                 }
@@ -987,10 +985,11 @@ class ExportController extends Controller
                         $productID = $productIDs[$i];
                         $productQty = $productQtys[$i];
 
-                        // Lấy số lượng hiện tại của sản phẩm
+                        // Lấy số lượng, đang giao dịch hiện tại của sản phẩm
                         $currentQty = Product::where('id', $productID)->value('product_qty');
+                        $currentTrade = Product::where('id', $productID)->value('product_trade');
 
-                        // Giảm số lượng sản phẩm
+                        // Giảm số lượng sản phẩm và số lượng đang giao dịch
                         $newQty = $currentQty - $productQty;
                         $newTrade = 1;
 
@@ -1006,7 +1005,6 @@ class ExportController extends Controller
                             ->update([
                                 'product_qty' => $newQty,
                                 'total' => $total,
-                                'product_trade' => $newTrade,
                             ]);
                     }
                     if ($request->id != null) {
@@ -1424,7 +1422,7 @@ class ExportController extends Controller
     {
         $data = $request->all();
         $product = Product::select('product.*')
-            ->selectRaw('(product.product_qty - product.product_trade) as qty_exist') // Thêm cột tồn kho
+            ->selectRaw('COALESCE((product.product_qty - COALESCE(product.product_trade, 0)), 0) as qty_exist')
             ->where('product.id', $data['idProduct'])
             ->first();
         return response()->json($product);

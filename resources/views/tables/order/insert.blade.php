@@ -131,24 +131,33 @@
                 <!-- Main content -->
                 <div class="d-flex justify-content-between align-items-center my-2">
                     <div class="d-flex">
-                        <input type="text" name="product_code" placeholder="Số hóa đơn" class="form-control"
-                            required>
-                        <input type="date" name="product_create" placeholder="Ngày nhập hóa đơn"
+                        <div style="width:42%;">
+                            <label class="ml-2">Số hóa đơn</label>
+                            <input type="text" required name="product_code" placeholder="Số hóa đơn" class="form-control">
+                        </div>
+                        <div>
+                            <label class="ml-4">Ngày hóa đơn</label>
+                            <input type="date" name="product_create" placeholder="Ngày nhập hóa đơn"
                             class="form-control ml-2" required>
+                        </div>
+                      
                     </div>
                     <div class="d-flex">
-                        <label class="btn btn-default btn-file m-2 d-flex">
-                            Import file
-                            <input type="file" id="import_file" class="import_file" accept=".xml">
-                            <div>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                    viewBox="0 0 24 24" fill="none">
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M7.23123 9.23123C7.53954 8.92292 8.03941 8.92292 8.34772 9.23123L12 12.8835L15.6523 9.23123C15.9606 8.92292 16.4605 8.92292 16.7688 9.23123C17.0771 9.53954 17.0771 10.0394 16.7688 10.3477L12.5582 14.5582C12.2499 14.8665 11.7501 14.8665 11.4418 14.5582L7.23123 10.3477C6.92292 10.0394 6.92292 9.53954 7.23123 9.23123Z"
-                                        fill="#555555" />
-                                </svg>
-                            </div>
-                        </label>
+                        <div>
+                            <label></label>
+                            <label class="btn btn-default btn-file m-2 d-flex">
+                                Import file
+                                <input type="file" id="import_file" class="import_file" accept=".xml">
+                                <div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        viewBox="0 0 24 24" fill="none">
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                            d="M7.23123 9.23123C7.53954 8.92292 8.03941 8.92292 8.34772 9.23123L12 12.8835L15.6523 9.23123C15.9606 8.92292 16.4605 8.92292 16.7688 9.23123C17.0771 9.53954 17.0771 10.0394 16.7688 10.3477L12.5582 14.5582C12.2499 14.8665 11.7501 14.8665 11.4418 14.5582L7.23123 10.3477C6.92292 10.0394 6.92292 9.53954 7.23123 9.23123Z"
+                                            fill="#555555" />
+                                    </svg>
+                                </div>
+                            </label>
+                        </div>
                     </div>
                 </div>
                 <section class="content">
@@ -190,6 +199,7 @@
                                 <div class="d-flex justify-content-between mt-2">
                                     <span class="text-lg"><b>Tổng cộng:</b></span>
                                     <span><b id="grand-total">đ</b></span>
+                                    <input type="hidden" name="total_import" class="total_import">
                                 </div>
                             </div>
                         </div>
@@ -280,7 +290,8 @@
 
             // Update data-value attribute
             $('#grand-total').attr('data-value', grandTotal);
-            $('#total').val(formatCurrency(grandTotal));
+            $('.total_import').val(grandTotal);
+            $('#total').val(formatCurrency(grandTotal));    
         }
 
         $("#radio1").on("click", function() {
@@ -621,7 +632,7 @@
                     var parts = ngayNhapHoaDon.split('-');
                     var formattedDate = parts[2] + '-' + parts[1] + '-' + parts[0];
                     console.log(ngayNhapHoaDon);
-                    // $('tbody tr').remove();
+                    $('tbody tr').remove();
                     // Tạo các ô input mới và đặt giá trị của chúng
                     for (var i = 0; i < THHDVu.length; i++) {
                         var tax = 0;
