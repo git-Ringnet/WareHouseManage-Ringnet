@@ -65,4 +65,8 @@ class Provides extends Model
         $provides = $provides->orderBy('id', 'asc')->paginate(8);
         return $provides;
     }
+
+    function updateProvide() : Returntype {
+        
+    }
 }

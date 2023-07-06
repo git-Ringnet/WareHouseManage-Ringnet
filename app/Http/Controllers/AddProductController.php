@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DebtImport;
 use App\Models\Orders;
 use App\Models\Product;
 use App\Models\ProductOrders;
@@ -165,8 +166,19 @@ class AddProductController extends Controller
                 $new_provide->provide_address = $request->provide_address_new;
                 $new_provide->provide_code = $request->provide_code_new;
                 $new_provide->provide_status = 1;
+                $new_provide->debt = $request->debt;
                 $new_provide->save();
             }
+        } else {
+            $update_provide = Provides::findOrFail($request['provide_id']);
+            $update_provide->provide_name = $request->provide_name;
+            $update_provide->provide_represent = $request->provide_represent;
+            $update_provide->provide_phone = $request->provide_phone;
+            $update_provide->provide_email = $request->provide_email;
+            $update_provide->provide_address = $request->provide_address;
+            $update_provide->provide_code = $request->provide_code;
+            $update_provide->debt = $request->provide_debt == null ? 0 : $request->provide_debt;
+            $update_provide->save();
         }
         $product_name = $request->product_name;
         $product_unit = $request->product_unit;
@@ -247,6 +259,16 @@ class AddProductController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $update_provide = Provides::findOrFail($request->provide_id);
+        $update_provide->provide_name = $request->provide_name;
+        $update_provide->provide_represent = $request->provide_represent;
+        $update_provide->provide_phone = $request->provide_phone;
+        $update_provide->provide_email = $request->provide_email;
+        $update_provide->provide_address = $request->provide_address;
+        $update_provide->provide_code = $request->provide_code;
+        $update_provide->debt = $request->provide_debt == null ? 0 : $request->provide_debt;
+        $update_provide->save();
+    
         $updateOrder = Orders::find($id);
         $product_id = $request->product_id;
         $product_name = $request->product_name;
@@ -256,6 +278,7 @@ class AddProductController extends Controller
         $product_tax = $request->product_tax;
         $product_price = str_replace(',', '', $request->product_price);
         $product_total = str_replace(',', '', $request->product_total);
+        $total_import =  str_replace(',', '', $request->total_import);
         $arr_new_product = [];
         // Kiểm tra tình trạng 
         if ($updateOrder->order_status == 2) {
@@ -291,7 +314,6 @@ class AddProductController extends Controller
                     $check->product_total = $product_total[$i];
                     $check->order_id = $request->order_id;
                     $check->save();
-                 
                 }
                 $updateOrder->provide_id = $request->provide_id;
                 $updateOrder->total += $product_total[$i];
@@ -344,6 +366,16 @@ class AddProductController extends Controller
 
             $updateOrder->order_status = 1;
             $updateOrder->save();
+
+            $debt = new DebtImport();
+            $debt->provide_id = $updateOrder->provide_id;
+            $debt->user_id = Auth::user()->id;
+            $debt->import_id = $updateOrder->id;
+            $debt->total_import = $total_import;
+            $debt->debt = $request->provide_debt == null ? 0 : $request->provide_debt;
+            $debt->debt_status = 0;
+            $debt->created_at = $updateOrder->created_at;
+            $debt->save();
             return redirect()->route('insertProduct.index')->with('msg', 'Đơn hàng đã được duyệt');
         } else {
             return redirect()->route('insertProduct.index')->with('warning', 'Đơn hàng đã được duyệt trước đó');
@@ -387,6 +419,16 @@ class AddProductController extends Controller
                 $new_provide->provide_status = 1;
                 $new_provide->save();
             }
+        } else {
+            $update_provide = Provides::findOrFail($request['provide_id']);
+            $update_provide->provide_name = $request->provide_name;
+            $update_provide->provide_represent = $request->provide_represent;
+            $update_provide->provide_phone = $request->provide_phone;
+            $update_provide->provide_email = $request->provide_email;
+            $update_provide->provide_address = $request->provide_address;
+            $update_provide->provide_code = $request->provide_code;
+            $update_provide->debt = $request->provide_debt == null ? 0 : $request->provide_debt;
+            $update_provide->save();
         }
 
         $product_name = $request->product_name;
@@ -465,12 +507,24 @@ class AddProductController extends Controller
         $update_provide->provide_email = $data['provide_email'];
         $update_provide->provide_address = $data['provide_address'];
         $update_provide->provide_code = $data['provide_code'];
+        $update_provide->debt = $data['debt'];
         $update_provide->save();
     }
 
     // Thêm hàng mới vào Order
     public function addBillEdit(Request $request)
     {
+        $update_provide = Provides::findOrFail($request->provide_id);
+        $update_provide->provide_name = $request->provide_name;
+        $update_provide->provide_represent = $request->provide_represent;
+        $update_provide->provide_phone = $request->provide_phone;
+        $update_provide->provide_email = $request->provide_email;
+        $update_provide->provide_address = $request->provide_address;
+        $update_provide->provide_code = $request->provide_code;
+        $update_provide->debt = $request->provide_debt == null ? 0 : $request->provide_debt;
+        $update_provide->save();
+
+
         $order = Orders::findOrFail($request->order_id);
         // Kiểm tra tình trạng 
         if ($order->order_status == 2) {
@@ -664,6 +718,7 @@ class AddProductController extends Controller
             $add_newProvide->provide_status = 1;
             $add_newProvide->provide_address = $data['provide_address'];
             $add_newProvide->provide_code = $data['provide_code'];
+            $add_newProvide->debt = $data['debt'];
             $add_newProvide->save();
             session()->flash('msg', 'Thêm mới nhà cung cấp thành công!');
             return response()->json(['success' => true, 'msg' => 'Thêm mới nhà cung cấp thành công !', 'data' => $add_newProvide]);
