@@ -168,13 +168,11 @@ class ExportController extends Controller
                             $guest->guest_name = $request->guest_name;
                             $guest->guest_address = $request->guest_address;
                             $guest->guest_code = $request->guest_code;
-                            $guest->guest_addressDeliver = $request->guest_addressDeliver;
                             $guest->guest_receiver = $request->guest_receiver;
                             $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
                             $guest->guest_email = $request->guest_email;
                             $guest->guest_status = 1;
                             $guest->guest_phone = $request->guest_phone;
-                            $guest->guest_pay = $request->guest_pay;
                             $guest->guest_note = $request->guest_note;
                             if ($request->debt == null) {
                                 $guest->debt = 0;
@@ -273,13 +271,11 @@ class ExportController extends Controller
                             $guest->guest_name = $request->guest_name;
                             $guest->guest_address = $request->guest_address;
                             $guest->guest_code = $request->guest_code;
-                            $guest->guest_addressDeliver = $request->guest_addressDeliver;
                             $guest->guest_receiver = $request->guest_receiver;
                             $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
                             $guest->guest_email = $request->guest_email;
                             $guest->guest_status = 1;
                             $guest->guest_phone = $request->guest_phone;
-                            $guest->guest_pay = $request->guest_pay;
                             $guest->guest_note = $request->guest_note;
                             if ($request->debt == null) {
                                 $guest->debt = 0;
@@ -592,36 +588,8 @@ class ExportController extends Controller
                                     'total' => $total
                                 ]);
                         }
-                        //cập nhật số lượng tồn kho sản phẩm cha
-                        $query = "UPDATE `products` 
-                        INNER JOIN `product` ON `products`.`id` = `product`.`products_id` 
-                        SET `products`.`inventory` = (
-                        SELECT SUM(`product`.`product_qty`) 
-                        FROM `product` 
-                        WHERE `product`.`products_id` = `products`.`id`
-                        ),
-                        `products`.`price_inventory` = (
-                        SELECT SUM(`product`.`total`) 
-                        FROM `product` 
-                        WHERE `product`.`products_id` = `products`.`id`
-                        ),
-                        `products`.`price_avg` = (
-                        SELECT CASE WHEN (
-                        SELECT SUM(`product`.`product_qty`) 
-                        FROM `product` 
-                        WHERE `product`.`products_id` = `products`.`id`
-                        ) = 0 THEN 0 ELSE (
-                        SELECT SUM(`product`.`total`) 
-                        FROM `product` 
-                        WHERE `product`.`products_id` = `products`.`id`
-                        ) / (
-                        SELECT SUM(`product`.`product_qty`) 
-                        FROM `product` 
-                        WHERE `product`.`products_id` = `products`.`id`
-                        ) END
-                        )
-                        WHERE `products`.`id` IN (" . implode(',', $products_id) . ")";
-                        DB::statement($query);
+                        //cập nhật số lượng tồn kho sản phẩm
+
                         return redirect()->route('exports.index')->with('msg', 'Duyệt đơn thành công!');
                     }
                 }
@@ -1048,13 +1016,11 @@ class ExportController extends Controller
                         $guest->guest_name = $request->guest_name;
                         $guest->guest_address = $request->guest_address;
                         $guest->guest_code = $request->guest_code;
-                        $guest->guest_addressDeliver = $request->guest_addressDeliver;
                         $guest->guest_receiver = $request->guest_receiver;
                         $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
                         $guest->guest_email = $request->guest_email;
                         $guest->guest_status = 1;
                         $guest->guest_phone = $request->guest_phone;
-                        $guest->guest_pay = $request->guest_pay;
                         $guest->guest_note = $request->guest_note;
                         if ($request->debt == 0) {
                             $guest->debt = 0;
@@ -1091,36 +1057,8 @@ class ExportController extends Controller
                             }
                         }
                     }
-                    //cập nhật số lượng tồn kho sản phẩm cha
-                    $query = "UPDATE `products` 
-      INNER JOIN `product` ON `products`.`id` = `product`.`products_id` 
-      SET `products`.`inventory` = (
-          SELECT SUM(`product`.`product_qty`) 
-          FROM `product` 
-          WHERE `product`.`products_id` = `products`.`id`
-      ),
-      `products`.`price_inventory` = (
-          SELECT SUM(`product`.`total`) 
-          FROM `product` 
-          WHERE `product`.`products_id` = `products`.`id`
-      ),
-      `products`.`price_avg` = (
-          SELECT CASE WHEN (
-              SELECT SUM(`product`.`product_qty`) 
-              FROM `product` 
-              WHERE `product`.`products_id` = `products`.`id`
-          ) = 0 THEN 0 ELSE (
-              SELECT SUM(`product`.`total`) 
-              FROM `product` 
-              WHERE `product`.`products_id` = `products`.`id`
-          ) / (
-              SELECT SUM(`product`.`product_qty`) 
-              FROM `product` 
-              WHERE `product`.`products_id` = `products`.`id`
-          ) END
-      )
-      WHERE `products`.`id` IN (" . implode(',', $products_id) . ")";
-                    DB::statement($query);
+                    //cập nhật số lượng tồn kho sản phẩm
+                    
                     // Lấy lại thông tin exports từ cơ sở dữ liệu (nếu cần)
                     $exports = Exports::find($exports->id);
 
@@ -1389,13 +1327,11 @@ class ExportController extends Controller
                         $guest->guest_name = $request->guest_name;
                         $guest->guest_address = $request->guest_address;
                         $guest->guest_code = $request->guest_code;
-                        $guest->guest_addressDeliver = $request->guest_addressDeliver;
                         $guest->guest_receiver = $request->guest_receiver;
                         $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
                         $guest->guest_email = $request->guest_email;
                         $guest->guest_status = 1;
                         $guest->guest_phone = $request->guest_phone;
-                        $guest->guest_pay = $request->guest_pay;
                         $guest->guest_note = $request->guest_note;
                         if ($request->debt == 0) {
                             $guest->debt = 0;

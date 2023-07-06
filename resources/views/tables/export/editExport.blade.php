@@ -733,7 +733,7 @@
                 "</td>");
             const thanhTienInput = $(
                 "<td><span class='total-amount form-control text-center' style='background:#e9ecef; width:140px'>0</span></td>"
-                );
+            );
             const ghichuInput = $(
                 "<td><input type='text' class='note_product form-control text-left' name='product_note[]'></td>"
             );
@@ -1075,9 +1075,16 @@
             }
         });
     });
+    //lấy thông tin sản phẩm
     $(document).ready(function() {
-        //lấy thông tin sản phẩm con từ tên sản phẩm con
         var selectedProductIDs = [];
+        // Lấy tất cả các phần tử đang được chọn theo class "productName"
+        var selectedProducts = document.querySelectorAll(".productName");
+        // Lặp qua từng phần tử và lấy giá trị của nó
+        selectedProducts.forEach(function(product) {
+            selectedProductIDs.push(product.value);
+        });
+
         $(document).on('change', '.child-select', function() {
             var selectedID = $(this).val();
             var row = $(this).closest('tr');
@@ -1113,8 +1120,6 @@
                         loaihang.val(response.product_category);
                         dangGD.val(response.product_trade);
                         thue.val(response.tax);
-                        // Tính lại tổng số tiền và tổng số thuế
-                        calculateTotalTax();
                         calculateGrandTotal();
                     },
                 });

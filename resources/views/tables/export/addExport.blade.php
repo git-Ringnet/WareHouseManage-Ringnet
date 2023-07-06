@@ -949,21 +949,21 @@
         $('#chot_don').on('click', function() {
             if (isFirstClick) {
                 isFirstClick = false;
-
                 setTimeout(function() {
                     isFirstClick = true;
-                }, 1000);
+                    $('#chot_don').prop('disabled', false);
+                }, 10);
             } else {
                 return;
             }
         });
+
         $('#luu').on('click', function() {
             if (isFirstClick) {
                 isFirstClick = false;
-
                 setTimeout(function() {
-                    isFirstClick = true;
-                }, 1000);
+                    $('#luu').prop('disabled', false);
+                }, 10);
             } else {
                 return;
             }
