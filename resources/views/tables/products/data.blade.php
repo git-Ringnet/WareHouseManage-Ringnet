@@ -122,11 +122,12 @@ $index = array_search($item['label'], $numberedLabels);
                                                 } @endphp">
                                     {{ $item['label'] }}
                                     @if ($item['label'] === 'Thuế:')
-                                    <span class="filter-values">{{ implode(', ', array_map(function($value) { return $value . '%'; }, $item['values'])) }}
-                                    </span>
-                                @else
-                                    <span class="filter-values">{{ implode(', ', $item['values']) }}</span>
-                                @endif
+                                        <span
+                                            class="filter-values">{{ implode(', ',array_map(function ($value) {return $value . '%';}, $item['values'])) }}
+                                        </span>
+                                    @else
+                                        <span class="filter-values">{{ implode(', ', $item['values']) }}</span>
+                                    @endif
                                     <a class="delete-item delete-btn-{{ $item['class'] }}"
                                         onclick="updateDeleteItemValue('{{ $item['label'] }}')">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -581,7 +582,7 @@ $index = array_search($item['label'], $numberedLabels);
             <div class="d-flex justify-content-between align-items-center">
                 <span class="count_checkbox mr-5"></span>
                 <div class="row action">
-                    <!-- <div class="btn-taodon my-2 ml-3">
+                    <div class="btn-taodon my-2 ml-3">
                         <button type="button" class="btn-group btn btn-light d-flex align-items-center">
                             <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24" fill="none">
@@ -594,7 +595,7 @@ $index = array_search($item['label'], $numberedLabels);
                             </svg>
                             <span>Tạo đơn bán</span>
                         </button>
-                    </div> -->
+                    </div>
                     <div class="btn-nhaphang my-2">
                         <!-- <button type="button" class="btn-group btn btn-light d-flex align-items-center ml-4">
                             <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -750,7 +751,7 @@ $index = array_search($item['label'], $numberedLabels);
                                 <tbody>
                                     @foreach ($products as $value)
                                         <tr>
-                                            <td><input type="checkbox"></td>
+                                            <td><input type="checkbox" class="cb-element"></td>
                                             <td class="text-left">{{ $value->id }}</td>
                                             <td class="text-left">{{ $value->product_name }}</td>
                                             <td class="text-left">{{ $value->provide }}</td>
