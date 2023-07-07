@@ -474,7 +474,7 @@ $("#radio2").on("click", function () {
         '</div>' +
         '<div class="form-group">' +
         '<label for="email">Công nợ:</label>' +
-        '<div class="d-flex align-items-center" style="width:101%;"> <input id="debtInput" class="form-control" type="text" name="debt" style="width:15%;">' +
+        '<div class="d-flex align-items-center" style="width:101%;"> <input id="debtInput" class="form-control" type="text" name="provide_debt" style="width:15%;">' +
         '<span class="ml-2" id="data-debt" style="color: rgb(29, 28, 32);">ngày</span>' +
         '<input type="checkbox" id="debtCheckbox" value="0" style="margin-left:10%;">' +
         '<span class="ml-2">Thanh toán tiền mặt</span> </div>' +
