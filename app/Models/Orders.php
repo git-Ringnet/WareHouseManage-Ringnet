@@ -10,7 +10,7 @@ class Orders extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'provide_id', 'users_id', 'order_status', 'total'
+        'provide_id', 'users_id', 'order_status', 'total','created_at','updated_at','product_code'
     ];
     protected $table = 'orders';
 
@@ -23,7 +23,7 @@ class Orders extends Model
         }
         $orders = Orders::join('users', 'users.id', '=', 'orders.users_id')
         ->leftJoin('provides', 'provides.id', '=', 'orders.provide_id')
-        ->select('orders.id', 'orders.product_code','provides.provide_name', 'users.name', 'orders.total', 'orders.updated_at', 'order_status')
+        ->select('orders.id', 'orders.product_code','provides.provide_name', 'users.name', 'orders.total','orders.created_at', 'orders.updated_at', 'order_status')
         ->whereIn('orders.id', $productIds);
         // Các điều kiện tìm kiếm và lọc dữ liệu ở đây
 

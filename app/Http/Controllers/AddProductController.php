@@ -381,25 +381,28 @@ class AddProductController extends Controller
             $debt->import_id = $updateOrder->id;
             $debt->total_import = $total_import;
             $debt->debt = $request->provide_debt == null ? 0 : $request->provide_debt;
-            $debt->date_start = now();
+            $debt->date_start = $request->product_create;
 
-            // //Xử lí workingday
-            $startDate = $debt->debt_start;
-            $daysToAdd = $debt->debt;
-            $newDate = ($this->calculateAllDays($startDate, $daysToAdd));
-            $debt->date_end = $newDate;
+            $startDate = Carbon::parse($request->product_create); // Chuyển đổi ngày bắt đầu thành đối tượng Carbon
+            $daysToAdd = $debt->debt; // Số ngày cần thêm
+
+            $endDate = $startDate->copy()->addDays($daysToAdd); // Thêm số ngày vào ngày bắt đầu để tính ngày kết thúc
+
+            // Định dạng ngày kết thúc theo ý muốn
+            $endDateFormatted = $endDate->format('Y-m-d');
+            // dd($endDateFormatted);
+            $debt->date_end = $endDateFormatted;
+
 
             // Xử lí status debt
-            $endDate = new DateTime($debt->date_end);
-            $now = new DateTime();
-            $interval = $endDate->diff($now);
-            $daysDiff = $interval->format('%R%a');
-            $daysDiff = intval($daysDiff);
-            $daysDiff = -$daysDiff;
+            $endDate = Carbon::parse($endDateFormatted); 
+            $currentDate = Carbon::now(); 
+            $daysDiffss = $currentDate->diffInDays($endDate);
+            $daysDiff = - $daysDiffss;
 
             if ($debt->debt == 0) {
                 $debt->debt_status = 4;
-            } elseif ($daysDiff <= 3) {
+            } elseif ($daysDiff <= 3 && $daysDiff >= 0) {
                 $debt->debt_status = 2;
             } elseif ($daysDiff < 0) {
                 $debt->debt_status = 0;
@@ -417,7 +420,7 @@ class AddProductController extends Controller
     function calculateAllDays($startDate, $daysToAdd)
     {
         $createdDate = Carbon::parse($startDate);
-        $currentDate = $createdDate->copy()->addDays($daysToAdd);
+        $currentDate = $createdDate->addDays($daysToAdd);
 
         return $currentDate->format('Y-m-d');
     }
@@ -481,7 +484,6 @@ class AddProductController extends Controller
         $product_price = str_replace(',', '', $request->product_price);
         $product_total = str_replace(',', '', $request->product_total);
         $total_import =  str_replace(',', '', $request->total_import);
-
         $order = new Orders();
         for ($i = 0; $i < count($product_name); $i++) {
             $order->provide_id = $new_provide->id != null ? $new_provide->id :  $request['provide_id'];
@@ -542,25 +544,29 @@ class AddProductController extends Controller
             $debt->total_import = $total_import;
             $debt->debt = $request->provide_debt == null ? 0 : $request->provide_debt;
 
-            $debt->date_start = now();
+            $debt->date_start = $request->product_create;
 
-            // //Xử lí workingday
-            $startDate = $debt->debt_start;
-            $daysToAdd = $debt->debt;
-            $newDate = ($this->calculateAllDays($startDate, $daysToAdd));
-            $debt->date_end = $newDate;
+            $startDate = Carbon::parse($request->product_create); // Chuyển đổi ngày bắt đầu thành đối tượng Carbon
+            $daysToAdd = $debt->debt; // Số ngày cần thêm
 
+            $endDate = $startDate->copy()->addDays($daysToAdd); // Thêm số ngày vào ngày bắt đầu để tính ngày kết thúc
+
+            // Định dạng ngày kết thúc theo ý muốn
+            $endDateFormatted = $endDate->format('Y-m-d');
+            $debt->date_end = $endDateFormatted;
+
+           
             // Xử lí status debt
-            $endDate = new DateTime($debt->date_end);
-            $now = new DateTime();
-            $interval = $endDate->diff($now);
-            $daysDiff = $interval->format('%R%a');
-            $daysDiff = intval($daysDiff);
-            $daysDiff = -$daysDiff;
+            $endDate = Carbon::parse($endDateFormatted); // Chuyển đổi ngày kết thúc thành đối tượng Carbon
+
+            $currentDate = Carbon::now(); // Lấy ngày hiện tại thành đối tượng Carbon
+
+            $daysDiffs = $currentDate->diffInDays($endDate);
+            $daysDiff = -$daysDiffs;
 
             if ($debt->debt == 0) {
                 $debt->debt_status = 4;
-            } elseif ($daysDiff <= 3) {
+            } elseif ($daysDiff <= 3 && $daysDiff >= 0) {
                 $debt->debt_status = 2;
             } elseif ($daysDiff < 0) {
                 $debt->debt_status = 0;
@@ -569,7 +575,6 @@ class AddProductController extends Controller
             }
             $debt->created_at = $updateOrder->created_at;
             $debt->save();
-
         } else {
             return redirect()->route('insertProduct.index')->with('warning', 'Đơn hàng đã được duyệt trước đó');
         }
@@ -708,9 +713,9 @@ class AddProductController extends Controller
             var_dump($id_product);
             foreach ($id_product as $va) {
                 // Kiểm tra sản phẩm đã tạo đơn chưa
-    
+
                 $check_PExport = productExports::where('product_id', $va->product_id)->first();
-           
+
                 if ($check_PExport) {
                     // Kiểm tra sản phẩm đã bán ra chưa
                     $check_Exp = Exports::where('id', $check_PExport->export_id)->first();
