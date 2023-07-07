@@ -570,8 +570,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             <span class="d-flex align-items-center">
                                                 <a href="#" class="sort-link" data-sort-by="id"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
-                                                        type="submit">Mã
-                                                        đơn</button></a>
+                                                        type="submit">HĐ ra</button></a>
                                                 <div class="icon" id="icon-id"></div>
                                             </span>
                                         </th>
@@ -672,7 +671,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     <td><input type="checkbox" name="ids[]" class="cb-element"
                                                             value="{{ $value->id }}"></td>
                                                 @endcan
-                                                <td class="text-left">{{ $value->madon }}</td>
+                                                <td class="text-left">{{ $value->hdr }}</td>
                                                 <td class="">
                                                     {{ $value->khachhang }}
                                                 </td>

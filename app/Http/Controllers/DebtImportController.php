@@ -6,6 +6,7 @@ use App\Models\DebtImport;
 use App\Models\User;
 use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class DebtImportController extends Controller
 {
@@ -21,7 +22,7 @@ class DebtImportController extends Controller
     }
     public function index(Request $request)
     {
-        $title = 'Công nợ xuất';
+        $title = 'Công nợ nhập';
         $filters = [];
         $string = [];
         //Mã đơn
@@ -223,14 +224,11 @@ class DebtImportController extends Controller
                 return redirect()->route('debt_import.index')->with('msg', 'Thanh toán thành công!');
             }
             if ($action === 'action2') {
-                // Xử lí status debt
-                $endDate = new DateTime($request->date_end);
-                $now = new DateTime();
+                $endDate = Carbon::parse($request->date_end);
+                $currentDate = Carbon::now();
+                $daysDiffss = $currentDate->diffInDays($endDate);
+                $daysDiff = -$daysDiffss;
 
-                $interval = $endDate->diff($now);
-                $daysDiff = $interval->days; // Số ngày khác nhau giữa hai ngày
-                // dd($request->debt_debt);
-                // dd($daysDiff);
                 if ($request->debt_debt == null || $request->debt_debt == 0) {
                     $debt->debt_status = 4;
                     $debt->debt = 0;
@@ -244,6 +242,7 @@ class DebtImportController extends Controller
                     $debt->debt_status = 3;
                     $debt->debt = $request->debt_debt;
                 }
+
                 $debt->update($request->all());
 
                 return redirect()->route('debt_import.index')->with('msg', 'Cập nhật thành công!');

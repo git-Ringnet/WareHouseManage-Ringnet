@@ -247,25 +247,27 @@ class ExportController extends Controller
                             $debt->debt_transport_fee = $debtTransportFee;
                             $debt->total_difference = $totalDifference;
                             $debt->debt = $guest->debt;
-                            $debt->date_start = now();
+                            $debt->date_start = $request->export_create;
+                            $startDate = Carbon::parse($request->export_create); // Chuyển đổi ngày bắt đầu thành đối tượng Carbon
+                            $daysToAdd = $debt->debt; // Số ngày cần thêm
 
-                            // //Xử lí workingday
-                            $startDate = $debt->debt_start;
-                            $daysToAdd = $debt->debt;
-                            $newDate = ($this->calculateAllDays($startDate, $daysToAdd));
-                            $debt->date_end = $newDate;
+                            $endDate = $startDate->copy()->addDays($daysToAdd); // Thêm số ngày vào ngày bắt đầu để tính ngày kết thúc
+
+                            // Định dạng ngày kết thúc theo ý muốn
+                            $endDateFormatted = $endDate->format('Y-m-d');
+                            // dd($endDateFormatted);
+                            $debt->date_end = $endDateFormatted;
+
 
                             // Xử lí status debt
-                            $endDate = new DateTime($debt->date_end);
-                            $now = new DateTime();
-                            $interval = $endDate->diff($now);
-                            $daysDiff = $interval->format('%R%a');
-                            $daysDiff = intval($daysDiff);
-                            $daysDiff = -$daysDiff;
+                            $endDate = Carbon::parse($endDateFormatted);
+                            $currentDate = Carbon::now();
+                            $daysDiffss = $currentDate->diffInDays($endDate);
+                            $daysDiff = -$daysDiffss;
 
-                            if ($guest->debt == 0) {
+                            if ($debt->debt == 0) {
                                 $debt->debt_status = 4;
-                            } elseif ($daysDiff <= 3) {
+                            } elseif ($daysDiff <= 3 && $daysDiff >= 0) {
                                 $debt->debt_status = 2;
                             } elseif ($daysDiff < 0) {
                                 $debt->debt_status = 0;
@@ -363,25 +365,28 @@ class ExportController extends Controller
                             $debt->total_difference = $totalDifference;
                             $debt->debt = $guest->debt;
 
-                            $debt->date_start = now();
+                            $debt->date_start = $request->export_create;
 
-                            // //Xử lí workingday
-                            $startDate = $debt->debt_start;
-                            $daysToAdd = $debt->debt;
-                            $newDate = ($this->calculateAllDays($startDate, $daysToAdd));
-                            $debt->date_end = $newDate;
+                            $startDate = Carbon::parse($request->export_create); // Chuyển đổi ngày bắt đầu thành đối tượng Carbon
+                            $daysToAdd = $debt->debt; // Số ngày cần thêm
+
+                            $endDate = $startDate->copy()->addDays($daysToAdd); // Thêm số ngày vào ngày bắt đầu để tính ngày kết thúc
+
+                            // Định dạng ngày kết thúc theo ý muốn
+                            $endDateFormatted = $endDate->format('Y-m-d');
+                            // dd($endDateFormatted);
+                            $debt->date_end = $endDateFormatted;
+
 
                             // Xử lí status debt
-                            $endDate = new DateTime($debt->date_end);
-                            $now = new DateTime();
-                            $interval = $endDate->diff($now);
-                            $daysDiff = $interval->format('%R%a');
-                            $daysDiff = intval($daysDiff);
-                            $daysDiff = -$daysDiff;
+                            $endDate = Carbon::parse($endDateFormatted);
+                            $currentDate = Carbon::now();
+                            $daysDiffss = $currentDate->diffInDays($endDate);
+                            $daysDiff = -$daysDiffss;
 
-                            if ($guest->debt == 0) {
+                            if ($debt->debt == 0) {
                                 $debt->debt_status = 4;
-                            } elseif ($daysDiff <= 3) {
+                            } elseif ($daysDiff <= 3 && $daysDiff >= 0) {
                                 $debt->debt_status = 2;
                             } elseif ($daysDiff < 0) {
                                 $debt->debt_status = 0;
@@ -463,25 +468,28 @@ class ExportController extends Controller
                             $debt->total_difference = $totalDifference;
                             $debt->debt = $guest->debt;
 
-                            $debt->date_start = now();
+                            $debt->date_start = $request->export_create;
 
-                            // //Xử lí workingday
-                            $startDate = $debt->debt_start;
-                            $daysToAdd = $debt->debt;
-                            $newDate = ($this->calculateAllDays($startDate, $daysToAdd));
-                            $debt->date_end = $newDate;
+                            $startDate = Carbon::parse($request->export_create); // Chuyển đổi ngày bắt đầu thành đối tượng Carbon
+                            $daysToAdd = $debt->debt; // Số ngày cần thêm
+
+                            $endDate = $startDate->copy()->addDays($daysToAdd); // Thêm số ngày vào ngày bắt đầu để tính ngày kết thúc
+
+                            // Định dạng ngày kết thúc theo ý muốn
+                            $endDateFormatted = $endDate->format('Y-m-d');
+                            // dd($endDateFormatted);
+                            $debt->date_end = $endDateFormatted;
+
 
                             // Xử lí status debt
-                            $endDate = new DateTime($debt->date_end);
-                            $now = new DateTime();
-                            $interval = $endDate->diff($now);
-                            $daysDiff = $interval->format('%R%a');
-                            $daysDiff = intval($daysDiff);
-                            $daysDiff = -$daysDiff;
+                            $endDate = Carbon::parse($endDateFormatted);
+                            $currentDate = Carbon::now();
+                            $daysDiffss = $currentDate->diffInDays($endDate);
+                            $daysDiff = -$daysDiffss;
 
-                            if ($guest->debt == 0) {
+                            if ($debt->debt == 0) {
                                 $debt->debt_status = 4;
-                            } elseif ($daysDiff <= 3) {
+                            } elseif ($daysDiff <= 3 && $daysDiff >= 0) {
                                 $debt->debt_status = 2;
                             } elseif ($daysDiff < 0) {
                                 $debt->debt_status = 0;
@@ -563,25 +571,28 @@ class ExportController extends Controller
                             $debt->total_difference = $totalDifference;
                             $debt->debt = $guest->debt;
 
-                            $debt->date_start = now();
+                            $debt->date_start = $request->export_create;
 
-                            // //Xử lí workingday
-                            $startDate = $debt->debt_start;
-                            $daysToAdd = $debt->debt;
-                            $newDate = ($this->calculateAllDays($startDate, $daysToAdd));
-                            $debt->date_end = $newDate;
+                            $startDate = Carbon::parse($request->export_create); // Chuyển đổi ngày bắt đầu thành đối tượng Carbon
+                            $daysToAdd = $debt->debt; // Số ngày cần thêm
+
+                            $endDate = $startDate->copy()->addDays($daysToAdd); // Thêm số ngày vào ngày bắt đầu để tính ngày kết thúc
+
+                            // Định dạng ngày kết thúc theo ý muốn
+                            $endDateFormatted = $endDate->format('Y-m-d');
+                            // dd($endDateFormatted);
+                            $debt->date_end = $endDateFormatted;
+
 
                             // Xử lí status debt
-                            $endDate = new DateTime($debt->date_end);
-                            $now = new DateTime();
-                            $interval = $endDate->diff($now);
-                            $daysDiff = $interval->format('%R%a');
-                            $daysDiff = intval($daysDiff);
-                            $daysDiff = -$daysDiff;
+                            $endDate = Carbon::parse($endDateFormatted);
+                            $currentDate = Carbon::now();
+                            $daysDiffss = $currentDate->diffInDays($endDate);
+                            $daysDiff = -$daysDiffss;
 
-                            if ($guest->debt == 0) {
+                            if ($debt->debt == 0) {
                                 $debt->debt_status = 4;
-                            } elseif ($daysDiff <= 3) {
+                            } elseif ($daysDiff <= 3 && $daysDiff >= 0) {
                                 $debt->debt_status = 2;
                             } elseif ($daysDiff < 0) {
                                 $debt->debt_status = 0;
@@ -1075,25 +1086,28 @@ class ExportController extends Controller
                     $debt->debt_transport_fee = $debtTransportFee;
                     $debt->total_difference = $totalDifference;
                     $debt->debt = $guest->debt;
-                    $debt->date_start = now();
+                    $debt->date_start = $request->export_create;
 
-                    // //Xử lí workingday
-                    $startDate = $debt->debt_start;
-                    $daysToAdd = $debt->debt;
-                    $newDate = ($this->calculateAllDays($startDate, $daysToAdd));
-                    $debt->date_end = $newDate;
+                    $startDate = Carbon::parse($request->export_create); // Chuyển đổi ngày bắt đầu thành đối tượng Carbon
+                    $daysToAdd = $debt->debt; // Số ngày cần thêm
+
+                    $endDate = $startDate->copy()->addDays($daysToAdd); // Thêm số ngày vào ngày bắt đầu để tính ngày kết thúc
+
+                    // Định dạng ngày kết thúc theo ý muốn
+                    $endDateFormatted = $endDate->format('Y-m-d');
+                    // dd($endDateFormatted);
+                    $debt->date_end = $endDateFormatted;
+
 
                     // Xử lí status debt
-                    $endDate = new DateTime($debt->date_end);
-                    $now = new DateTime();
-                    $interval = $endDate->diff($now);
-                    $daysDiff = $interval->format('%R%a');
-                    $daysDiff = intval($daysDiff);
-                    $daysDiff = -$daysDiff;
+                    $endDate = Carbon::parse($endDateFormatted);
+                    $currentDate = Carbon::now();
+                    $daysDiffss = $currentDate->diffInDays($endDate);
+                    $daysDiff = -$daysDiffss;
 
-                    if ($guest->debt == 0) {
+                    if ($debt->debt == 0) {
                         $debt->debt_status = 4;
-                    } elseif ($daysDiff <= 3) {
+                    } elseif ($daysDiff <= 3 && $daysDiff >= 0) {
                         $debt->debt_status = 2;
                     } elseif ($daysDiff < 0) {
                         $debt->debt_status = 0;

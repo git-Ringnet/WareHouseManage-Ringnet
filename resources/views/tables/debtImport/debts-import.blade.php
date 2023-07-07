@@ -650,7 +650,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             @endcan
                                             <td class="text-left">{{ $value->madon }}</td>
                                             <td class="text-left">
-                                                {{ date_format(new DateTime($value->creadted_at), 'd-m-Y') }}
+                                                {{ date_format(new DateTime($value->created_at), 'd-m-Y') }}
                                             </td>
                                             <td class="text-left">{{ $value->nhacungcap }}</td>
                                             <td class="text-center">

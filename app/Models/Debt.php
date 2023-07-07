@@ -28,7 +28,7 @@ class Debt extends Model
     ];
     public function getAllDebts($filter = [], $keywords = null, $name = [], $date = [], $datepaid = [], $status = [], $orderBy = null, $orderType = null)
     {
-        $debts = Debt::select('debts.*', 'exports.id as madon', 'guests.guest_name as khachhang', 'users.name as nhanvien', 'exports.updated_at as debtdate')
+        $debts = Debt::select('debts.*', 'exports.id as madon', 'guests.guest_name as khachhang', 'users.name as nhanvien', 'exports.updated_at as debtdate','exports.export_code as hdr')
             ->leftJoin('guests', 'guests.id', 'debts.guest_id')
             ->leftJoin('users', 'users.id', 'debts.user_id')
             ->leftJoin('exports', 'exports.id', 'debts.export_id');

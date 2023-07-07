@@ -23,7 +23,7 @@ class DebtController extends Controller
      */
     public function index(Request $request)
     {
-        $title = 'Công nợ';
+        $title = 'Công nợ xuất';
         $filters = [];
         $string = [];
         //Mã đơn
@@ -223,13 +223,11 @@ class DebtController extends Controller
             }
             if ($action === 'action2') {
                 // Xử lí status debt
-                $endDate = new DateTime($request->date_end);
-                $now = new DateTime();
-
-                $interval = $endDate->diff($now);
-                $daysDiff = $interval->days; // Số ngày khác nhau giữa hai ngày
-                // dd($request->debt_debt);
-                // dd($daysDiff);
+                $endDate = Carbon::parse($request->date_end);
+                $currentDate = Carbon::now();
+                $daysDiffss = $currentDate->diffInDays($endDate);
+                $daysDiff = -$daysDiffss;
+                
                 if ($request->debt_debt == null || $request->debt_debt == 0) {
                     $debt->debt_status = 4;
                     $debt->debt = 0;
@@ -243,6 +241,7 @@ class DebtController extends Controller
                     $debt->debt_status = 3;
                     $debt->debt = $request->debt_debt;
                 }
+                // dd($daysDiff);
                 $debt->update($request->all());
 
                 return redirect()->route('debt.index')->with('msg', 'Cập nhật thành công!');
