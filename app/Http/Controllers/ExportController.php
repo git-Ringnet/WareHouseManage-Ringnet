@@ -1162,10 +1162,10 @@ class ExportController extends Controller
                         $currentTrade = Product::where('id', $productID)->value('product_trade');
                         $existingQuantity = $existingProductQuantities[$productID] ?? 0;
                         $newTrade = ($currentTrade - $existingQuantity) + $productQty;
-
+                        $updateTrade = $newTrade - $productQty;
                         Product::where('id', $productID)
                             ->update([
-                                'product_trade' => $newTrade,
+                                'product_trade' => $updateTrade,
                             ]);
                     } else {
                         $proExport = new ProductExports();

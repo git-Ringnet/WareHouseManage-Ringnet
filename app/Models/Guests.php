@@ -20,8 +20,7 @@ class Guests extends Model
         'guest_email_personal',
         'guest_receiver',
         'guest_phoneReceiver',
-        'guest_pay',
-        'guest_payTerm',
+        'guest_email_personal',
         'guest_note',
         'user_id',
         'debt'
