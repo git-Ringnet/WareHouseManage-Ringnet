@@ -229,7 +229,7 @@
                                 <input type="hidden" name="updateClick" id="updateClick" value="">
                             </div>
                             <div class="form-group">
-                                <label>Địa chỉ xuất hóa đơn:</label>
+                                <label>Địa chỉ:</label>
                                 <input type="text" class="form-control" placeholder="Nhập thông tin"
                                     <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                         echo 'readonly';
@@ -244,39 +244,12 @@
                                     placeholder="Nhập thông tin" name="guest_code" value="{{ $guest->guest_code }}">
                             </div>
                             <div class="form-group">
-                                <label for="email">Địa chỉ giao hàng:</label>
-                                <input type="text" class="form-control" id="guest_addressDeliver"
-                                    <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                        echo 'readonly';
-                                    } ?> placeholder="Nhập thông tin" name="guest_addressDeliver"
-                                    value="{{ $guest->guest_addressDeliver }}">
-                            </div>
-                            <div class="form-group">
-                                <label for="email">Người nhận hàng:</label>
-                                <input type="text" class="form-control" id="guest_receiver" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                    echo 'readonly';
-                                } ?>
-                                    placeholder="Nhập thông tin" name="guest_receiver"
-                                    value="{{ $guest->guest_receiver }}" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="email">SĐT người nhận:</label>
-                                <input type="text" class="form-control" id="guest_phoneReceiver"
-                                    pattern="^(0|\+84)(3[2-9]|5[2689]|7[0|6-9]|8[1-9]|9[0-9])\d{7,9}$"
-                                    <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                        echo 'readonly';
-                                    } ?> placeholder="Nhập thông tin" name="guest_phoneReceiver"
-                                    value="{{ $guest->guest_phoneReceiver }}" required>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
                                 <label for="email">Email:</label>
                                 <input type="email" class="form-control" id="guest_email" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                     echo 'readonly';
                                 } ?>
                                     placeholder="Nhập thông tin" name="guest_email"
-                                    value="{{ $guest->guest_email }}" required>
+                                    value="{{ $guest->guest_email }}">
                             </div>
                             <div class="form-group">
                                 <label for="email">Số điện thoại:</label>
@@ -285,21 +258,34 @@
                                     id="guest_phone" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                         echo 'readonly';
                                     } ?> placeholder="Nhập thông tin"
-                                    name="guest_phone" value="{{ $guest->guest_phone }}" required>
+                                    name="guest_phone" value="{{ $guest->guest_phone }}">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="email">Người nhận hàng:</label>
+                                <input type="text" class="form-control" id="guest_receiver" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                    echo 'readonly';
+                                } ?>
+                                    placeholder="Nhập thông tin" name="guest_receiver"
+                                    value="{{ $guest->guest_receiver }}">
                             </div>
                             <div class="form-group">
-                                <label for="email">Phương thức thanh toán:</label>
-                                <select name="guest_pay" required class="form-control" id="guest_pay"
+                                <label for="email">Email cá nhân:</label>
+                                <input type="text" class="form-control" id="guest_email_personal" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                    echo 'readonly';
+                                } ?>
+                                    placeholder="Nhập thông tin" name="guest_email_personal"
+                                    value="{{ $guest->guest_email_personal }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">SĐT người nhận:</label>
+                                <input type="text" class="form-control" id="guest_phoneReceiver"
+                                    pattern="^(0|\+84)(3[2-9]|5[2689]|7[0|6-9]|8[1-9]|9[0-9])\d{7,9}$"
                                     <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                        echo 'disabled';
-                                    } ?>>
-                                    <option value="0" <?php if ($guest->guest_pay == 0) {
-                                        echo 'selected';
-                                    } ?>>Chuyển khoản</option>
-                                    <option value="1" <?php if ($guest->guest_pay == 1) {
-                                        echo 'selected';
-                                    } ?>>Thanh toán bằng tiền mặt</option>
-                                </select>
+                                        echo 'readonly';
+                                    } ?> placeholder="Nhập thông tin" name="guest_phoneReceiver"
+                                    value="{{ $guest->guest_phoneReceiver }}">
                             </div>
                             <div class="form-group">
                                 <label>Công nợ:</label>
@@ -332,12 +318,13 @@
             <div class="d-flex align-items-center my-2">
                 <div class="">
                     <p class="m-0"><b>Số hóa đơn</b></p>
-                    <input type="number" value="{{$exports->export_code}}" name="export_code" class="form-control"
-                        placeholder="Nhập thông tin">
+                    <input type="number" value="{{ $exports->export_code }}" name="export_code"
+                        class="form-control" placeholder="Nhập thông tin">
                 </div>
                 <div class="pl-3">
                     <p class="m-0"><b>Ngày hóa đơn</b></p>
-                    <input type="date" value="{{ ($exports->created_at)->format('Y-m-d') }}" name="export_create" class="form-control">
+                    <input type="date" value="{{ $exports->created_at->format('Y-m-d') }}" name="export_create"
+                        class="form-control">
                 </div>
             </div>
             {{-- Bảng thêm sản phẩm --}}
@@ -641,7 +628,7 @@
             '<div class="border-bottom p-3 d-flex justify-content-between align-items-center">' +
             '<b>Thông tin khách hàng</b>' +
             '<button id="btn-addCustomer" type="submit" class="btn btn-primary d-flex align-items-center">' +
-            '<img src="../dist/img/icon/Union.png">' +
+            '<img src="../../dist/img/icon/Union.png">' +
             '<span class="ml-1">Lưu thông tin</span></button></div>' +
             '<input type="hidden" name="click" id="click" value="">' +
             '<div class="row p-3">' +
@@ -873,9 +860,9 @@
     //hiển thị thông tin khách hàng
     $(document).ready(function() {
         $('.search-info').click(function() {
-            //biến cập nhật
-            $('#checkguest').val(1);
             var idCustomer = $(this).attr('id');
+            $('#checkguest').val(1);
+            $('#form-edit').remove();
             $('#radio1').prop('checked', true);
             $.ajax({
                 url: '{{ route('searchExport') }}',
@@ -889,7 +876,7 @@
                         '<div class="border-bottom p-3 d-flex justify-content-between align-items-center">' +
                         '<b>Thông tin khách hàng</b>' +
                         '<button id="btn-customer" type="submit" class="btn btn-primary d-flex align-items-center">' +
-                        '<img src="../dist/img/icon/Union.png">' +
+                        '<img src="../../dist/img/icon/Union.png">' +
                         '<span class="ml-1">Lưu thông tin</span></button></div>' +
                         '<div class="row p-3">' +
                         '<div class="col-sm-6">' +
@@ -949,6 +936,8 @@
                         (data.guest_note == null ? '' : data.guest_note) + '">' +
                         '</div>' + '</div></div><div>'
                     );
+                    $('#click').val(null);
+                    $('#updateClick').val(2);
                     //Công nợ
                     var isChecked = $('#debtCheckbox').is(':checked');
                     // Đặt trạng thái của input dựa trên checkbox
@@ -991,6 +980,7 @@
         var guest_receiver = $('#guest_receiver').val();
         var guest_phoneReceiver = $('#guest_phoneReceiver').val();
         var guest_email = $('#guest_email').val();
+        var guest_email_personal = $('#guest_email_personal').val();
         var guest_phone = $('#guest_phone').val();
         var guest_pay = $('#guest_pay').val();
         var guest_note = $('#guest_note').val();
@@ -1019,6 +1009,7 @@
                 guest_phone,
                 guest_pay,
                 guest_note,
+                guest_email_personal,
                 updateClick,
                 debt
             },
@@ -1049,6 +1040,7 @@
         var guest_phoneReceiver = $('#guest_phoneReceiver').val();
         var guest_email = $('#guest_email').val();
         var guest_phone = $('#guest_phone').val();
+        var guest_email_personal = $('#guest_email_personal').val();
         var guest_pay = $('#guest_pay').val();
         var guest_note = $('#guest_note').val();
         var debt = "";
@@ -1075,6 +1067,7 @@
                 guest_phone,
                 guest_pay,
                 guest_note,
+                guest_email_personal,
                 click,
                 debt
             },
