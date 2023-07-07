@@ -36,65 +36,52 @@
                                         name="guest_represent" placeholder="Nhập tên người đại diện" required>
                                 </div> --}}
                                 <div class="mb-3">
-                                    <label class="required-label" for="pwd">Số điện thoại</label>
+                                    <label class="" for="pwd">Số điện thoại</label>
                                     <input type="text" class="form-control" oninput=validateNumberInput(this)
                                         value="{{ $guests->guest_phone }}" name="guest_phone"
                                         pattern="^(?:\+?84|0)(?:\d{9}|\d{10})$" title="Số điện thoại không hợp lệ"
-                                        placeholder="Nhập số điện thoại" required>
+                                        placeholder="Nhập số điện thoại">
                                 </div>
                                 <div class="mb-3">
-                                    <label class="required-label" for="pwd">Email</label>
+                                    <label class="" for="pwd">Email</label>
                                     <input type="email" class="form-control" value="{{ $guests->guest_email }}"
                                         pattern="/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/" name="guest_email"
-                                        placeholder="Nhập email" required>
+                                        placeholder="Nhập email">
                                 </div>
                                 <div class="mb-3">
-                                    <label class="required-label">Địa chỉ xuất hóa đơn</label>
+                                    <label class="required-label">Địa chỉ</label>
                                     <input type="text" class="form-control" id="guest_address"
-                                        placeholder="Nhập địa chỉ xuất hóa đơn" name="guest_address"
-                                        value="{{ $guests->guest_address }}" required="">
+                                        placeholder="Nhập địa chỉ" name="guest_address"
+                                        value="{{ $guests->guest_address }}" required>
                                 </div>
                                 <div class="mb-3">
                                     <label class="required-label">Mã số thuế</label>
                                     <input type="number" class="form-control" id="guest_code"
                                         placeholder="Nhập mã số thuế" name="guest_code"
-                                        value="{{ $guests->guest_code }}" required="">
+                                        value="{{ $guests->guest_code }}" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="required-label" for="email">Địa chỉ giao hàng</label>
-                                    <input type="text" class="form-control" id="guest_addressDeliver"
-                                        placeholder="Nhập địa chỉ giao hàng" name="guest_addressDeliver"
-                                        value="{{ $guests->guest_addressDeliver }}" required="">
-                                </div>
-                                <div class="mb-3">
-                                    <label class="required-label" for="email">Người nhận hàng</label>
+                                    <label class="" for="email">Người nhận hàng</label>
                                     <input type="text" class="form-control" id="guest_receiver"
                                         placeholder="Nhập người nhận hàng" name="guest_receiver"
-                                        value="{{ $guests->guest_receiver }}" required="">
+                                        value="{{ $guests->guest_receiver }}">
                                 </div>
                                 <div class="mb-3">
-                                    <label class="required-label" for="email">SĐT người nhận</label>
+                                    <label class="" for="email">SĐT người nhận</label>
                                     <input type="text" class="form-control" id="guest_phoneReceiver"
                                         oninput=validateNumberInput(this) placeholder="Nhập số điện thoại người nhận"
                                         name="guest_phoneReceiver" pattern="^(?:\+?84|0)(?:\d{9}|\d{10})$"
-                                        title="Số điện thoại không hợp lệ" value="{{ $guests->guest_phoneReceiver }}"
-                                        required="">
+                                        title="Số điện thoại không hợp lệ" value="{{ $guests->guest_phoneReceiver }}">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="" for="pwd">Email cá nhân:</label>
+                                    <input type="email" class="form-control" name="guest_email_personal"
+                                        pattern="/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/" value="{{$guests->guest_email_personal}}" placeholder="Nhập email cá nhân">
                                 </div>
                                 <div class="mb-3">
                                     <label for="email">Ghi chú:</label>
                                     <input type="text" class="form-control" id="guest_note"
                                         placeholder="Nhập ghi chú" name="guest_note" value="{{ $guests->guest_note }}">
-                                </div>
-                                <div class="mb-3">
-                                    <label class="required-label" for="email">Hình thức thanh toán</label>
-                                    <select class="form-control" name="guest_pay" id="guest_pay" required>
-                                        <option value="0" <?php if ($guests->guest_pay == 0) {
-                                            echo 'selected';
-                                        } ?>>Chuyển khoản</option>
-                                        <option value="1" <?php if ($guests->guest_pay == 1) {
-                                            echo 'selected';
-                                        } ?>>Thanh toán bằng tiền mặt</option>
-                                    </select>
                                 </div>
                                 <div class="mb-3">
                                     <label class="required-label">Công nợ</label>

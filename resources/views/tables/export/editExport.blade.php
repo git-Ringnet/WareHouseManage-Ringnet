@@ -1366,6 +1366,7 @@
             }
         });
     });
+    
     //kiểm tra số điện thoại VN
     // function isValidPhoneNumber(phoneNumber) {
     //     // Loại bỏ khoảng trắng và dấu '-' trong số điện thoại
