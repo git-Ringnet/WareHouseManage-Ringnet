@@ -112,6 +112,12 @@
                             @if ($order->order_status == 0)
                                 @if (Auth::user()->id == $order->users_id || Auth::user()->can('isAdmin'))
                                     <div class="w-75">
+                                        <div class="d-flex mb-2">
+                                            <input type="radio" name="options" id="radio1" checked>
+                                            <span class="ml-1">Nhà cung cấp cũ</span>
+                                            <input type="radio" name="options" id="radio2" style="margin-left: 40px;">
+                                            <span class="ml-1">Nhà cung cấp mới</span>
+                                        </div>
                                         <div class="input-group mb-1 position-relative w-50">
                                             <input type="text" class="form-control"
                                                 placeholder="Nhập thông tin nhà cung cấp" aria-label="Username"
@@ -239,15 +245,14 @@
                         <label for="" class="ml-2">Số hóa đơn</label>
                         <input type="text" name="product_code" class="form-control"
                             value="{{ $order->product_code }}" @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif
-                            @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif
-                            >
+                            @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif>
                     </div>
                     <div>
                         <label for="" class="ml-4">Ngày hóa đơn</label>
                         <input type="date" name="product_create" class="form-control ml-2"
-                            value="{{ $order->created_at->format('Y-m-d') }}" @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif
-                            @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif
-                            >
+                            value="{{ $order->created_at->format('Y-m-d') }}"
+                            @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif
+                            @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif>
                     </div>
 
                 </div>
@@ -508,6 +513,8 @@
         checkRow();
     });
     setSTT();
+
+
     // AJAX hiển thị thông tin nhà cung cấp 
     $('.search-info').click(function() {
         var provides_id = $(this).attr('id');
@@ -522,8 +529,8 @@
                 $('#infor_provide').html(
                     '<div class="border-bottom p-3 d-flex justify-content-between">' +
                     '<b>Thông tin nhà cung cấp</b>' +
-                    '<button id="btn-addCustomer" class="btn btn-primary d-flex align-items-center">' +
-                    '<img src="../dist/img/icon/Union.png">' +
+                    '<button id="btn-addProvide" class="btn btn-primary d-flex align-items-center">' +
+                    '<img src="{{ asset('dist/img/icon/Union.png') }}">' +
                     '<span class="ml-1">Lưu thông tin</span></button></div>' +
                     '<div class="row p-3">' +
                     '<div class="col-sm-6">' +
@@ -554,11 +561,29 @@
                     '<input required type="text" class="form-control" id="provide_phone" placeholder="Nhập thông tin" name="provide_phone" value="' +
                     data.provide_phone + '">' +
                     '</div>' + '<div class="form-group">' +
+                    '<label for="email">Công nợ:</label>' +
+                    '<div class="d-flex align-items-center" style="width:101%;"> <input name="provide_debt" id="debtInput" class="form-control" type="text" name="debt" style="width:15%;" value="' +
+                    data.debt + '">' +
+                    '<span class="ml-2" id="data-debt" style="color: rgb(29, 28, 32);">ngày</span>' +
+                    '<input type="checkbox" id="debtCheckbox" value="0" ' + (data
+                        .debt == 0 ? 'checked' : '') + ' style="margin-left:10%;" >' +
+                    '<span class="ml-2">Thanh toán tiền mặt</span>' +
+                    '</div>' +
                     '</div>' + '<div class="form-group">' +
                     '</div>' + '<div class="form-group">' +
                     '</div></div></div>'
                 );
                 $('#provide_id').val(data.id);
+                var isChecked = $('#debtCheckbox').is(':checked');
+                console.log(isChecked);
+                // Đặt trạng thái của input dựa trên checkbox
+                $('#debtInput').prop('disabled', isChecked);
+                // Xử lý sự kiện khi checkbox thay đổi
+                $(document).on('change', '#debtCheckbox', function() {
+                    var isChecked = $(this).is(':checked');
+                    $('#debtInput').prop('disabled', isChecked);
+                    $('#debtInput').val(0);
+                });
             }
         });
     })
@@ -573,6 +598,7 @@
         var provide_email = $('#provide_email').val();
         var provide_phone = $('#provide_phone').val();
         var provide_code = $('#provide_code').val();
+        var debt = $('#debtInput').val();
         $.ajax({
             url: "{{ route('update_provide') }}",
             type: "get",
@@ -583,13 +609,60 @@
                 provide_represent: provide_represent,
                 provide_email: provide_email,
                 provide_phone: provide_phone,
-                provide_code: provide_code
+                provide_code: provide_code,
+                debt: debt
             },
             success: function(data) {
                 alert('Lưu thông tin thành công');
             }
         })
     })
+
+     // Thêm nhanh nhà cung cấp
+     $(document).on('click', '#btn-addCustomer', function(e) {
+            e.preventDefault();
+            var provide_name = $('#provide_name_new').val();
+            var provide_address = $('#provide_address_new').val();
+            var provide_represent = $('#provide_represent_new').val();
+            var provide_email = $('#provide_email_new').val();
+            var provide_phone = $('#provide_phone_new').val();
+            var provide_code = $('#provide_code_new').val();
+            var debt = $('#debtInput').val();
+            var check = false;
+            if (provide_name == "") {
+                alert('Vui lòng nhập tên công ty');
+                check = true;
+            } else if (provide_address == "") {
+                alert('Vui lòng nhập địa chỉ xuất hóa đơn');
+                check = true;
+            } else if (provide_code == "") {
+                alert('Vui lòng nhập mã số thuế');
+                check = true;
+            }
+            if (check == false) {
+                $.ajax({
+                    url: "{{ route('add_newProvide') }}",
+                    type: "get",
+                    data: {
+                        provide_name: provide_name,
+                        provide_address: provide_address,
+                        provide_represent: provide_represent,
+                        provide_email: provide_email,
+                        provide_phone: provide_phone,
+                        provide_code: provide_code,
+                        debt: debt
+                    },
+                    success: function(data) {
+                        if (data.success) {
+                            alert(data.msg);
+                            $('#provide_id').val(data.data.id);
+                        }
+                    }
+                })
+            }
+
+        })
+
 
     $('#add_bill').on('click', function(e) {
         this.classList.add('disabled');

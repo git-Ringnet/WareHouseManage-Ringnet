@@ -224,7 +224,7 @@
                                     fill="#55555" />
                             </svg>
                             <p>
-                                Sản phẩm
+                                Tồn kho
                             </p>
                         </a>
                     </li>

@@ -97,8 +97,10 @@ Route::delete('/delete_product/{id}', [ProductsController::class, 'delete_produc
 Route::post('/import_products',[ProductsController::class,'import_products'])->name('import_products');
 
 Route::get('/checkProducts_code',[ProductsController::class,'checkProducts_code'])->name('checkProducts_code');
-
 Route::PUT('/updateProduct/{id}', [ProductsController::class, 'updateProduct'])->name('updateProduct');
+
+Route::get('/export_product',[ProductController::class, 'export'])->name('export');
+
 
 Route::get('/show_provide', [AddProductController::class, 'show_provide'])->name('show_provide');
 Route::get('/update_provide', [AddProductController::class, 'update_provide'])->name('update_provide');
