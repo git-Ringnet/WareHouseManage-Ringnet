@@ -876,7 +876,7 @@ class ExportController extends Controller
         $exports = Exports::find($id);
         $guest = Guests::find($exports->guest_id);
         $customer = Guests::all();
-        $productExport = productExports::select('product_exports.*', 'product.product_qty as tonkho')
+        $productExport = productExports::select('product_exports.*')
             ->join('exports', 'product_exports.export_id', '=', 'exports.id')
             ->join('product', 'product.id', '=', 'product_exports.product_id')
             ->selectRaw('(product.product_qty - product.product_trade) as tonkho')
@@ -1179,6 +1179,13 @@ class ExportController extends Controller
                         $proExport->product_tax = $request->product_tax[$i];
                         $proExport->product_total = $request->totalValue;
                         $proExport->save();
+                        $currentTrade = Product::where('id', $productID)->value('product_trade');
+                        $newTrade = $currentTrade + $productQty;
+
+                        Product::where('id', $productID)
+                            ->update([
+                                'product_trade' => $newTrade,
+                            ]);
                     }
 
                     $totalQtyNeeded += $productQty;
@@ -1245,6 +1252,13 @@ class ExportController extends Controller
                             $proExport->product_tax = $request->product_tax[$i];
                             $proExport->product_total = $request->totalValue;
                             $proExport->save();
+                            $currentTrade = Product::where('id', $productID)->value('product_trade');
+                            $newTrade = $currentTrade + $productQty;
+
+                            Product::where('id', $productID)
+                                ->update([
+                                    'product_trade' => $newTrade,
+                                ]);
                         }
 
                         $totalQtyNeeded += $productQty;

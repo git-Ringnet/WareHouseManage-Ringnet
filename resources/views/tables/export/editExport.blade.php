@@ -387,7 +387,7 @@
                                             value="{{ $value_export->product_qty }}" name="product_qty[]"
                                             required="">
                                         <input type="text" readonly="" class="quantity-exist" required=""
-                                            value="/{{ $value_export->tonkho }}"
+                                            value="/{{ $value_export->tonkho + $value_export->product_qty}}"
                                             style="width:50px;background:#D6D6D6;border:none;" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                                 echo 'hidden';
                                             } ?>>
