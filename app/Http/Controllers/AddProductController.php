@@ -263,16 +263,30 @@ class AddProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $update_provide = Provides::findOrFail($request->provide_id);
-        $update_provide->provide_name = $request->provide_name;
-        $update_provide->provide_represent = $request->provide_represent;
-        $update_provide->provide_phone = $request->provide_phone;
-        $update_provide->provide_email = $request->provide_email;
-        $update_provide->provide_address = $request->provide_address;
-        $update_provide->provide_code = $request->provide_code;
-        $update_provide->debt = $request->provide_debt == null ? 0 : $request->provide_debt;
-        $update_provide->save();
-
+        if($request->provide_id === null){
+            if($request->provide_name_new != null && $request->provide_address_new != null && $request->provide_code_new != null){
+                $newProvide = new Provides();
+                $newProvide->provide_name = $request->provide_name_new;
+                $newProvide->provide_represent = $request->provide_represent_new;
+                $newProvide->provide_phone = $request->provide_phone_new;
+                $newProvide->provide_email = $request->provide_email_new;
+                $newProvide->provide_status = 1;
+                $newProvide->provide_address = $request->provide_address_new;
+                $newProvide->provide_code = $request->provide_code_new;
+                $newProvide->save();
+            }
+        }else{
+            $update_provide = Provides::findOrFail($request->provide_id);
+            $update_provide->provide_name = $request->provide_name;
+            $update_provide->provide_represent = $request->provide_represent;
+            $update_provide->provide_phone = $request->provide_phone;
+            $update_provide->provide_email = $request->provide_email;
+            $update_provide->provide_address = $request->provide_address;
+            $update_provide->provide_code = $request->provide_code;
+            $update_provide->debt = $request->provide_debt == null ? 0 : $request->provide_debt;
+            $update_provide->save();
+        }
+      
         $updateOrder = Orders::find($id);
         $product_id = $request->product_id;
         $product_name = $request->product_name;
@@ -320,7 +334,7 @@ class AddProductController extends Controller
                     $check->save();
                     array_push($id_product, $check->id);
                 }
-                $updateOrder->provide_id = $request->provide_id;
+                $updateOrder->provide_id = $request->provide_id == null ? $newProvide->id :$request->provide_id;
                 $updateOrder->total += $product_total[$i];
                 $updateOrder->product_code = $request->product_code;
                 $updateOrder->created_at = $request->product_create;
@@ -376,7 +390,7 @@ class AddProductController extends Controller
             $updateOrder->save();
 
             $debt = new DebtImport();
-            $debt->provide_id = $updateOrder->provide_id;
+            $debt->provide_id = $request->provide_id == null ? $newProvide->id : $request->provide_id;
             $debt->user_id = Auth::user()->id;
             $debt->import_id = $updateOrder->id;
             $debt->total_import = $total_import;
@@ -537,7 +551,7 @@ class AddProductController extends Controller
             $updateOrder->order_status = 1;
             $updateOrder->save();
             $debt = new DebtImport();
-            $debt->provide_id = $updateOrder->provide_id;
+            $debt->provide_id = $request['provide_id'] == null ? $new_provide->id : $update_provide->provide_id;
             $debt->user_id = Auth::user()->id;
             $debt->import_id = $updateOrder->id;
             $debt->total_import = $total_import;
