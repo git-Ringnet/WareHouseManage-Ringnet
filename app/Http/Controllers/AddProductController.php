@@ -551,7 +551,7 @@ class AddProductController extends Controller
             $updateOrder->order_status = 1;
             $updateOrder->save();
             $debt = new DebtImport();
-            $debt->provide_id = $request['provide_id'] == null ? $new_provide->id : $update_provide->provide_id;
+            $debt->provide_id = $request['provide_id'] == null ? $new_provide->id : $request->provide_id;
             $debt->user_id = Auth::user()->id;
             $debt->import_id = $updateOrder->id;
             $debt->total_import = $total_import;
