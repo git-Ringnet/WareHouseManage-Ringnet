@@ -411,16 +411,6 @@ function checkData(e) {
 //     }
 // });
 
-// function checkClick(event) {
-//     var div = $(event.target);
-//     event.stopPropagation();
-//     if(div[0].is(event.target)){
-//         alert('trong');
-//     }else{
-//         alert('ngoài');
-//     }
-// }
-
 // Hàm chỉ cho phép nhập số
 function validateNumberInput(input) {
     var regex = /^[0-9][0-9-]*$/;
@@ -476,11 +466,21 @@ $("#radio2").on("click", function () {
         '<label for="email">Công nợ:</label>' +
         '<div class="d-flex align-items-center" style="width:101%;"> <input id="debtInput" class="form-control" type="text" name="provide_debt" style="width:15%;">' +
         '<span class="ml-2" id="data-debt" style="color: rgb(29, 28, 32);">ngày</span>' +
-        '<input type="checkbox" id="debtCheckbox" value="0" style="margin-left:10%;">' +
+        '<input type="checkbox" id="debtCheckbox" value="0" style="margin-left:10%;" checked>' +
         '<span class="ml-2">Thanh toán tiền mặt</span> </div>' +
         '</div>' +
         '</div></div>'
     );
+    var isChecked = $('#debtCheckbox').is(':checked');
+    // Đặt trạng thái của input dựa trên checkbox
+    $('#debtInput').val(0);
+    $('#debtInput').prop('disabled', isChecked);
+    // Xử lý sự kiện khi checkbox thay đổi
+    $(document).on('change', '#debtCheckbox', function () {
+        var isChecked = $(this).is(':checked');
+        $('#debtInput').prop('disabled', isChecked);
+        $('#debtInput').val(0);
+    });
 })
 
 

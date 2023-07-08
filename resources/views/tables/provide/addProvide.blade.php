@@ -62,6 +62,15 @@
                                         <option value="0">Disable</option>
                                     </select>
                                 </div>
+                                <div class="mb-3">
+                                    <label class="required-label" for="pwd">Công nợ</label>
+                                    <div class="d-flex align-items-center">
+                                        <input type="text" oninput="validateNumberInput(this)" class="form-control" id="debtInput" value="" name="debt" style="width:15%;" required="">
+                                        <span class="ml-2" id="data-debt">ngày</span>
+                                        <input type="checkbox" id="debtCheckbox" value="0" name="debt" class="ml-3" checked>
+                                        <span class="ml-2">Thanh toán tiền mặt</span>
+                                    </div>
+                                </div>
                                 <div class="btn-fixed">
                                     <button type="submit" class="btn btn-primary">Thêm</button>
                                     <a href="{{ asset('./provides') }}" class="btn btn-default">Hủy</a>
@@ -88,6 +97,16 @@
             input.value = '';
         }
     }
+    var isChecked = $('#debtCheckbox').is(':checked');
+    // Đặt trạng thái của input dựa trên checkbox
+    $('#debtInput').prop('disabled', isChecked);
+    $('#debtInput').val(0);
+    // Xử lý sự kiện khi checkbox thay đổi
+    $(document).on('change', '#debtCheckbox', function () {
+        var isChecked = $(this).is(':checked');
+        $('#debtInput').prop('disabled', isChecked);
+        $('#debtInput').val(0);
+    });
 </script>
 </body>
 

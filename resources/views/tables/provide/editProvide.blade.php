@@ -55,8 +55,9 @@
                                 </div>
                                 <div class="mb-3">
                                     <label class="required-label" for="pwd">Mã số thuế</label>
-                                    <input type="text" class="form-control" name="provide_code" oninput=validateNumberInput(this)
-                                        value="{{ $provides->provide_code }}" placeholder="Nhập mã số thuế" required>
+                                    <input type="text" class="form-control" name="provide_code"
+                                        oninput=validateNumberInput(this) value="{{ $provides->provide_code }}"
+                                        placeholder="Nhập mã số thuế" required>
                                 </div>
                                 <div class="mb-3 d-none">
                                     <label for="pwd">Trạng thái:</label>
@@ -68,6 +69,19 @@
                                             echo 'selected';
                                         } ?>>Disable</option>
                                     </select>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="d-flex align-items-center">
+                                        <input type="text" oninput="validateNumberInput(this)" class="form-control"
+                                            id="debtInput" value="{{ $provides->debt }}" name="debt"
+                                            style="width:15%;" required="" disabled="">
+                                        <span class="ml-2" id="data-debt">ngày</span>
+                                        <input type="checkbox" id="debtCheckbox" value="0" name="debt"
+                                            class="ml-3" <?php if ($provides->debt == 0) {
+                                                echo 'checked';
+                                            } ?>>
+                                        <span class="ml-2">Thanh toán tiền mặt</span>
+                                    </div>
                                 </div>
                                 <div class="btn-fixed">
                                     <button type="submit" class="btn btn-primary">Cập nhật</button>
@@ -96,6 +110,17 @@
             input.value = '';
         }
     }
+    var isChecked = $('#debtCheckbox').is(':checked');
+    // Đặt trạng thái của input dựa trên checkbox
+    $('#debtInput').prop('disabled', isChecked);
+    $('#debtInput').val(0);
+    // Xử lý sự kiện khi checkbox thay đổi
+    $(document).on('change', '#debtCheckbox', function () {
+        var isChecked = $(this).is(':checked');
+        $('#debtInput').prop('disabled', isChecked);
+        $('#debtInput').val(0);
+    });
+
 </script>
 </body>
 
