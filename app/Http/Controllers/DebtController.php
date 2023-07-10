@@ -29,9 +29,9 @@ class DebtController extends Controller
         //Mã đơn
         if (!empty($request->id)) {
             $id = $request->id;
-            array_push($filters, ['debts.id', 'like', '%' . $id . '%']);
+            array_push($filters, ['exports.export_code', 'like', '%' . $id . '%']);
             $nameArr = explode(',.@', $id);
-            array_push($string, ['label' => 'Mã đơn:', 'values' => $nameArr, 'class' => 'id']);
+            array_push($string, ['label' => 'Hóa đơn ra:', 'values' => $nameArr, 'class' => 'id']);
         }
         //Khách hàng
         if (!empty($request->guest)) {

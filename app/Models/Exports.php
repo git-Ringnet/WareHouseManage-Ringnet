@@ -38,12 +38,12 @@ class Exports extends Model
             $exports = $exports->whereIn('users.name', $name);
         }
         if (!empty($date)) {
-            $exports = $exports->wherebetween('exports.updated_at', $date);
+            $exports = $exports->wherebetween('exports.created_at', $date);
         }
         // dd($exports = $exports->wherebetween('exports.updated_at', $date));
         if (!empty($keywords)) {
             $exports = $exports->where(function ($query) use ($keywords) {
-                $query->orWhere('exports.id', 'like', '%' . $keywords . '%');
+                $query->orWhere('exports.export_status', 'like', '%' . $keywords . '%');
                 $query->orWhere('guests.guest_receiver', 'like', '%' . $keywords . '%');
                 $query->orWhere('users.name', 'like', '%' . $keywords . '%');
             });

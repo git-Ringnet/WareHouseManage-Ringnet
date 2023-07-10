@@ -42,11 +42,11 @@ class Orders extends Model
             $orders = $orders->whereIn('users.name', $name);
         }
         if (!empty($date)) {
-            $orders = $orders->wherebetween('orders.updated_at', $date);
+            $orders = $orders->wherebetween('orders.created_at', $date);
         }
         if (!empty($keywords)) {
             $orders = $orders->where(function ($query) use ($keywords) {
-                $query->orWhere('orders.id', 'like', '%' . $keywords . '%');
+                $query->orWhere('orders.product_code', 'like', '%' . $keywords . '%');
                 $query->orWhere('users.name', 'like', '%' . $keywords . '%');
                 $query->orWhere('provides.provide_name', 'like', '%' . $keywords . '%');
             });

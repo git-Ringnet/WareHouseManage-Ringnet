@@ -37,7 +37,7 @@ class ExportController extends Controller
         //Mã đơn
         if (!empty($request->id)) {
             $id = $request->id;
-            array_push($filters, ['exports.id', 'like', '%' . $id . '%']);
+            array_push($filters, ['exports.export_code', 'like', '%' . $id . '%']);
             $nameArr = explode(',.@', $id);
             array_push($string, ['label' => 'Mã đơn hàng:', 'values' => $nameArr, 'class' => 'id']);
         }
@@ -74,13 +74,13 @@ class ExportController extends Controller
             $name = $request->input('name', []);
             array_push($string, ['label' => 'Người tạo:', 'values' => $name, 'class' => 'name']);
         }
-        //Đến ngày
+        //Ngày tạo
         $date = [];
         if (!empty($request->trip_start) && !empty($request->trip_end)) {
             $trip_start = $request->input('trip_start');
             $trip_end = $request->input('trip_end');
             $date[] = [$trip_start, $trip_end];
-            $datearr = ['label' => 'Chỉnh sửa cuối:', 'values' => [
+            $datearr = ['label' => 'Ngày tạo:', 'values' => [
                 date('d/m/Y', strtotime($trip_start)),
                 date('d/m/Y', strtotime($trip_end))
             ], 'class' => 'date'];

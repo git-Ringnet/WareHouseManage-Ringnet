@@ -28,21 +28,32 @@
                 <form class="w-100" action="" method="get" id='search-filter'>
                     <div class="row mr-0">
                         <div class="col-5">
-                            <input type="text" placeholder="Tìm kiếm theo mã đơn hàng và khách hàng" name="keywords"
-                                class="pr-4 input-search w-100 form-control h-100" value="{{ request()->keywords }}">
-                            <span class="search-icon"><i class="fas fa-search"></i></span>
+                            <input type="text" placeholder="Tìm kiếm theo mã hóa đơn và khách hàng" name="keywords"
+                                class="pr-4 input-search w-100 form-control searchkeyword" value="{{ request()->keywords }}">
+                            <span id="search-icon" class="search-icon"><i class="fas fa-search"></i></span>
                         </div>
                         <div class="col-2 d-none">
                             <button type="submit" class="btn btn-primary btn-block">Tìm kiếm</button>
                         </div>
-                        <a class="btn ml-auto btn-delete-filter btn-light" href="{{ route('debt.index') }}"><span><svg
+                        <div class="ml-auto">
+                            <button class="btn btn-light" id="expandall" type="button" onclick="expand()"><svg
                                     width="24" height="24" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M6 5.4643C6 5.34116 6.04863 5.22306 6.13518 5.13599C6.22174 5.04892 6.33913 5 6.46154 5H17.5385C17.6609 5 17.7783 5.04892 17.8648 5.13599C17.9514 5.22306 18 5.34116 18 5.4643V7.32149C18 7.43599 17.9579 7.54645 17.8818 7.63164L13.8462 12.1428V16.6075C13.8461 16.7049 13.8156 16.7998 13.7589 16.8788C13.7022 16.9578 13.6223 17.0168 13.5305 17.0476L10.7612 17.9762C10.6919 17.9994 10.618 18.0058 10.5458 17.9947C10.4735 17.9836 10.4049 17.9554 10.3456 17.9124C10.2863 17.8695 10.238 17.8129 10.2047 17.7475C10.1713 17.682 10.1539 17.6096 10.1538 17.5361V12.1428L6.11815 7.63164C6.0421 7.54645 6.00002 7.43599 6 7.32149V5.4643Z"
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M7.23123 9.23123C7.53954 8.92292 8.03941 8.92292 8.34772 9.23123L12 12.8835L15.6523 9.23123C15.9606 8.92292 16.4605 8.92292 16.7688 9.23123C17.0771 9.53954 17.0771 10.0394 16.7688 10.3477L12.5582 14.5582C12.2499 14.8665 11.7501 14.8665 11.4418 14.5582L7.23123 10.3477C6.92292 10.0394 6.92292 9.53954 7.23123 9.23123Z"
                                         fill="#555555" />
                                 </svg>
-                            </span><span>Tắt bộ lọc</span></a>
+                                Mở rộng tất
+                                cả</button>
+                            <button class="btn btn-light" style="display: none" id="collapseall" type="button"
+                                onclick="collapse()"><svg width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M16.7688 14.7688C16.4605 15.0771 15.9606 15.0771 15.6523 14.7688L12 11.1165L8.34772 14.7688C8.03941 15.0771 7.53954 15.0771 7.23123 14.7688C6.92292 14.4605 6.92292 13.9606 7.23123 13.6523L11.4418 9.44176C11.7501 9.13345 12.2499 9.13345 12.5582 9.44176L16.7688 13.6523C17.0771 13.9606 17.0771 14.4605 16.7688 14.7688Z"
+                                        fill="#555555" />
+                                </svg>
+                                Thu gọn tất cả</button>
+                        </div>
                     </div>
                     <div class="d-flex justify-contents-center align-items-center mr-auto row-filter my-3 m-0">
                         <div class="icon-filter mr-3">
@@ -125,10 +136,11 @@ $index = array_search($item['label'], $numberedLabels);
                             <div class="class" style="order:999">
                                 <div class="filter-options">
                                     <div class="dropdown">
-                                        <button class="btn btn-filter btn-light" type="button" id="dropdownMenuButton"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <span><svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                                    xmlns="http://www.w3.org/2000/svg">
+                                        <button class="btn btn-filter btn-light" type="button"
+                                            id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false">
+                                            <span><svg width="24" height="24" viewBox="0 0 24 24"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
                                                     <path fill-rule="evenodd" clip-rule="evenodd"
                                                         d="M12 6C12.3879 6 12.7024 6.31446 12.7024 6.70237L12.7024 17.2976C12.7024 17.6855 12.3879 18 12 18C11.6121 18 11.2976 17.6855 11.2976 17.2976V6.70237C11.2976 6.31446 11.6121 6 12 6Z"
                                                         fill="#555555" />
@@ -146,7 +158,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     onkeyup="filterFunction()">
                                                 <span class="search-icon"><i class="fas fa-search"></i></span>
                                             </div>
-                                            <button class="dropdown-item" id="btn-id">Mã đơn hàng</button>
+                                            <button class="dropdown-item" id="btn-id">Hóa đơn ra</button>
                                             <button class="dropdown-item" id="btn-guest">Khách hàng</button>
                                             @if (Auth::user()->can('isAdmin'))
                                                 <button class="dropdown-item" id="btn-creator">Nhân viên</button>
@@ -156,9 +168,11 @@ $index = array_search($item['label'], $numberedLabels);
                                             <button class="dropdown-item" id="btn-sum-fee">Phí vận chuyển</button>
                                             <button class="dropdown-item" id="btn-sum-difference">Tổng tiền chênh
                                                 lệch</button>
-                                            {{-- <button class="dropdown-item" id="btn-debt">Công nợ</button> --}}
                                             <button class="dropdown-item" id="btn-status">Trạng thái</button>
                                         </div>
+                                        @if(!empty($string))
+                                        <a class="btn-delete-filter" href="{{ route('debt.index') }}"><span>Tắt bộ lọc</span></a>
+                                        @endif
                                     </div>
                                     <?php $status = [];
                                     if (isset(request()->status)) {
@@ -223,11 +237,11 @@ $index = array_search($item['label'], $numberedLabels);
                                     }
                                     ?>
 
-                                    {{-- Tìm mã đơn hàng --}}
+                                    {{-- Tìm hóa đơn ra --}}
                                     <div class="block-options" id="id-options" style="display:none">
                                         <div class="wrap w-100">
                                             <div class="heading-title title-wrap">
-                                                <h5>Mã đơn hàng</h5>
+                                                <h5>Hóa đơn ra</h5>
                                             </div>
                                             <div class="input-group p-2">
                                                 <label class="title" for="">Chứa kí tự</label>
@@ -377,7 +391,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('sale_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity sale-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -407,7 +421,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('import_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity import-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -437,7 +451,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('fee_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity fee-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -467,7 +481,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('difference_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity difference-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -796,7 +810,9 @@ $index = array_search($item['label'], $numberedLabels);
                                                     @endcan
                                                     <td class="text-left"><?php echo $stt += 1; ?>
                                                     </td>
-                                                    <td class="text-left w-auto"><p>Mã sản phẩm</p>{{$item->tensanpham}}</td>
+                                                    <td class="text-left w-auto">
+                                                        <p>Mã sản phẩm</p>{{ $item->tensanpham }}
+                                                    </td>
                                                     <td></td>
                                                     <td class="text-right">
                                                         <p>Số lượng</p>{{ $item->soluong }}
@@ -848,6 +864,57 @@ $index = array_search($item['label'], $numberedLabels);
 </div>
 <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
 <script>
+    $('#search-icon').on('click', function(e) {
+        e.preventDefault();
+        $('#search-filter').submit();
+    });
+    // Show all hide all
+    function expand() {
+        $('#expandall').hide();
+        $('#collapseall').show();
+        $(".product-details").addClass("show");
+        var dropdownItems = $('[id^="dropdown_item"]');
+        dropdownItems.addClass("dropdown-item-active");
+        dropdownItems.attr("aria-expanded", "true");
+        var svgs = dropdownItems.find('svg');
+        svgs.addClass("svgactive")
+        svgs.removeClass("svginative")
+    }
+
+    function collapse() {
+        $('#expandall').show();
+        $('#collapseall').hide();
+        $(".product-details").removeClass("show");
+        var dropdownItems = $('[id^="dropdown_item"]');
+        dropdownItems.removeClass("dropdown-item-active");
+        dropdownItems.attr("aria-expanded", "false");
+        var svgs = dropdownItems.find('svg');
+        svgs.removeClass("svgactive")
+        svgs.addClass("svginative")
+    }
+
+    var dropdownItems = $('[id^="dropdown_item"]');
+    dropdownItems.each(function() {
+        $(this).on('click', function() {
+            var isActive = $(this).hasClass('dropdown-item-active');
+            var svgElement = $(this).find('svg');
+            var parentElement = $(this).parent().parent();
+            console.log(parentElement);
+            if (isActive) {
+                $(this).removeClass('dropdown-item-active');
+                parentElement.css('background', '#E9ECEF');
+                svgElement.removeClass("svgactive")
+                svgElement.addClass("svginative")
+            }
+            if (!isActive) {
+                $(this).addClass('dropdown-item-active');
+                parentElement.css('background', '#ADB5BD');
+                svgElement.addClass("svgactive")
+                svgElement.removeClass("svginative")
+            }
+        });
+    });
+
     // Xử lí filter ngày tháng
     $(document).ready(function() {
         $('#end').change(function() {
@@ -1279,31 +1346,6 @@ $index = array_search($item['label'], $numberedLabels);
         document.getElementById('delete-item-input').value = label;
     }
 
-    var dropdownItems = $('[id^="dropdown_item"]');
-    dropdownItems.each(function() {
-        $(this).on('click', function() {
-            var isActive = $(this).hasClass('dropdown-item-active');
-            var svgElement = $(this).find('svg');
-            var parentElement = $(this).parent().parent();
-            console.log(parentElement);
-            if (isActive) {
-                $(this).removeClass('dropdown-item-active');
-                parentElement.css('background', '#E9ECEF');
-                svgElement.css({
-                    transform: 'rotate(0deg)',
-                    transition: 'transform 0.3s ease'
-                });
-            }
-            if (!isActive) {
-                $(this).addClass('dropdown-item-active');
-                parentElement.css('background', '#ADB5BD');
-                svgElement.css({
-                    transform: 'rotate(180deg)',
-                    transition: 'transform 0.3s ease'
-                });
-            }
-        });
-    });
 
     function myFunction() {
         let text = "Bạn có chắc chắn thanh toán các đơn đã chọn không?";

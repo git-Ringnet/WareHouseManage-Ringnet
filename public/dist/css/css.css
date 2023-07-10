@@ -36,10 +36,11 @@ li {
     align-items: center;
 }
 
-.btn-filter,
 .btn-delete-filter {
-    background: #ffffff;
-    border-radius: 8px;
+    padding-left: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #EC212D;
 }
 
 .filter-options {
@@ -93,7 +94,11 @@ li {
     right: 15px;
     top: 50%;
     transform: translateY(-50%);
-    pointer-events: none;
+}
+
+#search-icon{
+    z-index: 1000;
+    cursor: pointer;
 }
 
 .search-icon i {
@@ -865,3 +870,15 @@ input[type="checkbox"] {
 
     }
 }
+.svgactive{
+    transform: rotate(180deg);
+    transition: transform 0.3s ease;
+}
+.svginative{
+    transform: rotate(0);
+    transition: transform 0.3s ease;
+}
+.searchkeyword{
+    height: 48px !important;
+}
+

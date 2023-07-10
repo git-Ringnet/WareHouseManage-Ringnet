@@ -37,7 +37,7 @@ class Debt extends Model
         }
         if (!empty($keywords)) {
             $debts = $debts->where(function ($query) use ($keywords) {
-                $query->orWhere('exports.id', 'like', '%' . $keywords . '%');
+                $query->orWhere('exports.export_code', 'like', '%' . $keywords . '%');
                 $query->orWhere('guests.guest_name', 'like', '%' . $keywords . '%');
             });
         }

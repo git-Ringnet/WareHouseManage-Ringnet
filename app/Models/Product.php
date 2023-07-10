@@ -75,7 +75,7 @@ class Product extends Model
             });
         }
 
-        $products = $products->orderBy('product.created_at', 'asc')->paginate(8);
+        $products = $products->orderBy('product.created_at', 'asc')->paginate(20);
 
         return $products;
     }
@@ -85,6 +85,33 @@ class Product extends Model
     }
     public function addProduct($data){
         return DB::table($this->table)->insertGetId($data);
+    }
+    public function allProducts(){
+        $products = DB::table($this->table)->get();
+        return $products;
+    }
+    public function productsStock(){
+        $products = DB::table($this->table);
+        $products = $products->where('product_qty', '>', 5)->get();
+        return $products;
+    }
+    public function productsEnd(){
+        $products = DB::table($this->table);
+        $products = $products->where(function ($query) {
+            $query->orWhere('product_qty', '=', null);
+            $query->orWhere('product_qty', '=', 0);
+        });
+        $products = $products->get();
+        return $products;
+    }
+    public function sumTotalInventory(){
+        $totalSum = DB::table($this->table)->sum('product_price');
+        return $totalSum;
+    }
+    public function productsNearEnd(){
+        $products = DB::table($this->table);
+        $products = $products->whereBetween('product_qty', [1, 5])->get();
+        return $products;
     }
     
 }

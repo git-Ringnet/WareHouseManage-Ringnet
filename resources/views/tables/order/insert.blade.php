@@ -342,7 +342,7 @@
                 '<td><input required type="text" class="form-control text-center product_price" style="width:140px"" name="product_price[]" ></td>' +
                 '<td>' +
                 '<input type="hidden" class="product_tax1">' +
-                '<select name="product_tax[]" style="width:80px" class="product_tax form-control">' +
+                '<select name="product_tax[]" style="width:100px" class="product_tax form-control">' +
                 '<option value="10">10%</option>' +
                 '<option value="0">0%</option>' +
                 '<option value="8">8%</option>' +
@@ -606,7 +606,7 @@
                             price + '"></td>' +
                             '<input type="hidden" class="product_tax1">' +
                             '<td>' +
-                            '<select style="width:80px;" name="product_tax[]"class="product_tax form-control" >' +
+                            '<select style="width:100px;" name="product_tax[]"class="product_tax form-control" >' +
                             '<option value="10"' + (tax == 10 ? "selected" : "") + '>10%</option>' +
                             '<option value="0" ' + (tax == 0 ? "selected" : "") + '>0%</option>' +
                             '<option value="8" ' + (tax == 8 ? "selected" : "") + '>8%</option>' +

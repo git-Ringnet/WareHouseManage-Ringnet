@@ -42,12 +42,12 @@ class AddProductController extends Controller
         $filters = [];
         $status = [];
         $provide_name = [];
-        //Mã đơn
+        //Số hóa đơn
         if (!empty($request->id)) {
             $id = $request->id;
-            array_push($filters, ['orders.id', '=', $id]);
+            array_push($filters, ['orders.product_code', 'like', '%' . $id . '%']);
             $nameArr = explode(',.@', $id);
-            array_push($string, ['label' => 'Mã đơn hàng:', 'values' => $nameArr, 'class' => 'id']);
+            array_push($string, ['label' => 'Số hóa :', 'values' => $nameArr, 'class' => 'id']);
         }
         //Nhà cung cấp
         if (!empty($request->guest)) {
@@ -94,13 +94,13 @@ class AddProductController extends Controller
             $name = $request->input('name', []);
             array_push($string, ['label' => 'Người tạo:', 'values' => $name, 'class' => 'name']);
         }
-        //Đến ngày
+        //Ngày nhập hóa đơn
         $date = [];
         if (!empty($request->trip_start) && !empty($request->trip_end)) {
             $trip_start = $request->input('trip_start');
             $trip_end = $request->input('trip_end');
             $date[] = [$trip_start, $trip_end];
-            $datearr = ['label' => 'Chỉnh sửa cuối:', 'values' => [
+            $datearr = ['label' => 'Ngày nhập hóa đơn:', 'values' => [
                 date('d/m/Y', strtotime($trip_start)),
                 date('d/m/Y', strtotime($trip_end))
             ], 'class' => 'date'];
