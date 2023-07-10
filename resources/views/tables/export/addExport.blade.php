@@ -129,7 +129,8 @@
             <div class="d-flex align-items-center my-2">
                 <div class="">
                     <p class="m-0"><b>Số hóa đơn</b></p>
-                    <input type="number" value="" name="export_code" class="form-control" placeholder="Nhập thông tin">
+                    <input type="number" value="" name="export_code" class="form-control"
+                        placeholder="Nhập thông tin">
                 </div>
                 <div class="pl-3">
                     <p class="m-0"><b>Ngày hóa đơn</b></p>
@@ -591,9 +592,25 @@
     var qty_exist = $('.quantity-exist').val();
 
     function limitMaxValue(input) {
-        if (input.value > qty_exist) {
-            input.value = qty_exist;
-        }
+        var value = input.value;
+
+        // Gửi dữ liệu qua AJAX
+        $.ajax({
+            url: '',
+            type: 'GET',
+            data: {
+                value: value
+            },
+            success: function(response) {
+                var maxLimit = response.maxLimit;
+                if (value > maxLimit) {
+                    input.value = maxLimit;
+                }
+            },
+            error: function() {
+                // Xử lý lỗi nếu cần thiết
+            }
+        });
     }
 
     //cập nhật thông tin khách hàng

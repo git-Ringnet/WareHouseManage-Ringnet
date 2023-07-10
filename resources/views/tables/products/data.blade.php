@@ -158,8 +158,9 @@ $index = array_search($item['label'], $numberedLabels);
                             <span class="" style="order: 999;">
                                 <div class="filter-options">
                                     <div class="dropdown">
-                                        <button class="btn btn-filter btn-light" type="button" id="dropdownMenuButton"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <button class="btn btn-filter btn-light" type="button"
+                                            id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false">
                                             <span><svg width="24" height="24" viewBox="0 0 24 24"
                                                     fill="none" xmlns="http://www.w3.org/2000/svg">
                                                     <path fill-rule="evenodd" clip-rule="evenodd"
@@ -597,7 +598,8 @@ $index = array_search($item['label'], $numberedLabels);
                 <span class="count_checkbox mr-5"></span>
                 <div class="row action">
                     <div class="btn-taodon my-2 ml-3">
-                        <button type="button" class="btn-group btn btn-light d-flex align-items-center">
+                        <button type="button" class="btn-group btn btn-light d-flex align-items-center"
+                            id="createOrderBtn">
                             <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24" fill="none">
                                 <path fill-rule="evenodd" clip-rule="evenodd"
@@ -765,7 +767,7 @@ $index = array_search($item['label'], $numberedLabels);
                                 <tbody>
                                     @foreach ($products as $value)
                                         <tr>
-                                            <td><input type="checkbox" class="cb-element"></td>
+                                            <td><input type="checkbox" class="cb-element" name="product[]" value="{{$value->id}}"></td>
                                             <td class="text-left">{{ $value->id }}</td>
                                             <td class="text-left">{{ $value->product_name }}</td>
                                             <td class="text-left">{{ $value->provide }}</td>
@@ -1336,6 +1338,22 @@ $index = array_search($item['label'], $numberedLabels);
         $('.filter-results').on('click', '.delete-btn-products_name', function() {
             $('.products_name-input').val('');
             document.getElementById('search-filter').submit();
+        });
+    });
+    //Tạo đơn bán
+    $(document).ready(function() {
+        $('#createOrderBtn').click(function() {
+            var selectedProducts = [];
+            $('input[name="product[]"]:checked').each(function() {
+                selectedProducts.push($(this).val());
+            });
+
+            if (selectedProducts.length > 0) {
+                var url = 'exports/create'; // Thay thế bằng URL của trang nhận id sản phẩm
+
+                // Chuyển hướng đến trang mới với id sản phẩm được gửi đi
+                window.location.href = url + '?products=' + selectedProducts.join(',');
+            }
         });
     });
 </script>
