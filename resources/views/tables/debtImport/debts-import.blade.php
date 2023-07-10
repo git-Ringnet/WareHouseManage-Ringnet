@@ -388,7 +388,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('import_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
                                                 <input class="w-50 input-quantity import-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -442,7 +442,7 @@ $index = array_search($item['label'], $numberedLabels);
                 <div class="row action">
                     <div class="btn-taodon my-2 ml-3">
                         <button type="button" class="btn-group btn btn-light d-flex align-items-center"
-                            id="paymentdebt">
+                            id="paymentdebtimport">
                             <svg width="18" height="13" viewBox="0 0 18 13" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" clip-rule="evenodd"
@@ -737,6 +737,30 @@ $index = array_search($item['label'], $numberedLabels);
 </div>
 <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
 <script>
+    // AJAX Thanh toán Payment
+    $(document).on('click', '#paymentdebtimport', function(e) {
+        e.preventDefault();
+        if (myFunction()) {
+            const list_id = [];
+            $('input[name="ids[]"]').each(function() {
+                if ($(this).is(':checked')) {
+                    var value = $(this).val();
+                    list_id.push(value);
+                }
+            });
+            $.ajax({
+                url: "{{ route('paymentdebtimport') }}",
+                type: "get",
+                data: {
+                    list_id: list_id,
+                },
+                success: function(data) {
+                    location.reload();
+                }
+            })
+        }
+    })
+
     $('#search-icon').on('click', function(e) {
         e.preventDefault();
         $('#search-filter').submit();
@@ -1165,29 +1189,6 @@ $index = array_search($item['label'], $numberedLabels);
         }
 
     }
-    // AJAX Thanh toán Payment
-    $(document).on('click', '#paymentdebt', function(e) {
-        e.preventDefault();
-        if (myFunction()) {
-            const list_id = [];
-            $('input[name="ids[]"]').each(function() {
-                if ($(this).is(':checked')) {
-                    var value = $(this).val();
-                    list_id.push(value);
-                }
-            });
-            $.ajax({
-                url: "{{ route('paymentdebt') }}",
-                type: "get",
-                data: {
-                    list_id: list_id,
-                },
-                success: function(data) {
-                    location.reload();
-                }
-            })
-        }
-    })
 </script>
 </body>
 

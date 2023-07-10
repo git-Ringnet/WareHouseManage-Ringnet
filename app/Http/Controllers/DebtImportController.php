@@ -55,7 +55,6 @@ class DebtImportController extends Controller
         if (!empty($request->import_operator) && !empty($request->sum_import)) {
             $sum = $request->input('sum_import');
             $import_operator = $request->input('import_operator');
-            // $total = 'productorders.product_qty'*'productorders.product_price' * (1 +'productorders.product_tax' /100);
             $filters[] = ['orders.total', $import_operator, $sum];
             $importArray = explode(',.@', $sum);
             array_push($string, ['label' => 'Tổng tiền nhập(+VAT) ' . $import_operator, 'values' => $importArray, 'class' => 'sum-import']);
@@ -223,5 +222,20 @@ class DebtImportController extends Controller
     public function destroy($id)
     {
         //
+    }
+    public function paymentdebtimport(Request $request)
+    {
+        if (isset($request->list_id)) {
+            $list = $request->list_id;
+            $listOrder = DebtImport::whereIn('id', $list)->get();
+            foreach ($listOrder as $value) {
+                $value->debt_status = 1;
+                $value->save();
+            }
+            session()->flash('msg', 'Thanh toán thành công');
+            return response()->json(['success' => true, 'msg' => 'Thanh toán thành công']);
+        }
+        return response()->json(['success' => false, 'warning' => 'Thanh toán thất bại!']);
+        session()->flash('msg', 'Thanh toán thất bại!');
     }
 }

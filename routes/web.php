@@ -78,6 +78,8 @@ Route::get('/paymentdebt', [DebtController::class, 'paymentdebt'])->name('paymen
 
 // Công nợ nhập hàng
 Route::resource('debt_import', DebtImportController::class);
+Route::get('/paymentdebtimport', [DebtImportController::class, 'paymentdebtimport'])->name('paymentdebtimport');
+
 
 
 

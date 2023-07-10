@@ -349,7 +349,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('comparison_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
                                                 <input class="w-50 input-quantity sum-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -599,14 +599,14 @@ $index = array_search($item['label'], $numberedLabels);
                                                     <td></td>
                                                     <td></td>
                                                     <td>
-                                                        <p>Thông tin sản phẩm:</p>{{ $item->product_name }}
+                                                        <p>Thông tin sản phẩm</p>{{ $item->product_name }}
                                                     </td>
                                                     <td>
-                                                        <p>Số lượng:</p>{{ $item->product_qty }}
+                                                        <p>Số lượng</p>{{ $item->product_qty }}
                                                     </td>
                                                     <td></td>
                                                     <td>
-                                                        <p>Tổng tiền:</p>
+                                                        <p>Tổng tiền</p>
                                                         {{ number_format($item->product_price * $item->product_qty) }}
                                                     </td>
                                                     <td></td>
@@ -938,33 +938,6 @@ $index = array_search($item['label'], $numberedLabels);
                 }
             });
         }
-    });
-
-    //drop icon
-    var dropdownItems = $('[id^="dropdown_item"]');
-    dropdownItems.each(function() {
-        $(this).on('click', function() {
-            var isActive = $(this).hasClass('dropdown-item-active');
-            var svgElement = $(this).find('svg');
-            var parentElement = $(this).parent().parent();
-            console.log(parentElement);
-            if (isActive) {
-                $(this).removeClass('dropdown-item-active');
-                parentElement.css('background', '#E9ECEF');
-                svgElement.css({
-                    transform: 'rotate(0deg)',
-                    transition: 'transform 0.3s ease'
-                });
-            }
-            if (!isActive) {
-                $(this).addClass('dropdown-item-active');
-                parentElement.css('background', '#ADB5BD');
-                svgElement.css({
-                    transform: 'rotate(180deg)',
-                    transition: 'transform 0.3s ease'
-                });
-            }
-        });
     });
 
     // Xóa tất cả các dữ liệu trong Local Storage
