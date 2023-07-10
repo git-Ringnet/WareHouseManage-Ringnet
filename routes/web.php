@@ -65,6 +65,8 @@ Route::get('addguest', [ExportController::class, 'addCustomer'])->name('addCusto
 Route::get('nameProducts', [ExportController::class, 'nameProduct'])->name('nameProduct');
 //lấy thông tin sản phẩm từ tên sản phẩm
 Route::get('getProduct', [ExportController::class, 'getProduct'])->name('getProduct');
+//giới hạn số lượng
+Route::get('limit_qty', [ExportController::class, 'limit_qty'])->name('limit_qty');
 //lấy thông tin SN của sản phẩm con
 Route::get('getSN', [ExportController::class, 'getSN'])->name('getSN');
 Route::get('getSN1', [ExportController::class, 'getSN1'])->name('getSN1');
@@ -76,11 +78,9 @@ Route::get('/cancelBillExport', [ExportController::class, 'cancelBillExport'])->
 Route::resource('debt', DebtController::class);
 Route::get('/paymentdebt', [DebtController::class, 'paymentdebt'])->name('paymentdebt');
 
-// Công nợ nhập hàng
+//Công nợ nhập hàng
 Route::resource('debt_import', DebtImportController::class);
 Route::get('/paymentdebtimport', [DebtImportController::class, 'paymentdebtimport'])->name('paymentdebtimport');
-
-
 
 
 //kiểm tra số lượng trong xuất hàng
