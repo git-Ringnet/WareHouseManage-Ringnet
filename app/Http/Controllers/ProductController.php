@@ -137,7 +137,7 @@ class ProductController extends Controller
         // Đơn vị tính
         $unit = Product::all();
 
-        $title = 'Sản phẩm';
+        $title = 'Tồn kho';
         return view('tables.products.data', compact('products', 'string', 'provide', 'unit', 'sortType', 'title'));
     }
 

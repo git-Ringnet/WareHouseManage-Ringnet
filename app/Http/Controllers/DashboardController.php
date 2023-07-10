@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Exports;
 use App\Models\Orders;
+use App\Models\Product;
 use App\Models\Products;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,7 @@ class DashboardController extends Controller
 
     public function __construct()
     {
-        $this->products = new Products();
+        $this->products = new Product();
         $this->orders = new Orders();
         $this->exports = new Exports();
     }

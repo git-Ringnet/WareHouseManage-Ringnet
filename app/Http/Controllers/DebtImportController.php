@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\DebtImport;
+use App\Models\Provides;
 use App\Models\User;
 use DateTime;
 use Illuminate\Http\Request;
@@ -28,16 +29,20 @@ class DebtImportController extends Controller
         //Mã đơn
         if (!empty($request->id)) {
             $id = $request->id;
-            array_push($filters, ['debts.id', 'like', '%' . $id . '%']);
+            array_push($filters, ['orders.product_code', 'like', '%' . $id . '%']);
             $nameArr = explode(',.@', $id);
-            array_push($string, ['label' => 'Mã đơn:', 'values' => $nameArr, 'class' => 'id']);
+            array_push($string, ['label' => 'Hóa đơn vào:', 'values' => $nameArr, 'class' => 'id']);
         }
-        //Khách hàng
-        if (!empty($request->guest)) {
-            $guest = $request->guest;
-            array_push($filters, ['guests.guest_name', 'like', '%' . $guest . '%']);
-            $nameArr = explode(',.@', $guest);
-            array_push($string, ['label' => 'Khách hàng:', 'values' => $nameArr, 'class' => 'guest']);
+        //Nhà cung cấp
+        $provides = Provides::all();
+        $provide_namearr = [];
+        if (!empty($request->provide_namearr)) {
+            $provide_namearr = $request->input('provide_namearr', []);
+            if (!empty($provide_namearr)) {
+                $selectedProvides = Provides::whereIn('id', $provide_namearr)->get();
+                $selectedProvides = $selectedProvides->pluck('provide_name')->toArray();
+            }
+            array_push($string, ['label' => 'Nhà cung cấp:', 'values' => $selectedProvides, 'class' => 'provide_name']);
         }
         //Name
         $nhanvien = [];
@@ -45,46 +50,17 @@ class DebtImportController extends Controller
             $nhanvien = $request->input('nhanvien', []);
             array_push($string, ['label' => 'Nhân viên:', 'values' => $nhanvien, 'class' => 'name']);
         }
-        // Bán
-        if (!empty($request->sale_operator) && !empty($request->sum_sale)) {
-            $sum = $request->input('sum_sale');
-            $sale_operator = $request->input('sale_operator');
-            $filters[] = ['debts.total_sales', $sale_operator, $sum];
-            $saleArray = explode(',.@', $sum);
-            array_push($string, ['label' => 'Tổng tiền bán ' . $sale_operator, 'values' => $saleArray, 'class' => 'sum-sale']);
-        }
+
         // nhập
         if (!empty($request->import_operator) && !empty($request->sum_import)) {
             $sum = $request->input('sum_import');
             $import_operator = $request->input('import_operator');
-            $filters[] = ['debts.total_import', $import_operator, $sum];
+            // $total = 'productorders.product_qty'*'productorders.product_price' * (1 +'productorders.product_tax' /100);
+            $filters[] = ['orders.total', $import_operator, $sum];
             $importArray = explode(',.@', $sum);
-            array_push($string, ['label' => 'Tổng tiền nhập ' . $import_operator, 'values' => $importArray, 'class' => 'sum-import']);
+            array_push($string, ['label' => 'Tổng tiền nhập(+VAT) ' . $import_operator, 'values' => $importArray, 'class' => 'sum-import']);
         }
-        // phí
-        if (!empty($request->fee_operator) && !empty($request->sum_fee)) {
-            $sum = $request->input('sum_fee');
-            $fee_operator = $request->input('fee_operator');
-            $filters[] = ['debts.debt_transport_fee', $fee_operator, $sum];
-            $feeArray = explode(',.@', $sum);
-            array_push($string, ['label' => 'Phí vận chuyển ' . $fee_operator, 'values' => $feeArray, 'class' => 'sum-fee']);
-        }
-        // Chênh lệch
-        if (!empty($request->difference_operator) && !empty($request->sum_difference)) {
-            $sum = $request->input('sum_difference');
-            $difference_operator = $request->input('difference_operator');
-            $filters[] = ['debts.total_difference', $difference_operator, $sum];
-            $inventoryArray = explode(',.@', $sum);
-            array_push($string, ['label' => 'Tổng tiền chênh lệch ' . $difference_operator, 'values' => $inventoryArray, 'class' => 'sum-difference']);
-        }
-        // Công nợ
-        if (!empty($request->debt_operator) && !empty($request->debt)) {
-            $sum = $request->input('debt');
-            $debt_operator = $request->input('debt_operator');
-            $filters[] = ['debts.debt', $debt_operator, $sum];
-            $inventoryArray = explode(',.@', $sum);
-            array_push($string, ['label' => 'Ngày công nợ' . $debt_operator, 'values' => $inventoryArray, 'class' => 'debt']);
-        }
+       
         //Trạng thái
         $status = [];
         if (!empty($request->status)) {
@@ -97,26 +73,14 @@ class DebtImportController extends Controller
         }
 
         $date = [];
-        if (!empty($request->date_start) && !empty($request->date_end)) {
-            $date_start = $request->input('date_start');
-            $date_end = $request->input('date_end');
-            $date[] = [$date_start, $date_end];
-            $datearr = ['label' => 'Công nợ:', 'values' => [
-                date('d/m/Y', strtotime($date_start)),
-                date('d/m/Y', strtotime($date_end))
-            ], 'class' => 'debt'];
-            array_push($string, $datearr);
-        }
-        // Công nợ đã thanh toán
-        $datepaid = [];
-        if (!empty($request->paid_date_start) && !empty($request->paid_date_end)) {
-            $date_start = $request->input('paid_date_start');
-            $date_end = $request->input('paid_date_end');
-            $datepaid[] = [$date_start, $date_end];
-            $datearr = ['label' => 'Đã thanh toán:', 'values' => [
-                date('d/m/Y', strtotime($date_start)),
-                date('d/m/Y', strtotime($date_end))
-            ], 'class' => 'debt-paid'];
+        if (!empty($request->trip_start) && !empty($request->trip_end)) {
+            $trip_start = $request->input('trip_start');
+            $trip_end = $request->input('trip_end');
+            $date[] = [$trip_start, $trip_end];
+            $datearr = ['label' => 'Ngày nhập hóa đơn:', 'values' => [
+                date('d/m/Y', strtotime($trip_start)),
+                date('d/m/Y', strtotime($trip_end))
+            ], 'class' => 'date'];
             array_push($string, $datearr);
         }
 
@@ -141,10 +105,10 @@ class DebtImportController extends Controller
 
 
         $debtsSale = User::whereIn('roleid', [1, 3])->get();
-        $debts = $this->debts->getAllDebts($filters, $keywords, $nhanvien, $date, $datepaid, $status, $sortBy, $sortType);
+        $debts = $this->debts->getAllDebts($filters, $keywords, $nhanvien, $date,$provide_namearr, $status, $sortBy, $sortType);
         $product = $this->debts->getAllProductsDebts();
         $debtsCreator = $this->debts->debtsCreator();
-        return view('tables.debtImport.debts-import', compact('title', 'debts', 'debtsSale', 'product', 'string', 'sortType', 'debtsCreator'));
+        return view('tables.debtImport.debts-import', compact('title', 'debts','provides', 'debtsSale', 'product', 'string', 'sortType', 'debtsCreator'));
     }
 
     /**

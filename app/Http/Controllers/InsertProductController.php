@@ -15,7 +15,7 @@ class InsertProductController extends Controller
      */
     public function index()
     {
-        $title = 'Sản phẩm';
+        $title = 'Tồn Kho';
         return view('tables.order.insertProduct',compact('title'));
     }
 

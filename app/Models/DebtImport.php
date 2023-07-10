@@ -22,37 +22,32 @@ class DebtImport extends Model
         'date_end',
         'date_start',
     ];
-    public function getAllDebts($filter=[],$keywords=null,$name=[],$date=[],$datepaid=[],$status=[], $orderBy = null, $orderType = null)
+    public function getAllDebts($filter=[],$keywords=null,$name=[],$date=[],$provide_name=[],$status=[], $orderBy = null, $orderType = null)
     {
         $debt_import = DebtImport::select('debt_import.*', 'orders.product_code as madon', 'provides.provide_name as nhacungcap', 'users.name as nhanvien','orders.updated_at as debtdate')
             ->leftJoin('provides', 'provides.id', 'debt_import.provide_id')
             ->leftJoin('users', 'users.id', 'debt_import.user_id')
-            ->leftJoin('orders', 'orders.id', 'debt_import.import_id');
+            ->leftJoin('orders', 'orders.id', 'debt_import.import_id')
+            ->leftJoin('productorders', 'orders.id', 'productorders.order_id');
         if (!empty($filter)) {
             $debt_import = $debt_import->where($filter);
         }
         if (!empty($keywords)) {
             $debt_import = $debt_import->where(function ($query) use ($keywords) {
-                $query->orWhere('orders.id', 'like', '%' . $keywords . '%');
-                $query->orWhere('provides.guest_name', 'like', '%' . $keywords . '%');
+                $query->orWhere('orders.product_code', 'like', '%' . $keywords . '%');
+                $query->orWhere('provides.provide_name', 'like', '%' . $keywords . '%');
             });
         }
 
         if (!empty($name)) {
             $debt_import = $debt_import->whereIn('users.name', $name);
         }
-        // dd($date[0][0]);
         if (!empty($date)) {
-            $debt_import = $debt_import->where(function ($query) use ($date) {
-                $query->where('debt_import.date_start', '>=', $date[0][0])
-                    ->where('debt_import.date_end', '<=', $date[0][1]);
-            });
+            $debt_import = $debt_import->wherebetween('orders.created_at', $date);
         }
-        if (!empty($datepaid)) {
-            $debt_import = $debt_import->where('debt_import.debt_status', 1)->wherebetween('debt_import.updated_at', $datepaid);
+        if (!empty($provide_name)) {
+            $debt_import = $debt_import->whereIn('orders.provide_id', $provide_name);
         }
-              
-
         if (!empty($status)) {
             $debt_import = $debt_import->whereIn('debt_import.debt_status', $status);
         }

@@ -86,7 +86,7 @@
                                             <td class="text-right">
                                                 {{number_format($item->soluong*$item->gianhap)}}
                                             </td>
-                                            <td class="text-center">{{$item->thue}}%</td>
+                                            <td class="text-center">@if($item->thue == 99) NOVAT @else {{$item->thue}}%  @endif</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -137,7 +137,7 @@
                 <button class="btn btn-primary" type="submit" name="submitBtn" value="action2"
                     onkeydown="return event.key != 'Enter';">Lưu</button>
             @endif
-            <a href="{{ route('debt.index') }}"><span class="btn border-secondary ml-1">Hủy</span></a>
+            <a href="{{ route('debt_import.index') }}"><span class="btn border-secondary ml-1">Hủy</span></a>
         </div>
     </form>
     <script>

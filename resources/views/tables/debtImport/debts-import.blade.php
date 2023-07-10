@@ -28,21 +28,33 @@
                 <form class="w-100" action="" method="get" id='search-filter'>
                     <div class="row mr-0">
                         <div class="col-5">
-                            <input type="text" placeholder="Tìm kiếm theo mã đơn hàng và khách hàng" name="keywords"
-                                class="pr-4 input-search w-100 form-control h-100" value="{{ request()->keywords }}">
-                            <span class="search-icon"><i class="fas fa-search"></i></span>
+                            <input type="text" placeholder="Tìm kiếm theo mã hóa đơn vào hoặc nhà cung cấp"
+                                name="keywords" class="pr-4 input-search w-100 form-control searchkeyword"
+                                value="{{ request()->keywords }}">
+                            <span id="search-icon" class="search-icon"><i class="fas fa-search"></i></span>
                         </div>
                         <div class="col-2 d-none">
                             <button type="submit" class="btn btn-primary btn-block">Tìm kiếm</button>
                         </div>
-                        <a class="btn ml-auto btn-delete-filter btn-light" href="{{ route('debt.index') }}"><span><svg
+                        <div class="ml-auto">
+                            <button class="btn btn-light" id="expandall" type="button" onclick="expand()"><svg
                                     width="24" height="24" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M6 5.4643C6 5.34116 6.04863 5.22306 6.13518 5.13599C6.22174 5.04892 6.33913 5 6.46154 5H17.5385C17.6609 5 17.7783 5.04892 17.8648 5.13599C17.9514 5.22306 18 5.34116 18 5.4643V7.32149C18 7.43599 17.9579 7.54645 17.8818 7.63164L13.8462 12.1428V16.6075C13.8461 16.7049 13.8156 16.7998 13.7589 16.8788C13.7022 16.9578 13.6223 17.0168 13.5305 17.0476L10.7612 17.9762C10.6919 17.9994 10.618 18.0058 10.5458 17.9947C10.4735 17.9836 10.4049 17.9554 10.3456 17.9124C10.2863 17.8695 10.238 17.8129 10.2047 17.7475C10.1713 17.682 10.1539 17.6096 10.1538 17.5361V12.1428L6.11815 7.63164C6.0421 7.54645 6.00002 7.43599 6 7.32149V5.4643Z"
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M7.23123 9.23123C7.53954 8.92292 8.03941 8.92292 8.34772 9.23123L12 12.8835L15.6523 9.23123C15.9606 8.92292 16.4605 8.92292 16.7688 9.23123C17.0771 9.53954 17.0771 10.0394 16.7688 10.3477L12.5582 14.5582C12.2499 14.8665 11.7501 14.8665 11.4418 14.5582L7.23123 10.3477C6.92292 10.0394 6.92292 9.53954 7.23123 9.23123Z"
                                         fill="#555555" />
                                 </svg>
-                            </span><span>Tắt bộ lọc</span></a>
+                                Mở rộng tất
+                                cả</button>
+                            <button class="btn btn-light" style="display: none" id="collapseall" type="button"
+                                onclick="collapse()"><svg width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M16.7688 14.7688C16.4605 15.0771 15.9606 15.0771 15.6523 14.7688L12 11.1165L8.34772 14.7688C8.03941 15.0771 7.53954 15.0771 7.23123 14.7688C6.92292 14.4605 6.92292 13.9606 7.23123 13.6523L11.4418 9.44176C11.7501 9.13345 12.2499 9.13345 12.5582 9.44176L16.7688 13.6523C17.0771 13.9606 17.0771 14.4605 16.7688 14.7688Z"
+                                        fill="#555555" />
+                                </svg>
+                                Thu gọn tất cả</button>
+                        </div>
                     </div>
                     <div class="d-flex justify-contents-center align-items-center mr-auto row-filter my-3 m-0">
                         <div class="icon-filter mr-3">
@@ -105,7 +117,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     echo 0;
                                                 } @endphp">
                                     {{ $item['label'] }}
-                                    @if ($item['label'] === 'Công nợ:')
+                                    @if ($item['label'] === 'Ngày nhập hóa đơn:')
                                         {{ $item['values'][0] }} đến {{ $item['values'][1] }}
                                     @else
                                         <span class="filter-values">{{ implode(', ', $item['values']) }}</span>
@@ -125,10 +137,11 @@ $index = array_search($item['label'], $numberedLabels);
                             <div class="class" style="order:999">
                                 <div class="filter-options">
                                     <div class="dropdown">
-                                        <button class="btn btn-filter btn-light" type="button" id="dropdownMenuButton"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <span><svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                                    xmlns="http://www.w3.org/2000/svg">
+                                        <button class="btn btn-filter btn-light" type="button"
+                                            id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false">
+                                            <span><svg width="24" height="24" viewBox="0 0 24 24"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
                                                     <path fill-rule="evenodd" clip-rule="evenodd"
                                                         d="M12 6C12.3879 6 12.7024 6.31446 12.7024 6.70237L12.7024 17.2976C12.7024 17.6855 12.3879 18 12 18C11.6121 18 11.2976 17.6855 11.2976 17.2976V6.70237C11.2976 6.31446 11.6121 6 12 6Z"
                                                         fill="#555555" />
@@ -146,19 +159,21 @@ $index = array_search($item['label'], $numberedLabels);
                                                     onkeyup="filterFunction()">
                                                 <span class="search-icon"><i class="fas fa-search"></i></span>
                                             </div>
-                                            <button class="dropdown-item" id="btn-id">Mã đơn hàng</button>
-                                            <button class="dropdown-item" id="btn-guest">Khách hàng</button>
+                                            <button class="dropdown-item" id="btn-id">Hóa đơn vào</button>
+                                            <button class="dropdown-item" id="btn-update_at">Ngày nhập hóa
+                                                đơn</button>
+                                            <button class="dropdown-item" id="btn-provide_name">Nhà cung cấp</button>
                                             @if (Auth::user()->can('isAdmin'))
                                                 <button class="dropdown-item" id="btn-creator">Nhân viên</button>
                                             @endif
-                                            <button class="dropdown-item" id="btn-sum-sale">Tổng tiền bán</button>
-                                            <button class="dropdown-item" id="btn-sum-import">Tổng tiền nhập</button>
-                                            <button class="dropdown-item" id="btn-sum-fee">Phí vận chuyển</button>
-                                            <button class="dropdown-item" id="btn-sum-difference">Tổng tiền chênh
-                                                lệch</button>
-                                            {{-- <button class="dropdown-item" id="btn-debt">Công nợ</button> --}}
+                                            <button class="dropdown-item" id="btn-sum-import">Tổng tiền
+                                                nhập(+VAT)</button>
                                             <button class="dropdown-item" id="btn-status">Trạng thái</button>
                                         </div>
+                                        @if (!empty($string))
+                                            <a class="btn-delete-filter"
+                                                href="{{ route('debt_import.index') }}"><span>Tắt bộ lọc</span></a>
+                                        @endif
                                     </div>
                                     <?php $status = [];
                                     if (isset(request()->status)) {
@@ -193,41 +208,19 @@ $index = array_search($item['label'], $numberedLabels);
                                         $import_operator = null;
                                         $sum = null;
                                     }
-                                    $fee_operator = null;
-                                    $sum = null;
-                                    //Tổng tiền
-                                    if (isset(request()->fee_operator) && isset(request()->sum_fee)) {
-                                        $fee_operator = request()->fee_operator;
-                                        $sum = request()->sum_fee;
+                                    $provide_namearr = [];
+                                    if (isset(request()->provide_namearr)) {
+                                        $provide_namearr = request()->provide_namearr;
                                     } else {
-                                        $fee_operator = null;
-                                        $sum = null;
-                                    }
-                                    $difference_operator = null;
-                                    $sum = null;
-                                    //Tổng tiền
-                                    if (isset(request()->difference_operator) && isset(request()->sum_difference)) {
-                                        $difference_operator = request()->difference_operator;
-                                        $sum = request()->sum_difference;
-                                    } else {
-                                        $difference_operator = null;
-                                        $sum = null;
-                                    }
-                                    // Công nợ
-                                    if (isset(request()->debt_operator) && isset(request()->debt)) {
-                                        $debt_operator = request()->debt_operator;
-                                        $sum = request()->debt;
-                                    } else {
-                                        $debt_operator = null;
-                                        $sum = null;
+                                        $provide_namearr = [];
                                     }
                                     ?>
 
-                                    {{-- Tìm mã đơn hàng --}}
+                                    {{-- Tìm Hđ vào --}}
                                     <div class="block-options" id="id-options" style="display:none">
                                         <div class="wrap w-100">
                                             <div class="heading-title title-wrap">
-                                                <h5>Mã đơn hàng</h5>
+                                                <h5>Hóa đơn vào</h5>
                                             </div>
                                             <div class="input-group p-2">
                                                 <label class="title" for="">Chứa kí tự</label>
@@ -242,22 +235,40 @@ $index = array_search($item['label'], $numberedLabels);
                                                 class="btn btn-default btn-block">Hủy</button>
                                         </div>
                                     </div>
-                                    {{-- Tìm khách hàng --}}
-                                    <div class="block-options" id="guest-options" style="display:none">
+                                    {{-- Tìm nhà cung cấp --}}
+                                    <div class="block-options" id="provide_name-options" style="display:none">
                                         <div class="wrap w-100">
                                             <div class="heading-title title-wrap">
-                                                <h5>Khách hàng</h5>
+                                                <h5>Nhà cung cấp</h5>
                                             </div>
-                                            <div class="input-group p-2">
-                                                <label class="title" for="">Chứa kí tự</label>
-                                                <input type="search" name="guest" class="form-control guest-input"
-                                                    value="{{ request()->guest }}" placeholder="Nhập thông tin..">
+                                            <div class="search-container px-2 mt-2">
+                                                <input type="text" placeholder="Tìm kiếm"
+                                                    id="myInput-provide-name" class="pr-4 w-100 input-search"
+                                                    onkeyup="filterProvidename()">
+                                                <span class="search-icon"><i class="fas fa-search"></i></span>
                                             </div>
+                                            <div
+                                                class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
+                                                <a class="cursor select-all-provide_name mr-auto">Chọn tất cả</a>
+                                                <a class="cursor deselect-all-provide_name">Hủy chọn</a>
+                                            </div>
+                                            <ul class="ks-cboxtags-provide_name p-0 mb-1 px-2">
+                                                @if (!empty($provides))
+                                                    @foreach ($provides as $value)
+                                                        <li>
+                                                            <input type="checkbox" id="roles_active"
+                                                                {{ in_array($value->id, $provide_namearr) ? 'checked' : '' }}
+                                                                name="provide_namearr[]" value="{{ $value->id }}">
+                                                            <label for="">{{ $value->provide_name }}</label>
+                                                        </li>
+                                                    @endforeach
+                                                @endif
+                                            </ul>
                                         </div>
                                         <div class="d-flex justify-contents-center align-items-baseline p-2">
                                             <button type="submit" class="btn btn-primary btn-block mr-2">Xác
                                                 Nhận</button>
-                                            <button type="button" id="cancel-guest"
+                                            <button type="button" id="cancel-provide_name"
                                                 class="btn btn-default btn-block">Hủy</button>
                                         </div>
                                     </div>
@@ -317,7 +328,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 class="btn btn-default btn-block">Hủy</button>
                                         </div>
                                     </div>
-                                    {{-- Creator --}}
+                                    {{-- Nhân viên --}}
                                     <div class="block-options" id="creator-options" style="display:none">
                                         <div class="wrap w-100">
                                             <div class="heading-title title-wrap">
@@ -362,36 +373,6 @@ $index = array_search($item['label'], $numberedLabels);
                                             </div>
                                         </div>
                                     </div>
-                                    {{-- Tổng tiền bán --}}
-                                    <div class="block-options" id="sale-options" style="display:none">
-                                        <div class="wrap w-100">
-                                            <div class="heading-title title-wrap">
-                                                <h5>Tổng tiền bán</h5>
-                                            </div>
-                                            <div class="input-group p-2 justify-content-around">
-                                                <select class="sale_operator input-so" name="sale_operator"
-                                                    style="width: 40%">
-                                                    <option value=">="
-                                                        {{ request('sale_operator') === '>=' ? 'selected' : '' }}>
-                                                        >=
-                                                    </option>
-                                                    <option value="<="
-                                                        {{ request('sale_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
-                                                </select>
-                                                <input class="w-50 input-quantity sale-input" type="text"
-                                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-                                                    name="sum_sale" value="{{ request()->sum_sale }}"
-                                                    placeholder="Tổng tiền bán">
-                                            </div>
-                                        </div>
-                                        <div class="d-flex justify-contents-center align-items-baseline p-2">
-                                            <button type="submit" class="btn btn-primary btn-block mr-2">Xác
-                                                Nhận</button>
-                                            <button type="button" id="cancel-sum-sale"
-                                                class="btn btn-default btn-block">Hủy</button>
-                                        </div>
-                                    </div>
                                     {{-- Tổng tiền nhập --}}
                                     <div class="block-options" id="import-options" style="display:none">
                                         <div class="wrap w-100">
@@ -422,87 +403,27 @@ $index = array_search($item['label'], $numberedLabels);
                                                 class="btn btn-default btn-block">Hủy</button>
                                         </div>
                                     </div>
-                                    {{-- Phí vận chuyển --}}
-                                    <div class="block-options" id="fee-options" style="display:none">
+                                    {{-- Ngày nhập hóa đơn --}}
+                                    <div class="block-options" id="update_at-options" style="display:none">
                                         <div class="wrap w-100">
                                             <div class="heading-title title-wrap">
-                                                <h5>Phí vận chuyển</h5>
-                                            </div>
-                                            <div class="input-group p-2 justify-content-around">
-                                                <select class="fee_operator input-so" name="fee_operator"
-                                                    style="width: 40%">
-                                                    <option value=">="
-                                                        {{ request('fee_operator') === '>=' ? 'selected' : '' }}>
-                                                        >=
-                                                    </option>
-                                                    <option value="<="
-                                                        {{ request('fee_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
-                                                </select>
-                                                <input class="w-50 input-quantity fee-input" type="text"
-                                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-                                                    name="sum_fee" value="{{ request()->sum_fee }}"
-                                                    placeholder="Phí vận chuyển">
-                                            </div>
-                                        </div>
-                                        <div class="d-flex justify-contents-center align-items-baseline p-2">
-                                            <button type="submit" class="btn btn-primary btn-block mr-2">Xác
-                                                Nhận</button>
-                                            <button type="button" id="cancel-sum-fee"
-                                                class="btn btn-default btn-block">Hủy</button>
-                                        </div>
-                                    </div>
-                                    {{-- Chênh lệch --}}
-                                    <div class="block-options" id="difference-options" style="display:none">
-                                        <div class="wrap w-100">
-                                            <div class="heading-title title-wrap">
-                                                <h5>Tổng tiền chênh lệch</h5>
-                                            </div>
-                                            <div class="input-group p-2 justify-content-around">
-                                                <select class="difference_operator input-so"
-                                                    name="difference_operator" style="width: 40%">
-                                                    <option value=">="
-                                                        {{ request('difference_operator') === '>=' ? 'selected' : '' }}>
-                                                        >=
-                                                    </option>
-                                                    <option value="<="
-                                                        {{ request('difference_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
-                                                </select>
-                                                <input class="w-50 input-quantity difference-input" type="text"
-                                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-                                                    name="sum_difference" value="{{ request()->sum_difference }}"
-                                                    placeholder="Chênh lệch">
-                                            </div>
-                                        </div>
-                                        <div class="d-flex justify-contents-center align-items-baseline p-2">
-                                            <button type="submit" class="btn btn-primary btn-block mr-2">Xác
-                                                Nhận</button>
-                                            <button type="button" id="cancel-sum-difference"
-                                                class="btn btn-default btn-block">Hủy</button>
-                                        </div>
-                                    </div>
-                                    {{-- Công nợ --}}
-                                    <div class="block-options" id="debt-options" style="display:none">
-                                        <div class="wrap w-100">
-                                            <div class="heading-title title-wrap">
-                                                <h5>Công nợ</h5>
+                                                <h5>Ngày nhập hóa đơn</h5>
                                             </div>
                                             <div class="input-group p-2 justify-content-around">
                                                 <label for="start">Từ ngày:</label>
-                                                <input type="date" id="start" name="date_start"
-                                                    value="{{ request()->date_start }}" min="2018-01-01"
+                                                <input type="date" id="start" name="trip_start"
+                                                    value="{{ request()->trip_start }}" min="2018-01-01"
                                                     max="2050-12-31">
                                                 <label for="start">Đến ngày:</label>
-                                                <input type="date" id="end" name="date_end"
-                                                    value="{{ request()->date_end }}" min="2018-01-01"
+                                                <input type="date" id="end" name="trip_end"
+                                                    value="{{ request()->trip_end }}" min="2018-01-01"
                                                     max="2050-12-31">
                                             </div>
                                         </div>
                                         <div class="d-flex justify-contents-center align-items-baseline p-2">
                                             <button type="submit" class="btn btn-primary btn-block mr-2">Xác
                                                 Nhận</button>
-                                            <button type="button" id="cancel-debt"
+                                            <button type="button" id="cancel-update_at"
                                                 class="btn btn-default btn-block">Hủy</button>
                                         </div>
                                     </div>
@@ -568,40 +489,41 @@ $index = array_search($item['label'], $numberedLabels);
                                         @endcan
                                         <th scope="col">
                                             <span class="d-flex align-items-center">
-                                                <a href="#" class="sort-link" data-sort-by="id"
+                                                <a href="#" class="sort-link" data-sort-by="product_code"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">HĐ vào</button></a>
-                                                <div class="icon" id="icon-id"></div>
+                                                <div class="icon" id="icon-product_code"></div>
                                             </span>
                                         </th>
                                         <th scope="col">
                                             <span class="d-flex align-items-center">
-                                                <a href="#" class="sort-link" data-sort-by=""
+                                                <a href="#" class="sort-link" data-sort-by="created_at"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Ngày nhập hóa đơn</button></a>
-                                                <div class="icon" id="icon-"></div>
+                                                <div class="icon" id="icon-created_at"></div>
+                                            </span>
+                                        </th>
+
+                                        <th scope="col" class="text-left">
+                                            <span class="d-flex justify-content-start">
+                                                <a href="#" class="sort-link" data-sort-by="nhacungcap"
+                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
+                                                        type="submit">Nhà cung cấp</button></a>
+                                                <div class="icon" id="icon-nhacungcap"></div>
                                             </span>
                                         </th>
                                         @if (Auth::user()->can('isAdmin'))
                                             <th scope="col">
-                                                <span class="d-flex align-items-center">
-                                                    <a href="#" class="sort-link" data-sort-by="user_id"
+                                                <span class="d-flex justify-content-center align-items-center">
+                                                    <a href="#" class="sort-link" data-sort-by="nhanvien"
                                                         data-sort-type="{{ $sortType }}"><button class="btn-sort"
-                                                            type="submit">Nhà cung cấp</button></a>
-                                                    <div class="icon" id="icon-user_id"></div>
+                                                            type="submit">Nhân viên</button></a>
+                                                    <div class="icon" id="icon-nhanvien"></div>
                                                 </span>
                                             </th>
                                         @endif
                                         <th scope="col">
-                                            <span class="d-flex justify-content-end align-items-center">
-                                                <a href="#" class="sort-link" data-sort-by="total_sales"
-                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
-                                                        type="submit">Nhân viên</button></a>
-                                                <div class="icon" id="icon-total_sales"></div>
-                                            </span>
-                                        </th>
-                                        <th scope="col">
-                                            <span class="d-flex justify-content-end align-items-center">
+                                            <span class="d-flex justify-content-end align-items-end">
                                                 <a href="#" class="sort-link" data-sort-by="total_import"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Tổng
@@ -649,7 +571,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                         value="{{ $value->id }}"></td>
                                             @endcan
                                             <td class="text-left">{{ $value->madon }}</td>
-                                            <td class="text-left">
+                                            <td class="text-center">
                                                 {{ date_format(new DateTime($value->created_at), 'd-m-Y') }}
                                             </td>
                                             <td class="text-left">{{ $value->nhacungcap }}</td>
@@ -774,10 +696,15 @@ $index = array_search($item['label'], $numberedLabels);
                                                 </td>
                                                 <td class="text-right">
                                                     <p>Thành tiền</p>
-                                                    {{ number_format($item->gianhap*$item->soluong) }}
+                                                    {{ number_format($item->gianhap * $item->soluong) }}
                                                 </td>
-                                                <td><p>Thuế</p>
-                                                    {{$item->thue}}%
+                                                <td>
+                                                    <p>Thuế</p>
+                                                    @if ($item->thue == 99)
+                                                        NOVAT
+                                                    @else
+                                                        {{ $item->thue }}%
+                                                    @endif
                                                 </td>
                                                 <td></td>
                                                 <td></td>
@@ -810,6 +737,57 @@ $index = array_search($item['label'], $numberedLabels);
 </div>
 <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
 <script>
+    $('#search-icon').on('click', function(e) {
+        e.preventDefault();
+        $('#search-filter').submit();
+    });
+    // Show all hide all
+    function expand() {
+        $('#expandall').hide();
+        $('#collapseall').show();
+        $(".product-details").addClass("show");
+        var dropdownItems = $('[id^="dropdown_item"]');
+        dropdownItems.addClass("dropdown-item-active");
+        dropdownItems.attr("aria-expanded", "true");
+        var svgs = dropdownItems.find('svg');
+        svgs.addClass("svgactive")
+        svgs.removeClass("svginative")
+    }
+
+    function collapse() {
+        $('#expandall').show();
+        $('#collapseall').hide();
+        $(".product-details").removeClass("show");
+        var dropdownItems = $('[id^="dropdown_item"]');
+        dropdownItems.removeClass("dropdown-item-active");
+        dropdownItems.attr("aria-expanded", "false");
+        var svgs = dropdownItems.find('svg');
+        svgs.removeClass("svgactive")
+        svgs.addClass("svginative")
+    }
+
+    var dropdownItems = $('[id^="dropdown_item"]');
+    dropdownItems.each(function() {
+        $(this).on('click', function() {
+            var isActive = $(this).hasClass('dropdown-item-active');
+            var svgElement = $(this).find('svg');
+            var parentElement = $(this).parent().parent();
+            console.log(parentElement);
+            if (isActive) {
+                $(this).removeClass('dropdown-item-active');
+                parentElement.css('background', '#E9ECEF');
+                svgElement.removeClass("svgactive")
+                svgElement.addClass("svginative")
+            }
+            if (!isActive) {
+                $(this).addClass('dropdown-item-active');
+                parentElement.css('background', '#ADB5BD');
+                svgElement.addClass("svgactive")
+                svgElement.removeClass("svginative")
+            }
+        });
+    });
+
     // Xử lí filter ngày tháng
     $(document).ready(function() {
         $('#end').change(function() {
@@ -821,6 +799,12 @@ $index = array_search($item['label'], $numberedLabels);
                 $(this).val('');
             }
         });
+    });
+    $('.ks-cboxtags-provide_name li').on('click', function(event) {
+        if (event.target.tagName !== 'INPUT') {
+            var checkbox = $(this).find('input[type="checkbox"]');
+            checkbox.prop('checked', !checkbox.prop('checked')); // Đảo ngược trạng thái checked
+        }
     });
     $('.ks-cboxtags-status li').on('click', function(event) {
         if (event.target.tagName !== 'INPUT') {
@@ -870,42 +854,6 @@ $index = array_search($item['label'], $numberedLabels);
         $('.import-input').val('');
         $('#import-options').hide();
     });
-    // Phí
-    $('#btn-sum-fee').click(function(event) {
-        event.preventDefault();
-        $('.btn-filter').prop('disabled', true);
-        $('#fee-options').toggle();
-    });
-    $('#cancel-sum-fee').click(function(event) {
-        event.preventDefault();
-        $('.btn-filter').prop('disabled', false);
-        $('.fee-input').val('');
-        $('#fee-options').hide();
-    });
-    // Chênh lệch
-    $('#btn-sum-difference').click(function(event) {
-        event.preventDefault();
-        $('.btn-filter').prop('disabled', true);
-        $('#difference-options').toggle();
-    });
-    $('#cancel-sum-difference').click(function(event) {
-        event.preventDefault();
-        $('.btn-filter').prop('disabled', false);
-        $('.difference-input').val('');
-        $('#difference-options').hide();
-    });
-    // Công nợ
-    $('#btn-debt').click(function(event) {
-        event.preventDefault();
-        $('.btn-filter').prop('disabled', true);
-        $('#debt-options').toggle();
-    });
-    $('#cancel-debt').click(function(event) {
-        event.preventDefault();
-        $('.btn-filter').prop('disabled', false);
-        $('.debt-input').val('');
-        $('#debt-options').hide();
-    });
     $('#btn-creator').click(function(event) {
         event.preventDefault();
         $('#creator-options input').addClass('creator-checkbox');
@@ -943,20 +891,29 @@ $index = array_search($item['label'], $numberedLabels);
         $('#id-options').hide();
     });
 
-    $('#btn-guest').click(function(event) {
+    $('#btn-provide_name').click(function(event) {
         event.preventDefault();
         $('.btn-filter').prop('disabled', true);
-        $('#guest-options').toggle();
+        $('#provide_name-options input').addClass('provide_name-checkbox');
+        $('#provide_name-options').toggle();
     });
-    $('#cancel-guest').click(function(event) {
+    $('#cancel-provide_name').click(function(event) {
         event.preventDefault();
         $('.btn-filter').prop('disabled', false);
-        $('.guest-input').val('');
-        $('#guest-options').hide();
+        $('.deselect-all-provide_name').click();
+        $('#provide_name-options').hide();
     });
 
     // Check box
     $(document).ready(function() {
+        $('.select-all-provide_name').click(function() {
+            $('#provide_name-options input[type="checkbox"]').prop('checked', true);
+        });
+
+        // Hủy tất cả các checkbox
+        $('.deselect-all-provide_name').click(function() {
+            $('#provide_name-options input[type="checkbox"]').prop('checked', false);
+        });
         // Chọn tất cả các checkbox
         $('.select-all-creator').click(function() {
             $('#creator-options input[type="checkbox"]').prop('checked', true);
@@ -966,8 +923,6 @@ $index = array_search($item['label'], $numberedLabels);
         $('.deselect-all-creator').click(function() {
             $('#creator-options input[type="checkbox"]').prop('checked', false);
         });
-    });
-    $(document).ready(function() {
         // Chọn tất cả các checkbox
         $('.select-all').click(function() {
             $('#status-options input[type="checkbox"]').prop('checked', true);
@@ -998,19 +953,6 @@ $index = array_search($item['label'], $numberedLabels);
             document.getElementById('search-filter').submit();
         });
     });
-    $(document).ready(function() {
-        $('.filter-results').on('click', '.delete-btn-guest', function() {
-            $('.guest-input').val('');
-            document.getElementById('search-filter').submit();
-        });
-    });
-    // bán
-    $(document).ready(function() {
-        $('.filter-results').on('click', '.delete-btn-sum-sale', function() {
-            $('.sale-input').val('');
-            document.getElementById('search-filter').submit();
-        });
-    });
     // Nhập
     $(document).ready(function() {
         $('.filter-results').on('click', '.delete-btn-sum-import', function() {
@@ -1018,28 +960,22 @@ $index = array_search($item['label'], $numberedLabels);
             document.getElementById('search-filter').submit();
         });
     });
-    // phí
+    // Ngày nhập hóa đơn
     $(document).ready(function() {
-        $('.filter-results').on('click', '.delete-btn-sum-fee', function() {
-            $('.fee-input').val('');
-            document.getElementById('search-filter').submit();
-        });
-    });
-    // Chênh lệch
-    $(document).ready(function() {
-        $('.filter-results').on('click', '.delete-btn-sum-difference', function() {
-            $('.difference-input').val('');
-            document.getElementById('search-filter').submit();
-        });
-    });
-    // Công nợ
-    $(document).ready(function() {
-        $('.filter-results').on('click', '.delete-btn-debt', function() {
+        $('.filter-results').on('click', '.delete-btn-date', function() {
             $('#start').val('');
             $('#end').val('');
             document.getElementById('search-filter').submit();
         });
     });
+    // Nhà cung cấp
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-provide_name', function() {
+            $('.deselect-all-provide_name').click();
+            document.getElementById('search-filter').submit();
+        });
+    });
+
 
 
 
@@ -1106,27 +1042,6 @@ $index = array_search($item['label'], $numberedLabels);
         }
     }
 
-    $('.product_category').change(function() {
-        var product_id = $(this).attr('id');
-        var category_id = $(this).val();
-        var newRow = $('<tr>');
-        newRow.attr('id', 'newRow');
-        $('#example2').append(newRow);
-        $.ajax({
-            url: "{{ route('ajax') }}",
-            type: "get",
-            data: {
-                product_id: product_id,
-                category_id: category_id
-            },
-            success: function(data) {
-                alert('Thay đổi thành công');
-            }
-        });
-    })
-
-
-
     //Xử lí tìm kiếm bộ lọc tổng
     function filterFunction() {
         var input = $("#myInput");
@@ -1143,10 +1058,10 @@ $index = array_search($item['label'], $numberedLabels);
         });
     }
 
-    function filterTrademark() {
-        var input = $("#myInput-trademark");
+    function filterCreator() {
+        var input = $("#myInput-creator");
         var filter = input.val().toUpperCase();
-        var buttons = $(".ks-cboxtags-trademark li");
+        var buttons = $(".ks-cboxtags-creator li");
 
         buttons.each(function() {
             var text = $(this).text();
@@ -1158,10 +1073,10 @@ $index = array_search($item['label'], $numberedLabels);
         });
     }
 
-    function filterCategory() {
-        var input = $("#myInput-category");
+    function filterProvidename() {
+        var input = $("#myInput-provide-name");
         var filter = input.val().toUpperCase();
-        var buttons = $(".ks-cboxtags-category li");
+        var buttons = $(".ks-cboxtags-provide_name li");
 
         buttons.each(function() {
             var text = $(this).text();
@@ -1240,32 +1155,6 @@ $index = array_search($item['label'], $numberedLabels);
     function updateDeleteItemValue(label) {
         document.getElementById('delete-item-input').value = label;
     }
-
-    var dropdownItems = $('[id^="dropdown_item"]');
-    dropdownItems.each(function() {
-        $(this).on('click', function() {
-            var isActive = $(this).hasClass('dropdown-item-active');
-            var svgElement = $(this).find('svg');
-            var parentElement = $(this).parent().parent();
-            console.log(parentElement);
-            if (isActive) {
-                $(this).removeClass('dropdown-item-active');
-                parentElement.css('background', '#E9ECEF');
-                svgElement.css({
-                    transform: 'rotate(0deg)',
-                    transition: 'transform 0.3s ease'
-                });
-            }
-            if (!isActive) {
-                $(this).addClass('dropdown-item-active');
-                parentElement.css('background', '#ADB5BD');
-                svgElement.css({
-                    transform: 'rotate(180deg)',
-                    transition: 'transform 0.3s ease'
-                });
-            }
-        });
-    });
 
     function myFunction() {
         let text = "Bạn có chắc chắn thanh toán các đơn đã chọn không?";
