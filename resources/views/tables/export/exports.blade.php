@@ -488,6 +488,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             </span>
                                         </th>
                                         <th></th>
+                                        <th></th>
                                     </tr>
                                     </form>
                                 </thead>
@@ -561,8 +562,44 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </a>
                                                 @endif
                                             </td>
+                                            <td class="text-center">
+                                                <div id="dropdown_item{{ $value->id }}"
+                                                    class="dropdownitem collapsed" data-toggle="collapse"
+                                                    data-target="#product-details-<?php echo $value->id; ?>"
+                                                    aria-expanded="false">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="32"
+                                                        height="32" viewBox="0 0 32 32" fill="none">
+                                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                                            d="M9.64162 12.3083C10.0527 11.8972 10.7192 11.8972 11.1303 12.3083L16 17.178L20.8697 12.3083C21.2808 11.8972 21.9473 11.8972 22.3583 12.3083C22.7694 12.7194 22.7694 13.3859 22.3583 13.797L16.7443 19.411C16.3332 19.8221 15.6667 19.8221 15.2557 19.411L9.64162 13.797C9.23054 13.3859 9.23054 12.7194 9.64162 12.3083Z"
+                                                            fill="#555555"></path>
+                                                    </svg>
+                                                </div>
+                                            </td>
                                         </tr>
                                         {{-- @endif --}}
+                                        @foreach ($productEx as $item)
+                                            <tr id="product-details-{{ $value->id }}"
+                                                class="collapse product-details">
+                                                @if ($value->id == $item->export_id)
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>
+                                                        <p>Thông tin sản phẩm:</p>{{ $item->product_name }}
+                                                    </td>
+                                                    <td>
+                                                        <p>Số lượng:</p>{{ $item->product_qty }}
+                                                    </td>
+                                                    <td></td>
+                                                    <td>
+                                                        <p>Tổng tiền:</p>
+                                                        {{ number_format($item->product_price * $item->product_qty) }}
+                                                    </td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                @endif
+                                            </tr>
+                                        @endforeach
                                     @endforeach
                                 </tbody>
                             </table>
@@ -834,6 +871,33 @@ $index = array_search($item['label'], $numberedLabels);
                 }
             });
         }
+    });
+
+    //drop icon
+    var dropdownItems = $('[id^="dropdown_item"]');
+    dropdownItems.each(function() {
+        $(this).on('click', function() {
+            var isActive = $(this).hasClass('dropdown-item-active');
+            var svgElement = $(this).find('svg');
+            var parentElement = $(this).parent().parent();
+            console.log(parentElement);
+            if (isActive) {
+                $(this).removeClass('dropdown-item-active');
+                parentElement.css('background', '#E9ECEF');
+                svgElement.css({
+                    transform: 'rotate(0deg)',
+                    transition: 'transform 0.3s ease'
+                });
+            }
+            if (!isActive) {
+                $(this).addClass('dropdown-item-active');
+                parentElement.css('background', '#ADB5BD');
+                svgElement.css({
+                    transform: 'rotate(180deg)',
+                    transition: 'transform 0.3s ease'
+                });
+            }
+        });
     });
 
     // Xóa tất cả các dữ liệu trong Local Storage
