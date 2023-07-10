@@ -14,12 +14,18 @@ class Exports extends Model
     use HasFactory;
     public function getAllExports($filter = [], $status = [], $name = [], $date = [], $keywords = null, $orderBy = null, $orderType = null)
     {
+        
         $exports = DB::table($this->table)
             ->leftJoin('guests', 'exports.guest_id', '=', 'guests.id')
             ->leftJoin('users', 'exports.user_id', '=', 'users.id')
-            ->select('exports.id', 'guests.guest_receiver', 'users.name', 'exports.total', 'exports.updated_at', 'export_status');
+            ->select('exports.*','exports.id','exports.user_id', 'guests.guest_receiver', 'users.name', 'exports.total', 'exports.updated_at', 'export_status');
         // Các điều kiện tìm kiếm và lọc dữ liệu ở đây
 
+        $userId = Auth::user()->id;
+        if( Auth::user()->roleid != 1){
+            $exports = $exports->where('exports.user_id',$userId);
+        }
+        
         if (!empty($filter)) {
             $exports = $exports->where($filter);
         }
@@ -38,7 +44,7 @@ class Exports extends Model
         if (!empty($keywords)) {
             $exports = $exports->where(function ($query) use ($keywords) {
                 $query->orWhere('exports.id', 'like', '%' . $keywords . '%');
-                // $query->orWhere('guests.guest_represent', 'like', '%' . $keywords . '%');
+                $query->orWhere('guests.guest_receiver', 'like', '%' . $keywords . '%');
                 $query->orWhere('users.name', 'like', '%' . $keywords . '%');
             });
         }
@@ -55,11 +61,17 @@ class Exports extends Model
     }
     public function productExports()
     {
-        return $this->hasMany(ProductExports::class, 'export_id');
+        return $this->hasMany(productExports::class, 'export_id');
     }
+
     public function allExports()
     {
-        $exports = DB::table($this->table)->get();
+        $startDate = now()->subDays(30); // Ngày bắt đầu là ngày hiện tại trừ đi 30 ngày
+        $endDate = now(); // Ngày kết thúc là ngày hiện tại
+        $exports = DB::table($this->table)
+        ->where('export_status', 2)
+        ->whereBetween('created_at', [$startDate, $endDate])
+        ->get();
         return $exports;
     }
     protected $fillable = [
@@ -68,16 +80,26 @@ class Exports extends Model
         'total',
         'export_status',
         'note_form',
+        'export_code',
     ];
     public function sumTotalExports()
     {
-        $totalSum = DB::table($this->table)->sum('total');
+        $startDate = now()->subDays(30); // Ngày bắt đầu là ngày hiện tại trừ đi 30 ngày
+        $endDate = now(); // Ngày kết thúc là ngày hiện tại
+        
+        $totalSum = DB::table($this->table)
+            ->where('export_status', 2)
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->sum('total');
+        
         return $totalSum;
+        
     }
     public function productsCreator()
     {
         $userId = Auth::user()->id;
         $products = DB::table($this->table)->where('user_id', $userId)->paginate(8);
+        // dd($products);
         return $products;
     }
 }

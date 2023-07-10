@@ -12,7 +12,7 @@
         <!-- /.content-header -->
 
         <!-- Main content -->
-        <section class="content">
+        <section class="content index-dashboard">
             <div class="container">
                 <div class="container-fluid box border bg-light">
                     <div class="title-box">
@@ -210,7 +210,7 @@
                                 <div class="total">
                                     {{ number_format($sumTotalInventory)}}đ
                                 </div>
-                                <p>Trong 30 ngày vừa qua</p>
+                                {{-- <p>Trong 30 ngày vừa qua</p> --}}
                                  </div>
                                   <div class="icon-total d-none d-lg-block">
                                     <svg width="94" height="94" viewBox="0 0 94 94" fill="none"

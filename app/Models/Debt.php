@@ -26,9 +26,9 @@ class Debt extends Model
         'date_end',
         'date_start',
     ];
-    public function getAllDebts($filter=[],$keywords=null,$name=[],$date=[],$status=[], $orderBy = null, $orderType = null)
+    public function getAllDebts($filter = [], $keywords = null, $name = [], $date = [], $datepaid = [], $status = [], $orderBy = null, $orderType = null)
     {
-        $debts = Debt::select('debts.*', 'debts.id as madon', 'guests.guest_name as khachhang', 'users.name as nhanvien','exports.updated_at as debtdate')
+        $debts = Debt::select('debts.*', 'exports.id as madon', 'guests.guest_name as khachhang', 'users.name as nhanvien', 'exports.updated_at as debtdate','exports.export_code as hdr')
             ->leftJoin('guests', 'guests.id', 'debts.guest_id')
             ->leftJoin('users', 'users.id', 'debts.user_id')
             ->leftJoin('exports', 'exports.id', 'debts.export_id');
@@ -37,7 +37,7 @@ class Debt extends Model
         }
         if (!empty($keywords)) {
             $debts = $debts->where(function ($query) use ($keywords) {
-                $query->orWhere('debts.id', 'like', '%' . $keywords . '%');
+                $query->orWhere('exports.id', 'like', '%' . $keywords . '%');
                 $query->orWhere('guests.guest_name', 'like', '%' . $keywords . '%');
             });
         }
@@ -52,7 +52,10 @@ class Debt extends Model
                     ->where('debts.date_end', '<=', $date[0][1]);
             });
         }
-              
+        if (!empty($datepaid)) {
+            $debts = $debts->where('debts.debt_status', 1)->wherebetween('debts.updated_at', $datepaid);
+        }
+
 
         if (!empty($status)) {
             $debts = $debts->whereIn('debts.debt_status', $status);
@@ -64,7 +67,7 @@ class Debt extends Model
             };
             $debts = $debts->orderBy($orderBy, $orderType);
         }
-        
+
 
         $debts = $debts->orderBy('debts.id', 'desc')->paginate(8);
 
@@ -87,5 +90,4 @@ class Debt extends Model
         $debtsCreator = DB::table($this->table)->where('user_id', $userId)->paginate(8);
         return $debtsCreator;
     }
-   
 }

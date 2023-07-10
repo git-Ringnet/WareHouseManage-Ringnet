@@ -2,28 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Debt;
+use App\Models\DebtImport;
 use App\Models\User;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
-class DebtController extends Controller
+class DebtImportController extends Controller
 {
-
-    private $debts;
-    public function __construct()
-    {
-        $this->debts = new Debt();
-    }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
+    private $debts;
+    public function __construct()
+    {
+        $this->debts = new DebtImport();
+    }
     public function index(Request $request)
     {
-        $title = 'Công nợ xuất';
+        $title = 'Công nợ nhập';
         $filters = [];
         $string = [];
         //Mã đơn
@@ -145,7 +144,7 @@ class DebtController extends Controller
         $debts = $this->debts->getAllDebts($filters, $keywords, $nhanvien, $date, $datepaid, $status, $sortBy, $sortType);
         $product = $this->debts->getAllProductsDebts();
         $debtsCreator = $this->debts->debtsCreator();
-        return view('tables.debt.debts', compact('title', 'debts', 'debtsSale', 'product', 'string', 'sortType', 'debtsCreator'));
+        return view('tables.debtImport.debts-import', compact('title', 'debts', 'debtsSale', 'product', 'string', 'sortType', 'debtsCreator'));
     }
 
     /**
@@ -188,18 +187,21 @@ class DebtController extends Controller
      */
     public function edit($id)
     {
-        $debts = Debt::select('debts.*', 'guests.guest_name as khachhang', 'users.name as nhanvien')
-            ->join('guests', 'debts.guest_id', '=', 'guests.id')
-            ->join('users', 'debts.user_id', '=', 'users.id')
+        $debts = DebtImport::select('debt_import.*',  'productorders.product_tax as thue','orders.product_code as madon', 'provides.provide_name as nhacungcap', 'users.name as nhanvien', 'productorders.product_qty as soluong', 'productorders.product_price as gianhap')
+            ->leftJoin('provides', 'provides.id', 'debt_import.provide_id')
+            ->leftJoin('users', 'users.id', 'debt_import.user_id')
+            ->leftJoin('orders', 'orders.id', 'debt_import.import_id')
+            ->leftJoin('productorders', 'orders.id', 'productorders.order_id')
+            ->leftJoin('product', 'product.id', 'productorders.product_id')
             ->findOrFail($id);
-        $product = Debt::select('debts.*', 'product_exports.id as madon', 'product_exports.product_qty as soluong', 'product_exports.product_price as giaban', 'product.product_price as gianhap')
-            ->leftJoin('guests', 'guests.id', 'debts.guest_id')
-            ->leftJoin('users', 'users.id', 'debts.user_id')
-            ->leftJoin('exports', 'exports.id', 'debts.export_id')
-            ->leftJoin('product_exports', 'exports.id', 'product_exports.export_id')
-            ->leftJoin('product', 'product.id', 'product_exports.product_id')->where('debts.id', $id)->get();
-        $title = "Chi tiết đơn hàng";
-        return view('tables.debt.editDebt', compact('debts', 'product', 'title'));
+        $product = DebtImport::select('debt_import.*', 'productorders.product_tax as thue', 'productorders.product_name as tensanpham', 'productorders.product_unit as dvt', 'productorders.product_qty as soluong', 'productorders.product_price as gianhap')
+            ->leftJoin('provides', 'provides.id', 'debt_import.provide_id')
+            ->leftJoin('users', 'users.id', 'debt_import.user_id')
+            ->leftJoin('orders', 'orders.id', 'debt_import.import_id')
+            ->leftJoin('productorders', 'orders.id', 'productorders.order_id')
+            ->leftJoin('product', 'product.id', 'productorders.product_id')->where('debt_import.id', $id)->get();
+        $title = "Chi tiết đơn hàng nhập";
+        return view('tables.debtImport.editDebt-import', compact('debts', 'product', 'title'));
     }
 
     /**
@@ -211,7 +213,7 @@ class DebtController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $debt = Debt::find($id);
+        $debt = DebtImport::find($id);
         // dd($request);
         if ($request->has('submitBtn')) {
             $action = $request->input('submitBtn');
@@ -219,15 +221,14 @@ class DebtController extends Controller
                 $debt->debt_status = 1;
                 $debt->debt = 0;
                 $debt->update($request->all());
-                return redirect()->route('debt.index')->with('msg', 'Thanh toán thành công!');
+                return redirect()->route('debt_import.index')->with('msg', 'Thanh toán thành công!');
             }
             if ($action === 'action2') {
-                // Xử lí status debt
                 $endDate = Carbon::parse($request->date_end);
                 $currentDate = Carbon::now();
                 $daysDiffss = $currentDate->diffInDays($endDate);
                 $daysDiff = -$daysDiffss;
-                
+
                 if ($request->debt_debt == null || $request->debt_debt == 0) {
                     $debt->debt_status = 4;
                     $debt->debt = 0;
@@ -241,10 +242,10 @@ class DebtController extends Controller
                     $debt->debt_status = 3;
                     $debt->debt = $request->debt_debt;
                 }
-                // dd($daysDiff);
+
                 $debt->update($request->all());
 
-                return redirect()->route('debt.index')->with('msg', 'Cập nhật thành công!');
+                return redirect()->route('debt_import.index')->with('msg', 'Cập nhật thành công!');
             }
         }
     }
@@ -258,20 +259,5 @@ class DebtController extends Controller
     public function destroy($id)
     {
         //
-    }
-    public function paymentdebt(Request $request)
-    {
-        if (isset($request->list_id)) {
-            $list = $request->list_id;
-            $listOrder = Debt::whereIn('id', $list)->get();
-            foreach ($listOrder as $value) {
-                $value->debt_status = 1;
-                $value->save();
-            }
-            session()->flash('msg', 'Thanh toán thành công');
-            return response()->json(['success' => true, 'msg' => 'Thanh toán thành công']);
-        }
-        return response()->json(['success' => false, 'warning' => 'Thanh toán thất bại!']);
-        session()->flash('msg', 'Thanh toán thất bại!');
     }
 }

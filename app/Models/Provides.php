@@ -65,4 +65,13 @@ class Provides extends Model
         $provides = $provides->orderBy('id', 'asc')->paginate(8);
         return $provides;
     }
+
+    public function addProvides($data)
+    {
+        return DB::table($this->table)->insertGetId($data);
+    }
+    public function updateProvides($data, $id)
+    {
+        return DB::table($this->table)->where('id', $id)->update($data);
+    }
 }

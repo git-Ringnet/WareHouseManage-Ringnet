@@ -450,7 +450,15 @@ $index = array_search($item['label'], $numberedLabels);
                                         <span class="d-flex">
                                             <a href="#" class="sort-link" data-sort-by="id"
                                                 data-sort-type="{{ $sortType }}"><button class="btn-sort"
-                                                    type="submit">Mã đơn</button></a>
+                                                    type="submit">ID</button></a>
+                                            <div class="icon" id="icon-id"></div>
+                                        </span>
+                                    </th>
+                                    <th scope="col">
+                                        <span class="d-flex">
+                                            <a href="#" class="sort-link" data-sort-by="id"
+                                                data-sort-type="{{ $sortType }}"><button class="btn-sort"
+                                                    type="submit">Số hóa đơn</button></a>
                                             <div class="icon" id="icon-id"></div>
                                         </span>
                                     </th>
@@ -466,7 +474,7 @@ $index = array_search($item['label'], $numberedLabels);
                                         <span class="d-flex">
                                             <a href="#" class="sort-link" data-sort-by="updated_at"
                                                 data-sort-type="{{ $sortType }}"><button class="btn-sort"
-                                                    type="submit">Chỉnh sửa cuối</button></a>
+                                                    type="submit">Ngày nhập hóa đơn</button></a>
                                             <div class="icon" id="icon-updated_at"></div>
                                         </span>
                                     </th>
@@ -505,8 +513,9 @@ $index = array_search($item['label'], $numberedLabels);
                                         <td><input type="checkbox" class="cb-element" name="ids[]"
                                                 value="{{ $va->id }}"></td>
                                         <td>{{ $va->id }}</td>
+                                        <td>{{$va->product_code}}</td>
                                         <td>{{ $va->provide_name }}</td>
-                                        <td>{{ date_format(new DateTime($va->updated_at), "d-m-Y") }}</td>
+                                        <td>{{ date_format(new DateTime($va->created_at), "d-m-Y") }}</td>
                                         <td>{{ $va->name }}</td>
                                         <td class="text-right">{{ number_format($va->total) }}</td>
                                         <td class="text-center">
@@ -586,8 +595,8 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <td></td>
                                                 <td></td>
                                                 <td>
-                                                    <p>{{ $item->product_name }}</p>
-                                                     @if($item->getCodeProduct != null) {{$item->getCodeProduct->products_code}} @endif 
+                                                    <p>Thông tin sản phẩm</p>
+                                                    {{ $item->product_name }}
                                                 </td>
                                                 <td>
                                                     <p>Số lượng</p>
@@ -642,7 +651,18 @@ $index = array_search($item['label'], $numberedLabels);
     //     })
     // })
 
+         // Xử lí filter ngày tháng
+    $(document).ready(function() {
+        $('#end').change(function() {
+            var startDate = new Date($('#start').val());
+            var endDate = new Date($(this).val());
 
+            if (endDate < startDate) {
+                alert('Ngày kết thúc không được nhỏ hơn ngày bắt đầu!');
+                $(this).val('');
+            }
+        });
+    });
     // AJAX Hủy bill
     $(document).on('click', '#cancelBill', function(e) {
         e.preventDefault();
@@ -902,6 +922,12 @@ $index = array_search($item['label'], $numberedLabels);
             document.getElementById('search-filter').submit();
         });
     });
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-name', function() {
+            $('.deselect-all-creator').click();
+            document.getElementById('search-filter').submit();
+        });
+    });
 
     $('#btn-provide_name').click(function(event) {
         event.preventDefault();
@@ -1088,6 +1114,9 @@ $index = array_search($item['label'], $numberedLabels);
             }
         });
     }
+    $(document).on('keypress', 'form', function(event) {
+            return event.keyCode != 13; 
+        });
 </script>
 </body>
 

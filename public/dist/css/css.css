@@ -71,7 +71,7 @@ li {
 #myInput-category,
 .input-quantity,
 .input-search,
-.input-so {
+.input-so,.input-operator {
     padding: 5px 10px;
     border: 1px solid #d6d6d6;
     border-radius: 5px;
@@ -733,7 +733,8 @@ input[type="number"] {
 }
 
 .filter-options li:hover,
-.filter-options label:hover {
+.filter-options label:hover,
+.profile-li:hover,.logout-li:hover{
     background-color: #ebebeb;
     transition: background-color 0.3s ease;
     cursor: pointer;
@@ -848,4 +849,19 @@ input[type="checkbox"] {
 .required-label::after {
     content: "*";
     color: red;
+}
+.scroll-data{
+    overflow-y: auto;
+    max-height: 200px;
+}
+.text-custom{
+    color: #000000;
+}
+@media (max-width: 768px) {
+    .index-dashboard .col-6 {
+        width: 100%;
+        max-width: 100%;
+        flex: 0 0 100%;
+
+    }
 }

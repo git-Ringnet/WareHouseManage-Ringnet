@@ -15,13 +15,12 @@ class Guests extends Model
         'guest_phone',
         'guest_email',
         'guest_status',
-        'guest_addressInvoice',
+        'guest_address',
         'guest_code',
-        'guest_addressDeliver',
+        'guest_email_personal',
         'guest_receiver',
         'guest_phoneReceiver',
-        'guest_pay',
-        'guest_payTerm',
+        'guest_email_personal',
         'guest_note',
         'user_id',
         'debt'
@@ -76,7 +75,7 @@ class Guests extends Model
         if (!empty($keywords)) {
             $guests = $guests->where(function ($query) use ($keywords) {
                 $query->orWhere('guest_name', 'like', '%' . $keywords . '%');
-                $query->orWhere('guest_represent', 'like', '%' . $keywords . '%');
+                // $query->orWhere('guest_represent', 'like', '%' . $keywords . '%');
                 $query->orWhere('guest_email', 'like', '%' . $keywords . '%');
             });
         }

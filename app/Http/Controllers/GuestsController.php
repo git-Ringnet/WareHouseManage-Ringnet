@@ -124,12 +124,9 @@ class GuestsController extends Controller
      */
     public function store(Request $request)
     {
-        $existingCustomer = Guests::where('guest_name', $request->guest_name)
-            ->where('guest_email', $request->guest_email)
-            ->where('guest_code', $request->guest_code)
-            ->where('guest_receiver', $request->guest_receiver)
-            ->where('guest_phoneReceiver', $request->guest_phoneReceiver)
-            ->where('guest_phone', $request->guest_phone)
+        $existingCustomer = Guests::orwhere('guest_name', $request->guest_name)
+            ->orwhere('guest_address', $request->guest_address)
+            ->orwhere('guest_code', $request->guest_code)
             ->first();
 
         if ($existingCustomer) {
@@ -140,13 +137,11 @@ class GuestsController extends Controller
                 'guest_phone' => $request->guest_phone,
                 'guest_email' => $request->guest_email,
                 'guest_status' => $request->guest_status,
-                'guest_addressInvoice' => $request->guest_addressInvoice,
+                'guest_address' => $request->guest_address,
                 'guest_code' => $request->guest_code,
-                'guest_addressDeliver' => $request->guest_addressDeliver,
                 'guest_receiver' => $request->guest_receiver,
                 'guest_phoneReceiver' => $request->guest_phoneReceiver,
-                'guest_pay' => $request->guest_pay,
-                'guest_payTerm' => $request->guest_payTerm,
+                'guest_email_personal' => $request->guest_email_personal,
                 'guest_note' => $request->guest_note,
                 'user_id' =>  $request->user_id,
                 'debt' =>  $request->debt,

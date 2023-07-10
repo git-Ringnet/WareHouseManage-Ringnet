@@ -17,30 +17,26 @@ return new class extends Migration
             $table->id()->autoIncrement();
             //tên công ty
             $table->string('guest_name');
-            //người đại diện
-            $table->string('guest_represent');
-            //số điện thoại
-            $table->string('guest_phone');
-            //email
-            $table->string('guest_email');
-            //tình trạng 
-            $table->string('guest_status');
-            //địa chỉ xuất hóa đơn
-            $table->string('guest_addressInvoice')->nullable();
+            //địa chỉ
+            $table->string('guest_address');
             //mã số thuế
-            $table->string('guest_code')->nullable();
-            //Địa chỉ giao hàng
-            $table->string('guest_addressDeliver')->nullable();
+            $table->string('guest_code');
+            //số điện thoại
+            $table->string('guest_phone')->nullable();
+            //email
+            $table->string('guest_email')->nullable();
+            //email cá nhân
+            $table->string('guest_email_personal')->nullable();
             //Người nhận hàng
             $table->string('guest_receiver')->nullable();
             //số điện thoại người nhận
             $table->string('guest_phoneReceiver')->nullable();
-            //hình thức thanh toán
-            $table->integer('guest_pay')->nullable();
-            //điều kiện thanh toán
-            $table->text('guest_payTerm')->nullable();
             //ghi chú
             $table->string('guest_note')->nullable();
+            //tình trạng 
+            $table->string('guest_status')->nullable();
+            //người đại diện
+            $table->string('guest_represent');
             //
             $table->timestamps();
         });
