@@ -757,6 +757,7 @@
             var loaihang = $(this).closest('tr').find('.loaihang');
             var dangGD = $(this).closest('tr').find('.dangGD');
             var thue = $(this).closest('tr').find('.product_tax');
+            $(this).closest('tr').find('.quantity-input').val(null);
             if (selectedID) {
                 $.ajax({
                     url: "{{ route('getProduct') }}",
