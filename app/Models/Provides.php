@@ -66,7 +66,12 @@ class Provides extends Model
         return $provides;
     }
 
-    function updateProvide() : Returntype {
-        
+    public function addProvides($data)
+    {
+        return DB::table($this->table)->insertGetId($data);
+    }
+    public function updateProvides($data, $id)
+    {
+        return DB::table($this->table)->where('id', $id)->update($data);
     }
 }

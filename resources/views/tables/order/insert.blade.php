@@ -133,7 +133,7 @@
                     <div class="d-flex">
                         <div style="width:42%;">
                             <label class="ml-2">Số hóa đơn</label>
-                            <input type="text" required name="product_code" placeholder="Số hóa đơn"
+                            <input type="text" name="product_code" placeholder="Số hóa đơn"
                                 class="form-control">
                         </div>
                         <div>
@@ -295,63 +295,6 @@
             $('.total_import').val(grandTotal);
         }
 
-        // $("#radio1").on("click", function() {
-        //     $('#infor_provide').empty();
-        // });
-
-        // $("#radio2").on("click", function() {
-        //     $('#provide_id').val("");
-        //     $('#infor_provide').html(
-        //         '<div class="border-bottom p-3 d-flex justify-content-between">' +
-        //         '<b>Thông tin nhà cung cấp</b>' +
-        //         '<button id="btn-addCustomer" class="btn btn-primary d-flex align-items-center">' +
-        //         '<img src="../dist/img/icon/Union.png">' +
-        //         '<span class="ml-1">Lưu thông tin</span></button></div>' +
-        //         '<div class="row p-3">' +
-        //         '<div class="col-sm-6">' +
-        //         '<div class="form-group">' +
-        //         '<label for="congty">Công ty:</label>' +
-        //         '<input required type="text" class="form-control" id="provide_name_new" placeholder="Nhập thông tin" name="provide_name_new" value="">' +
-        //         '</div>' + '<div class="form-group">' +
-        //         '<label>Địa chỉ xuất hóa đơn:</label>' +
-        //         '<input required type="text" class="form-control" id="provide_address_new" placeholder="Nhập thông tin" name="provide_address_new" value="">' +
-        //         '</div>' + '<div class="form-group">' +
-        //         '<label for="email">Mã số thuế:</label>' +
-        //         '<input required type="text" class="form-control" oninput="validateNumberInput(this)" id="provide_code_new" placeholder="Nhập thông tin" name="provide_code_new" value="">' +
-        //         '</div>' + '</div>' + '<div class="col-sm-6">' +
-        //         '<div class="form-group">' +
-        //         '<label for="email">Người đại diện:</label>' +
-        //         '<input type="text" class="form-control" id="provide_represent_new" placeholder="Nhập thông tin" name="provide_represent_new" value="">' +
-        //         '</div>' + '<div class="form-group">' +
-        //         '<label for="email">Email:</label>' +
-        //         '<input type="email" class="form-control" id="provide_email_new" placeholder="Nhập thông tin" name="provide_email_new" value="">' +
-        //         '</div>' + '<div class="form-group">' +
-        //         '<label for="email">Số điện thoại:</label>' +
-        //         '<input type="number" class="form-control" id="provide_phone_new" placeholder="Nhập thông tin" name="provide_phone_new" value="">' +
-        //         '</div>' +
-        //         '<div class="form-group">' +
-        //         '<label for="email">Công nợ:</label>' +
-        //         '<div class="d-flex align-items-center" style="width:101%;"> <input id="debtInput" class="form-control" type="text" name="debt" style="width:15%;">' +
-        //         '<span class="ml-2" id="data-debt" style="color: rgb(29, 28, 32);">ngày</span>' +
-        //         '<input type="checkbox" id="debtCheckbox" value="0" style="margin-left:10%;">' +
-        //         '<span class="ml-2">Thanh toán tiền mặt</span> </div>' +
-        //         '</div>' +
-        //         '</div></div>'
-        //     );
-        // $(document).on('change', '#debtCheckbox', function() {
-        // if ($(this).is(':checked')) {
-        //     $('#debtInput').prop('disabled', true);
-        //     console.log($('#debtInput'));
-        //     $('#debtInput').val(0);
-        //     $("#data-debt").css("color", "#D6D6D6");
-        // } else {
-        //     $('#debtInput').prop('disabled', false);
-        //     $("#data-debt").css("color", "#1D1C20");
-        // }
-        // });
-        // });
-
-
         var add_bill = document.getElementById('add_bill');
         add_bill.addEventListener('click', function(e) {
             this.classList.add('disabled');
@@ -377,7 +320,7 @@
                 alert('Vui lòng chọn nhà cung cấp');
             }
 
-            if (isDuplicate) {
+            if (isDuplicate || error) {
                 return false;
             } else {
                 var provides_id = document.getElementById('form_submit');
@@ -437,7 +380,7 @@
                 var provide_email = $('#provide_email').val();
                 var provide_phone = $('#provide_phone').val();
                 var provide_code = $('#provide_code').val();
-                var debt = $('#debtInput').val();
+                var provide_debt = $('#debtInput').val();
                 $.ajax({
                     url: "{{ route('update_provide') }}",
                     type: "get",
@@ -449,7 +392,7 @@
                         provide_email: provide_email,
                         provide_phone: provide_phone,
                         provide_code: provide_code,
-                        debt: debt
+                        provide_debt: provide_debt
                     },
                     success: function(data) {
                         alert('Lưu thông tin thành công');
@@ -576,7 +519,7 @@
             var provide_email = $('#provide_email_new').val();
             var provide_phone = $('#provide_phone_new').val();
             var provide_code = $('#provide_code_new').val();
-            var debt = $('#debtInput').val();
+            var provide_debt = $('#debtInput').val();
             var check = false;
             if (provide_name == "") {
                 alert('Vui lòng nhập tên công ty');
@@ -599,12 +542,12 @@
                         provide_email: provide_email,
                         provide_phone: provide_phone,
                         provide_code: provide_code,
-                        debt: debt
+                        provide_debt: provide_debt
                     },
                     success: function(data) {
                         if (data.success) {
                             alert(data.msg);
-                            $('#provide_id').val(data.data.id);
+                            $('#provide_id').val(data.data);
                         }
                     }
                 })

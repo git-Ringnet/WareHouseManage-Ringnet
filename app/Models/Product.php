@@ -83,6 +83,8 @@ class Product extends Model
     {
         return $this->hasOne(Provides::class,'id','provide_id');
     }
-  
+    public function addProduct($data){
+        return DB::table($this->table)->insertGetId($data);
+    }
     
 }
