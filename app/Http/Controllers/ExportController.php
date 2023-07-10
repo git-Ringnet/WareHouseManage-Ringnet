@@ -112,7 +112,7 @@ class ExportController extends Controller
         $title = 'Xuất hàng';
         $productsCreator = $this->exports->productsCreator();
         // dd($productsCreator);
-        return view('tables.export.exports', compact('productEx','export', 'exports', 'sortType', 'string', 'title', 'productsCreator'));
+        return view('tables.export.exports', compact('productEx', 'export', 'exports', 'sortType', 'string', 'title', 'productsCreator'));
     }
 
     /**
@@ -648,6 +648,8 @@ class ExportController extends Controller
                             }
                             $productQtyMap[$productID] += $productQty;
                         }
+
+                        
 
                         //thêm khách hàng khi lưu nhanh
                         if ($request->checkguest == 2 && $clickValue == null) {
@@ -1409,6 +1411,16 @@ class ExportController extends Controller
             ->where('product.id', $data['idProduct'])
             ->first();
         return response()->json($product);
+    }
+
+    public function limit_qty(Request $request)
+    {
+        $data = $request->all();
+        $limit_qty = Product::select('product.*')
+            ->selectRaw('COALESCE((product.product_qty - COALESCE(product.product_trade, 0)), 0) as qty_exist')
+            ->where('product.id', $data['product_id'])
+            ->first();
+        return response()->json($limit_qty);
     }
 
     // Xóa đơn hàng AJAX
