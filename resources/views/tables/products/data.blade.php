@@ -772,12 +772,12 @@ $index = array_search($item['label'], $numberedLabels);
                                             <td class="text-right">{{ $value->product_qty }}</td>
                                             <td class="text-right">{{ $value->product_trade }}</td>
                                             <td class="text-right">{{ number_format($value->product_price) }}</td>
-                                            <td class="text-right">{{ number_format($value->total) }}</td>
+                                            <td class="text-right">{{ number_format($value->product_total) }}</td>
                                             <td class="text-center">
-                                                @if ($value->tax == 99)
+                                                @if ($value->product_tax == 99)
                                                     NOVAT
                                                 @else
-                                                    {{ $value->tax }}%
+                                                    {{ $value->product_tax }}%
                                                 @endif
                                             </td>
                                             <td class="text-center">
