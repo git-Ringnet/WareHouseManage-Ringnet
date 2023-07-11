@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\Provides;
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Response;
 
 class ProductController extends Controller
 {
@@ -210,33 +210,38 @@ class ProductController extends Controller
     public function export()
     {
         $products = Product::all();
-
-        $filename = 'products.csv';
-        $path = storage_path('app/' . $filename);
-
-        $file = fopen($path, 'w');
-
-        fputcsv($file, ['ID', 'Tên sản phẩm', 'Đơn vị tính', 'Tồn kho', 'Giá nhập', 'Thuế', 'Tổng tiền', 'Nhà cung cấp', 'Đang giao dịch']);
-
-
-        foreach ($products as $product) {
-            fputcsv($file, [
-                $product->id,
-                $product->product_name,
-                $product->product_unit,
-                $product->product_qty,
-                $product->product_price,
-                $product->tax,
-                $product->total,
-                $product->getNameProvide->provide_name,
-                $product->product_trade,
-            ]);
-        }
-
-        fclose($file);  
-        $excelFilename = 'products.csv';
-        $excelPath = storage_path('app/' . $excelFilename);
-      
-        return response()->download($excelPath, $excelFilename)->deleteFileAfterSend(true);
+        return response()->json(['success' => true, 'msg' => 'Xuất file thành công','data' => $products]);
     }
+
+
+    // public function export()
+    // {
+    //     $products = Product::all();
+
+    //     $filename = 'products.xls';
+    //     $path = storage_path('app/' . $filename);
+
+    //     $file = fopen($path, 'w');
+
+    //     fputcsv($file, ['ID', 'Tên sản phẩm', 'Đơn vị tính', 'Tồn kho', 'Giá nhập', 'Thuế', 'Tổng tiền', 'Nhà cung cấp', 'Đang giao dịch']);
+
+
+    //     foreach ($products as $product) {
+    //         fputcsv($file, [
+    //             $product->id,
+    //             $product->product_name,
+    //             $product->product_unit,
+    //             $product->product_qty,
+    //             $product->product_price,
+    //             $product->tax,
+    //             $product->total,
+    //             $product->getNameProvide->provide_name,
+    //             $product->product_trade,
+    //         ]);
+    //     }
+
+    //     fclose($file);  
+
+    //     return response()->download($path, $filename)->deleteFileAfterSend(true);
+    // }
 }

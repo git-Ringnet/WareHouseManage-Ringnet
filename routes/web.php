@@ -108,6 +108,8 @@ Route::get('/show_provide', [AddProductController::class, 'show_provide'])->name
 Route::get('/update_provide', [AddProductController::class, 'update_provide'])->name('update_provide');
 Route::resource('insertProduct', AddProductController::class)->middleware('permission:admin,manager');
 Route::POST('/addBillEdit', [AddProductController::class, 'addBillEdit'])->name('addBillEdit');
+Route::POST('/updateBill', [AddProductController::class, 'updateBill'])->name('updateBill');
+Route::POST('/updateBillEdit', [AddProductController::class, 'updateBillEdit'])->name('updateBillEdit');
 Route::post('/insertProductP', [AddProductController::class, 'addBill'])->name('addBill');
 Route::put('/deleteBill/{id?}', [AddProductController::class, 'deleteBill'])->name('deleteBill');
 Route::get('/deleteOrder', [AddProductController::class, 'deleteOrder'])->name('deleteOrder');

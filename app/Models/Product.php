@@ -113,5 +113,8 @@ class Product extends Model
         $products = $products->whereBetween('product_qty', [1, 5])->get();
         return $products;
     }
-    
+    public function updateProduct($data, $id)
+    {
+        return DB::table($this->table)->where('id', $id)->update($data);
+    }
 }

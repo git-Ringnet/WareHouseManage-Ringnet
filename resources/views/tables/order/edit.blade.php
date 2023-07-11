@@ -92,7 +92,6 @@
             @if (Session::has('session'))
                 {{ Session::get('session') }}
             @endif
-
             @csrf
             @method('PUT')
             <input type="hidden" name="order_id" value="{{ $order->id }}">
@@ -101,7 +100,12 @@
                 <div class="d-flex mb-1 action-don">
                     {{-- @if ($order->order_status == 0) --}}
                     @if (Auth::user()->id == $order->users_id || Auth::user()->can('isAdmin'))
-                        <button class="btn btn-danger text-white" id="add_bill">Duyệt đơn</button>
+                        @if ($order->order_status == 0)
+                            <button class="btn btn-danger text-white" id="add_bill">Duyệt đơn</button>
+                        @endif
+                        @if ($order->order_status == 1)
+                            <a href="#" class="btn btn-secondary" id="updateBill">Chỉnh sửa</a>
+                        @endif
                         <a href="#" class="btn btn-secondary mx-4" id="deleteBill">Hủy đơn</a>
                     @endif
                     {{-- @endif --}}
@@ -115,7 +119,8 @@
                                         <div class="d-flex mb-2">
                                             <input type="radio" name="options" id="radio1" checked>
                                             <span class="ml-1">Nhà cung cấp cũ</span>
-                                            <input type="radio" name="options" id="radio2" style="margin-left: 40px;">
+                                            <input type="radio" name="options" id="radio2"
+                                                style="margin-left: 40px;">
                                             <span class="ml-1">Nhà cung cấp mới</span>
                                         </div>
                                         <div class="input-group mb-1 position-relative w-50">
@@ -484,6 +489,22 @@
         }
     });
 
+    // Chỉnh sửa đơn hàng đã duyệt
+    $(document).on('click', '#updateBill', function(e) {
+        this.classList.add('disabled');
+        var countDown = 10;
+        var countdownInterval = setInterval(function() {
+            countDown--;
+            if (countDown <= 0) {
+                clearInterval(countdownInterval);
+                $('#updateBill').removeClass('disabled');
+            }
+        }, 100);
+        $('#form_submit').attr('action', '{{ route('updateBill') }}');
+        $('input[name="_method"]').remove();
+        $('#form_submit')[0].submit();
+    })
+
     var rowCount = $('.table_list_order tbody tr').length;
     $('.addRow').on('click', function() {
         updateRowNumbers();
@@ -551,15 +572,15 @@
                     '<div class="form-group">' +
                     '<label for="email">Người đại diện:</label>' +
                     '<input required type="text" class="form-control" id="provide_represent" placeholder="Nhập thông tin" name="provide_represent" value="' +
-                    data.provide_represent + '">' +
+                    (data.provide_represent == null ? "" : data.provide_represent) + '">' +
                     '</div>' + '<div class="form-group">' +
                     '<label for="email">Email:</label>' +
                     '<input required type="email" class="form-control" id="provide_email" placeholder="Nhập thông tin" name="provide_email" value="' +
-                    data.provide_email + '">' +
+                    (data.provide_email == null ? "" : data.provide_email) + '">' +
                     '</div>' + '<div class="form-group">' +
                     '<label for="email">Số điện thoại:</label>' +
                     '<input required type="text" class="form-control" id="provide_phone" placeholder="Nhập thông tin" name="provide_phone" value="' +
-                    data.provide_phone + '">' +
+                    (data.provide_phone == null ? "" : data.provide_phone) + '">' +
                     '</div>' + '<div class="form-group">' +
                     '<label for="email">Công nợ:</label>' +
                     '<div class="d-flex align-items-center" style="width:101%;"> <input name="provide_debt" id="debtInput" class="form-control" type="text" name="debt" style="width:15%;" value="' +
@@ -598,70 +619,84 @@
         var provide_email = $('#provide_email').val();
         var provide_phone = $('#provide_phone').val();
         var provide_code = $('#provide_code').val();
-        var debt = $('#debtInput').val();
-        $.ajax({
-            url: "{{ route('update_provide') }}",
-            type: "get",
-            data: {
-                provides_id: provides_id,
-                provide_name: provide_name,
-                provide_address: provide_address,
-                provide_represent: provide_represent,
-                provide_email: provide_email,
-                provide_phone: provide_phone,
-                provide_code: provide_code,
-                debt: debt
-            },
-            success: function(data) {
-                alert('Lưu thông tin thành công');
-            }
-        })
+        var provide_debt = $('#debtInput').val();
+        var check = false;
+        if (provide_name == "") {
+            alert('Vui lòng nhập tên công ty');
+            check = true;
+        } else if (provide_address == "") {
+            alert('Vui lòng nhập địa chỉ xuất hóa đơn');
+            check = true;
+        } else if (provide_code == "") {
+            alert('Vui lòng nhập mã số thuế');
+            check = true;
+        }
+        if (check == false) {
+            $.ajax({
+                url: "{{ route('update_provide') }}",
+                type: "get",
+                data: {
+                    provides_id: provides_id,
+                    provide_name: provide_name,
+                    provide_address: provide_address,
+                    provide_represent: provide_represent,
+                    provide_email: provide_email,
+                    provide_phone: provide_phone,
+                    provide_code: provide_code,
+                    provide_debt: provide_debt
+                },
+                success: function(data) {
+                    alert('Lưu thông tin thành công');
+                }
+            })
+        }
+
     })
 
-     // Thêm nhanh nhà cung cấp
-     $(document).on('click', '#btn-addCustomer', function(e) {
-            e.preventDefault();
-            var provide_name = $('#provide_name_new').val();
-            var provide_address = $('#provide_address_new').val();
-            var provide_represent = $('#provide_represent_new').val();
-            var provide_email = $('#provide_email_new').val();
-            var provide_phone = $('#provide_phone_new').val();
-            var provide_code = $('#provide_code_new').val();
-            var debt = $('#debtInput').val();
-            var check = false;
-            if (provide_name == "") {
-                alert('Vui lòng nhập tên công ty');
-                check = true;
-            } else if (provide_address == "") {
-                alert('Vui lòng nhập địa chỉ xuất hóa đơn');
-                check = true;
-            } else if (provide_code == "") {
-                alert('Vui lòng nhập mã số thuế');
-                check = true;
-            }
-            if (check == false) {
-                $.ajax({
-                    url: "{{ route('add_newProvide') }}",
-                    type: "get",
-                    data: {
-                        provide_name: provide_name,
-                        provide_address: provide_address,
-                        provide_represent: provide_represent,
-                        provide_email: provide_email,
-                        provide_phone: provide_phone,
-                        provide_code: provide_code,
-                        debt: debt
-                    },
-                    success: function(data) {
-                        if (data.success) {
-                            alert(data.msg);
-                            $('#provide_id').val(data.data.id);
-                        }
+    // Thêm nhanh nhà cung cấp
+    $(document).on('click', '#btn-addCustomer', function(e) {
+        e.preventDefault();
+        var provide_name = $('#provide_name_new').val();
+        var provide_address = $('#provide_address_new').val();
+        var provide_represent = $('#provide_represent_new').val();
+        var provide_email = $('#provide_email_new').val();
+        var provide_phone = $('#provide_phone_new').val();
+        var provide_code = $('#provide_code_new').val();
+        var provide_debt = $('#debtInput').val();
+        var check = false;
+        if (provide_name == "") {
+            alert('Vui lòng nhập tên công ty');
+            check = true;
+        } else if (provide_address == "") {
+            alert('Vui lòng nhập địa chỉ xuất hóa đơn');
+            check = true;
+        } else if (provide_code == "") {
+            alert('Vui lòng nhập mã số thuế');
+            check = true;
+        }
+        if (check == false) {
+            $.ajax({
+                url: "{{ route('add_newProvide') }}",
+                type: "get",
+                data: {
+                    provide_name: provide_name,
+                    provide_address: provide_address,
+                    provide_represent: provide_represent,
+                    provide_email: provide_email,
+                    provide_phone: provide_phone,
+                    provide_code: provide_code,
+                    provide_debt: provide_debt
+                },
+                success: function(data) {
+                    if (data.success) {
+                        alert(data.msg);
+                        $('#provide_id').val(data.data.id);
                     }
-                })
-            }
+                }
+            })
+        }
 
-        })
+    })
 
 
     $('#add_bill').on('click', function(e) {

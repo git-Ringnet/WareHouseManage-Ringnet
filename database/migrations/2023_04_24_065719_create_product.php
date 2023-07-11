@@ -16,14 +16,14 @@ class CreateProduct extends Migration
         Schema::create('product', function (Blueprint $table) {
             $table->id()->autoIncrement();
             $table->string('product_name');
-            $table->string('product_notes')->nullable();
             $table->string('product_unit')->nullable();
             $table->integer('product_qty')->nullable();
             $table->decimal('product_price', 15, 4)->nullable();
-            $table->string('tax')->nullable();
-            $table->string('total')->nullable();
+            $table->string('product_tax')->nullable();
+            $table->string('product_total')->nullable();
             $table->integer('provide_id')->nullable();
             $table->integer('product_trade')->nullable();
+            $table->string('product_trademark')->nullable();
             $table->timestamps();
         });
     }

@@ -26,4 +26,8 @@ class ProductOrders extends Model
     public function addProductOrder($data){
         return DB::table($this->table)->insertGetId($data);
     }
+    public function updateProductOrder($data, $id)
+    {
+        return DB::table($this->table)->where('id', $id)->update($data);
+    }
 }

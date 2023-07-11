@@ -231,7 +231,7 @@
                     @can('view-orders')
                         <li class="nav-item">
                             <a href="{{ route('insertProduct.index') }}"
-                                class="nav-link {{ App\Helpers\Helper::isActiveRouteGroup(['insertProduct.index', 'insertProduct.create', 'insertProduct.edit']) }}">
+                                class="nav-link {{ App\Helpers\Helper::isActiveRouteGroup(['insertProduct.index', 'insertProduct.create', 'insertProduct.edit','updateBill']) }}">
                                 <svg class="stroke" width="32" height="24" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <g clip-path="url(#clip0_6062_36566)">

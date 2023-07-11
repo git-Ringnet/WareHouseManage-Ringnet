@@ -4,7 +4,7 @@ function updateRowNumbers() {
     });
 }
 
-$(document).on('input', '.name_product, .type_product, .product_price', function () {
+$(document).on('input', '.name_product, .unit_product, .product_price', function () {
     if (checkAllValuesEntered()) {
         checkDuplicateRows();
     }
@@ -43,9 +43,9 @@ function checkDuplicateRows() {
         var isDuplicate = false;
 
         // Lặp qua từng ô dữ liệu trong hàng
-        for (var j = 1; j < 7; j++) {
-            // Bỏ qua vị trí td 4 và 5
-            if (j === 4 || j === 5) {
+        for (var j = 1; j < 5; j++) {
+            // Bỏ qua vị trí td 0 và 3
+            if (j === 0 || j === 3) {
                 continue;
             }
 
@@ -56,11 +56,6 @@ function checkDuplicateRows() {
                 cellValue = input.value.trim();
             } else {
                 cellValue = cells[j].innerText.trim();
-            }
-
-            var select = cells[j].getElementsByTagName("select")[0];
-            if (select) {
-                cellValue = select.value;
             }
 
             rowValues.push(cellValue);
@@ -250,6 +245,7 @@ function calculateTotals() {
 
     // Hiển thị tổng totalAmount và totalTax
     $('#total-amount-sum').text(formatCurrency(totalAmount));
+    $('.total_price').val(formatCurrency(totalAmount));
     $('#product-tax').text((formatCurrency(totalTax)));
 
     // Tính tổng thành tiền và thuế
@@ -438,7 +434,7 @@ $("#radio2").on("click", function () {
         '<div class="border-bottom p-3 d-flex justify-content-between">' +
         '<b>Thông tin nhà cung cấp</b>' +
         '<button id="btn-addCustomer" class="btn btn-primary d-flex align-items-center">' +
-        '<img src="../dist/img/icon/Union.png">' +
+        '<img src="../../dist/img/icon/Union.png">' +
         '<span class="ml-1">Lưu thông tin</span></button></div>' +
         '<div class="row p-3">' +
         '<div class="col-sm-6">' +
