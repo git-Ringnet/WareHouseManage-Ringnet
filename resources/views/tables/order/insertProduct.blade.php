@@ -367,7 +367,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 </option>
                                                 <option value="<="
                                                     {{ request('comparison_operator') === '<=' ? 'selected' : '' }}>
-                                                    <=</option>
+                                                    <=< /option>
                                             </select>
                                             <input class="w-50 input-quantity sum-input" type="number"
                                                 oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -650,31 +650,6 @@ $index = array_search($item['label'], $numberedLabels);
     <!-- /.content -->
 </div>
 <script>
-    // AJAX duyệt đơn nhanh
-    // $(document).on('click','#confirmBill',function(e){
-    //     e.preventDefault();
-    //     const list_id = [];
-    //     $('input[name="ids[]"]').each(function() {
-    //         if ($(this).is(':checked')) {
-    //             var value = $(this).val();
-    //             list_id.push(value);
-    //         }
-    //     });
-    //     $.ajax({
-    //         url: "{{ route('confirmBill') }}",
-    //         type: "get",
-    //         data: {
-    //             list_id: list_id,
-    //         },
-    //         success: function(data) {
-    //            location.reload();
-    //         }
-    //     })
-    // })
-
-
-
-
     // Xử lí filter ngày tháng
     $(document).ready(function() {
         $('#end').change(function() {
@@ -704,7 +679,8 @@ $index = array_search($item['label'], $numberedLabels);
                 list_id: list_id,
             },
             success: function(data) {
-                location.reload();
+                console.log(data);
+                // location.reload();
             }
         })
     })
@@ -1163,6 +1139,9 @@ function expand() {
             }
         });
     }
+    $(document).on('keypress', 'form', function(event) {
+        return event.keyCode != 13;
+    });
 </script>
 </body>
 

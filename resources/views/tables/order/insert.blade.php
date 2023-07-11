@@ -192,6 +192,7 @@
                                 <div class="d-flex justify-content-between">
                                     <span><b>Giá trị trước thuế:</b></span>
                                     <span id="total-amount-sum">Đ</span>
+                                    <input type="hidden" name="total_price" class="total_price">
                                 </div>
                                 <div class="d-flex justify-content-between mt-2">
                                     <span><b>Thuế VAT:</b></span>
@@ -292,9 +293,11 @@
             // Update data-value attribute
             $('#grand-total').attr('data-value', grandTotal);
             $('#total').val(formatCurrency(grandTotal));
+            $('.total_price').val(formatCurrency(totalAmount));
             $('.total_import').val(grandTotal);
         }
 
+        // Xử lý duyệt đơn nhanh
         var add_bill = document.getElementById('add_bill');
         add_bill.addEventListener('click', function(e) {
             this.classList.add('disabled');
@@ -417,7 +420,7 @@
                         '<div class="border-bottom p-3 d-flex justify-content-between">' +
                         '<b>Thông tin nhà cung cấp</b>' +
                         '<button id="btn-addProvide" class="btn btn-primary d-flex align-items-center">' +
-                        '<img src="../dist/img/icon/Union.png">' +
+                        '<img src="../../dist/img/icon/Union.png">' +
                         '<span class="ml-1">Lưu thông tin</span></button></div>' +
                         '<div class="row p-3">' +
                         '<div class="col-sm-6">' +
@@ -437,15 +440,15 @@
                         '<div class="form-group">' +
                         '<label for="email">Người đại diện:</label>' +
                         '<input required type="text" class="form-control" id="provide_represent" placeholder="Nhập thông tin" name="provide_represent" value="' +
-                        data.provide_represent + '">' +
+                       (data.provide_represent == null ? "" : data.provide_represent )+ '">' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">Email:</label>' +
                         '<input required type="email" class="form-control" id="provide_email" placeholder="Nhập thông tin" name="provide_email" value="' +
-                        data.provide_email + '">' +
+                        (data.provide_email == null ? "" : data.provide_email ) + '">' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">Số điện thoại:</label>' +
                         '<input required type="text" class="form-control" id="provide_phone" placeholder="Nhập thông tin" name="provide_phone" value="' +
-                        data.provide_phone + '">' +
+                        (data.provide_phone == null ? "" : data.provide_phone) + '">' +
                         '</div>' +
                         '<div class="form-group">' +
                         '<label for="email">Công nợ:</label>' +
@@ -575,7 +578,6 @@
                     var ngayNhapHoaDon = xmlDoc.getElementsByTagName('NLap')[0].textContent;
                     var parts = ngayNhapHoaDon.split('-');
                     var formattedDate = parts[2] + '-' + parts[1] + '-' + parts[0];
-                    console.log(ngayNhapHoaDon);
                     $('tbody tr').remove();
                     // Tạo các ô input mới và đặt giá trị của chúng
                     for (var i = 0; i < THHDVu.length; i++) {

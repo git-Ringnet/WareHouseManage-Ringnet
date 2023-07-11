@@ -94,4 +94,13 @@ class Orders extends Model
         return $totalSum;        
     }
  
+    public function addOrder($data){
+        return DB::table($this->table)->insertGetId($data);
+    }
+    public function updateOrder($data, $id)
+    {
+        return DB::table($this->table)->where('id', $id)->update($data);
+    }
+
+
 }

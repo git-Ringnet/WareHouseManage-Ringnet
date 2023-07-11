@@ -82,5 +82,8 @@ class DebtImport extends Model
         return $debtsCreator;
     }
    
-
+    public function updateDebtImport($data, $id)
+    {
+        return DB::table($this->table)->where('import_id', $id)->update($data);
+    }
 }

@@ -5,7 +5,7 @@
         <div class="col-sm-6 breadcrumb">
             <span><a href="{{ route('insertProduct.index') }}">Nhập hàng</a></span>
             <span class="mx-1"> / </span>
-            <span><b>Chi tiết đơn hàng</b></span>
+            <span><b>Chỉnh sửa đơn hàng</b></span>
         </div>
         <div class="col-sm-6 position-absolute" style="top:63px;right:2%">
             <div class="w-50 position-relative" style="float: right;">
@@ -96,6 +96,7 @@
             @method('PUT')
             <input type="hidden" name="order_id" value="{{ $order->id }}">
             <input type="hidden" name="provide_id" value="{{ $provide_order[0]->id }}" id="provide_id">
+            <input type="hidden" name="debtimport_id" value="{{$debt_import[0]->id}}">
             <section class="content-header">
                 <div class="d-flex mb-1 action-don">
                     {{-- @if ($order->order_status == 0) --}}
@@ -104,59 +105,57 @@
                             <button class="btn btn-danger text-white" id="add_bill">Duyệt đơn</button>
                         @endif
                         @if ($order->order_status == 1)
-                            <a href="#" class="btn btn-secondary" id="updateBill">Chỉnh sửa</a>
+                            <a href="#" class="btn btn-secondary d-none" id="updateBill">Chỉnh sửa</a>
                         @endif
-                        <a href="#" class="btn btn-secondary mx-4" id="deleteBill">Hủy đơn</a>
+                        <a href="#" class="btn btn-secondary mx-4 d-none" id="deleteBill">Hủy đơn</a>
                     @endif
                     {{-- @endif --}}
                 </div>
                 <div class="container-fluided">
                     <div class="row my-3">
                         <div class="col">
-                            @if ($order->order_status == 0)
-                                @if (Auth::user()->id == $order->users_id || Auth::user()->can('isAdmin'))
-                                    <div class="w-75">
-                                        <div class="d-flex mb-2">
-                                            <input type="radio" name="options" id="radio1" checked>
-                                            <span class="ml-1">Nhà cung cấp cũ</span>
-                                            <input type="radio" name="options" id="radio2"
-                                                style="margin-left: 40px;">
-                                            <span class="ml-1">Nhà cung cấp mới</span>
-                                        </div>
-                                        <div class="input-group mb-1 position-relative w-50">
-                                            <input type="text" class="form-control"
-                                                placeholder="Nhập thông tin nhà cung cấp" aria-label="Username"
-                                                aria-describedby="basic-addon1" id="myInput" autocomplete="off">
-                                            <div class="position-absolute" style="right: 5px;top: 17%;">
-                                                <svg width="24" height="24" viewBox="0 0 24 24"
-                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                                        d="M15.1835 7.36853C13.0254 5.21049 9.52656 5.21049 7.36853 7.36853C5.21049 9.52656 5.21049 13.0254 7.36853 15.1835C9.52656 17.3415 13.0254 17.3415 15.1835 15.1835C17.3415 13.0254 17.3415 9.52656 15.1835 7.36853ZM16.2441 6.30787C13.5003 3.56404 9.05169 3.56404 6.30787 6.30787C3.56404 9.05169 3.56404 13.5003 6.30787 16.2441C9.05169 18.988 13.5003 18.988 16.2441 16.2441C18.988 13.5003 18.988 9.05169 16.2441 6.30787Z"
-                                                        fill="#555555" />
-                                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                                        d="M15.1796 15.1796C15.4725 14.8867 15.9474 14.8867 16.2403 15.1796L19.5303 18.4696C19.8232 18.7625 19.8232 19.2374 19.5303 19.5303C19.2374 19.8232 18.7625 19.8232 18.4696 19.5303L15.1796 16.2403C14.8867 15.9474 14.8867 15.4725 15.1796 15.1796Z"
-                                                        fill="#555555" />
-                                                </svg>
-                                            </div>
-                                        </div>
-                                        <ul id="myUL"
-                                            class="bg-white position-absolute w-50 rounded shadow p-0 scroll-data "
-                                            style="z-index: 99;">
-                                            @foreach ($provide as $value)
-                                                <li <?php if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) {
-                                                    echo 'class="d-none"';
-                                                } ?>>
-                                                    <a href="#"
-                                                        class="text-dark d-flex justify-content-between p-2 search-info select_page"
-                                                        id="{{ $value->id }}" name="select_page">
-                                                        <span class="w-50">{{ $value->provide_represent }}</span>
-                                                        <span class="w-50">{{ $value->provide_name }}</span>
-                                                    </a>
-                                                </li>
-                                            @endforeach
-                                        </ul>
+                            @if (Auth::user()->id == $order->users_id || Auth::user()->can('isAdmin'))
+                                <div class="w-75">
+                                    <div class="d-flex mb-2">
+                                        <input type="radio" name="options" id="radio1" checked>
+                                        <span class="ml-1">Nhà cung cấp cũ</span>
+                                        <input type="radio" name="options" id="radio2"
+                                            style="margin-left: 40px;">
+                                        <span class="ml-1">Nhà cung cấp mới</span>
                                     </div>
-                                @endif
+                                    <div class="input-group mb-1 position-relative w-50">
+                                        <input type="text" class="form-control"
+                                            placeholder="Nhập thông tin nhà cung cấp" aria-label="Username"
+                                            aria-describedby="basic-addon1" id="myInput" autocomplete="off">
+                                        <div class="position-absolute" style="right: 5px;top: 17%;">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M15.1835 7.36853C13.0254 5.21049 9.52656 5.21049 7.36853 7.36853C5.21049 9.52656 5.21049 13.0254 7.36853 15.1835C9.52656 17.3415 13.0254 17.3415 15.1835 15.1835C17.3415 13.0254 17.3415 9.52656 15.1835 7.36853ZM16.2441 6.30787C13.5003 3.56404 9.05169 3.56404 6.30787 6.30787C3.56404 9.05169 3.56404 13.5003 6.30787 16.2441C9.05169 18.988 13.5003 18.988 16.2441 16.2441C18.988 13.5003 18.988 9.05169 16.2441 6.30787Z"
+                                                    fill="#555555" />
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M15.1796 15.1796C15.4725 14.8867 15.9474 14.8867 16.2403 15.1796L19.5303 18.4696C19.8232 18.7625 19.8232 19.2374 19.5303 19.5303C19.2374 19.8232 18.7625 19.8232 18.4696 19.5303L15.1796 16.2403C14.8867 15.9474 14.8867 15.4725 15.1796 15.1796Z"
+                                                    fill="#555555" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <ul id="myUL"
+                                        class="bg-white position-absolute w-50 rounded shadow p-0 scroll-data "
+                                        style="z-index: 99;">
+                                        @foreach ($provide as $value)
+                                            <li <?php if (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin')) {
+                                                echo 'class="d-none"';
+                                            } ?>>
+                                                <a href="#"
+                                                    class="text-dark d-flex justify-content-between p-2 search-info select_page"
+                                                    id="{{ $value->id }}" name="select_page">
+                                                    <span class="w-50">{{ $value->provide_represent }}</span>
+                                                    <span class="w-50">{{ $value->provide_name }}</span>
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
                             @endif
                         </div>
                     </div>
@@ -168,12 +167,10 @@
             <div class="border-bottom p-3 d-flex justify-content-between">
                 <b>Thông tin nhà cung cấp</b>
                 @if (Auth::user()->id == $order->users_id)
-                    @if ($order->order_status == 0)
-                        <button id="btn-addProvide" class="btn btn-primary save_infor d-flex align-items-center">
-                            <img src="{{ asset('dist/img/icon/Union.png') }}">
-                            <span class="ml-1">Lưu thông tin</span>
-                        </button>
-                    @endif
+                    <button id="btn-addProvide" class="btn btn-primary save_infor d-flex align-items-center">
+                        <img src="{{ asset('dist/img/icon/Union.png') }}">
+                        <span class="ml-1">Lưu thông tin</span>
+                    </button>
                 @endif
             </div>
             <div class="row p-3">
@@ -181,52 +178,46 @@
                     <div class="form-group">
                         <label for="congty">Công ty:</label>
                         <input required type="text" class="form-control"
-                            @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif id="provide_name"
+                            @if (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin')) readonly @endif id="provide_name"
                             placeholder="Nhập thông tin" name="provide_name"
-                            value="{{ $provide_order[0]->provide_name }}"
-                            @if ($order->order_status == 1) <?php echo 'readonly'; ?> @endif>
+                            value="{{ $provide_order[0]->provide_name }}">
                     </div>
                     <div class="form-group">
                         <label>Địa chỉ xuất hóa đơn:</label>
                         <input required type="text" class="form-control"
-                            @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif id="provide_address"
+                            @if (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin')) readonly @endif id="provide_address"
                             placeholder="Nhập thông tin" name="provide_address"
-                            value="{{ $provide_order[0]->provide_address }}"
-                            @if ($order->order_status == 1) <?php echo 'readonly'; ?> @endif>
+                            value="{{ $provide_order[0]->provide_address }}">
                     </div>
                     <div class="form-group">
                         <label for="email">Mã số thuế:</label>
                         <input required oninput="validateNumberInput(this)" type="text" class="form-control"
-                            @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif id="provide_code"
+                            @if (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin')) readonly @endif id="provide_code"
                             placeholder="Nhập thông tin" name="provide_code"
-                            value="{{ $provide_order[0]->provide_code }}"
-                            @if ($order->order_status == 1) <?php echo 'readonly'; ?> @endif>
+                            value="{{ $provide_order[0]->provide_code }}">
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label for="email">Người đại diện:</label>
-                        <input required type="text" class="form-control"
-                            @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif id="provide_represent"
+                        <input type="text" class="form-control"
+                            @if (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin')) readonly @endif id="provide_represent"
                             placeholder="Nhập thông tin" name="provide_represent"
-                            value="{{ $provide_order[0]->provide_represent }}"
-                            @if ($order->order_status == 1) <?php echo 'readonly'; ?> @endif>
+                            value="{{ $provide_order[0]->provide_represent }}">
                     </div>
                     <div class="form-group">
                         <label for="email">Email:</label>
-                        <input required type="email" class="form-control"
-                            @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif id="provide_email"
+                        <input type="email" class="form-control"
+                            @if (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin')) readonly @endif id="provide_email"
                             placeholder="Nhập thông tin" name="provide_email"
-                            value="{{ $provide_order[0]->provide_email }}"
-                            @if ($order->order_status == 1) <?php echo 'readonly'; ?> @endif>
+                            value="{{ $provide_order[0]->provide_email }}">
                     </div>
                     <div class="form-group">
                         <label for="email">Số điện thoại:</label>
-                        <input oninput="validateNumberInput(this)" required type="text" class="form-control"
-                            @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif id="provide_phone"
+                        <input oninput="validateNumberInput(this)" type="text" class="form-control"
+                            @if (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin')) readonly @endif id="provide_phone"
                             placeholder="Nhập thông tin" name="provide_phone"
-                            value="{{ $provide_order[0]->provide_phone }}"
-                            @if ($order->order_status == 1) <?php echo 'readonly'; ?> @endif>
+                            value="{{ $provide_order[0]->provide_phone }}">
                     </div>
                     <div class="form-group">
                         <label for="email">Công nợ:</label>
@@ -249,14 +240,14 @@
                     <div style="width:42%;">
                         <label for="" class="ml-2">Số hóa đơn</label>
                         <input type="text" name="product_code" class="form-control"
-                            value="{{ $order->product_code }}" @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif
+                            value="{{ $order->product_code }}" @if (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin')) readonly @endif
                             @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif>
                     </div>
                     <div>
                         <label for="" class="ml-4">Ngày hóa đơn</label>
                         <input type="date" name="product_create" class="form-control ml-2"
                             value="{{ $order->created_at->format('Y-m-d') }}"
-                            @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif
+                            @if (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin')) readonly @endif
                             @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif>
                     </div>
 
@@ -304,12 +295,12 @@
                                 <td class="STT"></td>
                                 <input type="hidden" name="product_id[]" value="{{ $pro->id }}">
                                 <td> <input class="form-control name_product"
-                                        @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif required
+                                        @if (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin')) readonly @endif required
                                         @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif type="text"
                                         style="width:auto" name="product_name[]" value="{{ $pro->product_name }}">
                                 </td>
                                 <td> <input class="form-control text-center unit_product" style="width: 80px"
-                                        @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif required type="text"
+                                        @if (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin')) readonly @endif required type="text"
                                         name="product_unit[]" value="{{ $pro->product_unit }}"
                                         @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif> </td>
                                 <td> <input oninput="validatQtyInput(this)"
@@ -319,13 +310,13 @@
                                         name="product_qty[]" value="{{ $pro->product_qty }}"
                                         @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif> </td>
                                 <td> <input class="form-control text-center product_price"
-                                        @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif required type="text"
+                                        @if (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin')) readonly @endif required type="text"
                                         style="width:140px" name="product_price[]"
                                         value="{{ number_format($pro->product_price) }}"
                                         @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif> </td>
                                 <td>
                                     <select name="product_tax[]" id="" class="form-control product_tax"
-                                        style="width:100px;" @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) disabled @endif>>
+                                        style="width:100px;" @if (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin')) disabled @endif>>
                                         <option value="0" <?php echo $pro->product_tax == 0 ? 'selected' : ''; ?>>0%</option>
                                         <option value="8" <?php echo $pro->product_tax == 8 ? 'selected' : ''; ?>>8%</option>
                                         <option value="10" <?php echo $pro->product_tax == 10 ? 'selected' : ''; ?>>10%</option>
@@ -335,7 +326,7 @@
                                 <td> <input class="form-control text-center total-amount" style="width:140px" readonly
                                         type="text" name="product_total[]" value="{{ $pro->product_total }}">
                                 </td>
-                                <td> <input class="form-control" @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif
+                                <td> <input class="form-control" @if (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin')) readonly @endif
                                         type="text" name="product_trademark[]"
                                         value=" {{ $pro->product_trademark }}"
                                         @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif> </td>
@@ -362,12 +353,9 @@
                     @endif
                 @endif
             </div>
-
             <div class="btn-fixed">
-                @if ($order->order_status == 0)
-                    @if (Auth::user()->id == $order->users_id || Auth::user()->can('isAdmin'))
-                        <a href="javascript:;" class="btn btn-primary addBillEdit">Lưu</a>
-                    @endif
+                @if (Auth::user()->id == $order->users_id || Auth::user()->can('isAdmin'))
+                    <a href="javascript:;" class="btn btn-primary updateBillEdit">Lưu</a>
                 @endif
                 <a href="{{ route('insertProduct.index') }}" class="btn btn-light">Hủy</a>
             </div>
@@ -379,6 +367,7 @@
                     <div class="d-flex justify-content-between">
                         <span><b>Giá trị trước thuế:</b></span>
                         <span id="total-amount-sum">Đ</span>
+                        <input type="hidden" name="total_price" class="total_price">
                     </div>
                     <div class="d-flex justify-content-between mt-2">
                         <span><b>Thuế VAT:</b></span>
@@ -423,39 +412,19 @@
         $('.total_import').val(formatCurrency(grandTotal));
     }
 
-    // Hủy đơn hàng
-    $(document).on('click', '#deleteBill', function(e) {
-        this.classList.add('disabled');
-        var countDown = 10;
-        var countdownInterval = setInterval(function() {
-            countDown--;
-            if (countDown <= 0) {
-                clearInterval(countdownInterval);
-                $('#deleteBill').removeClass('disabled');
-            }
-        }, 100);
-
-        e.preventDefault();
-        if (myFunction()) {
-            var order_id = <?php echo $order->id; ?>;
-            var deleteUrl = "{{ route('deleteBill', ['order_id' => '']) }}".replace('order_id', order_id);
-            $('#form_submit').attr('action', deleteUrl);
-            $('#form_submit').submit();
-        }
-    });
 
     // Kiểm tra dữ liệu trước khi submit
     var checkSubmit = false;
 
     // Chuyển hướng form để thêm dữ liệu
-    $(document).on('click', '.addBillEdit', function(e) {
+    $(document).on('click', '.updateBillEdit', function(e) {
         this.classList.add('disabled');
         var countDown = 10;
         var countdownInterval = setInterval(function() {
             countDown--;
             if (countDown <= 0) {
                 clearInterval(countdownInterval);
-                $('.addBillEdit').removeClass('disabled');
+                $('.updateBillEdit').removeClass('disabled');
             }
         }, 100);
 
@@ -479,31 +448,14 @@
             if (hasErrors) {
                 return false;
             } else {
-                $('#form_submit').attr('action', '{{ route('addBillEdit') }}');
+                $('#form_submit').attr('action', '{{ route('updateBillEdit') }}');
                 $('input[name="_method"]').remove();
-                updateProductSN()
                 $('#form_submit')[0].submit();
             }
         } else {
             $('#form_submit')[0].reportValidity();
         }
     });
-
-    // Chỉnh sửa đơn hàng đã duyệt
-    $(document).on('click', '#updateBill', function(e) {
-        this.classList.add('disabled');
-        var countDown = 10;
-        var countdownInterval = setInterval(function() {
-            countDown--;
-            if (countDown <= 0) {
-                clearInterval(countdownInterval);
-                $('#updateBill').removeClass('disabled');
-            }
-        }, 100);
-        $('#form_submit').attr('action', '{{ route('updateBill') }}');
-        $('input[name="_method"]').remove();
-        $('#form_submit')[0].submit();
-    })
 
     var rowCount = $('.table_list_order tbody tr').length;
     $('.addRow').on('click', function() {
@@ -612,6 +564,7 @@
     // Ajax thay đổi thông tin khách hàng
     $(document).on('click', '#btn-addProvide', function(e) {
         e.preventDefault();
+        var check = false;
         var provides_id = $('#provide_id').val();
         var provide_name = $('#provide_name').val();
         var provide_address = $('#provide_address').val();
@@ -620,7 +573,6 @@
         var provide_phone = $('#provide_phone').val();
         var provide_code = $('#provide_code').val();
         var provide_debt = $('#debtInput').val();
-        var check = false;
         if (provide_name == "") {
             alert('Vui lòng nhập tên công ty');
             check = true;
@@ -650,7 +602,6 @@
                 }
             })
         }
-
     })
 
     // Thêm nhanh nhà cung cấp
