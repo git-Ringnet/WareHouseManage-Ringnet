@@ -141,11 +141,9 @@
                 @if ($exports->export_status == 1)
                     @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
                         <button type="submit" class="btn btn-danger text-white" name="submitBtn" value="action1"
-                            onclick="validateAndSubmit(event)" id="chot_don">Chốt
-                            đơn</button>
+                            onclick="validateAndSubmit(event)" id="chot_don">Chốt đơn</button>
                         <button type="submit" class="btn btn-secondary mx-4" name="submitBtn" value="action2"
-                            onclick="validateAndSubmit(event)" id="huy">Hủy
-                            đơn</button>
+                            onclick="validateAndSubmit(event)" id="huy">Hủy đơn</button>
                     @endif
                 @endif
                 {{-- <a href="#" class="btn border border-secondary mr-4">Xuất file</a> --}}
@@ -272,10 +270,10 @@
                             </div>
                             <div class="form-group">
                                 <label for="email">Email cá nhân:</label>
-                                <input type="text" class="form-control" id="guest_email_personal" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                    echo 'readonly';
-                                } ?>
-                                    placeholder="Nhập thông tin" name="guest_email_personal"
+                                <input type="text" class="form-control" id="guest_email_personal"
+                                    <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                        echo 'readonly';
+                                    } ?> placeholder="Nhập thông tin" name="guest_email_personal"
                                     value="{{ $guest->guest_email_personal }}">
                             </div>
                             <div class="form-group">
@@ -387,7 +385,7 @@
                                             value="{{ $value_export->product_qty }}" name="product_qty[]"
                                             required="">
                                         <input type="text" readonly="" class="quantity-exist" required=""
-                                            value="/{{ $value_export->tonkho + $value_export->product_qty}}"
+                                            value="/{{ $value_export->tonkho + $value_export->product_qty }}"
                                             style="width:50px;background:#D6D6D6;border:none;" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                                 echo 'hidden';
                                             } ?>>
@@ -1125,7 +1123,7 @@
                         tonkho.val(response.product_qty);
                         loaihang.val(response.product_category);
                         dangGD.val(response.product_trade);
-                        thue.val(response.tax);
+                        thue.val(response.product_tax);
                         calculateGrandTotal();
                     },
                 });
@@ -1279,7 +1277,7 @@
         var checkguest = $('#checkguest').val();
 
         if (formGuest.length && productList.length > 0) {
-            $('.product_price, [name^="product_price"],#transport_fee').each(function() {
+            $('.product_price, [name^="product_price"], #transport_fee').each(function() {
                 var newValue = $(this).val().replace(/,/g, '');
                 $(this).val(newValue);
             });
@@ -1366,7 +1364,7 @@
             }
         });
     });
-    
+
     //kiểm tra số điện thoại VN
     // function isValidPhoneNumber(phoneNumber) {
     //     // Loại bỏ khoảng trắng và dấu '-' trong số điện thoại

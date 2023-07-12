@@ -122,8 +122,8 @@ class ExportController extends Controller
      */
     public function create()
     {
-        $product = Product::where('product.product_qty', '>', 0)
-            ->whereRaw('COALESCE((product.product_qty - COALESCE(product.product_trade, 0)), 0) > 0')
+        $product = Product::select('product.*')
+            ->selectRaw('COALESCE((product.product_qty - COALESCE(product.product_trade, 0)), 0) as qty_exist')
             ->get();
         $customer = Guests::where('guest_status', 1)->get();
         $guest_id = DB::table('guests')->select('id')->orderBy('id', 'DESC')->first();
@@ -584,7 +584,6 @@ class ExportController extends Controller
                             // dd($endDateFormatted);
                             $debt->date_end = $endDateFormatted;
 
-
                             // Xử lí status debt
                             $endDate = Carbon::parse($endDateFormatted);
                             $currentDate = Carbon::now();
@@ -624,7 +623,7 @@ class ExportController extends Controller
                             Product::where('id', $productID)
                                 ->update([
                                     'product_qty' => $newQty,
-                                    'total' => $total
+                                    'product_total' => $total
                                 ]);
                         }
                         return redirect()->route('exports.index')->with('msg', 'Duyệt đơn thành công!');
@@ -649,7 +648,7 @@ class ExportController extends Controller
                             $productQtyMap[$productID] += $productQty;
                         }
 
-                        
+
 
                         //thêm khách hàng khi lưu nhanh
                         if ($request->checkguest == 2 && $clickValue == null) {
@@ -1000,7 +999,7 @@ class ExportController extends Controller
                         Product::where('id', $productID)
                             ->update([
                                 'product_qty' => $newQty,
-                                'total' => $total,
+                                'product_total' => $total,
                             ]);
                     }
                     if ($request->id != null) {
