@@ -312,7 +312,7 @@ class AddProductController extends Controller
                     'provide_id' => $request->provide_id == null ? $newProvide : $request->provide_id
                 ];
                 if ($check === null) {
-                    $newProductOd = $this->product->addProduct($dataProduct);
+                    $newProductOd = $this->productOrder->addProductOrder($dataProduct);
                     array_push($arr_new_product, $newProductOd);
                     array_push($id_product, $newProductOd);
                 } else {
@@ -380,7 +380,6 @@ class AddProductController extends Controller
                 $updateP->product_id = $newP;
                 $updateP->save();
             }
-
             $updateOrder->order_status = 1;
             $updateOrder->save();
 
@@ -456,6 +455,8 @@ class AddProductController extends Controller
     // Duyệt Đơn Hàng Nhanh
     public function addBill(Request $request)
     {
+        var_dump($request->product_id);
+        die();
         $product_name = $request->product_name;
         $product_unit = $request->product_unit;
         $product_trademark = $request->product_trademark;
@@ -466,7 +467,6 @@ class AddProductController extends Controller
         $total_import =  str_replace(',', '', $request->total_import);
         $total_price = str_replace(',', '', $request->total_price);
         $id_product = [];
-
         $dataProvide = [
             'provide_name' => $request->provide_id == null ? $request->provide_name_new : ($request->options == 2 ? $request->provide_name_new : $request->provide_name),
             'provide_represent' => $request->provide_id == null ? $request->provide_represent_new : ($request->options == 2 ? $request->provide_represent_new : $request->provide_represent),
@@ -597,8 +597,6 @@ class AddProductController extends Controller
     // Thêm hàng mới vào Order
     public function addBillEdit(Request $request)
     {
-        var_dump($request->options);
-        die();
         $dataProvide = [
             'provide_name' => $request->provide_id == null ? $request->provide_name_new : ($request->options == 2 ? $request->provide_name_new : $request->provide_name),
             'provide_represent' => $request->provide_id == null ? $request->provide_represent_new : ($request->options == 2 ? $request->provide_represent_new : $request->provide_represent),

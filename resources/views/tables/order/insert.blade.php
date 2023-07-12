@@ -441,15 +441,15 @@
                         '</div>' + '</div>' + '<div class="col-sm-6">' +
                         '<div class="form-group">' +
                         '<label for="email">Người đại diện:</label>' +
-                        '<input required type="text" class="form-control" id="provide_represent" placeholder="Nhập thông tin" name="provide_represent" value="' +
+                        '<input type="text" class="form-control" id="provide_represent" placeholder="Nhập thông tin" name="provide_represent" value="' +
                         (data.provide_represent == null ? "" : data.provide_represent) + '">' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">Email:</label>' +
-                        '<input required type="email" class="form-control" id="provide_email" placeholder="Nhập thông tin" name="provide_email" value="' +
+                        '<input type="email" class="form-control" id="provide_email" placeholder="Nhập thông tin" name="provide_email" value="' +
                         (data.provide_email == null ? "" : data.provide_email) + '">' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">Số điện thoại:</label>' +
-                        '<input required type="text" class="form-control" id="provide_phone" placeholder="Nhập thông tin" name="provide_phone" value="' +
+                        '<input type="text" class="form-control" id="provide_phone" placeholder="Nhập thông tin" name="provide_phone" value="' +
                         (data.provide_phone == null ? "" : data.provide_phone) + '">' +
                         '</div>' +
                         '<div class="form-group">' +
