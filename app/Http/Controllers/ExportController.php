@@ -123,6 +123,7 @@ class ExportController extends Controller
     public function create()
     {
         $product = Product::select('product.*')
+            ->whereRaw('COALESCE((product.product_qty - COALESCE(product.product_trade, 0)), 0) > 0')
             ->selectRaw('COALESCE((product.product_qty - COALESCE(product.product_trade, 0)), 0) as qty_exist')
             ->get();
         $customer = Guests::where('guest_status', 1)->get();

@@ -273,13 +273,13 @@
             '<div class="col-sm-6">' +
             '<div class="form-group">' +
             '<input type="text" hidden class="form-control" name="id" value="">' +
-            '<label for="congty">Công ty:</label>' +
+            '<label for="congty" class="required-label">Công ty:</label>' +
             '<input type="text" class="form-control" id="guest_name" placeholder="Nhập thông tin" name="guest_name" value="" required>' +
             '</div>' + '<div class="form-group">' +
-            '<label>Địa chỉ:</label>' +
+            '<label class="required-label">Địa chỉ:</label>' +
             '<input type="text" class="form-control" id="guest_address" placeholder="Nhập thông tin" name="guest_address" value="" required>' +
             '</div>' + '<div class="form-group">' +
-            '<label>Mã số thuế:</label>' +
+            '<label class="required-label">Mã số thuế:</label>' +
             '<input type="text" oninput="validateNumberInput(this)" class="form-control" id="guest_code" inputmode="numeric" placeholder="Nhập thông tin" name="guest_code" value="" required>' +
             '</div>' + '<div class="form-group">' +
             '<label for="email">Email:</label>' +
@@ -333,10 +333,9 @@
         }
     }
 
-
     //add sản phẩm
+    let fieldCounter = 1;
     $(document).ready(function() {
-        let fieldCounter = 1;
         $("#add-field-btn").click(function() {
             let nextSoTT = $(".soTT").length + 1;
             // Tạo các phần tử HTML mới
@@ -397,24 +396,28 @@
                 "<td style='display:none;'><input type='text' class='product_tax1'></td>"
             );
 
-            function updateSTT() {
-                $(".soTT").each(function(index) {
-                    $(this).text(index + 1);
-                });
-            }
             //Xóa sản phẩm
             deleteBtn.click(function() {
-                $(this).closest("tr").remove();
+                var row = $(this).closest("tr");
+                var selectedID = row.find('.child-select').val();
+
+                // Kiểm tra nếu ID sản phẩm đang bị xóa có trong mảng selectedProductIDs
+                var index = selectedProductIDs.indexOf(selectedID);
+                if (index !== -1) {
+                    selectedProductIDs.splice(index, 1); // Xóa ID sản phẩm khỏi mảng
+                }
+                row.remove();
                 fieldCounter--;
                 calculateTotalAmount();
                 calculateTotalTax();
                 calculateGrandTotal();
-                updateSTT(); // Cập nhật lại số thứ tự
+                updateRowNumbers();
                 var taxAmount = parseFloat(row.find('.product_tax1').text());
                 var totalTax = parseFloat($('#product-tax').text());
                 totalTax -= taxAmount;
                 $('#product-tax').text(totalTax);
             });
+
             //xem thông tin sản phẩm
             info.click(function() {
                 var productCode = $(this).closest('tr').find('.maProduct option:selected')
@@ -508,15 +511,15 @@
                         '<input type="text" hidden class="form-control" id="id" name="id" value="' +
                         data.id + '" required>' +
                         '<input type="hidden" name="updateClick" id="updateClick" value="">' +
-                        '<label for="congty">Công ty:</label>' +
+                        '<label for="congty" class="required-label">Công ty:</label>' +
                         '<input type="text" class="form-control" id="guest_name" placeholder="Nhập thông tin" name="guest_name" value="' +
                         data.guest_name + '" required>' +
                         '</div>' + '<div class="form-group">' +
-                        '<label>Địa chỉ:</label>' +
+                        '<label class="required-label">Địa chỉ:</label>' +
                         '<input type="text" class="form-control" placeholder="Nhập thông tin" id="guest_address" name="guest_address" value="' +
                         data.guest_address + '" required>' +
                         '</div>' + '<div class="form-group">' +
-                        '<label for="email">Mã số thuế:</label>' +
+                        '<label for="email" class="required-label">Mã số thuế:</label>' +
                         '<input type="text" oninput="validateNumberInput(this)" class="form-control" inputmode="numeric" id="guest_code" placeholder="Nhập thông tin" name="guest_code" value="' +
                         data.guest_code + '" required>' +
                         '</div>' + '<div class="form-group">' +
@@ -745,8 +748,8 @@
     });
 
     //lấy thông tin sản phẩm con từ tên sản phẩm con
+    var selectedProductIDs = [];
     $(document).ready(function() {
-        var selectedProductIDs = [];
         // Lấy tất cả các phần tử đang được chọn theo class "productName"
         var selectedProducts = document.querySelectorAll(".productName");
         // Lặp qua từng phần tử và lấy giá trị của nó
@@ -942,23 +945,6 @@
                 var newValue = $(this).val().replace(/,/g, '');
                 $(this).val(newValue);
             });
-            // // Lấy giá trị product_id và product_qty từ các phần tử trong form
-            // var productIDs = [];
-            // var productQtys = [];
-
-            // $('.maProduct').each(function() {
-            //     var productID = $(this).val();
-            //     if (productID !== '') {
-            //         productIDs.push(productID);
-            //     }
-            // });
-
-            // $('.quantity-input').each(function() {
-            //     var productQty = $(this).val();
-            //     if (productQty !== '') {
-            //         productQtys.push(productQty);
-            //     }
-            // });
         } else {
             if (formGuest.length === 0) {
                 alert('Lỗi: Chưa nhập thông tin khách hàng!');
@@ -1036,7 +1022,6 @@
     var currentURL = window.location.href;
     var productsParam = getUrlParameter(currentURL, "products");
     var products = productsParam.split(",");
-    let fieldCounter = 1;
 
     function getUrlParameter(currentURL, name) {
         name = name.replace(/[\[\]]/g, "\\$&");
@@ -1142,25 +1127,27 @@
             dvtInput.find('input').replaceWith(dvt);
             if (productList[i].id == products[j]) {
                 slInput.find('.quantity-exist').val("/" + productList[i].qty_exist);
+                thueInput.find('select').val(thue);
             }
             giaInput.find('.product_price').replaceWith(gia);
-            thueInput.find('select').val(thue.toString());
-        }
-
-        function updateRowNumbers() {
-            $('.row-number').each(function(index) {
-                $(this).text(index + 1);
-            });
         }
 
         //Xóa sản phẩm
         deleteBtn.click(function() {
-            $(this).closest("tr").remove();
+            var row = $(this).closest("tr");
+            var selectedID = row.find('.child-select').val();
+
+            // Kiểm tra nếu ID sản phẩm đang bị xóa có trong mảng selectedProductIDs
+            var index = selectedProductIDs.indexOf(selectedID);
+            if (index !== -1) {
+                selectedProductIDs.splice(index, 1); // Xóa ID sản phẩm khỏi mảng
+            }
+            row.remove();
             fieldCounter--;
             calculateTotalAmount();
             calculateTotalTax();
             calculateGrandTotal();
-            updateRowNumbers(); // Cập nhật lại số thứ tự
+            updateRowNumbers();
             var taxAmount = parseFloat(row.find('.product_tax1').text());
             var totalTax = parseFloat($('#product-tax').text());
             totalTax -= taxAmount;
@@ -1194,6 +1181,12 @@
         $("#dynamic-fields").before(newRow);
         // Tăng giá trị fieldCounter
         fieldCounter++;
+    }
+
+    function updateRowNumbers() {
+        $('.soTT').each(function(index) {
+            $(this).text(index + 1);
+        });
     }
 </script>
 </body>
