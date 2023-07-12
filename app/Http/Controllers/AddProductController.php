@@ -455,8 +455,6 @@ class AddProductController extends Controller
     // Duyệt Đơn Hàng Nhanh
     public function addBill(Request $request)
     {
-        var_dump($request->product_id);
-        die();
         $product_name = $request->product_name;
         $product_unit = $request->product_unit;
         $product_trademark = $request->product_trademark;
