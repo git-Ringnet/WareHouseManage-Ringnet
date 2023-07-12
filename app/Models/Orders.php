@@ -10,7 +10,7 @@ class Orders extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'provide_id', 'users_id', 'order_status', 'total'
+        'provide_id', 'users_id', 'order_status', 'total','created_at','updated_at','product_code'
     ];
     protected $table = 'orders';
 
@@ -23,7 +23,7 @@ class Orders extends Model
         }
         $orders = Orders::join('users', 'users.id', '=', 'orders.users_id')
         ->leftJoin('provides', 'provides.id', '=', 'orders.provide_id')
-        ->select('orders.id', 'provides.provide_name', 'users.name', 'orders.total', 'orders.updated_at', 'order_status')
+        ->select('orders.id', 'orders.product_code','provides.provide_name', 'users.name', 'orders.total','orders.created_at', 'orders.updated_at', 'order_status')
         ->whereIn('orders.id', $productIds);
         // Các điều kiện tìm kiếm và lọc dữ liệu ở đây
 
@@ -42,11 +42,11 @@ class Orders extends Model
             $orders = $orders->whereIn('users.name', $name);
         }
         if (!empty($date)) {
-            $orders = $orders->wherebetween('orders.updated_at', $date);
+            $orders = $orders->wherebetween('orders.created_at', $date);
         }
         if (!empty($keywords)) {
             $orders = $orders->where(function ($query) use ($keywords) {
-                $query->orWhere('orders.id', 'like', '%' . $keywords . '%');
+                $query->orWhere('orders.product_code', 'like', '%' . $keywords . '%');
                 $query->orWhere('users.name', 'like', '%' . $keywords . '%');
                 $query->orWhere('provides.provide_name', 'like', '%' . $keywords . '%');
             });
@@ -70,13 +70,37 @@ class Orders extends Model
     // {
     //     return $this->hasOne(Provides::class,'id','provide_id');
     // }
-    public function allOrders(){
-        $orders = DB::table($this->table)->get();
+    public function allOrders()
+    {
+        $startDate = now()->subDays(30); // Ngày bắt đầu là ngày hiện tại trừ đi 30 ngày
+        $endDate = now(); // Ngày kết thúc là ngày hiện tại
+        $orders = DB::table($this->table)
+            ->where('order_status', 1)
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->get();
+        
         return $orders;
+        
     }
     public function sumTotalOrders(){
-        $totalSum = DB::table($this->table)->sum('total');
-        return $totalSum;
+        $startDate = now()->subDays(30); // Ngày bắt đầu là ngày hiện tại trừ đi 30 ngày
+        $endDate = now(); // Ngày kết thúc là ngày hiện tại
+        
+        $totalSum = DB::table($this->table)
+            ->where('order_status', 1)
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->sum('total');
+        
+        return $totalSum;        
     }
  
+    public function addOrder($data){
+        return DB::table($this->table)->insertGetId($data);
+    }
+    public function updateOrder($data, $id)
+    {
+        return DB::table($this->table)->where('id', $id)->update($data);
+    }
+
+
 }

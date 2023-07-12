@@ -24,21 +24,13 @@
                 <form class="w-100" action="" method="get" id='search-filter'>
                     <div class="row mr-0">
                         <div class="col-5">
-                            <input type="text" name="keywords" class="form-control h-100"
+                            <input type="text" name="keywords" class="form-control searchkeyword"
                                 value="{{ request()->keywords }}" placeholder="Tìm kiếm đơn vị hoặc email">
-                            <span class="search-icon"><i class="fas fa-search"></i></span>
+                            <span id="search-icon" class="search-icon"><i class="fas fa-search"></i></span>
                         </div>
                         <div class="col-2 d-none">
                             <button type="submit" class="btn btn-primary btn-block">Tìm kiếm</button>
                         </div>
-                        <a class="btn ml-auto btn-delete-filter btn-light" href="{{ route('guests.index') }}"><span><svg
-                                    width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M6 5.4643C6 5.34116 6.04863 5.22306 6.13518 5.13599C6.22174 5.04892 6.33913 5 6.46154 5H17.5385C17.6609 5 17.7783 5.04892 17.8648 5.13599C17.9514 5.22306 18 5.34116 18 5.4643V7.32149C18 7.43599 17.9579 7.54645 17.8818 7.63164L13.8462 12.1428V16.6075C13.8461 16.7049 13.8156 16.7998 13.7589 16.8788C13.7022 16.9578 13.6223 17.0168 13.5305 17.0476L10.7612 17.9762C10.6919 17.9994 10.618 18.0058 10.5458 17.9947C10.4735 17.9836 10.4049 17.9554 10.3456 17.9124C10.2863 17.8695 10.238 17.8129 10.2047 17.7475C10.1713 17.682 10.1539 17.6096 10.1538 17.5361V12.1428L6.11815 7.63164C6.0421 7.54645 6.00002 7.43599 6 7.32149V5.4643Z"
-                                        fill="#555555" />
-                                </svg>
-                            </span>Tắt bộ lọc</a>
                     </div>
                     <div class="d-flex justify-contents-center align-items-center mr-auto row-filter my-3 m-0">
                         <div class="icon-filter mr-3">
@@ -148,6 +140,9 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <button class="dropdown-item d-none" id="btn-status">Trạng thái</button>
                                             </div>
                                         </div>
+                                        @if(!empty($string))
+                                        <a class="btn-delete-filter" href="{{ route('provides.index') }}"><span>Tắt bộ lọc</span></a>
+                                        @endif
                                     </div>
                                     <?php $status = [];
                                     $roles = [];
@@ -524,6 +519,10 @@ $index = array_search($item['label'], $numberedLabels);
     <!-- /.content -->
 </div>
 <script>
+    $('#search-icon').on('click', function(e) {
+        e.preventDefault();
+        $('#search-filter').submit();
+    });
     $('.ks-cboxtags-users_name li').on('click', function(event) {
         if (event.target.tagName !== 'INPUT') {
             var checkbox = $(this).find('input[type="checkbox"]');

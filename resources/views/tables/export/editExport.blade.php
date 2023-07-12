@@ -3,19 +3,25 @@
     <div class="row">
         <div class="col-sm-6 breadcrumb">
             @if ($exports->export_status == 2)
-            <a href="{{ route('exports.index') }}">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" fill="#555555" />
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M17 11.9999C17 12.3289 16.7513 12.5956 16.4444 12.5956L7.55557 12.5956C7.24875 12.5956 7.00002 12.3289 7.00002 11.9999C7.00002 11.671 7.24875 11.4043 7.55557 11.4043L16.4444 11.4043C16.7513 11.4043 17 11.671 17 11.9999Z" fill="white" />
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M11.1244 8.17446C11.3413 8.40707 11.3413 8.78421 11.1244 9.01683L8.34199 12L11.1244 14.9832C11.3413 15.2158 11.3413 15.5929 11.1244 15.8255C10.9074 16.0582 10.5557 16.0582 10.3387 15.8255L7.16349 12.4212C6.94653 12.1886 6.94653 11.8114 7.16349 11.5788L10.3387 8.17446C10.5557 7.94185 10.9074 7.94185 11.1244 8.17446Z" fill="white" />
-                </svg>
-                <span class="ml-1" style="font-size: 16px; font-weight: 500; color: #555555;">Quay lại danh
-                    sách</span>
-            </a>
+                <a href="{{ route('exports.index') }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path
+                            d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
+                            fill="#555555" />
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M17 11.9999C17 12.3289 16.7513 12.5956 16.4444 12.5956L7.55557 12.5956C7.24875 12.5956 7.00002 12.3289 7.00002 11.9999C7.00002 11.671 7.24875 11.4043 7.55557 11.4043L16.4444 11.4043C16.7513 11.4043 17 11.671 17 11.9999Z"
+                            fill="white" />
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M11.1244 8.17446C11.3413 8.40707 11.3413 8.78421 11.1244 9.01683L8.34199 12L11.1244 14.9832C11.3413 15.2158 11.3413 15.5929 11.1244 15.8255C10.9074 16.0582 10.5557 16.0582 10.3387 15.8255L7.16349 12.4212C6.94653 12.1886 6.94653 11.8114 7.16349 11.5788L10.3387 8.17446C10.5557 7.94185 10.9074 7.94185 11.1244 8.17446Z"
+                            fill="white" />
+                    </svg>
+                    <span class="ml-1" style="font-size: 16px; font-weight: 500; color: #555555;">Quay lại danh
+                        sách</span>
+                </a>
             @else
-            <span><a href="{{ route('exports.index') }}">Xuất hàng</a></span>
-            <span class="px-1">/</span>
-            <span><b>Chi tiết đơn hàng</b></span>
+                <span><a href="{{ route('exports.index') }}">Xuất hàng</a></span>
+                <span class="px-1">/</span>
+                <span><b>Chi tiết đơn hàng</b></span>
             @endif
         </div>
         <div class="col-sm-6 position-absolute" style="top:63px;right:2%">
@@ -129,31 +135,18 @@
     <form action="{{ route('exports.update', $exports->id) }}" method="POST" id="export_form">
         @csrf
         @method('PUT')
+        <input type="hidden" name="checkguest" value="" id="checkguest">
         <section class="content">
             <div class="d-flex mb-1 action-don">
                 @if ($exports->export_status == 1)
                     @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
                         <button type="submit" class="btn btn-danger text-white" name="submitBtn" value="action1"
-                            onclick="validateAndSubmit(event)" id="chot_don">Chốt
-                            đơn</button>
+                            onclick="validateAndSubmit(event)" id="chot_don">Chốt đơn</button>
                         <button type="submit" class="btn btn-secondary mx-4" name="submitBtn" value="action2"
-                            onclick="validateAndSubmit(event)" id="huy">Hủy
-                            đơn</button>
+                            onclick="validateAndSubmit(event)" id="huy">Hủy đơn</button>
                     @endif
                 @endif
                 {{-- <a href="#" class="btn border border-secondary mr-4">Xuất file</a> --}}
-                <a class="btn border border-secondary mr-4" onclick="toggleDiv()">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M9 5C8.46957 5 7.96086 5.21071 7.58579 5.58579C7.21071 5.96086 7 6.46957 7 7V8H17V7C17 6.46957 16.7893 5.96086 16.4142 5.58579C16.0391 5.21071 15.5304 5 15 5H9ZM15 13H9C8.73478 13 8.48043 13.1054 8.29289 13.2929C8.10536 13.4804 8 13.7348 8 14V17C8 17.2652 8.10536 17.5196 8.29289 17.7071C8.48043 17.8946 8.73478 18 9 18H15C15.2652 18 15.5196 17.8946 15.7071 17.7071C15.8946 17.5196 16 17.2652 16 17V14C16 13.7348 15.8946 13.4804 15.7071 13.2929C15.5196 13.1054 15.2652 13 15 13Z"
-                            fill="#555555" />
-                        <path
-                            d="M4 11C4 10.4696 4.21071 9.96086 4.58579 9.58579C4.96086 9.21071 5.46957 9 6 9H18C18.5304 9 19.0391 9.21071 19.4142 9.58579C19.7893 9.96086 20 10.4696 20 11V14C20 14.5304 19.7893 15.0391 19.4142 15.4142C19.0391 15.7893 18.5304 16 18 16H17V14C17 13.4696 16.7893 12.9609 16.4142 12.5858C16.0391 12.2107 15.5304 12 15 12H9C8.46957 12 7.96086 12.2107 7.58579 12.5858C7.21071 12.9609 7 13.4696 7 14V16H6C5.46957 16 4.96086 15.7893 4.58579 15.4142C4.21071 15.0391 4 14.5304 4 14V11ZM6.5 12C6.63261 12 6.75979 11.9473 6.85355 11.8536C6.94732 11.7598 7 11.6326 7 11.5C7 11.3674 6.94732 11.2402 6.85355 11.1464C6.75979 11.0527 6.63261 11 6.5 11C6.36739 11 6.24021 11.0527 6.14645 11.1464C6.05268 11.2402 6 11.3674 6 11.5C6 11.6326 6.05268 11.7598 6.14645 11.8536C6.24021 11.9473 6.36739 12 6.5 12Z"
-                            fill="#555555" />
-                    </svg>
-                    In báo giá
-                </a>
             </div>
             <div class="container-fluided position-relative">
                 <div class="row my-3">
@@ -184,19 +177,20 @@
                                             </svg>
                                         </div>
                                     </div>
-                                    <ul id="myUL" class="bg-white position-absolute w-50 rounded shadow p-0"
+                                    <ul id="myUL"
+                                        class="bg-white position-absolute w-50 rounded shadow p-0 scroll-data"
                                         style="z-index: 99;">
                                         @foreach ($customer as $item)
-                                        @if (Auth::user()->id == $item->user_id || Auth::user()->can('isAdmin'))
-                                            <li>
-                                                <a href="#"
-                                                    class="text-dark d-flex justify-content-between p-2 search-info"
-                                                    id="{{ $item->id }}" name="search-info">
-                                                    <span class="w-50">{{ $item->guest_receiver }}</span>
-                                                    <span class="w-50">{{ $item->guest_name }}</span>
-                                                </a>
-                                            </li>
-                                        @endif
+                                            @if (Auth::user()->id == $item->user_id || Auth::user()->can('isAdmin'))
+                                                <li>
+                                                    <a href="#"
+                                                        class="text-dark d-flex justify-content-between p-2 search-info"
+                                                        id="{{ $item->id }}" name="search-info">
+                                                        <span class="w-50">{{ $item->guest_receiver }}</span>
+                                                        <span class="w-50">{{ $item->guest_name }}</span>
+                                                    </a>
+                                                </li>
+                                            @endif
                                         @endforeach
                                     </ul>
                                 @endif
@@ -222,8 +216,6 @@
                     <div class="row p-3">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <input type="text" hidden class="form-control" id="id" name="id"
-                                    value="{{ $guest->id }}" required>
                                 <label for="congty">Công ty:</label>
                                 <input type="text" class="form-control" id="guest_name" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                     echo 'readonly';
@@ -235,12 +227,12 @@
                                 <input type="hidden" name="updateClick" id="updateClick" value="">
                             </div>
                             <div class="form-group">
-                                <label>Địa chỉ xuất hóa đơn:</label>
+                                <label>Địa chỉ:</label>
                                 <input type="text" class="form-control" placeholder="Nhập thông tin"
                                     <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                         echo 'readonly';
-                                    } ?> id="guest_addressInvoice" name="guest_addressInvoice"
-                                    value="{{ $guest->guest_addressInvoice }}" required>
+                                    } ?> id="guest_address" name="guest_address"
+                                    value="{{ $guest->guest_address }}" required>
                             </div>
                             <div class="form-group">
                                 <label for="email">Mã số thuế:</label>
@@ -250,39 +242,12 @@
                                     placeholder="Nhập thông tin" name="guest_code" value="{{ $guest->guest_code }}">
                             </div>
                             <div class="form-group">
-                                <label for="email">Địa chỉ giao hàng:</label>
-                                <input type="text" class="form-control" id="guest_addressDeliver"
-                                    <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                        echo 'readonly';
-                                    } ?> placeholder="Nhập thông tin" name="guest_addressDeliver"
-                                    value="{{ $guest->guest_addressDeliver }}">
-                            </div>
-                            <div class="form-group">
-                                <label for="email">Người nhận hàng:</label>
-                                <input type="text" class="form-control" id="guest_receiver" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                    echo 'readonly';
-                                } ?>
-                                    placeholder="Nhập thông tin" name="guest_receiver"
-                                    value="{{ $guest->guest_receiver }}" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="email">SĐT người nhận:</label>
-                                <input type="text" class="form-control" id="guest_phoneReceiver"
-                                    pattern="^(0|\+84)(3[2-9]|5[2689]|7[0|6-9]|8[1-9]|9[0-9])\d{7,9}$"
-                                    <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                        echo 'readonly';
-                                    } ?> placeholder="Nhập thông tin" name="guest_phoneReceiver"
-                                    value="{{ $guest->guest_phoneReceiver }}" required>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
                                 <label for="email">Email:</label>
                                 <input type="email" class="form-control" id="guest_email" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                     echo 'readonly';
                                 } ?>
                                     placeholder="Nhập thông tin" name="guest_email"
-                                    value="{{ $guest->guest_email }}" required>
+                                    value="{{ $guest->guest_email }}">
                             </div>
                             <div class="form-group">
                                 <label for="email">Số điện thoại:</label>
@@ -291,21 +256,34 @@
                                     id="guest_phone" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                         echo 'readonly';
                                     } ?> placeholder="Nhập thông tin"
-                                    name="guest_phone" value="{{ $guest->guest_phone }}" required>
+                                    name="guest_phone" value="{{ $guest->guest_phone }}">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="email">Người nhận hàng:</label>
+                                <input type="text" class="form-control" id="guest_receiver" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                    echo 'readonly';
+                                } ?>
+                                    placeholder="Nhập thông tin" name="guest_receiver"
+                                    value="{{ $guest->guest_receiver }}">
                             </div>
                             <div class="form-group">
-                                <label for="email">Phương thức thanh toán:</label>
-                                <select name="guest_pay" required class="form-control" id="guest_pay"
+                                <label for="email">Email cá nhân:</label>
+                                <input type="text" class="form-control" id="guest_email_personal"
                                     <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                        echo 'disabled';
-                                    } ?>>
-                                    <option value="0" <?php if ($guest->guest_pay == 0) {
-                                        echo 'selected';
-                                    } ?>>Chuyển khoản</option>
-                                    <option value="1" <?php if ($guest->guest_pay == 1) {
-                                        echo 'selected';
-                                    } ?>>Thanh toán bằng tiền mặt</option>
-                                </select>
+                                        echo 'readonly';
+                                    } ?> placeholder="Nhập thông tin" name="guest_email_personal"
+                                    value="{{ $guest->guest_email_personal }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">SĐT người nhận:</label>
+                                <input type="text" class="form-control" id="guest_phoneReceiver"
+                                    pattern="^(0|\+84)(3[2-9]|5[2689]|7[0|6-9]|8[1-9]|9[0-9])\d{7,9}$"
+                                    <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                        echo 'readonly';
+                                    } ?> placeholder="Nhập thông tin" name="guest_phoneReceiver"
+                                    value="{{ $guest->guest_phoneReceiver }}">
                             </div>
                             <div class="form-group">
                                 <label>Công nợ:</label>
@@ -335,18 +313,24 @@
                     </div>
                     <div>
             </section>
+            <div class="d-flex align-items-center my-2">
+                <div class="">
+                    <p class="m-0"><b>Số hóa đơn</b></p>
+                    <input type="number" value="{{ $exports->export_code }}" name="export_code"
+                        class="form-control" placeholder="Nhập thông tin">
+                </div>
+                <div class="pl-3">
+                    <p class="m-0"><b>Ngày hóa đơn</b></p>
+                    <input type="date" value="{{ $exports->created_at->format('Y-m-d') }}" name="export_create"
+                        class="form-control">
+                </div>
+            </div>
             {{-- Bảng thêm sản phẩm --}}
             <div class="mt-4" style="overflow-x: auto;">
                 <table class="table">
                     <thead class="bg-white border-0 rounded-top">
                         <tr>
-                            @if ($exports->export_status == 1)
-                                @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
-                                    <th><input type="checkbox"></th>
-                                @endif
-                            @endif
                             <th>STT</th>
-                            <th>Mã sản phẩm</th>
                             <th>Tên sản phẩm</th>
                             <th>ĐVT</th>
                             <th>Số lượng</th>
@@ -354,7 +338,6 @@
                             <th>Thuế</th>
                             <th>Thành tiền</th>
                             <th>Ghi chú</th>
-                            <th>S/N</th>
                             <th></th>
                             <th></th>
                         </tr>
@@ -363,25 +346,7 @@
                         <?php $stt = 1; ?>
                         @foreach ($productExport as $index => $value_export)
                             <tr id="dynamic-row-{{ $index }}">
-                                @if ($exports->export_status == 1)
-                                    @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
-                                        <td><input type="checkbox"></td>
-                                    @endif
-                                @endif
                                 <td class="soTT"><?php echo $stt++; ?></td>
-                                <td>
-                                    <input type="hidden" id="export_id" value="{{ $exports->id }}">
-                                    <select id="maProduct" class="p-1 maProduct form-control" name="products_id[]"
-                                        <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                            echo 'disabled';
-                                        } ?>>
-                                        @foreach ($product_code as $value_code)
-                                            <option value="{{ $value_code->id }}"
-                                                @if ($value_export->products_id == $value_code->id) selected @endif>
-                                                {{ $value_code->products_code }}</option>
-                                        @endforeach
-                                    </select>
-                                </td>
                                 <td>
                                     {{-- <input type="text" title="{{ $value_export->product_name }}"
                                             style="width: 220px" class="child-select p-1 form-control productName"
@@ -391,7 +356,15 @@
                                             echo 'disabled';
                                         } ?>>
                                         <option value="{{ $value_export->product_id }}">
-                                            {{ $value_export->product_name }}</option>
+                                            {{ $value_export->product_name }}
+                                        </option>
+                                        @foreach ($product_code as $value_code)
+                                            <option value="{{ $value_code->id }}" class="<?php if ($value_code->id === $value_export->product_id) {
+                                                echo 'd-none';
+                                            } ?>">
+                                                {{ $value_code->product_name }}
+                                            </option>
+                                        @endforeach
                                     </select>
                                 </td>
                                 <td>
@@ -403,13 +376,20 @@
                                         required="">
                                 </td>
                                 <td>
-                                    <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-                                        id="product_qty" class="quantity-input form-control text-center"
-                                        style="width: 50px" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                            echo 'readonly';
-                                        } ?>
-                                        value="{{ $value_export->product_qty }}" name="product_qty[]"
-                                        required="">
+                                    <div class='d-flex'>
+                                        <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                            id="product_qty" class="quantity-input form-control text-center"
+                                            style="width: 50px" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                                echo 'readonly';
+                                            } ?>
+                                            value="{{ $value_export->product_qty }}" name="product_qty[]"
+                                            required="">
+                                        <input type="text" readonly="" class="quantity-exist" required=""
+                                            value="/{{ $value_export->tonkho + $value_export->product_qty }}"
+                                            style="width:50px;background:#D6D6D6;border:none;" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                                echo 'hidden';
+                                            } ?>>
+                                    </div>
                                 </td>
                                 <td>
                                     <input type="text" id="product_price" name="product_price[]"
@@ -448,16 +428,6 @@
                                         } ?>
                                         value="{{ $value_export->product_note }}">
                                 </td>
-                                @if ($exports->export_status == 2)
-                                    <td data-toggle='modal' data-target='#snModal' class='sn'><img
-                                            src="../../dist/img/icon/list.png"></td>
-                                @elseif($exports->export_status == 0)
-                                    <td data-toggle='modal' data-target='#snModal' class='sn1'><img
-                                            src="../../dist/img/icon/list.png"></td>
-                                @else
-                                    <td data-toggle='modal' data-target='#snModal' class='sn2'><img
-                                            src="../../dist/img/icon/list.png"></td>
-                                @endif
                                 <td data-toggle='modal' data-target='#productModal' class='productMD'><img
                                         src="../../dist/img/icon/Group.png"></td>
                                 @if ($exports->export_status == 1)
@@ -484,7 +454,7 @@
             </div>
             <div class="row position-relative footer-total">
                 <div class="col-sm-6">
-                    <div class="mt-4 w-75" style="float: left;">
+                    {{-- <div class="mt-4 w-75" style="float: left;">
                         <b class="pl-2">*Ghi chú báo giá</b>
                         <div class="position-relative">
                             <input type="hidden" name="creator" id="creator" value="{{ Auth::user()->id }}">
@@ -502,7 +472,7 @@
                                 </div>
                             @endif
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="col-sm-6">
                     <div class="mt-4 w-50" style="float: right;">
@@ -568,151 +538,7 @@
         </div>
     </div>
 </div>
-{{-- Modal S/N --}}
-<div class="modal fade" id="snModal" tabindex="-1" role="dialog" aria-labelledby="productModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document" style="max-width: 85%;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="productModalLabel">Danh sách Serial Number</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-            </div>
-        </div>
-    </div>
-</div>
 </section>
-</div>
-<div id="print-price">
-    <div class="container">
-        <div class="text-center">
-            <img src='../../dist/img/print/Print1.jpg' width="100%">
-        </div>
-        <div class="text-center my-4">
-            <h1><b>ĐƠN ĐẶT HÀNG</b></h1>
-        </div>
-        <div class="row">
-            <div class="col-md-9">
-                <div class>
-                    <span>Kính gửi:</span>
-                    <span class="guest-name"><b></b></span>
-                </div>
-                <div class>
-                    <span>Địa chỉ:</span>
-                    <span class="guest-addressDeliver"></span>
-                </div>
-                <div class>
-                    <span>MST:</span>
-                    <span class="guest-code"></span>
-                </div>
-                <div class>
-                    <span>
-                        Người liên hệ:
-                    </span>
-                    <span class="guest-receiver">
-                        <b></b>
-                    </span>
-                    <span>-</span>
-                    <span>Phone:</span>
-                    <span class="guest-phoneReceiver"><b></b></span>
-                </div>
-                <div class>
-                    <span><b><u><i>Kính gửi:</i></u></b></span>
-                    <span><b>Quý khách hàng</b></span>
-                    <p>Công ty Khang Yến trân trọng gởi đến quý khách
-                        hàng
-                        báo giá chi tiết sau:</p>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class>
-                    <span><i>Date:</i></span>
-                    <span><i><?php $ngayHienTai = date('d/m/Y');
-                    echo $ngayHienTai; ?></i></span>
-                </div>
-                <div class>
-                    <span><i>From:</i></span>
-                    <span><i>{{ Auth::user()->name }}</i></span>
-                </div>
-                <div class>
-                    <span><i>Email:</i></span>
-                    <span><i>{{ Auth::user()->email }}</i></span>
-                </div>
-                <div class>
-                    <span><i>Mobile:</i></span>
-                    <span><i>{{ Auth::user()->phonenumber }}</i></span>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="container">
-        <table id="destinationTable">
-            <thead>
-                <tr>
-                    <th class="text-center">P/N</th>
-                    <th class="text-center">CHI TIẾT CẤU HÌNH KỸ THUẬT</th>
-                    <th class="text-center">SL</th>
-                    <th class="text-center">ĐƠN GIÁ</th>
-                    <th class="text-center">THUẾ</th>
-                    <th class="text-center">THÀNH TIỀN</th>
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="5" class="text-center">
-                        <b style="color: #EC212D;">Tổng cộng tiền hàng:</b>
-                    </td>
-                    <td style="color: #EC212D;" class="text-right tong-tien"><b></b></td>
-                </tr>
-                <tr>
-                    <td colspan="5" class="text-center" style="color: #EC212D;">
-                        <b>Thuế VAT:</b>
-                    </td>
-                    <td style="color: #EC212D;" class="text-right thue-vat"><b></b></td>
-                </tr>
-                <tr>
-                    <td colspan="5" class="text-center"><b style="color: #EC212D;">Vận chuyển:</b></td>
-                    <td style="color: #EC212D;" class="text-right van-chuyen"><b></b></td>
-                </tr>
-                <tr>
-                    <td colspan="5" class="text-center"><b style="color: #EC212D;">Thành tiền:</b></td>
-                    <td style="color: #EC212D;" class="text-right tong-cong"><b></b></td>
-                </tr>
-                {{-- <tr>
-                    <td colspan="6" class="text-center">
-                        <b>(Bằng chữ: Ba mươi chín triệu ba trăm tám mươi
-                            ngàn đồng chẵn).
-                        </b>
-                    </td>
-                </tr> --}}
-            </tfoot>
-        </table>
-        <div class="mt-4">
-            <p class="p-0 m-0"><b><u><i>*Ghi chú:</i></u></b></p>
-            <?php
-            $noteForm = nl2br(e(Auth::user()->note_form)); // Sử dụng hàm nl2br để chuyển xuống dòng thành thẻ <br>
-            ?>
-            <div class="noteForm"><?php echo $noteForm; ?></div>
-        </div>
-        <div class="p-4" style="border: 2px solid black;">
-            <div class="text-center"><b>Công ty TNHH Công Nghệ Khanh Yến</b></div>
-            <div class="text-center">Số tài khoản: 3334449988</div>
-            <div class="text-center">Tại: Ngân hàng ACB - CN Tây Sài Gòn</div>
-        </div>
-        <div class="d-flex justify-content-between p-5">
-            <span><b><i>Khách hàng xác nhận đặt hàng</i></b></span>
-            <span><b>Nhân viên</b></span>
-        </div>
-    </div>
 </div>
 <script>
     // Thay đổi màu nút save note_form
@@ -730,6 +556,7 @@
         if ($('#radio1:checked').length > 0) {
             $('#click').val(2);
             $('#updateClick').val(2);
+            $('#checkguest').val(1);
         }
     });
     //Thêm form ghi chú cho nhân viên
@@ -761,9 +588,6 @@
             .val();
         var thue = $(this).closest('tr').find('.product_tax')
             .val();
-        if (thue == 99) {
-            thue = 0;
-        }
         $.ajax({
             url: "{{ route('getProduct') }}",
             type: "get",
@@ -778,198 +602,14 @@
                 } else {
                     formattedPrice = numeral(productPrice).format('0,0.00');
                 }
-                $('#productModal').find('.modal-body').html('<b>Mã sản phẩm: </b> ' +
-                    productCode +
-                    '<br>' + '<b>Tên sản phẩm: </b> ' + productName + '<br>' +
-                    '<b>Loại hàng: </b> ' + response.product_category + '<br>' +
+                $('#productModal').find('.modal-body').html('<b>Tên sản phẩm: </b> ' + productName +
+                    '<br>' +
                     '<b>Tồn kho: </b>' + response.product_qty + '<br>' +
                     '<b>Đang giao dịch: </b>' +
-                    response.trading +
+                    response.product_trade +
                     '<br>' + '<b>Giá nhập: </b>' + formattedPrice + '<br>' + '<b>Thuế: </b>' +
-                    thue + '%');
+                    (thue == 99 ? "NOVAT" : thue + "%"));
             },
-        });
-    });
-    //hiển thị thông tin S/N chốt đơn
-    $('.sn').on('click', function() {
-        var qty = $(this).closest('tr').find('.quantity-input').val();
-        var productCode = $(this).closest('tr').find('.productName').val();
-        var productCode1 = $(this).closest('tr').find('.maProduct option:selected')
-            .text();
-        var productName = $(this).closest('tr').find('.productName option:selected')
-            .text();
-        var dvt = $(this).closest('tr').find('.product_unit').val();
-        var giaBan = $(this).closest('tr').find('.product_price')
-            .val();
-        var ghiChu = $(this).closest('tr').find('.note_product')
-            .val();
-        var thue = $(this).closest('tr').find('.product_tax')
-            .val();
-        var thanhTien = $(this).closest('tr').find('.total-amount')
-            .text();
-        var giaNhap = $(this).closest('tr').find('.price_import').val();
-        var tonKho = $(this).closest('tr').find('.tonkho').val();
-        $.ajax({
-            url: '{{ route('getSN1') }}',
-            type: 'GET',
-            data: {
-                qty: qty,
-                productCode: productCode,
-            },
-            success: function(response) {
-                console.log(response);
-                var modalBody = $('#snModal').find('.modal-body');
-                let count = 1;
-                modalBody.empty();
-                var snList = $('<table class="table table-hover">' +
-                    '<thead><tr><td>STT</td><td>Serial Number</td></tr></thead>' +
-                    '<tbody>'
-                );
-                var product = $('<table class="table table-hover">' +
-                    '<thead><tr><td>ID</td><td>Mã sản phẩm</td><td>Tên sản phẩm</td><td>Số lượng sản phẩm</td><td>Số lượng S/N</td></tr></thead>' +
-                    '<tbody><tr>' + '<td>1</td>' + '<td>' +
-                    productCode1 + '</td>' + '<td>' + productName +
-                    '</td>' + '<td>' + qty + '</td>' + '<td>' + qty +
-                    '</td>' +
-                    '</tr</tbody>' + '</table>' +
-                    '<h5>Thông tin Serial Number </h5>');
-                response.forEach(function(sn) {
-                    var countCell = $('<td>').text(count);
-                    var snItemCell = $('<td>').text(sn.serinumber);
-                    var row = $('<tr>').append(countCell,
-                        snItemCell);
-                    snList.append(row);
-                    count++;
-                });
-                modalBody.append(product, snList);
-                $('#snModal').modal('show');
-            },
-            error: function(xhr, status, error) {
-                console.log(error);
-            }
-        });
-    });
-    //hiển thị thông tin S/N hủy đơn
-    $('.sn1').on('click', function() {
-        var qty = $(this).closest('tr').find('.quantity-input').val();
-        var productCode = $(this).closest('tr').find('.productName').val();
-        var productCode1 = $(this).closest('tr').find('.maProduct option:selected')
-            .text();
-        var productName = $(this).closest('tr').find('.productName option:selected')
-            .text();
-        var dvt = $(this).closest('tr').find('.product_unit').val();
-        var giaBan = $(this).closest('tr').find('.product_price')
-            .val();
-        var ghiChu = $(this).closest('tr').find('.note_product')
-            .val();
-        var thue = $(this).closest('tr').find('.product_tax')
-            .val();
-        var thanhTien = $(this).closest('tr').find('.total-amount')
-            .text();
-        var giaNhap = $(this).closest('tr').find('.price_import').val();
-        var tonKho = $(this).closest('tr').find('.tonkho').val();
-        var export_id = $('#export_id').val();
-        $.ajax({
-            url: '{{ route('getSN') }}',
-            type: 'GET',
-            data: {
-                qty: qty,
-                productCode: productCode,
-                export_id: export_id,
-            },
-            success: function(response) {
-                console.log(response);
-                var modalBody = $('#snModal').find('.modal-body');
-                let count = 1;
-                modalBody.empty();
-                var snList = $('<table class="table table-hover">' +
-                    '<thead><tr><td>STT</td><td>Serial Number</td></tr></thead>' +
-                    '<tbody>'
-                );
-                var product = $('<table class="table table-hover">' +
-                    '<thead><tr><td>ID</td><td>Mã sản phẩm</td><td>Tên sản phẩm</td><td>Số lượng sản phẩm</td><td>Số lượng S/N</td></tr></thead>' +
-                    '<tbody><tr>' + '<td>1</td>' + '<td>' +
-                    productCode1 + '</td>' + '<td>' + productName +
-                    '</td>' + '<td>' + qty + '</td>' + '<td>' + qty +
-                    '</td>' +
-                    '</tr</tbody>' + '</table>' +
-                    '<h5>Thông tin Serial Number </h5>');
-                response.forEach(function(sn) {
-                    var countCell = $('<td>').text(count);
-                    var snItemCell = $('<td>').text(sn.serinumber);
-                    var row = $('<tr>').append(countCell,
-                        snItemCell);
-                    snList.append(row);
-                    count++;
-                });
-                modalBody.append(product, snList);
-                $('#snModal').modal('show');
-            },
-            error: function(xhr, status, error) {
-                console.log(error);
-            }
-        });
-    });
-
-    //hiển thị thông tin S/N cho duyet
-    $('.sn2').on('click', function() {
-        var qty = $(this).closest('tr').find('.quantity-input').val();
-        var productCode = $(this).closest('tr').find('.productName').val();
-        var productCode1 = $(this).closest('tr').find('.maProduct option:selected')
-            .text();
-        var productName = $(this).closest('tr').find('.productName option:selected')
-            .text();
-        var dvt = $(this).closest('tr').find('.product_unit').val();
-        var giaBan = $(this).closest('tr').find('.product_price')
-            .val();
-        var ghiChu = $(this).closest('tr').find('.note_product')
-            .val();
-        var thue = $(this).closest('tr').find('.product_tax')
-            .val();
-        var thanhTien = $(this).closest('tr').find('.total-amount')
-            .text();
-        var giaNhap = $(this).closest('tr').find('.price_import').val();
-        var tonKho = $(this).closest('tr').find('.tonkho').val();
-        var export_id = $('#export_id').val();
-
-        $.ajax({
-            url: '{{ route('getSN2') }}',
-            type: 'GET',
-            data: {
-                qty: qty,
-                productCode: productCode,
-                export_id: export_id,
-            },
-            success: function(response) {
-                var modalBody = $('#snModal').find('.modal-body');
-                let count = 1;
-                modalBody.empty();
-                var snList = $('<table class="table table-hover">' +
-                    '<thead><tr><td>STT</td><td>Serial Number</td></tr></thead>' +
-                    '<tbody>'
-                );
-                var product = $('<table class="table table-hover">' +
-                    '<thead><tr><td>ID</td><td>Mã sản phẩm</td><td>Tên sản phẩm</td><td>Số lượng sản phẩm</td><td>Số lượng S/N</td></tr></thead>' +
-                    '<tbody><tr>' + '<td>1</td>' + '<td>' +
-                    productCode1 + '</td>' + '<td>' + productName +
-                    '</td>' + '<td>' + qty + '</td>' + '<td>' + qty +
-                    '</td>' +
-                    '</tr</tbody>' + '</table>' +
-                    '<h5>Thông tin Serial Number </h5>');
-                response.forEach(function(sn) {
-                    var countCell = $('<td>').text(count);
-                    var snItemCell = $('<td>').text(sn.serinumber);
-                    var row = $('<tr>').append(countCell,
-                        snItemCell);
-                    snList.append(row);
-                    count++;
-                });
-                modalBody.append(product, snList);
-                $('#snModal').modal('show');
-            },
-            error: function(xhr, status, error) {
-                console.log(error);
-            }
         });
     });
     //form thong tin khach hang xuất hàng
@@ -978,6 +618,7 @@
     $("#radio1").on("click", function() {
         $('#data-container').empty();
         $('#form-edit').show();
+        $('#form-guest').remove();
     });
     $("#radio2").on("click", function() {
         $('#data-container').html(
@@ -995,38 +636,34 @@
             '<label for="congty">Công ty:</label>' +
             '<input type="text" class="form-control" id="guest_name" placeholder="Nhập thông tin" name="guest_name" value="" required>' +
             '</div>' + '<div class="form-group">' +
-            '<label>Địa chỉ xuất hóa đơn:</label>' +
-            '<input type="text" class="form-control" id="guest_addressInvoice" placeholder="Nhập thông tin" name="guest_addressInvoice" value="" required>' +
+            '<label>Địa chỉ:</label>' +
+            '<input type="text" class="form-control" id="guest_address" placeholder="Nhập thông tin" name="guest_address" value="" required>' +
             '</div>' + '<div class="form-group">' +
             '<label>Mã số thuế:</label>' +
             '<input type="text" oninput="validateNumberInput(this)" class="form-control" id="guest_code" inputmode="numeric" placeholder="Nhập thông tin" name="guest_code" value="" required>' +
             '</div>' + '<div class="form-group">' +
-            '<label for="email">Địa chỉ giao hàng:</label>' +
-            '<input type="text" class="form-control" id="guest_addressDeliver" placeholder="Nhập thông tin" name="guest_addressDeliver" value="" required>' +
-            '</div>' + '<div class="form-group">' +
-            '<label for="email">Người nhận hàng:</label>' +
-            '<input type="text" class="form-control" id="guest_receiver" placeholder="Nhập thông tin" name="guest_receiver" value="" required>' +
-            '</div>' + '<div class="form-group">' +
-            '<label for="email">SĐT người nhận:</label>' +
-            '<input type="text" oninput="validateNumberInput(this)" pattern="/^(0|\+84)(3[2-9]|5[2689]|7[0|6-9]|8[1-9]|9[0-9])\d{7,9}$/" class="form-control" id="guest_phoneReceiver" placeholder="Nhập thông tin" name="guest_phoneReceiver" value="" required>' +
-            '</div>' + '</div>' + '<div class="col-sm-6">' +
-            '<div class="form-group">' +
             '<label for="email">Email:</label>' +
-            '<input type="email" class="form-control" pattern="/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/" id="guest_email" placeholder="Nhập thông tin" name="guest_email" value="" required>' +
+            '<input type="email" class="form-control" pattern="/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/" id="guest_email" placeholder="Nhập thông tin" name="guest_email" value="">' +
             '</div>' + '<div class="form-group">' +
             '<label>Số điện thoại:</label>' +
-            '<input type="text" class="form-control" oninput="validateNumberInput(this)" pattern="/^(0|\+84)(3[2-9]|5[2689]|7[0|6-9]|8[1-9]|9[0-9])\d{7,9}$/" id="guest_phone" placeholder="Nhập thông tin" name="guest_phone" value="" required>' +
+            '<input type="text" class="form-control" oninput="validateNumberInput(this)" pattern="/^(0|\+84)(3[2-9]|5[2689]|7[0|6-9]|8[1-9]|9[0-9])\d{7,9}$/" id="guest_phone" placeholder="Nhập thông tin" name="guest_phone" value="">' +
+            '</div>' + '</div>' + '<div class="col-sm-6">' +
+            '<div class="form-group">' +
+            '<label for="email">Người nhận hàng:</label>' +
+            '<input type="text" class="form-control" id="guest_receiver" placeholder="Nhập thông tin" name="guest_receiver" value="">' +
             '</div>' + '<div class="form-group">' +
-            ' <label for="email">Phương thức thanh toán:</label>' +
-            '<select name="guest_pay" class="form-control" id="guest_pay">' +
-            '<option value="0">Chuyển khoản</option>' +
-            '</select>' +
+            '<label for="email">Email cá nhân:</label>' +
+            '<input type="text" class="form-control" id="guest_email_personal" placeholder="Nhập thông tin" name="guest_email_personal" value="">' +
             '</div>' + '<div class="form-group">' +
+            '<label for="email">SĐT người nhận:</label>' +
+            '<input type="text" oninput="validateNumberInput(this)" pattern="/^(0|\+84)(3[2-9]|5[2689]|7[0|6-9]|8[1-9]|9[0-9])\d{7,9}$/" class="form-control" id="guest_phoneReceiver" placeholder="Nhập thông tin" name="guest_phoneReceiver" value="">' +
+            '</div>' +
+            '<div class="form-group">' +
             '<label>Công nợ:</label>' +
             '<div class="d-flex align-items-center" style="width:101%;">' +
             '<input type="text" oninput="validateNumberInput(this)" class="form-control" id="debtInput" value="" name="debt" style="width:15%;">' +
             '<span class="ml-2" id="data-debt">ngày</span>' +
-            '<input type="checkbox" id="debtCheckbox" value="0" name="debt" style="margin-left:10%;">' +
+            '<input type="checkbox" id="debtCheckbox" value="0" style="margin-left:10%;">' +
             '<span class="ml-2">Thanh toán tiền mặt</span>' +
             '</div>' + '</div>' +
             '<div class="form-group">' +
@@ -1036,6 +673,7 @@
         );
         $('#click').val(2);
         $('#updateClick').val(2);
+        $('#checkguest').val(2);
         //Công nợ
         $(document).on('change', '#debtCheckbox', function() {
             if ($(this).is(':checked')) {
@@ -1047,7 +685,7 @@
                 $("#data-debt").css("color", "#1D1C20");
             }
         });
-        $('#form-edit').hide();
+        $('#form-edit').remove();
     });
     //add sản phẩm
     $(document).ready(function() {
@@ -1057,22 +695,16 @@
             const newRow = $("<tr>", {
                 "id": `dynamic-row-${fieldCounter}`
             });
-            const checkbox = $("<td><input type='checkbox'></td>");
             const MaInput = $("<td>", {
                 "class": "soTT",
                 "text": nextSoTT
             });
-            const TenInput = $("<td>" +
-                "<select id='maProduct' class='p-1 maProduct form-control' name='products_id[]' required>" +
+            const ProInput = $("<td>" +
+                "<select class='child-select p-1 productName form-control' style='width:220px' required name='product_id[]'>" +
                 "<option value=''>Lựa chọn sản phẩm</option>" +
                 '@foreach ($product_code as $value)' +
-                "<option value='{{ $value->id }}'>{{ $value->products_code }}</option>" +
+                "<option value='{{ $value->id }}'>{{ $value->product_name }}</option>" +
                 '@endforeach' +
-                "</select>"
-            );
-            const ProInput = $("<td>" +
-                "<select class='child-select p-1 productName form-control' name='product_id[]' required>" +
-                "<option value=''>Lựa chọn sản phẩm</option>" +
                 "</select>" +
                 "</td>");
             const dvtInput = $(
@@ -1098,12 +730,10 @@
                 "</select>" +
                 "</td>");
             const thanhTienInput = $(
-                "<td><span class='total-amount form-control text-center'>0</span></td>");
+                "<td><span class='total-amount form-control text-center' style='background:#e9ecef; width:140px'>0</span></td>"
+            );
             const ghichuInput = $(
                 "<td><input type='text' class='note_product form-control text-left' name='product_note[]'></td>"
-            );
-            const sn = $(
-                "<td data-toggle='modal' data-target='#snModal'><img src='../../dist/img/icon/list.png'></td>"
             );
             const info = $(
                 "<td data-toggle='modal' data-target='#productModal'><img src='../../dist/img/icon/Group.png'></td>"
@@ -1123,64 +753,6 @@
                 updateSTT();
                 calculateGrandTotal();
                 calculateTotals();
-            });
-            //lấy S/N
-            sn.click(function() {
-                var qty = $(this).closest('tr').find('.quantity-input').val();
-                var productCode = $(this).closest('tr').find('.productName').val();
-                var productCode1 = $(this).closest('tr').find('.maProduct option:selected')
-                    .text();
-                var productName = $(this).closest('tr').find('.productName option:selected')
-                    .text();
-                var dvt = $(this).closest('tr').find('.product_unit').val();
-                var giaBan = $(this).closest('tr').find('.product_price')
-                    .val();
-                var ghiChu = $(this).closest('tr').find('.note_product')
-                    .val();
-                var thue = $(this).closest('tr').find('.product_tax')
-                    .val();
-                var thanhTien = $(this).closest('tr').find('.total-amount')
-                    .text();
-                var giaNhap = $(this).closest('tr').find('.price_import').val();
-                var tonKho = $(this).closest('tr').find('.tonkho').val();
-                $.ajax({
-                    url: "{{ route('getSN') }}",
-                    method: 'GET',
-                    data: {
-                        qty: qty,
-                        productCode: productCode,
-                    },
-                    success: function(response) {
-                        var modalBody = $('#snModal').find('.modal-body');
-                        let count = 1;
-                        modalBody.empty();
-                        var snList = $('<table class="table table-hover">' +
-                            '<thead><tr><td>STT</td><td>Serial Number</td></tr></thead>' +
-                            '<tbody>'
-                        );
-                        var product = $('<table class="table table-hover">' +
-                            '<thead><tr><td>ID</td><td>Mã sản phẩm</td><td>Tên sản phẩm</td><td>Số lượng sản phẩm</td><td>Số lượng S/N</td></tr></thead>' +
-                            '<tbody><tr>' + '<td>1</td>' + '<td>' +
-                            productCode1 + '</td>' + '<td>' + productName +
-                            '</td>' + '<td>' + qty + '</td>' + '<td>' + qty +
-                            '</td>' +
-                            '</tr</tbody>' + '</table>' +
-                            '<h5>Thông tin Serial Number </h5>');
-                        response.forEach(function(sn) {
-                            var countCell = $('<td>').text(count);
-                            var snItemCell = $('<td>').text(sn.serinumber);
-                            var row = $('<tr>').append(countCell,
-                                snItemCell);
-                            snList.append(row);
-                            count++;
-                        });
-                        modalBody.append(product, snList);
-                        $('#snModal').modal('show');
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(error);
-                    }
-                });
             });
             //xem thông tin sản phẩm
             info.click(function() {
@@ -1209,23 +781,19 @@
                             formattedPrice = numeral(productPrice).format('0,0.00');
                         }
                         $('#productModal').find('.modal-body').html(
-                            '<b>Mã sản phẩm: </b> ' +
-                            productCode +
-                            '<br>' + '<b>Tên sản phẩm: </b> ' + productName +
-                            '<br>' +
-                            '<b>Loại hàng: </b> ' + response.product_category +
+                            '<b>Tên sản phẩm: </b> ' + productName +
                             '<br>' +
                             '<b>Tồn kho: </b>' + response.product_qty + '<br>' +
                             '<b>Đang giao dịch: </b>' +
                             response.trading +
                             '<br>' + '<b>Giá nhập: </b>' + formattedPrice +
                             '<br>' + '<b>Thuế: </b>' +
-                            (thue == 99 ? "NOVAT" : thue + '%') + '%');
+                            (thue == 99 ? "NOVAT" : thue + '%'));
                     },
                 });
             });
-            newRow.append(checkbox, MaInput, TenInput, ProInput, dvtInput, slInput,
-                giaInput, thueInput, thanhTienInput, ghichuInput, sn, info, deleteBtn, option);
+            newRow.append(MaInput, ProInput, dvtInput, slInput,
+                giaInput, thueInput, thanhTienInput, ghichuInput, info, deleteBtn, option);
             $("#dynamic-fields").before(newRow);
             fieldCounter++;
         });
@@ -1291,6 +859,8 @@
     $(document).ready(function() {
         $('.search-info').click(function() {
             var idCustomer = $(this).attr('id');
+            $('#checkguest').val(1);
+            $('#form-edit').remove();
             $('#radio1').prop('checked', true);
             $.ajax({
                 url: '{{ route('searchExport') }}',
@@ -1316,50 +886,45 @@
                         '<input type="text" class="form-control" id="guest_name" placeholder="Nhập thông tin" name="guest_name" value="' +
                         data.guest_name + '" required>' +
                         '</div>' + '<div class="form-group">' +
-                        '<label>Địa chỉ xuất hóa đơn:</label>' +
-                        '<input type="text" class="form-control" placeholder="Nhập thông tin" id="guest_addressInvoice" name="guest_addressInvoice" value="' +
-                        data.guest_addressInvoice + '" required>' +
+                        '<label>Địa chỉ:</label>' +
+                        '<input type="text" class="form-control" placeholder="Nhập thông tin" id="guest_address" name="guest_address" value="' +
+                        data.guest_address + '" required>' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">Mã số thuế:</label>' +
                         '<input type="text" oninput="validateNumberInput(this)" class="form-control" inputmode="numeric" id="guest_code" placeholder="Nhập thông tin" name="guest_code" value="' +
                         data.guest_code + '" required>' +
                         '</div>' + '<div class="form-group">' +
-                        '<label for="email">Địa chỉ giao hàng:</label>' +
-                        '<input type="text" class="form-control" id="guest_addressDeliver" placeholder="Nhập thông tin" name="guest_addressDeliver" value="' +
-                        data.guest_addressDeliver + '" required>' +
-                        '</div>' + '<div class="form-group">' +
-                        '<label for="email">Người nhận hàng:</label>' +
-                        '<input type="text" class="form-control" id="guest_receiver" placeholder="Nhập thông tin" name="guest_receiver" value="' +
-                        data.guest_receiver + '" required>' +
-                        '</div>' + '<div class="form-group">' +
-                        '<label for="email">SĐT người nhận:</label>' +
-                        '<input type="text" oninput="validateNumberInput(this)" pattern="/^(0|\+84)(3[2-9]|5[2689]|7[0|6-9]|8[1-9]|9[0-9])\d{7,9}$/" class="form-control" id="guest_phoneReceiver" placeholder="Nhập thông tin" name="guest_phoneReceiver" value="' +
-                        data.guest_phoneReceiver + '" required>' +
-                        '</div>' + '</div>' + '<div class="col-sm-6">' +
-                        '<div class="form-group">' +
                         '<label for="email">Email:</label>' +
                         '<input type="email" class="form-control" pattern="/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/" id="guest_email" placeholder="Nhập thông tin" name="guest_email" value="' +
-                        data.guest_email + '" required>' +
+                        (data.guest_email == null ? '' : data.guest_email) + '">' +
                         '</div>' + '<div class="form-group">' +
                         '<label>Số điện thoại:</label>' +
                         '<input type="text" class="form-control" oninput="validateNumberInput(this)" pattern="/^(0|\+84)(3[2-9]|5[2689]|7[0|6-9]|8[1-9]|9[0-9])\d{7,9}$/" id="guest_phone" placeholder="Nhập thông tin" name="guest_phone" value="' +
-                        data.guest_phone + '" required>' +
+                        (data.guest_phone == null ? '' : data.guest_phone) + '">' +
+                        '</div>' + '</div>' + '<div class="col-sm-6">' +
+                        '<div class="form-group">' +
+                        '<label for="email">Người nhận hàng:</label>' +
+                        '<input type="text" class="form-control" id="guest_receiver" placeholder="Nhập thông tin" name="guest_receiver" value="' +
+                        (data.guest_receiver == null ? '' : data.guest_receiver) +
+                        '">' +
                         '</div>' + '<div class="form-group">' +
-                        '<label for="email">Phương thức thanh toán:</label>' +
-                        '<select name="guest_pay" class="form-control" id="guest_pay" required>' +
-                        '<option value="0"' + (data.guest_pay == 0 ? ' selected' : '') +
-                        '>Chuyển khoản</option>' +
-                        '<option value="1"' + (data.guest_pay == 1 ? ' selected' : '') +
-                        '>Thanh toán bằng tiền mặt</option>' +
-                        '</select>' +
+                        '<label for="email">Email cá nhân:</label>' +
+                        '<input type="text" class="form-control" id="guest_email_personal" placeholder="Nhập thông tin" name="guest_email_personal" value="' +
+                        (data.guest_email_personal == null ? '' : data
+                            .guest_email_personal) + '">' +
                         '</div>' + '<div class="form-group">' +
+                        '<label for="email">SĐT người nhận:</label>' +
+                        '<input type="text" oninput="validateNumberInput(this)" pattern="/^(0|\+84)(3[2-9]|5[2689]|7[0|6-9]|8[1-9]|9[0-9])\d{7,9}$/" class="form-control" id="guest_phoneReceiver" placeholder="Nhập thông tin" name="guest_phoneReceiver" value="' +
+                        (data.guest_phoneReceiver == null ? '' : data
+                            .guest_phoneReceiver) + '">' +
+                        '</div>' +
+                        '<div class="form-group">' +
                         '<label>Công nợ:</label>' +
                         '<div class="d-flex align-items-center" style="width:101%;">' +
-                        '<input type="text" oninput="validateNumberInput(this)" name="debt" class="form-control" pattern="^[0-9]+$" id="debtInput" value="' +
-                        (data.debt) + '" style="width:15%;" required>' +
+                        '<input type="text" name="debt" oninput="validateNumberInput(this)" class="form-control" pattern="^[0-9]+$" id="debtInput" value="' +
+                        (data.debt) + '" style="width:15%;">' +
                         '<span class="ml-2" id="data-debt">ngày</span>' +
-                        '<input type="checkbox" id="debtCheckbox" value="0" name="debt" ' +
-                        (data
+                        '<input type="checkbox" id="debtCheckbox" value="0" ' + (data
                             .debt == 0 ? 'checked' : '') +
                         ' style="margin-left:10%;">' +
                         '<span class="ml-2">Thanh toán tiền mặt</span>' +
@@ -1407,12 +972,13 @@
         var updateClick = $('#updateClick').val();
         var id = $('#id').val();
         var guest_name = $('#guest_name').val();
-        var guest_addressInvoice = $('#guest_addressInvoice').val();
+        var guest_address = $('#guest_address').val();
         var guest_code = $('#guest_code').val();
         var guest_addressDeliver = $('#guest_addressDeliver').val();
         var guest_receiver = $('#guest_receiver').val();
         var guest_phoneReceiver = $('#guest_phoneReceiver').val();
         var guest_email = $('#guest_email').val();
+        var guest_email_personal = $('#guest_email_personal').val();
         var guest_phone = $('#guest_phone').val();
         var guest_pay = $('#guest_pay').val();
         var guest_note = $('#guest_note').val();
@@ -1432,7 +998,7 @@
             data: {
                 id: id,
                 guest_name,
-                guest_addressInvoice,
+                guest_address,
                 guest_code,
                 guest_addressDeliver,
                 guest_receiver,
@@ -1441,6 +1007,7 @@
                 guest_phone,
                 guest_pay,
                 guest_note,
+                guest_email_personal,
                 updateClick,
                 debt
             },
@@ -1464,13 +1031,14 @@
         $('#click').val(1);
         var click = $('#click').val();
         var guest_name = $('#guest_name').val();
-        var guest_addressInvoice = $('#guest_addressInvoice').val();
+        var guest_address = $('#guest_address').val();
         var guest_code = $('#guest_code').val();
         var guest_addressDeliver = $('#guest_addressDeliver').val();
         var guest_receiver = $('#guest_receiver').val();
         var guest_phoneReceiver = $('#guest_phoneReceiver').val();
         var guest_email = $('#guest_email').val();
         var guest_phone = $('#guest_phone').val();
+        var guest_email_personal = $('#guest_email_personal').val();
         var guest_pay = $('#guest_pay').val();
         var guest_note = $('#guest_note').val();
         var debt = "";
@@ -1488,7 +1056,7 @@
             type: "get",
             data: {
                 guest_name,
-                guest_addressInvoice,
+                guest_address,
                 guest_code,
                 guest_addressDeliver,
                 guest_receiver,
@@ -1497,6 +1065,7 @@
                 guest_phone,
                 guest_pay,
                 guest_note,
+                guest_email_personal,
                 click,
                 debt
             },
@@ -1510,47 +1079,20 @@
             }
         });
     });
-    //lấy thông tin sản phẩm từ mã sản phẩm
+    //lấy thông tin sản phẩm
     $(document).ready(function() {
-        //lấy thông tin sản phẩm từ mã sản phẩm
-        var selectedProductNames = [];
-        $(document).on('change', '.maProduct', function() {
-            var row = $(this).closest('tr');
-            var childSelect = row.find('.child-select');
-            var idProducts = $(this).val();
-
-            if (idProducts) {
-                $.ajax({
-                    url: "{{ route('nameProduct') }}",
-                    type: "GET",
-                    data: {
-                        idProducts: idProducts,
-                        selectedProductIds: selectedProductNames
-                    },
-                    success: function(response) {
-                        childSelect.empty();
-                        childSelect.append('<option value="">Lựa chọn sản phẩm</option>');
-                        $.each(response, function(index, product) {
-                            childSelect.append(
-                                `<option value="${product.id}">${product.product_name}</option>`
-                            );
-                        });
-                    },
-                    error: function(xhr, status, error) {
-                        // Handle errors (if any)
-                        console.log(error);
-                    }
-                });
-            } else {
-                childSelect.empty();
-                childSelect.append('<option value="">Lựa chọn sản phẩm</option>');
-            }
+        var selectedProductIDs = [];
+        // Lấy tất cả các phần tử đang được chọn theo class "productName"
+        var selectedProducts = document.querySelectorAll(".productName");
+        // Lặp qua từng phần tử và lấy giá trị của nó
+        selectedProducts.forEach(function(product) {
+            selectedProductIDs.push(product.value);
         });
-        //lấy thông tin sản phẩm con từ tên sản phẩm con
+
         $(document).on('change', '.child-select', function() {
-            var selectedName = $(this).val();
+            var selectedID = $(this).val();
             var row = $(this).closest('tr');
-            var idProduct = $(this).val();
+            var productNameElement = $(this).closest('tr').find('.product_name');
             var productUnitElement = $(this).closest('tr').find('.product_unit');
             var qty_exist = $(this).closest('tr').find('.quantity-exist');
             var price_import = $(this).closest('tr').find('.price_import');
@@ -1558,14 +1100,16 @@
             var loaihang = $(this).closest('tr').find('.loaihang');
             var dangGD = $(this).closest('tr').find('.dangGD');
             var thue = $(this).closest('tr').find('.product_tax');
-            if (idProduct) {
+            if (selectedID) {
                 $.ajax({
                     url: "{{ route('getProduct') }}",
                     type: "get",
                     data: {
-                        idProduct: idProduct,
+                        idProduct: selectedID,
                     },
                     success: function(response) {
+                        productNameElement.val(response
+                            .product_name); // Hiển thị tên sản phẩm đã chọn trong ô input
                         productUnitElement.val(response.product_unit);
                         qty_exist.val("/" + response.qty_exist);
                         var productPrice = parseFloat(response.product_price);
@@ -1578,41 +1122,53 @@
                         price_import.val(formattedPrice);
                         tonkho.val(response.product_qty);
                         loaihang.val(response.product_category);
-                        dangGD.val(response.trading);
-                        thue.val(response.tax);
-                        // Tính lại tổng số tiền và tổng số thuế
-                        calculateTotalTax();
+                        dangGD.val(response.product_trade);
+                        thue.val(response.product_tax);
                         calculateGrandTotal();
                     },
                 });
             }
 
-            // Check if the selected product name is already in use
-            // if (selectedProductNames.includes(selectedName)) {
-            //     $(this).val('');
-            // } else {
-            //     selectedProductNames.push(selectedName);
-            // }
+            // Kiểm tra nếu ID sản phẩm đã chọn đã có trong danh sách các sản phẩm đã chọn
+            if (selectedProductIDs.includes(selectedID)) {
+                $(this).val(''); // Đặt giá trị của tùy chọn thành trống
+
+                var productNameElement = $(this).closest('tr').find('.product_name');
+                productNameElement.prop('disabled', true); // Disable ô input chứa tên sản phẩm
+            } else {
+                var previousID = $(this).data('previous-id'); // Lấy ID trước đó của tùy chọn
+                if (previousID && previousID !== selectedID) {
+                    var index = selectedProductIDs.indexOf(previousID);
+                    if (index !== -1) {
+                        selectedProductIDs.splice(index, 1); // Xóa ID trước đó khỏi mảng
+                    }
+                }
+
+                selectedProductIDs.push(selectedID); // Lưu ID sản phẩm đã chọn vào mảng
+                $(this).data('previous-id',
+                    selectedID); // Lưu ID hiện tại vào thuộc tính data của tùy chọn
+
+                hideSelectedProductNames(row); // Ẩn tên sản phẩm đã chọn từ các tùy chọn khác
+            }
         });
 
         // Function to hide selected product names from other child select options
-        // function hideSelectedProductNames(row) {
-        //     var selectedNames = row.find('.child-select').map(function() {
-        //         return $(this).val();
-        //     }).get();
+        function hideSelectedProductNames(row) {
+            var selectedIDs = row.find('.child-select').map(function() {
+                return $(this).val();
+            }).get();
 
-        //     row.find('.child-select').each(function() {
-        //         var currentName = $(this).val();
-        //         $(this).find('option').each(function() {
-        //             if ($(this).val() !== currentName && selectedNames.includes($(this)
-        //                     .val())) {
-        //                 $(this).hide();
-        //             } else {
-        //                 $(this).show();
-        //             }
-        //         });
-        //     });
-        // }
+            row.find('.child-select').each(function() {
+                var currentID = $(this).val();
+                $(this).find('option').each(function() {
+                    if ($(this).val() !== currentID && selectedIDs.includes($(this).val())) {
+                        $(this).hide();
+                    } else {
+                        $(this).show();
+                    }
+                });
+            });
+        }
     });
     //tính thành tiền của sản phẩm
     $(document).ready(function() {
@@ -1673,23 +1229,18 @@
 
         // Cập nhật giá trị data-value
         $('#grand-total').attr('data-value', grandTotal.toFixed(2));
-        $('#total').val(grandTotal.toFixed(2));
+        $('#total').val(totalAmount);
     }
 
     function calculateGrandTotalWithTransportFee() {
         var totalAmount = parseFloat($('#total-amount-sum').text().replace(/[^0-9.-]+/g, ''));
         var totalTax = parseFloat($('#product-tax').text().replace(/[^0-9.-]+/g, ''));
 
-        // Check if transportFee is NaN, set it to 0
-        if (isNaN(transportFee)) {
-            transportFee = 0;
-        }
-
-        var grandTotal = totalAmount + totalTax + transportFee;
+        var grandTotal = totalAmount + totalTax;
         $('#grand-total').text(formatCurrency(grandTotal.toFixed(2)));
 
         // Update the input value with the grand total
-        $('#total').val(grandTotal.toFixed(2));
+        $('#total').val(totalAmount);
     }
 
     function formatCurrency(value) {
@@ -1723,13 +1274,18 @@
     function validateAndSubmit(event) {
         var formGuest = $('#form-guest');
         var productList = $('.productName');
+        var checkguest = $('#checkguest').val();
 
         if (formGuest.length && productList.length > 0) {
-            $('.product_price, [name^="product_price"],#transport_fee').each(function() {
+            $('.product_price, [name^="product_price"], #transport_fee').each(function() {
                 var newValue = $(this).val().replace(/,/g, '');
                 $(this).val(newValue);
             });
             $('#btn-customer').click();
+            window.backupAlert = window.alert;
+            window.alert = function() {
+                return true
+            };
         } else {
             if (formGuest.length === 0) {
                 alert('Lỗi: Chưa nhập thông tin khách hàng!');
@@ -1771,177 +1327,6 @@
         return formattedNumber;
     }
 
-    //in báo giá
-    function toggleDiv() {
-        var selectElements = document.querySelectorAll(".child-select");
-        var quantity_input = document.querySelectorAll(".quantity-input");
-        var product_price = document.querySelectorAll(".product_price");
-        var product_tax = document.querySelectorAll(".product_tax");
-        var total_amount = document.querySelectorAll(".total-amount");
-        var destinationTable = document.getElementById("destinationTable");
-        var tableBody = destinationTable.querySelector("tbody");
-
-        // Clear existing data in the destination table body
-        if (tableBody) {
-            tableBody.innerHTML = "";
-        } else {
-            tableBody = destinationTable.createTBody();
-        }
-
-        // Copy selected data from select elements to destination table
-        for (var i = 0; i < selectElements.length; i++) {
-            var selectElement = selectElements[i];
-            var selectedOption = selectElement.options[selectElement.selectedIndex].text;
-
-            var newRow = tableBody.insertRow(i);
-            var cellA = newRow.insertCell(0);
-            var cellB = newRow.insertCell(1);
-
-            cellA.innerHTML = i + 1; // Example value for column A
-            cellB.innerHTML = selectedOption; // Selected option text for column B
-        }
-
-        // Copy quantity data from quantity inputs to destination table
-        for (var j = 0; j < quantity_input.length; j++) {
-            var quantityInput = quantity_input[j];
-            var inputValue = quantityInput.value;
-
-            var existingRow = tableBody.rows[j];
-
-            // If the row doesn't exist, create a new row
-            if (!existingRow) {
-                existingRow = tableBody.insertRow(j);
-                existingRow.insertCell(0);
-                existingRow.insertCell(1);
-            }
-
-            var quantityCell = existingRow.cells[2];
-            if (!quantityCell) {
-                quantityCell = existingRow.insertCell(2);
-            }
-            quantityCell.innerHTML = inputValue;
-        }
-
-        // Copy price data from price inputs to destination table
-        for (var k = 0; k < product_price.length; k++) {
-            var priceInput = product_price[k];
-            var inputValue = priceInput.value;
-
-            var existingRow = tableBody.rows[k];
-
-            // If the row doesn't exist, create a new row
-            if (!existingRow) {
-                existingRow = tableBody.insertRow(k);
-                existingRow.insertCell(0);
-                existingRow.insertCell(1);
-            }
-
-            var priceCell = existingRow.cells[3];
-            if (!priceCell) {
-                priceCell = existingRow.insertCell(3);
-            }
-            priceCell.innerHTML = inputValue;
-        }
-
-        // Copy tax data from select elements to destination table
-        for (var m = 0; m < product_tax.length; m++) {
-            var taxElement = product_tax[m];
-            var selectedOption = taxElement.options[taxElement.selectedIndex].text;
-
-            var existingRow = tableBody.rows[m];
-
-            // If the row doesn't exist, create a new row
-            if (!existingRow) {
-                existingRow = tableBody.insertRow(m);
-                existingRow.insertCell(0);
-                existingRow.insertCell(1);
-                existingRow.insertCell(2);
-                existingRow.insertCell(3);
-            }
-
-            var taxCell = existingRow.cells[4];
-            if (!taxCell) {
-                taxCell = existingRow.insertCell(4);
-            }
-            taxCell.innerHTML = selectedOption;
-        }
-
-        //thành tiền
-        for (var n = 0; n < total_amount.length; n++) {
-            var amountSpan = total_amount[n];
-            var amountValue = amountSpan.innerText;
-
-            var existingRow = tableBody.rows[n];
-
-            // Nếu hàng không tồn tại, tạo một hàng mới
-            if (!existingRow) {
-                existingRow = tableBody.insertRow(n);
-                existingRow.insertCell(0);
-                existingRow.insertCell(1);
-                existingRow.insertCell(2);
-                existingRow.insertCell(3);
-                existingRow.insertCell(4);
-            }
-
-            var amountCell = existingRow.cells[5];
-            if (!amountCell) {
-                amountCell = existingRow.insertCell(5);
-            }
-            amountCell.innerHTML = amountValue;
-        }
-
-        //lấy thông tin khách hàng
-        var guest_name = document.getElementById("guest_name");
-        var guest_addressInvoice = document.getElementById("guest_addressInvoice");
-        var guest_code = document.getElementById("guest_code");
-        var guest_receiver = document.getElementById("guest_receiver");
-        var guest_phoneReceiver = document.getElementById("guest_phoneReceiver");
-        //
-        var name_cty = document.querySelector(".guest-name");
-        var dia_chi = document.querySelector(".guest-addressDeliver");
-        var mst = document.querySelector(".guest-code");
-        var nguoi_nhan = document.querySelector(".guest-receiver");
-        var phone = document.querySelector(".guest-phoneReceiver");
-        //
-        var productList = $('.productName');
-        //tổng tiền, thuế, thành tiền
-        var tong_tien = document.querySelector(".tong-tien");
-        var thue_vat = document.querySelector(".thue-vat");
-        var tong_cong = document.querySelector(".tong-cong");
-        var van_chuyen = document.querySelector(".van-chuyen");
-        //
-        var total_amount_sum = document.getElementById("total-amount-sum");
-        var product_tax = document.getElementById("product-tax");
-        var transport_fee = document.getElementById("transport_fee");
-        var grand_total = document.getElementById("grand-total");
-        //ghi chú
-        var note_form = document.getElementById("note_form");
-        var ghi_chu = document.querySelector(".noteForm");
-
-        if (guest_name) {
-            if (productList.length === 0) {
-                alert('Lỗi: Chưa thêm sản phẩm!');
-            } else {
-                //thông tin khách hàng
-                name_cty.innerHTML = "<b>" + guest_name.value + "</b>";
-                dia_chi.innerHTML = guest_addressInvoice.value;
-                mst.innerHTML = guest_code.value;
-                nguoi_nhan.innerHTML = "<b>" + guest_receiver.value + "</b>";
-                phone.innerHTML = "<b>" + guest_phoneReceiver.value + "</b>";
-                //thành tiền, thuế, tổng tiền
-                tong_tien.innerHTML = total_amount_sum.innerText;
-                thue_vat.innerHTML = product_tax.innerText;
-                van_chuyen.innerHTML = transport_fee.value;
-                tong_cong.innerHTML = grand_total.innerText;
-                //ghi chú
-                ghi_chu.innerHTML = note_form.value.replace(/\n/g, "<br>");
-                // Print the content
-                window.print();
-            }
-        } else {
-            alert("Chưa nhập thông tin khách hàng");
-        }
-    }
     //ngăn chặn click
     $(document).ready(function() {
         let isFirstClick = true;
@@ -1960,7 +1345,6 @@
         $('#luu').on('click', function() {
             if (isFirstClick) {
                 isFirstClick = false;
-
                 setTimeout(function() {
                     isFirstClick = true;
                 }, 1000);
@@ -1980,6 +1364,42 @@
             }
         });
     });
+
+    //kiểm tra số điện thoại VN
+    // function isValidPhoneNumber(phoneNumber) {
+    //     // Loại bỏ khoảng trắng và dấu '-' trong số điện thoại
+    //     phoneNumber = phoneNumber.replace(/\s+/g, '').replace(/-/g, '');
+
+    //     // Số điện thoại phải có độ dài từ 10 đến 11 chữ số
+    //     if (phoneNumber.length < 10 || phoneNumber.length > 11) {
+    //         return false;
+    //     }
+
+    //     // Số điện thoại phải bắt đầu bằng các số từ 0 đến 9
+    //     if (!/^[0-9]+$/.test(phoneNumber.charAt(0))) {
+    //         return false;
+    //     }
+
+    //     // Kiểm tra số điện thoại có hợp lệ
+    //     // Số điện thoại Việt Nam bắt đầu bằng 0 và theo sau là 9 chữ số nếu độ dài là 10
+    //     // hoặc bắt đầu bằng 84 và theo sau là 9 chữ số nếu độ dài là 11
+    //     if (phoneNumber.length === 10 && phoneNumber.charAt(0) === '0') {
+    //         return true;
+    //     } else if (phoneNumber.length === 11 && phoneNumber.substr(0, 2) === '84') {
+    //         return true;
+    //     }
+
+    //     return false;
+    // }
+    // var phoneNumber = "0123456789"; // Thay đổi số điện thoại tại đây
+    // if (isValidPhoneNumber(phoneNumber)) {
+    //     console.log("Số điện thoại hợp lệ.");
+    // } else {
+    //     console.log("Số điện thoại không hợp lệ.");
+    // }
+    // $(document).on('keypress', 'form', function(event) {
+    //     return event.keyCode != 13;
+    // });
 </script>
 </body>
 

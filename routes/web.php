@@ -4,13 +4,17 @@ use App\Http\Controllers\AddProductController;
 use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DebtController;
+use App\Http\Controllers\DebtImportController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\GuestsController;
+use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\InsertProductController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\provideController;
+use App\Models\DebtImport;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,18 +66,31 @@ Route::get('addguest', [ExportController::class, 'addCustomer'])->name('addCusto
 Route::get('nameProducts', [ExportController::class, 'nameProduct'])->name('nameProduct');
 //lấy thông tin sản phẩm từ tên sản phẩm
 Route::get('getProduct', [ExportController::class, 'getProduct'])->name('getProduct');
+//giới hạn số lượng
+Route::get('limit_qty', [ExportController::class, 'limit_qty'])->name('limit_qty');
 //lấy thông tin SN của sản phẩm con
 Route::get('getSN', [ExportController::class, 'getSN'])->name('getSN');
 Route::get('getSN1', [ExportController::class, 'getSN1'])->name('getSN1');
 Route::get('getSN2', [ExportController::class, 'getSN2'])->name('getSN2');
+Route::get('getSN3', [ExportController::class, 'getSN3'])->name('getSN3');
 Route::get('/deleteExports', [ExportController::class, 'deleteExports'])->name('deleteExports');
 Route::get('/cancelBillExport', [ExportController::class, 'cancelBillExport'])->name('cancelBillExport');
 //Công nợ
 Route::resource('debt', DebtController::class);
+Route::get('/paymentdebt', [DebtController::class, 'paymentdebt'])->name('paymentdebt');
+
+//Công nợ nhập hàng
+Route::resource('debt_import', DebtImportController::class);
+Route::get('/paymentdebtimport', [DebtImportController::class, 'paymentdebtimport'])->name('paymentdebtimport');
+// Lịch sử giao dịch
+Route::resource('history', HistoryController::class);
+
+
+
 //kiểm tra số lượng trong xuất hàng
 Route::get('checkqty', [ExportController::class, 'checkqty'])->name('checkqty');
 
-Route::resource('data', ProductsController::class);
+Route::resource('data', ProductController::class);
 Route::get('/insertProducts', [ProductsController::class, 'insertProducts'])->name('insertProducts');
 Route::POST('/storeProducts', [ProductsController::class, 'storeProducts'])->name('storeProducts');
 Route::get('/data_edit', [ProductsController::class, 'edit_ajax'])->name('ajax');
@@ -86,13 +103,17 @@ Route::delete('/delete_product/{id}', [ProductsController::class, 'delete_produc
 Route::post('/import_products',[ProductsController::class,'import_products'])->name('import_products');
 
 Route::get('/checkProducts_code',[ProductsController::class,'checkProducts_code'])->name('checkProducts_code');
-
 Route::PUT('/updateProduct/{id}', [ProductsController::class, 'updateProduct'])->name('updateProduct');
+
+Route::get('/export_product',[ProductController::class, 'export'])->name('export');
+
 
 Route::get('/show_provide', [AddProductController::class, 'show_provide'])->name('show_provide');
 Route::get('/update_provide', [AddProductController::class, 'update_provide'])->name('update_provide');
 Route::resource('insertProduct', AddProductController::class)->middleware('permission:admin,manager');
 Route::POST('/addBillEdit', [AddProductController::class, 'addBillEdit'])->name('addBillEdit');
+Route::POST('/updateBill', [AddProductController::class, 'updateBill'])->name('updateBill');
+Route::POST('/updateBillEdit', [AddProductController::class, 'updateBillEdit'])->name('updateBillEdit');
 Route::post('/insertProductP', [AddProductController::class, 'addBill'])->name('addBill');
 Route::put('/deleteBill/{id?}', [AddProductController::class, 'deleteBill'])->name('deleteBill');
 Route::get('/deleteOrder', [AddProductController::class, 'deleteOrder'])->name('deleteOrder');

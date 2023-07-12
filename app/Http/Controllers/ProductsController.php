@@ -168,11 +168,9 @@ class ProductsController extends Controller
                 'product.total',
                 'product.provide_id',
                 'products.id',
-                'products.products_code'
             )
             ->select(
                 'product.*',
-                'products.products_code',
                 DB::raw('SUM(product.product_qty * product.product_price) as total'),
                 DB::raw('SUM(CASE WHEN serinumbers.seri_status = 2 THEN 1 ELSE 0 END) as trading')
             )

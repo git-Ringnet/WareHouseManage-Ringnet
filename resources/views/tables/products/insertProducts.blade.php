@@ -66,37 +66,37 @@
                                         <div class="product_name">
                                             <div class="title-edit-item">Tên sản phẩm</div>
                                             <input required type="text" name="products_name"
-                                                class="w-100 p-1 form-control mb-4">
+                                                class="w-100 form-control mb-4">
                                         </div>
                                         <div class="product_code">
                                             <div class="title-edit-item">Mã sản phẩm</div>
-
                                             <input required type="text" name="products_code"
-                                                class="w-100 p-1 form-control mb-4" id="products_code">
+                                                class="w-100 form-control mb-4" id="products_code">
                                         </div>
                                         <!-- <div class="product_id">
                                             <div class="title-edit-item">ID</div>
 
                                             <input type="text" name="products_id" readonly
-                                                class="w-100 p-1 form-control mb-4">
+                                                class="w-100 form-control mb-4">
                                         </div> -->
                                     </div>
                                     <div class="col-md-3">
                                         <div class="product_category">
                                           <div class="title-edit-item">Danh mục</div>
-                                            <input required type="text" name="product_category" class="w-100 form-control mb-4">
+                                            <input required type="text" name="product_category" 
+                                            class="w-100 form-control mb-4">
                                         </div>
                                         <div class="product_trademark">
                                             <div class="title-edit-item">Thương hiệu</div>
 
                                             <input required type="text" name="products_trademark"
-                                                class="w-100 p-1 form-control mb-4">
+                                                class="w-100 form-control mb-4">
                                         </div>
                                         <!-- <div class="product_unit">
                                             <div class="title-edit-item">Đơn vị</div>
 
                                             <input required type="text" name="products_unit"
-                                                class="w-100 p-1 form-control mb-4">
+                                                class="w-100 form-control mb-4">
                                         </div> -->
                                     </div>
                                     <div class="col-md-6">
@@ -121,7 +121,20 @@
 </section>
 </div>
 <script>
+    $(document).on('keypress', 'form', function(event) {
+            return event.keyCode != 13; 
+        });
     $(document).on('submit','#add_product',function(e){
+         $(e.target).find('.btn.btn-primary').prop('disabled', true);
+        var countDown = 10;
+        var countdownInterval = setInterval(function() {
+            countDown--;
+            if (countDown <= 0) {
+                clearInterval(countdownInterval);
+                $(e.target).find('.btn.btn-primary').prop('disabled', false);
+            }
+        }, 100);
+        
         e.preventDefault();
         var products_code =  $('#products_code').val();
         $.ajax({

@@ -19,7 +19,7 @@ $("#radio2").on("click", function() {
         '<input type="text" class="form-control" id="guest_name" placeholder="Nhập thông tin" name="guest_name" value="">' +
         '</div>' + '<div class="form-group">' +
         '<label>Địa chỉ xuất hóa đơn:</label>' +
-        '<input type="text" class="form-control" id="guest_addressInvoice" placeholder="Nhập thông tin" name="guest_addressInvoice" value="">' +
+        '<input type="text" class="form-control" id="guest_address" placeholder="Nhập thông tin" name="guest_address" value="">' +
         '</div>' + '<div class="form-group">' +
         '<label for="email">Mã số thuế:</label>' +
         '<input type="text" class="form-control" id="guest_code" placeholder="Nhập thông tin" name="guest_code" value="">' +
@@ -155,8 +155,8 @@ $(document).ready(function() {
                     data.guest_name + '" required>' +
                     '</div>' + '<div class="form-group">' +
                     '<label>Địa chỉ xuất hóa đơn:</label>' +
-                    '<input type="text" class="form-control" placeholder="Nhập thông tin" id="guest_addressInvoice" name="guest_addressInvoice" value="' +
-                    data.guest_addressInvoice + '">' +
+                    '<input type="text" class="form-control" placeholder="Nhập thông tin" id="guest_address" name="guest_address" value="' +
+                    data.guest_address + '">' +
                     '</div>' + '<div class="form-group">' +
                     '<label for="email">Mã số thuế:</label>' +
                     '<input type="text" class="form-control" id="guest_code" placeholder="Nhập thông tin" name="guest_code" value="' +
@@ -206,7 +206,7 @@ $(document).on('click', '#btn-customer', function(e) {
     e.preventDefault();
     var id = $('#id').val();
     var guest_name = $('#guest_name').val();
-    var guest_addressInvoice = $('#guest_addressInvoice').val();
+    var guest_address = $('#guest_address').val();
     var guest_code = $('#guest_code').val();
     var guest_addressDeliver = $('#guest_addressDeliver').val();
     var guest_receiver = $('#guest_receiver').val();
@@ -224,7 +224,7 @@ $(document).on('click', '#btn-customer', function(e) {
         data: {
             id: id,
             guest_name,
-            guest_addressInvoice,
+            guest_address,
             guest_code,
             guest_addressDeliver,
             guest_receiver,
@@ -245,7 +245,7 @@ $(document).on('click', '#btn-customer', function(e) {
 $(document).on('click', '#btn-addCustomer', function(e) {
     e.preventDefault();
     var guest_name = $('#guest_name').val();
-    var guest_addressInvoice = $('#guest_addressInvoice').val();
+    var guest_address = $('#guest_address').val();
     var guest_code = $('#guest_code').val();
     var guest_addressDeliver = $('#guest_addressDeliver').val();
     var guest_receiver = $('#guest_receiver').val();
@@ -262,7 +262,7 @@ $(document).on('click', '#btn-addCustomer', function(e) {
         type: "get",
         data: {
             guest_name,
-            guest_addressInvoice,
+            guest_address,
             guest_code,
             guest_addressDeliver,
             guest_receiver,

@@ -4,7 +4,7 @@ function updateRowNumbers() {
     });
 }
 
-$(document).on('input', '.name_product, .type_product, .product_price', function () {
+$(document).on('input', '.name_product, .unit_product, .product_price', function () {
     if (checkAllValuesEntered()) {
         checkDuplicateRows();
     }
@@ -43,9 +43,9 @@ function checkDuplicateRows() {
         var isDuplicate = false;
 
         // Lặp qua từng ô dữ liệu trong hàng
-        for (var j = 1; j < 7; j++) {
-            // Bỏ qua vị trí td 4 và 5
-            if (j === 4 || j === 5) {
+        for (var j = 1; j < 5; j++) {
+            // Bỏ qua vị trí td 0 và 3
+            if (j === 0 || j === 3) {
                 continue;
             }
 
@@ -56,11 +56,6 @@ function checkDuplicateRows() {
                 cellValue = input.value.trim();
             } else {
                 cellValue = cells[j].innerText.trim();
-            }
-
-            var select = cells[j].getElementsByTagName("select")[0];
-            if (select) {
-                cellValue = select.value;
             }
 
             rowValues.push(cellValue);
@@ -114,9 +109,8 @@ $('body').on('click', '.deleteRow', function () {
     $(targetId).remove();
     parentTr.remove();
     calculateTotals();
-    updateRowNumbers();
     checkRow();
-    fillDataToModal();
+    setSTT();
 });
 
 // Hàm kiểm tra số lượng tr trong table
@@ -174,30 +168,14 @@ function formatCurrency(value) {
     return formattedValue;
 }
 
-// Hàm điền dữ liệu từ input vào modal
-function fillDataToModal() {
-    var info = document.querySelectorAll('.exampleModal');
-    for (let k = 0; k < info.length; k++) {
-        info[k].addEventListener('click', function () {
-            var productCode = $(this).closest('tr').find('.list_products option:selected').text();
-            var productName = $(this).closest('tr').find('[name^="product_name"]').val();
-            var productType = $(this).closest('tr').find('[name^="product_category"]').val();
-            var productQty = $(this).closest('tr').find('[name^="product_qty"]').val();
-            var provide_name;
-            if ($('#provide_id').val() === "") {
-                provide_name = $('#provide_name_new').val();
-            } else {
-                provide_name = $('#provide_name').val();
-            }
-            $('.sttRowTable').text(k + 1);
-            $('.code_product').text(productCode);
-            $('.name_product').text(productName);
-            $('.provide_name').text(provide_name);
-            $('.type_product').text(productType);
-            $('.qty_product').text(productQty);
-        })
+
+function setSTT() {
+    var rows = $('#inputContainer').find('tbody tr');
+    for (let i = 0; i < rows.length; i++) {
+        $(rows[i]).find('td:eq(0)').text(i + 1);
     }
 }
+
 
 // Hàm tính tổng tiền
 function calculateTotals() {
@@ -235,6 +213,7 @@ function calculateTotals() {
 
     // Hiển thị tổng totalAmount và totalTax
     $('#total-amount-sum').text(formatCurrency(totalAmount));
+    $('.total_price').val(formatCurrency(totalAmount));
     $('#product-tax').text((formatCurrency(totalTax)));
 
     // Tính tổng thành tiền và thuế
@@ -396,16 +375,6 @@ function checkData(e) {
 //     }
 // });
 
-// function checkClick(event) {
-//     var div = $(event.target);
-//     event.stopPropagation();
-//     if(div[0].is(event.target)){
-//         alert('trong');
-//     }else{
-//         alert('ngoài');
-//     }
-// }
-
 // Hàm chỉ cho phép nhập số
 function validateNumberInput(input) {
     var regex = /^[0-9][0-9-]*$/;
@@ -423,19 +392,60 @@ function validatQtyInput(input) {
 }
 
 
-function delayButtonClick(button) {
-    $(button).prop('disabled', true);
+$("#radio1").on("click", function () {
+    $('#infor_provide').empty();
+});
 
-    var countDown = 10;
-    var countdownInterval = setInterval(function () {
-        countDown--;
-        if (countDown <= 0) {
-            clearInterval(countdownInterval);
-            $(button).prop('disabled', false);
-        }
-    }, 100);
-}
-
+$("#radio2").on("click", function () {
+    $('#provide_id').val("");
+    $('#infor_provide').html(
+        '<div class="border-bottom p-3 d-flex justify-content-between">' +
+        '<b>Thông tin nhà cung cấp</b>' +
+        '<button id="btn-addCustomer" class="btn btn-primary d-flex align-items-center">' +
+        '<img src="../../dist/img/icon/Union.png">' +
+        '<span class="ml-1">Lưu thông tin</span></button></div>' +
+        '<div class="row p-3">' +
+        '<div class="col-sm-6">' +
+        '<div class="form-group">' +
+        '<label for="congty">Công ty:</label>' +
+        '<input required type="text" class="form-control" id="provide_name_new" placeholder="Nhập thông tin" name="provide_name_new" value="">' +
+        '</div>' + '<div class="form-group">' +
+        '<label>Địa chỉ xuất hóa đơn:</label>' +
+        '<input required type="text" class="form-control" id="provide_address_new" placeholder="Nhập thông tin" name="provide_address_new" value="">' +
+        '</div>' + '<div class="form-group">' +
+        '<label for="email">Mã số thuế:</label>' +
+        '<input required type="text" class="form-control" oninput="validateNumberInput(this)" id="provide_code_new" placeholder="Nhập thông tin" name="provide_code_new" value="">' +
+        '</div>' + '</div>' + '<div class="col-sm-6">' +
+        '<div class="form-group">' +
+        '<label for="email">Người đại diện:</label>' +
+        '<input type="text" class="form-control" id="provide_represent_new" placeholder="Nhập thông tin" name="provide_represent_new" value="">' +
+        '</div>' + '<div class="form-group">' +
+        '<label for="email">Email:</label>' +
+        '<input type="email" class="form-control" id="provide_email_new" placeholder="Nhập thông tin" name="provide_email_new" value="">' +
+        '</div>' + '<div class="form-group">' +
+        '<label for="email">Số điện thoại:</label>' +
+        '<input type="number" class="form-control" id="provide_phone_new" placeholder="Nhập thông tin" name="provide_phone_new" value="">' +
+        '</div>' +
+        '<div class="form-group">' +
+        '<label for="email">Công nợ:</label>' +
+        '<div class="d-flex align-items-center" style="width:101%;"> <input id="debtInput" class="form-control" type="text" name="provide_debt" style="width:15%;">' +
+        '<span class="ml-2" id="data-debt" style="color: rgb(29, 28, 32);">ngày</span>' +
+        '<input type="checkbox" id="debtCheckbox" value="0" style="margin-left:10%;" checked>' +
+        '<span class="ml-2">Thanh toán tiền mặt</span> </div>' +
+        '</div>' +
+        '</div></div>'
+    );
+    var isChecked = $('#debtCheckbox').is(':checked');
+    // Đặt trạng thái của input dựa trên checkbox
+    $('#debtInput').val(0);
+    $('#debtInput').prop('disabled', isChecked);
+    // Xử lý sự kiện khi checkbox thay đổi
+    $(document).on('change', '#debtCheckbox', function () {
+        var isChecked = $(this).is(':checked');
+        $('#debtInput').prop('disabled', isChecked);
+        $('#debtInput').val(0);
+    });
+})
 
 
 

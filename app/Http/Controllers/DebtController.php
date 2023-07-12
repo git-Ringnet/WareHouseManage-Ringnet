@@ -23,15 +23,15 @@ class DebtController extends Controller
      */
     public function index(Request $request)
     {
-        $title = 'Công nợ';
+        $title = 'Công nợ xuất';
         $filters = [];
         $string = [];
         //Mã đơn
         if (!empty($request->id)) {
             $id = $request->id;
-            array_push($filters, ['debts.id', 'like', '%' . $id . '%']);
+            array_push($filters, ['exports.export_code', 'like', '%' . $id . '%']);
             $nameArr = explode(',.@', $id);
-            array_push($string, ['label' => 'Mã đơn:', 'values' => $nameArr, 'class' => 'id']);
+            array_push($string, ['label' => 'Hóa đơn ra:', 'values' => $nameArr, 'class' => 'id']);
         }
         //Khách hàng
         if (!empty($request->guest)) {
@@ -52,7 +52,7 @@ class DebtController extends Controller
             $sale_operator = $request->input('sale_operator');
             $filters[] = ['debts.total_sales', $sale_operator, $sum];
             $saleArray = explode(',.@', $sum);
-            array_push($string, ['label' => 'Tổng tiền bán' . $sale_operator, 'values' => $saleArray, 'class' => 'sum-sale']);
+            array_push($string, ['label' => 'Tổng tiền bán ' . $sale_operator, 'values' => $saleArray, 'class' => 'sum-sale']);
         }
         // nhập
         if (!empty($request->import_operator) && !empty($request->sum_import)) {
@@ -60,7 +60,7 @@ class DebtController extends Controller
             $import_operator = $request->input('import_operator');
             $filters[] = ['debts.total_import', $import_operator, $sum];
             $importArray = explode(',.@', $sum);
-            array_push($string, ['label' => 'Tổng tiền nhập' . $import_operator, 'values' => $importArray, 'class' => 'sum-import']);
+            array_push($string, ['label' => 'Tổng tiền nhập ' . $import_operator, 'values' => $importArray, 'class' => 'sum-import']);
         }
         // phí
         if (!empty($request->fee_operator) && !empty($request->sum_fee)) {
@@ -68,7 +68,7 @@ class DebtController extends Controller
             $fee_operator = $request->input('fee_operator');
             $filters[] = ['debts.debt_transport_fee', $fee_operator, $sum];
             $feeArray = explode(',.@', $sum);
-            array_push($string, ['label' => 'Phí vận chuyển' . $fee_operator, 'values' => $feeArray, 'class' => 'sum-fee']);
+            array_push($string, ['label' => 'Phí vận chuyển ' . $fee_operator, 'values' => $feeArray, 'class' => 'sum-fee']);
         }
         // Chênh lệch
         if (!empty($request->difference_operator) && !empty($request->sum_difference)) {
@@ -76,7 +76,7 @@ class DebtController extends Controller
             $difference_operator = $request->input('difference_operator');
             $filters[] = ['debts.total_difference', $difference_operator, $sum];
             $inventoryArray = explode(',.@', $sum);
-            array_push($string, ['label' => 'Tổng tiền chênh lệch' . $difference_operator, 'values' => $inventoryArray, 'class' => 'sum-difference']);
+            array_push($string, ['label' => 'Tổng tiền chênh lệch ' . $difference_operator, 'values' => $inventoryArray, 'class' => 'sum-difference']);
         }
         // Công nợ
         if (!empty($request->debt_operator) && !empty($request->debt)) {
@@ -89,7 +89,7 @@ class DebtController extends Controller
         //Trạng thái
         $status = [];
         if (!empty($request->status)) {
-            $statusValues = [0 => 'Quá hạn', 1 => 'Thanh toán đủ', 2 => 'Gần đến hạn', 3 => 'Công nợ'];
+            $statusValues = [0 => 'Quá hạn', 1 => 'Thanh toán đủ', 2 => 'Gần đến hạn', 3 => 'Công nợ', 4 => 'Chưa thanh toán'];
             $status = $request->input('status', []);
             $statusLabels = array_map(function ($value) use ($statusValues) {
                 return $statusValues[$value];
@@ -102,8 +102,22 @@ class DebtController extends Controller
             $date_start = $request->input('date_start');
             $date_end = $request->input('date_end');
             $date[] = [$date_start, $date_end];
-            $datearr = ['label' => 'Công nợ:', 'values' => [date('d/m/Y', strtotime($date_start)),
-            date('d/m/Y', strtotime($date_end))], 'class' => 'debt'];
+            $datearr = ['label' => 'Công nợ:', 'values' => [
+                date('d/m/Y', strtotime($date_start)),
+                date('d/m/Y', strtotime($date_end))
+            ], 'class' => 'debt'];
+            array_push($string, $datearr);
+        }
+        // Công nợ đã thanh toán
+        $datepaid = [];
+        if (!empty($request->paid_date_start) && !empty($request->paid_date_end)) {
+            $date_start = $request->input('paid_date_start');
+            $date_end = $request->input('paid_date_end');
+            $datepaid[] = [$date_start, $date_end];
+            $datearr = ['label' => 'Đã thanh toán:', 'values' => [
+                date('d/m/Y', strtotime($date_start)),
+                date('d/m/Y', strtotime($date_end))
+            ], 'class' => 'debt-paid'];
             array_push($string, $datearr);
         }
 
@@ -128,10 +142,10 @@ class DebtController extends Controller
 
 
         $debtsSale = User::whereIn('roleid', [1, 3])->get();
-        $debts = $this->debts->getAllDebts($filters, $keywords, $nhanvien, $date, $status, $sortBy, $sortType);
+        $debts = $this->debts->getAllDebts($filters, $keywords, $nhanvien, $date, $datepaid, $status, $sortBy, $sortType);
         $product = $this->debts->getAllProductsDebts();
         $debtsCreator = $this->debts->debtsCreator();
-        return view('tables.debt.debts', compact('title', 'debts', 'debtsSale', 'product', 'string', 'sortType','debtsCreator'));
+        return view('tables.debt.debts', compact('title', 'debts', 'debtsSale', 'product', 'string', 'sortType', 'debtsCreator'));
     }
 
     /**
@@ -174,16 +188,16 @@ class DebtController extends Controller
      */
     public function edit($id)
     {
-        $debts = Debt::select('debts.*','guests.guest_name as khachhang', 'users.name as nhanvien')
-        ->join('guests', 'debts.guest_id', '=', 'guests.id')
-        ->join('users', 'debts.user_id', '=', 'users.id')
-        ->findOrFail($id);
-        $product = Debt::select('debts.*', 'products.products_code as maSanPham', 'product_exports.id as madon', 'product_exports.product_qty as soluong', 'product_exports.product_price as giaban', 'product.product_price as gianhap')
+        $debts = Debt::select('debts.*', 'guests.guest_name as khachhang', 'users.name as nhanvien','exports.export_code as hdr')
+            ->join('guests', 'debts.guest_id', '=', 'guests.id')
+            ->join('users', 'debts.user_id', '=', 'users.id')
+            ->leftJoin('exports', 'exports.id', 'debts.export_id')
+            ->findOrFail($id);
+        $product = Debt::select('debts.*', 'product_exports.id as madon', 'product_exports.product_qty as soluong', 'product_exports.product_price as giaban', 'product.product_price as gianhap')
             ->leftJoin('guests', 'guests.id', 'debts.guest_id')
             ->leftJoin('users', 'users.id', 'debts.user_id')
             ->leftJoin('exports', 'exports.id', 'debts.export_id')
             ->leftJoin('product_exports', 'exports.id', 'product_exports.export_id')
-            ->leftJoin('products', 'products.id', 'product_exports.products_id')
             ->leftJoin('product', 'product.id', 'product_exports.product_id')->where('debts.id', $id)->get();
         $title = "Chi tiết đơn hàng";
         return view('tables.debt.editDebt', compact('debts', 'product', 'title'));
@@ -210,22 +224,27 @@ class DebtController extends Controller
             }
             if ($action === 'action2') {
                 // Xử lí status debt
-                $endDate = new DateTime($request->date_end);
-                $now = new DateTime();
-                $interval = $endDate->diff($now);
-                $daysDiff = $interval->format('%R%a');
-                $daysDiff = intval($daysDiff);
-                $daysDiff = -$daysDiff;
-                if ($request->debt == 0) {
-                    $debt->debt_status = 1;
-                } elseif ($daysDiff <= 3) {
+                $endDate = Carbon::parse($request->date_end);
+                $currentDate = Carbon::now();
+                $daysDiffss = $currentDate->diffInDays($endDate);
+                $daysDiff = -$daysDiffss;
+                
+                if ($request->debt_debt == null || $request->debt_debt == 0) {
+                    $debt->debt_status = 4;
+                    $debt->debt = 0;
+                } elseif ($daysDiff <= 3 && $daysDiff >= 0) {
                     $debt->debt_status = 2;
+                    $debt->debt = $request->debt_debt;
                 } elseif ($daysDiff < 0) {
                     $debt->debt_status = 0;
+                    $debt->debt = $request->debt_debt;
                 } else {
                     $debt->debt_status = 3;
+                    $debt->debt = $request->debt_debt;
                 }
+                // dd($daysDiff);
                 $debt->update($request->all());
+
                 return redirect()->route('debt.index')->with('msg', 'Cập nhật thành công!');
             }
         }
@@ -240,5 +259,20 @@ class DebtController extends Controller
     public function destroy($id)
     {
         //
+    }
+    public function paymentdebt(Request $request)
+    {
+        if (isset($request->list_id)) {
+            $list = $request->list_id;
+            $listOrder = Debt::whereIn('id', $list)->get();
+            foreach ($listOrder as $value) {
+                $value->debt_status = 1;
+                $value->save();
+            }
+            session()->flash('msg', 'Thanh toán thành công');
+            return response()->json(['success' => true, 'msg' => 'Thanh toán thành công']);
+        }
+        return response()->json(['success' => false, 'warning' => 'Thanh toán thất bại!']);
+        session()->flash('msg', 'Thanh toán thất bại!');
     }
 }

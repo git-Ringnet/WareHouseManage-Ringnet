@@ -24,6 +24,7 @@ class ProvidesSeeder extends Seeder
                 'provide_status' => 1,
                 'provide_address' => '38 Út tịch',
                 'provide_code' => '123',
+                'debt' => 0
             ],
             [
                 'id' => 2,
@@ -34,6 +35,7 @@ class ProvidesSeeder extends Seeder
                 'provide_status' => 1,
                 'provide_address' => '38 Út tịch',
                 'provide_code' => '123',
+                'debt' => 1
             ],
             [
                 'id' => 3,
@@ -44,6 +46,7 @@ class ProvidesSeeder extends Seeder
                 'provide_status' => 1,
                 'provide_address' => '38 Út tịch',
                 'provide_code' => '123',
+                'debt' => 2
             ],
         ]);
     }
