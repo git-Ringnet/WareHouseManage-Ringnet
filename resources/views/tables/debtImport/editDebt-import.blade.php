@@ -28,7 +28,7 @@
                 <div class="col-md-3 col-sm-6">
                     <div class="form-group">
                         <div class="labelform">Ngày nhập hóa đơn</div>
-                        <input type="text" class="form-control" value="{{$debts->created_at}}" name="" id=""
+                        <input type="text" class="form-control" value="{{date_format(new DateTime($debts->created_at),"d-m-Y") }}" name="" id=""
                             readonly>
                     </div>
                 </div>

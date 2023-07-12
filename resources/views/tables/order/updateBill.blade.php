@@ -239,13 +239,13 @@
                 <div class="d-flex">
                     <div style="width:42%;">
                         <label for="" class="ml-2">Số hóa đơn</label>
-                        <input type="text" name="product_code" class="form-control"
+                        <input oninput="validateBillInput(this)" type="text" name="product_code" class="form-control"
                             value="{{ $order->product_code }}" @if (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin')) readonly @endif
                             @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif>
                     </div>
                     <div>
                         <label for="" class="ml-4">Ngày hóa đơn</label>
-                        <input type="date" name="product_create" class="form-control ml-2"
+                        <input id="product_create" type="date" name="product_create" class="form-control ml-2"
                             value="{{ $order->created_at->format('Y-m-d') }}"
                             @if (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin')) readonly @endif
                             @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif>
@@ -435,7 +435,10 @@
                 er = true;
                 alert('Vui lòng nhập ít nhất 1 sản phẩm');
             }
-
+            if($('#product_create').val().trim() == ''){
+                er = true;
+                alert('Vui lòng nhập ngày hóa đơn');
+            }
             // Kiểm tra trùng sản phẩm con
             if (checkDuplicateRows()) {
                 alert('Sản phẩm đã tồn tại');

@@ -117,7 +117,8 @@
                                 @if (Auth::user()->id == $order->users_id || Auth::user()->can('isAdmin'))
                                     <div class="w-75">
                                         <div class="d-flex mb-2">
-                                            <input type="radio" name="options" id="radio1" checked value="1">
+                                            <input type="radio" name="options" id="radio1" checked
+                                                value="1">
                                             <span class="ml-1">Nhà cung cấp cũ</span>
                                             <input type="radio" name="options" id="radio2"
                                                 style="margin-left: 40px;" value="2">
@@ -206,17 +207,15 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label for="email">Người đại diện:</label>
-                        <input type="text" class="form-control"
-                            @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif id="provide_represent"
-                            placeholder="Nhập thông tin" name="provide_represent"
+                        <input type="text" class="form-control" @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif
+                            id="provide_represent" placeholder="Nhập thông tin" name="provide_represent"
                             value="{{ $provide_order[0]->provide_represent }}"
                             @if ($order->order_status == 1) <?php echo 'readonly'; ?> @endif>
                     </div>
                     <div class="form-group">
                         <label for="email">Email:</label>
-                        <input type="email" class="form-control"
-                            @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif id="provide_email"
-                            placeholder="Nhập thông tin" name="provide_email"
+                        <input type="email" class="form-control" @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif
+                            id="provide_email" placeholder="Nhập thông tin" name="provide_email"
                             value="{{ $provide_order[0]->provide_email }}"
                             @if ($order->order_status == 1) <?php echo 'readonly'; ?> @endif>
                     </div>
@@ -230,9 +229,10 @@
                     </div>
                     <div class="form-group">
                         <label for="email">Công nợ:</label>
-                        <div class="d-flex align-items-center" style="width:101%;"> <input name="provide_debt"
-                                id="debtInput" class="form-control" type="text" name="debt"
-                                style="width:15%;" value="{{ $provide_order[0]->debt }}">
+                        <div class="d-flex align-items-center" style="width:101%;">
+                            <input name="provide_debt" id="debtInput" class="form-control" type="text"
+                                name="debt" style="width:15%;" value="{{ $provide_order[0]->debt }}"
+                                @if($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif >
                             <span class="ml-2" id="data-debt" style="color: rgb(29, 28, 32);">ngày</span>
                             <input type="checkbox" id="debtCheckbox" value="0" <?php echo $provide_order[0]->debt == 0 ? 'checked' : ''; ?>
                                 style="margin-left:10%;">
@@ -248,13 +248,13 @@
                 <div class="d-flex">
                     <div style="width:42%;">
                         <label for="" class="ml-2">Số hóa đơn</label>
-                        <input type="text" name="product_code" class="form-control"
+                        <input oninput="validateBillInput(this)" type="text" name="product_code" class="form-control"
                             value="{{ $order->product_code }}" @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif
                             @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif>
                     </div>
                     <div>
                         <label for="" class="ml-4">Ngày hóa đơn</label>
-                        <input type="date" name="product_create" class="form-control ml-2"
+                        <input id="product_create" type="date" name="product_create" class="form-control ml-2"
                             value="{{ $order->created_at->format('Y-m-d') }}"
                             @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif
                             @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif>
@@ -471,7 +471,10 @@
             if (checkDuplicateRows()) {
                 alert('Sản phẩm đã tồn tại');
             }
-
+            if($('#product_create').val().trim() == ''){
+                er =true;
+                alert('Vui lòng nhập ngày hóa đơn');
+            }
             // Kiểm tra có lỗi hay không
             var hasErrors = checkRow() === false ||
                 checkDuplicateRows() === true || er === true;
@@ -723,6 +726,10 @@
                 if (checkDuplicateRows()) {
                     er = true;
                     alert('Sản phẩm đã tồn tại');
+                }
+                if($('#product_create').val().trim() == ''){
+                    er = true;
+                    alert('Vui lòng nhập ngày hóa đơn');
                 }
                 if (er) {
                     return false;
