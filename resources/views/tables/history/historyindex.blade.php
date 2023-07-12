@@ -489,6 +489,14 @@ $index = array_search($item['label'], $numberedLabels);
                                         </th>
                                         <th scope="col">
                                             <span class="d-flex align-items-center">
+                                                <a href="#" class="sort-link" data-sort-by="nhanvien"
+                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
+                                                        type="submit">Nhân viên</button></a>
+                                                <div class="icon" id="icon-nhanvien"></div>
+                                            </span>
+                                        </th>
+                                        <th scope="col">
+                                            <span class="d-flex align-items-center">
                                                 <a href="#" class="sort-link" data-sort-by="created_at"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Thời gian</button></a>
@@ -496,7 +504,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             </span>
                                         </th>
                                         <th scope="col" class="text-left">
-                                            <span class="d-flex justify-content-start">
+                                            <span class="d-flex justify-content-start" style="width:100px;">
                                                 <a href="#" class="sort-link" data-sort-by="nhacungcap"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">NCC</button></a>
@@ -560,7 +568,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             </span>
                                         </th>
                                         <th scope="col" class="text-center">
-                                            <span class="d-flex justify-content-center align-items-center">
+                                            <span class="d-flex justify-content-center align-items-center" style="width:110px;">
                                                 <a href="#" class="sort-link" data-sort-by="debt_status"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Khách hàng</button></a>
@@ -627,14 +635,6 @@ $index = array_search($item['label'], $numberedLabels);
                                             <span class="d-flex align-items-center">
                                                 <a href="#" class="sort-link" data-sort-by="created_at"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
-                                                        type="submit">Tồn</button></a>
-                                                <div class="icon" id="icon-created_at"></div>
-                                            </span>
-                                        </th>
-                                        <th scope="col">
-                                            <span class="d-flex align-items-center">
-                                                <a href="#" class="sort-link" data-sort-by="created_at"
-                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Chi phí VC</button></a>
                                                 <div class="icon" id="icon-created_at"></div>
                                             </span>
@@ -654,7 +654,34 @@ $index = array_search($item['label'], $numberedLabels);
                                     </form>
                                 </thead>
                                 <tbody>
-                                    {{-- foreach --}}
+                                    <?php $stt = 1; ?>
+                                    @foreach ($history as $item)
+                                        <tr>
+                                            <td><?php echo $stt++; ?></td>
+                                            <td>{{ $item->name }}</td>
+                                            <td>{{ date_format(new DateTime($item->date_time), 'd-m-Y') }}</td>
+                                            <td>{{ $item->provide_name }}</td>
+                                            <td>{{ $item->product_name }}</td>
+                                            <td>{{ $item->product_qty }}</td>
+                                            <td>{{ $item->product_unit }}</td>
+                                            <td>{{ number_format($item->price_import) }}</td>
+                                            <td>{{ number_format($item->product_total) }}</td>
+                                            <td>{{ $item->import_code }}</td>
+                                            <td>{{ $item->import_status }}</td>
+                                            <td>{{ $item->guest_name }}</td>
+                                            <td>{{ $item->export_qty }}</td>
+                                            <td>{{ $item->export_unit }}</td>
+                                            <td>{{ number_format($item->price_export) }}</td>
+                                            <td>{{ number_format($item->export_total) }}</td>
+                                            <td>{{ $item->export_code }}</td>
+                                            <td>{{ $item->export_status }}</td>
+                                            <td>{{ number_format($item->total_difference) }}</td>
+                                            <td>{{ $item->tranport_fee }}</td>
+                                            <td>{{ $item->history_note }}</td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>

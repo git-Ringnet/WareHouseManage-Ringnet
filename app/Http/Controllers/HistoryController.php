@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\DebtImport;
+use App\Models\History;
 use App\Models\Provides;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -100,7 +101,10 @@ class HistoryController extends Controller
         $debts = $this->debts->getAllDebts($filters, $keywords, $nhanvien, $date,$provide_namearr, $status, $sortBy, $sortType);
         $product = $this->debts->getAllProductsDebts();
         $debtsCreator = $this->debts->debtsCreator();
-        return view('tables.history.historyindex', compact('title', 'debts','provides', 'debtsSale', 'product', 'string', 'sortType', 'debtsCreator'));
+        $history = History::leftJoin('users','users.id','history.user_id')
+        ->leftJoin('provides','provides.id','history.provide_id')
+        ->leftJoin('guests','guests.id','history.guest_id')->get();
+        return view('tables.history.historyindex', compact('history','title', 'debts','provides', 'debtsSale', 'product', 'string', 'sortType', 'debtsCreator'));
     }
 
     /**
