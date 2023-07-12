@@ -165,13 +165,13 @@ class AddProductController extends Controller
      */
     public function store(Request $request)
     {
-        $new_provide = new Provides();
         $dataProvide = [
-            'provide_name' => $request->provide_id == null ? $request->provide_name_new : $request->provide_name,
-            'provide_represent' => $request->provide_id == null ? $request->provide_represent_new : $request->provide_represent,
-            'provide_phone' => $request->provide_id == null ? $request->provide_phone_new : $request->provide_phone,
-            'provide_email' => $request->provide_id == null ? $request->provide_email_new : $request->provide_email,
-            'provide_address' => $request->provide_id == null ? $request->provide_address_new : $request->provide_address,
+            'provide_name' => $request->provide_id == null ? $request->provide_name_new : ($request->input('options') == 2 ? $request->provide_name_new : $request->provide_name),
+            'provide_represent' => $request->provide_id == null ? $request->provide_represent_new : ($request->input('options') == 2 ? $request->provide_represent_new : $request->provide_represent),
+            'provide_phone' => $request->provide_id == null ? $request->provide_phone_new : ($request->input('options') == 2 ? $request->provide_phone_new : $request->provide_phone),
+            'provide_email' => $request->provide_id == null ? $request->provide_email_new : ($request->input('options') == 2 ? $request->provide_email_new : $request->provide_email),
+            'provide_address' => $request->provide_id == null ? $request->provide_address_new : ($request->input('options') == 2 ? $request->provide_address_new : $request->provide_address),
+            'provide_code' => $request->provide_id == null ? $request->provide_code_new : ($request->input('options') == 2 ? $request->provide_code_new : $request->provide_code),
             'provide_status' => 1,
             'debt' => $request->provide_debt == null ? 0 : $request->provide_debt
         ];
@@ -262,11 +262,11 @@ class AddProductController extends Controller
     public function update(Request $request, $id)
     {
         $dataProvide = [
-            'provide_name' => $request->provide_id == null ? $request->provide_name_new : $request->provide_name,
-            'provide_represent' => $request->provide_id == null ? $request->provide_represent_new : $request->provide_represent,
-            'provide_phone' => $request->provide_id == null ? $request->provide_phone_new : $request->provide_phone,
-            'provide_email' => $request->provide_id == null ? $request->provide_email_new : $request->provide_email,
-            'provide_address' => $request->provide_id == null ? $request->provide_address_new : $request->provide_address,
+            'provide_name' => $request->provide_id == null ? $request->provide_name_new : ($request->options == 2 ? $request->provide_name_new : $request->provide_name),
+            'provide_represent' => $request->provide_id == null ? $request->provide_represent_new : ($request->options == 2 ? $request->provide_represent_new : $request->provide_represent),
+            'provide_phone' => $request->provide_id == null ? $request->provide_phone_new : ($request->options == 2 ? $request->provide_phone_new : $request->provide_phone),
+            'provide_email' => $request->provide_id == null ? $request->provide_email_new : ($request->options == 2 ? $request->provide_email_new : $request->provide_email),
+            'provide_address' => $request->provide_id == null ? $request->provide_address_new : ($request->options == 2 ? $request->provide_address_new : $request->provide_address),
             'provide_status' => 1,
             'provide_code' => $request->provide_id == null ? $request->provide_code_new : $request->provide_code,
             'debt' => $request->provide_debt == null ? 0 : $request->provide_debt,
@@ -309,7 +309,7 @@ class AddProductController extends Controller
                     'order_id' => $request->order_id,
                     'product_tax' => $product_tax[$i],
                     'product_total' => $product_total[$i],
-                    'provide_id' => $request->provide_id == null ? $newProvide: $request->provide_id
+                    'provide_id' => $request->provide_id == null ? $newProvide : $request->provide_id
                 ];
                 if ($check === null) {
                     $newProductOd = $this->product->addProduct($dataProduct);
@@ -468,11 +468,11 @@ class AddProductController extends Controller
         $id_product = [];
 
         $dataProvide = [
-            'provide_name' => $request->provide_id == null ? $request->provide_name_new : $request->provide_name,
-            'provide_represent' => $request->provide_id == null ? $request->provide_represent_new : $request->provide_represent,
-            'provide_phone' => $request->provide_id == null ? $request->provide_phone_new : $request->provide_phone,
-            'provide_email' => $request->provide_id == null ? $request->provide_email_new : $request->provide_email,
-            'provide_address' => $request->provide_id == null ? $request->provide_address_new : $request->provide_address,
+            'provide_name' => $request->provide_id == null ? $request->provide_name_new : ($request->options == 2 ? $request->provide_name_new : $request->provide_name),
+            'provide_represent' => $request->provide_id == null ? $request->provide_represent_new : ($request->options == 2 ? $request->provide_represent_new : $request->provide_represent),
+            'provide_phone' => $request->provide_id == null ? $request->provide_phone_new : ($request->options == 2 ? $request->provide_phone_new : $request->provide_phone),
+            'provide_email' => $request->provide_id == null ? $request->provide_email_new : ($request->options == 2 ? $request->provide_email_new : $request->provide_email),
+            'provide_address' => $request->provide_id == null ? $request->provide_address_new : ($request->options == 2 ? $request->provide_address_new : $request->provide_address),
             'debt' => $request->provide_debt == null ? 0 : $request->provide_debt,
             'provide_status' => 1
         ];
@@ -530,8 +530,10 @@ class AddProductController extends Controller
                 $updateP->product_id = $pro;
                 $updateP->save();
             }
+
             $updateOrder->order_status = 1;
             $updateOrder->save();
+
             $debt = new DebtImport();
             $debt->provide_id = $request['provide_id'] == null ? $new : $request->provide_id;
             $debt->user_id = Auth::user()->id;
@@ -595,13 +597,15 @@ class AddProductController extends Controller
     // Thêm hàng mới vào Order
     public function addBillEdit(Request $request)
     {
+        var_dump($request->options);
+        die();
         $dataProvide = [
-            'provide_name' => $request->provide_id == null ? $request->provide_name_new : $request->provide_name,
-            'provide_represent' => $request->provide_id == null ? $request->provide_represent_new : $request->provide_represent,
-            'provide_phone' => $request->provide_id == null ? $request->provide_phone_new : $request->provide_phone,
-            'provide_address' => $request->provide_id == null ? $request->provide_address_new : $request->provide_address,
-            'provide_email' => $request->provide_id == null ? $request->provide_email_new : $request->provide_email,
-            'provide_code' => $request->provide_id == null ? $request->provide_code : $request->provide_code,
+            'provide_name' => $request->provide_id == null ? $request->provide_name_new : ($request->options == 2 ? $request->provide_name_new : $request->provide_name),
+            'provide_represent' => $request->provide_id == null ? $request->provide_represent_new : ($request->options == 2 ? $request->provide_represent_new : $request->provide_represent),
+            'provide_phone' => $request->provide_id == null ? $request->provide_phone_new : ($request->options == 2 ? $request->provide_phone_new : $request->provide_phone),
+            'provide_address' => $request->provide_id == null ? $request->provide_address_new : ($request->options == 2 ? $request->provide_address_new  : $request->provide_address),
+            'provide_email' => $request->provide_id == null ? $request->provide_email_new : ($request->options == 2 ? $request->provide_email_new : $request->provide_email),
+            'provide_code' => $request->provide_id == null ? $request->provide_code_new : ($request->options == 2 ? $request->provide_code_new : $request->provide_code),
             'provide_status' => 1,
             'debt' => $request->provide_debt == null ? 0 : $request->provide_debt
         ];
@@ -874,13 +878,13 @@ class AddProductController extends Controller
         $product_total = str_replace(',', '', $request->product_total);
         $total_price = str_replace(',', '', $request->total_price);
         $dataProvide = [
-            'provide_name' => $request->provide_id == null ? $request->provide_name_new : $request->provide_name,
-            'provide_represent' => $request->provide_id == null ? $request->provide_represent_new : $request->provide_represent,
-            'provide_phone' => $request->provide_id == null ? $request->provide_phone_new : $request->provide_phone,
-            'provide_email' => $request->provide_id == null ? $request->provide_email_new : $request->provide_email,
+            'provide_name' => $request->provide_id == null ? $request->provide_name_new : ($request->options == 2 ? $request->provide_name_new : $request->provide_name),
+            'provide_represent' => $request->provide_id == null ? $request->provide_represent_new : ($request->options == 2? $request->provide_represent_new: $request->provide_represent),
+            'provide_phone' => $request->provide_id == null ? $request->provide_phone_new : ($request->options == 2? $request->provide_phone_new: $request->provide_phone),
+            'provide_email' => $request->provide_id == null ? $request->provide_email_new : ($request->options == 2? $request->provide_email_new: $request->provide_email),
             'provide_status' => 1,
-            'provide_address' => $request->provide_id == null ? $request->provide_address_new : $request->provide_address,
-            'provide_code' => $request->provide_id == null ? $request->provide_code_new : $request->provide_code,
+            'provide_address' => $request->provide_id == null ? $request->provide_address_new : ($request->options == 2 ? $request->provide_address_new : $request->provide_address),
+            'provide_code' => $request->provide_id == null ? $request->provide_code_new : ($request->options == 2 ? $request->provide_code_new : $request->provide_code),
             'debt' => $request->provide_debt == null ? 0 : $request->provide_debt
         ];
 
@@ -917,11 +921,40 @@ class AddProductController extends Controller
             $this->product->updateProduct($data, $f->product_id);
         }
 
+        $startDate = Carbon::parse($request->product_create); // Chuyển đổi ngày bắt đầu thành đối tượng Carbon
+        $daysToAdd = $request->provide_debt; // Số ngày cần thêm
+
+        $endDate = $startDate->copy()->addDays($daysToAdd); // Thêm số ngày vào ngày bắt đầu để tính ngày kết thúc
+
+        // Định dạng ngày kết thúc theo ý muốn
+        $endDateFormatted = $endDate->format('Y-m-d');
+
+        $endDate = Carbon::parse($endDateFormatted); // Chuyển đổi ngày kết thúc thành đối tượng Carbon
+
+        $currentDate = Carbon::now(); // Lấy ngày hiện tại thành đối tượng Carbon
+
+        $daysDiffs = $currentDate->diffInDays($endDate);
+        $daysDiff = -$daysDiffs;
+
+
+        if ($request->provide_debt == 0) {
+            $debt_status = 4;
+        } elseif ($daysDiff <= 3 && $daysDiff >= 0) {
+            $debt_status = 2;
+        } elseif ($daysDiff < 0) {
+            $debt_status = 0;
+        } else {
+            $debt_status = 3;
+        }
+
         // Chỉnh sửa công nợ
         $dataImport = [
             'provide_id' => $request->provide_id == null ? $add_newProvide : $request->provide_id,
             'total_import' => $total_import,
-            'debt' => $request->provide_debt == null ? 0 : $request->provide_debt
+            'debt' => $request->provide_debt == null ? 0 : $request->provide_debt,
+            'date_start' => $request->product_create,
+            'date_end' => $endDateFormatted,
+            'debt_status' => $debt_status,
         ];
         $this->debtImport->updateDebtImport($dataImport, $request->debtimport_id);
 
