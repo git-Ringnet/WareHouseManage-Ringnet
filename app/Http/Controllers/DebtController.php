@@ -188,7 +188,7 @@ class DebtController extends Controller
      */
     public function edit($id)
     {
-        $debts = Debt::select('debts.*', 'guests.guest_name as khachhang', 'users.name as nhanvien','exports.export_code as hdr')
+        $debts = Debt::select('debts.*', 'guests.guest_name as khachhang', 'users.name as nhanvien', 'exports.export_code as hdr')
             ->join('guests', 'debts.guest_id', '=', 'guests.id')
             ->join('users', 'debts.user_id', '=', 'users.id')
             ->leftJoin('exports', 'exports.id', 'debts.export_id')
@@ -227,13 +227,19 @@ class DebtController extends Controller
                 $endDate = Carbon::parse($request->date_end);
                 $currentDate = Carbon::now();
                 $daysDiffss = $currentDate->diffInDays($endDate);
-                $daysDiff = -$daysDiffss;
-                
+                if ($endDate < $currentDate) {
+                    $daysDiff = -$daysDiffss;
+                } else {
+                    $daysDiff = $daysDiffss;
+                }
                 if ($request->debt_debt == null || $request->debt_debt == 0) {
                     $debt->debt_status = 4;
                     $debt->debt = 0;
-                } elseif ($daysDiff <= 3 && $daysDiff >= 0) {
+                } elseif ($daysDiff <= 3 && $daysDiff > 0) {
                     $debt->debt_status = 2;
+                    $debt->debt = $request->debt_debt;
+                } elseif ($daysDiff == 0) {
+                    $debt->debt_status = 5;
                     $debt->debt = $request->debt_debt;
                 } elseif ($daysDiff < 0) {
                     $debt->debt_status = 0;
@@ -242,7 +248,6 @@ class DebtController extends Controller
                     $debt->debt_status = 3;
                     $debt->debt = $request->debt_debt;
                 }
-                // dd($daysDiff);
                 $debt->update($request->all());
 
                 return redirect()->route('debt.index')->with('msg', 'Cập nhật thành công!');

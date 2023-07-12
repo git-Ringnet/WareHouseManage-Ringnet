@@ -496,7 +496,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             </span>
                                         </th>
                                         <th scope="col">
-                                            <span class="d-flex align-items-center">
+                                            <span class="d-flex align-items-center" style="width:110px;">
                                                 <a href="#" class="sort-link" data-sort-by="created_at"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Thời gian</button></a>
@@ -512,7 +512,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             </span>
                                         </th>
                                         <th scope="col" class="text-left">
-                                            <span class="d-flex justify-content-start">
+                                            <span class="d-flex justify-content-start" style="width:110px;">
                                                 <a href="#" class="sort-link" data-sort-by="nhacungcap"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Mặt hàng</button></a>

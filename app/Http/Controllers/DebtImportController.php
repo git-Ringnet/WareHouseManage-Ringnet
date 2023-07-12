@@ -191,13 +191,19 @@ class DebtImportController extends Controller
                 $endDate = Carbon::parse($request->date_end);
                 $currentDate = Carbon::now();
                 $daysDiffss = $currentDate->diffInDays($endDate);
-                $daysDiff = -$daysDiffss;
-
+                if ($endDate < $currentDate) {
+                    $daysDiff = -$daysDiffss;
+                } else {
+                    $daysDiff = $daysDiffss;
+                }
                 if ($request->debt_debt == null || $request->debt_debt == 0) {
                     $debt->debt_status = 4;
                     $debt->debt = 0;
-                } elseif ($daysDiff <= 3 && $daysDiff >= 0) {
+                } elseif ($daysDiff <= 3 && $daysDiff > 0) {
                     $debt->debt_status = 2;
+                    $debt->debt = $request->debt_debt;
+                } elseif ($daysDiff == 0) {
+                    $debt->debt_status = 5;
                     $debt->debt = $request->debt_debt;
                 } elseif ($daysDiff < 0) {
                     $debt->debt_status = 0;

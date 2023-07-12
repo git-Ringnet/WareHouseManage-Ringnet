@@ -264,7 +264,11 @@ class ExportController extends Controller
                             $endDate = Carbon::parse($endDateFormatted);
                             $currentDate = Carbon::now();
                             $daysDiffss = $currentDate->diffInDays($endDate);
-                            $daysDiff = -$daysDiffss;
+                            if ($endDate < $currentDate) {
+                                $daysDiff = -$daysDiffss;
+                            } else {
+                                $daysDiff = $daysDiffss;
+                            }
 
                             if ($debt->debt == 0) {
                                 $debt->debt_status = 4;
@@ -383,7 +387,11 @@ class ExportController extends Controller
                             $endDate = Carbon::parse($endDateFormatted);
                             $currentDate = Carbon::now();
                             $daysDiffss = $currentDate->diffInDays($endDate);
-                            $daysDiff = -$daysDiffss;
+                            if ($endDate < $currentDate) {
+                                $daysDiff = -$daysDiffss;
+                            } else {
+                                $daysDiff = $daysDiffss;
+                            }
 
                             if ($debt->debt == 0) {
                                 $debt->debt_status = 4;
@@ -486,7 +494,11 @@ class ExportController extends Controller
                             $endDate = Carbon::parse($endDateFormatted);
                             $currentDate = Carbon::now();
                             $daysDiffss = $currentDate->diffInDays($endDate);
-                            $daysDiff = -$daysDiffss;
+                            if ($endDate < $currentDate) {
+                                $daysDiff = -$daysDiffss;
+                            } else {
+                                $daysDiff = $daysDiffss;
+                            }
 
                             if ($debt->debt == 0) {
                                 $debt->debt_status = 4;
@@ -588,7 +600,11 @@ class ExportController extends Controller
                             $endDate = Carbon::parse($endDateFormatted);
                             $currentDate = Carbon::now();
                             $daysDiffss = $currentDate->diffInDays($endDate);
-                            $daysDiff = -$daysDiffss;
+                            if ($endDate < $currentDate) {
+                                $daysDiff = -$daysDiffss;
+                            } else {
+                                $daysDiff = $daysDiffss;
+                            }
 
                             if ($debt->debt == 0) {
                                 $debt->debt_status = 4;
@@ -1105,7 +1121,11 @@ class ExportController extends Controller
                     $endDate = Carbon::parse($endDateFormatted);
                     $currentDate = Carbon::now();
                     $daysDiffss = $currentDate->diffInDays($endDate);
-                    $daysDiff = -$daysDiffss;
+                    if ($endDate < $currentDate) {
+                        $daysDiff = -$daysDiffss;
+                    } else {
+                        $daysDiff = $daysDiffss;
+                    }
 
                     if ($debt->debt == 0) {
                         $debt->debt_status = 4;
