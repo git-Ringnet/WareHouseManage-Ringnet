@@ -743,9 +743,16 @@
             }
         });
     });
+
     //lấy thông tin sản phẩm con từ tên sản phẩm con
     $(document).ready(function() {
         var selectedProductIDs = [];
+        // Lấy tất cả các phần tử đang được chọn theo class "productName"
+        var selectedProducts = document.querySelectorAll(".productName");
+        // Lặp qua từng phần tử và lấy giá trị của nó
+        selectedProducts.forEach(function(product) {
+            selectedProductIDs.push(product.value);
+        });
         $(document).on('change', '.child-select', function() {
             var selectedID = $(this).val();
             var row = $(this).closest('tr');
@@ -780,7 +787,7 @@
                         tonkho.val(response.product_qty);
                         loaihang.val(response.product_category);
                         dangGD.val(response.product_trade);
-                        thue.val(response.tax);
+                        thue.val(response.product_tax);
                         // Tính lại tổng số tiền và tổng số thuế
                         calculateTotalTax();
                         calculateGrandTotal();
@@ -791,9 +798,9 @@
             // Kiểm tra nếu ID sản phẩm đã chọn đã có trong danh sách các sản phẩm đã chọn
             if (selectedProductIDs.includes(selectedID)) {
                 $(this).val(''); // Đặt giá trị của tùy chọn thành trống
-
                 var productNameElement = $(this).closest('tr').find('.product_name');
                 productNameElement.prop('disabled', true); // Disable ô input chứa tên sản phẩm
+                alert('Sản phẩm này đã được thêm trước đó, vui lòng chọn sản phẩm khác');
             } else {
                 var previousID = $(this).data('previous-id'); // Lấy ID trước đó của tùy chọn
                 if (previousID && previousID !== selectedID) {
@@ -802,11 +809,9 @@
                         selectedProductIDs.splice(index, 1); // Xóa ID trước đó khỏi mảng
                     }
                 }
-
                 selectedProductIDs.push(selectedID); // Lưu ID sản phẩm đã chọn vào mảng
                 $(this).data('previous-id',
                     selectedID); // Lưu ID hiện tại vào thuộc tính data của tùy chọn
-
                 hideSelectedProductNames(row); // Ẩn tên sản phẩm đã chọn từ các tùy chọn khác
             }
         });
@@ -1042,6 +1047,12 @@
         return decodeURIComponent(results[2].replace(/\+/g, " "));
     }
 
+    function formatNumber(number) {
+        const parts = number.toString().split('.');
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        return parts.join('.');
+    }
+
     for (let j = 0; j < products.length; j++) {
         // Tạo các phần tử HTML mới
         const newRow = $("<tr class='soTT'>", {
@@ -1058,22 +1069,10 @@
             "<td><select class='child-select p-1 productName form-control' style='width:220px' required name='product_id[]'></select></td>"
         );
 
-        for (let i = 0; i < productList.length; i++) {
-            let option = $("<option>", {
-                "value": productList[i].id,
-                "text": productList[i].product_name
-            });
-
-            if (selectedProducts[j].includes(productList[i].id.toString())) {
-                option.prop('selected', true);
-            }
-
-            ProInput.find('select').append(option);
-        }
-
         const dvtInput = $(
             "<td><input type='text' id='product_unit' class='product_unit form-control' style='width:100px' name='product_unit[]' required></td>"
         );
+
         const slInput = $(
             "<td>" +
             "<div class='d-flex'>" +
@@ -1112,6 +1111,41 @@
             "<td style='display:none;'><input type='text' class='dangGD'></td>" +
             "<td style='display:none;'><input type='text' class='product_tax1'></td>"
         );
+        for (let i = 0; i < productList.length; i++) {
+            let option = $("<option>", {
+                "value": productList[i].id,
+                "text": productList[i].product_name,
+            });
+
+            let dvt = $("<input>", {
+                "value": productList[i].product_unit,
+                "class": "product_unit form-control",
+                "style": "width:100px",
+                "name": "product_unit[]",
+                "required": true
+            });
+
+            let gia = $("<input>", {
+                "value": formatNumber(parseFloat(productList[i].product_price)),
+                "class": "product_price form-control text-center",
+                "name": "product_price[]",
+                "required": true,
+            });
+
+            let thue = productList[i].product_tax;
+
+            if (selectedProducts[j].includes(productList[i].id.toString())) {
+                option.prop('selected', true);
+            }
+
+            ProInput.find('select').append(option);
+            dvtInput.find('input').replaceWith(dvt);
+            if (productList[i].id == products[j]) {
+                slInput.find('.quantity-exist').val("/" + productList[i].qty_exist);
+            }
+            giaInput.find('.product_price').replaceWith(gia);
+            thueInput.find('select').val(thue.toString());
+        }
 
         function updateRowNumbers() {
             $('.row-number').each(function(index) {
