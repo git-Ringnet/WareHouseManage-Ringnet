@@ -117,10 +117,10 @@
                             @if (Auth::user()->id == $order->users_id || Auth::user()->can('isAdmin'))
                                 <div class="w-75">
                                     <div class="d-flex mb-2">
-                                        <input type="radio" name="options" id="radio1" checked>
+                                        <input type="radio" name="options" id="radio1" checked value="1">
                                         <span class="ml-1">Nhà cung cấp cũ</span>
                                         <input type="radio" name="options" id="radio2"
-                                            style="margin-left: 40px;">
+                                            style="margin-left: 40px;" value="2">
                                         <span class="ml-1">Nhà cung cấp mới</span>
                                     </div>
                                     <div class="input-group mb-1 position-relative w-50">

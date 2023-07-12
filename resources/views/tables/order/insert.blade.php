@@ -73,57 +73,59 @@
             </div>
         </div>
         <!-- Content Header (Page header) -->
-        <section class="content-header">
-            <div class="d-flex mb-1 action-don">
-                <a href="#" class="btn btn-danger text-white" id="add_bill">Duyệt đơn</a>
-                <a href="#" class="btn btn-secondary mx-4">Hủy đơn</a>
-            </div>
-            <div class="container-fluided">
-                <div class="row my-3">
-                    <div class="col">
-                        <div class="w-75">
-                            <div class="d-flex mb-2">
-                                <input type="radio" name="options" id="radio1" checked>
-                                <span class="ml-1">Nhà cung cấp cũ</span>
-                                <input type="radio" name="options" id="radio2" style="margin-left: 40px;">
-                                <span class="ml-1">Nhà cung cấp mới</span>
-                            </div>
-                            <div class="input-group mb-1 position-relative w-50">
-                                <input type="text" class="form-control" placeholder="Nhập thông tin nhà cung cấp"
-                                    aria-label="Username" aria-describedby="basic-addon1" id="myInput"
-                                    autocomplete="off">
-                                <div class="position-absolute" style="right: 5px;top: 17%;">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                            d="M15.1835 7.36853C13.0254 5.21049 9.52656 5.21049 7.36853 7.36853C5.21049 9.52656 5.21049 13.0254 7.36853 15.1835C9.52656 17.3415 13.0254 17.3415 15.1835 15.1835C17.3415 13.0254 17.3415 9.52656 15.1835 7.36853ZM16.2441 6.30787C13.5003 3.56404 9.05169 3.56404 6.30787 6.30787C3.56404 9.05169 3.56404 13.5003 6.30787 16.2441C9.05169 18.988 13.5003 18.988 16.2441 16.2441C18.988 13.5003 18.988 9.05169 16.2441 6.30787Z"
-                                            fill="#555555" />
-                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                            d="M15.1796 15.1796C15.4725 14.8867 15.9474 14.8867 16.2403 15.1796L19.5303 18.4696C19.8232 18.7625 19.8232 19.2374 19.5303 19.5303C19.2374 19.8232 18.7625 19.8232 18.4696 19.5303L15.1796 16.2403C14.8867 15.9474 14.8867 15.4725 15.1796 15.1796Z"
-                                            fill="#555555" />
-                                    </svg>
+        <form action="{{ route('insertProduct.store') }}" method="POST" id="form_submit">
+            <section class="content-header">
+                <div class="d-flex mb-1 action-don">
+                    <a href="#" class="btn btn-danger text-white" id="add_bill">Duyệt đơn</a>
+                    <a href="#" class="btn btn-secondary mx-4">Hủy đơn</a>
+                </div>
+                <div class="container-fluided">
+                    <div class="row my-3">
+                        <div class="col">
+                            <div class="w-75">
+                                <div class="d-flex mb-2">
+                                    <input type="radio" name="options" id="radio1" checked value="1">
+                                    <span class="ml-1">Nhà cung cấp cũ</span>
+                                    <input type="radio" name="options" id="radio2" style="margin-left: 40px;"
+                                        value="2">
+                                    <span class="ml-1">Nhà cung cấp mới</span>
                                 </div>
-                            </div>
-                            <ul id="myUL" class="bg-white position-absolute w-50 rounded shadow p-0 scroll-data"
-                                style="z-index: 99;">
-                                @foreach ($provide as $value)
-                                    <li>
-                                        <a href="#"
-                                            class="text-dark d-flex justify-content-between p-2 search-info"
-                                            id="{{ $value->id }}" name="search-info">
-                                            <span class="w-50">{{ $value->provide_represent }}</span>
-                                            <span class="w-50">{{ $value->provide_name }}</span>
-                                        </a>
-                                    </li>
-                                @endforeach
-                            </ul>
+                                <div class="input-group mb-1 position-relative w-50">
+                                    <input type="text" class="form-control"
+                                        placeholder="Nhập thông tin nhà cung cấp" aria-label="Username"
+                                        aria-describedby="basic-addon1" id="myInput" autocomplete="off">
+                                    <div class="position-absolute" style="right: 5px;top: 17%;">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M15.1835 7.36853C13.0254 5.21049 9.52656 5.21049 7.36853 7.36853C5.21049 9.52656 5.21049 13.0254 7.36853 15.1835C9.52656 17.3415 13.0254 17.3415 15.1835 15.1835C17.3415 13.0254 17.3415 9.52656 15.1835 7.36853ZM16.2441 6.30787C13.5003 3.56404 9.05169 3.56404 6.30787 6.30787C3.56404 9.05169 3.56404 13.5003 6.30787 16.2441C9.05169 18.988 13.5003 18.988 16.2441 16.2441C18.988 13.5003 18.988 9.05169 16.2441 6.30787Z"
+                                                fill="#555555" />
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M15.1796 15.1796C15.4725 14.8867 15.9474 14.8867 16.2403 15.1796L19.5303 18.4696C19.8232 18.7625 19.8232 19.2374 19.5303 19.5303C19.2374 19.8232 18.7625 19.8232 18.4696 19.5303L15.1796 16.2403C14.8867 15.9474 14.8867 15.4725 15.1796 15.1796Z"
+                                                fill="#555555" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                <ul id="myUL"
+                                    class="bg-white position-absolute w-50 rounded shadow p-0 scroll-data"
+                                    style="z-index: 99;">
+                                    @foreach ($provide as $value)
+                                        <li>
+                                            <a href="#"
+                                                class="text-dark d-flex justify-content-between p-2 search-info"
+                                                id="{{ $value->id }}" name="search-info">
+                                                <span class="w-50">{{ $value->provide_represent }}</span>
+                                                <span class="w-50">{{ $value->provide_name }}</span>
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
 
+                            </div>
                         </div>
                     </div>
-                </div>
-        </section>
-        <div class="container-fluided">
-            <form action="{{ route('insertProduct.store') }}" method="POST" id="form_submit">
+            </section>
+            <div class="container-fluided">
                 <input type="hidden" id="provide_id" name="provide_id">
                 @csrf
                 <section id="infor_provide" class="bg-white rounded">
@@ -133,8 +135,7 @@
                     <div class="d-flex">
                         <div style="width:42%;">
                             <label class="ml-2">Số hóa đơn</label>
-                            <input type="text" name="product_code" placeholder="Số hóa đơn"
-                                class="form-control">
+                            <input type="text" name="product_code" placeholder="Số hóa đơn" class="form-control">
                         </div>
                         <div>
                             <label class="ml-4">Ngày hóa đơn</label>
@@ -212,9 +213,10 @@
                         <a href="{{ route('insertProduct.index') }}" class="btn btn-light"
                             onclick="return confirm('Bạn có muốn quay lại ?');">Hủy</a>
                     </div>
-            </form>
-        </div>
-        </section>
+
+            </div>
+            </section>
+        </form>
         <!-- /.content -->
     </div>
     <script src="{{ asset('dist/js/productOrder.js') }}"></script>
@@ -440,11 +442,11 @@
                         '<div class="form-group">' +
                         '<label for="email">Người đại diện:</label>' +
                         '<input required type="text" class="form-control" id="provide_represent" placeholder="Nhập thông tin" name="provide_represent" value="' +
-                       (data.provide_represent == null ? "" : data.provide_represent )+ '">' +
+                        (data.provide_represent == null ? "" : data.provide_represent) + '">' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">Email:</label>' +
                         '<input required type="email" class="form-control" id="provide_email" placeholder="Nhập thông tin" name="provide_email" value="' +
-                        (data.provide_email == null ? "" : data.provide_email ) + '">' +
+                        (data.provide_email == null ? "" : data.provide_email) + '">' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">Số điện thoại:</label>' +
                         '<input required type="text" class="form-control" id="provide_phone" placeholder="Nhập thông tin" name="provide_phone" value="' +

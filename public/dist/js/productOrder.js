@@ -168,38 +168,6 @@ function formatCurrency(value) {
     return formattedValue;
 }
 
-// Hàm điền dữ liệu từ input vào modal
-// function fillDataToModal() {
-//     var info = document.querySelectorAll('.exampleModal');
-//     for (let k = 0; k < info.length; k++) {
-//         info[k].addEventListener('click', function () {
-//             var productCode = $(this).closest('tr').find('.list_products option:selected').text();
-//             var productName = $(this).closest('tr').find('[name^="product_name"]').val();
-//             var productType = $(this).closest('tr').find('[name^="product_category"]').val();
-//             var productQty = $(this).closest('tr').find('[name^="product_qty"]').val();
-//             var provide_name;
-//             if ($('#provide_id').val() === "") {
-//                 provide_name = $('#provide_name_new').val();
-//             } else {
-//                 provide_name = $('#provide_name').val();
-//             }
-//             $('.sttRowTable').text(k + 1);
-//             $('.code_product').text(productCode);
-//             $('.name_product').text(productName);
-//             $('.provide_name').text(provide_name);
-//             $('.type_product').text(productType);
-//             $('.qty_product').text(productQty);
-//              var id_modal = $(info[k]).attr('data-target').match(/\d+/)[0];
-//             var div_value = $('.div_value' + id_modal);
-//             div_value.closest('.modal-body').find('.SNCount').text(div_value.find('table tbody .stt_SN').length);
-//             var setSTT = div_value.closest('.modal-body').find('.stt_SN');
-//             for (let i = 0; i < setSTT.length; i++) {
-//                 $(setSTT[i]).eq(0).text(i + 1);
-//             }
-//         })
-//     }
-// }
-
 
 function setSTT() {
     var rows = $('#inputContainer').find('tbody tr');

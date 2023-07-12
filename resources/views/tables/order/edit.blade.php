@@ -117,10 +117,10 @@
                                 @if (Auth::user()->id == $order->users_id || Auth::user()->can('isAdmin'))
                                     <div class="w-75">
                                         <div class="d-flex mb-2">
-                                            <input type="radio" name="options" id="radio1" checked>
+                                            <input type="radio" name="options" id="radio1" checked value="1">
                                             <span class="ml-1">Nhà cung cấp cũ</span>
                                             <input type="radio" name="options" id="radio2"
-                                                style="margin-left: 40px;">
+                                                style="margin-left: 40px;" value="2">
                                             <span class="ml-1">Nhà cung cấp mới</span>
                                         </div>
                                         <div class="input-group mb-1 position-relative w-50">
@@ -206,7 +206,7 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label for="email">Người đại diện:</label>
-                        <input required type="text" class="form-control"
+                        <input type="text" class="form-control"
                             @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif id="provide_represent"
                             placeholder="Nhập thông tin" name="provide_represent"
                             value="{{ $provide_order[0]->provide_represent }}"
@@ -214,7 +214,7 @@
                     </div>
                     <div class="form-group">
                         <label for="email">Email:</label>
-                        <input required type="email" class="form-control"
+                        <input type="email" class="form-control"
                             @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif id="provide_email"
                             placeholder="Nhập thông tin" name="provide_email"
                             value="{{ $provide_order[0]->provide_email }}"
@@ -222,7 +222,7 @@
                     </div>
                     <div class="form-group">
                         <label for="email">Số điện thoại:</label>
-                        <input oninput="validateNumberInput(this)" required type="text" class="form-control"
+                        <input oninput="validateNumberInput(this)" type="text" class="form-control"
                             @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif id="provide_phone"
                             placeholder="Nhập thông tin" name="provide_phone"
                             value="{{ $provide_order[0]->provide_phone }}"
