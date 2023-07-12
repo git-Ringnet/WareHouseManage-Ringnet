@@ -375,11 +375,18 @@ function checkData(e) {
 //     }
 // });
 
-// Hàm chỉ cho phép nhập số
+// Hàm chỉ cho phép nhập số và ký tự - 
 function validateNumberInput(input) {
     var regex = /^[0-9][0-9-]*$/;
     if (!regex.test(input.value)) {
         input.value = input.value.replace(/[^0-9][0-9-]*$/g, '');
+    }
+}
+
+function validateBillInput(input) {
+    var regex = /^[0-9][0-9]*$/;
+    if (!regex.test(input.value)) {
+        input.value = input.value.replace(/[^0-9][0-9]*$/g, '');
     }
 }
 

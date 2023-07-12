@@ -120,7 +120,6 @@
                                         </li>
                                     @endforeach
                                 </ul>
-
                             </div>
                         </div>
                     </div>
@@ -135,14 +134,14 @@
                     <div class="d-flex">
                         <div style="width:42%;">
                             <label class="ml-2">Số hóa đơn</label>
-                            <input type="text" name="product_code" placeholder="Số hóa đơn" class="form-control">
+                            <input oninput="validateBillInput(this)" type="text" name="product_code"
+                                placeholder="Số hóa đơn" class="form-control">
                         </div>
                         <div>
                             <label class="ml-4">Ngày hóa đơn</label>
                             <input type="date" name="product_create" placeholder="Ngày nhập hóa đơn"
-                                class="form-control ml-2" required>
+                                class="form-control ml-2" required id="product_create">
                         </div>
-
                     </div>
                     <div class="d-flex">
                         <div>
@@ -325,7 +324,11 @@
                 alert('Vui lòng chọn nhà cung cấp');
             }
 
-            if (isDuplicate || error) {
+            if($('#product_create').val().trim() == ''){
+                alert('Vui lòng nhập ngày hóa đơn');
+                isDuplicate = true;
+            }
+            if (isDuplicate || error ) {
                 return false;
             } else {
                 var provides_id = document.getElementById('form_submit');

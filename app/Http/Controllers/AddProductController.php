@@ -344,6 +344,8 @@ class AddProductController extends Controller
                 $pro_id = $product->id;
                 array_push($product_id_array, $pro_id);
             }
+
+          
             // Kiểm tra xóa hết sản phẩm trong đơn nháp
             $deletePro = array_diff($product_id_array, $arr_new_product);
             if ($product_id === null) {
@@ -351,14 +353,16 @@ class AddProductController extends Controller
             } else {
                 $id_del = $product_id;
             }
+
             // Tìm phần tử không tồn tại trong danh sách order_id và xóa
             if ($deletePro === $id_del) {
                 $remaining = $deletePro;
             } else {
                 $remaining = array_diff($deletePro, $id_del);
             }
+
             foreach ($remaining as $valu) {
-                $prod = ProductOrders::where('product_id', $valu)->get();
+                $prod = ProductOrders::where('id', $valu)->get();
                 foreach ($prod as $item) {
                     $item->delete();
                 }
@@ -684,7 +688,7 @@ class AddProductController extends Controller
             } else {
                 $remaining = array_diff($deletePro, $id_del);
             }
-
+            // Duyệt qua tất cả sản phẩm không tồn tại trong danh sách và xóa
             foreach ($remaining as $valu) {
                 $prod = ProductOrders::where('id', $valu)->get();
                 foreach ($prod as $item) {
@@ -854,6 +858,7 @@ class AddProductController extends Controller
         }
     }
 
+    // Hiển thị UI chỉnh sửa đơn hàng đã duyệt
     public function updateBill(Request $request)
     {
         $order = Orders::findOrFail($request->order_id);
@@ -870,94 +875,103 @@ class AddProductController extends Controller
         return view('tables.order.updateBill', compact('debt_import', 'provide', 'order', 'product_order', 'provide_order', 'title'));
     }
 
+    // Chỉnh sửa đơn hàng đã duyệt
     public function updateBillEdit(Request $request)
     {
-        $list_id = $request->product_id;
-        $total_import =  str_replace(',', '', $request->total_import);
-        $product_price =  str_replace(',', '', $request->product_price);
-        $product_total = str_replace(',', '', $request->product_total);
-        $total_price = str_replace(',', '', $request->total_price);
-        $dataProvide = [
-            'provide_name' => $request->provide_id == null ? $request->provide_name_new : ($request->options == 2 ? $request->provide_name_new : $request->provide_name),
-            'provide_represent' => $request->provide_id == null ? $request->provide_represent_new : ($request->options == 2? $request->provide_represent_new: $request->provide_represent),
-            'provide_phone' => $request->provide_id == null ? $request->provide_phone_new : ($request->options == 2? $request->provide_phone_new: $request->provide_phone),
-            'provide_email' => $request->provide_id == null ? $request->provide_email_new : ($request->options == 2? $request->provide_email_new: $request->provide_email),
-            'provide_status' => 1,
-            'provide_address' => $request->provide_id == null ? $request->provide_address_new : ($request->options == 2 ? $request->provide_address_new : $request->provide_address),
-            'provide_code' => $request->provide_id == null ? $request->provide_code_new : ($request->options == 2 ? $request->provide_code_new : $request->provide_code),
-            'debt' => $request->provide_debt == null ? 0 : $request->provide_debt
-        ];
-
-        // Kiểm tra thông tin nhà cung cấp
-        if ($request->provide_id == null) {
-            $add_newProvide = $this->provides->addProvides($dataProvide);
+        $checkStatus = DebtImport::findOrFail($request->debtimport_id)->debt_status;
+        if ($checkStatus == 1) {
+            return redirect()->route('insertProduct.index')->with('warning', 'Công nợ đã thanh toán không thể chỉnh sửa');
         } else {
-            $this->provides->updateProvides($dataProvide, $request->provide_id);
-        }
-
-        // Chỉnh sửa thông tin bảng order
-        $dataOrder = [
-            'product_code' => $request->product_code,
-            'created_at' => $request->product_create,
-            'provide_id' => $request->provide_id == null ? $add_newProvide : $request->provide_id,
-            'total' => $total_price
-        ];
-        $this->orders->updateOrder($dataOrder, $request->order_id);
-
-        // Chỉnh sửa thông tin sản phẩm 
-        for ($i = 0; $i < count($list_id); $i++) {
-            $data = [
-                'product_name' => $request->product_name[$i],
-                'product_unit' => $request->product_unit[$i],
-                'product_trademark' => $request->product_trademark[$i],
-                'product_price' => $product_price[$i],
-                'product_total' => $product_total[$i],
-                'product_tax' => $request->product_tax[$i],
-                'provide_id' => $request->provide_id == null ? $add_newProvide : $request->provide_id
+            $list_id = $request->product_id;
+            $total_import =  str_replace(',', '', $request->total_import);
+            $product_price =  str_replace(',', '', $request->product_price);
+            $product_total = str_replace(',', '', $request->product_total);
+            $total_price = str_replace(',', '', $request->total_price);
+            $dataProvide = [
+                'provide_name' => $request->provide_id == null ? $request->provide_name_new : ($request->options == 2 ? $request->provide_name_new : $request->provide_name),
+                'provide_represent' => $request->provide_id == null ? $request->provide_represent_new : ($request->options == 2 ? $request->provide_represent_new : $request->provide_represent),
+                'provide_phone' => $request->provide_id == null ? $request->provide_phone_new : ($request->options == 2 ? $request->provide_phone_new : $request->provide_phone),
+                'provide_email' => $request->provide_id == null ? $request->provide_email_new : ($request->options == 2 ? $request->provide_email_new : $request->provide_email),
+                'provide_status' => 1,
+                'provide_address' => $request->provide_id == null ? $request->provide_address_new : ($request->options == 2 ? $request->provide_address_new : $request->provide_address),
+                'provide_code' => $request->provide_id == null ? $request->provide_code_new : ($request->options == 2 ? $request->provide_code_new : $request->provide_code),
+                'debt' => $request->provide_debt == null ? 0 : $request->provide_debt
             ];
-            $this->productOrder->updateProductOrder($data, $list_id[$i]);
 
-            $f = ProductOrders::findOrFail($list_id[$i]);
-            $this->product->updateProduct($data, $f->product_id);
+            // Kiểm tra thông tin nhà cung cấp
+            if ($request->provide_id == null) {
+                $add_newProvide = $this->provides->addProvides($dataProvide);
+            } else {
+                $this->provides->updateProvides($dataProvide, $request->provide_id);
+            }
+
+            // Chỉnh sửa thông tin bảng order
+            $dataOrder = [
+                'product_code' => $request->product_code,
+                'created_at' => $request->product_create,
+                'provide_id' => $request->provide_id == null ? $add_newProvide : $request->provide_id,
+                'total' => $total_price
+            ];
+            $this->orders->updateOrder($dataOrder, $request->order_id);
+
+            $getdate = Orders::find($request->order_id)->updated_at;
+
+            // Chỉnh sửa thông tin sản phẩm 
+            for ($i = 0; $i < count($list_id); $i++) {
+                $data = [
+                    'product_name' => $request->product_name[$i],
+                    'product_unit' => $request->product_unit[$i],
+                    'product_trademark' => $request->product_trademark[$i],
+                    'product_price' => $product_price[$i],
+                    'product_total' => $product_total[$i],
+                    'product_tax' => $request->product_tax[$i],
+                    'provide_id' => $request->provide_id == null ? $add_newProvide : $request->provide_id
+                ];
+                $this->productOrder->updateProductOrder($data, $list_id[$i]);
+
+                $f = ProductOrders::findOrFail($list_id[$i]);
+                $this->product->updateProduct($data, $f->product_id);
+            }
+
+            $startDate = Carbon::parse($request->product_create); // Chuyển đổi ngày bắt đầu thành đối tượng Carbon
+            $daysToAdd = $request->provide_debt; // Số ngày cần thêm
+
+            $endDate = $startDate->copy()->addDays($daysToAdd); // Thêm số ngày vào ngày bắt đầu để tính ngày kết thúc
+
+            // Định dạng ngày kết thúc theo ý muốn
+            $endDateFormatted = $endDate->format('Y-m-d');
+
+            $endDate = Carbon::parse($endDateFormatted); // Chuyển đổi ngày kết thúc thành đối tượng Carbon
+
+            $currentDate = Carbon::now(); // Lấy ngày hiện tại thành đối tượng Carbon
+
+            $daysDiffs = $currentDate->diffInDays($endDate);
+            $daysDiff = -$daysDiffs;
+
+
+            if ($request->provide_debt == 0) {
+                $debt_status = 4;
+            } elseif ($daysDiff <= 3 && $daysDiff >= 0) {
+                $debt_status = 2;
+            } elseif ($daysDiff < 0) {
+                $debt_status = 0;
+            } else {
+                $debt_status = 3;
+            }
+
+            // Chỉnh sửa công nợ
+            $dataImport = [
+                'provide_id' => $request->provide_id == null ? $add_newProvide : $request->provide_id,
+                'total_import' => $total_import,
+                'debt' => $request->provide_debt == null ? 0 : $request->provide_debt,
+                'date_start' => $request->product_create,
+                'date_end' => $endDateFormatted,
+                'debt_status' => $debt_status,
+                'created_at' => $getdate
+            ];
+            $this->debtImport->updateDebtImport($dataImport, $request->order_id);
+
+            return redirect()->route('insertProduct.index')->with('msg', 'Chỉnh sửa đơn hàng thành công');
         }
-
-        $startDate = Carbon::parse($request->product_create); // Chuyển đổi ngày bắt đầu thành đối tượng Carbon
-        $daysToAdd = $request->provide_debt; // Số ngày cần thêm
-
-        $endDate = $startDate->copy()->addDays($daysToAdd); // Thêm số ngày vào ngày bắt đầu để tính ngày kết thúc
-
-        // Định dạng ngày kết thúc theo ý muốn
-        $endDateFormatted = $endDate->format('Y-m-d');
-
-        $endDate = Carbon::parse($endDateFormatted); // Chuyển đổi ngày kết thúc thành đối tượng Carbon
-
-        $currentDate = Carbon::now(); // Lấy ngày hiện tại thành đối tượng Carbon
-
-        $daysDiffs = $currentDate->diffInDays($endDate);
-        $daysDiff = -$daysDiffs;
-
-
-        if ($request->provide_debt == 0) {
-            $debt_status = 4;
-        } elseif ($daysDiff <= 3 && $daysDiff >= 0) {
-            $debt_status = 2;
-        } elseif ($daysDiff < 0) {
-            $debt_status = 0;
-        } else {
-            $debt_status = 3;
-        }
-
-        // Chỉnh sửa công nợ
-        $dataImport = [
-            'provide_id' => $request->provide_id == null ? $add_newProvide : $request->provide_id,
-            'total_import' => $total_import,
-            'debt' => $request->provide_debt == null ? 0 : $request->provide_debt,
-            'date_start' => $request->product_create,
-            'date_end' => $endDateFormatted,
-            'debt_status' => $debt_status,
-        ];
-        $this->debtImport->updateDebtImport($dataImport, $request->debtimport_id);
-
-        return redirect()->route('insertProduct.index')->with('msg', 'Chỉnh sửa đơn hàng thành công');
     }
 }
