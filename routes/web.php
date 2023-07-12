@@ -7,6 +7,7 @@ use App\Http\Controllers\DebtController;
 use App\Http\Controllers\DebtImportController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\GuestsController;
+use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\InsertProductController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductsController;
@@ -81,6 +82,9 @@ Route::get('/paymentdebt', [DebtController::class, 'paymentdebt'])->name('paymen
 //Công nợ nhập hàng
 Route::resource('debt_import', DebtImportController::class);
 Route::get('/paymentdebtimport', [DebtImportController::class, 'paymentdebtimport'])->name('paymentdebtimport');
+// Lịch sử giao dịch
+Route::resource('history', HistoryController::class);
+
 
 
 //kiểm tra số lượng trong xuất hàng

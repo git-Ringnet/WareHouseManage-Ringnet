@@ -5,7 +5,7 @@
         <span><a href="{{ route('debt.index') }}">Công nợ xuất</a></span>
         <span class="px-1">/</span>
         <span><b>Đơn Hàng</b></span>
-        <span class="ml-1">#{{ $debts->id }}</span>
+        <span class="ml-1"><b>{{ $debts->hdr }}</b></span>
     </div>
     <form action="{{ route('debt.update', $debts->id) }}" method="POST">
         @csrf
@@ -20,8 +20,8 @@
             <div class="row  mt-2">
                 <div class="col-md-3 col-sm-6">
                     <div class="form-group">
-                        <div class="labelform">Mã đơn</div>
-                        <input type="text" class="form-control" value="{{ $debts->id }}" name=""
+                        <div class="labelform">Hóa đơn ra</div>
+                        <input type="text" class="form-control" value="{{ $debts->hdr }}" name=""
                             id="" readonly>
                     </div>
                 </div>

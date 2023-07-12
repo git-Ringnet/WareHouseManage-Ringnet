@@ -5,7 +5,7 @@
         <span><a href="{{ route('debt_import.index') }}">Công nợ nhập</a></span>
         <span class="px-1">/</span>
         <span><b>Đơn Hàng</b></span>
-        <span class="ml-1">#{{ $debts->id }}</span>
+        <span class="ml-1"><b>{{$debts->madon}}</b></span>
     </div>
     <form action="{{ route('debt_import.update', $debts->id) }}" method="POST">
         @csrf
@@ -20,7 +20,7 @@
             <div class="row  mt-2">
                 <div class="col-md-3 col-sm-6">
                     <div class="form-group">
-                        <div class="labelform">Số hóa đơn</div>
+                        <div class="labelform">Hóa đơn vào</div>
                         <input type="text" class="form-control" value="{{$debts->madon}}" name="" id=""
                             readonly>
                     </div>

@@ -22,13 +22,13 @@ class DebtImport extends Model
         'date_end',
         'date_start',
     ];
-    public function getAllDebts($filter=[],$keywords=null,$name=[],$date=[],$provide_name=[],$status=[], $orderBy = null, $orderType = null)
+    public function getAllDebts($filter = [], $keywords = null, $name = [], $date = [], $provide_name = [], $status = [], $orderBy = null, $orderType = null)
     {
-        $debt_import = DebtImport::select('debt_import.*', 'orders.product_code as madon', 'provides.provide_name as nhacungcap', 'users.name as nhanvien','orders.updated_at as debtdate')
+        $debt_import = DB::table($this->table)
             ->leftJoin('provides', 'provides.id', 'debt_import.provide_id')
             ->leftJoin('users', 'users.id', 'debt_import.user_id')
             ->leftJoin('orders', 'orders.id', 'debt_import.import_id')
-            ->leftJoin('productorders', 'orders.id', 'productorders.order_id');
+            ->select('debt_import.*', 'orders.product_code as madon', 'provides.provide_name as nhacungcap', 'users.name as nhanvien', 'orders.updated_at as debtdate');
         if (!empty($filter)) {
             $debt_import = $debt_import->where($filter);
         }
@@ -58,7 +58,7 @@ class DebtImport extends Model
             };
             $debt_import = $debt_import->orderBy($orderBy, $orderType);
         }
-        
+
 
         $debt_import = $debt_import->orderBy('debt_import.id', 'desc')->paginate(8);
 
@@ -67,7 +67,7 @@ class DebtImport extends Model
     }
     public function getAllProductsDebts()
     {
-        $product = DebtImport::select('debt_import.*','productorders.product_tax as thue','productorders.product_name as tensanpham','productorders.product_unit as dvt' ,'productorders.product_qty as soluong', 'productorders.product_price as gianhap')
+        $product = DebtImport::select('debt_import.*', 'productorders.product_tax as thue', 'productorders.product_name as tensanpham', 'productorders.product_unit as dvt', 'productorders.product_qty as soluong', 'productorders.product_price as gianhap')
             ->leftJoin('provides', 'provides.id', 'debt_import.provide_id')
             ->leftJoin('users', 'users.id', 'debt_import.user_id')
             ->leftJoin('orders', 'orders.id', 'debt_import.import_id')
@@ -86,4 +86,5 @@ class DebtImport extends Model
     {
         return DB::table($this->table)->where('import_id', $id)->update($data);
     }
+
 }

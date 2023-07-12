@@ -36,6 +36,7 @@
                         <div class="col-2 d-none">
                             <button type="submit" class="btn btn-primary btn-block">Tìm kiếm</button>
                         </div>
+                        @if(empty($debts))
                         <div class="ml-auto">
                             <button class="btn btn-light" id="expandall" type="button" onclick="expand()"><svg
                                     width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -55,6 +56,7 @@
                                 </svg>
                                 Thu gọn tất cả</button>
                         </div>
+                        @endif
                     </div>
                     <div class="d-flex justify-contents-center align-items-center mr-auto row-filter my-3 m-0">
                         <div class="icon-filter mr-3">
@@ -674,45 +676,45 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </svg>
                                                 </div>
                                                 <?php $stt = 0; ?>
-                                                @foreach ($product as $item)
-                                        <tr id="product-details-{{ $value->id }}"
-                                            class="collapse product-details">
-                                            @if ($value->import_id == $item->import_id)
-                                                <td class="text-left"><?php echo $stt += 1; ?>
-                                                </td>
-                                                <td class="text-left w-auto">
-                                                    <p>Tên sản phẩm</p>{{ $item->tensanpham }}
-                                                </td>
-                                                <td class="text-left">
-                                                    <p>ĐVT</p>
-                                                    {{ $item->dvt }}
-                                                </td>
-                                                <td class="text-right">
-                                                    <p>Số lượng</p>{{ $item->soluong }}
-                                                </td>
-                                                <td class="text-right">
-                                                    <p>Giá nhập</p>
-                                                    {{ number_format($item->gianhap) }}
-                                                </td>
-                                                <td class="text-right">
-                                                    <p>Thành tiền</p>
-                                                    {{ number_format($item->gianhap * $item->soluong) }}
-                                                </td>
-                                                <td>
-                                                    <p>Thuế</p>
-                                                    @if ($item->thue == 99)
-                                                        NOVAT
-                                                    @else
-                                                        {{ $item->thue }}%
-                                                    @endif
-                                                </td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                            @endif
-                                        </tr>
-                                    @endforeach
+                                        @foreach ($product as $item)
+                                            <tr id="product-details-{{ $value->id }}"
+                                                class="collapse product-details">
+                                                @if ($value->import_id == $item->import_id)
+                                                    <td class="text-left"><?php echo $stt += 1 ?>
+                                                    </td>
+                                                    <td class="text-left w-auto">
+                                                        <p>Tên sản phẩm</p>{{ $item->tensanpham }}
+                                                    </td>
+                                                    <td class="text-left">
+                                                        <p>ĐVT</p>
+                                                        {{ $item->dvt }}
+                                                    </td>
+                                                    <td class="text-right">
+                                                        <p>Số lượng</p>{{ $item->soluong }}
+                                                    </td>
+                                                    <td class="text-right">
+                                                        <p>Giá nhập</p>
+                                                        {{ number_format($item->gianhap) }}
+                                                    </td>
+                                                    <td class="text-right">
+                                                        <p>Thành tiền</p>
+                                                        {{ number_format($item->gianhap * $item->soluong) }}
+                                                    </td>
+                                                    <td>
+                                                        <p>Thuế</p>
+                                                        @if ($item->thue == 99)
+                                                            NOVAT
+                                                        @else
+                                                            {{ $item->thue }}%
+                                                        @endif
+                                                    </td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                @endif
+                                            </tr>
+                                        @endforeach
                                     </td>
                                     </tr>
                                     @endforeach
