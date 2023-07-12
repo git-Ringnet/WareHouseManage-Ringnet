@@ -12,7 +12,7 @@ class Product extends Model
     protected $table = 'product';
     
     protected $fillable = [
-        'product_name','product_unit','product_qty','product_price','tax','total','provide_id','product_trade'
+        'product_name','product_unit','product_qty','product_price','product_tax','product_total','provide_id','product_trade','product_trademark'
      ];
     public function getAllProduct($filters = [], $status = [], $products_name = null, $providearr, $unitarr,$taxarr, $keywords = null, $sortByArr = null)
     {
