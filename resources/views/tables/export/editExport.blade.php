@@ -146,6 +146,15 @@
                             onclick="validateAndSubmit(event)" id="huy">Hủy đơn</button>
                     @endif
                 @endif
+                @if ($exports->export_status == 2)
+                    @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
+                        <a class="btn btn-secondary text-white" id="chinhsua">Chỉnh sửa</a>
+                        @if ($exports->export_status != 0)
+                            <button type="submit" class="btn btn-secondary mx-4" onclick="validateAndSubmit(event)"
+                                id="huydon" name="submitBtn" value="action4">Hủy đơn</button>
+                        @endif
+                    @endif
+                @endif
                 {{-- <a href="#" class="btn border border-secondary mr-4">Xuất file</a> --}}
             </div>
             <div class="container-fluided position-relative">
@@ -377,13 +386,12 @@
                                 </td>
                                 <td>
                                     <div class='d-flex'>
-                                        <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-                                            id="product_qty" class="quantity-input form-control text-center"
-                                            style="width: 50px" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                        <input type="text" oninput="limitMaxEdit(this)" id="product_qty"
+                                            class="quantity-input form-control text-center" style="width: 50px"
+                                            <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                                 echo 'readonly';
-                                            } ?>
-                                            value="{{ $value_export->product_qty }}" name="product_qty[]"
-                                            required="">
+                                            } ?> value="{{ $value_export->product_qty }}"
+                                            name="product_qty[]" required="">
                                         <input type="text" readonly="" class="quantity-exist" required=""
                                             value="/{{ $value_export->tonkho + $value_export->product_qty }}"
                                             style="width:50px;background:#D6D6D6;border:none;" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
@@ -713,7 +721,7 @@
             const slInput = $(
                 "<td>" +
                 "<div class='d-flex'>" +
-                "<input type='text' oninput='validatQtyInput(this)' id='product_qty' class='quantity-input form-control text-center' name='product_qty[]' required style='width:50px;'>" +
+                "<input type='text' oninput='limitMaxValue(this)' id='product_qty' class='quantity-input form-control text-center' name='product_qty[]' required style='width:50px;'>" +
                 "<input type='text' readonly class='quantity-exist' required style='width:50px;background:#D6D6D6;border:none;'>" +
                 "</div>" +
                 "</td>"
@@ -852,11 +860,49 @@
         }
     }
 
-    //số lượng
-    function validatQtyInput(input) {
+    //giới hạn số lượng nhập của thêm sản phẩm mới
+    function limitMaxValue(input) {
         var regex = /^[1-9][0-9]*$/;
         if (!regex.test(input.value)) {
             input.value = input.value.replace(/[^1-9]*$/g, '');
+        }
+        var value = input.value;
+        var product_id = $(input).closest('tr').find('.productName').val();
+        if (isNaN(value) || value <= 0) {
+            return;
+        }
+
+        // Gửi dữ liệu qua AJAX
+        $.ajax({
+            url: "{{ route('limit_qty') }}",
+            type: 'GET',
+            data: {
+                product_id: product_id,
+            },
+            success: function(response) {
+                var maxLimit = response.qty_exist;
+                if (value > maxLimit) {
+                    input.value = maxLimit;
+                }
+            }
+        });
+    }
+    //giới hạn số lượng nhập của edit sản phẩm
+    function limitMaxEdit(input) {
+        var regex = /^[1-9][0-9]*$/;
+        if (!regex.test(input.value)) {
+            input.value = input.value.replace(/[^1-9]*$/g, '');
+        }
+        var value = input.value;
+        var product_id = $(input).closest('tr').find('.productName').val();
+        var qty_exist = $(input).closest('tr').find('.quantity-exist').val();
+        qty_exist = qty_exist.replace('/', '');
+        if (isNaN(value) || value <= 0) {
+            return;
+        }
+        var maxLimit = parseInt(qty_exist);
+        if (value > maxLimit) {
+            input.value = maxLimit;
         }
     }
 
@@ -1137,7 +1183,7 @@
                         price_import.val(formattedPrice);
                         tonkho.val(response.product_qty);
                         loaihang.val(response.product_category);
-                        dangGD.val(response.product_trade);
+                        dangGD.val(response.product_trade == null ? 0 : response.product_trade);
                         thue.val(response.product_tax);
                         calculateGrandTotal();
                     },
@@ -1345,39 +1391,59 @@
 
     //ngăn chặn click
     $(document).ready(function() {
-        let isFirstClick = true;
-
         $('#chot_don').on('click', function() {
-            if (isFirstClick) {
-                isFirstClick = false;
-
-                setTimeout(function() {
-                    isFirstClick = true;
-                }, 1000);
-            } else {
-                return;
-            }
+            this.classList.add('disabled');
+            var countDown = 10;
+            var countdownInterval = setInterval(function() {
+                countDown--;
+                if (countDown <= 0) {
+                    clearInterval(countdownInterval);
+                    $('#chot_don').removeClass('disabled');
+                }
+            }, 100);
         });
         $('#luu').on('click', function() {
-            if (isFirstClick) {
-                isFirstClick = false;
-                setTimeout(function() {
-                    isFirstClick = true;
-                }, 1000);
-            } else {
-                return;
-            }
+            this.classList.add('disabled');
+            var countDown = 10;
+            var countdownInterval = setInterval(function() {
+                countDown--;
+                if (countDown <= 0) {
+                    clearInterval(countdownInterval);
+                    $('#luu').removeClass('disabled');
+                }
+            }, 100);
         });
         $('#huy').on('click', function() {
-            if (isFirstClick) {
-                isFirstClick = false;
+            this.classList.add('disabled');
+            var countDown = 10;
+            var countdownInterval = setInterval(function() {
+                countDown--;
+                if (countDown <= 0) {
+                    clearInterval(countdownInterval);
+                    $('#huy').removeClass('disabled');
+                }
+            }, 100);
+        });
+        $('#huydon').on('click', function() {
+            var inputs = document.getElementsByTagName("input");
+            var selects = document.getElementsByTagName("select");
 
-                setTimeout(function() {
-                    isFirstClick = true;
-                }, 1000);
-            } else {
-                return;
+            for (var i = 0; i < inputs.length; i++) {
+                inputs[i].removeAttribute("readonly");
             }
+
+            for (var j = 0; j < selects.length; j++) {
+                selects[j].removeAttribute("disabled");
+            }
+            this.classList.add('disabled');
+            var countDown = 10;
+            var countdownInterval = setInterval(function() {
+                countDown--;
+                if (countDown <= 0) {
+                    clearInterval(countdownInterval);
+                    $('#huydon').removeClass('disabled');
+                }
+            }, 100);
         });
     });
 

@@ -66,7 +66,7 @@ Route::get('addguest', [ExportController::class, 'addCustomer'])->name('addCusto
 Route::get('nameProducts', [ExportController::class, 'nameProduct'])->name('nameProduct');
 //lấy thông tin sản phẩm từ tên sản phẩm
 Route::get('getProduct', [ExportController::class, 'getProduct'])->name('getProduct');
-//giới hạn số lượng
+//giới hạn số lượng thêm mới
 Route::get('limit_qty', [ExportController::class, 'limit_qty'])->name('limit_qty');
 //lấy thông tin SN của sản phẩm con
 Route::get('getSN', [ExportController::class, 'getSN'])->name('getSN');

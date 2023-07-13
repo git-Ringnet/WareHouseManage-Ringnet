@@ -25,19 +25,19 @@ class DatabaseSeeder extends Seeder
         $this->call([
             // CategorySeeder::class,
             // DetailsSeeder::class,
-            // GuestsSeeder::class,
-            // ProductSeeder::class,
+            GuestsSeeder::class,
+            ProductSeeder::class,
             // // productsSeeder::class,
-            // // ProvidesSeeder::class,
+            ProvidesSeeder::class,
             // // SerinumbersSeeder::class,
-            // UsersTableSeeder::class,
-            // RolesTableSeeder::class,
+            UsersTableSeeder::class,
+            RolesTableSeeder::class,
             // DebtSeeder::class,
             // OrdersSeeder::class,
             // ProductOrderSeeder::class,
 			// ExportSeeder::class,
             // productExportSeeder::class,
-            HistorySeeder::class
+            // HistorySeeder::class
         ]);
         
     }
