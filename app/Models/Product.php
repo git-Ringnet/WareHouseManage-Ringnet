@@ -65,7 +65,7 @@ class Product extends Model
         // Thuế
         // dd($taxarr);
         if (!empty($taxarr)) {
-            $products = $products->whereIn('product.tax', $taxarr);
+            $products = $products->whereIn('product.product_tax', $taxarr);
         }
 
         if (!empty($keywords)) {
@@ -74,7 +74,7 @@ class Product extends Model
                 $query->orWhere('provides.provide_name', 'like', '%' . $keywords . '%');
             });
         }
-
+        $products = $products->where('product.product_qty','>',0);
         $products = $products->orderBy('product.created_at', 'asc')->paginate(20);
 
         return $products;

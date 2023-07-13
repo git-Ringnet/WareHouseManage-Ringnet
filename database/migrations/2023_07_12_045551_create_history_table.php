@@ -25,6 +25,7 @@ return new class extends Migration
             $table->decimal('price_import', 15, 4)->nullable();
             $table->decimal('product_total', 15, 4)->nullable();
             $table->integer('import_code')->nullable();
+            $table->integer('debt_import')->default(0);
             $table->integer('import_status')->nullable();
             $table->integer('guest_id')->nullable();
             $table->integer('export_qty')->nullable();
@@ -32,6 +33,7 @@ return new class extends Migration
             $table->decimal('price_export', 15, 4)->nullable();
             $table->decimal('export_total', 15, 4)->nullable();
             $table->integer('export_code')->nullable();
+            $table->integer('debt_export')->default(0);
             $table->integer('export_status')->nullable();
             $table->decimal('total_difference', 15, 4)->nullable();
             $table->integer('tranport_fee')->nullable();

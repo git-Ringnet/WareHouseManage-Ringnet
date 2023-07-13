@@ -817,7 +817,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     <td class="text-left"><?php echo $stt += 1; ?>
                                                     </td>
                                                     <td class="text-left w-auto">
-                                                        <p>Mã sản phẩm</p>{{ $item->tensanpham }}
+                                                        <p>Tên sản phẩm</p>{{ $item->tensanpham }}
                                                     </td>
                                                     <td></td>
                                                     <td class="text-right">

@@ -36,26 +36,26 @@
                         <div class="col-2 d-none">
                             <button type="submit" class="btn btn-primary btn-block">Tìm kiếm</button>
                         </div>
-                        @if(empty($debts))
-                        <div class="ml-auto">
-                            <button class="btn btn-light" id="expandall" type="button" onclick="expand()"><svg
-                                    width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M7.23123 9.23123C7.53954 8.92292 8.03941 8.92292 8.34772 9.23123L12 12.8835L15.6523 9.23123C15.9606 8.92292 16.4605 8.92292 16.7688 9.23123C17.0771 9.53954 17.0771 10.0394 16.7688 10.3477L12.5582 14.5582C12.2499 14.8665 11.7501 14.8665 11.4418 14.5582L7.23123 10.3477C6.92292 10.0394 6.92292 9.53954 7.23123 9.23123Z"
-                                        fill="#555555" />
-                                </svg>
-                                Mở rộng tất
-                                cả</button>
-                            <button class="btn btn-light" style="display: none" id="collapseall" type="button"
-                                onclick="collapse()"><svg width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M16.7688 14.7688C16.4605 15.0771 15.9606 15.0771 15.6523 14.7688L12 11.1165L8.34772 14.7688C8.03941 15.0771 7.53954 15.0771 7.23123 14.7688C6.92292 14.4605 6.92292 13.9606 7.23123 13.6523L11.4418 9.44176C11.7501 9.13345 12.2499 9.13345 12.5582 9.44176L16.7688 13.6523C17.0771 13.9606 17.0771 14.4605 16.7688 14.7688Z"
-                                        fill="#555555" />
-                                </svg>
-                                Thu gọn tất cả</button>
-                        </div>
+                        @if (empty($debts))
+                            <div class="ml-auto">
+                                <button class="btn btn-light" id="expandall" type="button" onclick="expand()"><svg
+                                        width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                            d="M7.23123 9.23123C7.53954 8.92292 8.03941 8.92292 8.34772 9.23123L12 12.8835L15.6523 9.23123C15.9606 8.92292 16.4605 8.92292 16.7688 9.23123C17.0771 9.53954 17.0771 10.0394 16.7688 10.3477L12.5582 14.5582C12.2499 14.8665 11.7501 14.8665 11.4418 14.5582L7.23123 10.3477C6.92292 10.0394 6.92292 9.53954 7.23123 9.23123Z"
+                                            fill="#555555" />
+                                    </svg>
+                                    Mở rộng tất
+                                    cả</button>
+                                <button class="btn btn-light" style="display: none" id="collapseall" type="button"
+                                    onclick="collapse()"><svg width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                            d="M16.7688 14.7688C16.4605 15.0771 15.9606 15.0771 15.6523 14.7688L12 11.1165L8.34772 14.7688C8.03941 15.0771 7.53954 15.0771 7.23123 14.7688C6.92292 14.4605 6.92292 13.9606 7.23123 13.6523L11.4418 9.44176C11.7501 9.13345 12.2499 9.13345 12.5582 9.44176L16.7688 13.6523C17.0771 13.9606 17.0771 14.4605 16.7688 14.7688Z"
+                                            fill="#555555" />
+                                    </svg>
+                                    Thu gọn tất cả</button>
+                            </div>
                         @endif
                     </div>
                     <div class="d-flex justify-contents-center align-items-center mr-auto row-filter my-3 m-0">
@@ -256,13 +256,23 @@ $index = array_search($item['label'], $numberedLabels);
                                             </div>
                                             <ul class="ks-cboxtags-provide_name p-0 mb-1 px-2">
                                                 @if (!empty($provides))
+                                                    @php
+                                                        $seenValues = [];
+                                                    @endphp
                                                     @foreach ($provides as $value)
-                                                        <li>
-                                                            <input type="checkbox" id="roles_active"
-                                                                {{ in_array($value->id, $provide_namearr) ? 'checked' : '' }}
-                                                                name="provide_namearr[]" value="{{ $value->id }}">
-                                                            <label for="">{{ $value->provide_name }}</label>
-                                                        </li>
+                                                        @if (!in_array($value->provide_name, $seenValues))
+                                                            <li>
+                                                                <input type="checkbox" id="roles_active"
+                                                                    {{ in_array($value->id, $provide_namearr) ? 'checked' : '' }}
+                                                                    name="provide_namearr[]"
+                                                                    value="{{ $value->id }}">
+                                                                <label
+                                                                    for="">{{ $value->provide_name }}</label>
+                                                            </li>
+                                                            @php
+                                                                $seenValues[] = $value->provide_name;
+                                                            @endphp
+                                                        @endif
                                                     @endforeach
                                                 @endif
                                             </ul>
@@ -390,7 +400,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('import_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity import-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -499,10 +509,10 @@ $index = array_search($item['label'], $numberedLabels);
                                         </th>
                                         <th scope="col">
                                             <span class="d-flex align-items-center">
-                                                <a href="#" class="sort-link" data-sort-by="created_at"
+                                                <a href="#" class="sort-link" data-sort-by="ngaytao"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Ngày nhập hóa đơn</button></a>
-                                                <div class="icon" id="icon-created_at"></div>
+                                                <div class="icon" id="icon-ngaytao"></div>
                                             </span>
                                         </th>
 
@@ -574,7 +584,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             @endcan
                                             <td class="text-left">{{ $value->madon }}</td>
                                             <td class="text-center">
-                                                {{ date_format(new DateTime($value->created_at), 'd-m-Y') }}
+                                                {{ date_format(new DateTime($value->ngaytao), 'd-m-Y') }}
                                             </td>
                                             <td class="text-left">{{ $value->nhacungcap }}</td>
                                             <td class="text-center">
@@ -676,45 +686,45 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </svg>
                                                 </div>
                                                 <?php $stt = 0; ?>
-                                        @foreach ($product as $item)
-                                            <tr id="product-details-{{ $value->id }}"
-                                                class="collapse product-details">
-                                                @if ($value->import_id == $item->import_id)
-                                                    <td class="text-left"><?php echo $stt += 1 ?>
-                                                    </td>
-                                                    <td class="text-left w-auto">
-                                                        <p>Tên sản phẩm</p>{{ $item->tensanpham }}
-                                                    </td>
-                                                    <td class="text-left">
-                                                        <p>ĐVT</p>
-                                                        {{ $item->dvt }}
-                                                    </td>
-                                                    <td class="text-right">
-                                                        <p>Số lượng</p>{{ $item->soluong }}
-                                                    </td>
-                                                    <td class="text-right">
-                                                        <p>Giá nhập</p>
-                                                        {{ number_format($item->gianhap) }}
-                                                    </td>
-                                                    <td class="text-right">
-                                                        <p>Thành tiền</p>
-                                                        {{ number_format($item->gianhap * $item->soluong) }}
-                                                    </td>
-                                                    <td>
-                                                        <p>Thuế</p>
-                                                        @if ($item->thue == 99)
-                                                            NOVAT
-                                                        @else
-                                                            {{ $item->thue }}%
-                                                        @endif
-                                                    </td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                @endif
-                                            </tr>
-                                        @endforeach
+                                                @foreach ($product as $item)
+                                        <tr id="product-details-{{ $value->id }}"
+                                            class="collapse product-details">
+                                            @if ($value->import_id == $item->import_id)
+                                                <td class="text-left"><?php echo $stt += 1; ?>
+                                                </td>
+                                                <td class="text-left w-auto">
+                                                    <p>Tên sản phẩm</p>{{ $item->tensanpham }}
+                                                </td>
+                                                <td class="text-left">
+                                                    <p>ĐVT</p>
+                                                    {{ $item->dvt }}
+                                                </td>
+                                                <td class="text-right">
+                                                    <p>Số lượng</p>{{ $item->soluong }}
+                                                </td>
+                                                <td class="text-right">
+                                                    <p>Giá nhập</p>
+                                                    {{ number_format($item->gianhap) }}
+                                                </td>
+                                                <td class="text-right">
+                                                    <p>Thành tiền</p>
+                                                    {{ number_format($item->gianhap * $item->soluong) }}
+                                                </td>
+                                                <td>
+                                                    <p>Thuế</p>
+                                                    @if ($item->thue == 99)
+                                                        NOVAT
+                                                    @else
+                                                        {{ $item->thue }}%
+                                                    @endif
+                                                </td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            @endif
+                                        </tr>
+                                    @endforeach
                                     </td>
                                     </tr>
                                     @endforeach

@@ -28,7 +28,7 @@ class DebtImport extends Model
             ->leftJoin('provides', 'provides.id', 'debt_import.provide_id')
             ->leftJoin('users', 'users.id', 'debt_import.user_id')
             ->leftJoin('orders', 'orders.id', 'debt_import.import_id')
-            ->select('debt_import.*', 'orders.product_code as madon', 'provides.provide_name as nhacungcap', 'users.name as nhanvien', 'orders.updated_at as debtdate');
+            ->select('debt_import.*', 'orders.product_code as madon', 'provides.provide_name as nhacungcap', 'users.name as nhanvien', 'orders.created_at as ngaytao');
         if (!empty($filter)) {
             $debt_import = $debt_import->where($filter);
         }

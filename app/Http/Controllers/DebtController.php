@@ -141,7 +141,7 @@ class DebtController extends Controller
         }
 
 
-        $debtsSale = User::whereIn('roleid', [1, 3])->get();
+        $debtsSale = Debt::leftjoin('users', 'debts.user_id', '=', 'users.id')->get();
         $debts = $this->debts->getAllDebts($filters, $keywords, $nhanvien, $date, $datepaid, $status, $sortBy, $sortType);
         $product = $this->debts->getAllProductsDebts();
         $debtsCreator = $this->debts->debtsCreator();

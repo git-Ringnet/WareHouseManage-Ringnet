@@ -34,7 +34,7 @@ class DebtImportController extends Controller
             array_push($string, ['label' => 'Hóa đơn vào:', 'values' => $nameArr, 'class' => 'id']);
         }
         //Nhà cung cấp
-        $provides = Provides::all();
+        $provides = DebtImport::leftjoin('provides', 'debt_import.provide_id', '=', 'provides.id')->get();
         $provide_namearr = [];
         if (!empty($request->provide_namearr)) {
             $provide_namearr = $request->input('provide_namearr', []);
@@ -103,7 +103,7 @@ class DebtImportController extends Controller
         }
 
 
-        $debtsSale = User::whereIn('roleid', [1, 3])->get();
+        $debtsSale = DebtImport::leftjoin('users', 'debt_import.user_id', '=', 'users.id')->get();
         $debts = $this->debts->getAllDebts($filters, $keywords, $nhanvien, $date,$provide_namearr, $status, $sortBy, $sortType);
         $product = $this->debts->getAllProductsDebts();
         $debtsCreator = $this->debts->debtsCreator();

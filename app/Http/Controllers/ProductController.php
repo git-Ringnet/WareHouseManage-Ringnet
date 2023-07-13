@@ -90,7 +90,7 @@ class ProductController extends Controller
         if (!empty($request->price_inven_operator) && !empty($request->price_inven)) {
             $price_inven = $request->price_inven;
             $operator = $request->price_inven_operator;
-            $filters[] = ['product.total', $operator, $price_inven];
+            $filters[] = ['product.product_total', $operator, $price_inven];
             $price_invenArray = explode(',.@', $price_inven);
             array_push($string, ['label' => 'Trị tồn kho ' . $operator, 'values' => $price_invenArray, 'class' => 'price_inven']);
         }

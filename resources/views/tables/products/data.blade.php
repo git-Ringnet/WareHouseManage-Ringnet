@@ -131,7 +131,9 @@ $index = array_search($item['label'], $numberedLabels);
                                     {{ $item['label'] }}
                                     @if ($item['label'] === 'Thuế:')
                                         <span
-                                            class="filter-values">{{ implode(', ',array_map(function ($value) {return $value . '%';}, $item['values'])) }}
+                                            class="filter-values">{{ implode(', ',array_map(function ($value) {if($value==99){
+                                                $value = 'NOVAT';
+                                            }else $value= $value. '%'; return $value;}, $item['values'])) }}
                                         </span>
                                     @else
                                         <span class="filter-values">{{ implode(', ', $item['values']) }}</span>
@@ -439,16 +441,20 @@ $index = array_search($item['label'], $numberedLabels);
                                                         $seenValues = [];
                                                     @endphp
                                                     @foreach ($unit as $value)
-                                                        @if (!in_array($value->tax, $seenValues))
+                                                        @if (!in_array($value->product_tax, $seenValues))
                                                             <li>
                                                                 <input type="checkbox" id="unit_active"
-                                                                    {{ in_array($value->tax, $taxarr) ? 'checked' : '' }}
-                                                                    name="taxarr[]" value="{{ $value->tax }}">
+                                                                    {{ in_array($value->product_tax, $taxarr) ? 'checked' : '' }}
+                                                                    name="taxarr[]" value="{{ $value->product_tax }}">
                                                                 <label id="tax_value"
-                                                                    for="">{{ $value->tax }}%</label>
+                                                                    for="">@if ($value->product_tax == 99)
+                                                                    NOVAT
+                                                                @else
+                                                                    {{ $value->product_tax }}%
+                                                                @endif</label>
                                                             </li>
                                                             @php
-                                                                $seenValues[] = $value->tax;
+                                                                $seenValues[] = $value->product_tax;
                                                             @endphp
                                                         @endif
                                                     @endforeach
@@ -721,20 +727,20 @@ $index = array_search($item['label'], $numberedLabels);
                                         </th>
                                         <th scope="col">
                                             <span class="d-flex justify-content-end">
-                                                <a href="#" class="sort-link" data-sort-by="total"
+                                                <a href="#" class="sort-link" data-sort-by="product_total"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Trị tồn
                                                         kho</button></a>
-                                                <div class="icon" id="icon-total"></div>
+                                                <div class="icon" id="icon-product_total"></div>
                                             </span>
                                         </th>
                                         <th scope="col">
                                             <span class="d-flex justify-content-center">
-                                                <a href="#" class="sort-link" data-sort-by="tax"
+                                                <a href="#" class="sort-link" data-sort-by="product_tax"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Thuế
                                                     </button></a>
-                                                <div class="icon" id="icon-tax"></div>
+                                                <div class="icon" id="icon-product_tax"></div>
                                             </span>
                                         </th>
                                         <th scope="col">

@@ -565,7 +565,11 @@ class AddProductController extends Controller
             $currentDate = Carbon::now(); // Lấy ngày hiện tại thành đối tượng Carbon
 
             $daysDiffs = $currentDate->diffInDays($endDate);
-            $daysDiff = -$daysDiffs;
+            if ($endDate < $currentDate) {
+                $daysDiff = -$daysDiffs;
+            } else {
+                $daysDiff = $daysDiffs;
+            }
 
             if ($debt->debt == 0) {
                 $debt->debt_status = 4;
@@ -941,7 +945,11 @@ class AddProductController extends Controller
             $currentDate = Carbon::now(); // Lấy ngày hiện tại thành đối tượng Carbon
 
             $daysDiffs = $currentDate->diffInDays($endDate);
-            $daysDiff = -$daysDiffs;
+            if ($endDate < $currentDate) {
+                $daysDiff = -$daysDiffs;
+            } else {
+                $daysDiff = $daysDiffs;
+            }
 
 
             if ($request->provide_debt == 0) {
