@@ -800,7 +800,7 @@
                             '<br>' +
                             '<b>Tồn kho: </b>' + response.product_qty + '<br>' +
                             '<b>Đang giao dịch: </b>' +
-                            response.trading +
+                            response.product_trade +
                             '<br>' + '<b>Giá nhập: </b>' + formattedPrice +
                             '<br>' + '<b>Thuế: </b>' +
                             (thue == 99 ? "NOVAT" : thue + '%'));
