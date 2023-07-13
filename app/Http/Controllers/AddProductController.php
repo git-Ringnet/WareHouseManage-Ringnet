@@ -268,7 +268,7 @@ class AddProductController extends Controller
             'provide_email' => $request->provide_id == null ? $request->provide_email_new : ($request->options == 2 ? $request->provide_email_new : $request->provide_email),
             'provide_address' => $request->provide_id == null ? $request->provide_address_new : ($request->options == 2 ? $request->provide_address_new : $request->provide_address),
             'provide_status' => 1,
-            'provide_code' => $request->provide_id == null ? $request->provide_code_new : $request->provide_code,
+            'provide_code' => $request->provide_id == null ? $request->provide_code_new : ($request->options == 2 ? $request->provide_code_new: $request->provide_code),
             'debt' => $request->provide_debt == null ? 0 : $request->provide_debt,
         ];
         if ($request->provide_id === null) {
@@ -345,7 +345,7 @@ class AddProductController extends Controller
                 array_push($product_id_array, $pro_id);
             }
 
-          
+
             // Kiểm tra xóa hết sản phẩm trong đơn nháp
             $deletePro = array_diff($product_id_array, $arr_new_product);
             if ($product_id === null) {
@@ -377,7 +377,7 @@ class AddProductController extends Controller
                     'product_price' => $product_price[$i],
                     'product_tax' => $product_tax[$i],
                     'product_total' => $product_total[$i],
-                    'provide_id' => $updateOrder->id
+                    'provide_id' => $request->provide_id == null ? $newProvide : $request->provide_id
                 ];
                 $newP = $this->product->addProduct($dataProduct);
                 $updateP = ProductOrders::where('id', $id_product[$i])->first();
@@ -402,9 +402,8 @@ class AddProductController extends Controller
 
             // Định dạng ngày kết thúc theo ý muốn
             $endDateFormatted = $endDate->format('Y-m-d');
-            // dd($endDateFormatted);
+         
             $debt->date_end = $endDateFormatted;
-
 
             // Xử lí status debt
             $endDate = Carbon::parse($endDateFormatted);
@@ -479,6 +478,7 @@ class AddProductController extends Controller
             'provide_phone' => $request->provide_id == null ? $request->provide_phone_new : ($request->options == 2 ? $request->provide_phone_new : $request->provide_phone),
             'provide_email' => $request->provide_id == null ? $request->provide_email_new : ($request->options == 2 ? $request->provide_email_new : $request->provide_email),
             'provide_address' => $request->provide_id == null ? $request->provide_address_new : ($request->options == 2 ? $request->provide_address_new : $request->provide_address),
+            'provide_code' => $request->provide_id == null ? $request->provide_code_new : ($request->options == 2 ? $request->provide_code_new : $request->provide_code),
             'debt' => $request->provide_debt == null ? 0 : $request->provide_debt,
             'provide_status' => 1
         ];
@@ -769,6 +769,7 @@ class AddProductController extends Controller
             $check = false;
             $list = $request->list_id;
             $listOrders = Orders::whereIn('id', $list)->get();
+
             foreach ($listOrders as $listOrder) {
                 if ($listOrder->order_status == 0) {
                     $listOrder->order_status = 2;
@@ -776,25 +777,19 @@ class AddProductController extends Controller
                 } else {
                     $id_product = ProductOrders::where('order_id', $listOrder->id)->get();
                     foreach ($id_product as $va) {
-                        // Kiểm tra sản phẩm đã tạo đơn chưa
-
                         $check_PExport = productExports::where('product_id', $va->product_id)->first();
 
                         if ($check_PExport) {
-                            // Kiểm tra sản phẩm đã bán ra chưa
                             $check_Exp = Exports::where('id', $check_PExport->export_id)->first();
-                            // Sản phẩm đang báo giá
                             if ($check_Exp->export_status != 0) {
                                 $check = true;
                             }
                         }
                     }
-                    // Hủy đơn
                     if ($check === false) {
                         $listOrder->order_status = 2;
                         $listOrder->save();
                         DebtImport::where('import_id', $listOrder->id)->delete();
-
                         foreach ($id_product as $check) {
                             Product::where('id', $check->product_id)->delete();
                         }
@@ -804,7 +799,7 @@ class AddProductController extends Controller
             session()->flash('msg', 'Hủy đơn hàng thành công');
             return response()->json(['success' => true, 'msg' => 'Hủy Đơn Hàng thành công', 'data' => $check]);
         }
-        return response()->json(['success' => false, 'msg' => 'Not fount']);
+        return response()->json(['success' => false, 'msg' => 'Not found']);
     }
 
     // Hiển thị sản phẩm
@@ -914,7 +909,7 @@ class AddProductController extends Controller
             ];
             $this->orders->updateOrder($dataOrder, $request->order_id);
 
-            $getdate = Orders::find($request->order_id)->updated_at;
+            $getdate = Orders::find($request->order_id)->created_at;
 
             // Chỉnh sửa thông tin sản phẩm 
             for ($i = 0; $i < count($list_id); $i++) {
