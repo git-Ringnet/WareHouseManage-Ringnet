@@ -28,8 +28,8 @@
                 <form class="w-100" action="" method="get" id='search-filter'>
                     <div class="row mr-0">
                         <div class="col-5">
-                            <input type="text" placeholder="Tìm kiếm theo mã hóa đơn vào hoặc nhà cung cấp"
-                                name="keywords" class="pr-4 input-search w-100 form-control searchkeyword"
+                            <input type="text" placeholder="Tìm kiếm" name="keywords"
+                                class="pr-4 input-search w-100 form-control searchkeyword"
                                 value="{{ request()->keywords }}">
                             <span id="search-icon" class="search-icon"><i class="fas fa-search"></i></span>
                         </div>
@@ -152,16 +152,19 @@ $index = array_search($item['label'], $numberedLabels);
                                                     nhập</button>
                                                 <button class="dropdown-item" id="btn-hdv">Hóa đơn vào</button>
                                                 <button class="dropdown-item" id="btn-status">Tình trạng nhập</button>
-                                                <button class="dropdown-item" id="btn-status">Khách hàng</button>
-                                                <button class="dropdown-item" id="btn-status">Số lượng xuất</button>
-                                                <button class="dropdown-item" id="btn-status">Đơn vị tính</button>
-                                                <button class="dropdown-item" id="btn-status">Giá bán</button>
-                                                <button class="dropdown-item" id="btn-status">Thành tiền xuất</button>
+                                                <button class="dropdown-item" id="btn-guest">Khách hàng</button>
+                                                <button class="dropdown-item" id="btn-export_qty">Số lượng
+                                                    xuất</button>
+                                                <button class="dropdown-item" id="btn-unit">Đơn vị tính</button>
+                                                <button class="dropdown-item" id="btn-sum-sale">Giá bán</button>
+                                                <button class="dropdown-item" id="btn-total-sale">Thành tiền
+                                                    xuất</button>
                                                 <button class="dropdown-item" id="btn-hdr">Hóa đơn ra</button>
                                                 <button class="dropdown-item" id="btn-status_export">Tình trạng
                                                     xuất</button>
-                                                <button class="dropdown-item" id="btn-status">Lợi nhuận</button>
-                                                <button class="dropdown-item" id="btn-status">Chi phí vận
+                                                <button class="dropdown-item" id="btn-total_difference">Lợi
+                                                    nhuận</button>
+                                                <button class="dropdown-item" id="btn-tranport_fee">Chi phí vận
                                                     chuyển</button>
                                             </div>
                                         </div>
@@ -182,12 +185,64 @@ $index = array_search($item['label'], $numberedLabels);
                                     } else {
                                         $status_export = [];
                                     }
+                                    $unitarr = [];
                                     
+                                    if (isset(request()->unitarr)) {
+                                        $unitarr = request()->unitarr;
+                                    } else {
+                                        $unitarr = [];
+                                    }
+                                    $guest = [];
+                                    if (isset(request()->guest)) {
+                                        $guest = request()->guest;
+                                    } else {
+                                        $guest = [];
+                                    }
                                     $nhanvien = [];
                                     if (isset(request()->nhanvien)) {
                                         $nhanvien = request()->nhanvien;
                                     } else {
                                         $nhanvien = [];
+                                    }
+                                    $sale_operator = null;
+                                    $sum = null;
+                                    //giá bán
+                                    if (isset(request()->sale_operator) && isset(request()->sum_sale)) {
+                                        $sale_operator = request()->sale_operator;
+                                        $sum = request()->sum_sale;
+                                    } else {
+                                        $sale_operator = null;
+                                        $sum = null;
+                                    }
+                                    $total_sale_operator = null;
+                                    $sum = null;
+                                    //Thành tiền xuất
+                                    if (isset(request()->total_sale_operator) && isset(request()->total_sum_sale)) {
+                                        $total_sale_operator = request()->total_sale_operator;
+                                        $sum = request()->total_sum_sale;
+                                    } else {
+                                        $total_sale_operator = null;
+                                        $sum = null;
+                                    }
+                                    $total_difference_operator = null;
+                                    $sum = null;
+                                    //Lợi nhuận
+                                    if (isset(request()->total_difference_operator) && isset(request()->total_difference)) {
+                                        $total_difference_operator = request()->total_difference_operator;
+                                        $sum = request()->total_difference;
+                                    } else {
+                                        $total_difference_operator = null;
+                                        $sum = null;
+                                    }
+                                    $tranport_fee_operator = null;
+                                    $sum = null;
+                                    //Chi phí vận chuyển
+                                    if (isset(request()->tranport_fee_operator) && isset(request()->tranport_fee)) {
+                                        $tranport_fee_operator = request()->tranport_fee_operator;
+                                        $sum = request()->tranport_fee;
+                                    } else {
+                                        $tranport_fee_operator = null;
+                                        $sum = null;
                                     }
                                     $product_qty = null;
                                     $sum_product_qty_operator = null;
@@ -198,6 +253,16 @@ $index = array_search($item['label'], $numberedLabels);
                                     } else {
                                         $product_qty_operator = null;
                                         $sum_product_qty_operator = null;
+                                    }
+                                    //Số lượng xuất
+                                    $export_qty = null;
+                                    $sum_export_qty_operator = null;
+                                    if (isset(request()->export_qty) && isset(request()->export_qty)) {
+                                        $export_qty_operator = request()->export_qty_operator;
+                                        $sum_export_qty_operator = request()->export_qty;
+                                    } else {
+                                        $export_qty_operator = null;
+                                        $sum_export_qty_operator = null;
                                     }
                                     // Giá nhập
                                     $price_import = null;
@@ -302,24 +367,28 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <a class="cursor select-all-provide_name mr-auto">Chọn tất cả</a>
                                                 <a class="cursor deselect-all-provide_name">Hủy chọn</a>
                                             </div>
-                                            <ul class="ks-cboxtags-provide_name p-0 mb-1 px-2">
-                                                @if (!empty($provides))
-                                                    @foreach ($provides as $value)
-                                                        <li>
-                                                            <input type="checkbox" id="roles_active"
-                                                                {{ in_array($value->id, $provide_namearr) ? 'checked' : '' }}
-                                                                name="provide_namearr[]" value="{{ $value->id }}">
-                                                            <label for="">{{ $value->provide_name }}</label>
-                                                        </li>
-                                                    @endforeach
-                                                @endif
-                                            </ul>
-                                        </div>
-                                        <div class="d-flex justify-contents-center align-items-baseline p-2">
-                                            <button type="submit" class="btn btn-primary btn-block mr-2">Xác
-                                                Nhận</button>
-                                            <button type="button" id="cancel-provide_name"
-                                                class="btn btn-default btn-block">Hủy</button>
+                                            <div class="ks-cboxtags-container">
+                                                <ul class="ks-cboxtags ks-cboxtags-provide_name p-0 mb-1 px-2">
+                                                    @if (!empty($provides))
+                                                        @foreach ($provides as $value)
+                                                            <li>
+                                                                <input type="checkbox" id="roles_active"
+                                                                    {{ in_array($value->id, $provide_namearr) ? 'checked' : '' }}
+                                                                    name="provide_namearr[]"
+                                                                    value="{{ $value->id }}">
+                                                                <label
+                                                                    for="">{{ $value->provide_name }}</label>
+                                                            </li>
+                                                        @endforeach
+                                                    @endif
+                                                </ul>
+                                            </div>
+                                            <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                                <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                                    Nhận</button>
+                                                <button type="button" id="cancel-provide_name"
+                                                    class="btn btn-default btn-block">Hủy</button>
+                                            </div>
                                         </div>
                                     </div>
                                     {{-- Status nhập --}}
@@ -338,50 +407,52 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <a class="cursor select-all mr-auto">Chọn tất cả</a>
                                                 <a class="cursor deselect-all">Hủy chọn</a>
                                             </div>
-                                            <ul class="ks-cboxtags-status p-0 mb-1 px-2">
-                                                <li>
-                                                    <input type="checkbox" id="status_inactive"
-                                                        {{ in_array(4, $status) ? 'checked' : '' }} name="status[]"
-                                                        value="4">
-                                                    <label for="">Chưa thanh toán</label>
-                                                </li>
-                                                <li>
-                                                    <input type="checkbox" id="status_active"
-                                                        {{ in_array(1, $status) ? 'checked' : '' }} name="status[]"
-                                                        value="1">
-                                                    <label for="">Thanh toán đủ</label>
-                                                </li>
-                                                <li>
-                                                    <input type="checkbox" id="status_inactive"
-                                                        {{ in_array(3, $status) ? 'checked' : '' }} name="status[]"
-                                                        value="3">
-                                                    <label for="">Công nợ</label>
-                                                </li>
-                                                <li>
-                                                    <input type="checkbox" id="status_inactive"
-                                                        {{ in_array(2, $status) ? 'checked' : '' }} name="status[]"
-                                                        value="2">
-                                                    <label for="">Gần đến hạn</label>
-                                                </li>
-                                                <li>
-                                                    <input type="checkbox" id="status_inactive"
-                                                        {{ in_array(0, $status) ? 'checked' : '' }} name="status[]"
-                                                        value="0">
-                                                    <label for="">Quá hạn</label>
-                                                </li>
-                                                <li>
-                                                    <input type="checkbox" id="status_inactive"
-                                                        {{ in_array(5, $status) ? 'checked' : '' }} name="status[]"
-                                                        value="5">
-                                                    <label for="">Đến hạn</label>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="d-flex justify-contents-center align-items-baseline p-2">
-                                            <button type="submit" class="btn btn-primary btn-block mr-2">Xác
-                                                Nhận</button>
-                                            <button type="button" id="cancel-status"
-                                                class="btn btn-default btn-block">Hủy</button>
+                                            <div class="ks-cboxtags-container">
+                                                <ul class="ks-cboxtags ks-cboxtags-status p-0 mb-1 px-2">
+                                                    <li>
+                                                        <input type="checkbox" id="status_inactive"
+                                                            {{ in_array(4, $status) ? 'checked' : '' }}
+                                                            name="status[]" value="4">
+                                                        <label for="">Chưa thanh toán</label>
+                                                    </li>
+                                                    <li>
+                                                        <input type="checkbox" id="status_active"
+                                                            {{ in_array(1, $status) ? 'checked' : '' }}
+                                                            name="status[]" value="1">
+                                                        <label for="">Thanh toán đủ</label>
+                                                    </li>
+                                                    <li>
+                                                        <input type="checkbox" id="status_inactive"
+                                                            {{ in_array(3, $status) ? 'checked' : '' }}
+                                                            name="status[]" value="3">
+                                                        <label for="">Công nợ</label>
+                                                    </li>
+                                                    <li>
+                                                        <input type="checkbox" id="status_inactive"
+                                                            {{ in_array(2, $status) ? 'checked' : '' }}
+                                                            name="status[]" value="2">
+                                                        <label for="">Gần đến hạn</label>
+                                                    </li>
+                                                    <li>
+                                                        <input type="checkbox" id="status_inactive"
+                                                            {{ in_array(0, $status) ? 'checked' : '' }}
+                                                            name="status[]" value="0">
+                                                        <label for="">Quá hạn</label>
+                                                    </li>
+                                                    <li>
+                                                        <input type="checkbox" id="status_inactive"
+                                                            {{ in_array(5, $status) ? 'checked' : '' }}
+                                                            name="status[]" value="5">
+                                                        <label for="">Đến hạn</label>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                                <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                                    Nhận</button>
+                                                <button type="button" id="cancel-status"
+                                                    class="btn btn-default btn-block">Hủy</button>
+                                            </div>
                                         </div>
                                     </div>
                                     {{-- Status xuất --}}
@@ -401,50 +472,52 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <a class="cursor select-all mr-auto">Chọn tất cả</a>
                                                 <a class="cursor deselect-all-status-export">Hủy chọn</a>
                                             </div>
-                                            <ul class="ks-cboxtags-status_export p-0 mb-1 px-2">
-                                                <li>
-                                                    <input type="checkbox" id="status_inactive"
-                                                        {{ in_array(4, $status_export) ? 'checked' : '' }} name="status_export[]"
-                                                        value="4">
-                                                    <label for="">Chưa thanh toán</label>
-                                                </li>
-                                                <li>
-                                                    <input type="checkbox" id="status_active"
-                                                        {{ in_array(1, $status_export) ? 'checked' : '' }} name="status_export[]"
-                                                        value="1">
-                                                    <label for="">Thanh toán đủ</label>
-                                                </li>
-                                                <li>
-                                                    <input type="checkbox" id="status_inactive"
-                                                        {{ in_array(3, $status_export) ? 'checked' : '' }} name="status_export[]"
-                                                        value="3">
-                                                    <label for="">Công nợ</label>
-                                                </li>
-                                                <li>
-                                                    <input type="checkbox" id="status_inactive"
-                                                        {{ in_array(2, $status_export) ? 'checked' : '' }} name="status_export[]"
-                                                        value="2">
-                                                    <label for="">Gần đến hạn</label>
-                                                </li>
-                                                <li>
-                                                    <input type="checkbox" id="status_inactive"
-                                                        {{ in_array(0, $status_export) ? 'checked' : '' }} name="status_export[]"
-                                                        value="0">
-                                                    <label for="">Quá hạn</label>
-                                                </li>
-                                                <li>
-                                                    <input type="checkbox" id="status_inactive"
-                                                        {{ in_array(5, $status_export) ? 'checked' : '' }} name="status_export[]"
-                                                        value="5">
-                                                    <label for="">Đến hạn</label>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="d-flex justify-contents-center align-items-baseline p-2">
-                                            <button type="submit" class="btn btn-primary btn-block mr-2">Xác
-                                                Nhận</button>
-                                            <button type="button" id="cancel-status_export"
-                                                class="btn btn-default btn-block">Hủy</button>
+                                            <div class="ks-cboxtags-container">
+                                                <ul class="ks-cboxtags ks-cboxtags-status_export p-0 mb-1 px-2">
+                                                    <li>
+                                                        <input type="checkbox" id="status_inactive"
+                                                            {{ in_array(4, $status_export) ? 'checked' : '' }}
+                                                            name="status_export[]" value="4">
+                                                        <label for="">Chưa thanh toán</label>
+                                                    </li>
+                                                    <li>
+                                                        <input type="checkbox" id="status_active"
+                                                            {{ in_array(1, $status_export) ? 'checked' : '' }}
+                                                            name="status_export[]" value="1">
+                                                        <label for="">Thanh toán đủ</label>
+                                                    </li>
+                                                    <li>
+                                                        <input type="checkbox" id="status_inactive"
+                                                            {{ in_array(3, $status_export) ? 'checked' : '' }}
+                                                            name="status_export[]" value="3">
+                                                        <label for="">Công nợ</label>
+                                                    </li>
+                                                    <li>
+                                                        <input type="checkbox" id="status_inactive"
+                                                            {{ in_array(2, $status_export) ? 'checked' : '' }}
+                                                            name="status_export[]" value="2">
+                                                        <label for="">Gần đến hạn</label>
+                                                    </li>
+                                                    <li>
+                                                        <input type="checkbox" id="status_inactive"
+                                                            {{ in_array(0, $status_export) ? 'checked' : '' }}
+                                                            name="status_export[]" value="0">
+                                                        <label for="">Quá hạn</label>
+                                                    </li>
+                                                    <li>
+                                                        <input type="checkbox" id="status_inactive"
+                                                            {{ in_array(5, $status_export) ? 'checked' : '' }}
+                                                            name="status_export[]" value="5">
+                                                        <label for="">Đến hạn</label>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                                <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                                    Nhận</button>
+                                                <button type="button" id="cancel-status_export"
+                                                    class="btn btn-default btn-block">Hủy</button>
+                                            </div>
                                         </div>
                                     </div>
                                     {{-- Nhân viên --}}
@@ -460,30 +533,34 @@ $index = array_search($item['label'], $numberedLabels);
                                             </div>
                                             <div
                                                 class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
-                                                <a class="cursor select-all-creator mr-auto">Chọn tất cả</a>
+                                                <a class="cursor select-all-creator mr-auto">Chọn tất
+                                                    cả</a>
                                                 <a class="cursor deselect-all-creator">Hủy chọn</a>
                                             </div>
-                                            <ul class="ks-cboxtags-creator p-0 mb-1 px-2">
-                                                @if (!empty($debtsSale))
-                                                    @php
-                                                        $seenValues = [];
-                                                    @endphp
-                                                    @foreach ($debtsSale as $value)
-                                                        @if (!in_array($value->name, $seenValues))
-                                                            <li>
-                                                                <input type="checkbox" id="name_active"
-                                                                    {{ in_array($value->name, $nhanvien) ? 'checked' : '' }}
-                                                                    name="nhanvien[]" value="{{ $value->name }}">
-                                                                <label id="nhanvien"
-                                                                    for="">{{ $value->name }}</label>
-                                                            </li>
-                                                            @php
-                                                                $seenValues[] = $value->name;
-                                                            @endphp
-                                                        @endif
-                                                    @endforeach
-                                                @endif
-                                            </ul>
+                                            <div class="ks-cboxtags-container">
+                                                <ul class="ks-cboxtags ks-cboxtags-creator p-0 mb-1 px-2">
+                                                    @if (!empty($debtsSale))
+                                                        @php
+                                                            $seenValues = [];
+                                                        @endphp
+                                                        @foreach ($debtsSale as $value)
+                                                            @if (!in_array($value->name, $seenValues))
+                                                                <li>
+                                                                    <input type="checkbox" id="name_active"
+                                                                        {{ in_array($value->name, $nhanvien) ? 'checked' : '' }}
+                                                                        name="nhanvien[]"
+                                                                        value="{{ $value->name }}">
+                                                                    <label id="nhanvien"
+                                                                        for="">{{ $value->name }}</label>
+                                                                </li>
+                                                                @php
+                                                                    $seenValues[] = $value->name;
+                                                                @endphp
+                                                            @endif
+                                                        @endforeach
+                                                    @endif
+                                                </ul>
+                                            </div>
                                             <div class="d-flex justify-contents-center align-items-baseline p-2">
                                                 <button type="submit" class="btn btn-primary btn-block mr-2">Xác
                                                     Nhận</button>
@@ -507,7 +584,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('product_qty_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
                                                 <input class="w-50 input-quantity product_qty-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -520,6 +597,85 @@ $index = array_search($item['label'], $numberedLabels);
                                                 Nhận</button>
                                             <button type="button" id="cancel-product_qty"
                                                 class="btn btn-default btn-block">Hủy</button>
+                                        </div>
+                                    </div>
+                                    {{-- Số lượng xuất --}}
+                                    <div class="block-options" id="export_qty-options" style="display:none">
+                                        <div class="wrap w-100">
+                                            <div class="heading-title title-wrap">
+                                                <h5>Số lượng xuất</h5>
+                                            </div>
+                                            <div class="input-group p-2 justify-content-around">
+                                                <select class="export_qty_operator input-so"
+                                                    name="export_qty_operator" style="width: 40%">
+                                                    <option value=">="
+                                                        {{ request('export_qty_operator') === '>=' ? 'selected' : '' }}>
+                                                        >=
+                                                    </option>
+                                                    <option value="<="
+                                                        {{ request('export_qty_operator') === '<=' ? 'selected' : '' }}>
+                                                        <=</option>
+                                                </select>
+                                                <input class="w-50 input-quantity export_qty-input" type="text"
+                                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                                    name="export_qty" value="{{ request()->export_qty }}"
+                                                    placeholder="Số lượng">
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                            <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                                Nhận</button>
+                                            <button type="button" id="cancel-export_qty"
+                                                class="btn btn-default btn-block">Hủy</button>
+                                        </div>
+                                    </div>
+                                    {{-- Tìm khách hàng --}}
+                                    <div class="block-options" id="guest-options" style="display:none">
+                                        <div class="wrap w-100">
+                                            <div class="heading-title title-wrap">
+                                                <h5>Khách hàng</h5>
+                                            </div>
+                                            <div class="search-container px-2 mt-2">
+                                                <input type="text" placeholder="Tìm kiếm" id="myInput-guest"
+                                                    class="pr-4 w-100 input-search" onkeyup="filterGuest()">
+                                                <span class="search-icon"><i class="fas fa-search"></i></span>
+                                            </div>
+                                            <div
+                                                class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
+                                                <a class="cursor select-all-guest mr-auto">Chọn tất
+                                                    cả</a>
+                                                <a class="cursor deselect-all-guest">Hủy chọn</a>
+                                            </div>
+                                            <div class="ks-cboxtags-container">
+                                                <ul class="ks-cboxtags ks-cboxtags-guest p-0 mb-1 px-2">
+                                                    @if (!empty($guests))
+                                                        @php
+                                                            $seenValues = [];
+                                                        @endphp
+                                                        @foreach ($guests as $value)
+                                                            @if (!in_array($value->guests, $seenValues))
+                                                                <li>
+                                                                    <input type="checkbox" id="name_active"
+                                                                        {{ in_array($value->guests, $guest) ? 'checked' : '' }}
+                                                                        name="guest[]" value="{{ $value->guests }}">
+                                                                    <label id="guest"
+                                                                        for="name">{{ $value->guests }}</label>
+                                                                </li>
+                                                                @php
+                                                                    $seenValues[] = $value->guests;
+                                                                @endphp
+                                                            @endif
+                                                        @endforeach
+                                                    @endif
+                                                </ul>
+                                            </div>
+
+                                            <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                                <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                                    Nhận</button>
+                                                <button type="button" id="cancel-guest"
+                                                    class="btn btn-default btn-block">Hủy</button>
+                                            </div>
                                         </div>
                                     </div>
                                     {{-- Giá nhập --}}
@@ -537,12 +693,12 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('price_import_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
                                                 <input class="w-50 input-quantity price_import-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                                     name="price_import" value="{{ request()->price_import }}"
-                                                    placeholder="Số lượng">
+                                                    placeholder="Nhập giá">
                                             </div>
                                         </div>
                                         <div class="d-flex justify-contents-center align-items-baseline p-2">
@@ -567,7 +723,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('import_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
                                                 <input class="w-50 input-quantity import-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -582,35 +738,205 @@ $index = array_search($item['label'], $numberedLabels);
                                                 class="btn btn-default btn-block">Hủy</button>
                                         </div>
                                     </div>
-                                    {{-- Ngày nhập hóa đơn --}}
-                                    <div class="block-options" id="update_at-options" style="display:none">
+                                    {{-- Giá bán --}}
+                                    <div class="block-options" id="sale-options" style="display:none">
                                         <div class="wrap w-100">
                                             <div class="heading-title title-wrap">
-                                                <h5>Ngày nhập hóa đơn</h5>
+                                                <h5>Giá bán</h5>
                                             </div>
                                             <div class="input-group p-2 justify-content-around">
-                                                <label for="start">Từ ngày:</label>
-                                                <input type="date" id="start" name="trip_start"
-                                                    value="{{ request()->trip_start }}" min="2018-01-01"
-                                                    max="2050-12-31">
-                                                <label for="start">Đến ngày:</label>
-                                                <input type="date" id="end" name="trip_end"
-                                                    value="{{ request()->trip_end }}" min="2018-01-01"
-                                                    max="2050-12-31">
+                                                <select class="sale_operator input-so" name="sale_operator"
+                                                    style="width: 40%">
+                                                    <option value=">="
+                                                        {{ request('sale_operator') === '>=' ? 'selected' : '' }}>
+                                                        >=
+                                                    </option>
+                                                    <option value="<="
+                                                        {{ request('sale_operator') === '<=' ? 'selected' : '' }}>
+                                                        <=</option>
+                                                </select>
+                                                <input class="w-50 input-quantity sale-input" type="text"
+                                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                                    name="sum_sale" value="{{ request()->sum_sale }}"
+                                                    placeholder="Nhập giá trị">
                                             </div>
                                         </div>
                                         <div class="d-flex justify-contents-center align-items-baseline p-2">
                                             <button type="submit" class="btn btn-primary btn-block mr-2">Xác
                                                 Nhận</button>
-                                            <button type="button" id="cancel-update_at"
+                                            <button type="button" id="cancel-sum-sale"
                                                 class="btn btn-default btn-block">Hủy</button>
+                                        </div>
+                                    </div>
+                                    {{-- Thành tiền xuất --}}
+                                    <div class="block-options" id="total-sale-options" style="display:none">
+                                        <div class="wrap w-100">
+                                            <div class="heading-title title-wrap">
+                                                <h5>Thành tiền xuất</h5>
+                                            </div>
+                                            <div class="input-group p-2 justify-content-around">
+                                                <select class="total_sale_operator input-so"
+                                                    name="total_sale_operator" style="width: 40%">
+                                                    <option value=">="
+                                                        {{ request('total_sale_operator') === '>=' ? 'selected' : '' }}>
+                                                        >=
+                                                    </option>
+                                                    <option value="<="
+                                                        {{ request('total_sale_operator') === '<=' ? 'selected' : '' }}>
+                                                        <=</option>
+                                                </select>
+                                                <input class="w-50 input-quantity total-sale-input" type="text"
+                                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                                    name="total_sum_sale" value="{{ request()->total_sum_sale }}"
+                                                    placeholder="Nhập giá trị">
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                            <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                                Nhận</button>
+                                            <button type="button" id="cancel-total-sale"
+                                                class="btn btn-default btn-block">Hủy</button>
+                                        </div>
+                                    </div>
+                                    {{-- Lợi nhuận --}}
+                                    <div class="block-options" id="total_difference-options" style="display:none">
+                                        <div class="wrap w-100">
+                                            <div class="heading-title title-wrap">
+                                                <h5>Lợi nhuận</h5>
+                                            </div>
+                                            <div class="input-group p-2 justify-content-around">
+                                                <select class="total_difference_operator input-so"
+                                                    name="total_difference_operator" style="width: 40%">
+                                                    <option value=">="
+                                                        {{ request('total_difference_operator') === '>=' ? 'selected' : '' }}>
+                                                        >=
+                                                    </option>
+                                                    <option value="<="
+                                                        {{ request('total_difference_operator') === '<=' ? 'selected' : '' }}>
+                                                        <=</option>
+                                                </select>
+                                                <input class="w-50 input-quantity total_difference-input"
+                                                    type="text"
+                                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                                    name="total_difference" value="{{ request()->total_difference }}"
+                                                    placeholder="Nhập giá trị">
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                            <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                                Nhận</button>
+                                            <button type="button" id="cancel-total_difference"
+                                                class="btn btn-default btn-block">Hủy</button>
+                                        </div>
+                                    </div>
+                                    {{-- Chi phí vận chuyển --}}
+                                    <div class="block-options" id="tranport_fee-options" style="display:none">
+                                        <div class="wrap w-100">
+                                            <div class="heading-title title-wrap">
+                                                <h5>Chi phí vận chuyển</h5>
+                                            </div>
+                                            <div class="input-group p-2 justify-content-around">
+                                                <select class="tranport_fee_operator input-so"
+                                                    name="tranport_fee_operator" style="width: 40%">
+                                                    <option value=">="
+                                                        {{ request('tranport_fee_operator') === '>=' ? 'selected' : '' }}>
+                                                        >=
+                                                    </option>
+                                                    <option value="<="
+                                                        {{ request('tranport_fee_operator') === '<=' ? 'selected' : '' }}>
+                                                        <=</option>
+                                                </select>
+                                                <input class="w-50 input-quantity tranport_fee-input" type="text"
+                                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                                    name="tranport_fee" value="{{ request()->tranport_fee }}"
+                                                    placeholder="Nhập giá trị">
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                            <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                                Nhận</button>
+                                            <button type="button" id="cancel-tranport_fee"
+                                                class="btn btn-default btn-block">Hủy</button>
+                                        </div>
+                                    </div>
+                                    {{-- Đơn vị tính --}}
+                                    <div class="block-options" id="unit-options" style="display:none">
+                                        <div class="wrap w-100">
+                                            <div class="heading-title title-wrap">
+                                                <h5>Đơn vị tính</h5>
+                                            </div>
+                                            <div class="search-container px-2 mt-2">
+                                                <input type="text" placeholder="Tìm kiếm" id="myInput-unit"
+                                                    class="pr-4 w-100 input-search" onkeyup="filterUnit()">
+                                                <span class="search-icon"><i class="fas fa-search"></i></span>
+                                            </div>
+                                            <div
+                                                class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
+                                                <a class="cursor select-all-unit mr-auto">Chọn tất
+                                                    cả</a>
+                                                <a class="cursor deselect-all-unit">Hủy chọn</a>
+                                            </div>
+                                            <div class="ks-cboxtags-container">
+                                                <ul class="ks-cboxtags ks-cboxtags-unit p-0 mb-1 px-2">
+                                                    @if (!empty($guests))
+                                                        @php
+                                                            $seenValues = [];
+                                                        @endphp
+                                                        @foreach ($guests as $value)
+                                                            @if (!in_array($value->unit, $seenValues))
+                                                                <li>
+                                                                    <input type="checkbox" id="unit_active"
+                                                                        {{ in_array($value->unit, $unitarr) ? 'checked' : '' }}
+                                                                        name="unitarr[]" value="{{ $value->unit }}">
+                                                                    <label id="unit_value"
+                                                                        for="">{{ $value->unit }}</label>
+                                                                </li>
+                                                                @php
+                                                                    $seenValues[] = $value->unit;
+                                                                @endphp
+                                                            @endif
+                                                        @endforeach
+                                                    @endif
+                                                </ul>
+                                            </div>
+
+                                                <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                                    <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                                        Nhận</button>
+                                                    <button type="button" id="cancel-unit"
+                                                        class="btn btn-default btn-block">Hủy</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {{-- Thời gian --}}
+                                        <div class="block-options" id="update_at-options" style="display:none">
+                                            <div class="wrap w-100">
+                                                <div class="heading-title title-wrap">
+                                                    <h5>Thời gian</h5>
+                                                </div>
+                                                <div class="input-group p-2 justify-content-around">
+                                                    <label for="start">Từ ngày:</label>
+                                                    <input type="date" id="start" name="trip_start"
+                                                        value="{{ request()->trip_start }}" min="2018-01-01"
+                                                        max="2050-12-31">
+                                                    <label for="start">Đến ngày:</label>
+                                                    <input type="date" id="end" name="trip_end"
+                                                        value="{{ request()->trip_end }}" min="2018-01-01"
+                                                        max="2050-12-31">
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                                <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                                    Nhận</button>
+                                                <button type="button" id="cancel-update_at"
+                                                    class="btn btn-default btn-block">Hủy</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                    </div>
+                        </div>
 
     </section>
     <!-- Main content -->
@@ -661,180 +987,183 @@ $index = array_search($item['label'], $numberedLabels);
                                     <tr>
                                         <th scope="col" style="width:2%">
                                             <span class="d-flex align-items-center">
-                                                STT
+                                                <a href="#" class="sort-link" data-sort-by="id"
+                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
+                                                        type="submit">STT</button></a>
+                                                <div class="icon" id="icon-id"></div>
                                             </span>
                                         </th>
                                         <th scope="col">
                                             <span class="d-flex align-items-center">
-                                                <a href="#" class="sort-link" data-sort-by="nhanvien"
+                                                <a href="#" class="sort-link" data-sort-by="name"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Nhân viên</button></a>
-                                                <div class="icon" id="icon-nhanvien"></div>
+                                                <div class="icon" id="icon-name"></div>
                                             </span>
                                         </th>
                                         <th scope="col">
                                             <span class="d-flex align-items-center" style="width:110px;">
-                                                <a href="#" class="sort-link" data-sort-by="created_at"
+                                                <a href="#" class="sort-link" data-sort-by="date_time"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Thời gian</button></a>
-                                                <div class="icon" id="icon-created_at"></div>
+                                                <div class="icon" id="icon-date_time"></div>
                                             </span>
                                         </th>
                                         <th scope="col" class="text-left">
                                             <span class="d-flex justify-content-start" style="width:100px;">
-                                                <a href="#" class="sort-link" data-sort-by="nhacungcap"
+                                                <a href="#" class="sort-link" data-sort-by="provide_name"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">NCC</button></a>
-                                                <div class="icon" id="icon-nhacungcap"></div>
+                                                <div class="icon" id="icon-provide_name"></div>
                                             </span>
                                         </th>
                                         <th scope="col" class="text-left">
                                             <span class="d-flex justify-content-start" style="width:110px;">
-                                                <a href="#" class="sort-link" data-sort-by="nhacungcap"
+                                                <a href="#" class="sort-link" data-sort-by="product_name"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Mặt hàng</button></a>
-                                                <div class="icon" id="icon-nhacungcap"></div>
+                                                <div class="icon" id="icon-product_name"></div>
                                             </span>
                                         </th>
                                         <th scope="col">
                                             <span class="d-flex align-items-center">
-                                                <a href="#" class="sort-link" data-sort-by="created_at"
+                                                <a href="#" class="sort-link" data-sort-by="product_qty"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">SL nhập</button></a>
-                                                <div class="icon" id="icon-created_at"></div>
+                                                <div class="icon" id="icon-product_qty"></div>
                                             </span>
                                         </th>
                                         <th scope="col">
                                             <span class="d-flex align-items-center">
-                                                <a href="#" class="sort-link" data-sort-by="created_at"
+                                                <a href="#" class="sort-link" data-sort-by="price_import"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Giá nhập</button></a>
-                                                <div class="icon" id="icon-created_at"></div>
+                                                <div class="icon" id="icon-price_import"></div>
                                             </span>
                                         </th>
                                         <th scope="col">
                                             <span class="d-flex justify-content-end align-items-end">
-                                                <a href="#" class="sort-link" data-sort-by="total_import"
+                                                <a href="#" class="sort-link" data-sort-by="product_total"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Thành tiền nhập</button></a>
-                                                <div class="icon" id="icon-total_import"></div>
+                                                <div class="icon" id="icon-product_total"></div>
                                             </span>
                                         </th>
                                         <th scope="col">
                                             <span class="d-flex align-items-center">
-                                                <a href="#" class="sort-link" data-sort-by="product_code"
+                                                <a href="#" class="sort-link" data-sort-by="import_code"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">HĐ vào</button></a>
-                                                <div class="icon" id="icon-product_code"></div>
+                                                <div class="icon" id="icon-import_code"></div>
                                             </span>
                                         </th>
                                         <th scope="col" class="text-center">
                                             <span class="d-flex justify-content-center align-items-center"
                                                 style="width:125px;">
-                                                <a href="#" class="sort-link" data-sort-by="debt_status"
+                                                <a href="#" class="sort-link" data-sort-by="debt_import"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Công nợ nhập</button></a>
-                                                <div class="icon" id="icon-debt_status"></div>
+                                                <div class="icon" id="icon-debt_import"></div>
                                             </span>
                                         </th>
                                         <th scope="col" class="text-center">
                                             <span class="d-flex justify-content-center align-items-center"
                                                 style="width:125px;">
-                                                <a href="#" class="sort-link" data-sort-by="debt_status"
+                                                <a href="#" class="sort-link" data-sort-by="import_status"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Tình trạng nhập</button></a>
-                                                <div class="icon" id="icon-debt_status"></div>
+                                                <div class="icon" id="icon-import_status"></div>
                                             </span>
                                         </th>
                                         <th scope="col" class="text-center">
                                             <span class="d-flex justify-content-center align-items-center"
                                                 style="width:110px;">
-                                                <a href="#" class="sort-link" data-sort-by="debt_status"
+                                                <a href="#" class="sort-link" data-sort-by="guest_name"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Khách hàng</button></a>
-                                                <div class="icon" id="icon-debt_status"></div>
+                                                <div class="icon" id="icon-guest_name"></div>
                                             </span>
                                         </th>
                                         <th scope="col">
                                             <span class="d-flex align-items-center">
-                                                <a href="#" class="sort-link" data-sort-by="created_at"
+                                                <a href="#" class="sort-link" data-sort-by="export_qty"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">SL xuất</button></a>
-                                                <div class="icon" id="icon-created_at"></div>
+                                                <div class="icon" id="icon-export_qty"></div>
                                             </span>
                                         </th>
                                         <th scope="col">
                                             <span class="d-flex align-items-center">
-                                                <a href="#" class="sort-link" data-sort-by="created_at"
+                                                <a href="#" class="sort-link" data-sort-by="export_unit"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">ĐVT</button></a>
-                                                <div class="icon" id="icon-created_at"></div>
+                                                <div class="icon" id="icon-export_unit"></div>
                                             </span>
                                         </th>
                                         <th scope="col">
                                             <span class="d-flex align-items-center">
-                                                <a href="#" class="sort-link" data-sort-by="created_at"
+                                                <a href="#" class="sort-link" data-sort-by="price_export"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Giá bán</button></a>
-                                                <div class="icon" id="icon-created_at"></div>
+                                                <div class="icon" id="icon-price_export"></div>
                                             </span>
                                         </th>
                                         <th scope="col">
                                             <span class="d-flex align-items-center">
-                                                <a href="#" class="sort-link" data-sort-by="created_at"
+                                                <a href="#" class="sort-link" data-sort-by="export_total"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Thành tiền xuất</button></a>
-                                                <div class="icon" id="icon-created_at"></div>
+                                                <div class="icon" id="icon-export_total"></div>
                                             </span>
                                         </th>
                                         <th scope="col">
                                             <span class="d-flex align-items-center">
-                                                <a href="#" class="sort-link" data-sort-by="created_at"
+                                                <a href="#" class="sort-link" data-sort-by="export_code"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">HĐ ra</button></a>
-                                                <div class="icon" id="icon-created_at"></div>
+                                                <div class="icon" id="icon-export_code"></div>
                                             </span>
                                         </th>
                                         <th scope="col" class="text-left">
                                             <span class="d-flex justify-content-center align-items-start"
                                                 style="width:125px;">
-                                                <a href="#" class="sort-link" data-sort-by="debt_status"
+                                                <a href="#" class="sort-link" data-sort-by="debt_export"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Công nợ xuất</button></a>
-                                                <div class="icon" id="icon-debt_status"></div>
+                                                <div class="icon" id="icon-debt_export"></div>
                                             </span>
                                         </th>
                                         <th scope="col">
                                             <span class="d-flex align-items-center" style="width:125px;">
-                                                <a href="#" class="sort-link" data-sort-by="created_at"
+                                                <a href="#" class="sort-link" data-sort-by="export_status"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Tình trạng xuất</button></a>
-                                                <div class="icon" id="icon-created_at"></div>
+                                                <div class="icon" id="icon-export_status"></div>
                                             </span>
                                         </th>
                                         <th scope="col">
                                             <span class="d-flex align-items-center">
-                                                <a href="#" class="sort-link" data-sort-by="created_at"
+                                                <a href="#" class="sort-link" data-sort-by="total_difference"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Lợi nhuận</button></a>
-                                                <div class="icon" id="icon-created_at"></div>
+                                                <div class="icon" id="icon-total_difference"></div>
                                             </span>
                                         </th>
                                         <th scope="col">
                                             <span class="d-flex align-items-center">
-                                                <a href="#" class="sort-link" data-sort-by="created_at"
+                                                <a href="#" class="sort-link" data-sort-by="tranport_fee"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Chi phí VC</button></a>
-                                                <div class="icon" id="icon-created_at"></div>
+                                                <div class="icon" id="icon-tranport_fee"></div>
                                             </span>
                                         </th>
                                         <th scope="col">
                                             <span class="d-flex justify-content-end align-items-center">
-                                                <a href="#" class="sort-link" data-sort-by="debt_note"
+                                                <a href="#" class="sort-link" data-sort-by="history_note"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Ghi
                                                         chú</button></a>
-                                                <div class="icon" id="icon-debt_note"></div>
+                                                <div class="icon" id="icon-history_note"></div>
                                             </span>
                                         </th>
                                         <th scope="col"></th>
@@ -1052,6 +1381,12 @@ $index = array_search($item['label'], $numberedLabels);
             checkbox.prop('checked', !checkbox.prop('checked')); // Đảo ngược trạng thái checked
         }
     });
+    $('.ks-cboxtags-unit li').on('click', function(event) {
+        if (event.target.tagName !== 'INPUT') {
+            var checkbox = $(this).find('input[type="checkbox"]');
+            checkbox.prop('checked', !checkbox.prop('checked')); // Đảo ngược trạng thái checked
+        }
+    });
     $('.ks-cboxtags-status li').on('click', function(event) {
         if (event.target.tagName !== 'INPUT') {
             var checkbox = $(this).find('input[type="checkbox"]');
@@ -1059,6 +1394,12 @@ $index = array_search($item['label'], $numberedLabels);
         }
     });
     $('.ks-cboxtags-creator li').on('click', function(event) {
+        if (event.target.tagName !== 'INPUT') {
+            var checkbox = $(this).find('input[type="checkbox"]');
+            checkbox.prop('checked', !checkbox.prop('checked')); // Đảo ngược trạng thái checked
+        }
+    });
+    $('.ks-cboxtags-guest li').on('click', function(event) {
         if (event.target.tagName !== 'INPUT') {
             var checkbox = $(this).find('input[type="checkbox"]');
             checkbox.prop('checked', !checkbox.prop('checked')); // Đảo ngược trạng thái checked
@@ -1088,6 +1429,18 @@ $index = array_search($item['label'], $numberedLabels);
         $('.product_qty-input').val('');
         $('#product_qty-options').hide();
     });
+    //Số lượng xuất
+    $('#btn-export_qty').click(function(event) {
+        event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
+        $('#export_qty-options').toggle();
+    });
+    $('#cancel-export_qty').click(function(event) {
+        event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
+        $('.export_qty-input').val('');
+        $('#export_qty-options').hide();
+    });
     //Giá nhập
     $('#btn-price_import').click(function(event) {
         event.preventDefault();
@@ -1111,6 +1464,54 @@ $index = array_search($item['label'], $numberedLabels);
         $('.btn-filter').prop('disabled', false);
         $('.import-input').val('');
         $('#import-options').hide();
+    });
+    //Bán
+    $('#btn-sum-sale').click(function(event) {
+        event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
+        $('#sale-options').toggle();
+    });
+    $('#cancel-sum-sale').click(function(event) {
+        event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
+        $('.sale-input').val('');
+        $('#sale-options').hide();
+    });
+    // Thành tiền xuất
+    $('#btn-total-sale').click(function(event) {
+        event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
+        $('#total-sale-options').toggle();
+    });
+    $('#cancel-total-sale').click(function(event) {
+        event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
+        $('.total-sale-input').val('');
+        $('#total-sale-options').hide();
+    });
+    // Lợi nhuận
+    $('#btn-total_difference').click(function(event) {
+        event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
+        $('#total_difference-options').toggle();
+    });
+    $('#cancel-total_difference').click(function(event) {
+        event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
+        $('.total_difference-input').val('');
+        $('#total_difference-options').hide();
+    });
+    // Chi phí vận chuyển
+    $('#btn-tranport_fee').click(function(event) {
+        event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
+        $('#tranport_fee-options').toggle();
+    });
+    $('#cancel-tranport_fee').click(function(event) {
+        event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
+        $('.tranport_fee-input').val('');
+        $('#tranport_fee-options').hide();
     });
     $('#btn-creator').click(function(event) {
         event.preventDefault();
@@ -1164,6 +1565,18 @@ $index = array_search($item['label'], $numberedLabels);
         $('.id-input').val('');
         $('#id-options').hide();
     });
+    // Đơn vị tính
+    $('#btn-unit').click(function(event) {
+        event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
+        $('#unit-options').toggle();
+    });
+    $('#cancel-unit').click(function(event) {
+        event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
+        $('.unit-input').val('');
+        $('#unit-options').hide();
+    });
 
     // Hóa đơn vào
     $('#btn-hdv').click(function(event) {
@@ -1202,6 +1615,18 @@ $index = array_search($item['label'], $numberedLabels);
         $('.deselect-all-provide_name').click();
         $('#provide_name-options').hide();
     });
+    $('#btn-guest').click(function(event) {
+        event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
+        $('#guest-options').toggle();
+    });
+    $('#cancel-guest').click(function(event) {
+        event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
+        $('.guest-input').val('');
+        $('#guest-options').hide();
+    });
+
 
     // Check box
     $(document).ready(function() {
@@ -1235,12 +1660,35 @@ $index = array_search($item['label'], $numberedLabels);
         $('.deselect-all-status-import').click(function() {
             $('#status-import-options input[type="checkbox"]').prop('checked', false);
         });
+        // Chọn tất cả các checkbox
+        $('.select-all-guest').click(function() {
+            $('#guest-options input[type="checkbox"]').prop('checked', true);
+        });
+
+        // Hủy tất cả các checkbox
+        $('.deselect-all-guest').click(function() {
+            $('#guest-options input[type="checkbox"]').prop('checked', false);
+        });
+        $('.select-all-unit').click(function() {
+            $('#unit-options input[type="checkbox"]').prop('checked', true);
+        });
+
+        // Hủy tất cả các checkbox
+        $('.deselect-all-unit').click(function() {
+            $('#unit-options input[type="checkbox"]').prop('checked', false);
+        });
     });
 
     //Xóa filter
     $(document).ready(function() {
         $('.filter-results').on('click', '.delete-btn-status', function() {
             $('.deselect-all').click();
+            document.getElementById('search-filter').submit();
+        });
+    });
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-guest', function() {
+            $('.deselect-all-guest').click();
             document.getElementById('search-filter').submit();
         });
     });
@@ -1270,6 +1718,12 @@ $index = array_search($item['label'], $numberedLabels);
             document.getElementById('search-filter').submit();
         });
     });
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-export_qty', function() {
+            $('.export_qty-input').val('');
+            document.getElementById('search-filter').submit();
+        });
+    });
     // Giá nhập
     $(document).ready(function() {
         $('.filter-results').on('click', '.delete-btn-price_import', function() {
@@ -1296,6 +1750,34 @@ $index = array_search($item['label'], $numberedLabels);
     $(document).ready(function() {
         $('.filter-results').on('click', '.delete-btn-provide_name', function() {
             $('.deselect-all-provide_name').click();
+            document.getElementById('search-filter').submit();
+        });
+    });
+    // Giá bán
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-sum-sale', function() {
+            $('.sale-input').val('');
+            document.getElementById('search-filter').submit();
+        });
+    });
+    // Thành tiền xuất
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-total_sum_sale', function() {
+            $('.total-sale-input').val('');
+            document.getElementById('search-filter').submit();
+        });
+    });
+    // Lợi nhuận
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-total_difference', function() {
+            $('.total_difference-input').val('');
+            document.getElementById('search-filter').submit();
+        });
+    });
+    // Chi phí vận chuyển
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-tranport_fee', function() {
+            $('.tranport_fee-input').val('');
             document.getElementById('search-filter').submit();
         });
     });
@@ -1426,6 +1908,22 @@ $index = array_search($item['label'], $numberedLabels);
             }
         });
     }
+
+    function filterUnit() {
+        var input = $("#myInput-unit");
+        var filter = input.val().toUpperCase();
+        var buttons = $(".ks-cboxtags-unit li");
+
+        buttons.each(function() {
+            var text = $(this).text();
+            if (text.toUpperCase().indexOf(filter) > -1) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    }
+
     function filterStatus_export() {
         var input = $("#myInput-status_export");
         var filter = input.val().toUpperCase();

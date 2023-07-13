@@ -131,9 +131,17 @@ $index = array_search($item['label'], $numberedLabels);
                                     {{ $item['label'] }}
                                     @if ($item['label'] === 'Thuế:')
                                         <span
-                                            class="filter-values">{{ implode(', ',array_map(function ($value) {if($value==99){
-                                                $value = 'NOVAT';
-                                            }else $value= $value. '%'; return $value;}, $item['values'])) }}
+                                            class="filter-values">{{ implode(
+                                                ', ',
+                                                array_map(function ($value) {
+                                                    if ($value == 99) {
+                                                        $value = 'NOVAT';
+                                                    } else {
+                                                        $value = $value . '%';
+                                                    }
+                                                    return $value;
+                                                }, $item['values']),
+                                            ) }}
                                         </span>
                                     @else
                                         <span class="filter-values">{{ implode(', ', $item['values']) }}</span>
@@ -153,11 +161,10 @@ $index = array_search($item['label'], $numberedLabels);
                             <span class="" style="order: 999;">
                                 <div class="filter-options">
                                     <div class="dropdown">
-                                        <button class="btn btn-filter btn-light" type="button"
-                                            id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                            aria-expanded="false">
-                                            <span><svg width="24" height="24" viewBox="0 0 24 24"
-                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <button class="btn btn-filter btn-light" type="button" id="dropdownMenuButton"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <span><svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
                                                     <path fill-rule="evenodd" clip-rule="evenodd"
                                                         d="M12 6C12.3879 6 12.7024 6.31446 12.7024 6.70237L12.7024 17.2976C12.7024 17.6855 12.3879 18 12 18C11.6121 18 11.2976 17.6855 11.2976 17.2976V6.70237C11.2976 6.31446 11.6121 6 12 6Z"
                                                         fill="#555555" />
@@ -298,32 +305,34 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <a class="cursor select-all mr-auto">Chọn tất cả</a>
                                                 <a class="cursor deselect-all">Hủy chọn</a>
                                             </div>
-                                            <ul class="ks-cboxtags-status p-0 mb-1 px-2">
-                                                <li>
-                                                    <input type="checkbox" id="status_active"
-                                                        {{ in_array(2, $status) ? 'checked' : '' }} name="status[]"
-                                                        value="2">
-                                                    <label id="status_value" for="">Sẵn hàng</label>
-                                                </li>
-                                                <li>
-                                                    <input type="checkbox" id="status_inactive"
-                                                        {{ in_array(1, $status) ? 'checked' : '' }} name="status[]"
-                                                        value="1">
-                                                    <label id="status_value" for="">Gần hết</label>
-                                                </li>
-                                                <li>
-                                                    <input type="checkbox" id="status"
-                                                        {{ in_array(0, $status) ? 'checked' : '' }} name="status[]"
-                                                        value="0">
-                                                    <label for="">Hết hàng</label>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="d-flex justify-contents-center align-items-baseline p-2">
-                                            <button type="submit" class="btn btn-primary btn-block mr-2">Xác
-                                                Nhận</button>
-                                            <button type="button" id="cancel-status"
-                                                class="btn btn-default btn-block">Hủy</button>
+                                            <div class="ks-cboxtags-container">
+                                                <ul class="ks-cboxtags ks-cboxtags-status p-0 mb-1 px-2">
+                                                    <li>
+                                                        <input type="checkbox" id="status_active"
+                                                            {{ in_array(2, $status) ? 'checked' : '' }} name="status[]"
+                                                            value="2">
+                                                        <label id="status_value" for="">Sẵn hàng</label>
+                                                    </li>
+                                                    <li>
+                                                        <input type="checkbox" id="status_inactive"
+                                                            {{ in_array(1, $status) ? 'checked' : '' }} name="status[]"
+                                                            value="1">
+                                                        <label id="status_value" for="">Gần hết</label>
+                                                    </li>
+                                                    <li>
+                                                        <input type="checkbox" id="status"
+                                                            {{ in_array(0, $status) ? 'checked' : '' }}
+                                                            name="status[]" value="0">
+                                                        <label for="">Hết hàng</label>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                                <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                                    Nhận</button>
+                                                <button type="button" id="cancel-status"
+                                                    class="btn btn-default btn-block">Hủy</button>
+                                            </div>
                                         </div>
                                     </div>
                                     {{-- filter Nhà cung cấp --}}
@@ -342,29 +351,31 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <a class="cursor select-all-category mr-auto">Chọn tất cả</a>
                                                 <a class="cursor deselect-all-category">Hủy chọn</a>
                                             </div>
-                                            <ul class="ks-cboxtags-category p-0 mb-1 px-2">
-                                                @if (!empty($provide))
-                                                    @php
-                                                        $seenValues = [];
-                                                    @endphp
-                                                    @foreach ($provide as $value)
-                                                        @if (!in_array($value->provide_name, $seenValues))
-                                                            <li>
-                                                                <input type="checkbox" id="roles_active"
-                                                                    class="category-checkbox"
-                                                                    {{ in_array($value->provide_name, $providearr) ? 'checked' : '' }}
-                                                                    name="providearr[]"
-                                                                    value="{{ $value->provide_name }}">
-                                                                <label id="category_value"
-                                                                    for="">{{ $value->provide_name }}</label>
-                                                            </li>
-                                                            @php
-                                                                $seenValues[] = $value->provide_name;
-                                                            @endphp
-                                                        @endif
-                                                    @endforeach
-                                                @endif
-                                            </ul>
+                                            <div class="ks-cboxtags-container">
+                                                <ul class="ks-cboxtags ks-cboxtags-category p-0 mb-1 px-2">
+                                                    @if (!empty($provide))
+                                                        @php
+                                                            $seenValues = [];
+                                                        @endphp
+                                                        @foreach ($provide as $value)
+                                                            @if (!in_array($value->provide_name, $seenValues))
+                                                                <li>
+                                                                    <input type="checkbox" id="roles_active"
+                                                                        class="category-checkbox"
+                                                                        {{ in_array($value->provide_name, $providearr) ? 'checked' : '' }}
+                                                                        name="providearr[]"
+                                                                        value="{{ $value->provide_name }}">
+                                                                    <label id="category_value"
+                                                                        for="">{{ $value->provide_name }}</label>
+                                                                </li>
+                                                                @php
+                                                                    $seenValues[] = $value->provide_name;
+                                                                @endphp
+                                                            @endif
+                                                        @endforeach
+                                                    @endif
+                                                </ul>
+                                            </div>
                                             <div class="d-flex justify-contents-center align-items-baseline p-2">
                                                 <button type="submit" class="btn btn-primary btn-block mr-2">Xác
                                                     Nhận</button>
@@ -389,28 +400,31 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <a class="cursor select-all-trademark mr-auto">Chọn tất cả</a>
                                                 <a class="cursor deselect-all-trademark">Hủy chọn</a>
                                             </div>
-                                            <ul class="ks-cboxtags-trademark p-0 mb-1 px-2">
-                                                @if (!empty($unit))
-                                                    @php
-                                                        $seenValues = [];
-                                                    @endphp
-                                                    @foreach ($unit as $value)
-                                                        @if (!in_array($value->product_unit, $seenValues))
-                                                            <li>
-                                                                <input type="checkbox" id="unit_active"
-                                                                    {{ in_array($value->product_unit, $unitarr) ? 'checked' : '' }}
-                                                                    name="unitarr[]"
-                                                                    value="{{ $value->product_unit }}">
-                                                                <label id="trademark_value"
-                                                                    for="">{{ $value->product_unit }}</label>
-                                                            </li>
-                                                            @php
-                                                                $seenValues[] = $value->product_unit;
-                                                            @endphp
-                                                        @endif
-                                                    @endforeach
-                                                @endif
-                                            </ul>
+                                            <div class="ks-cboxtags-container">
+                                                <ul class="ks-cboxtags ks-cboxtags-trademark p-0 mb-1 px-2">
+                                                    @if (!empty($unit))
+                                                        @php
+                                                            $seenValues = [];
+                                                        @endphp
+                                                        @foreach ($unit as $value)
+                                                            @if (!in_array($value->product_unit, $seenValues))
+                                                                <li>
+                                                                    <input type="checkbox" id="unit_active"
+                                                                        {{ in_array($value->product_unit, $unitarr) ? 'checked' : '' }}
+                                                                        name="unitarr[]"
+                                                                        value="{{ $value->product_unit }}">
+                                                                    <label id="trademark_value"
+                                                                        for="">{{ $value->product_unit }}</label>
+                                                                </li>
+                                                                @php
+                                                                    $seenValues[] = $value->product_unit;
+                                                                @endphp
+                                                            @endif
+                                                        @endforeach
+                                                    @endif
+                                                </ul>
+                                            </div>
+
                                             <div class="d-flex justify-contents-center align-items-baseline p-2">
                                                 <button type="submit" class="btn btn-primary btn-block mr-2">Xác
                                                     Nhận</button>
@@ -427,7 +441,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             </div>
                                             <div class="search-container px-2 mt-2">
                                                 <input type="text" placeholder="Tìm kiếm" id="myInput-tax"
-                                                    class="pr-4 w-100" onkeyup="filtertax()">
+                                                    class="pr-4 w-100 input-search" onkeyup="filterTax()">
                                                 <span class="search-icon"><i class="fas fa-search"></i></span>
                                             </div>
                                             <div
@@ -435,31 +449,36 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <a class="cursor select-all-tax mr-auto">Chọn tất cả</a>
                                                 <a class="cursor deselect-all-tax">Hủy chọn</a>
                                             </div>
-                                            <ul class="ks-cboxtags-tax p-0 mb-1 px-2">
-                                                @if (!empty($unit))
-                                                    @php
-                                                        $seenValues = [];
-                                                    @endphp
-                                                    @foreach ($unit as $value)
-                                                        @if (!in_array($value->product_tax, $seenValues))
-                                                            <li>
-                                                                <input type="checkbox" id="unit_active"
-                                                                    {{ in_array($value->product_tax, $taxarr) ? 'checked' : '' }}
-                                                                    name="taxarr[]" value="{{ $value->product_tax }}">
-                                                                <label id="tax_value"
-                                                                    for="">@if ($value->product_tax == 99)
-                                                                    NOVAT
-                                                                @else
-                                                                    {{ $value->product_tax }}%
-                                                                @endif</label>
-                                                            </li>
-                                                            @php
-                                                                $seenValues[] = $value->product_tax;
-                                                            @endphp
-                                                        @endif
-                                                    @endforeach
-                                                @endif
-                                            </ul>
+                                            <div class="ks-cboxtags-container">
+                                                <ul class="ks-cboxtags ks-cboxtags-tax p-0 mb-1 px-2">
+                                                    @if (!empty($unit))
+                                                        @php
+                                                            $seenValues = [];
+                                                        @endphp
+                                                        @foreach ($unit as $value)
+                                                            @if (!in_array($value->product_tax, $seenValues))
+                                                                <li>
+                                                                    <input type="checkbox" id="unit_active"
+                                                                        {{ in_array($value->product_tax, $taxarr) ? 'checked' : '' }}
+                                                                        name="taxarr[]"
+                                                                        value="{{ $value->product_tax }}">
+                                                                    <label id="tax_value" for="">
+                                                                        @if ($value->product_tax == 99)
+                                                                            NOVAT
+                                                                        @else
+                                                                            {{ $value->product_tax }}%
+                                                                        @endif
+                                                                    </label>
+                                                                </li>
+                                                                @php
+                                                                    $seenValues[] = $value->product_tax;
+                                                                @endphp
+                                                            @endif
+                                                        @endforeach
+                                                    @endif
+                                                </ul>
+                                            </div>
+
                                             <div class="d-flex justify-contents-center align-items-baseline p-2">
                                                 <button type="submit" class="btn btn-primary btn-block mr-2">Xác
                                                     Nhận</button>
@@ -538,7 +557,8 @@ $index = array_search($item['label'], $numberedLabels);
                                             <div class="input-group p-2 justify-content-around">
                                                 <select class="avg_operator" name="avg_operator" style="width: 40%">
                                                     <option value=">="
-                                                        {{ request('avg_operator') === '>=' ? 'selected' : '' }}>>=
+                                                        {{ request('avg_operator') === '>=' ? 'selected' : '' }}>
+                                                        >=
                                                     </option>
                                                     <option value="<="
                                                         {{ request('avg_operator') === '<=' ? 'selected' : '' }}>
@@ -758,7 +778,8 @@ $index = array_search($item['label'], $numberedLabels);
                                 <tbody>
                                     @foreach ($products as $value)
                                         <tr>
-                                            <td><input type="checkbox" class="cb-element" name="product[]" value="{{$value->id}}"></td>
+                                            <td><input type="checkbox" class="cb-element" name="product[]"
+                                                    value="{{ $value->id }}"></td>
                                             <td class="text-left">{{ $value->id }}</td>
                                             <td class="text-left">{{ $value->product_name }}</td>
                                             <td class="text-left">{{ $value->provide }}</td>
@@ -844,7 +865,7 @@ $index = array_search($item['label'], $numberedLabels);
 
         // Tạo một workbook mới
         var wb = XLSX.utils.table_to_book(table);
-    
+
         // Chuyển đổi workbook thành dạng tệp Excel
         var wbout = XLSX.write(wb, {
             bookType: "xlsx",
@@ -1243,6 +1264,20 @@ $index = array_search($item['label'], $numberedLabels);
         var input = $("#myInput-status");
         var filter = input.val().toUpperCase();
         var buttons = $(".ks-cboxtags-status li");
+
+        buttons.each(function() {
+            var text = $(this).text();
+            if (text.toUpperCase().indexOf(filter) > -1) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    }
+    function filterTax() {
+        var input = $("#myInput-tax");
+        var filter = input.val().toUpperCase();
+        var buttons = $(".ks-cboxtags-tax li");
 
         buttons.each(function() {
             var text = $(this).text();

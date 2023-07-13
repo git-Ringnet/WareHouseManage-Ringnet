@@ -34,12 +34,12 @@ class DebtController extends Controller
             array_push($string, ['label' => 'Hóa đơn ra:', 'values' => $nameArr, 'class' => 'id']);
         }
         //Khách hàng
+        $guest = [];
         if (!empty($request->guest)) {
-            $guest = $request->guest;
-            array_push($filters, ['guests.guest_name', 'like', '%' . $guest . '%']);
-            $nameArr = explode(',.@', $guest);
-            array_push($string, ['label' => 'Khách hàng:', 'values' => $nameArr, 'class' => 'guest']);
+            $guest = $request->input('guest', []);
+            array_push($string, ['label' => 'Khách hàng:', 'values' => $guest, 'class' => 'guest']);
         }
+
         //Name
         $nhanvien = [];
         if (!empty($request->nhanvien)) {
@@ -140,12 +140,13 @@ class DebtController extends Controller
             $sortType = 'desc';
         }
 
+        $guests = Debt::leftjoin('guests', 'guests.id', '=', 'debts.guest_id')->select('guests.guest_name as guests')->get();
 
         $debtsSale = Debt::leftjoin('users', 'debts.user_id', '=', 'users.id')->get();
-        $debts = $this->debts->getAllDebts($filters, $keywords, $nhanvien, $date, $datepaid, $status, $sortBy, $sortType);
+        $debts = $this->debts->getAllDebts($filters, $keywords, $nhanvien, $date,$guest, $datepaid, $status, $sortBy, $sortType);
         $product = $this->debts->getAllProductsDebts();
         $debtsCreator = $this->debts->debtsCreator();
-        return view('tables.debt.debts', compact('title', 'debts', 'debtsSale', 'product', 'string', 'sortType', 'debtsCreator'));
+        return view('tables.debt.debts', compact('title', 'debts', 'debtsSale','guests', 'product', 'string', 'sortType', 'debtsCreator'));
     }
 
     /**

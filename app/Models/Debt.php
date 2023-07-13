@@ -26,7 +26,7 @@ class Debt extends Model
         'date_end',
         'date_start',
     ];
-    public function getAllDebts($filter = [], $keywords = null, $name = [], $date = [], $datepaid = [], $status = [], $orderBy = null, $orderType = null)
+    public function getAllDebts($filter = [], $keywords = null, $name = [], $date = [],$guest=[], $datepaid = [], $status = [], $orderBy = null, $orderType = null)
     {
         $debts = Debt::select('debts.*', 'exports.id as madon', 'guests.guest_name as khachhang', 'users.name as nhanvien', 'exports.updated_at as debtdate','exports.export_code as hdr')
             ->leftJoin('guests', 'guests.id', 'debts.guest_id')
@@ -45,6 +45,8 @@ class Debt extends Model
         if (!empty($name)) {
             $debts = $debts->whereIn('users.name', $name);
         }
+
+
         // dd($date[0][0]);
         if (!empty($date)) {
             $debts = $debts->where(function ($query) use ($date) {
@@ -55,7 +57,10 @@ class Debt extends Model
         if (!empty($datepaid)) {
             $debts = $debts->where('debts.debt_status', 1)->wherebetween('debts.updated_at', $datepaid);
         }
-
+                
+        if (!empty($guest)) {
+            $debts = $debts->whereIn('guests.guest_name', $guest);
+        }
 
         if (!empty($status)) {
             $debts = $debts->whereIn('debts.debt_status', $status);

@@ -3,7 +3,7 @@
 #category-options,
 #quantity-options,
 .block-options {
-    width: 230px;
+    width: 250px;
     background-color: #fff;
     border-radius: 8px;
     left: -37px !important;
@@ -121,7 +121,7 @@ li {
 .ks-cboxtags-provide_name {
     overflow-y: auto;
     scrollbar-width: thin;
-    max-height: 180px !important;
+    max-height: 300px !important;
     height: auto;
     /* ẩn thanh cuộn trên các trình duyệt mới */
     scrollbar-color: #999999 #f0f0f0;
@@ -881,4 +881,10 @@ input[type="checkbox"] {
 .searchkeyword{
     height: 48px !important;
 }
+.ks-cboxtags-container {
+    overflow-x: auto;  
+}
 
+.ks-cboxtags {
+    white-space: nowrap; 
+}

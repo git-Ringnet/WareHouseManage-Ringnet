@@ -43,11 +43,10 @@ class ExportController extends Controller
             array_push($string, ['label' => 'Mã đơn hàng:', 'values' => $nameArr, 'class' => 'id']);
         }
         //Khách hàng
+        $guest = [];
         if (!empty($request->guest)) {
-            $guest = $request->guest;
-            array_push($filters, ['guests.guest_receiver', 'like', '%' . $guest . '%']);
-            $nameArr = explode(',.@', $guest);
-            array_push($string, ['label' => 'Khách hàng:', 'values' => $nameArr, 'class' => 'guest']);
+            $guest = $request->input('guest', []);
+            array_push($string, ['label' => 'Khách hàng:', 'values' => $guest, 'class' => 'guest']);
         }
 
         //Tổng tiền
@@ -107,9 +106,9 @@ class ExportController extends Controller
             $sortType = 'desc';
         }
         $exports = Exports::leftjoin('guests', 'exports.guest_id', '=', 'guests.id')
-            ->leftjoin('users', 'exports.user_id', '=', 'users.id')->get();
+            ->leftjoin('users', 'exports.user_id', '=', 'users.id')->select('guests.guest_name as guests','users.name as name')->get();
         $productEx = productExports::all();
-        $export = $this->exports->getAllExports($filters, $status, $name, $date, $keywords, $sortBy, $sortType);
+        $export = $this->exports->getAllExports($filters, $status, $name,$guest, $date, $keywords, $sortBy, $sortType);
         $title = 'Xuất hàng';
         $productsCreator = $this->exports->productsCreator();
         // dd($productsCreator);

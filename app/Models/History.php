@@ -9,11 +9,11 @@ class History extends Model
 {
     protected $table = 'history';
     use HasFactory;
-    public function getAllHistory($filters=[], $keywords=null,$date = [],$status=[],$status_export=[], $orderBy = null, $orderType = null)
+    public function getAllHistory($filters = [], $keywords = null, $date = [], $guest = [], $status = [],$unitarr= [], $status_export = [], $orderBy = null, $orderType = null)
     {
-        $history = History::leftJoin('users','users.id','history.user_id')
-        ->leftJoin('provides','provides.id','history.provide_id')
-        ->leftJoin('guests','guests.id','history.guest_id');
+        $history = History::leftJoin('users', 'users.id', 'history.user_id')
+            ->leftJoin('provides', 'provides.id', 'history.provide_id')
+            ->leftJoin('guests', 'guests.id', 'history.guest_id');
 
         if (!empty($filters)) {
             $history = $history->where($filters);
@@ -28,14 +28,19 @@ class History extends Model
                 $query->orWhere('export_code', 'like', '%' . $keywords . '%');
             });
         }
-
+        if (!empty($guest)) {
+            $history = $history->whereIn('guests.guest_name', $guest);
+        }
         if (!empty($name)) {
             $history = $history->whereIn('users.name', $name);
         }
         if (!empty($date)) {
             $history = $history->wherebetween('history.date_time', $date);
         }
-
+        // Đơn vị tính
+        if (!empty($unitarr)) {
+            $history = $history->whereIn('export_unit', $unitarr);
+        }
         if (!empty($status)) {
             $history = $history->whereIn('import_status', $status);
         }

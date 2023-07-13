@@ -12,13 +12,13 @@ class Exports extends Model
     protected $table = 'exports';
 
     use HasFactory;
-    public function getAllExports($filter = [], $status = [], $name = [], $date = [], $keywords = null, $orderBy = null, $orderType = null)
+    public function getAllExports($filter = [], $status = [], $name = [],$guest=[], $date = [], $keywords = null, $orderBy = null, $orderType = null)
     {
         
         $exports = DB::table($this->table)
             ->leftJoin('guests', 'exports.guest_id', '=', 'guests.id')
             ->leftJoin('users', 'exports.user_id', '=', 'users.id')
-            ->select('exports.*','exports.id','exports.user_id', 'guests.guest_receiver', 'users.name', 'exports.total', 'exports.updated_at', 'export_status');
+            ->select('exports.*','exports.id','exports.user_id', 'guests.guest_name', 'users.name', 'exports.total', 'exports.updated_at', 'export_status');
         // Các điều kiện tìm kiếm và lọc dữ liệu ở đây
 
         $userId = Auth::user()->id;
@@ -36,6 +36,10 @@ class Exports extends Model
 
         if (!empty($name)) {
             $exports = $exports->whereIn('users.name', $name);
+        }
+        
+        if (!empty($guest)) {
+            $exports = $exports->whereIn('guests.guest_name', $guest);
         }
         if (!empty($date)) {
             $exports = $exports->wherebetween('exports.created_at', $date);

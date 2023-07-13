@@ -26,15 +26,15 @@ class HistoryController extends Controller
             $nameArr = explode(',.@', $id);
             array_push($string, ['label' => 'Mặt hàng:', 'values' => $nameArr, 'class' => 'id']);
         }
-         //Hóa đơn vào
-         if (!empty($request->hdv)) {
+        //Hóa đơn vào
+        if (!empty($request->hdv)) {
             $hdv = $request->hdv;
             array_push($filters, ['import_code', 'like', '%' . $hdv . '%']);
             $nameArr = explode(',.@', $hdv);
             array_push($string, ['label' => 'Hóa đơn vào:', 'values' => $nameArr, 'class' => 'hdv']);
         }
-         //Hóa đơn ra
-         if (!empty($request->hdr)) {
+        //Hóa đơn ra
+        if (!empty($request->hdr)) {
             $hdr = $request->hdr;
             array_push($filters, ['export_code', 'like', '%' . $hdr . '%']);
             $nameArr = explode(',.@', $hdr);
@@ -56,8 +56,16 @@ class HistoryController extends Controller
             $nhanvien = $request->input('nhanvien', []);
             array_push($string, ['label' => 'Nhân viên:', 'values' => $nhanvien, 'class' => 'name']);
         }
+        // SL xuất
+        if (!empty($request->export_qty_operator) && !empty($request->export_qty)) {
+            $sum = $request->input('export_qty');
+            $export_qty_operator = $request->input('product_qty_operator');
+            $filters[] = ['export_qty', $export_qty_operator, $sum];
+            $importArray = explode(',.@', $sum);
+            array_push($string, ['label' => 'Số lượng xuất ' . $export_qty_operator, 'values' => $importArray, 'class' => 'export_qty']);
+        }
         // SL nhập
-          if (!empty($request->product_qty_operator) && !empty($request->product_qty)) {
+        if (!empty($request->product_qty_operator) && !empty($request->product_qty)) {
             $sum = $request->input('product_qty');
             $product_qty_operator = $request->input('product_qty_operator');
             $filters[] = ['product_qty', $product_qty_operator, $sum];
@@ -81,7 +89,39 @@ class HistoryController extends Controller
             $importArray = explode(',.@', $sum);
             array_push($string, ['label' => 'Thành tiền nhập ' . $import_operator, 'values' => $importArray, 'class' => 'sum-import']);
         }
-       
+        // Giá Bán
+        if (!empty($request->sale_operator) && !empty($request->sum_sale)) {
+            $sum = $request->input('sum_sale');
+            $sale_operator = $request->input('sale_operator');
+            $filters[] = ['price_export', $sale_operator, $sum];
+            $saleArray = explode(',.@', $sum);
+            array_push($string, ['label' => 'Giá bán ' . $sale_operator, 'values' => $saleArray, 'class' => 'sum-sale']);
+        }
+        // Thành tiền xuất
+        if (!empty($request->total_sale_operator) && !empty($request->total_sum_sale)) {
+            $sum = $request->input('total_sum_sale');
+            $total_sale_operator = $request->input('total_sale_operator');
+            $filters[] = ['export_total', $total_sale_operator, $sum];
+            $saleArray = explode(',.@', $sum);
+            array_push($string, ['label' => 'Thành tiền xuất ' . $total_sale_operator, 'values' => $saleArray, 'class' => 'total_sum_sale']);
+        }
+        // Lợi nhuận
+        if (!empty($request->total_difference_operator) && !empty($request->total_difference)) {
+            $sum = $request->input('total_difference');
+            $total_difference_operator = $request->input('total_difference_operator');
+            $filters[] = ['total_difference', $total_difference_operator, $sum];
+            $saleArray = explode(',.@', $sum);
+            array_push($string, ['label' => 'Lợi nhuận ' . $total_difference_operator, 'values' => $saleArray, 'class' => 'total_difference']);
+        }
+         // Chi phí vận chuyển
+         if (!empty($request->tranport_fee_operator) && !empty($request->tranport_fee)) {
+            $sum = $request->input('tranport_fee');
+            $tranport_fee_operator = $request->input('tranport_fee_operator');
+            $filters[] = ['tranport_fee', $tranport_fee_operator, $sum];
+            $saleArray = explode(',.@', $sum);
+            array_push($string, ['label' => 'Chi phí vận chuyển ' . $tranport_fee_operator, 'values' => $saleArray, 'class' => 'tranport_fee']);
+        }
+
         //Trạng thái nhập
         $status = [];
         if (!empty($request->status)) {
@@ -92,17 +132,30 @@ class HistoryController extends Controller
             }, $status);
             array_push($string, ['label' => 'Tình trạng nhập:', 'values' => $statusLabels, 'class' => 'status']);
         }
-         //Trạng thái xuất
-         $status_export = [];
-         if (!empty($request->status_export)) {
-             $statusValues = [0 => 'Quá hạn', 1 => 'Thanh toán đủ', 2 => 'Gần đến hạn', 3 => 'Công nợ', 4 => 'Chưa thanh toán', 5 => 'Đến hạn'];
-             $status_export = $request->input('status_export', []);
-             $statusLabels = array_map(function ($value) use ($statusValues) {
-                 return $statusValues[$value];
-             }, $status_export);
-             array_push($string, ['label' => 'Tình trạng xuất:', 'values' => $statusLabels, 'class' => 'status']);
-         }
+        //Trạng thái xuất
+        $status_export = [];
+        if (!empty($request->status_export)) {
+            $statusValues = [0 => 'Quá hạn', 1 => 'Thanh toán đủ', 2 => 'Gần đến hạn', 3 => 'Công nợ', 4 => 'Chưa thanh toán', 5 => 'Đến hạn'];
+            $status_export = $request->input('status_export', []);
+            $statusLabels = array_map(function ($value) use ($statusValues) {
+                return $statusValues[$value];
+            }, $status_export);
+            array_push($string, ['label' => 'Tình trạng xuất:', 'values' => $statusLabels, 'class' => 'status']);
+        }
+        //Khách hàng
+        $guest = [];
+        if (!empty($request->guest)) {
+            $guest = $request->input('guest', []);
+            array_push($string, ['label' => 'Khách hàng:', 'values' => $guest, 'class' => 'guest']);
+        }
 
+        // Đơn vị tính
+        $unitarr = [];
+        if (!empty($request->unitarr)) {
+            $unitarr = $request->input('unitarr', []);
+            array_push($string, ['label' => 'Đơn vị tính:', 'values' => $unitarr, 'class' => 'unit']);
+        }
+        // Thời gian
         $date = [];
         if (!empty($request->trip_start) && !empty($request->trip_end)) {
             $trip_start = $request->input('trip_start');
@@ -134,6 +187,7 @@ class HistoryController extends Controller
             $sortType = 'desc';
         }
 
+        $guests = History::leftjoin('guests', 'guests.id', '=', 'history.guest_id')->select('guests.guest_name as guests', 'history.export_unit as unit')->get();
 
         $debtsSale =  History::leftjoin('users', 'history.user_id', '=', 'users.id')->get();
         $provides = History::leftjoin('provides', 'history.provide_id', '=', 'provides.id')->get();
@@ -143,9 +197,9 @@ class HistoryController extends Controller
         // $debts = $this->debts->getAllDebts($filters, $keywords, $nhanvien, $date,$provide_namearr, $status, $sortBy, $sortType);
         // $product = $this->debts->getAllProductsDebts();
         // $debtsCreator = $this->debts->debtsCreator();
-        $history = $this->history->getAllHistory($filters, $keywords,$date,$status,$status_export, $sortBy, $sortType);
-       
-        return view('tables.history.historyindex', compact('history','title','debtsSale','provides', 'string', 'sortType'));
+        $history = $this->history->getAllHistory($filters, $keywords, $date, $guest, $status, $unitarr, $status_export, $sortBy, $sortType);
+
+        return view('tables.history.historyindex', compact('history', 'title', 'guests', 'debtsSale', 'provides', 'string', 'sortType'));
     }
 
     /**

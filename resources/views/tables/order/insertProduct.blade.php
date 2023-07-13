@@ -47,26 +47,26 @@
                     <div class="col-2 d-none">
                         <button type="submit" class="btn btn-primary btn-block">Tìm kiếm</button>
                     </div>
-                    @if(empty($orders))
-                    <div class="ml-auto">
-                        <button class="btn btn-light" id="expandall" type="button" onclick="expand()"><svg
-                                width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M7.23123 9.23123C7.53954 8.92292 8.03941 8.92292 8.34772 9.23123L12 12.8835L15.6523 9.23123C15.9606 8.92292 16.4605 8.92292 16.7688 9.23123C17.0771 9.53954 17.0771 10.0394 16.7688 10.3477L12.5582 14.5582C12.2499 14.8665 11.7501 14.8665 11.4418 14.5582L7.23123 10.3477C6.92292 10.0394 6.92292 9.53954 7.23123 9.23123Z"
-                                    fill="#555555" />
-                            </svg>
-                            Mở rộng tất
-                            cả</button>
-                        <button class="btn btn-light" style="display: none" id="collapseall" type="button"
-                            onclick="collapse()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M16.7688 14.7688C16.4605 15.0771 15.9606 15.0771 15.6523 14.7688L12 11.1165L8.34772 14.7688C8.03941 15.0771 7.53954 15.0771 7.23123 14.7688C6.92292 14.4605 6.92292 13.9606 7.23123 13.6523L11.4418 9.44176C11.7501 9.13345 12.2499 9.13345 12.5582 9.44176L16.7688 13.6523C17.0771 13.9606 17.0771 14.4605 16.7688 14.7688Z"
-                                    fill="#555555" />
-                            </svg>
-                            Thu gọn tất cả</button>
-                    </div>
+                    @if (empty($orders))
+                        <div class="ml-auto">
+                            <button class="btn btn-light" id="expandall" type="button" onclick="expand()"><svg
+                                    width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M7.23123 9.23123C7.53954 8.92292 8.03941 8.92292 8.34772 9.23123L12 12.8835L15.6523 9.23123C15.9606 8.92292 16.4605 8.92292 16.7688 9.23123C17.0771 9.53954 17.0771 10.0394 16.7688 10.3477L12.5582 14.5582C12.2499 14.8665 11.7501 14.8665 11.4418 14.5582L7.23123 10.3477C6.92292 10.0394 6.92292 9.53954 7.23123 9.23123Z"
+                                        fill="#555555" />
+                                </svg>
+                                Mở rộng tất
+                                cả</button>
+                            <button class="btn btn-light" style="display: none" id="collapseall" type="button"
+                                onclick="collapse()"><svg width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M16.7688 14.7688C16.4605 15.0771 15.9606 15.0771 15.6523 14.7688L12 11.1165L8.34772 14.7688C8.03941 15.0771 7.53954 15.0771 7.23123 14.7688C6.92292 14.4605 6.92292 13.9606 7.23123 13.6523L11.4418 9.44176C11.7501 9.13345 12.2499 9.13345 12.5582 9.44176L16.7688 13.6523C17.0771 13.9606 17.0771 14.4605 16.7688 14.7688Z"
+                                        fill="#555555" />
+                                </svg>
+                                Thu gọn tất cả</button>
+                        </div>
                     @endif
                 </div>
                 <div class="d-flex justify-contents-center align-items-center mr-auto row-filter my-3 m-0">
@@ -176,9 +176,10 @@ $index = array_search($item['label'], $numberedLabels);
                                         <button class="dropdown-item" id="btn-sum">Tổng tiền</button>
                                         <button class="dropdown-item" id="btn-status">Trạng thái</button>
                                     </div>
-                                    @if(!empty($string))
-                                        <a class="btn-delete-filter" href="{{ route('insertProduct.index') }}"><span>Tắt bộ lọc</span></a>
-                                        @endif
+                                    @if (!empty($string))
+                                        <a class="btn-delete-filter"
+                                            href="{{ route('insertProduct.index') }}"><span>Tắt bộ lọc</span></a>
+                                    @endif
                                 </div>
                                 <?php $status = [];
                                 if (isset(request()->status)) {
@@ -246,24 +247,26 @@ $index = array_search($item['label'], $numberedLabels);
                                             <a class="cursor select-all-provide_name mr-auto">Chọn tất cả</a>
                                             <a class="cursor deselect-all-provide_name">Hủy chọn</a>
                                         </div>
-                                        <ul class="ks-cboxtags-provide_name p-0 mb-1 px-2">
-                                            @if (!empty($provides))
-                                                @foreach ($provides as $value)
-                                                    <li>
-                                                        <input type="checkbox" id="roles_active"
-                                                            {{ in_array($value->id, $provide_namearr) ? 'checked' : '' }}
-                                                            name="provide_namearr[]" value="{{ $value->id }}">
-                                                        <label for="">{{ $value->provide_name }}</label>
-                                                    </li>
-                                                @endforeach
-                                            @endif
-                                        </ul>
-                                    </div>
-                                    <div class="d-flex justify-contents-center align-items-baseline p-2">
-                                        <button type="submit" class="btn btn-primary btn-block mr-2">Xác
-                                            Nhận</button>
-                                        <button type="button" id="cancel-provide_name"
-                                            class="btn btn-default btn-block">Hủy</button>
+                                        <div class="ks-cboxtags-container">
+                                            <ul class="ks-cboxtags ks-cboxtags-provide_name p-0 mb-1 px-2">
+                                                @if (!empty($provides))
+                                                    @foreach ($provides as $value)
+                                                        <li>
+                                                            <input type="checkbox" id="roles_active"
+                                                                {{ in_array($value->id, $provide_namearr) ? 'checked' : '' }}
+                                                                name="provide_namearr[]" value="{{ $value->id }}">
+                                                            <label for="">{{ $value->provide_name }}</label>
+                                                        </li>
+                                                    @endforeach
+                                                @endif
+                                            </ul>
+                                        </div>
+                                        <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                            <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                                Nhận</button>
+                                            <button type="button" id="cancel-provide_name"
+                                                class="btn btn-default btn-block">Hủy</button>
+                                        </div>
                                     </div>
                                 </div>
                                 {{-- Status --}}
@@ -282,32 +285,34 @@ $index = array_search($item['label'], $numberedLabels);
                                             <a class="cursor select-all mr-auto">Chọn tất cả</a>
                                             <a class="cursor deselect-all">Hủy chọn</a>
                                         </div>
-                                        <ul class="ks-cboxtags-status p-0 mb-1 px-2">
-                                            <li>
-                                                <input type="checkbox" id="status_active"
-                                                    {{ in_array(0, $status) ? 'checked' : '' }} name="status[]"
-                                                    value="0">
-                                                <label for="">Chờ duyệt</label>
-                                            </li>
-                                            <li>
-                                                <input type="checkbox" id="status_inactive"
-                                                    {{ in_array(1, $status) ? 'checked' : '' }} name="status[]"
-                                                    value="1">
-                                                <label for="">Đã nhập hàng</label>
-                                            </li>
-                                            <li>
-                                                <input type="checkbox" id="status_inactive"
-                                                    {{ in_array(2, $status) ? 'checked' : '' }} name="status[]"
-                                                    value="2">
-                                                <label for="">Đã hủy</label>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="d-flex justify-contents-center align-items-baseline p-2">
-                                        <button type="submit" class="btn btn-primary btn-block mr-2">Xác
-                                            Nhận</button>
-                                        <button type="button" id="cancel-status"
-                                            class="btn btn-default btn-block">Hủy</button>
+                                        <div class="ks-cboxtags-container">
+                                            <ul class="ks-cboxtags ks-cboxtags-status p-0 mb-1 px-2">
+                                                <li>
+                                                    <input type="checkbox" id="status_active"
+                                                        {{ in_array(0, $status) ? 'checked' : '' }} name="status[]"
+                                                        value="0">
+                                                    <label for="">Chờ duyệt</label>
+                                                </li>
+                                                <li>
+                                                    <input type="checkbox" id="status_inactive"
+                                                        {{ in_array(1, $status) ? 'checked' : '' }} name="status[]"
+                                                        value="1">
+                                                    <label for="">Đã nhập hàng</label>
+                                                </li>
+                                                <li>
+                                                    <input type="checkbox" id="status_inactive"
+                                                        {{ in_array(2, $status) ? 'checked' : '' }} name="status[]"
+                                                        value="2">
+                                                    <label for="">Đã hủy</label>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                            <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                                Nhận</button>
+                                            <button type="button" id="cancel-status"
+                                                class="btn btn-default btn-block">Hủy</button>
+                                        </div>
                                     </div>
                                 </div>
                                 {{-- Creator --}}
@@ -326,27 +331,29 @@ $index = array_search($item['label'], $numberedLabels);
                                             <a class="cursor select-all-creator mr-auto">Chọn tất cả</a>
                                             <a class="cursor deselect-all-creator">Hủy chọn</a>
                                         </div>
-                                        <ul class="ks-cboxtags-name p-0 mb-1 px-2">
-                                            @if (!empty($ordersNameAndProvide))
-                                                @php
-                                                    $seenValues = [];
-                                                @endphp
-                                                @foreach ($ordersNameAndProvide as $value)
-                                                    @if (!in_array($value->name, $seenValues))
-                                                        <li>
-                                                            <input type="checkbox" id="name_active"
-                                                                {{ in_array($value->name, $name) ? 'checked' : '' }}
-                                                                name="name[]" value="{{ $value->name }}">
-                                                            <label id="name"
-                                                                for="name">{{ $value->name }}</label>
-                                                        </li>
-                                                        @php
-                                                            $seenValues[] = $value->name;
-                                                        @endphp
-                                                    @endif
-                                                @endforeach
-                                            @endif
-                                        </ul>
+                                        <div class="ks-cboxtags-container">
+                                            <ul class="ks-cboxtags ks-cboxtags-name p-0 mb-1 px-2">
+                                                @if (!empty($ordersNameAndProvide))
+                                                    @php
+                                                        $seenValues = [];
+                                                    @endphp
+                                                    @foreach ($ordersNameAndProvide as $value)
+                                                        @if (!in_array($value->name, $seenValues))
+                                                            <li>
+                                                                <input type="checkbox" id="name_active"
+                                                                    {{ in_array($value->name, $name) ? 'checked' : '' }}
+                                                                    name="name[]" value="{{ $value->name }}">
+                                                                <label id="name"
+                                                                    for="name">{{ $value->name }}</label>
+                                                            </li>
+                                                            @php
+                                                                $seenValues[] = $value->name;
+                                                            @endphp
+                                                        @endif
+                                                    @endforeach
+                                                @endif
+                                            </ul>
+                                        </div>
                                         <div class="d-flex justify-contents-center align-items-baseline p-2">
                                             <button type="submit" class="btn btn-primary btn-block mr-2">Xác
                                                 Nhận</button>
@@ -365,11 +372,12 @@ $index = array_search($item['label'], $numberedLabels);
                                             <select class="comparison_operator" name="comparison_operator"
                                                 style="width: 40%">
                                                 <option value=">="
-                                                    {{ request('comparison_operator') === '>=' ? 'selected' : '' }}>>=
+                                                    {{ request('comparison_operator') === '>=' ? 'selected' : '' }}>
+                                                    >=
                                                 </option>
                                                 <option value="<="
                                                     {{ request('comparison_operator') === '<=' ? 'selected' : '' }}>
-                                                    <=< /option>
+                                                    <=</option>
                                             </select>
                                             <input class="w-50 input-quantity sum-input" type="number"
                                                 oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -1012,8 +1020,8 @@ $index = array_search($item['label'], $numberedLabels);
     function updateDeleteItemValue(label) {
         document.getElementById('delete-item-input').value = label;
     }
-// Show all hide all
-function expand() {
+    // Show all hide all
+    function expand() {
         $('#expandall').hide();
         $('#collapseall').show();
         $(".product-details").addClass("show");

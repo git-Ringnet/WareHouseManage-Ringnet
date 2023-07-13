@@ -137,11 +137,13 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <button class="dropdown-item" id="btn-phonenumber">Số điện
                                                     thoại</button>
                                                 <button class="dropdown-item" id="btn-email">Email</button>
-                                                <button class="dropdown-item d-none" id="btn-status">Trạng thái</button>
+                                                <button class="dropdown-item d-none" id="btn-status">Trạng
+                                                    thái</button>
                                             </div>
                                         </div>
-                                        @if(!empty($string))
-                                        <a class="btn-delete-filter" href="{{ route('provides.index') }}"><span>Tắt bộ lọc</span></a>
+                                        @if (!empty($string))
+                                            <a class="btn-delete-filter"
+                                                href="{{ route('provides.index') }}"><span>Tắt bộ lọc</span></a>
                                         @endif
                                     </div>
                                     <?php $status = [];
@@ -173,26 +175,28 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <a class="cursor select-all mr-auto">Chọn tất cả</a>
                                                 <a class="cursor deselect-all">Hủy chọn</a>
                                             </div>
-                                            <ul class="ks-cboxtags-status p-0 mb-1 px-2">
-                                                <li>
-                                                    <input type="checkbox" id="status_active"
-                                                        {{ in_array(1, $status) ? 'checked' : '' }} name="status[]"
-                                                        value="1">
-                                                    <label for="">Active</label>
-                                                </li>
-                                                <li>
-                                                    <input type="checkbox" id="status_inactive"
-                                                        {{ in_array(0, $status) ? 'checked' : '' }} name="status[]"
-                                                        value="0">
-                                                    <label for="">Disable</label>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="d-flex justify-contents-center align-items-baseline p-2">
-                                            <button type="submit" class="btn btn-primary btn-block mr-2">Xác
-                                                Nhận</button>
-                                            <button type="button" id="cancel-status"
-                                                class="btn btn-default btn-block">Hủy</button>
+                                            <div class="ks-cboxtags-container">
+                                                <ul class="ks-cboxtags ks-cboxtags-status p-0 mb-1 px-2">
+                                                    <li>
+                                                        <input type="checkbox" id="status_active"
+                                                            {{ in_array(1, $status) ? 'checked' : '' }} name="status[]"
+                                                            value="1">
+                                                        <label for="">Active</label>
+                                                    </li>
+                                                    <li>
+                                                        <input type="checkbox" id="status_inactive"
+                                                            {{ in_array(0, $status) ? 'checked' : '' }} name="status[]"
+                                                            value="0">
+                                                        <label for="">Disable</label>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                                <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                                    Nhận</button>
+                                                <button type="button" id="cancel-status"
+                                                    class="btn btn-default btn-block">Hủy</button>
+                                            </div>
                                         </div>
                                     </div>
                                     {{-- Tìm đơn vị --}}
@@ -230,27 +234,31 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <a class="cursor select-all-users_name mr-auto">Chọn tất cả</a>
                                                 <a class="cursor deselect-all-users_name">Hủy chọn</a>
                                             </div>
-                                            <ul class="ks-cboxtags-users_name p-0 mb-1 px-2">
-                                                @if (!empty($users))
-                                                    @php
-                                                        $seenValues = [];
-                                                    @endphp
-                                                    @foreach ($users as $value)
-                                                        @if (!in_array($value->name, $seenValues))
-                                                            <li>
-                                                                <input type="checkbox" id="name_active"
-                                                                    {{ in_array($value->name, $users_name) ? 'checked' : '' }}
-                                                                    name="users_name[]" value="{{ $value->name }}">
-                                                                <label id="users_name"
-                                                                    for="">{{ $value->name }}</label>
-                                                            </li>
-                                                            @php
-                                                                $seenValues[] = $value->name;
-                                                            @endphp
-                                                        @endif
-                                                    @endforeach
-                                                @endif
-                                            </ul>
+                                            <div class="ks-cboxtags-container">
+                                                <ul class="ks-cboxtags ks-cboxtags-users_name p-0 mb-1 px-2">
+                                                    @if (!empty($users))
+                                                        @php
+                                                            $seenValues = [];
+                                                        @endphp
+                                                        @foreach ($users as $value)
+                                                            @if (!in_array($value->name, $seenValues))
+                                                                <li>
+                                                                    <input type="checkbox" id="name_active"
+                                                                        {{ in_array($value->name, $users_name) ? 'checked' : '' }}
+                                                                        name="users_name[]"
+                                                                        value="{{ $value->name }}">
+                                                                    <label id="users_name"
+                                                                        for="">{{ $value->name }}</label>
+                                                                </li>
+                                                                @php
+                                                                    $seenValues[] = $value->name;
+                                                                @endphp
+                                                            @endif
+                                                        @endforeach
+                                                    @endif
+                                                </ul>
+                                            </div>
+
                                             <div class="d-flex justify-contents-center align-items-baseline p-2">
                                                 <button type="submit" class="btn btn-primary btn-block mr-2">Xác
                                                     Nhận</button>
@@ -287,7 +295,8 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <h5>Số điện thoại</h5>
                                             </div>
                                             <div class="input-group p-2">
-                                                <label class="title" for="">Nhập số điện thoại</label>
+                                                <label class="title" for="">Nhập số điện
+                                                    thoại</label>
                                                 <input type="number" name="phonenumber"
                                                     class="form-control phonenumber-input"
                                                     value="{{ request()->phonenumber }}"
