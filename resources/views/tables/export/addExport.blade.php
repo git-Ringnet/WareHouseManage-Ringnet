@@ -789,7 +789,7 @@
                         price_import.val(formattedPrice);
                         tonkho.val(response.product_qty);
                         loaihang.val(response.product_category);
-                        dangGD.val(response.product_trade);
+                        dangGD.val(response.product_trade == null ? 0 : response.product_trade);
                         thue.val(response.product_tax);
                         // Tính lại tổng số tiền và tổng số thuế
                         calculateTotalTax();
@@ -957,29 +957,28 @@
 
     //ngăn chặn click
     $(document).ready(function() {
-        let isFirstClick = true;
-
         $('#chot_don').on('click', function() {
-            if (isFirstClick) {
-                isFirstClick = false;
-                setTimeout(function() {
-                    isFirstClick = true;
-                    $('#chot_don').prop('disabled', false);
-                }, 10);
-            } else {
-                return;
-            }
+            this.classList.add('disabled');
+            var countDown = 10;
+            var countdownInterval = setInterval(function() {
+                countDown--;
+                if (countDown <= 0) {
+                    clearInterval(countdownInterval);
+                    $('#chot_don').removeClass('disabled');
+                }
+            }, 100);
         });
 
         $('#luu').on('click', function() {
-            if (isFirstClick) {
-                isFirstClick = false;
-                setTimeout(function() {
-                    $('#luu').prop('disabled', false);
-                }, 10);
-            } else {
-                return;
-            }
+            this.classList.add('disabled');
+            var countDown = 10;
+            var countdownInterval = setInterval(function() {
+                countDown--;
+                if (countDown <= 0) {
+                    clearInterval(countdownInterval);
+                    $('#luu').removeClass('disabled');
+                }
+            }, 100);
         });
     });
 
@@ -1110,13 +1109,6 @@
                 "required": true
             });
 
-            let gia = $("<input>", {
-                "value": formatNumber(parseFloat(productList[i].product_price)),
-                "class": "product_price form-control text-center",
-                "name": "product_price[]",
-                "required": true,
-            });
-
             let thue = productList[i].product_tax;
 
             if (selectedProducts[j].includes(productList[i].id.toString())) {
@@ -1129,7 +1121,6 @@
                 slInput.find('.quantity-exist').val("/" + productList[i].qty_exist);
                 thueInput.find('select').val(thue);
             }
-            giaInput.find('.product_price').replaceWith(gia);
         }
 
         //Xóa sản phẩm
