@@ -502,7 +502,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('comparison_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 quantity-input input-so" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -532,7 +532,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('trade_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 trade-input input-so" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -562,7 +562,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('avg_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 avg-input" type="text" name="avg"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -591,7 +591,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('price_inven_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 price_inven-input input-so" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -777,40 +777,42 @@ $index = array_search($item['label'], $numberedLabels);
                                 </thead>
                                 <tbody>
                                     @foreach ($products as $value)
-                                        <tr>
-                                            <td><input type="checkbox" class="cb-element" name="product[]"
-                                                    value="{{ $value->id }}"></td>
-                                            <td class="text-left">{{ $value->id }}</td>
-                                            <td class="text-left">{{ $value->product_name }}</td>
-                                            <td class="text-left">{{ $value->provide }}</td>
-                                            <td class="text-center">{{ $value->product_unit }}</td>
-                                            <td class="text-right">{{ $value->product_qty }}</td>
-                                            <td class="text-right">{{ $value->product_trade }}</td>
-                                            <td class="text-right">{{ number_format($value->product_price) }}</td>
-                                            <td class="text-right">{{ number_format($value->product_total) }}</td>
-                                            <td class="text-center">
-                                                @if ($value->product_tax == 99)
-                                                    NOVAT
-                                                @else
-                                                    {{ $value->product_tax }}%
-                                                @endif
-                                            </td>
-                                            <td class="text-center">
-                                                @if ($value->product_qty == 0)
-                                                    <div class="py-1 rounded pb-1 bg-danger">
-                                                        <span class="text-light">Hết hàng</span>
-                                                    </div>
-                                                @elseif($value->product_qty < 6)
-                                                    <div class="py-1 rounded pb-1 bg-warning">
-                                                        <span class="text-light">Gần hết</span>
-                                                    </div>
-                                                @else
-                                                    <div class="py-1 rounded pb-1 bg-success">
-                                                        <span class="text-light">Sẵn hàng</span>
-                                                    </div>
-                                                @endif
-                                            </td>
-                                        </tr>
+                                        @if ($value->product_qty > 1)
+                                            <tr>
+                                                <td><input type="checkbox" class="cb-element" name="product[]"
+                                                        value="{{ $value->id }}"></td>
+                                                <td class="text-left">{{ $value->id }}</td>
+                                                <td class="text-left">{{ $value->product_name }}</td>
+                                                <td class="text-left">{{ $value->provide }}</td>
+                                                <td class="text-center">{{ $value->product_unit }}</td>
+                                                <td class="text-right">{{ $value->product_qty }}</td>
+                                                <td class="text-right">{{ $value->product_trade }}</td>
+                                                <td class="text-right">{{ number_format($value->product_price) }}</td>
+                                                <td class="text-right">{{ number_format($value->product_total) }}</td>
+                                                <td class="text-center">
+                                                    @if ($value->product_tax == 99)
+                                                        NOVAT
+                                                    @else
+                                                        {{ $value->product_tax }}%
+                                                    @endif
+                                                </td>
+                                                <td class="text-center">
+                                                    @if ($value->product_qty == 0)
+                                                        <div class="py-1 rounded pb-1 bg-danger">
+                                                            <span class="text-light">Hết hàng</span>
+                                                        </div>
+                                                    @elseif($value->product_qty < 6)
+                                                        <div class="py-1 rounded pb-1 bg-warning">
+                                                            <span class="text-light">Gần hết</span>
+                                                        </div>
+                                                    @else
+                                                        <div class="py-1 rounded pb-1 bg-success">
+                                                            <span class="text-light">Sẵn hàng</span>
+                                                        </div>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endif
                                     @endforeach
                                 </tbody>
                             </table>
@@ -860,28 +862,50 @@ $index = array_search($item['label'], $numberedLabels);
 
     // Xuất file excel
     function exportToExcel() {
+        var table = document.getElementById('example2');
+        var jsonData = [];
+
         // Lấy dữ liệu từ bảng HTML
-        var table = document.getElementById("example2");
+        for (var i = 1; i < table.rows.length; i++) {
+            var row = table.rows[i];
+            var rowData = {};
+
+            rowData['STT'] = row.cells[1].textContent;
+            rowData['Tên sản phẩm'] = row.cells[2].textContent;
+            rowData['Nhà cung cấp'] = row.cells[3].textContent;
+            rowData['ĐVT'] = row.cells[4].textContent;
+            rowData['Số lượng'] = row.cells[5].textContent;
+            rowData['Đang giao dịch'] = row.cells[6].textContent;
+            rowData['Đơn giá nhập'] = row.cells[7].textContent;
+            rowData['Trị tồn kho'] = row.cells[8].textContent;
+            rowData['Thuế'] = row.cells[9].textContent.trim();
+            rowData['Trạng thái'] = row.cells[10].textContent.trim();
+            jsonData.push(rowData);
+        }
 
         // Tạo một workbook mới
-        var wb = XLSX.utils.table_to_book(table);
+        var wb = XLSX.utils.book_new();
+        var ws = XLSX.utils.json_to_sheet(jsonData);
+
+        // Thêm sheet vào workbook
+        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
 
         // Chuyển đổi workbook thành dạng tệp Excel
         var wbout = XLSX.write(wb, {
-            bookType: "xlsx",
-            type: "array"
+            bookType: 'xlsx',
+            type: 'array'
         });
 
         // Tạo một Blob từ dữ liệu Excel
         var blob = new Blob([wbout], {
-            type: "application/octet-stream"
+            type: 'application/octet-stream'
         });
 
         // Tạo URL tạm thời và tải xuống tệp Excel
         var url = URL.createObjectURL(blob);
-        var a = document.createElement("a");
+        var a = document.createElement('a');
         a.href = url;
-        a.download = "product.xlsx";
+        a.download = 'data.xlsx';
         a.click();
 
         // Giải phóng URL tạm thời
