@@ -664,6 +664,7 @@ $index = array_search($item['label'], $numberedLabels);
             }
         });
     });
+
     // AJAX Hủy bill
     $(document).on('click', '#cancelBill', function(e) {
         e.preventDefault();
