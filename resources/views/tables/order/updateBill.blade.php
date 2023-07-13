@@ -96,7 +96,7 @@
             @method('PUT')
             <input type="hidden" name="order_id" value="{{ $order->id }}">
             <input type="hidden" name="provide_id" value="{{ $provide_order[0]->id }}" id="provide_id">
-            <input type="hidden" name="debtimport_id" value="{{$debt_import[0]->id}}">
+            <input type="hidden" name="debtimport_id" value="{{ $debt_import[0]->id }}">
             <section class="content-header">
                 <div class="d-flex mb-1 action-don">
                     {{-- @if ($order->order_status == 0) --}}
@@ -200,16 +200,14 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label for="email">Người đại diện:</label>
-                        <input type="text" class="form-control"
-                            @if (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin')) readonly @endif id="provide_represent"
-                            placeholder="Nhập thông tin" name="provide_represent"
+                        <input type="text" class="form-control" @if (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin')) readonly @endif
+                            id="provide_represent" placeholder="Nhập thông tin" name="provide_represent"
                             value="{{ $provide_order[0]->provide_represent }}">
                     </div>
                     <div class="form-group">
                         <label for="email">Email:</label>
-                        <input type="email" class="form-control"
-                            @if (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin')) readonly @endif id="provide_email"
-                            placeholder="Nhập thông tin" name="provide_email"
+                        <input type="email" class="form-control" @if (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin')) readonly @endif
+                            id="provide_email" placeholder="Nhập thông tin" name="provide_email"
                             value="{{ $provide_order[0]->provide_email }}">
                     </div>
                     <div class="form-group">
@@ -239,8 +237,9 @@
                 <div class="d-flex">
                     <div style="width:42%;">
                         <label for="" class="ml-2">Số hóa đơn</label>
-                        <input oninput="validateBillInput(this)" type="text" name="product_code" class="form-control"
-                            value="{{ $order->product_code }}" @if (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin')) readonly @endif
+                        <input oninput="validateBillInput(this)" type="text" name="product_code"
+                            class="form-control" value="{{ $order->product_code }}"
+                            @if (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin')) readonly @endif
                             @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif>
                     </div>
                     <div>
@@ -299,7 +298,7 @@
                                         @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif type="text"
                                         style="width:auto" name="product_name[]" value="{{ $pro->product_name }}">
                                 </td>
-                                <td> <input class="form-control text-center unit_product" style="width: 80px"
+                                <td> <input class="form-control text-center unit_product" style="width: 100px"
                                         @if (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin')) readonly @endif required type="text"
                                         name="product_unit[]" value="{{ $pro->product_unit }}"
                                         @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif> </td>
@@ -311,8 +310,7 @@
                                         @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif> </td>
                                 <td> <input class="form-control text-center product_price"
                                         @if (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin')) readonly @endif required type="text"
-                                        style="width:140px" name="product_price[]"
-                                        value="{{ number_format($pro->product_price) }}"
+                                        name="product_price[]" value="{{ number_format($pro->product_price) }}"
                                         @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif> </td>
                                 <td>
                                     <select name="product_tax[]" id="" class="form-control product_tax"
@@ -320,11 +318,12 @@
                                         <option value="0" <?php echo $pro->product_tax == 0 ? 'selected' : ''; ?>>0%</option>
                                         <option value="8" <?php echo $pro->product_tax == 8 ? 'selected' : ''; ?>>8%</option>
                                         <option value="10" <?php echo $pro->product_tax == 10 ? 'selected' : ''; ?>>10%</option>
+                                        <option value="99" <?php echo $pro->product_tax == 99 ? 'selected' : ''; ?>>NOVAT</option>
                                     </select>
                                 </td>
                                 <input type="hidden" class="product_tax1">
-                                <td> <input class="form-control text-center total-amount" style="width:140px" readonly
-                                        type="text" name="product_total[]" value="{{ $pro->product_total }}">
+                                <td> <input class="form-control text-center total-amount" readonly type="text"
+                                        name="product_total[]" value="{{ $pro->product_total }}">
                                 </td>
                                 <td> <input class="form-control" @if (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin')) readonly @endif
                                         type="text" name="product_trademark[]"
@@ -435,7 +434,7 @@
                 er = true;
                 alert('Vui lòng nhập ít nhất 1 sản phẩm');
             }
-            if($('#product_create').val().trim() == ''){
+            if ($('#product_create').val().trim() == '') {
                 er = true;
                 alert('Vui lòng nhập ngày hóa đơn');
             }
@@ -652,46 +651,6 @@
 
     })
 
-
-    $('#add_bill').on('click', function(e) {
-        this.classList.add('disabled');
-        var countDown = 10;
-        var countdownInterval = setInterval(function() {
-            countDown--;
-            if (countDown <= 0) {
-                clearInterval(countdownInterval);
-                $('#add_bill').removeClass('disabled');
-            }
-        }, 100);
-
-        e.preventDefault();
-        if (myFunction()) {
-            if ($('#form_submit')[0].checkValidity()) {
-                var er = false;
-                if (checkRow() == false) {
-                    er = true;
-                    alert('Vui lòng nhập ít nhất 1 sản phẩm');
-                }
-
-                // Kiểm tra trùng sản phẩm con
-                if (checkDuplicateRows()) {
-                    er = true;
-                    alert('Sản phẩm đã tồn tại');
-                }
-                if (er) {
-                    return false;
-                } else {
-                    $('#form_submit')[0].submit();
-                }
-                // Kiểm tra có lỗi hay không
-                var hasErrors = isDuplicate || listSNOld.length != countQTY || checkRow() === false ||
-                    checkDuplicateRows() === true || er === true;
-            } else {
-                $('#form_submit')[0].reportValidity();
-            }
-        }
-    })
-
     // Hàm kiểm tra xác nhận người dùng
     function myFunction() {
         let text = "Bạn có muốn thực hiện thao tác không ?";
@@ -702,71 +661,6 @@
         }
     }
 
-    var fileImport = document.getElementById('import_file');
-    if (fileImport) {
-        fileImport.addEventListener('change', function(event) {
-            var file = event.target.files[0];
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                var xmlContent = e.target.result;
-                var parser = new DOMParser();
-                var xmlDoc = parser.parseFromString(xmlContent, 'text/xml');
-                var THHDVu = xmlDoc.getElementsByTagName('THHDVu');
-                var SLuong = xmlDoc.getElementsByTagName('SLuong');
-                var DVTinh = xmlDoc.getElementsByTagName('DVTinh');
-                var DGia = xmlDoc.getElementsByTagName('DGia');
-                var TSuat = xmlDoc.getElementsByTagName('TSuat');
-                $('tbody tr').remove();
-                // Tạo các ô input mới và đặt giá trị của chúng
-                for (var i = 0; i < THHDVu.length; i++) {
-                    var tax = 0;
-                    if (TSuat[i].textContent == "KCT") {
-                        tax = 0;
-                    } else {
-                        tax = parseInt(TSuat[i].textContent.match(/\d+/)[0]);
-                    }
-                    var titlesValue = THHDVu[i].textContent;
-                    var numberssValue = Math.floor(SLuong[i].textContent).toString();
-                    var typeValue = DVTinh[i].textContent;
-                    var price = formatCurrency(Math.floor(DGia[i].textContent).toString());
-                    var totalPrice = formatCurrency(numberssValue * (price.replace(/[^0-9.-]+/g, "")));
-                    var tr = '<tr>' +
-                        '<td class="STT"></td>' +
-                        '<td><input required type="text" class="search_product form-control" name="product_name[]" value="' +
-                        titlesValue +
-                        '"></td>' +
-                        '<td><input required type="text" class="form-control text-center" style="width:80px" name="product_unit[]" value="' +
-                        typeValue +
-                        '"></td>' +
-                        '<td><input required type="text" oninput="validatQtyInput(this)" name="product_qty[]" class="quantity-input form-control text-center" value="' +
-                        numberssValue + '"></td>' +
-                        '<td><input required type="text" class="form-control product_price text-center" style="width:140px" name="product_price[]" value="' +
-                        price + '"></td>' +
-                        '<input type="hidden" class="product_tax1">' +
-                        '<td>' +
-                        '<select style="width:100px;" name="product_tax[]"class="product_tax form-control" >' +
-                        '<option value="10"' + (tax == 10 ? "selected" : "") + '>10%</option>' +
-                        '<option value="0" ' + (tax == 0 ? "selected" : "") + '>0%</option>' +
-                        '<option value="8" ' + (tax == 8 ? "selected" : "") + '>8%</option>' +
-                        '<option value="99" ' + (tax == 99 ? "selected" : "") + '>NOVAT</option>' +
-                        '</select' +
-                        '</td>' +
-                        '<td><input readonly type="text" style="width:140px" class="form-control text-center total-amount" name="product_total[]" value=""></td>' +
-                        '<td><input style="with:150px;" type="text" class="form-control" style="width:140px" name="product_trademark[]"></td>' +
-                        '<td><a href="javascript:;" class="deleteRow"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.0606 6.66675C13.6589 6.66675 13.3333 6.99236 13.3333 7.39402C13.3333 7.79568 13.6589 8.12129 14.0606 8.12129H17.9394C18.341 8.12129 18.6667 7.79568 18.6667 7.39402C18.6667 6.99236 18.341 6.66675 17.9394 6.66675H14.0606ZM8 10.3031C8 9.90143 8.32561 9.57582 8.72727 9.57582H10.1818H21.8182H23.2727C23.6744 9.57582 24 9.90143 24 10.3031C24 10.7048 23.6744 11.0304 23.2727 11.0304H22.5455V22.6667C22.5455 24.2819 21.2158 25.5758 19.6179 25.5758H12.3452C11.9637 25.5755 11.5854 25.4997 11.2333 25.3528C10.8812 25.2059 10.5617 24.9908 10.2931 24.7199C10.0244 24.449 9.81206 24.1276 9.66816 23.7743C9.52463 23.4219 9.45204 23.0447 9.45455 22.6642V11.0304H8.72727C8.32561 11.0304 8 10.7048 8 10.3031ZM10.9091 22.6723V11.0304H21.0909V22.6667C21.0909 23.4623 20.4288 24.1213 19.6179 24.1213H12.3458C12.1562 24.1211 11.9684 24.0834 11.7934 24.0104C11.6183 23.9374 11.4595 23.8304 11.3259 23.6958C11.1924 23.5611 11.0868 23.4013 11.0153 23.2257C10.9437 23.05 10.9076 22.8619 10.9091 22.6723ZM17.9394 13.4546C18.3411 13.4546 18.6667 13.7802 18.6667 14.1819V20.9698C18.6667 21.3714 18.3411 21.6971 17.9394 21.6971C17.5377 21.6971 17.2121 21.3714 17.2121 20.9698V14.1819C17.2121 13.7802 17.5377 13.4546 17.9394 13.4546ZM14.7879 14.1819C14.7879 13.7802 14.4623 13.4546 14.0606 13.4546C13.6589 13.4546 13.3333 13.7802 13.3333 14.1819V20.9698C13.3333 21.3714 13.6589 21.6971 14.0606 21.6971C14.4623 21.6971 14.7879 21.3714 14.7879 20.9698V14.1819Z" fill="#555555"/></svg></a></td>' +
-                        '</tr>';
-                    $('#inputContainer tbody').append(tr);
-                    deleteDuplicateTr();
-                    rowCount++;
-                    calculateTotals();
-                    setSTT();
-                }
-            };
-            reader.readAsText(file);
-            checkRow();
-            fileImport.value = "";
-        });
-    }
     $(document).on('keypress', 'form', function(event) {
         return event.keyCode != 13;
     });

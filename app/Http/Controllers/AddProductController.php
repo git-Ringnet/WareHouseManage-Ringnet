@@ -770,11 +770,11 @@ class AddProductController extends Controller
     public function cancelBill(Request $request)
     {
         if (isset($request->list_id)) {
-            $check = false;
             $list = $request->list_id;
             $listOrders = Orders::whereIn('id', $list)->get();
-
+          
             foreach ($listOrders as $listOrder) {
+                $check = false;
                 if ($listOrder->order_status == 0) {
                     $listOrder->order_status = 2;
                     $listOrder->save();
