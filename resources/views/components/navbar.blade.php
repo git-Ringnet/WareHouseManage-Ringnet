@@ -280,7 +280,7 @@
                     @can('view-exports')
                         <li class="nav-item">
                             <a href="{{ route('exports.index') }}"
-                                class="nav-link {{ App\Helpers\Helper::isActiveRouteGroup('exports.index,exports.create,exports.edit') }}">
+                                class="nav-link {{ App\Helpers\Helper::isActiveRouteGroup('exports.index,exports.create,exports.edit,editEx') }}">
                                 <svg class="stroke" width="32" height="24" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <g clip-path="url(#clip0_6062_36566)">

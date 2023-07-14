@@ -336,8 +336,8 @@
                                         <input type="text" oninput="limitMaxEdit(this)" id="product_qty"
                                             class="quantity-input form-control text-center" style="width: 50px"
                                             value="{{ $value_export->product_qty }}" name="product_qty[]"
-                                            required="">
-                                        <input type="text" readonly="" class="quantity-exist" required=""
+                                            required="" readonly>
+                                        <input type="text" hidden class="quantity-exist" required=""
                                             value="/{{ $value_export->product_qty }}"
                                             style="width:50px;background:#D6D6D6;border:none;">
                                     </div>

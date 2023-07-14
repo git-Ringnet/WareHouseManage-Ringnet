@@ -1513,6 +1513,7 @@ class ExportController extends Controller
                         }
                         $exports->save();
                     }
+
                     return redirect()->route('exports.index')->with('msg', 'Duyệt đơn thành công!');
                 } else {
                     return redirect()->route('exports.index')->with('warning', 'Chưa được thêm sản phẩm nào!');
@@ -1862,104 +1863,9 @@ class ExportController extends Controller
                             $history->import_code = $import_code;
                             $history->debt_import = $debt_import;
                             $history->import_status = $import_status;
-                            $history->guest_id = $exports->guest_id;
-                            $history->export_qty = $productQty;
-                            $history->export_unit = $request->product_unit[$i];
-                            $history->price_export = $request->product_price[$i];
-                            $history->export_total = $productQty * $request->product_price[$i];
-                            $history->export_code = $exports->export_code;
-                            $history->debt_export = $guest->debt;
-                            $history->total_difference = ($productQty * $request->product_price[$i]) - ($product->product_price * $productQty);
-                            $history->tranport_fee = $exports->transport_fee;
-                            $history->history_note = null;
-                            $history->save();
                         }
                         $totalQtyNeeded += $productQty;
                     }
-
-                    // Lấy lại thông tin exports từ cơ sở dữ liệu (nếu cần)
-                    $exports = Exports::find($exports->id);
-
-                    // Lấy thông tin productExports từ exports
-                    $productExports = $exports->productExports;
-
-                    // Tiếp tục tính toán các giá trị mong muốn
-                    $totalSales = 0;
-                    $totalImport = 0;
-                    $totalDifference = 0;
-
-                    foreach ($productExports as $productExport) {
-                        // Tính toán giá trị total_sales
-                        $totalSales += $productExport->product_price * $productExport->product_qty;
-
-                        // Tính toán giá trị total_import
-                        $product = Product::find($productExport->product_id);
-                        $totalImport += $product->product_price * $productExport->product_qty;
-                    }
-
-                    // Tính toán giá trị total_difference
-                    if ($exports->transport_fee === null) {
-                        $debtTransportFee = 0;
-                    } else {
-                        $debtTransportFee = $exports->transport_fee;
-                    }
-                    $totalDifference = $totalSales - $totalImport - $debtTransportFee;
-                    // Lấy thông tin từ bảng Guests
-                    $guest = Guests::find($exports->guest_id);
-                    // Tạo đối tượng Debt và cập nhật giá trị
-                    $debt = new Debt();
-                    $debt->guest_id = $guest->id;
-                    $debt->user_id = Auth::user()->id;
-                    $debt->export_id = $exports->id;
-                    $debt->total_sales = $totalSales;
-                    $debt->total_import = $totalImport;
-                    $debt->debt_transport_fee = $debtTransportFee;
-                    $debt->total_difference = $totalDifference;
-                    $debt->debt = $guest->debt;
-                    $debt->date_start = $request->export_create;
-
-                    $startDate = Carbon::parse($request->export_create); // Chuyển đổi ngày bắt đầu thành đối tượng Carbon
-                    $daysToAdd = $debt->debt; // Số ngày cần thêm
-
-                    $endDate = $startDate->copy()->addDays($daysToAdd); // Thêm số ngày vào ngày bắt đầu để tính ngày kết thúc
-
-                    // Định dạng ngày kết thúc theo ý muốn
-                    $endDateFormatted = $endDate->format('Y-m-d');
-                    // dd($endDateFormatted);
-                    $debt->date_end = $endDateFormatted;
-
-                    // Xử lí status debt
-                    $endDate = Carbon::parse($endDateFormatted);
-                    $currentDate = Carbon::now();
-                    $daysDiffss = $currentDate->diffInDays($endDate);
-                    if ($endDate < $currentDate) {
-                        $daysDiff = -$daysDiffss;
-                    } else {
-                        $daysDiff = $daysDiffss;
-                    }
-
-                    if ($debt->debt == 0) {
-                        $debt->debt_status = 4;
-                    } elseif ($daysDiff <= 3 && $daysDiff >= 0) {
-                        $debt->debt_status = 2;
-                    } elseif ($daysDiff < 0) {
-                        $debt->debt_status = 0;
-                    } else {
-                        $debt->debt_status = 3;
-                    }
-                    $debt->save();
-                    // Lấy thông tin từ bảng History
-                    $historyInfo = History::find($history->id);
-                    //tình trạng xuất hàng
-                    $export_status = Product::leftJoin('product_exports', 'product_exports.product_id', 'product.id')
-                        ->leftJoin('exports', 'product_exports.export_id', 'exports.id')
-                        ->leftJoin('debts', 'debts.export_id', 'exports.id')
-                        ->where('product.id', $productID)
-                        ->value('debts.debt_status');
-                    //cập nhật tình trạng xuất hàng cho bảng History
-                    $historyInfo->export_status = $export_status;
-                    $historyInfo->save();
-
                     // Xóa các sản phẩm đã bị xóa
                     $productExportsToDelete = ProductExports::where('export_id', $exports->id)
                         ->whereNotIn('product_id', $productIDs)
@@ -1973,7 +1879,6 @@ class ExportController extends Controller
                         // Xóa sản phẩm
                         $productExport->delete();
                     }
-
                     // Giảm số lượng của sản phẩm trong bảng product
                     for ($i = 0; $i < count($productIDs); $i++) {
                         $productID = $productIDs[$i];
@@ -2045,6 +1950,97 @@ class ExportController extends Controller
                             $exports->created_at = $request->export_create;
                         }
                         $exports->save();
+                    }
+
+                    // Lấy lại thông tin exports từ cơ sở dữ liệu (nếu cần)
+                    $exports = Exports::find($exports->id);
+
+                    // Lấy thông tin productExports từ exports
+                    $productExports = $exports->productExports;
+
+                    // Tiếp tục tính toán các giá trị mong muốn
+                    $totalSales = 0;
+                    $totalImport = 0;
+                    $totalDifference = 0;
+
+                    foreach ($productExports as $productExport) {
+                        // Tính toán giá trị total_sales
+                        $totalSales += $productExport->product_price * $productExport->product_qty;
+
+                        // Tính toán giá trị total_import
+                        $product = Product::find($productExport->product_id);
+                        $totalImport += $product->product_price * $productExport->product_qty;
+                    }
+                    // Tính toán giá trị total_difference
+                    $totalDifference = $totalSales - $totalImport - $exports->transport_fee;
+                    // Lấy thông tin từ bảng Guests
+                    $guest = Guests::find($exports->guest_id);
+                    // Tạo đối tượng Debt và cập nhật giá trị
+                    $debt = Debt::where('export_id', $exports->id)->first();
+                    $debt->guest_id = $guest->id;
+                    $debt->user_id = Auth::user()->id;
+                    $debt->export_id = $exports->id;
+                    $debt->total_sales = $totalSales;
+                    $debt->total_import = $totalImport;
+                    $debt->debt_transport_fee = $exports->transport_fee == null ? 0 : $exports->transport_fee;
+                    $debt->total_difference = $totalDifference;
+                    $debt->debt = $guest->debt;
+                    $debt->date_start = $request->export_create;
+
+                    $startDate = Carbon::parse($request->export_create); // Chuyển đổi ngày bắt đầu thành đối tượng Carbon
+                    $daysToAdd = $debt->debt; // Số ngày cần thêm
+
+                    $endDate = $startDate->copy()->addDays($daysToAdd); // Thêm số ngày vào ngày bắt đầu để tính ngày kết thúc
+
+                    // Định dạng ngày kết thúc theo ý muốn
+                    $endDateFormatted = $endDate->format('Y-m-d');
+                    // dd($endDateFormatted);
+                    $debt->date_end = $endDateFormatted;
+
+                    // Xử lí status debt
+                    $endDate = Carbon::parse($endDateFormatted);
+                    $currentDate = Carbon::now();
+                    $daysDiffss = $currentDate->diffInDays($endDate);
+                    if ($endDate < $currentDate) {
+                        $daysDiff = -$daysDiffss;
+                    } else {
+                        $daysDiff = $daysDiffss;
+                    }
+
+                    if ($debt->debt == 0) {
+                        $debt->debt_status = 4;
+                    } elseif ($daysDiff <= 3 && $daysDiff >= 0) {
+                        $debt->debt_status = 2;
+                    } elseif ($daysDiff < 0) {
+                        $debt->debt_status = 0;
+                    } else {
+                        $debt->debt_status = 3;
+                    }
+                    $debt->save();
+                    //tình trạng xuất hàng
+                    $export_status = Product::leftJoin('product_exports', 'product_exports.product_id', 'product.id')
+                        ->leftJoin('exports', 'product_exports.export_id', 'exports.id')
+                        ->leftJoin('debts', 'debts.export_id', 'exports.id')
+                        ->where('product.id', $productID)
+                        ->value('debts.debt_status');
+                    //cập nhật tình trạng xuất hàng cho bảng History
+                    for ($i = 0; $i < count($productIDs); $i++) {
+                        $productID = $productIDs[$i];
+                        $productQty = $productQtys[$i];
+                        History::where('export_id', $history->export_id)
+                            ->update([
+                                'export_status' => $export_status,
+                                'guest_id' => $exports->guest_id,
+                                'export_qty' => $productQty,
+                                'export_unit' => $request->product_unit[$i],
+                                'price_export' => $request->product_price[$i],
+                                'export_total' => $productQty * $request->product_price[$i],
+                                'export_code' => $exports->export_code,
+                                'debt_export' => $guest->debt,
+                                'total_difference' => ($productQty * $request->product_price[$i]) - ($product->product_price * $productQty),
+                                'tranport_fee' => $exports->transport_fee,
+                                'history_note' => null
+                            ]);
                     }
                     return redirect()->route('exports.index')->with('msg', 'Duyệt đơn thành công!');
                 } else {
