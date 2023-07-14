@@ -106,9 +106,9 @@ class ExportController extends Controller
             $sortType = 'desc';
         }
         $exports = Exports::leftjoin('guests', 'exports.guest_id', '=', 'guests.id')
-            ->leftjoin('users', 'exports.user_id', '=', 'users.id')->select('guests.guest_name as guests','users.name as name')->get();
+            ->leftjoin('users', 'exports.user_id', '=', 'users.id')->select('guests.guest_name as guests', 'users.name as name')->get();
         $productEx = productExports::all();
-        $export = $this->exports->getAllExports($filters, $status, $name,$guest, $date, $keywords, $sortBy, $sortType);
+        $export = $this->exports->getAllExports($filters, $status, $name, $guest, $date, $keywords, $sortBy, $sortType);
         $title = 'Xuất hàng';
         $productsCreator = $this->exports->productsCreator();
         // dd($productsCreator);
@@ -231,6 +231,12 @@ class ExportController extends Controller
                                     ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
                                     ->where('product.id', $productID)
                                     ->value('debt_import.debt');
+                                //tình trạng nhập hàng
+                                $import_status = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
+                                    ->leftJoin('orders', 'productorders.order_id', 'orders.id')
+                                    ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
+                                    ->where('product.id', $productID)
+                                    ->value('debt_import.debt_status');
                                 //lấy thông tin sản phẩm
                                 $product = Product::find($productID);
                                 // Lấy thông tin từ bảng Guests
@@ -248,7 +254,7 @@ class ExportController extends Controller
                                 $history->product_total = $product->product_total;
                                 $history->import_code = $import_code;
                                 $history->debt_import = $debt_import;
-                                $history->import_status = 1;
+                                $history->import_status = $import_status;
                                 $history->guest_id = $export->guest_id;
                                 $history->export_qty = $productQty;
                                 $history->export_unit = $request->product_unit[$i];
@@ -256,7 +262,6 @@ class ExportController extends Controller
                                 $history->export_total = $productQty * $request->product_price[$i];
                                 $history->export_code = $export->export_code;
                                 $history->debt_export = $guest->debt;
-                                $history->export_status = 1;
                                 $history->total_difference = ($productQty * $request->product_price[$i]) - ($product->product_price * $productQty);
                                 $history->tranport_fee = $export->transport_fee;
                                 $history->history_note = null;
@@ -325,6 +330,17 @@ class ExportController extends Controller
                                 $debt->debt_status = 3;
                             }
                             $debt->save();
+                            // Lấy thông tin từ bảng History
+                            $historyInfo = History::find($history->id);
+                            //tình trạng xuất hàng
+                            $export_status = Product::leftJoin('product_exports', 'product_exports.product_id', 'product.id')
+                                ->leftJoin('exports', 'product_exports.export_id', 'exports.id')
+                                ->leftJoin('debts', 'debts.export_id', 'exports.id')
+                                ->where('product.id', $productID)
+                                ->value('debts.debt_status');
+                            //cập nhật tình trạng xuất hàng cho bảng History
+                            $historyInfo->export_status = $export_status;
+                            $historyInfo->save();
                         }
                         //cập nhật khách hàng khi lưu nhanh
                         if ($request->checkguest == 1 && $updateClick == null) {
@@ -391,6 +407,12 @@ class ExportController extends Controller
                                     ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
                                     ->where('product.id', $productID)
                                     ->value('debt_import.debt');
+                                //tình trạng nhập hàng
+                                $import_status = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
+                                    ->leftJoin('orders', 'productorders.order_id', 'orders.id')
+                                    ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
+                                    ->where('product.id', $productID)
+                                    ->value('debt_import.debt_status');
                                 //lấy thông tin sản phẩm
                                 $product = Product::find($productID);
                                 // Lấy thông tin từ bảng Guests
@@ -408,7 +430,7 @@ class ExportController extends Controller
                                 $history->product_total = $product->product_total;
                                 $history->import_code = $import_code;
                                 $history->debt_import = $debt_import;
-                                $history->import_status = 1;
+                                $history->import_status = $import_status;
                                 $history->guest_id = $export->guest_id;
                                 $history->export_qty = $productQty;
                                 $history->export_unit = $request->product_unit[$i];
@@ -416,7 +438,6 @@ class ExportController extends Controller
                                 $history->export_total = $productQty * $request->product_price[$i];
                                 $history->export_code = $export->export_code;
                                 $history->debt_export = $guest->debt;
-                                $history->export_status = 1;
                                 $history->total_difference = ($productQty * $request->product_price[$i]) - ($product->product_price * $productQty);
                                 $history->tranport_fee = $export->transport_fee;
                                 $history->history_note = null;
@@ -494,6 +515,17 @@ class ExportController extends Controller
                                 $debt->debt_status = 3;
                             }
                             $debt->save();
+                            // Lấy thông tin từ bảng History
+                            $historyInfo = History::find($history->id);
+                            //tình trạng xuất hàng
+                            $export_status = Product::leftJoin('product_exports', 'product_exports.product_id', 'product.id')
+                                ->leftJoin('exports', 'product_exports.export_id', 'exports.id')
+                                ->leftJoin('debts', 'debts.export_id', 'exports.id')
+                                ->where('product.id', $productID)
+                                ->value('debts.debt_status');
+                            //cập nhật tình trạng xuất hàng cho bảng History
+                            $historyInfo->export_status = $export_status;
+                            $historyInfo->save();
                         }
                         //tạo đơn khi đã nhấn cập nhật
                         if ($request->checkguest == 1 && $updateClick == 1) {
@@ -544,6 +576,12 @@ class ExportController extends Controller
                                     ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
                                     ->where('product.id', $productID)
                                     ->value('debt_import.debt');
+                                //tình trạng nhập hàng
+                                $import_status = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
+                                    ->leftJoin('orders', 'productorders.order_id', 'orders.id')
+                                    ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
+                                    ->where('product.id', $productID)
+                                    ->value('debt_import.debt_status');
                                 //lấy thông tin sản phẩm
                                 $product = Product::find($productID);
                                 // Lấy thông tin từ bảng Guests
@@ -561,7 +599,7 @@ class ExportController extends Controller
                                 $history->product_total = $product->product_total;
                                 $history->import_code = $import_code;
                                 $history->debt_import = $debt_import;
-                                $history->import_status = 1;
+                                $history->import_status = $import_status;
                                 $history->guest_id = $export->guest_id;
                                 $history->export_qty = $productQty;
                                 $history->export_unit = $request->product_unit[$i];
@@ -569,7 +607,6 @@ class ExportController extends Controller
                                 $history->export_total = $productQty * $request->product_price[$i];
                                 $history->export_code = $export->export_code;
                                 $history->debt_export = $guest->debt;
-                                $history->export_status = 1;
                                 $history->total_difference = ($productQty * $request->product_price[$i]) - ($product->product_price * $productQty);
                                 $history->tranport_fee = $export->transport_fee;
                                 $history->history_note = null;
@@ -646,6 +683,17 @@ class ExportController extends Controller
                                 $debt->debt_status = 3;
                             }
                             $debt->save();
+                            // Lấy thông tin từ bảng History
+                            $historyInfo = History::find($history->id);
+                            //tình trạng xuất hàng
+                            $export_status = Product::leftJoin('product_exports', 'product_exports.product_id', 'product.id')
+                                ->leftJoin('exports', 'product_exports.export_id', 'exports.id')
+                                ->leftJoin('debts', 'debts.export_id', 'exports.id')
+                                ->where('product.id', $productID)
+                                ->value('debts.debt_status');
+                            //cập nhật tình trạng xuất hàng cho bảng History
+                            $historyInfo->export_status = $export_status;
+                            $historyInfo->save();
                         }
                         //tạo đơn khi đã nhấn thêm
                         if ($clickValue == 1 && $request->checkguest == 2) {
@@ -696,6 +744,12 @@ class ExportController extends Controller
                                     ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
                                     ->where('product.id', $productID)
                                     ->value('debt_import.debt');
+                                //tình trạng nhập hàng
+                                $import_status = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
+                                    ->leftJoin('orders', 'productorders.order_id', 'orders.id')
+                                    ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
+                                    ->where('product.id', $productID)
+                                    ->value('debt_import.debt_status');
                                 //lấy thông tin sản phẩm
                                 $product = Product::find($productID);
                                 // Lấy thông tin từ bảng Guests
@@ -713,7 +767,7 @@ class ExportController extends Controller
                                 $history->product_total = $product->product_total;
                                 $history->import_code = $import_code;
                                 $history->debt_import = $debt_import;
-                                $history->import_status = 1;
+                                $history->import_status = $import_status;
                                 $history->guest_id = $export->guest_id;
                                 $history->export_qty = $productQty;
                                 $history->export_unit = $request->product_unit[$i];
@@ -721,7 +775,6 @@ class ExportController extends Controller
                                 $history->export_total = $productQty * $request->product_price[$i];
                                 $history->export_code = $export->export_code;
                                 $history->debt_export = $guest->debt;
-                                $history->export_status = 1;
                                 $history->total_difference = ($productQty * $request->product_price[$i]) - ($product->product_price * $productQty);
                                 $history->tranport_fee = $export->transport_fee;
                                 $history->history_note = null;
@@ -798,6 +851,17 @@ class ExportController extends Controller
                                 $debt->debt_status = 3;
                             }
                             $debt->save();
+                            // Lấy thông tin từ bảng History
+                            $historyInfo = History::find($history->id);
+                            //tình trạng xuất hàng
+                            $export_status = Product::leftJoin('product_exports', 'product_exports.product_id', 'product.id')
+                                ->leftJoin('exports', 'product_exports.export_id', 'exports.id')
+                                ->leftJoin('debts', 'debts.export_id', 'exports.id')
+                                ->where('product.id', $productID)
+                                ->value('debts.debt_status');
+                            //cập nhật tình trạng xuất hàng cho bảng History
+                            $historyInfo->export_status = $export_status;
+                            $historyInfo->save();
                         }
                         // Giảm số lượng của sản phẩm trong bảng product
                         for ($i = 0; $i < count($productIDs); $i++) {
@@ -1157,6 +1221,12 @@ class ExportController extends Controller
                                 ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
                                 ->where('product.id', $productID)
                                 ->value('debt_import.debt');
+                            //tình trạng nhập hàng
+                            $import_status = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
+                                ->leftJoin('orders', 'productorders.order_id', 'orders.id')
+                                ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
+                                ->where('product.id', $productID)
+                                ->value('debt_import.debt_status');
                             //lấy thông tin sản phẩm
                             $product = Product::find($productID);
                             // Lấy thông tin từ bảng Guests
@@ -1174,7 +1244,7 @@ class ExportController extends Controller
                             $history->product_total = $product->product_total;
                             $history->import_code = $import_code;
                             $history->debt_import = $debt_import;
-                            $history->import_status = 1;
+                            $history->import_status = $import_status;
                             $history->guest_id = $exports->guest_id;
                             $history->export_qty = $productQty;
                             $history->export_unit = $request->product_unit[$i];
@@ -1182,7 +1252,6 @@ class ExportController extends Controller
                             $history->export_total = $productQty * $request->product_price[$i];
                             $history->export_code = $exports->export_code;
                             $history->debt_export = $guest->debt;
-                            $history->export_status = 1;
                             $history->total_difference = ($productQty * $request->product_price[$i]) - ($product->product_price * $productQty);
                             $history->tranport_fee = $exports->transport_fee;
                             $history->history_note = null;
@@ -1215,6 +1284,12 @@ class ExportController extends Controller
                                 ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
                                 ->where('product.id', $productID)
                                 ->value('debt_import.debt');
+                            //tình trạng nhập hàng
+                            $import_status = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
+                                ->leftJoin('orders', 'productorders.order_id', 'orders.id')
+                                ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
+                                ->where('product.id', $productID)
+                                ->value('debt_import.debt_status');
                             //lấy thông tin sản phẩm
                             $product = Product::find($productID);
                             // Lấy thông tin từ bảng Guests
@@ -1232,7 +1307,7 @@ class ExportController extends Controller
                             $history->product_total = $product->product_total;
                             $history->import_code = $import_code;
                             $history->debt_import = $debt_import;
-                            $history->import_status = 1;
+                            $history->import_status = $import_status;
                             $history->guest_id = $exports->guest_id;
                             $history->export_qty = $productQty;
                             $history->export_unit = $request->product_unit[$i];
@@ -1240,7 +1315,6 @@ class ExportController extends Controller
                             $history->export_total = $productQty * $request->product_price[$i];
                             $history->export_code = $exports->export_code;
                             $history->debt_export = $guest->debt;
-                            $history->export_status = 1;
                             $history->total_difference = ($productQty * $request->product_price[$i]) - ($product->product_price * $productQty);
                             $history->tranport_fee = $exports->transport_fee;
                             $history->history_note = null;
@@ -1321,6 +1395,17 @@ class ExportController extends Controller
                         $debt->debt_status = 3;
                     }
                     $debt->save();
+                    // Lấy thông tin từ bảng History
+                    $historyInfo = History::find($history->id);
+                    //tình trạng xuất hàng
+                    $export_status = Product::leftJoin('product_exports', 'product_exports.product_id', 'product.id')
+                        ->leftJoin('exports', 'product_exports.export_id', 'exports.id')
+                        ->leftJoin('debts', 'debts.export_id', 'exports.id')
+                        ->where('product.id', $productID)
+                        ->value('debts.debt_status');
+                    //cập nhật tình trạng xuất hàng cho bảng History
+                    $historyInfo->export_status = $export_status;
+                    $historyInfo->save();
 
                     // Xóa các sản phẩm đã bị xóa
                     $productExportsToDelete = ProductExports::where('export_id', $exports->id)
