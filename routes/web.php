@@ -84,7 +84,8 @@ Route::resource('debt_import', DebtImportController::class);
 Route::get('/paymentdebtimport', [DebtImportController::class, 'paymentdebtimport'])->name('paymentdebtimport');
 // Lịch sử giao dịch
 Route::resource('history', HistoryController::class);
-
+//chỉnh sửa đơn xuất hàng
+Route::get('/editEx/{id}', [ExportController::class, 'editEx'])->name('editEx');
 
 
 //kiểm tra số lượng trong xuất hàng

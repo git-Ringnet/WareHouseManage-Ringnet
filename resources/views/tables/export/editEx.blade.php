@@ -137,72 +137,50 @@
         @method('PUT')
         <input type="hidden" name="checkguest" value="" id="checkguest">
         <section class="content">
-            <div class="d-flex mb-1 action-don">
-                @if ($exports->export_status == 1)
-                    @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
-                        <button type="submit" class="btn btn-danger text-white" name="submitBtn" value="action1"
-                            onclick="validateAndSubmit(event)" id="chot_don">Chốt đơn</button>
-                        <button type="submit" class="btn btn-secondary mx-4" name="submitBtn" value="action2"
-                            onclick="validateAndSubmit(event)" id="huy">Hủy đơn</button>
-                    @endif
-                @endif
-                @if ($exports->export_status == 2)
-                    @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
-                        <a class="btn btn-secondary text-white" id="chinhsua" href="{{ route('editEx', ['id' => $exports->id]) }}">Chỉnh sửa</a>
-                        @if ($exports->export_status != 0)
-                            <button type="submit" class="btn btn-secondary mx-4" onclick="validateAndSubmit(event)"
-                                id="huydon" name="submitBtn" value="action4">Hủy đơn</button>
-                        @endif
-                    @endif
-                @endif
-                {{-- <a href="#" class="btn border border-secondary mr-4">Xuất file</a> --}}
-            </div>
             <div class="container-fluided position-relative">
                 <div class="row my-3">
                     <div class="col">
                         <div class="w-75">
-                            @if ($exports->export_status == 1)
-                                @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
-                                    <div class="d-flex mb-2">
-                                        <input type="radio" name="options" id="radio1" checked>
-                                        <span class="ml-1">Khách hàng cũ</span>
-                                        <input type="radio" name="options" id="radio2"
-                                            style="margin-left: 40px;">
-                                        <span class="ml-1">Khách hàng mới</span>
+
+                            @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
+                                <div class="d-flex mb-2">
+                                    <input type="radio" name="options" id="radio1" checked>
+                                    <span class="ml-1">Khách hàng cũ</span>
+                                    <input type="radio" name="options" id="radio2" style="margin-left: 40px;">
+                                    <span class="ml-1">Khách hàng mới</span>
+                                </div>
+                                <div class="input-group mb-1 position-relative w-50">
+                                    <input type="text" class="form-control"
+                                        placeholder="Nhập thông tin khách hàng" aria-label="Username"
+                                        aria-describedby="basic-addon1" id="myInput" autocomplete="off">
+                                    <div class="position-absolute" style="right: 5px;top: 17%;">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M15.1835 7.36853C13.0254 5.21049 9.52656 5.21049 7.36853 7.36853C5.21049 9.52656 5.21049 13.0254 7.36853 15.1835C9.52656 17.3415 13.0254 17.3415 15.1835 15.1835C17.3415 13.0254 17.3415 9.52656 15.1835 7.36853ZM16.2441 6.30787C13.5003 3.56404 9.05169 3.56404 6.30787 6.30787C3.56404 9.05169 3.56404 13.5003 6.30787 16.2441C9.05169 18.988 13.5003 18.988 16.2441 16.2441C18.988 13.5003 18.988 9.05169 16.2441 6.30787Z"
+                                                fill="#555555" />
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M15.1796 15.1796C15.4725 14.8867 15.9474 14.8867 16.2403 15.1796L19.5303 18.4696C19.8232 18.7625 19.8232 19.2374 19.5303 19.5303C19.2374 19.8232 18.7625 19.8232 18.4696 19.5303L15.1796 16.2403C14.8867 15.9474 14.8867 15.4725 15.1796 15.1796Z"
+                                                fill="#555555" />
+                                        </svg>
                                     </div>
-                                    <div class="input-group mb-1 position-relative w-50">
-                                        <input type="text" class="form-control"
-                                            placeholder="Nhập thông tin khách hàng" aria-label="Username"
-                                            aria-describedby="basic-addon1" id="myInput" autocomplete="off">
-                                        <div class="position-absolute" style="right: 5px;top: 17%;">
-                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                                    d="M15.1835 7.36853C13.0254 5.21049 9.52656 5.21049 7.36853 7.36853C5.21049 9.52656 5.21049 13.0254 7.36853 15.1835C9.52656 17.3415 13.0254 17.3415 15.1835 15.1835C17.3415 13.0254 17.3415 9.52656 15.1835 7.36853ZM16.2441 6.30787C13.5003 3.56404 9.05169 3.56404 6.30787 6.30787C3.56404 9.05169 3.56404 13.5003 6.30787 16.2441C9.05169 18.988 13.5003 18.988 16.2441 16.2441C18.988 13.5003 18.988 9.05169 16.2441 6.30787Z"
-                                                    fill="#555555" />
-                                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                                    d="M15.1796 15.1796C15.4725 14.8867 15.9474 14.8867 16.2403 15.1796L19.5303 18.4696C19.8232 18.7625 19.8232 19.2374 19.5303 19.5303C19.2374 19.8232 18.7625 19.8232 18.4696 19.5303L15.1796 16.2403C14.8867 15.9474 14.8867 15.4725 15.1796 15.1796Z"
-                                                    fill="#555555" />
-                                            </svg>
-                                        </div>
-                                    </div>
-                                    <ul id="myUL"
-                                        class="bg-white position-absolute w-50 rounded shadow p-0 scroll-data"
-                                        style="z-index: 99;">
-                                        @foreach ($customer as $item)
-                                            @if (Auth::user()->id == $item->user_id || Auth::user()->can('isAdmin'))
-                                                <li>
-                                                    <a href="#"
-                                                        class="text-dark d-flex justify-content-between p-2 search-info"
-                                                        id="{{ $item->id }}" name="search-info">
-                                                        <span class="w-50">{{ $item->guest_receiver }}</span>
-                                                        <span class="w-50">{{ $item->guest_name }}</span>
-                                                    </a>
-                                                </li>
-                                            @endif
-                                        @endforeach
-                                    </ul>
-                                @endif
+                                </div>
+                                <ul id="myUL"
+                                    class="bg-white position-absolute w-50 rounded shadow p-0 scroll-data"
+                                    style="z-index: 99;">
+                                    @foreach ($customer as $item)
+                                        @if (Auth::user()->id == $item->user_id || Auth::user()->can('isAdmin'))
+                                            <li>
+                                                <a href="#"
+                                                    class="text-dark d-flex justify-content-between p-2 search-info"
+                                                    id="{{ $item->id }}" name="search-info">
+                                                    <span class="w-50">{{ $item->guest_receiver }}</span>
+                                                    <span class="w-50">{{ $item->guest_name }}</span>
+                                                </a>
+                                            </li>
+                                        @endif
+                                    @endforeach
+                                </ul>
                             @endif
                         </div>
                     </div>
@@ -214,21 +192,17 @@
                 <div id="form-guest">
                     <div class="border-bottom p-3 d-flex justify-content-between align-items-center">
                         <b>Thông tin khách hàng</b>
-                        @if ($exports->export_status == 1)
-                            @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
-                                <button id="btn-customer" type="submit" class="btn btn-primary">
-                                    <img src="../../dist/img/icon/Union.png">
-                                    <span>Lưu thông tin</span></button>
-                            @endif
+                        @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
+                            <button id="btn-customer" type="submit" class="btn btn-primary">
+                                <img src="../../dist/img/icon/Union.png">
+                                <span>Lưu thông tin</span></button>
                         @endif
                     </div>
                     <div class="row p-3">
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="congty" class="required-label">Công ty:</label>
-                                <input type="text" class="form-control" id="guest_name" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                    echo 'readonly';
-                                } ?>
+                                <input type="text" class="form-control" id="guest_name"
                                     placeholder="Nhập thông tin" name="guest_name" value="{{ $guest->guest_name }}"
                                     required>
                                 <input type="text" hidden class="form-control" id="id" name="id"
@@ -238,23 +212,17 @@
                             <div class="form-group">
                                 <label class="required-label">Địa chỉ:</label>
                                 <input type="text" class="form-control" placeholder="Nhập thông tin"
-                                    <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                        echo 'readonly';
-                                    } ?> id="guest_address" name="guest_address"
-                                    value="{{ $guest->guest_address }}" required>
+                                    id="guest_address" name="guest_address" value="{{ $guest->guest_address }}"
+                                    required>
                             </div>
                             <div class="form-group">
                                 <label for="email" class="required-label">Mã số thuế:</label>
-                                <input type="text" class="form-control" id="guest_code" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                    echo 'readonly';
-                                } ?>
+                                <input type="text" class="form-control" id="guest_code"
                                     placeholder="Nhập thông tin" name="guest_code" value="{{ $guest->guest_code }}">
                             </div>
                             <div class="form-group">
                                 <label for="email">Email:</label>
-                                <input type="email" class="form-control" id="guest_email" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                    echo 'readonly';
-                                } ?>
+                                <input type="email" class="form-control" id="guest_email"
                                     placeholder="Nhập thông tin" name="guest_email"
                                     value="{{ $guest->guest_email }}">
                             </div>
@@ -262,60 +230,46 @@
                                 <label for="email">Số điện thoại:</label>
                                 <input type="text" class="form-control"
                                     pattern="^(0|\+84)(3[2-9]|5[2689]|7[0|6-9]|8[1-9]|9[0-9])\d{7,9}$"
-                                    id="guest_phone" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                        echo 'readonly';
-                                    } ?> placeholder="Nhập thông tin"
-                                    name="guest_phone" value="{{ $guest->guest_phone }}">
+                                    id="guest_phone" placeholder="Nhập thông tin" name="guest_phone"
+                                    value="{{ $guest->guest_phone }}">
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="email">Người nhận hàng:</label>
-                                <input type="text" class="form-control" id="guest_receiver" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                    echo 'readonly';
-                                } ?>
+                                <input type="text" class="form-control" id="guest_receiver"
                                     placeholder="Nhập thông tin" name="guest_receiver"
                                     value="{{ $guest->guest_receiver }}">
                             </div>
                             <div class="form-group">
                                 <label for="email">Email cá nhân:</label>
                                 <input type="text" class="form-control" id="guest_email_personal"
-                                    <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                        echo 'readonly';
-                                    } ?> placeholder="Nhập thông tin" name="guest_email_personal"
+                                    placeholder="Nhập thông tin" name="guest_email_personal"
                                     value="{{ $guest->guest_email_personal }}">
                             </div>
                             <div class="form-group">
                                 <label for="email">SĐT người nhận:</label>
                                 <input type="text" class="form-control" id="guest_phoneReceiver"
                                     pattern="^(0|\+84)(3[2-9]|5[2689]|7[0|6-9]|8[1-9]|9[0-9])\d{7,9}$"
-                                    <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                        echo 'readonly';
-                                    } ?> placeholder="Nhập thông tin" name="guest_phoneReceiver"
+                                    placeholder="Nhập thông tin" name="guest_phoneReceiver"
                                     value="{{ $guest->guest_phoneReceiver }}">
                             </div>
                             <div class="form-group">
                                 <label>Công nợ:</label>
                                 <div class="d-flex align-items-center" style="width:101%;">
                                     <input type="text" class="form-control" id="debtInput" name="debt"
-                                        value="{{ $guest->debt }}" style="width:15%;" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                            echo 'readonly';
-                                        } ?>>
+                                        value="{{ $guest->debt }}" style="width:15%;">
                                     <span class="ml-2" id="data-debt">ngày</span>
                                     <input type="checkbox" id="debtCheckbox" name="debt" <?php if ($guest->debt == 0) {
                                         echo 'checked';
                                     } ?>
-                                        value="0" style="margin-left:10%;" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                            echo 'disabled';
-                                        } ?>>
+                                        value="0" style="margin-left:10%;">
                                     <span class="ml-2">Thanh toán tiền mặt</span>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="email">Ghi chú:</label>
-                                <input type="text" class="form-control" id="guest_note" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                    echo 'readonly';
-                                } ?>
+                                <input type="text" class="form-control" id="guest_note"
                                     placeholder="Nhập thông tin" name="guest_note" value="{{ $guest->guest_note }}">
                             </div>
                         </div>
@@ -357,13 +311,8 @@
                             <tr id="dynamic-row-{{ $index }}">
                                 <td class="soTT"><?php echo $stt++; ?></td>
                                 <td>
-                                    {{-- <input type="text" title="{{ $value_export->product_name }}"
-                                            style="width: 220px" class="child-select p-1 form-control productName"
-                                            readonly value="{{ $value_export->product_name }}"> --}}
                                     <select class="child-select p-1 form-control productName" style="width: 220px"
-                                        name="product_id[]" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                            echo 'disabled';
-                                        } ?>>
+                                        name="product_id[]">
                                         <option value="{{ $value_export->product_id }}">
                                             {{ $value_export->product_name }}
                                         </option>
@@ -378,9 +327,7 @@
                                 </td>
                                 <td>
                                     <input type="text" id="product_unit" style="width: 80px"
-                                        class="product_unit form-control text-center" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                            echo 'readonly';
-                                        } ?>
+                                        class="product_unit form-control text-center"
                                         value="{{ $value_export->product_unit }}" name="product_unit[]"
                                         required="">
                                 </td>
@@ -388,30 +335,21 @@
                                     <div class='d-flex'>
                                         <input type="text" oninput="limitMaxEdit(this)" id="product_qty"
                                             class="quantity-input form-control text-center" style="width: 50px"
-                                            <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                                echo 'readonly';
-                                            } ?> value="{{ $value_export->product_qty }}"
-                                            name="product_qty[]" required="">
+                                            value="{{ $value_export->product_qty }}" name="product_qty[]"
+                                            required="">
                                         <input type="text" readonly="" class="quantity-exist" required=""
-                                            value="/{{ $value_export->tonkho + $value_export->product_qty }}"
-                                            style="width:50px;background:#D6D6D6;border:none;" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                                echo 'hidden';
-                                            } ?>>
+                                            value="/{{ $value_export->product_qty }}"
+                                            style="width:50px;background:#D6D6D6;border:none;">
                                     </div>
                                 </td>
                                 <td>
                                     <input type="text" id="product_price" name="product_price[]"
                                         class="form-control text-center product_price" style="width: 140px"
-                                        <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                            echo 'readonly';
-                                        } ?> value={{ number_format($value_export->product_price) }}
-                                        required="">
+                                        value={{ number_format($value_export->product_price) }} required="">
                                 </td>
                                 <td>
                                     <select name="product_tax[]" class="product_tax form-control text-center"
-                                        style="width: 100px;" id="product_tax" required <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                            echo 'disabled';
-                                        } ?>>
+                                        style="width: 100px;" id="product_tax" required>
                                         <option value="0" <?php if ($value_export->product_tax == 0) {
                                             echo 'selected';
                                         } ?>>0%</option>
@@ -431,10 +369,7 @@
                                 </td>
                                 <td>
                                     <input type="text" id="" name="product_note[]"
-                                        class="form-control w-auto" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                            echo 'readonly';
-                                        } ?>
-                                        value="{{ $value_export->product_note }}">
+                                        class="form-control w-auto" value="{{ $value_export->product_note }}">
                                 </td>
                                 <td data-toggle='modal' data-target='#productModal' class='productMD'><img
                                         src="../../dist/img/icon/Group.png"></td>
@@ -492,18 +427,12 @@
                             <span><b>Thuế VAT:</b></span>
                             <span id="product-tax">0</span>
                         </div>
-                        {{-- <div class="d-flex justify-content-between mt-2">
-                            <span class="text-primary">Giảm giá:</span>
-                            <span>0đ</span>
-                        </div> --}}
                         <div class="d-flex justify-content-between align-items-center mt-2">
                             <span class="text-primary">Phí vận chuyển:</span>
                             <div class="w-50">
                                 <input type="text" class="form-control text-right"
                                     value="{{ number_format($exports->transport_fee) }}" name="transport_fee"
-                                    id="transport_fee" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                        echo 'readonly';
-                                    } ?>>
+                                    id="transport_fee">
                             </div>
                         </div>
                         <div class="d-flex justify-content-between mt-2">
@@ -515,11 +444,9 @@
                 </div>
             </div>
             <div class="btn-fixed">
-                @if ($exports->export_status == 1)
-                    @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
-                        <button type="submit" value="action3" name="submitBtn" class="btn btn-primary mr-1"
-                            onclick="validateAndSubmit(event)" id="luu">Lưu</button>
-                    @endif
+                @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
+                    <button type="submit" value="action5" name="submitBtn" class="btn btn-primary mr-1"
+                        onclick="validateAndSubmit(event)" id="luu">Lưu</button>
                 @endif
                 <a href="{{ route('exports.index') }}"><span class="btn border-secondary ml-1">Hủy</span></a>
             </div>
@@ -614,7 +541,7 @@
                     '<br>' +
                     '<b>Tồn kho: </b>' + response.product_qty + '<br>' +
                     '<b>Đang giao dịch: </b>' +
-                    (response.product_trade == null ? 0 : response.product_trade) +
+                    (response.product_trade === null ? 0 : response.product_trade) +
                     '<br>' + '<b>Giá nhập: </b>' + formattedPrice + '<br>' + '<b>Thuế: </b>' +
                     (thue == 99 ? "NOVAT" : thue + "%"));
             },
@@ -800,7 +727,8 @@
                             '<br>' +
                             '<b>Tồn kho: </b>' + response.product_qty + '<br>' +
                             '<b>Đang giao dịch: </b>' +
-                            (response.product_trade == null ? 0 : response.product_trade) +
+                            (response.product_trade == null ? 0 : response
+                                .product_trade) +
                             '<br>' + '<b>Giá nhập: </b>' + formattedPrice +
                             '<br>' + '<b>Thuế: </b>' +
                             (thue == 99 ? "NOVAT" : thue + '%'));
@@ -1183,7 +1111,8 @@
                         price_import.val(formattedPrice);
                         tonkho.val(response.product_qty);
                         loaihang.val(response.product_category);
-                        dangGD.val(response.product_trade == null ? 0 : response.product_trade);
+                        dangGD.val(response.product_trade == null ? 0 : response
+                            .product_trade);
                         thue.val(response.product_tax);
                         calculateGrandTotal();
                     },
