@@ -786,7 +786,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <td class="text-left">{{ $value->provide }}</td>
                                                 <td class="text-center">{{ $value->product_unit }}</td>
                                                 <td class="text-right">{{ $value->product_qty }}</td>
-                                                <td class="text-right">{{ $value->product_trade }}</td>
+                                                <td class="text-right">{{ $value->product_trade == null ? 0 : $value->product_trade }}</td>
                                                 <td class="text-right">{{ number_format($value->product_price) }}</td>
                                                 <td class="text-right">{{ number_format($value->product_total) }}</td>
                                                 <td class="text-center">

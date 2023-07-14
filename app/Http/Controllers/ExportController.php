@@ -248,6 +248,7 @@ class ExportController extends Controller
                                 //thêm lịch sử giao dịch
                                 $history = new History();
                                 $history->export_id = $export->id;
+                                $history->product_id = $productID;
                                 $history->date_time = Carbon::now();
                                 $history->user_id = Auth::user()->id;
                                 $history->provide_id = $provide_id;
@@ -426,6 +427,7 @@ class ExportController extends Controller
                                 //thêm lịch sử giao dịch
                                 $history = new History();
                                 $history->export_id = $export->id;
+                                $history->product_id = $productID;
                                 $history->date_time = Carbon::now();
                                 $history->user_id = Auth::user()->id;
                                 $history->provide_id = $provide_id;
@@ -597,6 +599,7 @@ class ExportController extends Controller
                                 //thêm lịch sử giao dịch
                                 $history = new History();
                                 $history->export_id = $export->id;
+                                $history->product_id = $productID;
                                 $history->date_time = Carbon::now();
                                 $history->user_id = Auth::user()->id;
                                 $history->provide_id = $provide_id;
@@ -767,6 +770,7 @@ class ExportController extends Controller
                                 //thêm lịch sử giao dịch
                                 $history = new History();
                                 $history->export_id = $export->id;
+                                $history->product_id = $productID;
                                 $history->date_time = Carbon::now();
                                 $history->user_id = Auth::user()->id;
                                 $history->provide_id = $provide_id;
@@ -1246,6 +1250,7 @@ class ExportController extends Controller
                             //thêm lịch sử giao dịch
                             $history = new History();
                             $history->export_id = $exports->id;
+                            $history->product_id = $productID;
                             $history->date_time = Carbon::now();
                             $history->user_id = Auth::user()->id;
                             $history->provide_id = $provide_id;
@@ -1313,6 +1318,7 @@ class ExportController extends Controller
                             //thêm lịch sử giao dịch
                             $history = new History();
                             $history->export_id = $exports->id;
+                            $history->product_id = $productID;
                             $history->date_time = Carbon::now();
                             $history->user_id = Auth::user()->id;
                             $history->provide_id = $provide_id;
