@@ -345,7 +345,7 @@
                 '<td>' +
                 '<input id="search" type="text" placeholder="Nhập tên sản phẩm" name="product_name[]" class="search_product form-control name_product" onkeyup="filterFunction()"> ' +
                 '</td>' +
-                '<td><input placeholder="Nhập đơn vị tính" required type="text" class="form-control text-center unit_product" style="width:100px" name="product_unit[]"></td>' +
+                '<td><input required type="text" class="form-control text-center unit_product" style="width:100px" name="product_unit[]"></td>' +
                 '<td><input required type="text" oninput="validatQtyInput(this)" name="product_qty[]" class="quantity-input form-control text-center"></td>' +
                 '<td><input required type="text" class="form-control text-center product_price" name="product_price[]" ></td>' +
                 '<td>' +
@@ -430,15 +430,15 @@
                         '<div class="row p-3">' +
                         '<div class="col-sm-6">' +
                         '<div class="form-group">' +
-                        '<label for="congty">Công ty:</label>' +
+                        '<label for="congty" class="required-label">Công ty:</label>' +
                         '<input required type="text" class="form-control" id="provide_name" placeholder="Nhập thông tin" name="provide_name" value="' +
                         data.provide_name + '">' +
                         '</div>' + '<div class="form-group">' +
-                        '<label>Địa chỉ xuất hóa đơn:</label>' +
+                        '<label class="required-label">Địa chỉ xuất hóa đơn:</label>' +
                         '<input required type="text" class="form-control" id="provide_address" placeholder="Nhập thông tin" name="provide_address" value="' +
                         data.provide_address + '">' +
                         '</div>' + '<div class="form-group">' +
-                        '<label for="email">Mã số thuế:</label>' +
+                        '<label for="email" class="required-label">Mã số thuế:</label>' +
                         '<input required type="text" class="form-control" oninput="validateNumberInput(this)" id="provide_code" placeholder="Nhập thông tin" name="provide_code" value="' +
                         data.provide_code + '">' +
                         '</div>' + '</div>' + '<div class="col-sm-6">' +
