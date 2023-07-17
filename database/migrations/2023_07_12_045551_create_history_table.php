@@ -18,7 +18,6 @@ return new class extends Migration
             $table->integer('export_id')->nullable();
             $table->integer('import_id')->nullable();
             $table->integer('product_id')->nullable();
-            $table->integer('import_id')->nullable();
             $table->dateTime('date_time')->nullable();
             $table->integer('user_id')->nullable();
             $table->integer('provide_id')->nullable();
