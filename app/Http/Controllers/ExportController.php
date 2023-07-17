@@ -334,8 +334,10 @@ class ExportController extends Controller
 
                             if ($debt->debt == 0) {
                                 $debt->debt_status = 4;
-                            } elseif ($daysDiff <= 3 && $daysDiff >= 0) {
+                            } elseif ($daysDiff <= 3 && $daysDiff = 0) {
                                 $debt->debt_status = 2;
+                            }elseif ($daysDiff == 0) {
+                                $debt->debt_status = 5;
                             } elseif ($daysDiff < 0) {
                                 $debt->debt_status = 0;
                             } else {
@@ -529,8 +531,10 @@ class ExportController extends Controller
 
                             if ($debt->debt == 0) {
                                 $debt->debt_status = 4;
-                            } elseif ($daysDiff <= 3 && $daysDiff >= 0) {
+                            } elseif ($daysDiff <= 3 && $daysDiff = 0) {
                                 $debt->debt_status = 2;
+                            }elseif ($daysDiff == 0) {
+                                $debt->debt_status = 5;
                             } elseif ($daysDiff < 0) {
                                 $debt->debt_status = 0;
                             } else {
@@ -707,8 +711,10 @@ class ExportController extends Controller
 
                             if ($debt->debt == 0) {
                                 $debt->debt_status = 4;
-                            } elseif ($daysDiff <= 3 && $daysDiff >= 0) {
+                            } elseif ($daysDiff <= 3 && $daysDiff = 0) {
                                 $debt->debt_status = 2;
+                            }elseif ($daysDiff == 0) {
+                                $debt->debt_status = 5;
                             } elseif ($daysDiff < 0) {
                                 $debt->debt_status = 0;
                             } else {
@@ -885,8 +891,10 @@ class ExportController extends Controller
 
                             if ($debt->debt == 0) {
                                 $debt->debt_status = 4;
-                            } elseif ($daysDiff <= 3 && $daysDiff >= 0) {
+                            } elseif ($daysDiff <= 3 && $daysDiff = 0) {
                                 $debt->debt_status = 2;
+                            }elseif ($daysDiff == 0) {
+                                $debt->debt_status = 5;
                             } elseif ($daysDiff < 0) {
                                 $debt->debt_status = 0;
                             } else {
@@ -1437,8 +1445,10 @@ class ExportController extends Controller
 
                     if ($debt->debt == 0) {
                         $debt->debt_status = 4;
-                    } elseif ($daysDiff <= 3 && $daysDiff >= 0) {
+                    } elseif ($daysDiff <= 3 && $daysDiff = 0) {
                         $debt->debt_status = 2;
+                    }elseif ($daysDiff == 0) {
+                        $debt->debt_status = 5;
                     } elseif ($daysDiff < 0) {
                         $debt->debt_status = 0;
                     } else {
@@ -2037,8 +2047,10 @@ class ExportController extends Controller
 
                     if ($debt->debt == 0) {
                         $debt->debt_status = 4;
-                    } elseif ($daysDiff <= 3 && $daysDiff >= 0) {
+                    } elseif ($daysDiff <= 3 && $daysDiff = 0) {
                         $debt->debt_status = 2;
+                    }elseif ($daysDiff == 0) {
+                        $debt->debt_status = 5;
                     } elseif ($daysDiff < 0) {
                         $debt->debt_status = 0;
                     } else {

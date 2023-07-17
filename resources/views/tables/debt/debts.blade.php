@@ -36,7 +36,7 @@
                         <div class="col-2 d-none">
                             <button type="submit" class="btn btn-primary btn-block">Tìm kiếm</button>
                         </div>
-                        @if (empty($debts))
+                        
                             <div class="ml-auto">
                                 <button class="btn btn-light" id="expandall" type="button" onclick="expand()"><svg
                                         width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -56,7 +56,7 @@
                                     </svg>
                                     Thu gọn tất cả</button>
                             </div>
-                        @endif
+                      
                     </div>
                     <div class="d-flex justify-contents-center align-items-center mr-auto row-filter my-3 m-0">
                         <div class="icon-filter mr-3">

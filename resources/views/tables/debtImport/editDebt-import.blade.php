@@ -52,7 +52,7 @@
                 <div class="col-md-3 col-sm-6">
                     <div class="form-group">
                         <div class="labelform">Tổng tiền nhập(+VAT)</div>
-                        <input type="text" class="form-control" value="{{ number_format($debts->soluong * $debts->gianhap * (1 + $debts->thue/100)) }}" name=""
+                        <input type="text" class="form-control" value="{{ number_format($debts->total_import) }}" name=""
                             id="" readonly>
                     </div>
                 </div>

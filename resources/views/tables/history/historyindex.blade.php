@@ -1068,7 +1068,7 @@ $index = array_search($item['label'], $numberedLabels);
                                         </th>
                                         <th scope="col" class="text-center">
                                             <span class="d-flex justify-content-center align-items-center"
-                                                style="width:125px;">
+                                                style="width:135px;">
                                                 <a href="#" class="sort-link" data-sort-by="import_status"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Tình trạng nhập</button></a>
@@ -1134,7 +1134,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             </span>
                                         </th>
                                         <th scope="col">
-                                            <span class="d-flex align-items-center" style="width:125px;">
+                                            <span class="d-flex align-items-center" style="width:135px;">
                                                 <a href="#" class="sort-link" data-sort-by="export_status"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Tình trạng xuất</button></a>
@@ -1185,20 +1185,20 @@ $index = array_search($item['label'], $numberedLabels);
                                             <td>{{ number_format($item->product_total) }}</td>
                                             <td>{{ $item->import_code }}</td>
                                             <td class="text-left" style="width: 125px">
-                                                @if ($value->debt_import != 0 && $value->import_status != 1)
-                                                    {{ $value->debt_import . ' ' }}ngày
+                                                @if ($item->debt_import != 0 && $item->import_status != 1)
+                                                    {{ $item->debt_import . ' ' }}ngày
                                                     <span>
                                                         <br>
-                                                        {{ date_format(new DateTime($value->date_start), 'd-m-Y') }}
+                                                        {{ date_format(new DateTime($item->date_import_start), 'd-m-Y') }}
                                                         <br>
 
-                                                        {{ date_format(new DateTime($value->date_end), 'd-m-Y') }}
+                                                        {{ date_format(new DateTime($item->date_import_end), 'd-m-Y') }}
                                                     </span>
-                                                @elseif($value->import_status == 4)
+                                                @elseif($item->import_status == 4)
                                                     <div id="payment" class="payment">Thanh toán tiền mặt</div>
-                                                @elseif($value->import_status == 1)
+                                                @elseif($item->import_status == 1)
                                                     Đã thanh toán ngày <br>
-                                                    {{ date_format(new DateTime($value->updated_at), 'd-m-Y') }}
+                                                    {{ date_format(new DateTime($item->updated_at), 'd-m-Y') }}
                                                 @endif
                                                 @php
                                                     $input_value = request('payment');
@@ -1226,20 +1226,19 @@ $index = array_search($item['label'], $numberedLabels);
                                             <td>{{ number_format($item->export_total) }}</td>
                                             <td>{{ $item->export_code }}</td>
                                             <td class="text-left" style="width: 125px">
-                                                @if ($value->debt_export != 0 && $item->export_status != 1)
+                                                @if ($item->debt_export != 0 && $item->export_status != 1)
                                                     {{ $item->debt_export . ' ' }}ngày
                                                     <span>
                                                         <br>
-                                                        {{ date_format(new DateTime($value->date_start), 'd-m-Y') }}
+                                                        {{ date_format(new DateTime($item->date_export_start), 'd-m-Y') }}
                                                         <br>
-
-                                                        {{ date_format(new DateTime($value->date_end), 'd-m-Y') }}
+                                                        {{ date_format(new DateTime($item->date_export_end), 'd-m-Y') }}
                                                     </span>
                                                 @elseif($item->export_status == 4)
                                                     <div id="payment" class="payment">Thanh toán tiền mặt</div>
                                                 @elseif($item->export_status == 1)
                                                     Đã thanh toán ngày <br>
-                                                    {{ date_format(new DateTime($value->updated_at), 'd-m-Y') }}
+                                                    {{ date_format(new DateTime($item->updated_at), 'd-m-Y') }}
                                                 @endif
                                                 @php
                                                     $input_value = request('payment');

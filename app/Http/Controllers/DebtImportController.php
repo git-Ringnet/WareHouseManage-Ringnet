@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\DebtImport;
+use App\Models\History;
 use App\Models\Provides;
 use App\Models\User;
 use DateTime;
@@ -17,9 +18,12 @@ class DebtImportController extends Controller
      * @return \Illuminate\Http\Response
      */
     private $debts;
+    private $history;
+
     public function __construct()
     {
         $this->debts = new DebtImport();
+        $this->history = new History();
     }
     public function index(Request $request)
     {
@@ -178,13 +182,18 @@ class DebtImportController extends Controller
     public function update(Request $request, $id)
     {
         $debt = DebtImport::find($id);
-        // dd($request);
+        $data = [];
         if ($request->has('submitBtn')) {
             $action = $request->input('submitBtn');
             if ($action === 'action1') {
                 $debt->debt_status = 1;
                 $debt->debt = 0;
                 $debt->update($request->all());
+                $data = [
+                    'debt_import' => 0,
+                    'import_status' => 1
+                ];
+                $this->history->updateHistoryByImport($data, $debt->import_id);
                 return redirect()->route('debt_import.index')->with('msg', 'Thanh toán thành công!');
             }
             if ($action === 'action2') {
@@ -213,7 +222,14 @@ class DebtImportController extends Controller
                     $debt->debt = $request->debt_debt;
                 }
 
+                $data = [
+                    'import_status' => $debt->debt_status,
+                    'debt_import' => $debt->debt,
+                    'debt_import_end' => $request->date_end,
+                    'debt_import_start' => $request->date_start
+                ];
                 $debt->update($request->all());
+                $this->history->updateHistoryByImport($data, $debt->import_id);
 
                 return redirect()->route('debt_import.index')->with('msg', 'Cập nhật thành công!');
             }

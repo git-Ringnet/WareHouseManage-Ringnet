@@ -420,8 +420,10 @@ class AddProductController extends Controller
 
             if ($debt->debt == 0) {
                 $debt->debt_status = 4;
-            } elseif ($daysDiff <= 3 && $daysDiff >= 0) {
+            } elseif ($daysDiff <= 3 && $daysDiff = 0) {
                 $debt->debt_status = 2;
+            } elseif ($daysDiff == 0) {
+                $debt->debt_status = 5;
             } elseif ($daysDiff < 0) {
                 $debt->debt_status = 0;
             } else {
@@ -576,8 +578,10 @@ class AddProductController extends Controller
 
             if ($debt->debt == 0) {
                 $debt->debt_status = 4;
-            } elseif ($daysDiff <= 3 && $daysDiff >= 0) {
+            } elseif ($daysDiff <= 3 && $daysDiff = 0) {
                 $debt->debt_status = 2;
+            }elseif ($daysDiff == 0) {
+                $debt->debt_status = 5;
             } elseif ($daysDiff < 0) {
                 $debt->debt_status = 0;
             } else {
@@ -958,8 +962,10 @@ class AddProductController extends Controller
 
             if ($request->provide_debt == 0) {
                 $debt_status = 4;
-            } elseif ($daysDiff <= 3 && $daysDiff >= 0) {
+            } elseif ($daysDiff <= 3 && $daysDiff = 0) {
                 $debt_status = 2;
+            } elseif ($daysDiff == 0) {
+                $debt_status = 5;
             } elseif ($daysDiff < 0) {
                 $debt_status = 0;
             } else {
@@ -977,7 +983,19 @@ class AddProductController extends Controller
                 'created_at' => $getdate
             ];
             $this->debtImport->updateDebtImport($dataImport, $request->order_id);
-        
+
+            $dataHistory =  [
+                'import_code'=> $request->product_code,
+                'provide_id' => $request->provide_id == null ? $add_newProvide : $request->provide_id,
+                'product_total' => $total_import,
+                'import_status' => $debt_status,
+                'debt_import' => $request->provide_debt == null ? 0 : $request->provide_debt,
+                'debt_import_end' => $endDateFormatted,
+                'debt_import_start' => $request->product_create,
+            ];
+            $this->history->updateHistoryByImport($dataHistory, $request->order_id);
+
+
             return redirect()->route('insertProduct.index')->with('msg', 'Chỉnh sửa đơn hàng thành công');
         }
     }

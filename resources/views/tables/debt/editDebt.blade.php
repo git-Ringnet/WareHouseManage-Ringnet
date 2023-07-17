@@ -82,7 +82,7 @@
                                 <thead>
                                     <tr>
                                         <th></th>
-                                        <th>Mã Sản Phẩm</th>
+                                        <th>Tên Sản Phẩm</th>
                                         <th class="text-right">Số lượng</th>
                                         <th class="text-right">Giá bán</th>
                                         <th class="text-right">Giá nhập</th>
@@ -94,7 +94,7 @@
                                     @foreach ($product as $item)
                                         <tr>
                                             <td><?php echo $stt += 1; ?></td>
-                                            <td>{{ $item->masanpham }}</td>
+                                            <td>{{ $item->tensanpham }}</td>
                                             <td class="text-right">{{ $item->soluong }}</td>
                                             <td class="text-right">{{ number_format($item->giaban) }}</td>
                                             <td class="text-right">{{ number_format($item->gianhap) }}</td>

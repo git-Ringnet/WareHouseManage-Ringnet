@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('history', function (Blueprint $table) {
             $table->id();
             $table->integer('export_id')->nullable();
+            $table->integer('import_id')->nullable();
             $table->integer('product_id')->nullable();
             $table->integer('import_id')->nullable();
             $table->dateTime('date_time')->nullable();
@@ -37,6 +38,10 @@ return new class extends Migration
             $table->string('export_code')->nullable();
             $table->integer('debt_export')->default(0);
             $table->integer('export_status')->nullable();
+            $table->dateTime('debt_export_start')->nullable();
+            $table->dateTime('debt_export_end')->nullable();
+            $table->dateTime('debt_import_start')->nullable();
+            $table->dateTime('debt_import_end')->nullable();
             $table->decimal('total_difference', 15, 4)->nullable();
             $table->integer('tranport_fee')->nullable();
             $table->string('history_note')->nullable();

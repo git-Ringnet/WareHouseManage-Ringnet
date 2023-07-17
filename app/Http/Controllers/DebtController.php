@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Debt;
+use App\Models\History;
 use App\Models\User;
 use DateTime;
 use Illuminate\Http\Request;
@@ -12,9 +13,11 @@ class DebtController extends Controller
 {
 
     private $debts;
+    private $history;
     public function __construct()
     {
         $this->debts = new Debt();
+        $this->history = new History();
     }
     /**
      * Display a listing of the resource.
@@ -143,10 +146,10 @@ class DebtController extends Controller
         $guests = Debt::leftjoin('guests', 'guests.id', '=', 'debts.guest_id')->select('guests.guest_name as guests')->get();
 
         $debtsSale = Debt::leftjoin('users', 'debts.user_id', '=', 'users.id')->get();
-        $debts = $this->debts->getAllDebts($filters, $keywords, $nhanvien, $date,$guest, $datepaid, $status, $sortBy, $sortType);
+        $debts = $this->debts->getAllDebts($filters, $keywords, $nhanvien, $date, $guest, $datepaid, $status, $sortBy, $sortType);
         $product = $this->debts->getAllProductsDebts();
         $debtsCreator = $this->debts->debtsCreator();
-        return view('tables.debt.debts', compact('title', 'debts', 'debtsSale','guests', 'product', 'string', 'sortType', 'debtsCreator'));
+        return view('tables.debt.debts', compact('title', 'debts', 'debtsSale', 'guests', 'product', 'string', 'sortType', 'debtsCreator'));
     }
 
     /**
@@ -194,7 +197,7 @@ class DebtController extends Controller
             ->join('users', 'debts.user_id', '=', 'users.id')
             ->leftJoin('exports', 'exports.id', 'debts.export_id')
             ->findOrFail($id);
-        $product = Debt::select('debts.*', 'product_exports.id as madon', 'product_exports.product_qty as soluong', 'product_exports.product_price as giaban', 'product.product_price as gianhap')
+        $product = Debt::select('debts.*', 'product_exports.id as madon', 'product_exports.product_qty as soluong', 'product_exports.product_price as giaban', 'product.product_price as gianhap', 'product.product_name as tensanpham')
             ->leftJoin('guests', 'guests.id', 'debts.guest_id')
             ->leftJoin('users', 'users.id', 'debts.user_id')
             ->leftJoin('exports', 'exports.id', 'debts.export_id')
@@ -214,13 +217,18 @@ class DebtController extends Controller
     public function update(Request $request, $id)
     {
         $debt = Debt::find($id);
-        // dd($request);
+        $data = [];
         if ($request->has('submitBtn')) {
             $action = $request->input('submitBtn');
             if ($action === 'action1') {
                 $debt->debt_status = 1;
                 $debt->debt = 0;
                 $debt->update($request->all());
+                $data = [
+                    'debt_export' => 0,
+                    'export_status' => 1
+                ];
+                $this->history->updateHistoryByExport($data, $debt->export_id);
                 return redirect()->route('debt.index')->with('msg', 'Thanh toán thành công!');
             }
             if ($action === 'action2') {
@@ -249,8 +257,14 @@ class DebtController extends Controller
                     $debt->debt_status = 3;
                     $debt->debt = $request->debt_debt;
                 }
+                $data = [
+                    'export_status' => $debt->debt_status,
+                    'debt_export' => $debt->debt,
+                    'debt_export_end' => $request->date_end,
+                    'debt_export_start' => $request->date_start
+                ];
                 $debt->update($request->all());
-
+                $this->history->updateHistoryByExport($data, $debt->export_id);
                 return redirect()->route('debt.index')->with('msg', 'Cập nhật thành công!');
             }
         }

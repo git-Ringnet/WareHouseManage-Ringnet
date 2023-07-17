@@ -49,12 +49,12 @@ class History extends Model
             $history = $history->whereIn('history.export_status', $status_export);
         }
 
-        // if (!empty($orderBy) && !empty($orderType)) {
-        //     if ($orderBy == 'updated_at') {
-        //         $orderBy = "history." . $orderBy;
-        //     };
-        //     $history = $history->orderBy($orderBy, $orderType);
-        // }
+        if (!empty($orderBy) && !empty($orderType)) {
+            if ($orderBy == 'updated_at') {
+                $orderBy = "history." . $orderBy;
+            };
+            $history = $history->orderBy($orderBy, $orderType);
+        }
 
 
         $history = $history->orderBy('history.id', 'desc')->paginate(8);
@@ -66,11 +66,15 @@ class History extends Model
     public function addHistory($data){
         return DB::table($this->table)->insertGetId($data);
     }
-    public function updateHistoryImport($data, $id)
+    public function getNameProduct($id){
+        return DB::table('product')->whereIn('id',$id)->get();
+    }
+    public function updateHistoryByImport($data, $id)
     {
         return DB::table($this->table)->where('import_id', $id)->update($data);
     }
-    public function getNameProduct($id){
-        return DB::table('product')->whereIn('id',$id)->get();
+    public function updateHistoryByExport($data, $id)
+    {
+        return DB::table($this->table)->where('export_id', $id)->update($data);
     }
 }
