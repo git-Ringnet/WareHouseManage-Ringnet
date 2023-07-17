@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\DebtImport;
 use App\Models\Exports;
+use App\Models\History;
 use App\Models\Orders;
 use App\Models\Product;
 use App\Models\productExports;
@@ -30,6 +31,7 @@ class AddProductController extends Controller
     private $productOrder;
     private $product;
     private $debtImport;
+    private $history;
     public function __construct()
     {
         $this->orders = new Orders();
@@ -37,6 +39,7 @@ class AddProductController extends Controller
         $this->productOrder = new ProductOrders();
         $this->product = new Product();
         $this->debtImport = new DebtImport();
+        $this->history = new History();
     }
     public function index(Request $request)
     {
@@ -268,7 +271,7 @@ class AddProductController extends Controller
             'provide_email' => $request->provide_id == null ? $request->provide_email_new : ($request->options == 2 ? $request->provide_email_new : $request->provide_email),
             'provide_address' => $request->provide_id == null ? $request->provide_address_new : ($request->options == 2 ? $request->provide_address_new : $request->provide_address),
             'provide_status' => 1,
-            'provide_code' => $request->provide_id == null ? $request->provide_code_new : ($request->options == 2 ? $request->provide_code_new: $request->provide_code),
+            'provide_code' => $request->provide_id == null ? $request->provide_code_new : ($request->options == 2 ? $request->provide_code_new : $request->provide_code),
             'debt' => $request->provide_debt == null ? 0 : $request->provide_debt,
         ];
         if ($request->provide_id === null) {
@@ -402,7 +405,7 @@ class AddProductController extends Controller
 
             // Định dạng ngày kết thúc theo ý muốn
             $endDateFormatted = $endDate->format('Y-m-d');
-         
+
             $debt->date_end = $endDateFormatted;
 
             // Xử lí status debt
@@ -772,7 +775,7 @@ class AddProductController extends Controller
         if (isset($request->list_id)) {
             $list = $request->list_id;
             $listOrders = Orders::whereIn('id', $list)->get();
-          
+
             foreach ($listOrders as $listOrder) {
                 $check = false;
                 if ($listOrder->order_status == 0) {
@@ -886,6 +889,7 @@ class AddProductController extends Controller
             $product_price =  str_replace(',', '', $request->product_price);
             $product_total = str_replace(',', '', $request->product_total);
             $total_price = str_replace(',', '', $request->total_price);
+          
             $dataProvide = [
                 'provide_name' => $request->provide_id == null ? $request->provide_name_new : ($request->options == 2 ? $request->provide_name_new : $request->provide_name),
                 'provide_represent' => $request->provide_id == null ? $request->provide_represent_new : ($request->options == 2 ? $request->provide_represent_new : $request->provide_represent),
@@ -931,7 +935,7 @@ class AddProductController extends Controller
                 $f = ProductOrders::findOrFail($list_id[$i]);
                 $this->product->updateProduct($data, $f->product_id);
             }
-
+          
             $startDate = Carbon::parse($request->product_create); // Chuyển đổi ngày bắt đầu thành đối tượng Carbon
             $daysToAdd = $request->provide_debt; // Số ngày cần thêm
 
@@ -973,7 +977,7 @@ class AddProductController extends Controller
                 'created_at' => $getdate
             ];
             $this->debtImport->updateDebtImport($dataImport, $request->order_id);
-
+        
             return redirect()->route('insertProduct.index')->with('msg', 'Chỉnh sửa đơn hàng thành công');
         }
     }

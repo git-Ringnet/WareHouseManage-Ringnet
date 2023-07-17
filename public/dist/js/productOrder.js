@@ -414,13 +414,13 @@ $("#radio2").on("click", function () {
         '<div class="row p-3">' +
         '<div class="col-sm-6">' +
         '<div class="form-group">' +
-        '<label for="congty">Công ty:</label>' +
+        '<label for="congty" class="required-label">Công ty:</label>' +
         '<input required type="text" class="form-control" id="provide_name_new" placeholder="Nhập thông tin" name="provide_name_new" value="">' +
         '</div>' + '<div class="form-group">' +
-        '<label>Địa chỉ xuất hóa đơn:</label>' +
+        '<label class="required-label">Địa chỉ xuất hóa đơn:</label>' +
         '<input required type="text" class="form-control" id="provide_address_new" placeholder="Nhập thông tin" name="provide_address_new" value="">' +
         '</div>' + '<div class="form-group">' +
-        '<label for="email">Mã số thuế:</label>' +
+        '<label for="email" class="required-label">Mã số thuế:</label>' +
         '<input required type="text" class="form-control" oninput="validateNumberInput(this)" id="provide_code_new" placeholder="Nhập thông tin" name="provide_code_new" value="">' +
         '</div>' + '</div>' + '<div class="col-sm-6">' +
         '<div class="form-group">' +

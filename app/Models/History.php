@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class History extends Model
 {
@@ -60,5 +61,16 @@ class History extends Model
 
 
         return $history;
+    }
+
+    public function addHistory($data){
+        return DB::table($this->table)->insertGetId($data);
+    }
+    public function updateHistoryImport($data, $id)
+    {
+        return DB::table($this->table)->where('import_id', $id)->update($data);
+    }
+    public function getNameProduct($id){
+        return DB::table('product')->whereIn('id',$id)->get();
     }
 }

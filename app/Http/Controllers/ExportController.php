@@ -241,6 +241,12 @@ class ExportController extends Controller
                                 $qty_exist = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                     ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                     ->where('product.id', $productID)->value('productorders.product_qty');
+                                // lấy id Import
+                                $import_id = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
+                                    ->leftJoin('orders', 'productorders.order_id', 'orders.id')
+                                    ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
+                                    ->where('product.id', $productID)
+                                    ->value('debt_import.import_id');
                                 //lấy thông tin sản phẩm
                                 $product = Product::find($productID);
                                 // Lấy thông tin từ bảng Guests
@@ -249,6 +255,7 @@ class ExportController extends Controller
                                 $history = new History();
                                 $history->export_id = $export->id;
                                 $history->product_id = $productID;
+                                $history->import_id = $import_id;
                                 $history->date_time = Carbon::now();
                                 $history->user_id = Auth::user()->id;
                                 $history->provide_id = $provide_id;
@@ -420,6 +427,12 @@ class ExportController extends Controller
                                 $qty_exist = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                     ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                     ->where('product.id', $productID)->value('productorders.product_qty');
+                                // lấy id Import
+                                $import_id = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
+                                    ->leftJoin('orders', 'productorders.order_id', 'orders.id')
+                                    ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
+                                    ->where('product.id', $productID)
+                                    ->value('debt_import.import_id');
                                 //lấy thông tin sản phẩm
                                 $product = Product::find($productID);
                                 // Lấy thông tin từ bảng Guests
@@ -428,6 +441,7 @@ class ExportController extends Controller
                                 $history = new History();
                                 $history->export_id = $export->id;
                                 $history->product_id = $productID;
+                                $history->import_id = $import_id;
                                 $history->date_time = Carbon::now();
                                 $history->user_id = Auth::user()->id;
                                 $history->provide_id = $provide_id;
@@ -592,6 +606,12 @@ class ExportController extends Controller
                                 $qty_exist = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                     ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                     ->where('product.id', $productID)->value('productorders.product_qty');
+                                // lấy id Import
+                                $import_id = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
+                                    ->leftJoin('orders', 'productorders.order_id', 'orders.id')
+                                    ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
+                                    ->where('product.id', $productID)
+                                    ->value('debt_import.import_id');
                                 //lấy thông tin sản phẩm
                                 $product = Product::find($productID);
                                 // Lấy thông tin từ bảng Guests
@@ -600,6 +620,7 @@ class ExportController extends Controller
                                 $history = new History();
                                 $history->export_id = $export->id;
                                 $history->product_id = $productID;
+                                $history->import_id = $import_id;
                                 $history->date_time = Carbon::now();
                                 $history->user_id = Auth::user()->id;
                                 $history->provide_id = $provide_id;
@@ -763,6 +784,12 @@ class ExportController extends Controller
                                 $qty_exist = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                     ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                     ->where('product.id', $productID)->value('productorders.product_qty');
+                                // lấy id Import
+                                $import_id = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
+                                    ->leftJoin('orders', 'productorders.order_id', 'orders.id')
+                                    ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
+                                    ->where('product.id', $productID)
+                                    ->value('debt_import.import_id');
                                 //lấy thông tin sản phẩm
                                 $product = Product::find($productID);
                                 // Lấy thông tin từ bảng Guests
@@ -771,6 +798,7 @@ class ExportController extends Controller
                                 $history = new History();
                                 $history->export_id = $export->id;
                                 $history->product_id = $productID;
+                                $history->import_id = $import_id;
                                 $history->date_time = Carbon::now();
                                 $history->user_id = Auth::user()->id;
                                 $history->provide_id = $provide_id;
@@ -2201,6 +2229,7 @@ class ExportController extends Controller
         }
         return response()->json(['success' => true]);
     }
+
     public function editEx($id)
     {
         $exports = Exports::find($id);
@@ -2213,7 +2242,6 @@ class ExportController extends Controller
             ->where('export_id', $id)
             ->get();
         $product_code = Product::all();
-        $title = 'Chi tiết đơn hàng';
         $title = 'Chi tiết đơn hàng';
         return view('tables.export.editEx', compact('exports', 'guest', 'productExport', 'product_code', 'customer', 'title'));
     }

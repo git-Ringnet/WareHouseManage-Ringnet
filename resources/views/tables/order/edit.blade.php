@@ -180,7 +180,7 @@
             <div class="row p-3">
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label for="congty">Công ty:</label>
+                        <label for="congty" class="required-label">Công ty:</label>
                         <input required type="text" class="form-control"
                             @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif id="provide_name"
                             placeholder="Nhập thông tin" name="provide_name"
@@ -188,7 +188,7 @@
                             @if ($order->order_status == 1) <?php echo 'readonly'; ?> @endif>
                     </div>
                     <div class="form-group">
-                        <label>Địa chỉ xuất hóa đơn:</label>
+                        <label class="required-label">Địa chỉ xuất hóa đơn:</label>
                         <input required type="text" class="form-control"
                             @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif id="provide_address"
                             placeholder="Nhập thông tin" name="provide_address"
@@ -196,7 +196,7 @@
                             @if ($order->order_status == 1) <?php echo 'readonly'; ?> @endif>
                     </div>
                     <div class="form-group">
-                        <label for="email">Mã số thuế:</label>
+                        <label for="email" class="required-label">Mã số thuế:</label>
                         <input required oninput="validateNumberInput(this)" type="text" class="form-control"
                             @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif id="provide_code"
                             placeholder="Nhập thông tin" name="provide_code"
@@ -313,7 +313,7 @@
                                         name="product_unit[]" value="{{ $pro->product_unit }}"
                                         @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif> </td>
                                 <td> <input oninput="validatQtyInput(this)"
-                                        class="form-control quantity-input text-center" style="width: 80px"
+                                        class="form-control quantity-input text-center"
                                         oninput="validateNumberInput(this)"
                                         @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif required type="text"
                                         name="product_qty[]" value="{{ $pro->product_qty }}"
