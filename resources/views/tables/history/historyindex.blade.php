@@ -1272,9 +1272,9 @@ $index = array_search($item['label'], $numberedLabels);
                     </div>
                     <div class="paginator mt-4 d-flex justify-content-end">
                         @if (Auth::user()->can('isAdmin'))
-                            {{-- {{ $debts->appends(request()->except('page'))->links() }} --}}
+                            {{ $history->appends(request()->except('page'))->links() }}
                         @else
-                            {{-- {{ $debtsCreator->appends(request()->except('page'))->links() }} --}}
+                            {{ $history->appends(request()->except('page'))->links() }}
                         @endif
                     </div>
                 </div>

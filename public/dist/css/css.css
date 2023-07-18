@@ -3,10 +3,10 @@
 #category-options,
 #quantity-options,
 .block-options {
-    width: 250px;
+    width: 300px;
     background-color: #fff;
     border-radius: 8px;
-    left: -37px !important;
+    left: -40px !important;
 }
 
 li {

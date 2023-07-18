@@ -326,7 +326,7 @@
                             </a>
                         </li>
                     @endcan
-                    @can('view-guests')
+                    @can('view-provides')
                         <li class="nav-item">
                             <a href="{{ route('debt_import.index') }}"
                                 class="nav-link {{ App\Helpers\Helper::isActiveRouteGroup('debt_import.index,debt_import.edit') }}">

@@ -192,11 +192,7 @@ class HistoryController extends Controller
         $debtsSale =  History::leftjoin('users', 'history.user_id', '=', 'users.id')->get();
         $provides = History::leftjoin('provides', 'history.provide_id', '=', 'provides.id')->get();
         $provide_namearr = [];
-
-
-        // $debts = $this->debts->getAllDebts($filters, $keywords, $nhanvien, $date,$provide_namearr, $status, $sortBy, $sortType);
-        // $product = $this->debts->getAllProductsDebts();
-        // $debtsCreator = $this->debts->debtsCreator();
+        
         $history = $this->history->getAllHistory($filters, $keywords, $date, $guest, $status, $unitarr, $status_export, $sortBy, $sortType);
 
         return view('tables.history.historyindex', compact('history', 'title', 'guests', 'debtsSale', 'provides', 'string', 'sortType'));
