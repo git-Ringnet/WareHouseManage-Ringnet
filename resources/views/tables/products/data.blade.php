@@ -777,6 +777,7 @@ $index = array_search($item['label'], $numberedLabels);
                                 </thead>
                                 <tbody>
                                     @foreach ($products as $value)
+                                        @if ($value->product_qty >= 1)
                                             <tr>
                                                 <td><input type="checkbox" class="cb-element" name="product[]"
                                                         value="{{ $value->id }}"></td>

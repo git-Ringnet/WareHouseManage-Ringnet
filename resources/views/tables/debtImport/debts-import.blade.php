@@ -597,7 +597,13 @@ $index = array_search($item['label'], $numberedLabels);
                                             <td class="text-center">
                                                 {{ $value->nhanvien }}
                                             </td>
-                                            <td class="text-right">{{ number_format($value->total_import) }}</td>
+                                            <td class="text-right">
+                                                @if(fmod($value->total_import,1) > 0)
+                                                {{ number_format($value->total_import,2,'.',',') }}
+                                                @else
+                                                {{ number_format($value->total_import) }}
+                                                @endif
+                                            </td>
                                             <td class="text-left" style="width: 125px">
                                                 @if ($value->debt != 0 && $value->debt_status != 1)
                                                     {{ $value->debt . ' ' }}ngày
@@ -713,11 +719,19 @@ $index = array_search($item['label'], $numberedLabels);
                                                 </td>
                                                 <td class="text-right">
                                                     <p>Giá nhập</p>
+                                                    @if(fmod($item->gianhap,1) > 0)
+                                                    {{ number_format($item->gianhap,1,'.',',') }}
+                                                    @else
                                                     {{ number_format($item->gianhap) }}
+                                                    @endif
                                                 </td>
                                                 <td class="text-right">
                                                     <p>Thành tiền</p>
+                                                    @if(fmod(($item->gianhap * $item->soluong),1) > 0)
+                                                    {{ number_format(($item->gianhap * $item->soluong),1,'.',',') }}
+                                                    @else
                                                     {{ number_format($item->gianhap * $item->soluong) }}
+                                                    @endif
                                                 </td>
                                                 <td>
                                                     <p>Thuế</p>

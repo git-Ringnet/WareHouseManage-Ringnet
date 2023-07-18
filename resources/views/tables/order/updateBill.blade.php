@@ -3,10 +3,22 @@
 <div class="content-wrapper">
     <div class="row">
         <div class="col-sm-6 breadcrumb">
+            @if ($order->order_status == 1)
+            <a href="{{route('insertProduct.index')}}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" fill="#555555"></path>
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M17 11.9999C17 12.3289 16.7513 12.5956 16.4444 12.5956L7.55557 12.5956C7.24875 12.5956 7.00002 12.3289 7.00002 11.9999C7.00002 11.671 7.24875 11.4043 7.55557 11.4043L16.4444 11.4043C16.7513 11.4043 17 11.671 17 11.9999Z" fill="white"></path>
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M11.1244 8.17446C11.3413 8.40707 11.3413 8.78421 11.1244 9.01683L8.34199 12L11.1244 14.9832C11.3413 15.2158 11.3413 15.5929 11.1244 15.8255C10.9074 16.0582 10.5557 16.0582 10.3387 15.8255L7.16349 12.4212C6.94653 12.1886 6.94653 11.8114 7.16349 11.5788L10.3387 8.17446C10.5557 7.94185 10.9074 7.94185 11.1244 8.17446Z" fill="white"></path>
+                </svg>
+                <span class="ml-1" style="font-size: 16px; font-weight: 500; color: #555555;">Quay lại danh
+                    sách</span>
+            </a>
+            @else
             <span><a href="{{ route('insertProduct.index') }}">Nhập hàng</a></span>
             <span class="mx-1"> / </span>
-            <span><b>Chỉnh sửa đơn hàng</b></span>
-        </div>
+            <span><b>Chi tiết đơn hàng</b></span>
+            @endif
+            </div>
         <div class="col-sm-6 position-absolute" style="top:63px;right:2%">
             <div class="w-50 position-relative" style="float: right;">
                 <div class="justify-content-between d-flex">
@@ -140,8 +152,8 @@
                                         </div>
                                     </div>
                                     <ul id="myUL"
-                                        class="bg-white position-absolute w-50 rounded shadow p-0 scroll-data "
-                                        style="z-index: 99;">
+                                        class="bg-white position-absolute rounded shadow p-0 scroll-data "
+                                        style="z-index: 99; width:37%;">
                                         @foreach ($provide as $value)
                                             <li <?php if (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin')) {
                                                 echo 'class="d-none"';
@@ -149,7 +161,6 @@
                                                 <a href="#"
                                                     class="text-dark d-flex justify-content-between p-2 search-info select_page"
                                                     id="{{ $value->id }}" name="select_page">
-                                                    <span class="w-50">{{ $value->provide_represent }}</span>
                                                     <span class="w-50">{{ $value->provide_name }}</span>
                                                 </a>
                                             </li>
@@ -212,7 +223,7 @@
                     </div>
                     <div class="form-group">
                         <label for="email">Số điện thoại:</label>
-                        <input oninput="validateNumberInput(this)" type="text" class="form-control"
+                        <input oninput="validateBillInput(this)" type="text" class="form-control"
                             @if (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin')) readonly @endif id="provide_phone"
                             placeholder="Nhập thông tin" name="provide_phone"
                             value="{{ $provide_order[0]->provide_phone }}">
@@ -236,7 +247,7 @@
             <div class="d-flex justify-content-between align-items-center my-2">
                 <div class="d-flex">
                     <div style="width:42%;">
-                        <label for="" class="ml-2">Số hóa đơn</label>
+                        <label for="" style="padding: 0 0.75rem;">Số hóa đơn</label>
                         <input oninput="validateBillInput(this)" type="text" name="product_code"
                             class="form-control" value="{{ $order->product_code }}"
                             @if (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin')) readonly @endif
@@ -310,7 +321,8 @@
                                         @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif> </td>
                                 <td> <input class="form-control text-center product_price"
                                         @if (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin')) readonly @endif required type="text"
-                                        name="product_price[]" value="{{ number_format($pro->product_price) }}"
+                                        name="product_price[]" 
+                                        value="@if(fmod($pro->product_price,1) > 0){{ number_format($pro->product_price,1,'.','') }}@else{{number_format($pro->product_price)}}@endif"
                                         @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif> </td>
                                 <td>
                                     <select name="product_tax[]" id="" class="form-control product_tax"
@@ -533,7 +545,7 @@
                     (data.provide_email == null ? "" : data.provide_email) + '">' +
                     '</div>' + '<div class="form-group">' +
                     '<label for="email">Số điện thoại:</label>' +
-                    '<input required type="text" class="form-control" id="provide_phone" placeholder="Nhập thông tin" name="provide_phone" value="' +
+                    '<input oninput="validateBillInput(this)" required type="text" class="form-control" id="provide_phone" placeholder="Nhập thông tin" name="provide_phone" value="' +
                     (data.provide_phone == null ? "" : data.provide_phone) + '">' +
                     '</div>' + '<div class="form-group">' +
                     '<label for="email">Công nợ:</label>' +

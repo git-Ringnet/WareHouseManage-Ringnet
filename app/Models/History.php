@@ -66,6 +66,10 @@ class History extends Model
     public function addHistory($data){
         return DB::table($this->table)->insertGetId($data);
     }
+    public function updateHistoryImport($data, $id)
+    {
+        return DB::table($this->table)->where('product_id', $id)->update($data);
+    }
     public function getNameProduct($id){
         return DB::table('product')->whereIn('id',$id)->get();
     }

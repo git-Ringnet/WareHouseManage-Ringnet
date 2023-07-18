@@ -77,7 +77,6 @@
             <section class="content-header">
                 <div class="d-flex mb-1 action-don">
                     <a href="#" class="btn btn-danger text-white" id="add_bill">Duyệt đơn</a>
-                    <a href="#" class="btn btn-secondary mx-4">Hủy đơn</a>
                 </div>
                 <div class="container-fluided">
                     <div class="row my-3">
@@ -107,14 +106,13 @@
                                     </div>
                                 </div>
                                 <ul id="myUL"
-                                    class="bg-white position-absolute w-50 rounded shadow p-0 scroll-data"
-                                    style="z-index: 99;">
+                                    class="bg-white position-absolute rounded shadow p-0 scroll-data"
+                                    style="z-index: 99; width:37%;">
                                     @foreach ($provide as $value)
                                         <li>
                                             <a href="#"
                                                 class="text-dark d-flex justify-content-between p-2 search-info"
                                                 id="{{ $value->id }}" name="search-info">
-                                                <span class="w-50">{{ $value->provide_represent }}</span>
                                                 <span class="w-50">{{ $value->provide_name }}</span>
                                             </a>
                                         </li>
@@ -133,7 +131,7 @@
                 <div class="d-flex justify-content-between align-items-center my-2">
                     <div class="d-flex">
                         <div style="width:42%;">
-                            <label class="ml-2">Số hóa đơn</label>
+                            <label style="padding: 0 0.75rem;">Số hóa đơn</label>
                             <input oninput="validateBillInput(this)" type="text" name="product_code"
                                 placeholder="Số hóa đơn" class="form-control">
                         </div>
@@ -452,7 +450,7 @@
                         (data.provide_email == null ? "" : data.provide_email) + '">' +
                         '</div>' + '<div class="form-group">' +
                         '<label for="email">Số điện thoại:</label>' +
-                        '<input type="text" class="form-control" id="provide_phone" placeholder="Nhập thông tin" name="provide_phone" value="' +
+                        '<input oninput="validateBillInput(this)" type="text" class="form-control" id="provide_phone" placeholder="Nhập thông tin" name="provide_phone" value="' +
                         (data.provide_phone == null ? "" : data.provide_phone) + '">' +
                         '</div>' +
                         '<div class="form-group">' +
@@ -604,12 +602,12 @@
                             '<td><input required type="text" class="search_product form-control" name="product_name[]" value="' +
                             titlesValue +
                             '"></td>' +
-                            '<td><input required type="text" class="form-control text-center" style="width:70px" name="product_unit[]" value="' +
+                            '<td><input required type="text" class="form-control text-center" style="width:100px" name="product_unit[]" value="' +
                             typeValue +
                             '"></td>' +
                             '<td><input required type="text" oninput="validatQtyInput(this)" name="product_qty[]" class="quantity-input form-control text-center" value="' +
                             numberssValue + '"></td>' +
-                            '<td><input required type="text" class="form-control product_price text-center" style="width:140px" name="product_price[]" value="' +
+                            '<td><input required type="text" class="form-control product_price text-center" name="product_price[]" value="' +
                             price + '"></td>' +
                             '<input type="hidden" class="product_tax1">' +
                             '<td>' +
@@ -620,8 +618,8 @@
                             '<option value="99" ' + (tax == 99 ? "selected" : "") + '>NOVAT</option>' +
                             '</select' +
                             '</td>' +
-                            '<td><input readonly type="text" style="width:140px" class="form-control text-center total-amount" name="product_total[]" value=""></td>' +
-                            '<td><input type="text" class="form-control" style="width:150px" name="product_trademark[]"></td>' +
+                            '<td><input readonly type="text"  class="form-control text-center total-amount" name="product_total[]" value=""></td>' +
+                            '<td><input type="text" class="form-control" name="product_trademark[]"></td>' +
                             '<td><a href="javascript:;" class="deleteRow"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.0606 6.66675C13.6589 6.66675 13.3333 6.99236 13.3333 7.39402C13.3333 7.79568 13.6589 8.12129 14.0606 8.12129H17.9394C18.341 8.12129 18.6667 7.79568 18.6667 7.39402C18.6667 6.99236 18.341 6.66675 17.9394 6.66675H14.0606ZM8 10.3031C8 9.90143 8.32561 9.57582 8.72727 9.57582H10.1818H21.8182H23.2727C23.6744 9.57582 24 9.90143 24 10.3031C24 10.7048 23.6744 11.0304 23.2727 11.0304H22.5455V22.6667C22.5455 24.2819 21.2158 25.5758 19.6179 25.5758H12.3452C11.9637 25.5755 11.5854 25.4997 11.2333 25.3528C10.8812 25.2059 10.5617 24.9908 10.2931 24.7199C10.0244 24.449 9.81206 24.1276 9.66816 23.7743C9.52463 23.4219 9.45204 23.0447 9.45455 22.6642V11.0304H8.72727C8.32561 11.0304 8 10.7048 8 10.3031ZM10.9091 22.6723V11.0304H21.0909V22.6667C21.0909 23.4623 20.4288 24.1213 19.6179 24.1213H12.3458C12.1562 24.1211 11.9684 24.0834 11.7934 24.0104C11.6183 23.9374 11.4595 23.8304 11.3259 23.6958C11.1924 23.5611 11.0868 23.4013 11.0153 23.2257C10.9437 23.05 10.9076 22.8619 10.9091 22.6723ZM17.9394 13.4546C18.3411 13.4546 18.6667 13.7802 18.6667 14.1819V20.9698C18.6667 21.3714 18.3411 21.6971 17.9394 21.6971C17.5377 21.6971 17.2121 21.3714 17.2121 20.9698V14.1819C17.2121 13.7802 17.5377 13.4546 17.9394 13.4546ZM14.7879 14.1819C14.7879 13.7802 14.4623 13.4546 14.0606 13.4546C13.6589 13.4546 13.3333 13.7802 13.3333 14.1819V20.9698C13.3333 21.3714 13.6589 21.6971 14.0606 21.6971C14.4623 21.6971 14.7879 21.3714 14.7879 20.9698V14.1819Z" fill="#555555"/></svg></a></td>' +
                             '</tr>';
                         $('#inputContainer tbody').append(tr);
@@ -636,6 +634,7 @@
                 checkRow();
             });
         }
+        
         $(document).on('keypress', 'form', function(event) {
             return event.keyCode != 13;
         });

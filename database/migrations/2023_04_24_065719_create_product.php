@@ -19,8 +19,8 @@ class CreateProduct extends Migration
             $table->string('product_unit')->nullable();
             $table->integer('product_qty')->nullable();
             $table->decimal('product_price', 15, 4)->nullable();
-            $table->string('product_tax')->nullable();
-            $table->string('product_total')->nullable();
+            $table->integer('product_tax')->nullable();
+            $table->decimal('product_total',15,4)->nullable();
             $table->integer('provide_id')->nullable();
             $table->integer('product_trade')->nullable();
             $table->string('product_trademark')->nullable();

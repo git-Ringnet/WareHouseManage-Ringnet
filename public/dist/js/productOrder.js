@@ -379,22 +379,26 @@ function checkData(e) {
 function validateNumberInput(input) {
     var regex = /^[0-9][0-9-]*$/;
     if (!regex.test(input.value)) {
-        input.value = input.value.replace(/[^0-9][0-9-]*$/g, '');
+        input.value = input.value.replace(/[^0-9]/g, '');
     }
 }
 
 function validateBillInput(input) {
-    var regex = /^[0-9][0-9]*$/;
+    var regex = /^[0-9]*$/;
     if (!regex.test(input.value)) {
-        input.value = input.value.replace(/[^0-9][0-9]*$/g, '');
+        input.value = input.value.replace(/[^0-9]/g, '');
     }
 }
 
+// Chặn sự kiên paste
+function handlePaste(e) {
+    e.preventDefault(); // Chặn sự kiện paste mặc định
+}
 // Hàm nhập số lượng
 function validatQtyInput(input) {
     var regex = /^[1-9][0-9]*$/;
     if (!regex.test(input.value)) {
-        input.value = input.value.replace(/[^1-9][0-9]*$/g, '');
+        input.value = input.value.replace(/[^1-9]/g, '');
     }
 }
 

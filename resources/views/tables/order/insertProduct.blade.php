@@ -547,7 +547,13 @@ $index = array_search($item['label'], $numberedLabels);
                                         <td>{{ $va->provide_name }}</td>
                                         <td>{{ date_format(new DateTime($va->created_at), 'd-m-Y') }}</td>
                                         <td>{{ $va->name }}</td>
-                                        <td class="text-right">{{ number_format($va->total) }}</td>
+                                        <td class="text-right">
+                                            @if(fmod($va->total,1) > 0)
+                                            {{ number_format($va->total,1,'.',',') }}
+                                            @else
+                                            {{ number_format($va->total) }}
+                                            @endif
+                                        </td>
                                         <td class="text-center">
                                             @if ($va->order_status == 0)
                                                 <span class="p-2 bg-warning rounded">Chờ duyệt</span>
@@ -634,7 +640,11 @@ $index = array_search($item['label'], $numberedLabels);
                                                 </td>
                                                 <td class="text-right">
                                                     <p>Tổng tiền</p>
+                                                    @if(fmod(($item->product_qty * $item->product_price),1) > 0)
+                                                    {{ number_format(($item->product_qty * $item->product_price),1,'.',',') }}
+                                                    @else
                                                     {{ number_format($item->product_qty * $item->product_price) }}
+                                                    @endif
                                                 </td>
                                                 <td></td>
                                                 <td></td>
@@ -690,8 +700,7 @@ $index = array_search($item['label'], $numberedLabels);
                 list_id: list_id,
             },
             success: function(data) {
-                console.log(data);
-                // location.reload();
+                location.reload();
             }
         })
     })
