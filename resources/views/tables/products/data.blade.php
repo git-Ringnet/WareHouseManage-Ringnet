@@ -463,7 +463,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                                         name="taxarr[]"
                                                                         value="{{ $value->product_tax }}">
                                                                     <label id="tax_value" for="">
-                                                                        @if ($value->product_tax == 99|| $value->product_tax == null)
+                                                                        @if ($value->product_tax == 99 || $value->product_tax == null)
                                                                             NOVAT
                                                                         @else
                                                                             {{ $value->product_tax }}%
@@ -502,7 +502,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('comparison_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 quantity-input input-so" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -532,7 +532,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('trade_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 trade-input input-so" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -562,7 +562,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('avg_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 avg-input" type="text" name="avg"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -591,7 +591,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('price_inven_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 price_inven-input input-so" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -777,7 +777,6 @@ $index = array_search($item['label'], $numberedLabels);
                                 </thead>
                                 <tbody>
                                     @foreach ($products as $value)
-                                        @if ($value->product_qty >= 1)
                                             <tr>
                                                 <td><input type="checkbox" class="cb-element" name="product[]"
                                                         value="{{ $value->id }}"></td>
@@ -786,7 +785,9 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <td class="text-left">{{ $value->provide }}</td>
                                                 <td class="text-center">{{ $value->product_unit }}</td>
                                                 <td class="text-right">{{ $value->product_qty }}</td>
-                                                <td class="text-right">{{ $value->product_trade == null ? 0 : $value->product_trade }}</td>
+                                                <td class="text-right">
+                                                    {{ $value->product_trade == null ? 0 : $value->product_trade }}
+                                                </td>
                                                 <td class="text-right">{{ number_format($value->product_price) }}</td>
                                                 <td class="text-right">{{ number_format($value->product_total) }}</td>
                                                 <td class="text-center">
@@ -812,7 +813,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     @endif
                                                 </td>
                                             </tr>
-                                    @endforeach
+                                        @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -1297,6 +1298,7 @@ $index = array_search($item['label'], $numberedLabels);
             }
         });
     }
+
     function filterTax() {
         var input = $("#myInput-tax");
         var filter = input.val().toUpperCase();
