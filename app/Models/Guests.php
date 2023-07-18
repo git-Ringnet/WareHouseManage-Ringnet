@@ -80,13 +80,13 @@ class Guests extends Model
             });
         }
         // dd($guests);
-        $guests = $guests->orderBy('id', 'asc')->paginate(8);
+        $guests = $guests->orderBy('id', 'asc')->paginate(20);
         return $guests;
     }
     public function guestsCreator()
     {
         $userId = Auth::user()->id;
-        $guests = DB::table($this->table)->where('user_id', $userId)->paginate(8);
+        $guests = DB::table($this->table)->where('user_id', $userId)->paginate(20);
         return $guests;
     }
 }

@@ -118,7 +118,7 @@ li {
 .scrollbar,
 .ks-cboxtags-trademark,
 .ks-cboxtags-category,
-.ks-cboxtags-provide_name {
+.ks-cboxtags-provide_name,.ks-cboxtags  {
     overflow-y: auto;
     scrollbar-width: thin;
     max-height: 300px !important;
@@ -887,4 +887,19 @@ input[type="checkbox"] {
 
 .ks-cboxtags {
     white-space: nowrap; 
+}
+.title-index{
+    color: #1D1C20;
+    size: 18px;
+    font-weight: 600;
+}
+.info-index h5{
+    color: #656565;
+    font-size: 18px;
+    font-weight: 400;
+}
+.info-index .value{
+    color: #1e1e1e;
+    font-size: 20px;
+    font-weight: 700;
 }

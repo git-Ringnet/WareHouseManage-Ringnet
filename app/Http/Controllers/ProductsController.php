@@ -262,7 +262,7 @@ class ProductsController extends Controller
         $products = Products::findOrFail($id);
         $cate = Category::all();
         $title = 'Chỉnh sửa sản phẩm';
-        // $listProduct = Product::with('getSerinumbers')->where('products_id', $products->id)->paginate(8);
+        // $listProduct = Product::with('getSerinumbers')->where('products_id', $products->id)->paginate(20);
         $listProduct = Product::with(['getNameProducts', 'getNameProvide', 'getSerinumbers'])
             ->select('product.*', DB::raw('SUM(CASE WHEN serinumbers.seri_status = 2 THEN 1 ELSE 0 END) as countSerial'))
             ->leftJoin('serinumbers', 'product.id', '=', 'serinumbers.product_id')
@@ -285,7 +285,7 @@ class ProductsController extends Controller
                 'product.created_at',
                 'product.updated_at'
             )
-            ->paginate(8);
+            ->paginate(20);
         return view('tables.products.edit_products', compact('products', 'cate', 'title', 'listProduct'))->with('msg', 'Chỉnh sửa sản phẩm thành công!!');
     }
 

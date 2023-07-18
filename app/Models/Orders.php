@@ -63,7 +63,7 @@ class Orders extends Model
 
         }
 
-        $orders = $orders->orderBy('orders.id', 'desc')->paginate(8);
+        $orders = $orders->orderBy('orders.id', 'desc')->paginate(20);
         return $orders;
     }
     // public function getProvide()

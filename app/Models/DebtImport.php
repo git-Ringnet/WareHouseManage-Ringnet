@@ -60,7 +60,7 @@ class DebtImport extends Model
         }
 
 
-        $debt_import = $debt_import->orderBy('debt_import.id', 'desc')->paginate(8);
+        $debt_import = $debt_import->orderBy('debt_import.id', 'desc')->paginate(20);
 
 
         return $debt_import;
@@ -78,7 +78,7 @@ class DebtImport extends Model
     public function debtsCreator()
     {
         $userId = Auth::user()->id;
-        $debtsCreator = DB::table($this->table)->where('user_id', $userId)->paginate(8);
+        $debtsCreator = DB::table($this->table)->where('user_id', $userId)->paginate(20);
         return $debtsCreator;
     }
    

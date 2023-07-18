@@ -525,7 +525,7 @@ $index = array_search($item['label'], $numberedLabels);
                                         </span>
                                     </th>
                                     <th scope="col">
-                                        <span class="d-flex justify-content-center">
+                                        <span class="d-flex justify-content-center" style="width: 135px">
                                             <a href="#" class="sort-link" data-sort-by="order_status"
                                                 data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                     type="submit">Trạng thái</button></a>

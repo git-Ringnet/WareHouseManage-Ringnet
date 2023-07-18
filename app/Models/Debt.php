@@ -74,7 +74,7 @@ class Debt extends Model
         }
 
 
-        $debts = $debts->orderBy('debts.id', 'desc')->paginate(8);
+        $debts = $debts->orderBy('debts.id', 'desc')->paginate(20);
 
 
         return $debts;
@@ -92,7 +92,7 @@ class Debt extends Model
     public function debtsCreator()
     {
         $userId = Auth::user()->id;
-        $debtsCreator = DB::table($this->table)->where('user_id', $userId)->paginate(8);
+        $debtsCreator = DB::table($this->table)->where('user_id', $userId)->paginate(20);
         return $debtsCreator;
     }
 }

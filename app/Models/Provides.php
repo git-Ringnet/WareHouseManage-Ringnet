@@ -62,7 +62,7 @@ class Provides extends Model
             });
         }
         // dd($provides);
-        $provides = $provides->orderBy('id', 'asc')->paginate(8);
+        $provides = $provides->orderBy('id', 'asc')->paginate(20);
         return $provides;
     }
 

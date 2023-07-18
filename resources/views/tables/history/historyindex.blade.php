@@ -982,12 +982,12 @@ $index = array_search($item['label'], $numberedLabels);
                             <table id="example2" class="table table-hover">
                                 <thead>
                                     {{-- SortType --}}
-                                    <input type="hidden" id="sortByInput" name="sort-by" value="id">
+                                    <input type="hidden" id="sortByInput" name="sort-by" value="history.id">
                                     <input type="hidden" id="sortTypeInput" name="sort-type">
                                     <tr>
                                         <th scope="col" style="width:2%">
                                             <span class="d-flex align-items-center">
-                                                <a href="#" class="sort-link" data-sort-by="id"
+                                                <a href="#" class="sort-link" data-sort-by="history.id"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">STT</button></a>
                                                 <div class="icon" id="icon-id"></div>

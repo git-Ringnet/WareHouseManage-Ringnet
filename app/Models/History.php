@@ -57,7 +57,7 @@ class History extends Model
         }
 
 
-        $history = $history->orderBy('history.id', 'desc')->paginate(8);
+        $history = $history->orderBy('history.id', 'desc')->paginate(20);
 
 
         return $history;

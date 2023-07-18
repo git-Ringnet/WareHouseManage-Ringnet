@@ -60,7 +60,7 @@ class Exports extends Model
             $exports = $exports->orderBy($orderBy, $orderType);
         }
 
-        $exports = $exports->orderBy('exports.id', 'desc')->paginate(8);
+        $exports = $exports->orderBy('exports.id', 'desc')->paginate(20);
         return $exports;
     }
     public function productExports()
@@ -102,7 +102,7 @@ class Exports extends Model
     public function productsCreator()
     {
         $userId = Auth::user()->id;
-        $products = DB::table($this->table)->where('user_id', $userId)->paginate(8);
+        $products = DB::table($this->table)->where('user_id', $userId)->paginate(20);
         // dd($products);
         return $products;
     }
