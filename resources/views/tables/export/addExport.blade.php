@@ -105,15 +105,14 @@
                                     </svg>
                                 </div>
                             </div>
-                            <ul id="myUL" class="bg-white position-absolute w-50 rounded shadow p-0 scroll-data"
-                                style="z-index: 99;">
+                            <ul id="myUL" class="bg-white position-absolute rounded shadow p-0 scroll-data"
+                                style="z-index: 99;width:37%;">
                                 @foreach ($customer as $item)
                                     @if (Auth::user()->id == $item->user_id || Auth::user()->can('isAdmin'))
-                                        <li>
+                                        <li class="p-2">
                                             <a href="#"
-                                                class="text-dark d-flex justify-content-between p-2 search-info"
+                                                class="text-dark justify-content-between p-2 search-info"
                                                 id="{{ $item->id }}" name="search-info">
-                                                <span class="w-50">{{ $item->guest_receiver }}</span>
                                                 <span class="w-50">{{ $item->guest_name }}</span>
                                             </a>
                                         </li>
@@ -128,12 +127,12 @@
             <section id="data-container" class="container-fluided bg-white rounded"></section>
             <div class="d-flex align-items-center my-2">
                 <div class="">
-                    <p class="m-0"><b>Số hóa đơn</b></p>
+                    <p class="m-0" style="padding: 0.375rem 0.75rem;"><b>Số hóa đơn</b></p>
                     <input type="number" value="" name="export_code" class="form-control"
                         placeholder="Nhập thông tin">
                 </div>
                 <div class="pl-3">
-                    <p class="m-0"><b>Ngày hóa đơn</b></p>
+                    <p class="m-0" style="padding: 0.375rem 0.75rem;"><b>Ngày hóa đơn</b></p>
                     <input type="date" value="" name="export_create" class="form-control">
                 </div>
             </div>
@@ -789,7 +788,8 @@
                         price_import.val(formattedPrice);
                         tonkho.val(response.product_qty);
                         loaihang.val(response.product_category);
-                        dangGD.val(response.product_trade == null ? 0 : response.product_trade);
+                        dangGD.val(response.product_trade == null ? 0 : response
+                            .product_trade);
                         thue.val(response.product_tax);
                         // Tính lại tổng số tiền và tổng số thuế
                         calculateTotalTax();
@@ -957,28 +957,30 @@
 
     //ngăn chặn click
     $(document).ready(function() {
-        $('#chot_don').on('click', function() {
-            this.classList.add('disabled');
-            var countDown = 10;
-            var countdownInterval = setInterval(function() {
-                countDown--;
-                if (countDown <= 0) {
-                    clearInterval(countdownInterval);
-                    $('#chot_don').removeClass('disabled');
-                }
-            }, 100);
+        $('#chot_don').on('click', function(event) {
+            var $button = $(this);
+
+            if (!$button.hasClass('disabled')) {
+                $button.addClass('disabled');
+                setTimeout(function() {
+                    $button.removeClass('disabled');
+                }, 10000);
+            } else {
+                event.preventDefault();
+            }
         });
 
         $('#luu').on('click', function() {
-            this.classList.add('disabled');
-            var countDown = 10;
-            var countdownInterval = setInterval(function() {
-                countDown--;
-                if (countDown <= 0) {
-                    clearInterval(countdownInterval);
-                    $('#luu').removeClass('disabled');
-                }
-            }, 100);
+            var $button = $(this);
+
+            if (!$button.hasClass('disabled')) {
+                $button.addClass('disabled');
+                setTimeout(function() {
+                    $button.removeClass('disabled');
+                }, 10000);
+            } else {
+                event.preventDefault();
+            }
         });
     });
 

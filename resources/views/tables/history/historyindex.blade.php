@@ -1189,10 +1189,10 @@ $index = array_search($item['label'], $numberedLabels);
                                                     {{ $item->debt_import . ' ' }}ngày
                                                     <span>
                                                         <br>
-                                                        {{ date_format(new DateTime($item->date_import_start), 'd-m-Y') }}
+                                                        {{ date_format(new DateTime($item->debt_import_start), 'd-m-Y') }}
                                                         <br>
 
-                                                        {{ date_format(new DateTime($item->date_import_end), 'd-m-Y') }}
+                                                        {{ date_format(new DateTime($item->debt_import_end), 'd-m-Y') }}
                                                     </span>
                                                 @elseif($item->import_status == 4)
                                                     <div id="payment" class="payment">Thanh toán tiền mặt</div>
@@ -1230,9 +1230,9 @@ $index = array_search($item['label'], $numberedLabels);
                                                     {{ $item->debt_export . ' ' }}ngày
                                                     <span>
                                                         <br>
-                                                        {{ date_format(new DateTime($item->date_export_start), 'd-m-Y') }}
+                                                        {{ date_format(new DateTime($item->debt_export_start), 'd-m-Y') }}
                                                         <br>
-                                                        {{ date_format(new DateTime($item->date_export_end), 'd-m-Y') }}
+                                                        {{ date_format(new DateTime($item->debt_export_end), 'd-m-Y') }}
                                                     </span>
                                                 @elseif($item->export_status == 4)
                                                     <div id="payment" class="payment">Thanh toán tiền mặt</div>
@@ -1260,7 +1260,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 @endif
                                             </td>
                                             <td>{{ number_format($item->total_difference) }}</td>
-                                            <td>{{ $item->tranport_fee }}</td>
+                                            <td>{{ number_format($item->tranport_fee) }}</td>
                                             <td>{{ $item->history_note }}</td>
                                             <td></td>
                                             <td></td>

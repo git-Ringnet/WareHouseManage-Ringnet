@@ -14,6 +14,7 @@ use App\Http\Controllers\ProductsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\provideController;
+use App\Http\Controllers\ReportController;
 use App\Models\DebtImport;
 
 /*
@@ -87,6 +88,8 @@ Route::resource('history', HistoryController::class);
 //chỉnh sửa đơn xuất hàng
 Route::get('/editEx/{id}', [ExportController::class, 'editEx'])->name('editEx');
 
+//Báo cáo
+Route::get('/report', [ReportController::class, 'index'])->name('report');
 
 //kiểm tra số lượng trong xuất hàng
 Route::get('checkqty', [ExportController::class, 'checkqty'])->name('checkqty');
@@ -98,15 +101,15 @@ Route::get('/data_edit', [ProductsController::class, 'edit_ajax'])->name('ajax')
 Route::get('/data_show', [ProductsController::class, 'show_ajax'])->name('show_ajax');
 Route::get('/deleteProducts', [ProductsController::class, 'deleteProducts'])->name('deleteProducts');
 Route::PUT('/editProduct/{id}', [ProductsController::class, 'editProduct'])->name('editProduct');
-Route::get('/export_products',[ProductsController::class,'export_products'])->name('export_products');
+Route::get('/export_products', [ProductsController::class, 'export_products'])->name('export_products');
 
 Route::delete('/delete_product/{id}', [ProductsController::class, 'delete_product'])->name('delete_product');
-Route::post('/import_products',[ProductsController::class,'import_products'])->name('import_products');
+Route::post('/import_products', [ProductsController::class, 'import_products'])->name('import_products');
 
-Route::get('/checkProducts_code',[ProductsController::class,'checkProducts_code'])->name('checkProducts_code');
+Route::get('/checkProducts_code', [ProductsController::class, 'checkProducts_code'])->name('checkProducts_code');
 Route::PUT('/updateProduct/{id}', [ProductsController::class, 'updateProduct'])->name('updateProduct');
 
-Route::get('/export_product',[ProductController::class, 'export'])->name('export');
+Route::get('/export_product', [ProductController::class, 'export'])->name('export');
 
 
 Route::get('/show_provide', [AddProductController::class, 'show_provide'])->name('show_provide');
@@ -123,9 +126,8 @@ Route::get('/confirmBill', [AddProductController::class, 'confirmBill'])->name('
 Route::get('/showProduct', [AddProductController::class, 'showProduct'])->name('showProduct');
 Route::get('/add_newProvide', [AddProductController::class, 'add_newProvide'])->name('add_newProvide');
 
-
 // Kiểm tra serial number tồn tại chưa
-Route::get('/checkSN',[AddProductController::class, 'checkSN'])->name('checkSN');
+Route::get('/checkSN', [AddProductController::class, 'checkSN'])->name('checkSN');
 
 
 Route::get('/simple', function () {

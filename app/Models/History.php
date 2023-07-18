@@ -10,7 +10,39 @@ class History extends Model
 {
     protected $table = 'history';
     use HasFactory;
-    public function getAllHistory($filters = [], $keywords = null, $date = [], $guest = [], $status = [],$unitarr= [], $status_export = [], $orderBy = null, $orderType = null)
+    protected $fillable = [
+        'id',
+        'export_id',
+        'import_id',
+        'product_id',
+        'date_time',
+        'user_id',
+        'provide_id',
+        'product_name',
+        'product_qty',
+        'product_unit',
+        'price_import',
+        'product_total',
+        'import_code',
+        'debt_import',
+        'import_status',
+        'guest_id',
+        'export_qty',
+        'export_unit',
+        'price_export',
+        'export_total',
+        'export_code',
+        'debt_export',
+        'export_status',
+        'debt_export_start',
+        'debt_export_end',
+        'debt_import_start',
+        'debt_import_end',
+        'total_difference',
+        'tranport_fee',
+        'history_note',
+    ];
+    public function getAllHistory($filters = [], $keywords = null, $date = [], $guest = [], $status = [], $unitarr = [], $status_export = [], $orderBy = null, $orderType = null)
     {
         $history = History::leftJoin('users', 'users.id', 'history.user_id')
             ->leftJoin('provides', 'provides.id', 'history.provide_id')
@@ -63,7 +95,8 @@ class History extends Model
         return $history;
     }
 
-    public function addHistory($data){
+    public function addHistory($data)
+    {
         return DB::table($this->table)->insertGetId($data);
     }
     public function updateHistoryImport($data, $id)

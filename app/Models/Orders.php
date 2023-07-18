@@ -82,6 +82,15 @@ class Orders extends Model
         return $orders;
         
     }
+
+    public function allNhaphang()
+    {
+        $orders = DB::table($this->table)
+            ->where('order_status', 1)
+            ->get();
+        return $orders;
+    }
+
     public function sumTotalOrders(){
         $startDate = now()->subDays(30); // Ngày bắt đầu là ngày hiện tại trừ đi 30 ngày
         $endDate = now(); // Ngày kết thúc là ngày hiện tại

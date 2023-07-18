@@ -1,0 +1,66 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\DebtImport;
+use App\Models\Exports;
+use App\Models\Orders;
+use App\Models\Product;
+use App\Models\ProductOrders;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class ReportController extends Controller
+{
+    private $products;
+    private $orders;
+    private $exports;
+    public function __construct()
+    {
+        $this->products = new Product();
+        $this->orders = new Orders();
+        $this->exports = new Exports();
+    }
+    public function index(Request $request)
+    {
+        $title = 'Báo cáo';
+        //Tổng đơn nhập
+        $orders = $this->orders->allNhaphang();
+        $orders = count($orders);
+        //Tổng tiền đơn nhập + vat
+        $totalSum = ProductOrders::select(DB::raw('SUM((productorders.product_price * productorders.product_qty) + ((productorders.product_price * productorders.product_qty * productorders.product_tax)/100)) as total_sum'))
+            ->leftJoin('orders', 'orders.id', 'productorders.order_id')
+            ->where('orders.order_status', 1)
+            ->limit(1)
+            ->first();
+        $sumTotalOrders = $totalSum->total_sum;
+        //Tổng công nợ + vat
+        $sumDebtImport = DebtImport::select(DB::raw('SUM(total_import) as total_import'))->limit(1)
+            ->first();
+        $sumDebtImportVAT = $sumDebtImport->total_import;
+        //table nhập hàng
+        $tableorders = Orders::leftJoin('users', 'users.id', 'orders.users_id')
+            ->leftJoin('roles', 'users.roleid', 'roles.id')
+            ->select('Orders.*', 'users.*', 'roles.*', 'users.name as nhanvien', 'roles.name as vaitro')
+            ->where('orders.order_status', 1)
+            ->selectSub(function ($query) {
+                $query->from('Orders')
+                    ->where('orders.order_status', 1)
+                    ->selectRaw('COUNT(id)');
+            }, 'product_qty_count')
+            ->selectSub(function ($query) {
+                $query->from('productorders')
+                    ->whereColumn('productorders.order_id', 'orders.id')
+                    ->whereColumn('orders.users_id', 'users.id')
+                    ->selectRaw('SUM((productorders.product_price * productorders.product_qty) + ((productorders.product_price * productorders.product_qty * productorders.product_tax)/100))');
+            }, 'total_sum')
+            ->selectSub(function ($query) {
+                $query->from('debt_import')
+                    ->whereColumn('debt_import.user_id', 'users.id')
+                    ->selectRaw('SUM(total_import)');
+            }, 'total_debt')
+            ->distinct()
+            ->paginate(20);
+        return view('tables.report.report', compact('title', 'orders', 'sumTotalOrders', 'sumDebtImportVAT', 'tableorders'));
+    }
+}

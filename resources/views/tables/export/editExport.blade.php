@@ -148,7 +148,8 @@
                 @endif
                 @if ($exports->export_status == 2)
                     @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
-                        <a class="btn btn-secondary text-white" id="chinhsua" href="{{ route('editEx', ['id' => $exports->id]) }}">Chỉnh sửa</a>
+                        <a class="btn btn-secondary text-white" id="chinhsua"
+                            href="{{ route('editEx', ['id' => $exports->id]) }}">Chỉnh sửa</a>
                         @if ($exports->export_status != 0)
                             <button type="submit" class="btn btn-secondary mx-4" onclick="validateAndSubmit(event)"
                                 id="huydon" name="submitBtn" value="action4">Hủy đơn</button>
@@ -187,15 +188,14 @@
                                         </div>
                                     </div>
                                     <ul id="myUL"
-                                        class="bg-white position-absolute w-50 rounded shadow p-0 scroll-data"
-                                        style="z-index: 99;">
+                                        class="bg-white position-absolute rounded shadow p-0 scroll-data"
+                                        style="z-index: 99;width:37%;">
                                         @foreach ($customer as $item)
                                             @if (Auth::user()->id == $item->user_id || Auth::user()->can('isAdmin'))
-                                                <li>
+                                                <li class="p-2">
                                                     <a href="#"
-                                                        class="text-dark d-flex justify-content-between p-2 search-info"
+                                                        class="text-dark justify-content-between p-2 search-info"
                                                         id="{{ $item->id }}" name="search-info">
-                                                        <span class="w-50">{{ $item->guest_receiver }}</span>
                                                         <span class="w-50">{{ $item->guest_name }}</span>
                                                     </a>
                                                 </li>
@@ -800,7 +800,8 @@
                             '<br>' +
                             '<b>Tồn kho: </b>' + response.product_qty + '<br>' +
                             '<b>Đang giao dịch: </b>' +
-                            (response.product_trade == null ? 0 : response.product_trade) +
+                            (response.product_trade == null ? 0 : response
+                                .product_trade) +
                             '<br>' + '<b>Giá nhập: </b>' + formattedPrice +
                             '<br>' + '<b>Thuế: </b>' +
                             (thue == 99 ? "NOVAT" : thue + '%'));
@@ -1161,6 +1162,7 @@
             var loaihang = $(this).closest('tr').find('.loaihang');
             var dangGD = $(this).closest('tr').find('.dangGD');
             var thue = $(this).closest('tr').find('.product_tax');
+            $(this).closest('tr').find('.quantity-input').val(null);
             if (selectedID) {
                 $.ajax({
                     url: "{{ route('getProduct') }}",
@@ -1183,9 +1185,11 @@
                         price_import.val(formattedPrice);
                         tonkho.val(response.product_qty);
                         loaihang.val(response.product_category);
-                        dangGD.val(response.product_trade == null ? 0 : response.product_trade);
+                        dangGD.val(response.product_trade == null ? 0 : response
+                            .product_trade);
                         thue.val(response.product_tax);
                         calculateGrandTotal();
+                        calculateGrandTotalWithTransportFee();
                     },
                 });
             }
@@ -1392,37 +1396,40 @@
     //ngăn chặn click
     $(document).ready(function() {
         $('#chot_don').on('click', function() {
-            this.classList.add('disabled');
-            var countDown = 10;
-            var countdownInterval = setInterval(function() {
-                countDown--;
-                if (countDown <= 0) {
-                    clearInterval(countdownInterval);
-                    $('#chot_don').removeClass('disabled');
-                }
-            }, 100);
+            var $button = $(this);
+
+            if (!$button.hasClass('disabled')) {
+                $button.addClass('disabled');
+                setTimeout(function() {
+                    $button.removeClass('disabled');
+                }, 10000);
+            } else {
+                event.preventDefault();
+            }
         });
         $('#luu').on('click', function() {
-            this.classList.add('disabled');
-            var countDown = 10;
-            var countdownInterval = setInterval(function() {
-                countDown--;
-                if (countDown <= 0) {
-                    clearInterval(countdownInterval);
-                    $('#luu').removeClass('disabled');
-                }
-            }, 100);
+            var $button = $(this);
+
+            if (!$button.hasClass('disabled')) {
+                $button.addClass('disabled');
+                setTimeout(function() {
+                    $button.removeClass('disabled');
+                }, 10000);
+            } else {
+                event.preventDefault();
+            }
         });
         $('#huy').on('click', function() {
-            this.classList.add('disabled');
-            var countDown = 10;
-            var countdownInterval = setInterval(function() {
-                countDown--;
-                if (countDown <= 0) {
-                    clearInterval(countdownInterval);
-                    $('#huy').removeClass('disabled');
-                }
-            }, 100);
+            var $button = $(this);
+
+            if (!$button.hasClass('disabled')) {
+                $button.addClass('disabled');
+                setTimeout(function() {
+                    $button.removeClass('disabled');
+                }, 10000);
+            } else {
+                event.preventDefault();
+            }
         });
         $('#huydon').on('click', function() {
             var inputs = document.getElementsByTagName("input");
@@ -1435,15 +1442,16 @@
             for (var j = 0; j < selects.length; j++) {
                 selects[j].removeAttribute("disabled");
             }
-            this.classList.add('disabled');
-            var countDown = 10;
-            var countdownInterval = setInterval(function() {
-                countDown--;
-                if (countDown <= 0) {
-                    clearInterval(countdownInterval);
-                    $('#huydon').removeClass('disabled');
-                }
-            }, 100);
+            var $button = $(this);
+
+            if (!$button.hasClass('disabled')) {
+                $button.addClass('disabled');
+                setTimeout(function() {
+                    $button.removeClass('disabled');
+                }, 10000);
+            } else {
+                event.preventDefault();
+            }
         });
     });
 

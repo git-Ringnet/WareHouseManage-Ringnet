@@ -166,15 +166,14 @@
                                     </div>
                                 </div>
                                 <ul id="myUL"
-                                    class="bg-white position-absolute w-50 rounded shadow p-0 scroll-data"
-                                    style="z-index: 99;">
+                                    class="bg-white position-absolute rounded shadow p-0 scroll-data"
+                                    style="z-index: 99;width:37%;">
                                     @foreach ($customer as $item)
                                         @if (Auth::user()->id == $item->user_id || Auth::user()->can('isAdmin'))
-                                            <li>
+                                            <li class="p-2">
                                                 <a href="#"
-                                                    class="text-dark d-flex justify-content-between p-2 search-info"
+                                                    class="text-dark justify-content-between p-2 search-info"
                                                     id="{{ $item->id }}" name="search-info">
-                                                    <span class="w-50">{{ $item->guest_receiver }}</span>
                                                     <span class="w-50">{{ $item->guest_name }}</span>
                                                 </a>
                                             </li>
@@ -336,9 +335,9 @@
                                         <input type="text" oninput="limitMaxEdit(this)" id="product_qty"
                                             class="quantity-input form-control text-center" style="width: 50px"
                                             value="{{ $value_export->product_qty }}" name="product_qty[]"
-                                            required="" readonly>
-                                        <input type="text" hidden class="quantity-exist" required=""
-                                            value="/{{ $value_export->product_qty }}"
+                                            required="">
+                                        <input type="text" class="quantity-exist" required=""
+                                            value="/{{ $value_export->product_qty + $value_export->soluong }}"
                                             style="width:50px;background:#D6D6D6;border:none;">
                                     </div>
                                 </td>
@@ -1089,6 +1088,7 @@
             var loaihang = $(this).closest('tr').find('.loaihang');
             var dangGD = $(this).closest('tr').find('.dangGD');
             var thue = $(this).closest('tr').find('.product_tax');
+            $(this).closest('tr').find('.quantity-input').val(null);
             if (selectedID) {
                 $.ajax({
                     url: "{{ route('getProduct') }}",
@@ -1115,6 +1115,7 @@
                             .product_trade);
                         thue.val(response.product_tax);
                         calculateGrandTotal();
+                        calculateGrandTotalWithTransportFee();
                     },
                 });
             }

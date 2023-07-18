@@ -888,6 +888,7 @@ input[type="checkbox"] {
 .ks-cboxtags {
     white-space: nowrap; 
 }
+
 .title-index{
     color: #1D1C20;
     size: 18px;
@@ -902,4 +903,20 @@ input[type="checkbox"] {
     color: #1e1e1e;
     font-size: 20px;
     font-weight: 700;
+}
+
+.background-blue-light{
+    background: #e4f5ff;
+}
+
+.background-red-light{
+    background: #f9ebeb;
+}
+
+.background-purple-light{
+    background: #ebefff;
+}
+
+.background-green-light{
+    background: #deffe7;
 }

@@ -17,10 +17,10 @@ class DebtImport extends Model
         'import_id',
         'total_import',
         'debt',
+        'date_start',
+        'date_end',
         'debt_status',
         'debt_note',
-        'date_end',
-        'date_start',
     ];
     public function getAllDebts($filter = [], $keywords = null, $name = [], $date = [], $provide_name = [], $status = [], $orderBy = null, $orderType = null)
     {
