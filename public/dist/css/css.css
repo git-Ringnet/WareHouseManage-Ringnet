@@ -920,3 +920,9 @@ input[type="checkbox"] {
 .background-green-light{
     background: #deffe7;
 }
+.hidden{
+    display: none !important;
+}
+.show-box{
+    display: block !important;
+}

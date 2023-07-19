@@ -407,7 +407,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('import_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity import-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -429,14 +429,19 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <h5>Ngày nhập hóa đơn</h5>
                                             </div>
                                             <div class="input-group p-2 justify-content-around">
-                                                <label for="start">Từ ngày:</label>
-                                                <input type="date" id="start" name="trip_start"
-                                                    value="{{ request()->trip_start }}" min="2018-01-01"
-                                                    max="2050-12-31">
-                                                <label for="start">Đến ngày:</label>
-                                                <input type="date" id="end" name="trip_end"
-                                                    value="{{ request()->trip_end }}" min="2018-01-01"
-                                                    max="2050-12-31">
+                                                <div class="start">
+                                                    <label for="start">Từ ngày:</label>
+                                                    <input type="date" id="start" name="trip_start"
+                                                        value="{{ request()->trip_start }}" min="2018-01-01"
+                                                        max="2050-12-31">
+                                                </div>
+                                                <div class="end">
+
+                                                    <label for="start">Đến ngày:</label>
+                                                    <input type="date" id="end" name="trip_end"
+                                                        value="{{ request()->trip_end }}" min="2018-01-01"
+                                                        max="2050-12-31">
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="d-flex justify-contents-center align-items-baseline p-2">
@@ -598,10 +603,10 @@ $index = array_search($item['label'], $numberedLabels);
                                                 {{ $value->nhanvien }}
                                             </td>
                                             <td class="text-right">
-                                                @if(fmod($value->total_import,1) > 0)
-                                                {{ number_format($value->total_import,2,'.',',') }}
+                                                @if (fmod($value->total_import, 1) > 0)
+                                                    {{ number_format($value->total_import, 2, '.', ',') }}
                                                 @else
-                                                {{ number_format($value->total_import) }}
+                                                    {{ number_format($value->total_import) }}
                                                 @endif
                                             </td>
                                             <td class="text-left" style="width: 125px">
@@ -719,18 +724,18 @@ $index = array_search($item['label'], $numberedLabels);
                                                 </td>
                                                 <td class="text-right">
                                                     <p>Giá nhập</p>
-                                                    @if(fmod($item->gianhap,1) > 0)
-                                                    {{ number_format($item->gianhap,1,'.',',') }}
+                                                    @if (fmod($item->gianhap, 1) > 0)
+                                                        {{ number_format($item->gianhap, 1, '.', ',') }}
                                                     @else
-                                                    {{ number_format($item->gianhap) }}
+                                                        {{ number_format($item->gianhap) }}
                                                     @endif
                                                 </td>
                                                 <td class="text-right">
                                                     <p>Thành tiền</p>
-                                                    @if(fmod(($item->gianhap * $item->soluong),1) > 0)
-                                                    {{ number_format(($item->gianhap * $item->soluong),1,'.',',') }}
+                                                    @if (fmod($item->gianhap * $item->soluong, 1) > 0)
+                                                        {{ number_format($item->gianhap * $item->soluong, 1, '.', ',') }}
                                                     @else
-                                                    {{ number_format($item->gianhap * $item->soluong) }}
+                                                        {{ number_format($item->gianhap * $item->soluong) }}
                                                     @endif
                                                 </td>
                                                 <td>

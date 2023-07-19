@@ -398,14 +398,18 @@ $index = array_search($item['label'], $numberedLabels);
                                             <h5>Ngày nhập hóa đơn</h5>
                                         </div>
                                         <div class="input-group p-2 justify-content-around">
+                                            <div class="start">
                                             <label for="start">Từ ngày:</label>
                                             <input type="date" id="start" name="trip_start"
                                                 value="{{ request()->trip_start }}" min="2018-01-01"
                                                 max="2050-12-31">
+                                        </div>
+                                            <div class="end">
                                             <label for="start">Đến ngày:</label>
                                             <input type="date" id="end" name="trip_end"
                                                 value="{{ request()->trip_end }}" min="2018-01-01" max="2050-12-31">
                                         </div>
+                                    </div>
                                     </div>
                                     <div class="d-flex justify-contents-center align-items-baseline p-2">
                                         <button type="submit" class="btn btn-primary btn-block mr-2">Xác

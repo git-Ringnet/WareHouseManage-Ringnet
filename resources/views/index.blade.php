@@ -25,7 +25,7 @@
                             </div>
                             <div class="col d-flex">
                                 <div class="dropdown w-100">
-                                    <button class="btn w-100 btn-light border rounded dropdown-toggle"
+                                    <button class="btn w-100 btn-light border rounded dropdown-toggle" id="orders"
                                         style="display: flex;
                                         justify-content: space-between;
                                         align-items: center;"
@@ -61,18 +61,63 @@
                                                 d="M11.2353 22.6231C11.3852 22.6225 11.5337 22.6515 11.6723 22.7084C11.8109 22.7653 11.9369 22.8491 12.0431 22.9548C12.1493 23.0606 12.2336 23.1863 12.291 23.3246C12.3485 23.463 12.3781 23.6114 12.3781 23.7613C12.3781 23.9862 12.3115 24.2061 12.1866 24.3931C12.0617 24.5802 11.8842 24.7261 11.6765 24.8124C11.4688 24.8987 11.2402 24.9215 11.0195 24.8779C10.7988 24.8344 10.596 24.7264 10.4367 24.5677C10.2773 24.409 10.1685 24.2066 10.1241 23.9861C10.0797 23.7656 10.1016 23.5369 10.187 23.3288C10.2725 23.1208 10.4177 22.9427 10.6042 22.8171C10.7908 22.6915 11.0104 22.624 11.2353 22.6231Z"
                                                 fill="#555555" />
                                         </svg>
-                                        <div class="d-flex flex-column">
-                                            <div class="ca d-flex">
-                                                <div class="start">ab</div>
-                                                <div class="end">das</div>
+                                        {{-- All orders --}}
+                                        <div id="all-orders">
+                                            <div class="d-flex flex-column all-orders">
+                                                <div class="ca d-flex">
+                                                    <div class="start">{{ $orders }}</div>
+                                                    <div class="end">{{ $getMinDateOrders }}</div>
+                                                </div>
+                                                <div class="ca">Tất cả</div>
                                             </div>
-                                            <div class="ca">dasd</div>
+                                        </div>
+                                        {{-- Tháng này Orders --}}
+                                        <div id="this-month-orders" style="display: none">
+                                            <div class="d-flex flex-column all-orders">
+                                                <div class="ca d-flex">
+                                                    <div class="start">{{ $orders }}</div>
+                                                    <div class="end">{{ $getMinDateOrders }}</div>
+                                                </div>
+                                                <div class="ca">Tháng này</div>
+                                            </div>
+                                        </div>
+                                        {{-- Tháng trước đây Orders --}}
+                                        <div id="last-month-orders" style="display: none">
+                                            <div class="d-flex flex-column all-orders">
+                                                <div class="ca d-flex">
+                                                    <div class="start">{{ $orders }}</div>
+                                                    <div class="end">{{ $getMinDateOrders }}</div>
+                                                </div>
+                                                <div class="ca">Tháng trước</div>
+                                            </div>
+                                        </div>
+                                        {{-- 3 Tháng trước đây Orders --}}
+                                        <div id="3last-month-orders" style="display: none">
+                                            <div class="d-flex flex-column all-orders">
+                                                <div class="ca d-flex">
+                                                    <div class="start">{{ $orders }}</div>
+                                                    <div class="end">{{ $getMinDateOrders }}</div>
+                                                </div>
+                                                <div class="ca">3 tháng trước</div>
+                                            </div>
+                                        </div>
+                                        {{-- Khoảng thời gian Orders --}}
+                                        <div id="time-orders" style="display: none">
+                                            <div class="d-flex flex-column all-orders">
+                                                <div class="ca d-flex">
+                                                    <div class="start">{{ $orders }}</div>
+                                                    <div class="end">{{ $getMinDateOrders }}</div>
+                                                </div>
+                                                <div class="ca">Khoảng thời gian</div>
+                                            </div>
                                         </div>
                                     </button>
-                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" href="#">Action</a>
-                                        <a class="dropdown-item" href="#">Another action</a>
-                                        <a class="dropdown-item" href="#">Something else here</a>
+                                    <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item" id="btn-all-orders" href="#">Tất cả</a>
+                                        <a class="dropdown-item" id="btn-this-month-orders" href="#">Tháng này</a>
+                                        <a class="dropdown-item" id="btn-last-month-orders" href="#">Tháng trước</a>
+                                        <a class="dropdown-item" id="btn-3last-month-orders" href="#">3 tháng trước</a>
+                                        <a class="dropdown-item" id="btn-time-orders" href="#">Khoảng thời gian</a>
                                     </div>
                                 </div>
                             </div>
@@ -93,8 +138,9 @@
                                                     stroke-linejoin="round" />
                                                 <path d="M30.4167 40H31.6667" stroke="#0095F6" stroke-width="1.5"
                                                     stroke-linecap="round" stroke-linejoin="round" />
-                                                <path d="M44.1667 38.0293V43.3326" stroke="#0095F6" stroke-width="1.5"
-                                                    stroke-linecap="round" stroke-linejoin="round" />
+                                                <path d="M44.1667 38.0293V43.3326" stroke="#0095F6"
+                                                    stroke-width="1.5" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
                                                 <path
                                                     d="M50 51.666H38.5417C38.0444 51.666 37.5675 51.4684 37.2159 51.1168C36.8642 50.7652 36.6667 50.2882 36.6667 49.791V42.611C36.667 42.1607 36.7583 41.7151 36.935 41.301L37.8467 39.1676C37.9912 38.8299 38.2317 38.542 38.5384 38.3396C38.845 38.1373 39.2043 38.0294 39.5717 38.0293H48.7617C49.1288 38.0295 49.4879 38.1374 49.7942 38.3398C50.1006 38.5422 50.3408 38.83 50.485 39.1676L51.3984 41.3043C51.5754 41.7184 51.6666 42.164 51.6667 42.6143V49.9993C51.6667 50.4413 51.4911 50.8653 51.1785 51.1778C50.866 51.4904 50.442 51.666 50 51.666Z"
                                                     stroke="#0095F6" stroke-width="1.5" stroke-linecap="round"
@@ -646,6 +692,54 @@
     <!-- /.control-sidebar -->
 </div>
 <!-- ./wrapper -->
+<script>
+    // Orders
+    // Tất cả
+    $("#btn-all-orders").click(function() {
+        $("#all-orders").show();
+        $("#this-month-orders").hide();
+        $("#last-month-orders").hide();
+        $("#3last-month-orders").hide();
+        $("#time-orders").hide();
+
+
+
+    });
+    // Tháng này
+    $("#btn-this-month-orders").click(function() {
+        $("#this-month-orders").show();
+        $("#all-orders").hide();
+        $("#last-month-orders").hide();
+        $("#3last-month-orders").hide();
+        $("#time-orders").hide();
+    });
+    // Tháng trước
+    $("#btn-last-month-orders").click(function() {
+        $("#last-month-orders").show();
+        $("#all-orders").hide();
+        $("#this-month-orders").hide();
+        $("#3last-month-orders").hide();
+        $("#time-orders").hide();
+    });
+    // 3 tháng trc
+    $("#btn-3last-month-orders").click(function() {
+        $("#3last-month-orders").show();
+        $("#all-orders").hide();
+        $("#this-month-orders").hide();
+        $("#last-month-orders").hide();
+        $("#time-orders").hide();
+    });
+    // Khoảng time
+    $("#btn-time-orders").click(function() {
+        $("#time-orders").show();
+        $("#all-orders").hide();
+        $("#this-month-orders").hide();
+        $("#last-month-orders").hide();
+        $("#3last-month-orders").hide();
+    });
+
+</script>
+
 </body>
 
 </html>

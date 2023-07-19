@@ -10,11 +10,11 @@ class Orders extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'provide_id', 'users_id', 'order_status', 'total','created_at','updated_at','product_code'
+        'provide_id', 'users_id', 'order_status', 'total', 'created_at', 'updated_at', 'product_code'
     ];
     protected $table = 'orders';
 
-    public function getAllOrders($filter = [], $status = [],$provide_name=[], $name = [], $date = [], $keywords = null, $orderBy = null, $orderType = null)
+    public function getAllOrders($filter = [], $status = [], $provide_name = [], $name = [], $date = [], $keywords = null, $orderBy = null, $orderType = null)
     {
         $productIds = array();
         $order = Orders::orderByDesc('id')->get();
@@ -22,9 +22,9 @@ class Orders extends Model
             array_push($productIds, $value->id);
         }
         $orders = Orders::join('users', 'users.id', '=', 'orders.users_id')
-        ->leftJoin('provides', 'provides.id', '=', 'orders.provide_id')
-        ->select('orders.id', 'orders.product_code','provides.provide_name', 'users.name', 'orders.total','orders.created_at', 'orders.updated_at', 'order_status')
-        ->whereIn('orders.id', $productIds);
+            ->leftJoin('provides', 'provides.id', '=', 'orders.provide_id')
+            ->select('orders.id', 'orders.product_code', 'provides.provide_name', 'users.name', 'orders.total', 'orders.created_at', 'orders.updated_at', 'order_status')
+            ->whereIn('orders.id', $productIds);
         // Các điều kiện tìm kiếm và lọc dữ liệu ở đây
 
         if (!empty($filter)) {
@@ -33,7 +33,7 @@ class Orders extends Model
         // dd($filter);
         if (!empty($status)) {
             $orders = $orders->whereIn('orders.order_status', $status);
-        } 
+        }
         if (!empty($provide_name)) {
             $orders = $orders->whereIn('orders.provide_id', $provide_name);
         }
@@ -60,7 +60,6 @@ class Orders extends Model
                 $orderBy = "orders." . $orderBy;
             };
             $orders = $orders->orderBy($orderBy, $orderType);
-
         }
 
         $orders = $orders->orderBy('orders.id', 'desc')->paginate(20);
@@ -78,38 +77,43 @@ class Orders extends Model
             ->where('order_status', 1)
             ->whereBetween('created_at', [$startDate, $endDate])
             ->get();
-        
+
         return $orders;
-        
     }
 
     public function allNhaphang()
     {
         $orders = DB::table($this->table)
-            ->where('order_status', 1)
             ->get();
         return $orders;
     }
+    public function getMinDateOrders()
+    {
+        $minDate = DB::table($this->table)
+            ->selectRaw('MIN(DATE(created_at)) AS min_date')
+            ->first();
+        return $minDate->min_date;
+    }
 
-    public function sumTotalOrders(){
+    public function sumTotalOrders()
+    {
         $startDate = now()->subDays(30); // Ngày bắt đầu là ngày hiện tại trừ đi 30 ngày
         $endDate = now(); // Ngày kết thúc là ngày hiện tại
-        
+
         $totalSum = DB::table($this->table)
             ->where('order_status', 1)
             ->whereBetween('created_at', [$startDate, $endDate])
             ->sum('total');
-        
-        return $totalSum;        
+
+        return $totalSum;
     }
- 
-    public function addOrder($data){
+
+    public function addOrder($data)
+    {
         return DB::table($this->table)->insertGetId($data);
     }
     public function updateOrder($data, $id)
     {
         return DB::table($this->table)->where('id', $id)->update($data);
     }
-
-
 }
