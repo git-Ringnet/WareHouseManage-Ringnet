@@ -325,7 +325,7 @@
                                     </select>
                                 </td>
                                 <td>
-                                    <input type="text" id="product_unit" style="width: 80px"
+                                    <input type="text" readonly id="product_unit" style="width: 80px"
                                         class="product_unit form-control text-center"
                                         value="{{ $value_export->product_unit }}" name="product_unit[]"
                                         required="">
@@ -349,16 +349,16 @@
                                 <td>
                                     <select name="product_tax[]" class="product_tax form-control text-center"
                                         style="width: 100px;" id="product_tax" required>
-                                        <option value="0" <?php if ($value_export->product_tax == 0) {
+                                        <option value="0" <?php if ($value_export->thue == 0) {
                                             echo 'selected';
                                         } ?>>0%</option>
-                                        <option value="8" <?php if ($value_export->product_tax == 8) {
+                                        <option value="8" <?php if ($value_export->thue == 8) {
                                             echo 'selected';
                                         } ?>>8%</option>
-                                        <option value="10" <?php if ($value_export->product_tax == 10) {
+                                        <option value="10" <?php if ($value_export->thue == 10) {
                                             echo 'selected';
                                         } ?>>10%</option>
-                                        <option value="99" <?php if ($value_export->product_tax == 99) {
+                                        <option value="99" <?php if ($value_export->thue == 99) {
                                             echo 'selected';
                                         } ?>>NOVAT</option>
                                     </select>
@@ -1322,37 +1322,64 @@
     //ngăn chặn click
     $(document).ready(function() {
         $('#chot_don').on('click', function() {
-            this.classList.add('disabled');
-            var countDown = 10;
-            var countdownInterval = setInterval(function() {
-                countDown--;
-                if (countDown <= 0) {
-                    clearInterval(countdownInterval);
-                    $('#chot_don').removeClass('disabled');
-                }
-            }, 100);
+            var inputs = document.getElementsByTagName("input");
+            var selects = document.getElementsByTagName("select");
+
+            for (var i = 0; i < inputs.length; i++) {
+                inputs[i].removeAttribute("readonly");
+            }
+
+            for (var j = 0; j < selects.length; j++) {
+                selects[j].removeAttribute("disabled");
+            }
+            if (!$button.hasClass('disabled')) {
+                $button.addClass('disabled');
+                setTimeout(function() {
+                    $button.removeClass('disabled');
+                }, 1000);
+            } else {
+                event.preventDefault();
+            }
         });
         $('#luu').on('click', function() {
-            this.classList.add('disabled');
-            var countDown = 10;
-            var countdownInterval = setInterval(function() {
-                countDown--;
-                if (countDown <= 0) {
-                    clearInterval(countdownInterval);
-                    $('#luu').removeClass('disabled');
-                }
-            }, 100);
+            var inputs = document.getElementsByTagName("input");
+            var selects = document.getElementsByTagName("select");
+
+            for (var i = 0; i < inputs.length; i++) {
+                inputs[i].removeAttribute("readonly");
+            }
+
+            for (var j = 0; j < selects.length; j++) {
+                selects[j].removeAttribute("disabled");
+            }
+            if (!$button.hasClass('disabled')) {
+                $button.addClass('disabled');
+                setTimeout(function() {
+                    $button.removeClass('disabled');
+                }, 1000);
+            } else {
+                event.preventDefault();
+            }
         });
         $('#huy').on('click', function() {
-            this.classList.add('disabled');
-            var countDown = 10;
-            var countdownInterval = setInterval(function() {
-                countDown--;
-                if (countDown <= 0) {
-                    clearInterval(countdownInterval);
-                    $('#huy').removeClass('disabled');
-                }
-            }, 100);
+            var inputs = document.getElementsByTagName("input");
+            var selects = document.getElementsByTagName("select");
+
+            for (var i = 0; i < inputs.length; i++) {
+                inputs[i].removeAttribute("readonly");
+            }
+
+            for (var j = 0; j < selects.length; j++) {
+                selects[j].removeAttribute("disabled");
+            }
+            if (!$button.hasClass('disabled')) {
+                $button.addClass('disabled');
+                setTimeout(function() {
+                    $button.removeClass('disabled');
+                }, 1000);
+            } else {
+                event.preventDefault();
+            }
         });
         $('#huydon').on('click', function() {
             var inputs = document.getElementsByTagName("input");
@@ -1365,15 +1392,14 @@
             for (var j = 0; j < selects.length; j++) {
                 selects[j].removeAttribute("disabled");
             }
-            this.classList.add('disabled');
-            var countDown = 10;
-            var countdownInterval = setInterval(function() {
-                countDown--;
-                if (countDown <= 0) {
-                    clearInterval(countdownInterval);
-                    $('#huydon').removeClass('disabled');
-                }
-            }, 100);
+            if (!$button.hasClass('disabled')) {
+                $button.addClass('disabled');
+                setTimeout(function() {
+                    $button.removeClass('disabled');
+                }, 1000);
+            } else {
+                event.preventDefault();
+            }
         });
     });
 

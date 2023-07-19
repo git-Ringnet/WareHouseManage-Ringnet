@@ -777,43 +777,43 @@ $index = array_search($item['label'], $numberedLabels);
                                 </thead>
                                 <tbody>
                                     @foreach ($products as $value)
-                                            <tr>
-                                                <td><input type="checkbox" class="cb-element" name="product[]"
-                                                        value="{{ $value->id }}"></td>
-                                                <td class="text-left">{{ $value->id }}</td>
-                                                <td class="text-left">{{ $value->product_name }}</td>
-                                                <td class="text-left">{{ $value->provide }}</td>
-                                                <td class="text-center">{{ $value->product_unit }}</td>
-                                                <td class="text-right">{{ $value->product_qty }}</td>
-                                                <td class="text-right">
-                                                    {{ $value->product_trade == null ? 0 : $value->product_trade }}
-                                                </td>
-                                                <td class="text-right">{{ number_format($value->product_price) }}</td>
-                                                <td class="text-right">{{ number_format($value->product_total) }}</td>
-                                                <td class="text-center">
-                                                    @if ($value->product_tax == 99 || $value->product_tax == null)
-                                                        NOVAT
-                                                    @else
-                                                        {{ $value->product_tax }}%
-                                                    @endif
-                                                </td>
-                                                <td class="text-center">
-                                                    @if ($value->product_qty == 0)
-                                                        <div class="py-1 rounded pb-1 bg-danger">
-                                                            <span class="text-light">Hết hàng</span>
-                                                        </div>
-                                                    @elseif($value->product_qty < 6)
-                                                        <div class="py-1 rounded pb-1 bg-warning">
-                                                            <span class="text-light">Gần hết</span>
-                                                        </div>
-                                                    @else
-                                                        <div class="py-1 rounded pb-1 bg-success">
-                                                            <span class="text-light">Sẵn hàng</span>
-                                                        </div>
-                                                    @endif
-                                                </td>
-                                            </tr>
-                                        @endforeach
+                                        <tr>
+                                            <td><input type="checkbox" class="cb-element" name="product[]"
+                                                    value="{{ $value->id }}"></td>
+                                            <td class="text-left">{{ $value->id }}</td>
+                                            <td class="text-left">{{ $value->product_name }}</td>
+                                            <td class="text-left">{{ $value->provide }}</td>
+                                            <td class="text-center">{{ $value->product_unit }}</td>
+                                            <td class="text-right">{{ $value->product_qty }}</td>
+                                            <td class="text-right">
+                                                {{ $value->product_trade == null ? 0 : $value->product_trade }}
+                                            </td>
+                                            <td class="text-right">{{ number_format($value->product_price) }}</td>
+                                            <td class="text-right">{{ number_format($value->product_total) }}</td>
+                                            <td class="text-center">
+                                                @if ($value->product_tax == 99 || $value->product_tax == null)
+                                                    NOVAT
+                                                @else
+                                                    {{ $value->product_tax }}%
+                                                @endif
+                                            </td>
+                                            <td class="text-center">
+                                                @if ($value->product_qty == 0)
+                                                    <div class="py-1 rounded pb-1 bg-danger">
+                                                        <span class="text-light">Hết hàng</span>
+                                                    </div>
+                                                @elseif($value->product_qty < 6)
+                                                    <div class="py-1 rounded pb-1 bg-warning">
+                                                        <span class="text-light">Gần hết</span>
+                                                    </div>
+                                                @else
+                                                    <div class="py-1 rounded pb-1 bg-success">
+                                                        <span class="text-light">Sẵn hàng</span>
+                                                    </div>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
