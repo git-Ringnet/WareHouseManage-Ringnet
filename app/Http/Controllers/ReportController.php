@@ -42,7 +42,8 @@ class ReportController extends Controller
         //table nhập hàng
         $tableorders = Orders::leftJoin('users', 'users.id', 'orders.users_id')
             ->leftJoin('roles', 'users.roleid', 'roles.id')
-            ->select('Orders.*', 'users.*', 'roles.*', 'users.name as nhanvien', 'roles.name as vaitro')
+            ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
+            ->select('users.name as nhanvien', 'roles.name as vaitro', 'orders.users_id')
             ->where('orders.order_status', 1)
             ->selectSub(function ($query) {
                 $query->from('Orders')
@@ -52,16 +53,16 @@ class ReportController extends Controller
             }, 'product_qty_count')
             ->selectSub(function ($query) {
                 $query->from('productorders')
-                    ->whereColumn('productorders.order_id', 'orders.id')
                     ->whereColumn('orders.users_id', 'users.id')
                     ->selectRaw('SUM((productorders.product_price * productorders.product_qty) + ((productorders.product_price * productorders.product_qty * productorders.product_tax)/100))');
             }, 'total_sum')
             ->selectSub(function ($query) {
                 $query->from('debt_import')
                     ->whereColumn('debt_import.user_id', 'users.id')
+                    ->whereColumn('orders.users_id', 'users.id')
                     ->selectRaw('SUM(total_import)');
             }, 'total_debt')
-            ->distinct()
+            ->groupBy('users.id', 'users.name', 'roles.name', 'orders.users_id')
             ->paginate(20);
         //Tổng đơn xuất
         $exports = $this->exports->alldonxuat();
@@ -79,7 +80,7 @@ class ReportController extends Controller
             ->leftJoin('roles', 'users.roleid', 'roles.id')
             ->leftJoin('debts', 'debts.export_id', 'exports.id')
             ->where('exports.export_status', 2)
-            ->select('users.name as nhanvien', 'roles.name as vaitro','users.email as email')
+            ->select('users.name as nhanvien', 'roles.name as vaitro', 'users.email as email')
             ->selectSub(function ($query) {
                 $query->from('exports')
                     ->where('exports.export_status', 2)
@@ -105,7 +106,7 @@ class ReportController extends Controller
                     ->selectRaw('SUM(total_sales)');
             }, 'tongcongno')
             ->distinct()
-            ->get();
+            ->paginate(20);
         return view('tables.report.report', compact('title', 'Tableexports', 'orders', 'sumTotalOrders', 'sumDebtImportVAT', 'tableorders', 'exports', 'sumExport', 'formattedLoinhuan', 'CongNo'));
     }
 }
