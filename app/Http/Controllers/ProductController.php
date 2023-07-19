@@ -209,8 +209,18 @@ class ProductController extends Controller
 
     public function export()
     {
-        $products = Product::all();
-        return response()->json(['success' => true, 'msg' => 'Xuất file thành công','data' => $products]);
+        $products = Product::select('id', 'product_name', 'product_unit', 'product_qty', 'product_price', 'product_tax', 'product_total', 'provide_id', 'product_trade')
+            ->where('product_qty', '>', 0)
+            ->with('getNameProvide')
+            ->get();
+        foreach ($products as $product) {
+            if ($product->getNameProvide) {
+                $product->provide_id = $product->getNameProvide->provide_name;
+                $product->product_price = number_format($product->product_price);
+                $product->product_total = number_format($product->product_total);
+            }
+        }
+        return response()->json(['success' => true, 'msg' => 'Xuất file thành công', 'data' => $products]);
     }
 
 

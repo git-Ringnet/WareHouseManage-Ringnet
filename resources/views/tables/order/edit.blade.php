@@ -600,7 +600,7 @@
                     '</div>' + '<div class="form-group">' +
                     '<label for="email">Công nợ:</label>' +
                     '<div class="d-flex align-items-center" style="width:101%;"> <input name="provide_debt" id="debtInput" class="form-control" type="text" name="debt" style="width:15%;" value="' +
-                    data.debt + '">' +
+                    (data.debt == null ? 0 : data.debt) + '">' +
                     '<span class="ml-2" id="data-debt" style="color: rgb(29, 28, 32);">ngày</span>' +
                     '<input type="checkbox" id="debtCheckbox" value="0" ' + (data
                         .debt == 0 ? 'checked' : '') + ' style="margin-left:10%;" >' +

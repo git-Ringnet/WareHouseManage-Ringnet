@@ -765,6 +765,15 @@ $index = array_search($item['label'], $numberedLabels);
                                         </th>
                                         <th scope="col">
                                             <span class="d-flex justify-content-center">
+                                                <a href="#" class="sort-link" data-sort-by=""
+                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
+                                                        type="submit">HĐ vào
+                                                    </button></a>
+                                                <div class="icon" id="icon-product_tax"></div>
+                                            </span>
+                                        </th>
+                                        <th scope="col">
+                                            <span class="d-flex justify-content-center">
                                                 <a href="#" class="sort-link" data-sort-by="soluong"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Trạng
@@ -796,6 +805,9 @@ $index = array_search($item['label'], $numberedLabels);
                                                 @else
                                                     {{ $value->product_tax }}%
                                                 @endif
+                                            </td>
+                                            <td>
+                                                {{ $value->product_code}}
                                             </td>
                                             <td class="text-center">
                                                 @if ($value->product_qty == 0)
@@ -861,130 +873,129 @@ $index = array_search($item['label'], $numberedLabels);
     });
 
     // Xuất file excel
-    function exportToExcel() {
-        var table = document.getElementById('example2');
-        var jsonData = [];
+    // function exportToExcel() {
+    //     var table = document.getElementById('example2');
+    //     var jsonData = [];
 
-        // Lấy dữ liệu từ bảng HTML
-        for (var i = 1; i < table.rows.length; i++) {
-            var row = table.rows[i];
-            var rowData = {};
+    //     // Lấy dữ liệu từ bảng HTML
+    //     for (var i = 1; i < table.rows.length; i++) {
+    //         var row = table.rows[i];
+    //         var rowData = {};
 
-            rowData['STT'] = row.cells[1].textContent;
-            rowData['Tên sản phẩm'] = row.cells[2].textContent;
-            rowData['Nhà cung cấp'] = row.cells[3].textContent;
-            rowData['ĐVT'] = row.cells[4].textContent;
-            rowData['Số lượng'] = row.cells[5].textContent;
-            rowData['Đang giao dịch'] = row.cells[6].textContent;
-            rowData['Đơn giá nhập'] = row.cells[7].textContent;
-            rowData['Trị tồn kho'] = row.cells[8].textContent;
-            rowData['Thuế'] = row.cells[9].textContent.trim();
-            rowData['Trạng thái'] = row.cells[10].textContent.trim();
-            jsonData.push(rowData);
-        }
+    //         rowData['STT'] = row.cells[1].textContent;
+    //         rowData['Tên sản phẩm'] = row.cells[2].textContent;
+    //         rowData['Nhà cung cấp'] = row.cells[3].textContent;
+    //         rowData['ĐVT'] = row.cells[4].textContent;
+    //         rowData['Số lượng'] = row.cells[5].textContent;
+    //         rowData['Đang giao dịch'] = row.cells[6].textContent;
+    //         rowData['Đơn giá nhập'] = row.cells[7].textContent;
+    //         rowData['Trị tồn kho'] = row.cells[8].textContent;
+    //         rowData['Thuế'] = row.cells[9].textContent.trim();
+    //         rowData['Trạng thái'] = row.cells[10].textContent.trim();
+    //         jsonData.push(rowData);
+    //     }
 
-        // Tạo một workbook mới
-        var wb = XLSX.utils.book_new();
-        var ws = XLSX.utils.json_to_sheet(jsonData);
+    //     // Tạo một workbook mới
+    //     var wb = XLSX.utils.book_new();
+    //     var ws = XLSX.utils.json_to_sheet(jsonData);
 
-        // Thêm sheet vào workbook
-        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    //     // Thêm sheet vào workbook
+    //     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
 
-        // Chuyển đổi workbook thành dạng tệp Excel
-        var wbout = XLSX.write(wb, {
-            bookType: 'xlsx',
-            type: 'array'
-        });
-
-        // Tạo một Blob từ dữ liệu Excel
-        var blob = new Blob([wbout], {
-            type: 'application/octet-stream'
-        });
-
-        // Tạo URL tạm thời và tải xuống tệp Excel
-        var url = URL.createObjectURL(blob);
-        var a = document.createElement('a');
-        a.href = url;
-        a.download = 'data.xlsx';
-        a.click();
-
-        // Giải phóng URL tạm thời
-        setTimeout(function() {
-            URL.revokeObjectURL(url);
-        }, 1000);
-    }
-
-    // $(document).on("click", '#EXPORT', function(e) {
-    //     e.preventDefault();
-
-    //     $.ajax({
-    //         url: "{{ route('export') }}",
-    //         type: "get",
-    //         dataType: 'json',
-    //         success: function(response) {
-    //             if (response.success) {
-    //                 var products = response.data;
-
-    //                 // Create a new workbook
-    //                 var workbook = XLSX.utils.book_new();
-
-    //                 // Create a new worksheet
-    //                 var worksheet = XLSX.utils.json_to_sheet(products);
-
-    //                 // Modify the column headers
-    //                 var headers = [
-    //                     'ID',
-    //                     'Tên sản phẩm',
-    //                     'Đơn vị tính',
-    //                     'Tồn kho',
-    //                     'Giá nhập',
-    //                     'Thuế',
-    //                     'Tổng tiền',
-    //                     'Nhà cung cấp',
-    //                     'Đang giao dịch',
-    //                     'Ghi chú',
-    //                 ];
-
-    //                 // Update the column headers in the worksheet
-    //                 worksheet['A1'].v = headers[0];
-    //                 worksheet['B1'].v = headers[1];
-    //                 worksheet['C1'].v = headers[2];
-    //                 worksheet['D1'].v = headers[3];
-    //                 worksheet['E1'].v = headers[4];
-    //                 worksheet['F1'].v = headers[5];
-    //                 worksheet['G1'].v = headers[6];
-    //                 worksheet['H1'].v = headers[7];
-    //                 worksheet['I1'].v = headers[8];
-    //                 worksheet['J1'].v = headers[9];
-
-    //                 // Add the worksheet to the workbook
-    //                 XLSX.utils.book_append_sheet(workbook, worksheet, 'Products');
-
-    //                 // Convert the workbook to a binary Excel file
-    //                 var excelFile = XLSX.write(workbook, {
-    //                     bookType: 'xlsx',
-    //                     type: 'binary'
-    //                 });
-
-    //                 // Convert the binary Excel file to a Blob
-    //                 var blob = new Blob([s2ab(excelFile)], {
-    //                     type: 'application/octet-stream'
-    //                 });
-
-    //                 // Create a temporary <a> element to trigger the file download
-    //                 var link = document.createElement('a');
-    //                 link.href = URL.createObjectURL(blob);
-    //                 link.download = 'products.xlsx';
-    //                 link.click();
-    //             } else {
-    //                 console.log(response.msg);
-    //             }
-    //         },
-    //         error: function(xhr, status, error) {
-    //             console.log(error);
-    //         }
+    //     // Chuyển đổi workbook thành dạng tệp Excel
+    //     var wbout = XLSX.write(wb, {
+    //         bookType: 'xlsx',
+    //         type: 'array'
     //     });
-    // });
+
+    //     // Tạo một Blob từ dữ liệu Excel
+    //     var blob = new Blob([wbout], {
+    //         type: 'application/octet-stream'
+    //     });
+
+    //     // Tạo URL tạm thời và tải xuống tệp Excel
+    //     var url = URL.createObjectURL(blob);
+    //     var a = document.createElement('a');
+    //     a.href = url;
+    //     a.download = 'data.xlsx';
+    //     a.click();
+
+    //     // Giải phóng URL tạm thời
+    //     setTimeout(function() {
+    //         URL.revokeObjectURL(url);
+    //     }, 1000);
+    // }
+
+    $(document).on("click", '#EXPORT', function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: "{{ route('export') }}",
+            type: "get",
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    var products = response.data;
+
+                    // Create a new workbook
+                    var workbook = XLSX.utils.book_new();
+
+                    // Create a new worksheet
+                    var worksheet = XLSX.utils.json_to_sheet(products);
+
+                    // Modify the column headers
+                    var headers = [
+                        'ID',
+                        'Tên sản phẩm',
+                        'Đơn vị tính',
+                        'Tồn kho',
+                        'Giá nhập',
+                        'Thuế',
+                        'Tổng tiền',
+                        'Nhà cung cấp',
+                        'Đang giao dịch',
+                        'Ghi chú',
+                    ];
+
+                    // Update the column headers in the worksheet
+                    worksheet['A1'].v = headers[0];
+                    worksheet['B1'].v = headers[1];
+                    worksheet['C1'].v = headers[2];
+                    worksheet['D1'].v = headers[3];
+                    worksheet['E1'].v = headers[4];
+                    worksheet['F1'].v = headers[5];
+                    worksheet['G1'].v = headers[6];
+                    worksheet['H1'].v = headers[7];
+                    worksheet['I1'].v = headers[8];
+                    worksheet['J1'].v = headers[9];
+
+                    // Add the worksheet to the workbook
+                    XLSX.utils.book_append_sheet(workbook, worksheet, 'Products');
+
+                    // Convert the workbook to a binary Excel file
+                    var excelFile = XLSX.write(workbook, {
+                        bookType: 'xlsx',
+                        type: 'binary'
+                    });
+
+                    // Convert the binary Excel file to a Blob
+                    var blob = new Blob([s2ab(excelFile)], {
+                        type: 'application/octet-stream'
+                    });
+
+                    // Create a temporary <a> element to trigger the file download
+                    var link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = 'products.xlsx';
+                    link.click();
+                } else {
+                    console.log(response.msg);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.log(error);
+            }
+        });
+    });
 
     function s2ab(s) {
         var buf = new ArrayBuffer(s.length);
@@ -993,59 +1004,6 @@ $index = array_search($item['label'], $numberedLabels);
         return buf;
     }
 
-
-    // Import file excel
-    function importExcel() {
-        var input = document.getElementById("import_file");
-        var file = input.files[0];
-        var reader = new FileReader();
-
-        reader.onload = function(e) {
-            var data = new Uint8Array(e.target.result);
-            var workbook = XLSX.read(data, {
-                type: "array"
-            });
-            var worksheet = workbook.Sheets[workbook.SheetNames[0]];
-            var jsonData = XLSX.utils.sheet_to_json(worksheet, {
-                header: 1
-            });
-
-            var formattedData = [];
-            var headers = jsonData[0];
-
-            for (var i = 1; i < jsonData.length; i++) {
-                var row = jsonData[i];
-                var formattedRow = {};
-
-                for (var j = 0; j < headers.length; j++) {
-                    var header = headers[j];
-                    formattedRow[header] = row[j];
-                }
-
-                formattedData.push(formattedRow);
-            }
-            var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            fetch("/import_products", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-CSRF-Token": csrfToken
-                    },
-                    body: JSON.stringify(formattedData),
-                })
-                .then(function(response) {
-                    if (response.ok) {
-                        location.reload();
-                    } else {
-                        alert('Có lỗi xảy ra trong quá trình import.');
-                    }
-                })
-                .catch(function(error) {
-                    console.log("Lỗi: " + error);
-                });
-        };
-        reader.readAsArrayBuffer(file);
-    }
 
     // Checkbox
     $('#checkall').change(function() {
@@ -1109,25 +1067,6 @@ $index = array_search($item['label'], $numberedLabels);
         })
     })
 
-
-    $('.product_category').change(function() {
-        var product_id = $(this).attr('id');
-        var category_id = $(this).val();
-        var newRow = $('<tr>');
-        newRow.attr('id', 'newRow');
-        $('#example2').append(newRow);
-        $.ajax({
-            url: "{{ route('ajax') }}",
-            type: "get",
-            data: {
-                product_id: product_id,
-                category_id: category_id
-            },
-            success: function(data) {
-                alert('Thay đổi thành công');
-            }
-        });
-    })
     // Tên sản phẩm
     $('#btn-id').click(function(event) {
         event.preventDefault();

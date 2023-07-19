@@ -116,4 +116,12 @@ class Orders extends Model
     {
         return DB::table($this->table)->where('id', $id)->update($data);
     }
+    public function getNameProvide()
+    {
+        return $this->hasOne(Provides::class,'id','provide_id');
+    }
+    public function getNameUsers()
+    {
+        return $this->hasOne(User::class,'id','users_id');
+    }
 }
