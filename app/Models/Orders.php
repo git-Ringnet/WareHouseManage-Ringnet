@@ -123,6 +123,7 @@ class Orders extends Model
     public function getNameUsers()
     {
         return $this->hasOne(User::class,'id','users_id');
+    }
     public function reportOrders($filter = [],$name = [], $orderBy = null, $orderType = null)
     {
         $tableorders = Orders::leftJoin('users', 'users.id', 'orders.users_id')
