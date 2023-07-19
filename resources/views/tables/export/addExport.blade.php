@@ -1100,7 +1100,7 @@
             "<td><input type='text' class='note_product form-control' style='width:140px' name='product_note[]'></td>"
         );
         const thueInput = $("<td>" +
-            "<select name='product_tax[]' class='product_tax p-1 form-control' style='width:80px' id='product_tax' required>" +
+            "<select disabled name='product_tax[]' class='product_tax p-1 form-control' style='width:80px' id='product_tax' required>" +
             "<option value='0'>0%</option>" +
             "<option value='8'>8%</option>" +
             "<option value='10'>10%</option>" +
@@ -1134,7 +1134,7 @@
                 "class": "product_unit form-control",
                 "style": "width:100px",
                 "name": "product_unit[]",
-                "required": true
+                "readonly": "readonly"
             });
 
             let thue = productList[i].product_tax;
@@ -1174,6 +1174,7 @@
         });
         //xem thông tin sản phẩm
         info.click(function() {
+            var idProduct = $(this).closest('tr').find('.productName').val();
             var productCode = $(this).closest('tr').find('.maProduct option:selected')
                 .text();
             var productName = $(this).closest('tr').find('.productName option:selected')
@@ -1183,16 +1184,31 @@
                 .val();
             var thue = $(this).closest('tr').find('.product_tax')
                 .val();
-            var giaNhap = $(this).closest('tr').find('.price_import').val();
-            var tonKho = $(this).closest('tr').find('.tonkho').val();
-            var loaihang = $(this).closest('tr').find('.loaihang').val();
-            var dangGD = $(this).closest('tr').find('.dangGD').val();
-            $('#productModal').find('.modal-body').html('<b>Tên sản phẩm: </b> ' +
-                productName + '<br>' +
-                '<b>Tồn kho: </b>' + tonKho + '<br>' + '<b>Đang giao dịch: </b>' +
-                dangGD +
-                '<br>' + '<b>Giá nhập: </b>' + giaNhap + '<br>' + '<b>Thuế: </b>' +
-                (thue == 99 ? "NOVAT" : thue + '%'));
+            $.ajax({
+                url: "{{ route('getProduct') }}",
+                type: "get",
+                data: {
+                    idProduct: idProduct,
+                },
+                success: function(response) {
+                    var productPrice = parseFloat(response.product_price);
+                    var formattedPrice;
+                    if (Number.isInteger(productPrice)) {
+                        formattedPrice = numeral(productPrice).format('0,0');
+                    } else {
+                        formattedPrice = numeral(productPrice).format('0,0.00');
+                    }
+                    $('#productModal').find('.modal-body').html('<b>Tên sản phẩm: </b> ' +
+                        productName +
+                        '<br>' +
+                        '<b>Tồn kho: </b>' + response.product_qty + '<br>' +
+                        '<b>Đang giao dịch: </b>' +
+                        (response.product_trade == null ? 0 : response.product_trade) +
+                        '<br>' + '<b>Giá nhập: </b>' + formattedPrice + '<br>' +
+                        '<b>Thuế: </b>' +
+                        (thue == 99 ? "NOVAT" : thue + "%"));
+                },
+            });
         });
         // Gắn các phần tử vào hàng mới
         newRow.append(MaInput, ProInput, dvtInput, slInput,
