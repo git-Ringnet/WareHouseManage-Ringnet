@@ -102,7 +102,7 @@ class GuestsController extends Controller
         // dd($guests);
         $title = 'Khách hàng';
         $guestsCreator = $this->guests->guestsCreator();
-        return view('tables.guest.guests', compact('guests', 'users', 'sortType', 'string', 'title','guestsCreator'));
+        return view('tables.guest.guests', compact('guests', 'users', 'sortType', 'string', 'title', 'guestsCreator'));
     }
 
     /**
@@ -125,27 +125,30 @@ class GuestsController extends Controller
     public function store(Request $request)
     {
         $existingCustomer = Guests::orwhere('guest_name', $request->guest_name)
-            ->orwhere('guest_address', $request->guest_address)
             ->orwhere('guest_code', $request->guest_code)
             ->first();
 
         if ($existingCustomer) {
             return redirect()->route('guests.index')->with('warning', 'Thêm thất bại,do thông tin khách hàng đã có trong hệ thống!');
         } else {
-            Guests::create([
-                'guest_name' => $request->guest_name,
-                'guest_phone' => $request->guest_phone,
-                'guest_email' => $request->guest_email,
-                'guest_status' => $request->guest_status,
-                'guest_address' => $request->guest_address,
-                'guest_code' => $request->guest_code,
-                'guest_receiver' => $request->guest_receiver,
-                'guest_phoneReceiver' => $request->guest_phoneReceiver,
-                'guest_email_personal' => $request->guest_email_personal,
-                'guest_note' => $request->guest_note,
-                'user_id' =>  $request->user_id,
-                'debt' =>  $request->debt,
-            ]);
+            $guest = new Guests();
+            $guest->guest_name = $request->guest_name;
+            $guest->guest_phone = $request->guest_phone;
+            $guest->guest_email = $request->guest_email;
+            $guest->guest_status = $request->guest_status;
+            $guest->guest_address = $request->guest_address;
+            $guest->guest_code = $request->guest_code;
+            $guest->guest_receiver = $request->guest_receiver;
+            $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
+            $guest->guest_email_personal = $request->guest_email_personal;
+            $guest->guest_note = $request->guest_note;
+            $guest->user_id =  $request->user_id;
+            if ($request->debt == null) {
+                $guest->debt = 0;
+            } else {
+                $guest->debt = $request->debt;
+            }
+            $guest->save();
             return redirect()->route('guests.index')->with('msg', 'Thêm khách hàng thành công!');
         }
     }
@@ -199,7 +202,23 @@ class GuestsController extends Controller
         //     return redirect()->route('guests.index')->with('msg', 'Cập nhật thành công!');
         // }
         $guests = Guests::find($id);
-        $guests->update($request->all());
+        $guests->guest_name = $request->guest_name;
+        $guests->guest_phone = $request->guest_phone;
+        $guests->guest_email = $request->guest_email;
+        $guests->guest_status = $request->guest_status;
+        $guests->guest_address = $request->guest_address;
+        $guests->guest_code = $request->guest_code;
+        $guests->guest_receiver = $request->guest_receiver;
+        $guests->guest_phoneReceiver = $request->guest_phoneReceiver;
+        $guests->guest_email_personal = $request->guest_email_personal;
+        $guests->guest_note = $request->guest_note;
+        $guests->user_id =  $request->user_id;
+        if ($request->debt == null) {
+            $guests->debt = 0;
+        } else {
+            $guests->debt = $request->debt;
+        }
+        $guests->save();
         return redirect()->route('guests.index')->with('msg', 'Cập nhật thành công!');
     }
 
