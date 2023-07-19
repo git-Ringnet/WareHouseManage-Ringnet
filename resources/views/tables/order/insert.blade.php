@@ -76,7 +76,9 @@
         <form action="{{ route('insertProduct.store') }}" method="POST" id="form_submit">
             <section class="content-header">
                 <div class="d-flex mb-1 action-don">
-                    <a href="#" class="btn btn-danger text-white" id="add_bill">Duyệt đơn</a>
+                    <button class="btn btn-danger text-white" id="add_bill" type="submit" name="action"
+                        value="1">Duyệt đơn</button>
+                    {{-- <a href="#" class="btn btn-danger text-white" id="add_bill">Duyệt đơn</a> --}}
                 </div>
                 <div class="container-fluided">
                     <div class="row my-3">
@@ -105,8 +107,7 @@
                                         </svg>
                                     </div>
                                 </div>
-                                <ul id="myUL"
-                                    class="bg-white position-absolute rounded shadow p-0 scroll-data"
+                                <ul id="myUL" class="bg-white position-absolute rounded shadow p-0 scroll-data"
                                     style="z-index: 99; width:37%;">
                                     @foreach ($provide as $value)
                                         <li>
@@ -322,14 +323,24 @@
                 alert('Vui lòng chọn nhà cung cấp');
             }
 
-            if($('#product_create').val().trim() == ''){
+            if ($('#product_create').val().trim() == '') {
                 alert('Vui lòng nhập ngày hóa đơn');
                 isDuplicate = true;
             }
-            if (isDuplicate || error ) {
+            var requiredInputs = document.querySelectorAll('input[required]');
+            for (var i = 0; i < requiredInputs.length; i++) {
+                if (requiredInputs[i].value.trim() === '') {
+                    alert('Vui lòng điền đầy đủ thông tin yêu cầu');
+                    isDuplicate = true;
+                    break;
+                }
+            }
+
+            if (isDuplicate || error) {
                 return false;
             } else {
                 var provides_id = document.getElementById('form_submit');
+
                 provides_id.setAttribute('action', '{{ route('addBill') }}');
                 provides_id.submit();
             }
@@ -456,10 +467,9 @@
                         '<div class="form-group">' +
                         '<label for="email">Công nợ:</label>' +
                         '<div class="d-flex align-items-center" style="width:101%;"> <input name="provide_debt" id="debtInput" class="form-control" type="text" name="debt" style="width:15%;" value="' +
-                        data.debt + '">' +
+                        (data.debt == null ? 0 : data.debt) + '">' +
                         '<span class="ml-2" id="data-debt" style="color: rgb(29, 28, 32);">ngày</span>' +
-                        '<input type="checkbox" id="debtCheckbox" value="0" ' + (data
-                            .debt == 0 ? 'checked' : '') + ' style="margin-left:10%;" >' +
+                        '<input type="checkbox" id="debtCheckbox" value="0" ' + (data.debt == 0 ? 'checked' : '') + ' style="margin-left:10%;" >' +
                         '<span class="ml-2">Thanh toán tiền mặt</span> </div>' +
                         '</div>' +
                         '</div></div>'
@@ -554,7 +564,7 @@
                         if (data.success == true) {
                             alert(data.msg);
                             $('#provide_id').val(data.data);
-                        }else{
+                        } else {
                             alert(data.msg);
                         }
                     }
@@ -636,7 +646,7 @@
                 checkRow();
             });
         }
-        
+
         $(document).on('keypress', 'form', function(event) {
             return event.keyCode != 13;
         });

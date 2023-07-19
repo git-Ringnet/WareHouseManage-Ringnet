@@ -21,7 +21,7 @@
                     <span>Tạo đơn</span>
                 </button>
             </a>
-            <button style="margin-left:24px" type="button" onclick="exportToExcel()"
+            <button style="margin-left:24px" type="button" id="exportExcelOrder"
                 class="custom-btn btn btn-outline-primary border-primary d-flex align-items-center">
                 <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                     fill="none">
@@ -1166,6 +1166,76 @@ $index = array_search($item['label'], $numberedLabels);
     $(document).on('keypress', 'form', function(event) {
         return event.keyCode != 13;
     });
+
+
+    $(document).on('click', '#exportExcelOrder', function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: "{{ route('export_order') }}",
+            type: "get",
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    var products = response.data;
+                    // Create a new workbook
+                    var workbook = XLSX.utils.book_new();
+                    // Create a new worksheet
+                    var worksheet = XLSX.utils.json_to_sheet(products);
+                    // Modify the column headers
+                    var headers = [
+                        'ID',
+                        'Số hóa đơn',
+                        'Nhà cung cấp',
+                        'Ngày lập hóa đơn',
+                        'Người tạo',
+                        'Tổng tiền',
+                        'Trạng thái',
+                    ];
+                    // Update the column headers in the worksheet
+                    worksheet['A1'].v = headers[0];
+                    worksheet['B1'].v = headers[1];
+                    worksheet['C1'].v = headers[2];
+                    worksheet['D1'].v = headers[4];
+                    worksheet['E1'].v = headers[6];
+                    worksheet['F1'].v = headers[5];
+                    worksheet['G1'].v = headers[3];
+
+                    // Add the worksheet to the workbook
+                    XLSX.utils.book_append_sheet(workbook, worksheet, 'Products');
+
+                    // Convert the workbook to a binary Excel file
+                    var excelFile = XLSX.write(workbook, {
+                        bookType: 'xlsx',
+                        type: 'binary'
+                    });
+
+                    // Convert the binary Excel file to a Blob
+                    var blob = new Blob([s2ab(excelFile)], {
+                        type: 'application/octet-stream'
+                    });
+
+                    // Create a temporary <a> element to trigger the file download
+                    var link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = 'products.xlsx';
+                    link.click();
+                } else {
+                    console.log(response.msg);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.log(error);
+            }
+        });
+    });
+
+
+    function s2ab(s) {
+        var buf = new ArrayBuffer(s.length);
+        var view = new Uint8Array(buf);
+        for (var i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xff;
+        return buf;
+    }
 </script>
 </body>
 

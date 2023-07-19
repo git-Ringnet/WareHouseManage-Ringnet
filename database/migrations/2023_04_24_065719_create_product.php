@@ -23,6 +23,7 @@ class CreateProduct extends Migration
             $table->decimal('product_total',15,4)->nullable();
             $table->integer('provide_id')->nullable();
             $table->integer('product_trade')->nullable();
+            $table->integer('product_code')->nullable();
             $table->string('product_trademark')->nullable();
             $table->timestamps();
         });
