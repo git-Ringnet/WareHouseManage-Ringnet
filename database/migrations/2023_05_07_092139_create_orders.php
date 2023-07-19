@@ -15,11 +15,12 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id()->autoIncrement();
-            $table->string('product_code')->nullable();
+            $table->integer('product_code')->nullable();
             $table->integer('provide_id');
             $table->integer('users_id');
             $table->integer('order_status');
             $table->decimal('total', 15, 4)->nullable();
+            $table->decimal('total_tax',15,4)->nullable();
             $table->timestamps();
         });
     }

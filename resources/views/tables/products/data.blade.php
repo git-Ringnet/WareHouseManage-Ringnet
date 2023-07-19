@@ -637,7 +637,7 @@ $index = array_search($item['label'], $numberedLabels);
                     </div>
                     <div class="btn-nhaphang my-2">
                     </div>
-                    <div class="dropdown my-2 ml-4">
+                    {{-- <div class="dropdown my-2 ml-4">
                         <button class="custom-btn btn btn-light dropdown-toggle align-items-center d-flex h-100"
                             type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
                             aria-expanded="false">
@@ -646,7 +646,7 @@ $index = array_search($item['label'], $numberedLabels);
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             <a href="#" id="deleteProducts" class="dropdown-item">Xóa sản phẩm</a>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="cancal_action btn ml-auto">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
