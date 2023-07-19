@@ -106,7 +106,7 @@ class ReportController extends Controller
                     ->selectRaw('SUM(total_sales)');
             }, 'tongcongno')
             ->distinct()
-            ->paginate(20);
+            ->get();
         return view('tables.report.report', compact('title', 'Tableexports', 'orders', 'sumTotalOrders', 'sumDebtImportVAT', 'tableorders', 'exports', 'sumExport', 'formattedLoinhuan', 'CongNo'));
     }
 }

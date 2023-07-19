@@ -165,8 +165,7 @@
                                         </svg>
                                     </div>
                                 </div>
-                                <ul id="myUL"
-                                    class="bg-white position-absolute rounded shadow p-0 scroll-data"
+                                <ul id="myUL" class="bg-white position-absolute rounded shadow p-0 scroll-data"
                                     style="z-index: 99;width:37%;">
                                     @foreach ($customer as $item)
                                         @if (Auth::user()->id == $item->user_id || Auth::user()->can('isAdmin'))
@@ -347,7 +346,7 @@
                                         value={{ number_format($value_export->product_price) }} required="">
                                 </td>
                                 <td>
-                                    <select name="product_tax[]" class="product_tax form-control text-center"
+                                    <select disabled name="product_tax[]" class="product_tax form-control text-center"
                                         style="width: 100px;" id="product_tax" required>
                                         <option value="0" <?php if ($value_export->thue == 0) {
                                             echo 'selected';
@@ -1123,10 +1122,21 @@
             // Kiểm tra nếu ID sản phẩm đã chọn đã có trong danh sách các sản phẩm đã chọn
             if (selectedProductIDs.includes(selectedID)) {
                 $(this).val(''); // Đặt giá trị của tùy chọn thành trống
-
                 var productNameElement = $(this).closest('tr').find('.product_name');
                 productNameElement.prop('disabled', true); // Disable ô input chứa tên sản phẩm
                 alert('Sản phẩm này đã được thêm trước đó, vui lòng chọn sản phẩm khác');
+
+                // Kiểm tra nếu giá trị data-previous-id là null, thì bỏ qua bước kiểm tra tiếp theo
+                if ($(this).data('previous-id') !== null) {
+                    var previousID = $(this).data('previous-id'); // Lấy ID trước đó của tùy chọn
+                    var index = selectedProductIDs.indexOf(previousID);
+                    if (index !== -1) {
+                        selectedProductIDs.splice(index, 1); // Xóa ID trước đó khỏi mảng
+                    }
+                }
+
+                // Đặt giá trị data-previous-id thành null để cho phép chọn lại sản phẩm ban đầu
+                $(this).data('previous-id', null);
             } else {
                 var previousID = $(this).data('previous-id'); // Lấy ID trước đó của tùy chọn
                 if (previousID && previousID !== selectedID) {

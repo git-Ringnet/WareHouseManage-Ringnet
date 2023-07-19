@@ -325,13 +325,17 @@
             <div class="d-flex align-items-center my-2">
                 <div class="">
                     <p class="m-0"><b>Số hóa đơn</b></p>
-                    <input type="number" value="{{ $exports->export_code }}" name="export_code"
-                        class="form-control" placeholder="Nhập thông tin">
+                    <input type="number" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                        echo 'readonly';
+                    } ?> value="{{ $exports->export_code }}"
+                        name="export_code" class="form-control" placeholder="Nhập thông tin">
                 </div>
                 <div class="pl-3">
                     <p class="m-0"><b>Ngày hóa đơn</b></p>
-                    <input type="date" value="{{ $exports->created_at->format('Y-m-d') }}" name="export_create"
-                        class="form-control">
+                    <input type="date" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                        echo 'readonly';
+                    } ?> value="{{ $exports->created_at->format('Y-m-d') }}"
+                        name="export_create" class="form-control">
                 </div>
             </div>
             {{-- Bảng thêm sản phẩm --}}
@@ -1197,10 +1201,21 @@
             // Kiểm tra nếu ID sản phẩm đã chọn đã có trong danh sách các sản phẩm đã chọn
             if (selectedProductIDs.includes(selectedID)) {
                 $(this).val(''); // Đặt giá trị của tùy chọn thành trống
-
                 var productNameElement = $(this).closest('tr').find('.product_name');
                 productNameElement.prop('disabled', true); // Disable ô input chứa tên sản phẩm
                 alert('Sản phẩm này đã được thêm trước đó, vui lòng chọn sản phẩm khác');
+
+                // Kiểm tra nếu giá trị data-previous-id là null, thì bỏ qua bước kiểm tra tiếp theo
+                if ($(this).data('previous-id') !== null) {
+                    var previousID = $(this).data('previous-id'); // Lấy ID trước đó của tùy chọn
+                    var index = selectedProductIDs.indexOf(previousID);
+                    if (index !== -1) {
+                        selectedProductIDs.splice(index, 1); // Xóa ID trước đó khỏi mảng
+                    }
+                }
+
+                // Đặt giá trị data-previous-id thành null để cho phép chọn lại sản phẩm ban đầu
+                $(this).data('previous-id', null);
             } else {
                 var previousID = $(this).data('previous-id'); // Lấy ID trước đó của tùy chọn
                 if (previousID && previousID !== selectedID) {

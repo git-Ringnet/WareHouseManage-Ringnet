@@ -424,16 +424,10 @@
                 var productName = $(this).closest('tr').find('.productName option:selected')
                     .text();
                 var dvt = $(this).closest('tr').find('.product_unit').val();
-                // var soluong = $(this).closest('tr').find('.quantity-input')
-                //     .val();
-                // var giaBan = $(this).closest('tr').find('.product_price')
-                //     .val();
                 var ghiChu = $(this).closest('tr').find('.note_product')
                     .val();
                 var thue = $(this).closest('tr').find('.product_tax')
                     .val();
-                // var thanhTien = $(this).closest('tr').find('.total-amount')
-                //     .text();
                 var giaNhap = $(this).closest('tr').find('.price_import').val();
                 var tonKho = $(this).closest('tr').find('.tonkho').val();
                 var loaihang = $(this).closest('tr').find('.loaihang').val();
@@ -804,6 +798,18 @@
                 var productNameElement = $(this).closest('tr').find('.product_name');
                 productNameElement.prop('disabled', true); // Disable ô input chứa tên sản phẩm
                 alert('Sản phẩm này đã được thêm trước đó, vui lòng chọn sản phẩm khác');
+
+                // Kiểm tra nếu giá trị data-previous-id là null, thì bỏ qua bước kiểm tra tiếp theo
+                if ($(this).data('previous-id') !== null) {
+                    var previousID = $(this).data('previous-id'); // Lấy ID trước đó của tùy chọn
+                    var index = selectedProductIDs.indexOf(previousID);
+                    if (index !== -1) {
+                        selectedProductIDs.splice(index, 1); // Xóa ID trước đó khỏi mảng
+                    }
+                }
+
+                // Đặt giá trị data-previous-id thành null để cho phép chọn lại sản phẩm ban đầu
+                $(this).data('previous-id', null);
             } else {
                 var previousID = $(this).data('previous-id'); // Lấy ID trước đó của tùy chọn
                 if (previousID && previousID !== selectedID) {

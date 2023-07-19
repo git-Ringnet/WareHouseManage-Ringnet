@@ -2094,6 +2094,16 @@ class ExportController extends Controller
                         }
                         $totalQtyNeeded += $productQty;
                     }
+
+                    // Xóa các sản phẩm đã bị xóa
+                    $productExportsToDelete = ProductExports::where('export_id', $exports->id)
+                        ->whereNotIn('product_id', $productIDs)
+                        ->get();
+                    foreach ($productExportsToDelete as $productExport) {
+                        // Xóa sản phẩm
+                        $productExport->delete();
+                    }
+
                     // Giảm số lượng của sản phẩm trong bảng product
                     for ($i = 0; $i < count($productIDs); $i++) {
                         $productID = $productIDs[$i];
@@ -2369,9 +2379,22 @@ class ExportController extends Controller
     {
         if (isset($request->list_id)) {
             $list = $request->list_id;
-            Exports::whereIn('id', $list)->delete();
-            session()->flash('msg', 'Xóa đơn hàng thành công');
-            return response()->json(['success' => true, 'msg' => 'Xóa đơn hàng thành công', 'ids' => $list]);
+            $exportsToDelete = Exports::whereIn('id', $list)->get();
+            $hasError = false;
+            foreach ($exportsToDelete as $export) {
+                if ($export->export_status !== 0) {
+                    $hasError = true;
+                    break;
+                }
+            }
+            if ($hasError) {
+                session()->flash('warning', 'Không tìm thấy đơn hàng cần xóa');
+                return response()->json(['success' => false, 'msg' => 'Không tìm thấy đơn hàng cần xóa']);
+            } else {
+                Exports::whereIn('id', $list)->where('export_status', 0)->delete();
+                session()->flash('msg', 'Xóa đơn hàng thành công');
+                return response()->json(['success' => true, 'msg' => 'Xóa đơn hàng thành công', 'ids' => $list]);
+            }
         }
         session()->flash('warning', 'Không tìm thấy đơn hàng cần xóa');
         return response()->json(['success' => false, 'msg' => 'Không tìm thấy đơn hàng cần xóa']);
