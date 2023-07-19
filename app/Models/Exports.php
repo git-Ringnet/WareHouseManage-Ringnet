@@ -12,20 +12,20 @@ class Exports extends Model
     protected $table = 'exports';
 
     use HasFactory;
-    public function getAllExports($filter = [], $status = [], $name = [],$guest=[], $date = [], $keywords = null, $orderBy = null, $orderType = null)
+    public function getAllExports($filter = [], $status = [], $name = [], $guest = [], $date = [], $keywords = null, $orderBy = null, $orderType = null)
     {
-        
+
         $exports = DB::table($this->table)
             ->leftJoin('guests', 'exports.guest_id', '=', 'guests.id')
             ->leftJoin('users', 'exports.user_id', '=', 'users.id')
-            ->select('exports.*','exports.id','exports.user_id', 'guests.guest_name', 'users.name', 'exports.total', 'exports.updated_at', 'export_status');
+            ->select('exports.*', 'exports.id', 'exports.user_id', 'guests.guest_name', 'users.name', 'exports.total', 'exports.updated_at', 'export_status');
         // Các điều kiện tìm kiếm và lọc dữ liệu ở đây
 
         $userId = Auth::user()->id;
-        if( Auth::user()->roleid != 1){
-            $exports = $exports->where('exports.user_id',$userId);
+        if (Auth::user()->roleid != 1) {
+            $exports = $exports->where('exports.user_id', $userId);
         }
-        
+
         if (!empty($filter)) {
             $exports = $exports->where($filter);
         }
@@ -37,7 +37,7 @@ class Exports extends Model
         if (!empty($name)) {
             $exports = $exports->whereIn('users.name', $name);
         }
-        
+
         if (!empty($guest)) {
             $exports = $exports->whereIn('guests.guest_name', $guest);
         }
@@ -73,9 +73,16 @@ class Exports extends Model
         $startDate = now()->subDays(30); // Ngày bắt đầu là ngày hiện tại trừ đi 30 ngày
         $endDate = now(); // Ngày kết thúc là ngày hiện tại
         $exports = DB::table($this->table)
-        ->where('export_status', 2)
-        ->whereBetween('created_at', [$startDate, $endDate])
-        ->get();
+            ->where('export_status', 2)
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->get();
+        return $exports;
+    }
+    public function alldonxuat()
+    {
+        $exports = DB::table($this->table)
+            ->where('export_status', 2)
+            ->get();
         return $exports;
     }
     protected $fillable = [
@@ -90,15 +97,24 @@ class Exports extends Model
     {
         $startDate = now()->subDays(30); // Ngày bắt đầu là ngày hiện tại trừ đi 30 ngày
         $endDate = now(); // Ngày kết thúc là ngày hiện tại
-        
+
         $totalSum = DB::table($this->table)
             ->where('export_status', 2)
             ->whereBetween('created_at', [$startDate, $endDate])
             ->sum('total');
-        
+
         return $totalSum;
-        
     }
+
+    public function tongtienxuat()
+    {
+        $totalSum = DB::table($this->table)
+            ->where('export_status', 2)
+            ->sum('total');
+
+        return $totalSum;
+    }
+
     public function productsCreator()
     {
         $userId = Auth::user()->id;

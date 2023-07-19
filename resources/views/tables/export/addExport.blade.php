@@ -354,7 +354,7 @@
                 "</select>" +
                 "</td>");
             const dvtInput = $(
-                "<td><input type='text' id='product_unit' class='product_unit form-control' style='width:100px' name='product_unit[]' required></td>"
+                "<td><input type='text' readonly id='product_unit' class='product_unit form-control' style='width:100px' name='product_unit[]' required></td>"
             );
             const slInput = $(
                 "<td>" +
@@ -371,7 +371,7 @@
                 "<td><input type='text' class='note_product form-control' style='width:140px' name='product_note[]'></td>"
             );
             const thueInput = $("<td>" +
-                "<select name='product_tax[]' class='product_tax p-1 form-control' style='width:80px' id='product_tax' required>" +
+                "<select disabled name='product_tax[]' class='product_tax p-1 form-control' style='width:80px' id='product_tax' required>" +
                 "<option value='0'>0%</option>" +
                 "<option value='8'>8%</option>" +
                 "<option value='10'>10%</option>" +
@@ -958,26 +958,46 @@
     //ngăn chặn click
     $(document).ready(function() {
         $('#chot_don').on('click', function(event) {
+            var inputs = document.getElementsByTagName("input");
+            var selects = document.getElementsByTagName("select");
+
+            for (var i = 0; i < inputs.length; i++) {
+                inputs[i].removeAttribute("readonly");
+            }
+
+            for (var j = 0; j < selects.length; j++) {
+                selects[j].removeAttribute("disabled");
+            }
             var $button = $(this);
 
             if (!$button.hasClass('disabled')) {
                 $button.addClass('disabled');
                 setTimeout(function() {
                     $button.removeClass('disabled');
-                }, 10000);
+                }, 1000);
             } else {
                 event.preventDefault();
             }
         });
 
         $('#luu').on('click', function() {
+            var inputs = document.getElementsByTagName("input");
+            var selects = document.getElementsByTagName("select");
+
+            for (var i = 0; i < inputs.length; i++) {
+                inputs[i].removeAttribute("readonly");
+            }
+
+            for (var j = 0; j < selects.length; j++) {
+                selects[j].removeAttribute("disabled");
+            }
             var $button = $(this);
 
             if (!$button.hasClass('disabled')) {
                 $button.addClass('disabled');
                 setTimeout(function() {
                     $button.removeClass('disabled');
-                }, 10000);
+                }, 1000);
             } else {
                 event.preventDefault();
             }

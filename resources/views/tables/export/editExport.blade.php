@@ -377,7 +377,7 @@
                                     </select>
                                 </td>
                                 <td>
-                                    <input type="text" id="product_unit" style="width: 80px"
+                                    <input type="text" id="product_unit" readonly style="width: 80px"
                                         class="product_unit form-control text-center" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                             echo 'readonly';
                                         } ?>
@@ -408,20 +408,20 @@
                                         required="">
                                 </td>
                                 <td>
-                                    <select name="product_tax[]" class="product_tax form-control text-center"
+                                    <select disabled name="product_tax[]" class="product_tax form-control text-center"
                                         style="width: 100px;" id="product_tax" required <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                             echo 'disabled';
                                         } ?>>
-                                        <option value="0" <?php if ($value_export->product_tax == 0) {
+                                        <option value="0" <?php if ($value_export->thue == 0) {
                                             echo 'selected';
                                         } ?>>0%</option>
-                                        <option value="8" <?php if ($value_export->product_tax == 8) {
+                                        <option value="8" <?php if ($value_export->thue == 8) {
                                             echo 'selected';
                                         } ?>>8%</option>
-                                        <option value="10" <?php if ($value_export->product_tax == 10) {
+                                        <option value="10" <?php if ($value_export->thue == 10) {
                                             echo 'selected';
                                         } ?>>10%</option>
-                                        <option value="99" <?php if ($value_export->product_tax == 99) {
+                                        <option value="99" <?php if ($value_export->thue == 99) {
                                             echo 'selected';
                                         } ?>>NOVAT</option>
                                     </select>
@@ -716,7 +716,7 @@
                 "</select>" +
                 "</td>");
             const dvtInput = $(
-                "<td><input type='text' id='product_unit' class='product_unit form-control text-center' style='width:80px' name='product_unit[]' required></td>"
+                "<td><input type='text' readonly id='product_unit' class='product_unit form-control text-center' style='width:80px' name='product_unit[]' required></td>"
             );
             const slInput = $(
                 "<td>" +
@@ -730,7 +730,7 @@
                 "<td><input type='text' class='product_price form-control text-center' style='width:140px;' id='product_price' name='product_price[]' required></td>"
             );
             const thueInput = $("<td>" +
-                "<select name='product_tax[]' class='product_tax p-1 form-control text-center' style='width:100px' id='product_tax' required>" +
+                "<select disabled name='product_tax[]' class='product_tax p-1 form-control text-center' style='width:100px' id='product_tax' required>" +
                 "<option value='0'>0%</option>" +
                 "<option value='8'>8%</option>" +
                 "<option value='10'>10%</option>" +
@@ -1396,37 +1396,67 @@
     //ngăn chặn click
     $(document).ready(function() {
         $('#chot_don').on('click', function() {
+            var inputs = document.getElementsByTagName("input");
+            var selects = document.getElementsByTagName("select");
+
+            for (var i = 0; i < inputs.length; i++) {
+                inputs[i].removeAttribute("readonly");
+            }
+
+            for (var j = 0; j < selects.length; j++) {
+                selects[j].removeAttribute("disabled");
+            }
             var $button = $(this);
 
             if (!$button.hasClass('disabled')) {
                 $button.addClass('disabled');
                 setTimeout(function() {
                     $button.removeClass('disabled');
-                }, 10000);
+                }, 1000);
             } else {
                 event.preventDefault();
             }
         });
         $('#luu').on('click', function() {
+            var inputs = document.getElementsByTagName("input");
+            var selects = document.getElementsByTagName("select");
+
+            for (var i = 0; i < inputs.length; i++) {
+                inputs[i].removeAttribute("readonly");
+            }
+
+            for (var j = 0; j < selects.length; j++) {
+                selects[j].removeAttribute("disabled");
+            }
             var $button = $(this);
 
             if (!$button.hasClass('disabled')) {
                 $button.addClass('disabled');
                 setTimeout(function() {
                     $button.removeClass('disabled');
-                }, 10000);
+                }, 1000);
             } else {
                 event.preventDefault();
             }
         });
         $('#huy').on('click', function() {
+            var inputs = document.getElementsByTagName("input");
+            var selects = document.getElementsByTagName("select");
+
+            for (var i = 0; i < inputs.length; i++) {
+                inputs[i].removeAttribute("readonly");
+            }
+
+            for (var j = 0; j < selects.length; j++) {
+                selects[j].removeAttribute("disabled");
+            }
             var $button = $(this);
 
             if (!$button.hasClass('disabled')) {
                 $button.addClass('disabled');
                 setTimeout(function() {
                     $button.removeClass('disabled');
-                }, 10000);
+                }, 1000);
             } else {
                 event.preventDefault();
             }
@@ -1448,7 +1478,7 @@
                 $button.addClass('disabled');
                 setTimeout(function() {
                     $button.removeClass('disabled');
-                }, 10000);
+                }, 1000);
             } else {
                 event.preventDefault();
             }
