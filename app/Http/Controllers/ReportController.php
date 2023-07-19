@@ -79,7 +79,7 @@ class ReportController extends Controller
             ->leftJoin('roles', 'users.roleid', 'roles.id')
             ->leftJoin('debts', 'debts.export_id', 'exports.id')
             ->where('exports.export_status', 2)
-            ->select('users.*', 'exports.*', 'users.name as nhanvien', 'roles.name as vaitro')
+            ->select('users.name as nhanvien', 'roles.name as vaitro','users.email as email')
             ->selectSub(function ($query) {
                 $query->from('exports')
                     ->where('exports.export_status', 2)

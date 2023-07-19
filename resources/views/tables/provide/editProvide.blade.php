@@ -71,6 +71,7 @@
                                     </select>
                                 </div>
                                 <div class="mb-3">
+                                    <label for="pwd">Công nợ:</label>
                                     <div class="d-flex align-items-center">
                                         <input type="text" oninput="validateNumberInput(this)" class="form-control"
                                             id="debtInput" value="{{ $provides->debt }}" name="debt"

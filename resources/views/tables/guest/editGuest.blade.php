@@ -26,27 +26,9 @@
                                 @csrf
                                 @method('PUT')
                                 <div class="mb-3">
-                                    <label class="required-label" for="email">Đơn vị</label>
+                                    <label class="required-label" for="email">Công ty</label>
                                     <input type="text" class="form-control" value="{{ $guests->guest_name }}"
-                                        name="guest_name" placeholder="Nhập tên đơn vị" required>
-                                </div>
-                                {{-- <div class="mb-3">
-                                    <label for="pwd">Đại diện:</label>
-                                    <input type="text" class="form-control" value="{{ $guests->guest_represent }}"
-                                        name="guest_represent" placeholder="Nhập tên người đại diện" required>
-                                </div> --}}
-                                <div class="mb-3">
-                                    <label class="" for="pwd">Số điện thoại</label>
-                                    <input type="text" class="form-control" oninput=validateNumberInput(this)
-                                        value="{{ $guests->guest_phone }}" name="guest_phone"
-                                        pattern="^(?:\+?84|0)(?:\d{9}|\d{10})$" title="Số điện thoại không hợp lệ"
-                                        placeholder="Nhập số điện thoại">
-                                </div>
-                                <div class="mb-3">
-                                    <label class="" for="pwd">Email</label>
-                                    <input type="email" class="form-control" value="{{ $guests->guest_email }}"
-                                        pattern="/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/" name="guest_email"
-                                        placeholder="Nhập email">
+                                        name="guest_name" placeholder="Nhập tên công ty" required>
                                 </div>
                                 <div class="mb-3">
                                     <label class="required-label">Địa chỉ</label>
@@ -61,10 +43,29 @@
                                         value="{{ $guests->guest_code }}" required>
                                 </div>
                                 <div class="mb-3">
+                                    <label class="" for="pwd">Email</label>
+                                    <input type="email" class="form-control" value="{{ $guests->guest_email }}"
+                                        pattern="/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/" name="guest_email"
+                                        placeholder="Nhập email">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="" for="pwd">Số điện thoại</label>
+                                    <input type="text" class="form-control" oninput=validateNumberInput(this)
+                                        value="{{ $guests->guest_phone }}" name="guest_phone"
+                                        pattern="^(?:\+?84|0)(?:\d{9}|\d{10})$" title="Số điện thoại không hợp lệ"
+                                        placeholder="Nhập số điện thoại">
+                                </div>
+                                <div class="mb-3">
                                     <label class="" for="email">Người nhận hàng</label>
                                     <input type="text" class="form-control" id="guest_receiver"
                                         placeholder="Nhập người nhận hàng" name="guest_receiver"
                                         value="{{ $guests->guest_receiver }}">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="" for="pwd">Email cá nhân:</label>
+                                    <input type="email" class="form-control" name="guest_email_personal"
+                                        pattern="/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/"
+                                        value="{{ $guests->guest_email_personal }}" placeholder="Nhập email cá nhân">
                                 </div>
                                 <div class="mb-3">
                                     <label class="" for="email">SĐT người nhận</label>
@@ -74,28 +75,24 @@
                                         title="Số điện thoại không hợp lệ" value="{{ $guests->guest_phoneReceiver }}">
                                 </div>
                                 <div class="mb-3">
-                                    <label class="" for="pwd">Email cá nhân:</label>
-                                    <input type="email" class="form-control" name="guest_email_personal"
-                                        pattern="/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/" value="{{$guests->guest_email_personal}}" placeholder="Nhập email cá nhân">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="email">Ghi chú:</label>
-                                    <input type="text" class="form-control" id="guest_note"
-                                        placeholder="Nhập ghi chú" name="guest_note" value="{{ $guests->guest_note }}">
-                                </div>
-                                <div class="mb-3">
-                                    <label class="required-label">Công nợ</label>
+                                    <label>Công nợ</label>
                                     <div class="d-flex align-items-center">
-                                        <input type="text" oninput="validateNumberInput(this)"
-                                            class="form-control" id="debtInput" value="{{ $guests->debt }}"
-                                            name="debt" style="width:15%;" required>
+                                        <input type="text" oninput="validateNumberInput(this)" class="form-control"
+                                            id="debtInput" value="{{ $guests->debt }}" name="debt"
+                                            style="width:15%;">
                                         <span class="ml-2" id="data-debt">ngày</span>
-                                        <input type="checkbox" id="debtCheckbox" value="0" name="debt" class="ml-3"
-                                            <?php if ($guests->debt == 0) {
+                                        <input type="checkbox" id="debtCheckbox" value="0" name="debt"
+                                            class="ml-3" <?php if ($guests->debt == 0) {
                                                 echo 'checked';
                                             } ?>>
                                         <span class="ml-2">Thanh toán tiền mặt</span>
                                     </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="email">Ghi chú:</label>
+                                    <input type="text" class="form-control" id="guest_note"
+                                        placeholder="Nhập ghi chú" name="guest_note"
+                                        value="{{ $guests->guest_note }}">
                                 </div>
                                 @if (Auth::user()->can('isAdmin'))
                                     <div class="mb-3">

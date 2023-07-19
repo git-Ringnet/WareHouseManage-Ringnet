@@ -226,7 +226,7 @@ class ExportController extends Controller
                                     ->where('product.id', $productID)
                                     ->value('orders.product_code');
                                 //lấy bảng nhập hàng
-                                $orders = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
+                                $productorders = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                     ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                     ->where('product.id', $productID)->first();
                                 //công nợ nhập
@@ -272,7 +272,7 @@ class ExportController extends Controller
                                 $history->product_qty = $qty_exist;
                                 $history->product_unit = $product->product_unit;
                                 $history->price_import = $product->product_price;
-                                $history->product_total = $orders->total;
+                                $history->product_total = $productorders->product_total;
                                 $history->import_code = $import_code;
                                 $history->debt_import = $debt_import;
                                 $history->import_status = $import_status;
@@ -433,7 +433,7 @@ class ExportController extends Controller
                                     ->where('product.id', $productID)
                                     ->value('orders.product_code');
                                 //lấy bảng nhập hàng
-                                $orders = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
+                                $productorders = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                     ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                     ->where('product.id', $productID)->first();
                                 //công nợ nhập
@@ -479,7 +479,7 @@ class ExportController extends Controller
                                 $history->product_qty = $qty_exist;
                                 $history->product_unit = $product->product_unit;
                                 $history->price_import = $product->product_price;
-                                $history->product_total = $orders->total;
+                                $history->product_total = $productorders->product_total;
                                 $history->import_code = $import_code;
                                 $history->debt_import = $debt_import;
                                 $history->import_status = $import_status;
@@ -633,7 +633,7 @@ class ExportController extends Controller
                                     ->where('product.id', $productID)
                                     ->value('orders.product_code');
                                 //lấy bảng nhập hàng
-                                $orders = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
+                                $productorders = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                     ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                     ->where('product.id', $productID)->first();
                                 //công nợ nhập
@@ -679,7 +679,7 @@ class ExportController extends Controller
                                 $history->product_qty = $qty_exist;
                                 $history->product_unit = $product->product_unit;
                                 $history->price_import = $product->product_price;
-                                $history->product_total = $orders->total;
+                                $history->product_total = $productorders->product_total;
                                 $history->import_code = $import_code;
                                 $history->debt_import = $debt_import;
                                 $history->import_status = $import_status;
@@ -832,7 +832,7 @@ class ExportController extends Controller
                                     ->where('product.id', $productID)
                                     ->value('orders.product_code');
                                 //lấy bảng nhập hàng
-                                $orders = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
+                                $productorders = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                     ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                     ->where('product.id', $productID)->first();
                                 //công nợ nhập
@@ -878,7 +878,7 @@ class ExportController extends Controller
                                 $history->product_qty = $qty_exist;
                                 $history->product_unit = $product->product_unit;
                                 $history->price_import = $product->product_price;
-                                $history->product_total = $orders->total;
+                                $history->product_total = $productorders->product_total;
                                 $history->import_code = $import_code;
                                 $history->debt_import = $debt_import;
                                 $history->import_status = $import_status;
@@ -1370,7 +1370,7 @@ class ExportController extends Controller
                                 ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
                                 ->where('product.id', $productID)->first();
                             //lấy bảng nhập hàng
-                            $orders = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
+                            $productorders = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                 ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                 ->where('product.id', $productID)->first();
                             //lấy thông tin sản phẩm
@@ -1389,7 +1389,7 @@ class ExportController extends Controller
                             $history->product_qty = $qty_exist;
                             $history->product_unit = $product->product_unit;
                             $history->price_import = $product->product_price;
-                            $history->product_total = $orders->total;
+                            $history->product_total = $productorders->product_total;
                             $history->import_code = $import_code;
                             $history->debt_import = $debt_import;
                             $history->import_status = $import_status;
@@ -1461,7 +1461,7 @@ class ExportController extends Controller
                                 ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
                                 ->where('product.id', $productID)->first();
                             //lấy bảng nhập hàng
-                            $orders = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
+                            $productorders = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                 ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                 ->where('product.id', $productID)->first();
                             //lấy thông tin sản phẩm
@@ -1480,7 +1480,7 @@ class ExportController extends Controller
                             $history->product_qty = $qty_exist;
                             $history->product_unit = $product->product_unit;
                             $history->price_import = $product->product_price;
-                            $history->product_total = $orders->total;
+                            $history->product_total = $productorders->product_total;
                             $history->import_code = $import_code;
                             $history->debt_import = $debt_import;
                             $history->import_status = $import_status;
@@ -1526,12 +1526,11 @@ class ExportController extends Controller
                         $product = Product::find($productExport->product_id);
                         $totalImport += $product->product_price * $productExport->product_qty;
                     }
-                    dd($exports->transport_fee);
                     // Tính toán giá trị total_difference
-                    if ($exports->transport_fee === null) {
+                    if ($request->transport_fee === null) {
                         $debtTransportFee = 0;
                     } else {
-                        $debtTransportFee = $exports->transport_fee;
+                        $debtTransportFee = $request->transport_fee;
                     }
                     $totalDifference = $totalSales - $totalImport - $debtTransportFee;
                     // Lấy thông tin từ bảng Guests
@@ -2164,20 +2163,6 @@ class ExportController extends Controller
                         $exports->save();
                     }
 
-                    // Xóa các sản phẩm đã bị xóa
-                    $productExportsToDelete = ProductExports::where('export_id', $exports->id)
-                        ->whereNotIn('product_id', $productIDs)
-                        ->get();
-                    foreach ($productExportsToDelete as $productExport) {
-                        // Lấy số lượng, đang giao dịch hiện tại của sản phẩm
-                        $productID = $productExport->product_id;
-                        $productQty = $productExport->product_qty;
-                        Product::where('id', $productID)
-                            ->decrement('product_trade', $productQty);
-                        // Xóa sản phẩm
-                        $productExport->delete();
-                    }
-
                     // Lấy lại thông tin exports từ cơ sở dữ liệu (nếu cần)
                     $exports = Exports::find($exports->id);
 
@@ -2452,7 +2437,10 @@ class ExportController extends Controller
             ->selectRaw('(product.product_qty - product.product_trade) as tonkho')
             ->where('export_id', $id)
             ->get();
-        $product_code = Product::all();
+        $product_code = Product::select('product.*')
+            ->whereRaw('COALESCE((product.product_qty - COALESCE(product.product_trade, 0)), 0) > 0')
+            ->selectRaw('COALESCE((product.product_qty - COALESCE(product.product_trade, 0)), 0) as qty_exist')
+            ->get();
         $title = 'Chi tiết đơn hàng';
         return view('tables.export.editEx', compact('exports', 'guest', 'productExport', 'product_code', 'customer', 'title'));
     }

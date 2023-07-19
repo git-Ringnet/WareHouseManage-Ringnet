@@ -63,11 +63,10 @@
                                     </select>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="required-label" for="pwd">Công nợ</label>
+                                    <label for="pwd">Công nợ</label>
                                     <div class="d-flex align-items-center">
                                         <input type="text" oninput="validateNumberInput(this)" class="form-control"
-                                            id="debtInput" value="" name="debt" style="width:15%;"
-                                            required="">
+                                            id="debtInput" value="" name="debt" style="width:15%;">
                                         <span class="ml-2" id="data-debt">ngày</span>
                                         <input type="checkbox" id="debtCheckbox" value="0" name="debt"
                                             class="ml-3" checked>
