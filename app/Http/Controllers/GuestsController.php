@@ -265,13 +265,15 @@ class GuestsController extends Controller
     {
         if (isset($request->list_id)) {
             $list = $request->list_id;
+            $id= $request->id;
             $listOrder = Guests::whereIn('id', $list)->get();
             foreach ($listOrder as $value) {
                 $value->guest_status = 1;
+                $value->user_id = $id;
                 $value->save();
             }
-            session()->flash('msg', 'Thay đổi trạng thái nhà cung cấp thành công');
-            return response()->json(['success' => true, 'msg' => 'Thay đổi trạng thái nhà cung cấp thành công']);
+            session()->flash('msg', 'Thay đổi người phụ trách thành công');
+            return response()->json(['success' => true, 'msg' => 'Thay đổi người phụ trách thành công']);
         }
         return response()->json(['success' => false, 'msg' => 'Not fount']);
     }

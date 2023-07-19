@@ -42,7 +42,7 @@ class History extends Model
         'tranport_fee',
         'history_note',
     ];
-    public function getAllHistory($filters = [], $keywords = null, $date = [], $guest = [], $status = [], $unitarr = [], $status_export = [], $orderBy = null, $orderType = null)
+    public function getAllHistory($filters = [], $keywords = null, $date = [], $provide_namearr = [], $guest = [], $status = [], $unitarr = [], $status_export = [], $orderBy = null, $orderType = null)
     {
         $history = History::leftJoin('users', 'users.id', 'history.user_id')
             ->leftJoin('provides', 'provides.id', 'history.provide_id')
@@ -66,6 +66,9 @@ class History extends Model
         }
         if (!empty($name)) {
             $history = $history->whereIn('users.name', $name);
+        }
+        if (!empty($provide_namearr)) {
+            $history = $history->whereIn('provides.id', $provide_namearr);
         }
         if (!empty($date)) {
             $history = $history->wherebetween('history.date_time', $date);

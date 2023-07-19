@@ -49,6 +49,7 @@ class Exports extends Model
             $exports = $exports->where(function ($query) use ($keywords) {
                 $query->orWhere('exports.export_status', 'like', '%' . $keywords . '%');
                 $query->orWhere('guests.guest_receiver', 'like', '%' . $keywords . '%');
+                $query->orWhere('guests.guest_name', 'like', '%' . $keywords . '%');
                 $query->orWhere('users.name', 'like', '%' . $keywords . '%');
             });
         }
@@ -121,5 +122,55 @@ class Exports extends Model
         $products = DB::table($this->table)->where('user_id', $userId)->paginate(20);
         // dd($products);
         return $products;
+    }
+    public function reportExports($filter = [],$name = [], $orderBy = null, $orderType = null)
+    {
+        //Table xuất hàng
+        $Tableexports = Exports::leftJoin('users', 'users.id', 'exports.user_id')
+            ->leftJoin('roles', 'users.roleid', 'roles.id')
+            ->leftJoin('debts', 'debts.export_id', 'exports.id')
+            ->where('exports.export_status', 2)
+            ->select('users.name as nhanvien', 'roles.name as vaitro', 'users.email as email')
+            ->selectSub(function ($query) {
+                $query->from('exports')
+                    ->where('exports.export_status', 2)
+                    ->whereColumn('exports.user_id', 'users.id')
+                    ->selectRaw('COUNT(id)');
+            }, 'donxuat')
+            ->selectSub(function ($query) {
+                $query->from('exports')
+                    ->where('exports.export_status', 2)
+                    ->whereColumn('exports.user_id', 'users.id')
+                    ->selectRaw('SUM(total)');
+            }, 'tongtienxuat')
+            ->selectSub(function ($query) {
+                $query->from('debts')
+                    ->where('exports.export_status', 2)
+                    ->whereColumn('exports.user_id', 'users.id')
+                    ->selectRaw('SUM(total_difference)');
+            }, 'tongloinhuan')
+            ->selectSub(function ($query) {
+                $query->from('debts')
+                    ->where('exports.export_status', 2)
+                    ->whereColumn('exports.user_id', 'users.id')
+                    ->selectRaw('SUM(total_sales)');
+            }, 'tongcongno')
+            ->distinct();
+            if (!empty($filter)) {
+                $Tableexports = $Tableexports->where($filter);
+            }
+            if (!empty($name)) {
+                $Tableexports = $Tableexports->whereIn('users.name', $name);
+            }
+            if (!empty($orderBy) && !empty($orderType)) {
+                if ($orderBy == 'updated_at') {
+                    $orderBy = "exports." . $orderBy;
+                };
+                $Tableexports = $Tableexports->orderBy('exports.id', $orderType);
+            }
+        $Tableexports = $Tableexports->get();
+        // dd($Tableexports);
+
+        return $Tableexports;
     }
 }

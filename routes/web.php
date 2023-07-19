@@ -89,7 +89,8 @@ Route::resource('history', HistoryController::class);
 Route::get('/editEx/{id}', [ExportController::class, 'editEx'])->name('editEx');
 
 //Báo cáo
-Route::get('/report', [ReportController::class, 'index'])->name('report');
+Route::get('/indexExport', [ReportController::class, 'indexExport'])->name('indexExport');
+Route::get('/indexImport', [ReportController::class, 'indexImport'])->name('indexImport');
 
 //kiểm tra số lượng trong xuất hàng
 Route::get('checkqty', [ExportController::class, 'checkqty'])->name('checkqty');
@@ -135,6 +136,7 @@ Route::get('/simple', function () {
 });
 Route::get('index', [DashboardController::class, 'index']);
 Route::get('/count',[DashboardController::class, 'count'])->name('count');
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),

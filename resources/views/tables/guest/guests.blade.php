@@ -358,11 +358,14 @@ $index = array_search($item['label'], $numberedLabels);
                     <div class="dropdown my-2 ml-4">
                         <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span>Thay đổi trạng thái</span>
+                            <span>Thay đổi người phụ trách</span>
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <button id="activeStatusGuest" class="dropdown-item">Active</button>
-                            <button id="disableStatusGuest" class="dropdown-item">Disable</button>
+                            @if(!empty($users))
+                            @foreach($users as $item)
+                            <button id="activeStatusGuest{{$item->id}}" data-id="{{ $item->id }}" class="dropdown-item">{{ $item->name }}</button>
+                            @endforeach
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -813,30 +816,33 @@ $index = array_search($item['label'], $numberedLabels);
         }
     })
     // AJAX disable user
-    $(document).on('click', '#activeStatusGuest', function(e) {
-            e.preventDefault();
-            if (myFunctionCancel()) {
-                const list_id = [];
-                $('input[name="ids[]"]').each(function() {
-                    if ($(this).is(':checked')) {
-                        var value = $(this).val();
-                        list_id.push(value);
-                    }
-                });
-                $.ajax({
-                    url: '{{ route('activeStatusGuest') }}',
-                    type: "GET",
-                    data: {
-                        list_id: list_id,
-                    },
-                    success: function(data) {
-                        location.reload();
-                    },
-                })
+    $(document).on('click', '[id^="activeStatusGuest"]', function(e) {
+    e.preventDefault();
+    if (myFunctionCancel()) {
+        const list_id = [];
+        $('input[name="ids[]"]').each(function() {
+            if ($(this).is(':checked')) {
+                var value = $(this).val();
+                list_id.push(value);
             }
-        }
+        });
 
-    )
+        var id = $(this).data('id'); // Lấy giá trị id từ data-id của button
+
+        $.ajax({
+            url: '{{ route('activeStatusGuest') }}',
+            type: "GET",
+            data: {
+                list_id: list_id,
+                id: id // Truyền giá trị id vào trong Ajax request
+            },
+            success: function(data) {
+                location.reload();
+            },
+        });
+    }
+});
+
 
     function myFunction() {
         let text = "Bạn có muốn xóa khách hàng đã chọn không?";
@@ -849,7 +855,7 @@ $index = array_search($item['label'], $numberedLabels);
     }
 
     function myFunctionCancel() {
-        let text = "Bạn có chắc chắn thay đổi trạng thái đã chọn không?";
+        let text = "Bạn có chắc chắn thay đổi người phụ trách không?";
         if (confirm(text) == true) {
             return true
         } else {

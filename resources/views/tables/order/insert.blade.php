@@ -352,10 +352,10 @@
             var tr = '<tr>' +
                 '<td class="STT"></td>' +
                 '<td>' +
-                '<input id="search" type="text" placeholder="Nhập tên sản phẩm" name="product_name[]" class="search_product form-control name_product" onkeyup="filterFunction()"> ' +
+                '<input id="search" type="text" placeholder="Nhập tên sản phẩm" style="width: 300px !important" name="product_name[]" class="search_product form-control name_product" onkeyup="filterFunction()"> ' +
                 '</td>' +
-                '<td><input required type="text" class="form-control text-center unit_product" style="width:100px" name="product_unit[]"></td>' +
-                '<td><input required type="text" oninput="validatQtyInput(this)" name="product_qty[]" class="quantity-input form-control text-center"></td>' +
+                '<td><input required type="text" class="form-control text-center unit_product" style="width:130px" name="product_unit[]"></td>' +
+                '<td><input required type="text" oninput="validatQtyInput(this)" style="width: 60px" name="product_qty[]" class="quantity-input form-control text-center"></td>' +
                 '<td><input required type="text" class="form-control text-center product_price" name="product_price[]" ></td>' +
                 '<td>' +
                 '<input type="hidden" class="product_tax1">' +
@@ -617,7 +617,7 @@
                             '<td><input required type="text" class="form-control text-center" style="width:100px" name="product_unit[]" value="' +
                             typeValue +
                             '"></td>' +
-                            '<td><input required type="text" oninput="validatQtyInput(this)" name="product_qty[]" class="quantity-input form-control text-center" value="' +
+                            '<td><input required type="text" oninput="validatQtyInput(this)" style="width: 60px" name="product_qty[]" class="quantity-input form-control text-center" value="' +
                             numberssValue + '"></td>' +
                             '<td><input required type="text" class="form-control product_price text-center" name="product_price[]" value="' +
                             price + '"></td>' +

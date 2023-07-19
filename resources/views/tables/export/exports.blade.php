@@ -37,7 +37,7 @@
                 <form class="w-100" action="" method="get" id='search-filter'>
                     <div class="row  mr-0">
                         <div class="col-5">
-                            <input type="text" placeholder="Tìm kiếm theo mã đơn hàng hoặc tên khách hàng"
+                            <input type="text" placeholder="Tìm kiếm theo số hóa đơn hoặc tên khách hàng"
                                 name="keywords" class="pr-4 form-control input-search w-100 searchkeyword"
                                 value="{{ request()->keywords }}">
                             <span id="search-icon" class="search-icon"><i class="fas fa-search"></i></span>
@@ -170,7 +170,8 @@ $index = array_search($item['label'], $numberedLabels);
                                                     onkeyup="filterFunction()">
                                                 <span class="search-icon"><i class="fas fa-search"></i></span>
                                             </div>
-                                            <button class="dropdown-item" id="btn-id">Mã đơn hàng</button>
+
+                                            <button class="dropdown-item" id="btn-id">Số hóa đơn</button>
                                             <button class="dropdown-item" id="btn-guest">Khách hàng</button>
                                             <button class="dropdown-item" id="btn-update_at">Ngày tạo</button>
                                             @if (Auth::user()->can('isAdmin'))
@@ -216,11 +217,10 @@ $index = array_search($item['label'], $numberedLabels);
                                     }
                                     ?>
 
-                                    {{-- Tìm mã đơn hàng --}}
+                                    {{-- Tìm Số hóa đơn --}}
                                     <div class="block-options" id="id-options" style="display:none">
                                         <div class="wrap w-100">
-                                            <div class="heading-title title-wrap">
-                                                <h5>Mã đơn hàng</h5>
+                                                <h5>Số hóa đơn</h5
                                             </div>
                                             <div class="input-group p-2">
                                                 <label class="title" for="">Chứa kí tự</label>
@@ -549,7 +549,8 @@ $index = array_search($item['label'], $numberedLabels);
                                         </th>
                                         <th scope="col">
                                             <span class="d-flex justify-content-center">
-                                                <a href="#" class="sort-link" data-sort-by="export_status"
+                                                <a href="#" class="sort-link d-flex justify-content-center"
+                                                    data-sort-by="export_status" style="width:130px"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Trạng thái</button></a>
                                                 <div class="icon" id="icon-export_status"></div>
@@ -652,7 +653,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 @if ($value->id == $item->export_id)
                                                     <td></td>
                                                     <td></td>
-                                                    <td>
+                                                    <td style="width:300px">
                                                         <p>Thông tin sản phẩm</p>{{ $item->product_name }}
                                                     </td>
                                                     <td>
@@ -704,6 +705,8 @@ $index = array_search($item['label'], $numberedLabels);
         var svgs = dropdownItems.find('svg');
         svgs.addClass("svgactive")
         svgs.removeClass("svginative")
+        var parentElement = dropdownItems.parent().parent();
+        parentElement.css('background', '#ADB5BD');
     }
 
     function collapse() {
@@ -714,6 +717,8 @@ $index = array_search($item['label'], $numberedLabels);
         dropdownItems.removeClass("dropdown-item-active");
         dropdownItems.attr("aria-expanded", "false");
         var svgs = dropdownItems.find('svg');
+        var parentElement = dropdownItems.parent().parent();
+        parentElement.css('background', '#E9ECEF');
         svgs.removeClass("svgactive")
         svgs.addClass("svginative")
     }
@@ -726,12 +731,16 @@ $index = array_search($item['label'], $numberedLabels);
             var parentElement = $(this).parent().parent();
             console.log(parentElement);
             if (isActive) {
+                $('#expandall').show();
+                $('#collapseall').hide();
                 $(this).removeClass('dropdown-item-active');
                 parentElement.css('background', '#E9ECEF');
                 svgElement.removeClass("svgactive")
                 svgElement.addClass("svginative")
             }
             if (!isActive) {
+                $('#expandall').hide();
+                $('#collapseall').show();
                 $(this).addClass('dropdown-item-active');
                 parentElement.css('background', '#ADB5BD');
                 svgElement.addClass("svgactive")

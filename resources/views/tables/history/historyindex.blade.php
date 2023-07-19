@@ -469,7 +469,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             </div>
                                             <div
                                                 class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
-                                                <a class="cursor select-all mr-auto">Chọn tất cả</a>
+                                                <a class="cursor select-all-status-export mr-auto">Chọn tất cả</a>
                                                 <a class="cursor deselect-all-status-export">Hủy chọn</a>
                                             </div>
                                             <div class="ks-cboxtags-container">
@@ -589,7 +589,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <input class="w-50 input-quantity product_qty-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                                     name="product_qty" value="{{ request()->product_qty }}"
-                                                    placeholder="Số lượng">
+                                                    placeholder="Nhập thông tin">
                                             </div>
                                         </div>
                                         <div class="d-flex justify-contents-center align-items-baseline p-2">
@@ -619,7 +619,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <input class="w-50 input-quantity export_qty-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                                     name="export_qty" value="{{ request()->export_qty }}"
-                                                    placeholder="Số lượng">
+                                                    placeholder="Nhập thông tin">
                                             </div>
                                         </div>
                                         <div class="d-flex justify-contents-center align-items-baseline p-2">
@@ -1319,52 +1319,6 @@ $index = array_search($item['label'], $numberedLabels);
         e.preventDefault();
         $('#search-filter').submit();
     });
-    // Show all hide all
-    function expand() {
-        $('#expandall').hide();
-        $('#collapseall').show();
-        $(".product-details").addClass("show");
-        var dropdownItems = $('[id^="dropdown_item"]');
-        dropdownItems.addClass("dropdown-item-active");
-        dropdownItems.attr("aria-expanded", "true");
-        var svgs = dropdownItems.find('svg');
-        svgs.addClass("svgactive")
-        svgs.removeClass("svginative")
-    }
-
-    function collapse() {
-        $('#expandall').show();
-        $('#collapseall').hide();
-        $(".product-details").removeClass("show");
-        var dropdownItems = $('[id^="dropdown_item"]');
-        dropdownItems.removeClass("dropdown-item-active");
-        dropdownItems.attr("aria-expanded", "false");
-        var svgs = dropdownItems.find('svg');
-        svgs.removeClass("svgactive")
-        svgs.addClass("svginative")
-    }
-
-    var dropdownItems = $('[id^="dropdown_item"]');
-    dropdownItems.each(function() {
-        $(this).on('click', function() {
-            var isActive = $(this).hasClass('dropdown-item-active');
-            var svgElement = $(this).find('svg');
-            var parentElement = $(this).parent().parent();
-            console.log(parentElement);
-            if (isActive) {
-                $(this).removeClass('dropdown-item-active');
-                parentElement.css('background', '#E9ECEF');
-                svgElement.removeClass("svgactive")
-                svgElement.addClass("svginative")
-            }
-            if (!isActive) {
-                $(this).addClass('dropdown-item-active');
-                parentElement.css('background', '#ADB5BD');
-                svgElement.addClass("svgactive")
-                svgElement.removeClass("svginative")
-            }
-        });
-    });
 
     // Xử lí filter ngày tháng
     $(document).ready(function() {
@@ -1408,6 +1362,13 @@ $index = array_search($item['label'], $numberedLabels);
             checkbox.prop('checked', !checkbox.prop('checked')); // Đảo ngược trạng thái checked
         }
     });
+    $('.ks-cboxtags-status_export li').on('click', function(event) {
+        if (event.target.tagName !== 'INPUT') {
+            var checkbox = $(this).find('input[type="checkbox"]');
+            checkbox.prop('checked', !checkbox.prop('checked')); // Đảo ngược trạng thái checked
+        }
+    });
+    
     $('#btn-update_at').click(function(event) {
         event.preventDefault();
         $('.btn-filter').prop('disabled', true);
@@ -1680,12 +1641,46 @@ $index = array_search($item['label'], $numberedLabels);
         $('.deselect-all-unit').click(function() {
             $('#unit-options input[type="checkbox"]').prop('checked', false);
         });
+
+        $('.select-all-status-export').click(function() {
+            $('#status_export-options input[type="checkbox"]').prop('checked', true);
+        });
+
+        // Hủy tất cả các checkbox
+        $('.deselect-all-status-export').click(function() {
+            $('#status_export-options input[type="checkbox"]').prop('checked', false);
+        });
+
     });
 
     //Xóa filter
     $(document).ready(function() {
         $('.filter-results').on('click', '.delete-btn-status', function() {
             $('.deselect-all').click();
+            document.getElementById('search-filter').submit();
+        });
+    });
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-unit', function() {
+            $('.deselect-all-unit').click();
+            document.getElementById('search-filter').submit();
+        });
+    });
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-status_export', function() {
+            $('.deselect-all-status-export').click();
+            document.getElementById('search-filter').submit();
+        });
+    });
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-hdv', function() {
+            $('.hdv-input').val('');
+            document.getElementById('search-filter').submit();
+        });
+    });
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-hdr', function() {
+            $('.hdr-input').val('');
             document.getElementById('search-filter').submit();
         });
     });

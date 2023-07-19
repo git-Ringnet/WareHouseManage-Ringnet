@@ -231,6 +231,7 @@
                                         $categoryarr = [];
                                     }
                                     ?>
+                                    {{--
                                     <div class="block-options" id="status-options" style="display:none">
                                         <div class="wrap w-100">
                                             <div class="heading-title title-wrap">
@@ -323,6 +324,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                      --}}
                                 </div>
                                 <a class="btn ml-auto btn-delete-filter btn-light"
                                     href="{{ route('guests.index') }}"><span><svg width="24" height="24"
@@ -333,7 +335,7 @@
                                         </svg>
                                     </span>Tắt bộ lọc</a>
                             </div>
-                        </form>
+
                     </div>
                 </div><!-- /.container-fluided -->
             </section>
@@ -361,6 +363,7 @@
                                                     <p class="text-center m-0">(+VAT)</p>
                                                 </th>
                                             </tr>
+                                            </form>
                                         </thead>
                                         <tbody>
                                             <?php $stt = 1; ?>
@@ -571,6 +574,7 @@
                                         $categoryarr = [];
                                     }
                                     ?>
+                                    {{--  
                                     <div class="block-options" id="status-options" style="display:none">
                                         <div class="wrap w-100">
                                             <div class="heading-title title-wrap">
@@ -662,7 +666,7 @@
                                                     class="btn btn-default btn-block">Hủy</button>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                 </div>
                                 <a class="btn ml-auto btn-delete-filter btn-light"
                                     href="{{ route('guests.index') }}"><span><svg width="24" height="24"
@@ -716,7 +720,8 @@
                                                     </td>
                                                     <td class="text-center">{{ number_format($value->tongloinhuan) }}
                                                     </td>
-                                                    <td class="text-center">{{number_format($value->tongcongno)}}</td>
+                                                    <td class="text-center">{{ number_format($value->tongcongno) }}
+                                                    </td>
                                                 </tr>
                                             @endforeach
                                         </tbody>

@@ -8,6 +8,7 @@ use App\Models\Exports;
 use App\Models\Orders;
 use App\Models\Product;
 use App\Models\ProductOrders;
+use App\Models\Roles;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -22,9 +23,103 @@ class ReportController extends Controller
         $this->orders = new Orders();
         $this->exports = new Exports();
     }
-    public function index(Request $request)
+    public function indexExport(Request $request)
     {
-        $title = 'Báo cáo';
+        $title = 'Báo cáo xuất hàng';
+        //Tổng đơn xuất
+        $exports = $this->exports->alldonxuat();
+        $exports = count($exports);
+        //Tổng tiền xuất
+        $sumExport = $this->exports->tongtienxuat();
+        //Tổng lợi nhuận
+        $sumLoinhuan = Debt::select(DB::raw('SUM(total_difference) as tongLoiNhuan'))->limit(1)->first();
+        $formattedLoinhuan = number_format($sumLoinhuan->tongLoiNhuan);
+        //Tổng công nợ
+        $sumCongNo = Debt::select(DB::raw('SUM(total_sales) as tongCongNo'))->limit(1)->first();
+        $CongNo = $sumCongNo->tongCongNo;
+
+
+        $filters = [];
+        //Name
+        $nhanvien = [];
+        $string = [];
+
+        if (!empty($request->nhanvien)) {
+            $nhanvien = $request->input('nhanvien', []);
+            array_push($string, ['label' => 'Nhân viên:', 'values' => $nhanvien, 'class' => 'name']);
+        }
+        if (!empty($request->email)) {
+            $email = $request->email;
+            array_push($filters, ['email', 'like', '%' . $email . '%']);
+            $nameArr = explode(',.@', $email);
+            array_push($string, ['label' => 'Email:', 'values' => $nameArr, 'class' => 'email']);
+        }
+        $roles = [];
+        if (!empty($request->roles)) {
+            $roles = $request->input('roles', []);
+            if (!empty($roles)) {
+                $selectedRoles = Roles::whereIn('id', $roles)->get();
+                $selectedRoleNames = $selectedRoles->pluck('name')->toArray();
+            }
+            array_push($string, ['label' => 'Vai trò:', 'values' => $selectedRoleNames, 'class' => 'roles']);
+        }
+        // Tổng đơn xuất
+        if (!empty($request->import_operator) && !empty($request->sum_import)) {
+            $sum = $request->input('sum_import');
+            $import_operator = $request->input('import_operator');
+            // $filters[] = ['donxuat', $import_operator, $sum];
+            $importArray = explode(',.@', $sum);
+            array_push($string, ['label' => 'Tổng đơn xuất ' . $import_operator, 'values' => $importArray, 'class' => 'sum-import']);
+        }
+        // Tổng tiền xuất
+        if (!empty($request->sale_operator) && !empty($request->sum_sale)) {
+            $sum = $request->input('sum_sale');
+            $sale_operator = $request->input('sale_operator');
+            // $filters[] = ['tongtienxuat', $sale_operator, $sum];
+            $saleArray = explode(',.@', $sum);
+            array_push($string, ['label' => 'Tổng tiền xuất ' . $sale_operator, 'values' => $saleArray, 'class' => 'sum-sale']);
+        }
+        // Lợi nhuận
+        if (!empty($request->difference_operator) && !empty($request->sum_difference)) {
+            $sum = $request->input('sum_difference');
+            $difference_operator = $request->input('difference_operator');
+            // $filters[] = ['tongloinhuan', $difference_operator, $sum];
+            $inventoryArray = explode(',.@', $sum);
+            array_push($string, ['label' => 'Tổng tiền chênh lệch ' . $difference_operator, 'values' => $inventoryArray, 'class' => 'sum-difference']);
+        }
+        // Công nợ
+        if (!empty($request->sum_debt_operator) && !empty($request->sum_debt)) {
+            $sum = $request->input('sum_debt');
+            $sum_debt_operator = $request->input('sum_debt_operator');
+            // $filters[] = ['tongloinhuan', $difference_operator, $sum];
+            $inventoryArray = explode(',.@', $sum);
+            array_push($string, ['label' => 'Tổng công nợ ' . $sum_debt_operator, 'values' => $inventoryArray, 'class' => 'sum-difference']);
+        }
+
+        $debtsSale = Exports::leftjoin('users', 'exports.user_id', '=', 'users.id')->get();
+        $sortType = $request->input('sort-type');
+        $sortBy = $request->input('sort-by');
+        $allowSort = ['asc', 'desc'];
+        if (!empty($sortType) && in_array($sortType, $allowSort)) {
+            if ($sortType == 'desc') {
+                $sortType = 'asc';
+            } else {
+                $sortType = 'desc';
+            }
+        } else {
+            $sortType = 'desc';
+        }
+        $allRoles = new Roles();
+        $allRoles = $allRoles->getAll();
+        $Tableexports = $this->exports->reportExports($filters, $nhanvien, $sortBy, $sortType);
+        return view('tables.report.report-export', compact('title', 'debtsSale', 'allRoles', 'string', 'Tableexports', 'sortType', 'exports', 'sumExport', 'formattedLoinhuan', 'CongNo'));
+    }
+
+
+    // Nhập hàng
+    public function indexImport(Request $request)
+    {
+        $title = 'Báo cáo nhập hàng';
         //Tổng đơn nhập
         $orders = $this->orders->allNhaphang();
         $orders = count($orders);
@@ -40,30 +135,7 @@ class ReportController extends Controller
             ->first();
         $sumDebtImportVAT = $sumDebtImport->total_import;
         //table nhập hàng
-        $tableorders = Orders::leftJoin('users', 'users.id', 'orders.users_id')
-            ->leftJoin('roles', 'users.roleid', 'roles.id')
-            ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
-            ->select('users.name as nhanvien', 'roles.name as vaitro', 'orders.users_id')
-            ->where('orders.order_status', 1)
-            ->selectSub(function ($query) {
-                $query->from('Orders')
-                    ->where('orders.order_status', 1)
-                    ->whereColumn('orders.users_id', 'users.id')
-                    ->selectRaw('COUNT(id)');
-            }, 'product_qty_count')
-            ->selectSub(function ($query) {
-                $query->from('productorders')
-                    ->whereColumn('orders.users_id', 'users.id')
-                    ->selectRaw('SUM((productorders.product_price * productorders.product_qty) + ((productorders.product_price * productorders.product_qty * productorders.product_tax)/100))');
-            }, 'total_sum')
-            ->selectSub(function ($query) {
-                $query->from('debt_import')
-                    ->whereColumn('debt_import.user_id', 'users.id')
-                    ->whereColumn('orders.users_id', 'users.id')
-                    ->selectRaw('SUM(total_import)');
-            }, 'total_debt')
-            ->groupBy('users.id', 'users.name', 'roles.name', 'orders.users_id')
-            ->paginate(20);
+        
         //Tổng đơn xuất
         $exports = $this->exports->alldonxuat();
         $exports = count($exports);
@@ -75,38 +147,48 @@ class ReportController extends Controller
         //Tổng công nợ
         $sumCongNo = Debt::select(DB::raw('SUM(total_sales) as tongCongNo'))->limit(1)->first();
         $CongNo = $sumCongNo->tongCongNo;
-        //Table xuất hàng
-        $Tableexports = Exports::leftJoin('users', 'users.id', 'exports.user_id')
-            ->leftJoin('roles', 'users.roleid', 'roles.id')
-            ->leftJoin('debts', 'debts.export_id', 'exports.id')
-            ->where('exports.export_status', 2)
-            ->select('users.name as nhanvien', 'roles.name as vaitro', 'users.email as email')
-            ->selectSub(function ($query) {
-                $query->from('exports')
-                    ->where('exports.export_status', 2)
-                    ->whereColumn('exports.user_id', 'users.id')
-                    ->selectRaw('COUNT(id)');
-            }, 'donxuat')
-            ->selectSub(function ($query) {
-                $query->from('exports')
-                    ->where('exports.export_status', 2)
-                    ->whereColumn('exports.user_id', 'users.id')
-                    ->selectRaw('SUM(total)');
-            }, 'tongtienxuat')
-            ->selectSub(function ($query) {
-                $query->from('debts')
-                    ->where('exports.export_status', 2)
-                    ->whereColumn('exports.user_id', 'users.id')
-                    ->selectRaw('SUM(total_difference)');
-            }, 'tongloinhuan')
-            ->selectSub(function ($query) {
-                $query->from('debts')
-                    ->where('exports.export_status', 2)
-                    ->whereColumn('exports.user_id', 'users.id')
-                    ->selectRaw('SUM(total_sales)');
-            }, 'tongcongno')
-            ->distinct()
-            ->get();
-        return view('tables.report.report', compact('title', 'Tableexports', 'orders', 'sumTotalOrders', 'sumDebtImportVAT', 'tableorders', 'exports', 'sumExport', 'formattedLoinhuan', 'CongNo'));
+
+
+        $filters = [];
+        //Name
+        $nhanvien = [];
+        $string = [];
+
+        if (!empty($request->nhanvien)) {
+            $nhanvien = $request->input('nhanvien', []);
+            array_push($string, ['label' => 'Nhân viên:', 'values' => $nhanvien, 'class' => 'name']);
+        }
+        if (!empty($request->email)) {
+            $email = $request->email;
+            array_push($filters, ['email', 'like', '%' . $email . '%']);
+            $nameArr = explode(',.@', $email);
+            array_push($string, ['label' => 'Email:', 'values' => $nameArr, 'class' => 'email']);
+        }
+        $roles = [];
+        if (!empty($request->roles)) {
+            $roles = $request->input('roles', []);
+            if (!empty($roles)) {
+                $selectedRoles = Roles::whereIn('id', $roles)->get();
+                $selectedRoleNames = $selectedRoles->pluck('name')->toArray();
+            }
+            array_push($string, ['label' => 'Vai trò:', 'values' => $selectedRoleNames, 'class' => 'roles']);
+        }
+
+        $debtsSale = Exports::leftjoin('users', 'exports.user_id', '=', 'users.id')->get();
+        $sortType = $request->input('sort-type');
+        $sortBy = $request->input('sort-by');
+        $allowSort = ['asc', 'desc'];
+        if (!empty($sortType) && in_array($sortType, $allowSort)) {
+            if ($sortType == 'desc') {
+                $sortType = 'asc';
+            } else {
+                $sortType = 'desc';
+            }
+        } else {
+            $sortType = 'desc';
+        }
+        $tableorders = $this->orders->reportOrders($filters, $nhanvien, $sortBy, $sortType);
+        // dd($tableorders);
+        return view('tables.report.report-import', compact('title', 'debtsSale', 'string', 'tableorders', 'sortType', 'orders', 'sumTotalOrders', 'sumDebtImportVAT', 'tableorders', 'exports', 'sumExport', 'formattedLoinhuan', 'CongNo'));
     }
 }

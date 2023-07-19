@@ -320,7 +320,7 @@ $index = array_search($item['label'], $numberedLabels);
                             <span>Xóa nhân viên</span>
                         </button>
                     </div>
-                    <div class="dropdown my-2 ml-4">
+                    {{-- <div class="dropdown my-2 ml-4">
                         <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span> Thay đổi trạng thái</span>
@@ -329,7 +329,7 @@ $index = array_search($item['label'], $numberedLabels);
                             <button id="activeStatusUser" class="dropdown-item">Active</button>
                             <button id="disableStatusUser" class="dropdown-item">Disable</button>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="btn ml-auto cancal_action">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"

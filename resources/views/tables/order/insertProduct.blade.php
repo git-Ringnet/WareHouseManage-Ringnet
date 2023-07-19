@@ -634,7 +634,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>
-                                                <td>
+                                                <td style="width: 300px">
                                                     <p>Thông tin sản phẩm</p>
                                                     {{ $item->product_name }}
                                                 </td>
@@ -1045,6 +1045,8 @@ $index = array_search($item['label'], $numberedLabels);
         var svgs = dropdownItems.find('svg');
         svgs.addClass("svgactive")
         svgs.removeClass("svginative")
+        var parentElement = dropdownItems.parent().parent();
+        parentElement.css('background', '#ADB5BD');
     }
 
     function collapse() {
@@ -1055,6 +1057,8 @@ $index = array_search($item['label'], $numberedLabels);
         dropdownItems.removeClass("dropdown-item-active");
         dropdownItems.attr("aria-expanded", "false");
         var svgs = dropdownItems.find('svg');
+        var parentElement = dropdownItems.parent().parent();
+        parentElement.css('background', '#E9ECEF');
         svgs.removeClass("svgactive")
         svgs.addClass("svginative")
     }
@@ -1067,12 +1071,16 @@ $index = array_search($item['label'], $numberedLabels);
             var parentElement = $(this).parent().parent();
             console.log(parentElement);
             if (isActive) {
+                $('#expandall').show();
+                $('#collapseall').hide();
                 $(this).removeClass('dropdown-item-active');
                 parentElement.css('background', '#E9ECEF');
                 svgElement.removeClass("svgactive")
                 svgElement.addClass("svginative")
             }
             if (!isActive) {
+                $('#expandall').hide();
+                $('#collapseall').show();
                 $(this).addClass('dropdown-item-active');
                 parentElement.css('background', '#ADB5BD');
                 svgElement.addClass("svgactive")
@@ -1236,6 +1244,7 @@ $index = array_search($item['label'], $numberedLabels);
         for (var i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xff;
         return buf;
     }
+
 </script>
 </body>
 

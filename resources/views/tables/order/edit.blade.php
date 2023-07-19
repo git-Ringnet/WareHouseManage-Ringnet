@@ -318,14 +318,14 @@
                                 <td> <input class="form-control name_product"
                                         @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif required
                                         @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif type="text"
-                                        style="width:auto" name="product_name[]" value="{{ $pro->product_name }}">
+                                        style="width:300px" name="product_name[]" value="{{ $pro->product_name }}">
                                 </td>
-                                <td> <input class="form-control text-center unit_product" style="width: 100px"
+                                <td> <input class="form-control text-center unit_product" style="width: 130px"
                                         @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif required type="text"
                                         name="product_unit[]" value="{{ $pro->product_unit }}"
                                         @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif> </td>
                                 <td> <input oninput="validatQtyInput(this)"
-                                        class="form-control quantity-input text-center"
+                                        class="form-control quantity-input text-center" style="width: 60px"
                                         oninput="validateNumberInput(this)"
                                         @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif required type="text"
                                         name="product_qty[]" value="{{ $pro->product_qty }}"

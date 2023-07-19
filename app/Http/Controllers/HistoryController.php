@@ -140,7 +140,7 @@ class HistoryController extends Controller
             $statusLabels = array_map(function ($value) use ($statusValues) {
                 return $statusValues[$value];
             }, $status_export);
-            array_push($string, ['label' => 'Tình trạng xuất:', 'values' => $statusLabels, 'class' => 'status']);
+            array_push($string, ['label' => 'Tình trạng xuất:', 'values' => $statusLabels, 'class' => 'status_export']);
         }
         //Khách hàng
         $guest = [];
@@ -191,9 +191,8 @@ class HistoryController extends Controller
 
         $debtsSale =  History::leftjoin('users', 'history.user_id', '=', 'users.id')->get();
         $provides = History::leftjoin('provides', 'history.provide_id', '=', 'provides.id')->get();
-        $provide_namearr = [];
         
-        $history = $this->history->getAllHistory($filters, $keywords, $date, $guest, $status, $unitarr, $status_export, $sortBy, $sortType);
+        $history = $this->history->getAllHistory($filters, $keywords, $date,$provide_namearr, $guest, $status, $unitarr, $status_export, $sortBy, $sortType);
 
         return view('tables.history.historyindex', compact('history', 'title', 'guests', 'debtsSale', 'provides', 'string', 'sortType'));
     }

@@ -35,12 +35,12 @@ class ExportController extends Controller
         $string = array();
         $filters = [];
         $status = [];
-        //Mã đơn
+        //Số hóa đơn
         if (!empty($request->id)) {
             $id = $request->id;
             array_push($filters, ['exports.export_code', 'like', '%' . $id . '%']);
             $nameArr = explode(',.@', $id);
-            array_push($string, ['label' => 'Mã đơn hàng:', 'values' => $nameArr, 'class' => 'id']);
+            array_push($string, ['label' => 'Số hóa đơn:', 'values' => $nameArr, 'class' => 'id']);
         }
         //Khách hàng
         $guest = [];
