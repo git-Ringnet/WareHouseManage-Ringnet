@@ -351,7 +351,7 @@ $index = array_search($item['label'], $numberedLabels);
                                         </div>
                                     </div>
                                     {{-- Tìm nhà cung cấp --}}
-                                    <div class="block-options" id="provide_name-options" style="display:none">
+                                    <div class="block-optionsss" id="provide_name-options" style="display:none">
                                         <div class="wrap w-100">
                                             <div class="heading-title title-wrap">
                                                 <h5>Nhà cung cấp</h5>
@@ -630,7 +630,7 @@ $index = array_search($item['label'], $numberedLabels);
                                         </div>
                                     </div>
                                     {{-- Tìm khách hàng --}}
-                                    <div class="block-options" id="guest-options" style="display:none">
+                                    <div class="block-optionsss" id="guest-options" style="display:none">
                                         <div class="wrap w-100">
                                             <div class="heading-title title-wrap">
                                                 <h5>Khách hàng</h5>
@@ -1998,6 +1998,20 @@ $index = array_search($item['label'], $numberedLabels);
             return false
         }
 
+    }
+    function filterGuest() {
+        var input = $("#myInput-guest");
+        var filter = input.val().toUpperCase();
+        var buttons = $(".ks-cboxtags-guest li");
+
+        buttons.each(function() {
+            var text = $(this).text();
+            if (text.toUpperCase().indexOf(filter) > -1) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
     }
 </script>
 </body>

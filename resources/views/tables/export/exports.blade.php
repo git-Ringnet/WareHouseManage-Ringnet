@@ -170,7 +170,6 @@ $index = array_search($item['label'], $numberedLabels);
                                                     onkeyup="filterFunction()">
                                                 <span class="search-icon"><i class="fas fa-search"></i></span>
                                             </div>
-
                                             <button class="dropdown-item" id="btn-id">Số hóa đơn</button>
                                             <button class="dropdown-item" id="btn-guest">Khách hàng</button>
                                             <button class="dropdown-item" id="btn-update_at">Ngày tạo</button>
@@ -220,7 +219,8 @@ $index = array_search($item['label'], $numberedLabels);
                                     {{-- Tìm Số hóa đơn --}}
                                     <div class="block-options" id="id-options" style="display:none">
                                         <div class="wrap w-100">
-                                                <h5>Số hóa đơn</h5
+                                            <div class="heading-title title-wrap">
+                                                <h5>Số hóa đơn</h5>
                                             </div>
                                             <div class="input-group p-2">
                                                 <label class="title" for="">Chứa kí tự</label>
@@ -236,7 +236,7 @@ $index = array_search($item['label'], $numberedLabels);
                                         </div>
                                     </div>
                                     {{-- Tìm khách hàng --}}
-                                    <div class="block-options" id="guest-options" style="display:none">
+                                    <div class="block-optionsss" id="guest-options" style="display:none">
                                         <div class="wrap w-100">
                                             <div class="heading-title title-wrap">
                                                 <h5>Khách hàng</h5>
@@ -390,7 +390,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('comparison_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
                                                 <input class="w-50 input-quantity sum-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"

@@ -310,7 +310,7 @@
                                                         style="width: 40%">
                                                         <option value=">=">>=</option>
                                                         <option value="<=">
-                                                            <=< /option>
+                                                            <=</option>
                                                     </select>
                                                     <input class="w-50 quantity-input" type="number" name="quantity"
                                                         placeholder="Số lượng">
@@ -653,7 +653,7 @@
                                                         style="width: 40%">
                                                         <option value=">=">>=</option>
                                                         <option value="<=">
-                                                            <=< /option>
+                                                            <=</option>
                                                     </select>
                                                     <input class="w-50 quantity-input" type="number" name="quantity"
                                                         placeholder="Số lượng">

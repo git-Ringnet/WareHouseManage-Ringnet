@@ -3,7 +3,13 @@
 #category-options,
 #quantity-options,
 .block-options {
-    width: 300px;
+    width: 250px;
+    background-color: #fff;
+    border-radius: 8px;
+    left: -40px !important;
+}
+.block-optionsss {
+    width: 320px;
     background-color: #fff;
     border-radius: 8px;
     left: -40px !important;
@@ -47,7 +53,7 @@ li {
     position: relative;
 }
 
-.block-options {
+.block-options,.block-optionsss {
     position: absolute;
     z-index: 1024;
 }
@@ -121,7 +127,7 @@ li {
 .ks-cboxtags-provide_name,.ks-cboxtags  {
     overflow-y: auto;
     scrollbar-width: thin;
-    max-height: 300px !important;
+    max-height: 220px !important;
     height: auto;
     /* ẩn thanh cuộn trên các trình duyệt mới */
     scrollbar-color: #999999 #f0f0f0;

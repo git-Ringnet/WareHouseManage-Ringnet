@@ -285,6 +285,12 @@ class DebtController extends Controller
         if (isset($request->list_id)) {
             $list = $request->list_id;
             $listOrder = Debt::whereIn('id', $list)->get();
+            $history = History::leftJoin('debts', 'history.export_id', 'debts.export_id')
+                ->whereIn('debts.id', $list)->get();
+            foreach ($history as $value) {
+                $value->export_status = 1;
+                $value->save();
+            };
             foreach ($listOrder as $value) {
                 $value->debt_status = 1;
                 $value->save();

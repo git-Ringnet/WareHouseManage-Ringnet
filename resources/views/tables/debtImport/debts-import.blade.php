@@ -238,7 +238,7 @@ $index = array_search($item['label'], $numberedLabels);
                                         </div>
                                     </div>
                                     {{-- Tìm nhà cung cấp --}}
-                                    <div class="block-options" id="provide_name-options" style="display:none">
+                                    <div class="block-optionsss" id="provide_name-options" style="display:none">
                                         <div class="wrap w-100">
                                             <div class="heading-title title-wrap">
                                                 <h5>Nhà cung cấp</h5>
@@ -407,7 +407,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('import_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
                                                 <input class="w-50 input-quantity import-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"

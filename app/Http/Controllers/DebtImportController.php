@@ -251,6 +251,12 @@ class DebtImportController extends Controller
         if (isset($request->list_id)) {
             $list = $request->list_id;
             $listOrder = DebtImport::whereIn('id', $list)->get();
+            $history = History::leftJoin('debt_import', 'history.import_id', 'debt_import.import_id')
+                ->whereIn('debt_import.id', $list)->get();
+            foreach ($history as $value) {
+                $value->import_status = 1;
+                $value->save();
+            };
             foreach ($listOrder as $value) {
                 $value->debt_status = 1;
                 $value->save();

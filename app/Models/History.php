@@ -43,7 +43,16 @@ class History extends Model
         'history_note',
     ];
     public function getAllHistory($filters = [], $keywords = null, $date = [], $provide_namearr = [], $guest = [], $status = [], $unitarr = [], $status_export = [], $orderBy = null, $orderType = null)
-    {
+    {   
+        // $list = [3,1,1];
+
+        // $history = History::leftJoin('debts','history.export_id','debts.export_id')
+        //     ->whereIn('debts.id', $list)->get();
+        //     dd($history);
+        //     foreach ($history as $value) {
+        //         $value->export_status = 1;
+        //         $value->save();
+        // };
         $history = History::leftJoin('users', 'users.id', 'history.user_id')
             ->leftJoin('provides', 'provides.id', 'history.provide_id')
             ->leftJoin('guests', 'guests.id', 'history.guest_id');

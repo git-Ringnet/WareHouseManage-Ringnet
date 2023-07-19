@@ -417,7 +417,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('sale_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
                                                 <input class="w-50 input-quantity sale-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -447,7 +447,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('import_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
                                                 <input class="w-50 input-quantity export-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -477,7 +477,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('difference_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
                                                 <input class="w-50 input-quantity difference-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -507,7 +507,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('sum_debt_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
                                                 <input class="w-50 input-quantity sum_debt-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -571,20 +571,58 @@ $index = array_search($item['label'], $numberedLabels);
                         <div class="card-body">
                             <table id="example2" class="table table-hover">
                                 <thead>
+                                    <input type="hidden" id="sortByInput" name="sort-by" value="">
+                                        <input type="hidden" id="sortTypeInput" name="sort-type"
+                                            value="{{ $sortType }}">
                                     <tr>
                                         <th scope="col">STT</th>
-                                        <th scope="col">Nhân viên</th>
-                                        <th scope="col">Email</th>
-                                        <th scope="col">Vai trò</th>
-                                        <th scope="col" class="text-right">Tổng đơn xuất</th>
+                                        <th scope="col"><span class="d-flex">
+                                            <a href="#" class="sort-link" data-sort-by="user_id"
+                                                data-sort-type="{{ $sortType }}"><button class="btn-sort"
+                                                    type="submit">Nhân viên</button></a>
+                                            <div class="icon" id="icon-user_id"></div>
+                                        </span></th>
+                                        <th scope="col"><span class="d-flex">
+                                            <a href="#" class="sort-link" data-sort-by="email"
+                                                data-sort-type="{{ $sortType }}"><button class="btn-sort"
+                                                    type="submit">Email</button></a>
+                                            <div class="icon" id="icon-email"></div>
+                                        </span></th>
+                                        <th scope="col"><span class="d-flex">
+                                            <a href="#" class="sort-link" data-sort-by="vaitro"
+                                                data-sort-type="{{ $sortType }}"><button class="btn-sort"
+                                                    type="submit">Vai trò</button></a>
+                                            <div class="icon" id="icon-vaitro"></div>
+                                        </span></th>
+                                        <th scope="col" class="text-right"><span class="d-flex justify-content-end">
+                                            <a href="#" class="sort-link" data-sort-by="donxuat"
+                                                data-sort-type="{{ $sortType }}"><button class="btn-sort"
+                                                    type="submit">Tổng đơn xuất</button></a>
+                                            <div class="icon" id="icon-donxuat"></div>
+                                        </span></th>
                                         <th scope="col">
-                                            <p class="text-center m-0">Tổng tiền xuất</p>
+                                            <span class="d-flex justify-content-center">
+                                                <a href="#" class="sort-link" data-sort-by="tongtienxuat"
+                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
+                                                        type="submit">Tổng tiền xuất</button></a>
+                                                <div class="icon" id="icon-tongtienxuat"></div>
+                                            </span>
                                         </th>
                                         <th scope="col">
-                                            <p class="text-center m-0">Tổng lợi nhuận</p>
+                                            <span class="d-flex justify-content-center">
+                                                <a href="#" class="sort-link" data-sort-by="tongloinhuan"
+                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
+                                                        type="submit">Tổng lợi nhuận</button></a>
+                                                <div class="icon" id="icon-tongloinhuan"></div>
+                                            </span>
                                         </th>
                                         <th scope="col">
-                                            Tổng công nợ
+                                            <span class="d-flex justify-content-center">
+                                                <a href="#" class="sort-link" data-sort-by="tongcongno"
+                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
+                                                        type="submit">Tổng công nợ</button></a>
+                                                <div class="icon" id="icon-tongcongno"></div>
+                                            </span>
                                         </th>
                                     </tr>
                                     </form>

@@ -443,19 +443,50 @@ $index = array_search($item['label'], $numberedLabels);
                         <div class="card-body">
                             <table id="example2" class="table table-hover">
                                 <thead>
+                                    <input type="hidden" id="sortByInput" name="sort-by" value="">
+                                    <input type="hidden" id="sortTypeInput" name="sort-type"
+                                        value="{{ $sortType }}">
                                     <tr>
                                         <th scope="col">STT</th>
-                                        <th scope="col">Nhân viên</th>
-                                        <th scope="col">Email</th>
-                                        <th scope="col">Vai trò</th>
-                                        <th scope="col" class="text-right">Tổng đơn nhập</th>
+                                        <th scope="col"><span class="d-flex justify-content-center">
+                                            <a href="#" class="sort-link" data-sort-by="nhanvien"
+                                                data-sort-type="{{ $sortType }}"><button class="btn-sort"
+                                                    type="submit">Nhân viên</button></a>
+                                            <div class="icon" id="icon-nhanvien"></div>
+                                        </span></th>
+                                        <th scope="col"><span class="d-flex">
+                                            <a href="#" class="sort-link" data-sort-by="email"
+                                                data-sort-type="{{ $sortType }}"><button class="btn-sort"
+                                                    type="submit">Email</button></a>
+                                            <div class="icon" id="icon-email"></div>
+                                        </span></th>
+                                        <th scope="col"><span class="d-flex">
+                                            <a href="#" class="sort-link" data-sort-by="vaitro"
+                                                data-sort-type="{{ $sortType }}"><button class="btn-sort"
+                                                    type="submit">Vai trò</button></a>
+                                            <div class="icon" id="icon-vaitro"></div>
+                                        </span></th>
+                                        <th scope="col" class="text-right"><span class="d-flex justify-content-end">
+                                            <a href="#" class="sort-link" data-sort-by="product_qty_count"
+                                                data-sort-type="{{ $sortType }}"><button class="btn-sort"
+                                                    type="submit">Tổng đơn nhập</button></a>
+                                            <div class="icon" id="icon-product_qty_count"></div>
+                                        </span></th>
                                         <th scope="col">
-                                            <p class="text-center m-0">Tổng tiền nhập</p>
-                                            <p class="text-center m-0">(+VAT)</p>
+                                            <span class="d-flex justify-content-end">
+                                                <a href="#" class="sort-link" data-sort-by="total_sum"
+                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
+                                                        type="submit">Tổng tiền nhập(+VAT)</button></a>
+                                                <div class="icon" id="icon-total_sum"></div>
+                                            </span>
                                         </th>
                                         <th scope="col">
-                                            <p class="text-center m-0">Tổng công nợ </p>
-                                            <p class="text-center m-0">(+VAT)</p>
+                                            <span class="d-flex justify-content-center">
+                                                <a href="#" class="sort-link" data-sort-by="total_debt"
+                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
+                                                        type="submit">Tổng công nợ(+VAT)</button></a>
+                                                <div class="icon" id="icon-total_debt"></div>
+                                            </span>
                                         </th>
                                     </tr>
                                     </form>
@@ -465,7 +496,7 @@ $index = array_search($item['label'], $numberedLabels);
                                     @foreach ($tableorders as $item)
                                         <tr>
                                             <td><?php echo $stt++; ?></td>
-                                            <td>{{ $item->nhanvien }}</td>
+                                            <td class="text-center">{{ $item->nhanvien }}</td>
                                             <td>{{ $item->email }}</td>
                                             <td>{{ $item->vaitro }}</td>
                                             <td class="text-right">{{ $item->product_qty_count }}</td>

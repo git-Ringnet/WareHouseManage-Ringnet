@@ -137,17 +137,20 @@ class Orders extends Model
                     ->whereColumn('orders.users_id', 'users.id')
                     ->selectRaw('COUNT(id)');
             }, 'product_qty_count')
+
             ->selectSub(function ($query) {
                 $query->from('productorders')
                     ->whereColumn('productorders.order_id', 'orders.id')
                     ->whereColumn('orders.users_id', 'users.id')
                     ->selectRaw('SUM((productorders.product_price * productorders.product_qty) + ((productorders.product_price * productorders.product_qty * productorders.product_tax)/100))');
             }, 'total_sum')
+       
             ->selectSub(function ($query) {
                 $query->from('debt_import')
                     ->whereColumn('debt_import.user_id', 'users.id')
                     ->selectRaw('SUM(total_import)');
             }, 'total_debt')
+       
             ->distinct();
             if (!empty($filter)) {
                 $tableorders = $tableorders->where($filter);
@@ -157,9 +160,9 @@ class Orders extends Model
             }
             if (!empty($orderBy) && !empty($orderType)) {
                 if ($orderBy == 'updated_at') {
-                    $orderBy = "exports." . $orderBy;
+                    $orderBy = "orders." . $orderBy;
                 };
-                $tableorders = $tableorders->orderBy('exports.id', $orderType);
+                $tableorders = $tableorders->orderBy('orders.id', $orderType);
             }
         $tableorders = $tableorders->get();
 

@@ -267,7 +267,7 @@ $index = array_search($item['label'], $numberedLabels);
                                         </div>
                                     </div>
                                     {{-- Tìm khách hàng --}}
-                                    <div class="block-options" id="guest-options" style="display:none">
+                                    <div class="block-optionsss" id="guest-options" style="display:none">
                                         <div class="wrap w-100">
                                             <div class="heading-title title-wrap">
                                                 <h5>Khách hàng</h5>
