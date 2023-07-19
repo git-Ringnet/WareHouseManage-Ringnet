@@ -202,8 +202,8 @@ class AddProductController extends Controller
             $order->product_code = $request->product_code;
             $order->created_at = $request->product_create;
             $order->total += $product_total[$i];
+            $order->total_tax = $request->total_import;
             $order->save();
-
 
             $dataProductOrder = [
                 'product_name' => $product_name[$i],
@@ -335,6 +335,7 @@ class AddProductController extends Controller
                 $updateOrder->total += $product_total[$i];
                 $updateOrder->product_code = $request->product_code;
                 $updateOrder->created_at = $request->product_create;
+                $updateOrder->total_tax = $total_import;
                 $updateOrder->save();
             }
 
@@ -503,7 +504,8 @@ class AddProductController extends Controller
             'order_status' => 0,
             'product_code' =>  $request->product_code,
             'created_at' => $request->product_create,
-            'total' => $total_price
+            'total' => $total_price,
+            'total_tax' => $request->total_import
         ];
         $order = $this->orders->addOrder($dataOrder);
         for ($i = 0; $i < count($product_name); $i++) {
@@ -648,6 +650,7 @@ class AddProductController extends Controller
             $product_tax = $request->product_tax;
             $product_price = str_replace(',', '', $request->product_price);
             $product_total = str_replace(',', '', $request->product_total);
+            $total_tax = str_replace(',', '', $request->total_import);
             $arr_new_product = [];
             for ($i = 0; $i < count($product_name); $i++) {
                 $dataProductOrder = [
@@ -674,6 +677,7 @@ class AddProductController extends Controller
                 $order->total += $product_total[$i];
                 $order->product_code = $request->product_code;
                 $order->created_at = $request->product_create;
+                $order->total_tax = $total_tax;
                 $order->save();
             }
 
@@ -1008,22 +1012,17 @@ class AddProductController extends Controller
                 'created_at' => $getdate
             ];
             $this->debtImport->updateDebtImport($dataImport, $request->order_id);
-            foreach ($list_id as $id) {
-                $getProduct = Product::where('id', $id)->first();
-                $dataHistory =  [
-                    'import_code' => $request->product_code,
-                    // 'product_name' => $getProduct->product_name,
-                    // 'product_unit' => $getProduct->product_unit,
-                    // 'price_import' => $getProduct->product_price,
-                    'provide_id' => $request->provide_id == null ? $add_newProvide : $request->provide_id,
-                    'product_total' => $total_import,
-                    'import_status' => $debt_status,
-                    'debt_import' => $request->provide_debt == null ? 0 : $request->provide_debt,
-                    'debt_import_end' => $endDateFormatted,
-                    'debt_import_start' => $request->product_create,
-                ];
-                $this->history->updateHistoryByImport($dataHistory, $id);
-            }
+
+            $dataHistory =  [
+                'import_code' => $request->product_code,
+                'provide_id' => $request->provide_id == null ? $add_newProvide : $request->provide_id,
+                'product_total' => $total_import,
+                'import_status' => $debt_status,
+                'debt_import' => $request->provide_debt == null ? 0 : $request->provide_debt,
+                'debt_import_end' => $endDateFormatted,
+                'debt_import_start' => $request->product_create,
+            ];
+            $this->history->updateHistoryByImport($dataHistory, $request->order_id);
             return redirect()->route('insertProduct.index')->with('msg', 'Chỉnh sửa đơn hàng thành công');
         }
     }

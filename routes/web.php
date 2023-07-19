@@ -134,7 +134,7 @@ Route::get('/simple', function () {
     return view('tables.simple');
 });
 Route::get('index', [DashboardController::class, 'index']);
-
+Route::get('/count',[DashboardController::class, 'count'])->name('count');
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),

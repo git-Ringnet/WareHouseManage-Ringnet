@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
             // CategorySeeder::class,
             // DetailsSeeder::class,
             GuestsSeeder::class,
-            ProductSeeder::class,
+            // ProductSeeder::class,
             // productsSeeder::class,
             ProvidesSeeder::class,
             // // // SerinumbersSeeder::class,

@@ -113,11 +113,16 @@
                                         </div>
                                     </button>
                                     <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" id="btn-all-orders" href="#">Tất cả</a>
-                                        <a class="dropdown-item" id="btn-this-month-orders" href="#">Tháng này</a>
-                                        <a class="dropdown-item" id="btn-last-month-orders" href="#">Tháng trước</a>
-                                        <a class="dropdown-item" id="btn-3last-month-orders" href="#">3 tháng trước</a>
-                                        <a class="dropdown-item" id="btn-time-orders" href="#">Khoảng thời gian</a>
+                                        <a class="dropdown-item" id="btn-all-orders" href="#"
+                                            data-value="0">Tất cả</a>
+                                        <a class="dropdown-item" id="btn-this-month-orders" href="#"
+                                            data-value="1">Tháng này</a>
+                                        <a class="dropdown-item" id="btn-last-month-orders" href="#"
+                                            data-value="2">Tháng trước</a>
+                                        <a class="dropdown-item" id="btn-3last-month-orders" href="#"
+                                            data-value="3">3 tháng trước</a>
+                                        <a class="dropdown-item" id="btn-time-orders" href="#">Khoảng thời
+                                            gian</a>
                                     </div>
                                 </div>
                             </div>
@@ -173,7 +178,7 @@
                                     </div>
                                     <div class="pl-2">
                                         <h5>Tổng đơn nhập</h5>
-                                        <div class="value">100</div>
+                                        <div class="value" id="import_id">100</div>
                                     </div>
                                 </div>
                             </div>
@@ -192,9 +197,12 @@
                                     </div>
                                     <div class="pl-2">
                                         <h5>Tổng tiền nhập(+VAT)</h5>
-                                        <div class="value">100đ</div>
+                                        <div class="value" id="import_total">100đ</div>
                                     </div>
                                 </div>
+                                <input type="date" name="date_start" class="date_start">
+                                <input type="date" name="date_end" class="date_end">
+                                <button class="suscess" value="4">Xác nhận</button>
                             </div>
                         </div>
                     </div>
@@ -692,6 +700,7 @@
     <!-- /.control-sidebar -->
 </div>
 <!-- ./wrapper -->
+{{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
 <script>
     // Orders
     // Tất cả
@@ -738,6 +747,69 @@
         $("#3last-month-orders").hide();
     });
 
+    function formatCurrency(value) {
+        // Làm tròn đến 2 chữ số thập phân
+        value = Math.round(value * 100) / 100;
+
+        // Xử lý phần nguyên
+        var parts = value.toString().split(".");
+        var integerPart = parts[0];
+        var formattedValue = "";
+
+        // Định dạng phần nguyên
+        var count = 0;
+        for (var i = integerPart.length - 1; i >= 0; i--) {
+            formattedValue = integerPart.charAt(i) + formattedValue;
+            count++;
+            if (count % 3 === 0 && i !== 0) {
+                formattedValue = "," + formattedValue;
+            }
+        }
+
+        // Nếu có phần thập phân, thêm vào sau phần nguyên
+        if (parts.length > 1) {
+            formattedValue += "." + parts[1];
+        }
+
+        // Trả về kết quả đã định dạng
+        return formattedValue;
+    }
+
+
+    $(document).on('click', '.dropdown-item', function() {
+        var data = $(this).data('value');
+        $.ajax({
+            url: "{{ route('count') }}",
+            type: "get",
+            data: {
+                data: data
+            },
+            success: function(data) {
+                $('#import_id').text(data.countID);
+                $('#import_total').text(formatCurrency(data.sumTotal));
+            }
+        })
+    })
+
+    
+    $(document).on('click', '.suscess', function() {
+        var data = $(this).val();
+        var date_start = $('.date_start').val();
+        var date_end = $('.date_end').val();
+        $.ajax({
+            url: "{{ route('count') }}",
+            type: "get",
+            data: {
+                data: data,
+                date_start: date_start,
+                date_end: date_end
+            },
+            success: function(data) {
+                $('#import_id').text(data.countID);
+                $('#import_total').text(formatCurrency(data.sumTotal));
+            }
+        })
+    })
 </script>
 
 </body>
