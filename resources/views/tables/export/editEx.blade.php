@@ -335,7 +335,7 @@
                                             class="quantity-input form-control text-center" style="width: 50px"
                                             value="{{ $value_export->product_qty }}" name="product_qty[]"
                                             required="">
-                                        <input type="text" class="quantity-exist" required=""
+                                        <input type="text" class="quantity-exist form-control" required=""
                                             value="/{{ $value_export->product_qty + $value_export->soluong }}"
                                             style="width:50px;background:#D6D6D6;border:none;">
                                     </div>

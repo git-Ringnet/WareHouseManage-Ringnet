@@ -340,7 +340,7 @@
             </div>
             {{-- Bảng thêm sản phẩm --}}
             <div class="mt-4" style="overflow-x: auto;">
-                <table class="table">
+                <table class="table" id="sourceTable">
                     <thead class="bg-white border-0 rounded-top">
                         <tr>
                             <th>STT</th>
@@ -396,7 +396,8 @@
                                                 echo 'readonly';
                                             } ?> value="{{ $value_export->product_qty }}"
                                             name="product_qty[]" required="">
-                                        <input type="text" readonly="" class="quantity-exist" required=""
+                                        <input type="text" readonly="" class="quantity-exist form-control"
+                                            required=""
                                             value="/{{ $value_export->tonkho + $value_export->product_qty }}"
                                             style="width:50px;background:#D6D6D6;border:none;" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                                 echo 'hidden';
@@ -761,6 +762,15 @@
                 "<td style='display:none;'><input type='text' class='product_tax1'></td>"
             );
             deleteBtn.click(function() {
+                var row = $(this).closest("tr");
+                var selectedID = row.find('.child-select').val();
+
+                // Kiểm tra nếu ID sản phẩm đang bị xóa có trong mảng selectedProductIDs
+                var index = selectedProductIDs.indexOf(selectedID);
+                if (index !== -1) {
+                    selectedProductIDs.splice(index, 1); // Xóa ID sản phẩm khỏi mảng
+                }
+                row.remove();
                 $(this).closest("tr").remove();
                 updateSTT();
                 calculateGrandTotal();
@@ -808,7 +818,7 @@
                                 .product_trade) +
                             '<br>' + '<b>Giá nhập: </b>' + formattedPrice +
                             '<br>' + '<b>Thuế: </b>' +
-                            (thue == 99 ? "NOVAT" : thue + '%'));
+                            (thue == 99 || thue == null ? "NOVAT" : thue + '%'));
                     },
                 });
             });
@@ -842,6 +852,7 @@
             if (index !== -1) {
                 selectedProductIDs.splice(index, 1); // Xóa ID sản phẩm khỏi mảng
             }
+            row.remove();
         });
 
         //hiện danh sách khách hàng khi click trường tìm kiếm
@@ -1029,7 +1040,6 @@
     //cập nhật thông tin khách hàng
     $(document).on('click', '#btn-customer', function(e) {
         e.preventDefault();
-        $('#sourceTable [required]').removeAttr('required');
         var form = $('#export_form')[0];
         if (!form.reportValidity()) {
             return;
@@ -1083,7 +1093,6 @@
                 } else if (data.hasOwnProperty('id')) {
                     alert('Lưu thông tin thành công');
                 }
-                $('#sourceTable [required]').attr('required', true);
             }
         })
     })
@@ -1361,12 +1370,12 @@
             $('.product_price, [name^="product_price"], #transport_fee').each(function() {
                 var newValue = $(this).val().replace(/,/g, '');
                 $(this).val(newValue);
+                $('#btn-customer').click();
+                window.backupAlert = window.alert;
+                window.alert = function() {
+                    return true
+                };
             });
-            $('#btn-customer').click();
-            window.backupAlert = window.alert;
-            window.alert = function() {
-                return true
-            };
         } else {
             if (formGuest.length === 0) {
                 alert('Lỗi: Chưa nhập thông tin khách hàng!');
@@ -1499,42 +1508,6 @@
             }
         });
     });
-
-    //kiểm tra số điện thoại VN
-    // function isValidPhoneNumber(phoneNumber) {
-    //     // Loại bỏ khoảng trắng và dấu '-' trong số điện thoại
-    //     phoneNumber = phoneNumber.replace(/\s+/g, '').replace(/-/g, '');
-
-    //     // Số điện thoại phải có độ dài từ 10 đến 11 chữ số
-    //     if (phoneNumber.length < 10 || phoneNumber.length > 11) {
-    //         return false;
-    //     }
-
-    //     // Số điện thoại phải bắt đầu bằng các số từ 0 đến 9
-    //     if (!/^[0-9]+$/.test(phoneNumber.charAt(0))) {
-    //         return false;
-    //     }
-
-    //     // Kiểm tra số điện thoại có hợp lệ
-    //     // Số điện thoại Việt Nam bắt đầu bằng 0 và theo sau là 9 chữ số nếu độ dài là 10
-    //     // hoặc bắt đầu bằng 84 và theo sau là 9 chữ số nếu độ dài là 11
-    //     if (phoneNumber.length === 10 && phoneNumber.charAt(0) === '0') {
-    //         return true;
-    //     } else if (phoneNumber.length === 11 && phoneNumber.substr(0, 2) === '84') {
-    //         return true;
-    //     }
-
-    //     return false;
-    // }
-    // var phoneNumber = "0123456789"; // Thay đổi số điện thoại tại đây
-    // if (isValidPhoneNumber(phoneNumber)) {
-    //     console.log("Số điện thoại hợp lệ.");
-    // } else {
-    //     console.log("Số điện thoại không hợp lệ.");
-    // }
-    // $(document).on('keypress', 'form', function(event) {
-    //     return event.keyCode != 13;
-    // });
 </script>
 </body>
 
