@@ -25,35 +25,35 @@
                             <form action="{{ route('provides.store') }}" method="POST">
                                 @csrf
                                 <div class="mb-3">
-                                    <label class="required-label" for="email">Đơn vị cung cấp</label>
+                                    <label class="required-label" for="email">Công ty</label>
                                     <input type="text" class="form-control" name="provide_name"
-                                        placeholder="Nhập đơn vị cung cấp" required>
+                                        placeholder="Nhập công ty cung cấp" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="required-label" for="pwd">Đại diện</label>
-                                    <input type="text" class="form-control" name="provide_represent"
-                                        placeholder="Nhập tên đại diện" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="required-label" for="pwd">Số điện thoại</label>
-                                    <input type="text" class="form-control" name="provide_phone"
-                                        oninput=validateNumberInput(this) pattern="^(?:\+?84|0)(?:\d{9}|\d{10})$"
-                                        placeholder="Nhập số điện thoại" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="required-label" for="pwd">Email</label>
-                                    <input type="email" pattern="/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/"
-                                        class="form-control" name="provide_email" placeholder="Nhập email" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="required-label" for="pwd">Địa chỉ</label>
+                                    <label class="required-label" for="pwd">Địa chỉ xuất hóa đơn</label>
                                     <input type="text" class="form-control" name="provide_address"
-                                        placeholder="Nhập địa chỉ" required>
+                                        placeholder="Nhập địa chỉ xuất hóa đơn" required>
                                 </div>
                                 <div class="mb-3">
                                     <label class="required-label" for="pwd">Mã số thuế</label>
                                     <input type="text" class="form-control" name="provide_code"
                                         oninput=validateNumberInput(this) placeholder="Nhập mã số thuế" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="pwd">Người đại diện</label>
+                                    <input type="text" class="form-control" name="provide_represent"
+                                        placeholder="Nhập tên đại diện" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="pwd">Email</label>
+                                    <input type="email" pattern="/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/"
+                                        class="form-control" name="provide_email" placeholder="Nhập email" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="pwd">Số điện thoại</label>
+                                    <input type="text" class="form-control" name="provide_phone"
+                                        oninput=validateNumberInput(this) pattern="^(?:\+?84|0)(?:\d{9}|\d{10})$"
+                                        placeholder="Nhập số điện thoại" required>
                                 </div>
                                 <div class="mb-3 d-none">
                                     <label for="pwd">Trạng thái:</label>
@@ -65,9 +65,12 @@
                                 <div class="mb-3">
                                     <label class="required-label" for="pwd">Công nợ</label>
                                     <div class="d-flex align-items-center">
-                                        <input type="text" oninput="validateNumberInput(this)" class="form-control" id="debtInput" value="" name="debt" style="width:15%;" required="">
+                                        <input type="text" oninput="validateNumberInput(this)" class="form-control"
+                                            id="debtInput" value="" name="debt" style="width:15%;"
+                                            required="">
                                         <span class="ml-2" id="data-debt">ngày</span>
-                                        <input type="checkbox" id="debtCheckbox" value="0" name="debt" class="ml-3" checked>
+                                        <input type="checkbox" id="debtCheckbox" value="0" name="debt"
+                                            class="ml-3" checked>
                                         <span class="ml-2">Thanh toán tiền mặt</span>
                                     </div>
                                 </div>
@@ -102,7 +105,7 @@
     $('#debtInput').prop('disabled', isChecked);
     $('#debtInput').val(0);
     // Xử lý sự kiện khi checkbox thay đổi
-    $(document).on('change', '#debtCheckbox', function () {
+    $(document).on('change', '#debtCheckbox', function() {
         var isChecked = $(this).is(':checked');
         $('#debtInput').prop('disabled', isChecked);
         $('#debtInput').val(0);

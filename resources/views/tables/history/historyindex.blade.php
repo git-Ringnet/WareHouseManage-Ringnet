@@ -1179,10 +1179,10 @@ $index = array_search($item['label'], $numberedLabels);
                                             <td>{{ $item->name }}</td>
                                             <td>{{ date_format(new DateTime($item->date_time), 'd-m-Y') }}</td>
                                             <td>{{ $item->provide_name }}</td>
-                                            <td>{{ $item->product_name }}</td>
+                                            <td>@if($item->getProduct != null) {{ $item->getProduct->product_name }} @endif</td>
                                             <td>{{ $item->product_qty }}</td>
-                                            <td>{{ number_format($item->price_import) }}</td>
-                                            <td>{{ number_format($item->product_total) }}</td>
+                                            <td>@if($item->getProduct != null) {{ number_format($item->getProduct->product_price) }} @endif</td>
+                                            <td>@if($item->getProduct != null) {{ number_format($item->getProduct->product_total) }} @endif</td>
                                             <td>{{ $item->import_code }}</td>
                                             <td class="text-left" style="width: 125px">
                                                 @if ($item->debt_import != 0 && $item->import_status != 1)

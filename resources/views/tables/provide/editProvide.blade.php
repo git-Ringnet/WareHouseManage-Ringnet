@@ -26,30 +26,12 @@
                                 @csrf
                                 @method('PUT')
                                 <div class="mb-3">
-                                    <label class="required-label" for="email">Đơn vị cung cấp</label>
+                                    <label class="required-label" for="email">Công ty</label>
                                     <input type="text" class="form-control" value="{{ $provides->provide_name }}"
                                         name="provide_name" placeholder="Nhập tên nhà cung cấp" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="required-label" for="pwd">Đại diện</label>
-                                    <input type="text" class="form-control"
-                                        value="{{ $provides->provide_represent }}" name="provide_represent"
-                                        placeholder="Nhập tên người đại diện" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="required-label" for="pwd">Số điện thoại</label>
-                                    <input type="text" class="form-control" oninput=validateNumberInput(this)
-                                        pattern="^(?:\+?84|0)(?:\d{9}|\d{10})$" value="{{ $provides->provide_phone }}"
-                                        name="provide_phone" placeholder="Nhập số điện thoại" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="required-label" for="pwd">Email</label>
-                                    <input type="email" class="form-control" value="{{ $provides->provide_email }}"
-                                        pattern="/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/" name="provide_email"
-                                        placeholder="Nhập email" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="required-label" for="pwd">Địa chỉ</label>
+                                    <label class="required-label" for="pwd">Địa chỉ xuất hóa đơn</label>
                                     <input type="text" class="form-control" value="{{ $provides->provide_address }}"
                                         name="provide_address" placeholder="Nhập địa chỉ" required="">
                                 </div>
@@ -58,6 +40,24 @@
                                     <input type="text" class="form-control" name="provide_code"
                                         oninput=validateNumberInput(this) value="{{ $provides->provide_code }}"
                                         placeholder="Nhập mã số thuế" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="pwd">Người đại diện</label>
+                                    <input type="text" class="form-control"
+                                        value="{{ $provides->provide_represent }}" name="provide_represent"
+                                        placeholder="Nhập tên người đại diện" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="pwd">Email</label>
+                                    <input type="email" class="form-control" value="{{ $provides->provide_email }}"
+                                        pattern="/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/" name="provide_email"
+                                        placeholder="Nhập email" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="pwd">Số điện thoại</label>
+                                    <input type="text" class="form-control" oninput=validateNumberInput(this)
+                                        pattern="^(?:\+?84|0)(?:\d{9}|\d{10})$" value="{{ $provides->provide_phone }}"
+                                        name="provide_phone" placeholder="Nhập số điện thoại" required>
                                 </div>
                                 <div class="mb-3 d-none">
                                     <label for="pwd">Trạng thái:</label>
@@ -115,12 +115,11 @@
     $('#debtInput').prop('disabled', isChecked);
     $('#debtInput').val(0);
     // Xử lý sự kiện khi checkbox thay đổi
-    $(document).on('change', '#debtCheckbox', function () {
+    $(document).on('change', '#debtCheckbox', function() {
         var isChecked = $(this).is(':checked');
         $('#debtInput').prop('disabled', isChecked);
         $('#debtInput').val(0);
     });
-
 </script>
 </body>
 

@@ -653,9 +653,11 @@
                     provide_debt: provide_debt
                 },
                 success: function(data) {
-                    if (data.success) {
+                    if (data.success == true) {
                         alert(data.msg);
                         $('#provide_id').val(data.data.id);
+                    }else{
+                        alert(data.msg);
                     }
                 }
             })

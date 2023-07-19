@@ -114,4 +114,8 @@ class History extends Model
     {
         return DB::table($this->table)->where('export_id', $id)->update($data);
     }
+    public function getProduct()
+    {
+        return $this->hasOne(Product::class,'id','product_id');
+    }
 }
