@@ -666,6 +666,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>
+                                                    <td></td>
                                                 @endif
                                             </tr>
                                         @endforeach

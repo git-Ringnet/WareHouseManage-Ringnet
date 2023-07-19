@@ -437,7 +437,7 @@
                     '<b>Tồn kho: </b>' + tonKho + '<br>' + '<b>Đang giao dịch: </b>' +
                     dangGD +
                     '<br>' + '<b>Giá nhập: </b>' + giaNhap + '<br>' + '<b>Thuế: </b>' +
-                    (thue == 99 ? "NOVAT" : thue + '%'));
+                    (thue == 99 || thue == null ? "NOVAT" : thue + '%'));
             });
             // Gắn các phần tử vào hàng mới
             newRow.append(MaInput, ProInput, dvtInput, slInput,
@@ -610,6 +610,7 @@
 
     //cập nhật thông tin khách hàng
     $(document).on('click', '#btn-customer', function(e) {
+        $("#sourceTable input, #sourceTable select").removeAttr("required");
         e.preventDefault();
         var form = $('#export_form')[0];
         if (!form.reportValidity()) {
@@ -662,6 +663,8 @@
                 } else if (data.hasOwnProperty('id')) {
                     alert('Lưu thông tin thành công');
                 }
+                $("#sourceTable input:not([name='product_note[]']), #sourceTable select").attr(
+                    "required", "required");
             }
         })
     })
@@ -685,6 +688,7 @@
 
     //thêm thông tin khách hàng
     $(document).on('click', '#btn-addCustomer', function(e) {
+        $("#sourceTable input, #sourceTable select").removeAttr("required");
         e.preventDefault();
         var form = $('#export_form')[0];
         if (!form.reportValidity()) {
@@ -736,6 +740,8 @@
                     alert('Thêm thông tin thành công');
                     $('#form-guest input[name="id"]').val(data.id);
                 }
+                $("#sourceTable input:not([name='product_note[]']), #sourceTable select").attr(
+                    "required", "required");
             }
         });
     });
@@ -784,7 +790,7 @@
                         loaihang.val(response.product_category);
                         dangGD.val(response.product_trade == null ? 0 : response
                             .product_trade);
-                        thue.val(response.product_tax);
+                        thue.val(response.product_tax == null ? 99 : response.product_tax);
                         // Tính lại tổng số tiền và tổng số thuế
                         calculateTotalTax();
                         calculateGrandTotal();
@@ -981,8 +987,6 @@
                 setTimeout(function() {
                     $button.removeClass('disabled');
                 }, 1000);
-            } else {
-                event.preventDefault();
             }
         });
 
@@ -1004,8 +1008,6 @@
                 setTimeout(function() {
                     $button.removeClass('disabled');
                 }, 1000);
-            } else {
-                event.preventDefault();
             }
         });
     });
@@ -1067,11 +1069,11 @@
 
     for (let j = 0; j < products.length; j++) {
         // Tạo các phần tử HTML mới
-        const newRow = $("<tr class='soTT'>", {
+        const newRow = $("<tr>", {
             "id": `dynamic-row-${fieldCounter}`
         });
         const MaInput = $("<td>", {
-            "class": "row-number",
+            "class": "soTT",
             "text": `${fieldCounter}`
         });
         var productList = @json($product);
@@ -1206,7 +1208,7 @@
                         (response.product_trade == null ? 0 : response.product_trade) +
                         '<br>' + '<b>Giá nhập: </b>' + formattedPrice + '<br>' +
                         '<b>Thuế: </b>' +
-                        (thue == 99 ? "NOVAT" : thue + "%"));
+                        (thue == 99 || thue == null ? "NOVAT" : thue + '%'));
                 },
             });
         });

@@ -463,7 +463,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                                         name="taxarr[]"
                                                                         value="{{ $value->product_tax }}">
                                                                     <label id="tax_value" for="">
-                                                                        @if ($value->product_tax == 99 || $value->product_tax == null)
+                                                                        @if ($value->product_tax === 99 || $value->product_tax === null)
                                                                             NOVAT
                                                                         @else
                                                                             {{ $value->product_tax }}%
@@ -800,7 +800,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             <td class="text-right">{{ number_format($value->product_price) }}</td>
                                             <td class="text-right">{{ number_format($value->product_total) }}</td>
                                             <td class="text-center">
-                                                @if ($value->product_tax == 99 || $value->product_tax == null)
+                                                @if ($value->product_tax === 99 || $value->product_tax === null)
                                                     NOVAT
                                                 @else
                                                     {{ $value->product_tax }}%

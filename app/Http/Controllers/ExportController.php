@@ -126,7 +126,7 @@ class ExportController extends Controller
             ->whereRaw('COALESCE((product.product_qty - COALESCE(product.product_trade, 0)), 0) > 0')
             ->selectRaw('COALESCE((product.product_qty - COALESCE(product.product_trade, 0)), 0) as qty_exist')
             ->get();
-        $customer = Guests::where('guest_status', 1)->get();
+        $customer = Guests::all();
         $guest_id = DB::table('guests')->select('id')->orderBy('id', 'DESC')->first();
         $title = 'Tạo đơn xuất hàng';
         return view('tables.export.addExport', compact('customer', 'product', 'title'));
@@ -2007,28 +2007,47 @@ class ExportController extends Controller
                                 ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
                                 ->where('product.id', $productID)
                                 ->value('debt_import.debt_status');
+                            //lấy số lượng nhập
+                            $qty_exist = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
+                                ->leftJoin('orders', 'productorders.order_id', 'orders.id')
+                                ->where('product.id', $productID)->value('productorders.product_qty');
+                            // lấy id Import
+                            $import_id = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
+                                ->leftJoin('orders', 'productorders.order_id', 'orders.id')
+                                ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
+                                ->where('product.id', $productID)
+                                ->value('debt_import.import_id');
+                            //lấy công nợ nhập
+                            $date_import = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
+                                ->leftJoin('orders', 'productorders.order_id', 'orders.id')
+                                ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
+                                ->where('product.id', $productID)->first();
+                            //lấy bảng nhập hàng
+                            $productorders = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
+                                ->leftJoin('orders', 'productorders.order_id', 'orders.id')
+                                ->where('product.id', $productID)->first();
                             //lấy thông tin sản phẩm
                             $product = Product::find($productID);
                             // Lấy thông tin từ bảng Guests
                             $guest = Guests::find($exports->guest_id);
                             //Cập nhật lịch sử
-                            // $history = History::where('export_id', $exports->id)
-                            //     ->where('product_id', $productID)
-                            //     ->first();
-                            // if ($history) {
-                            //     $history->export_id = $exports->id;
-                            //     $history->date_time = Carbon::now();
-                            //     $history->user_id = Auth::user()->id;
-                            //     $history->provide_id = $provide_id;
-                            //     $history->product_name = $nameProduct;
-                            //     $history->product_qty = $product->product_qty;
-                            //     $history->product_unit = $product->product_unit;
-                            //     $history->price_import = $product->product_price;
-                            //     $history->product_total = $product->product_total;
-                            //     $history->import_code = $import_code;
-                            //     $history->debt_import = $debt_import;
-                            //     $history->import_status = $import_status;
-                            // }
+                            $history = History::where('export_id', $exports->id)
+                                ->where('product_id', $productID)
+                                ->first();
+                            if ($history) {
+                                $history->export_id = $exports->id;
+                                $history->date_time = Carbon::now();
+                                $history->user_id = Auth::user()->id;
+                                $history->provide_id = $provide_id;
+                                $history->product_name = $nameProduct;
+                                $history->product_qty = $product->product_qty;
+                                $history->product_unit = $product->product_unit;
+                                $history->price_import = $product->product_price;
+                                $history->product_total = $product->product_total;
+                                $history->import_code = $import_code;
+                                $history->debt_import = $debt_import;
+                                $history->import_status = $import_status;
+                            }
                         } else {
                             $proExport = new ProductExports();
                             $proExport->product_id = $productID;
@@ -2379,22 +2398,9 @@ class ExportController extends Controller
     {
         if (isset($request->list_id)) {
             $list = $request->list_id;
-            $exportsToDelete = Exports::whereIn('id', $list)->get();
-            $hasError = false;
-            foreach ($exportsToDelete as $export) {
-                if ($export->export_status !== 0) {
-                    $hasError = true;
-                    break;
-                }
-            }
-            if ($hasError) {
-                session()->flash('warning', 'Không tìm thấy đơn hàng cần xóa');
-                return response()->json(['success' => false, 'msg' => 'Không tìm thấy đơn hàng cần xóa']);
-            } else {
-                Exports::whereIn('id', $list)->where('export_status', 0)->delete();
-                session()->flash('msg', 'Xóa đơn hàng thành công');
-                return response()->json(['success' => true, 'msg' => 'Xóa đơn hàng thành công', 'ids' => $list]);
-            }
+            Exports::whereIn('id', $list)->where('export_status', 0)->delete();
+            session()->flash('msg', 'Xóa đơn hàng thành công');
+            return response()->json(['success' => true, 'msg' => 'Xóa đơn hàng thành công', 'ids' => $list]);
         }
         session()->flash('warning', 'Không tìm thấy đơn hàng cần xóa');
         return response()->json(['success' => false, 'msg' => 'Không tìm thấy đơn hàng cần xóa']);
@@ -2405,7 +2411,7 @@ class ExportController extends Controller
             $list = $request->list_id;
             $listOrder = Exports::whereIn('id', $list)->get();
             foreach ($listOrder as $value) {
-                if ($value->export_status != 2) {
+                if ($value->export_status == 2) {
                     $value->export_status = 0;
                     $value->save();
                 }
