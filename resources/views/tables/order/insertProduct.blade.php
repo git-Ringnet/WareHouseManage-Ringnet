@@ -636,7 +636,6 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <td class="text-left">
                                                     <p>ĐVT</p>{{ $item->product_unit }}
                                                 </td>
-                                                <td></td>
                                                 <td class="text-right">
                                                     <p>Số lượng</p>
                                                     {{ $item->product_qty }}
@@ -653,7 +652,6 @@ $index = array_search($item['label'], $numberedLabels);
                                                     <p>Thành tiền</p>
                                                     {{ number_format($item->product_total) }}
                                                 </td>
-                                               
                                                 <td>
                                                     <p>Thuế</p>
                                                     @if ($item->product_tax == 99)
@@ -662,6 +660,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                         {{ $item->product_tax }}%
                                                     @endif
                                                 </td>
+                                                 <td></td>
                                                 <td></td>
                                                 <td></td>
                                             </tr>
