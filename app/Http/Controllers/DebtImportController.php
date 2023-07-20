@@ -267,4 +267,37 @@ class DebtImportController extends Controller
         return response()->json(['success' => false, 'warning' => 'Thanh toán thất bại!']);
         session()->flash('msg', 'Thanh toán thất bại!');
     }
+    // Exprort Excel
+    public function export_import(){
+        $data = DebtImport::select('id','import_id','date_start','provide_id','user_id','total_import','debt','debt_status','debt_note')
+        ->with('getProvide')
+        ->with('getUsers')
+        ->with('getCode')
+        ->get();
+        foreach($data as $va){
+            if($va->getProvide && $va->getUsers && $va->getCode){
+                $va->provide_id = $va->getProvide->provide_name;
+                $va->user_id = $va->getUsers->name;
+                $va->import_id = $va->getCode->product_code;
+                if($va->debt_status == 1){
+                    $va->debt_status = "Thanh toán đủ";
+                }elseif($va->debt_status == 2){
+                    $va->debt_status = "Gần đến hạn";
+                }elseif($va->debt_status == 3){
+                    $va->debt_status = "Công nợ";
+                }elseif($va->debt_status == 4){
+                    $va->debt_status = "Chưa thanh toán";
+                }else{
+                    $va->debt_status = "Đến hạn";
+                }
+                $va->total_import = number_format($va->total_import);
+                $va->date =  Carbon::parse($va->date_start)->format('Y-m-d');
+            }
+            unset($va->getProvide);
+            unset($va->getUsers);
+            unset($va->getCode);
+            unset($va->date_start);
+        }
+        return response()->json(['success' => true, 'msg' => 'Xuất file thành công', 'data' => $data]);
+    }
 }

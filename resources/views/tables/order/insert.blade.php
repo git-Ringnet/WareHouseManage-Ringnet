@@ -108,31 +108,19 @@
                                     </div>
                                 </div>
                                 <ul id="myUL" class="bg-white position-absolute rounded shadow p-0 scroll-data"
-                                style="z-index: 99; width:37%;">
-                                @foreach ($provide as $value)
-                                    <li class="p-2">
-                                        <a href="#" name="search-info" class="text-dark justify-content-between p-2 search-info"  id="{{$value->id}}">
-                                            <span class="w-50">
-                                                {{$value->provide_name}}
-                                            </span>
-                                        </a>
-                                    </li>
-                                @endforeach
-                                </ul>
-
-                                
-                                {{-- <ul id="myUL" class="bg-white position-absolute rounded shadow p-0 scroll-data"
                                     style="z-index: 99; width:37%;">
                                     @foreach ($provide as $value)
                                         <li class="p-2">
-                                            <a href="#"
-                                                class="text-dark d-flex justify-content-between p-2 search-info"
-                                                id="{{ $value->id }}" name="search-info">
-                                                <span class="w-50">{{ $value->provide_name }}</span>
+                                            <a href="#" name="search-info"
+                                                class="text-dark justify-content-between p-2 search-info"
+                                                id="{{ $value->id }}">
+                                                <span class="w-50">
+                                                    {{ $value->provide_name }}
+                                                </span>
                                             </a>
                                         </li>
                                     @endforeach
-                                </ul> --}}
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -179,15 +167,15 @@
                         <table class="table table-hover bg-white rounded" id="inputContainer">
                             <thead>
                                 <tr>
-                                    <th>STT</th>
-                                    <th>Tên sản phẩm</th>
-                                    <th>Đơn vị tính</th>
-                                    <th>Số lượng</th>
-                                    <th>Giá nhập</th>
-                                    <th>Thuế</th>
-                                    <th>Thành tiền</th>
-                                    <th>Ghi chú</th>
-                                    <th></th>
+                                    <th style="width:3%;">STT</th>
+                                    <th style="width:30%;">Tên sản phẩm</th>
+                                    <th style="width:8%;">Đơn vị tính</th>
+                                    <th style="width:8%;">Số lượng</th>
+                                    <th style="width:12%;">Giá nhập</th>
+                                    <th style="width:8%;">Thuế</th>
+                                    <th style="width:15%;">Thành tiền</th>
+                                    <th style="width:13%;">Ghi chú</th>
+                                    <th style="width:10%;"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -368,10 +356,10 @@
             var tr = '<tr>' +
                 '<td class="STT"></td>' +
                 '<td>' +
-                '<input id="search" type="text" placeholder="Nhập tên sản phẩm" style="width: 300px !important" name="product_name[]" class="search_product form-control name_product" onkeyup="filterFunction()"> ' +
+                '<input id="search" type="text" placeholder="Nhập tên sản phẩm" name="product_name[]" class="form-control name_product" onkeyup="filterFunction()"> ' +
                 '</td>' +
-                '<td><input required type="text" class="form-control text-center unit_product" style="width:130px" name="product_unit[]"></td>' +
-                '<td><input required type="text" oninput="validatQtyInput(this)" style="width: 60px" name="product_qty[]" class="quantity-input form-control text-center"></td>' +
+                '<td><input required type="text" class="form-control text-center unit_product" name="product_unit[]"></td>' +
+                '<td><input required type="text" oninput="validatQtyInput(this)" name="product_qty[]" class="quantity-input form-control text-center"></td>' +
                 '<td><input required type="text" class="form-control text-center product_price" name="product_price[]" ></td>' +
                 '<td>' +
                 '<input type="hidden" class="product_tax1">' +
@@ -485,7 +473,8 @@
                         '<div class="d-flex align-items-center" style="width:101%;"> <input name="provide_debt" id="debtInput" class="form-control" type="text" name="debt" style="width:15%;" value="' +
                         (data.debt == null ? 0 : data.debt) + '">' +
                         '<span class="ml-2" id="data-debt" style="color: rgb(29, 28, 32);">ngày</span>' +
-                        '<input type="checkbox" id="debtCheckbox" value="0" ' + (data.debt == 0 ? 'checked' : '') + ' style="margin-left:10%;" >' +
+                        '<input type="checkbox" id="debtCheckbox" value="0" ' + (data.debt == 0 ?
+                            'checked' : '') + ' style="margin-left:10%;" >' +
                         '<span class="ml-2">Thanh toán tiền mặt</span> </div>' +
                         '</div>' +
                         '</div></div>'
@@ -628,19 +617,19 @@
                         var totalPrice = ThTien[i].textContent;
                         var tr = '<tr>' +
                             '<td class="STT"> </td>' +
-                            '<td><input required type="text" class="search_product form-control" name="product_name[]" value="' +
+                            '<td><input required type="text" class="form-control" name="product_name[]" value="' +
                             titlesValue +
                             '"></td>' +
-                            '<td><input required type="text" class="form-control text-center" style="width:100px" name="product_unit[]" value="' +
+                            '<td><input required type="text" class="form-control text-center" name="product_unit[]" value="' +
                             typeValue +
                             '"></td>' +
-                            '<td><input required type="text" oninput="validatQtyInput(this)" style="width: 60px" name="product_qty[]" class="quantity-input form-control text-center" value="' +
+                            '<td><input required type="text" oninput="validatQtyInput(this)" name="product_qty[]" class="quantity-input form-control text-center" value="' +
                             numberssValue + '"></td>' +
                             '<td><input required type="text" class="form-control product_price text-center" name="product_price[]" value="' +
                             price + '"></td>' +
                             '<input type="hidden" class="product_tax1">' +
                             '<td>' +
-                            '<select style="width:100px;" name="product_tax[]"class="product_tax form-control" >' +
+                            '<select name="product_tax[]"class="product_tax form-control" >' +
                             '<option value="10"' + (tax == 10 ? "selected" : "") + '>10%</option>' +
                             '<option value="0" ' + (tax == 0 ? "selected" : "") + '>0%</option>' +
                             '<option value="8" ' + (tax == 8 ? "selected" : "") + '>8%</option>' +

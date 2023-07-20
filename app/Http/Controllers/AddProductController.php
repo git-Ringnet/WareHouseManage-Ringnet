@@ -757,7 +757,7 @@ class AddProductController extends Controller
                 $checkOrder->order_status = 2;
                 $checkOrder->save();
                 $debt->delete();
-                Product::whereIn('id',$request->product_id)->delete();
+                Product::whereIn('id', $request->product_id)->delete();
                 return redirect()->route('insertProduct.index')->with('msg', 'Hủy đơn hàng thành công');
             }
         }
@@ -961,8 +961,8 @@ class AddProductController extends Controller
                     'provide_id' => $request->provide_id == null ? $add_newProvide : $request->provide_id
                 ];
                 $this->productOrder->updateProductOrder($data, $list_id[$i]);
-                
-                $f = ProductOrders::where('product_id',$list_id[$i])->first();
+
+                $f = ProductOrders::where('product_id', $list_id[$i])->first();
                 $this->product->updateProduct($data, $f->product_id);
             }
 
@@ -1009,27 +1009,27 @@ class AddProductController extends Controller
                 'created_at' => $getdate
             ];
             $this->debtImport->updateDebtImport($dataImport, $request->order_id);
-            
-            foreach($list_id as $value){
-              $upPro = History::where('product_id',$value)->get();
-              foreach($upPro as $va){
-                if($value == $va->product_id){
-                    $Pro = Product::find($value);
-                    $va->product_name = $Pro->product_name;
-                    $va->product_unit = $Pro->product_unit;
-                    $va->price_import = $Pro->product_price;
-                    $va->product_total = $Pro->product_total;
-                    $va->import_code = $request->product_code;
-                    $va->provide_id = $request->provide_id == null ? $add_newProvide : $request->provide_id;
-                    $va->import_status = $debt_status;
-                    $va->debt_import = $request->provide_debt == null ? 0 : $request->provide_debt;
-                    $va->debt_import_end = $endDateFormatted;
-                    $va->debt_import_start = $request->product_create;
-                    $va->save();
+
+            foreach ($list_id as $value) {
+                $upPro = History::where('product_id', $value)->get();
+                foreach ($upPro as $va) {
+                    if ($value == $va->product_id) {
+                        $Pro = Product::find($value);
+                        $va->product_name = $Pro->product_name;
+                        $va->product_unit = $Pro->product_unit;
+                        $va->price_import = $Pro->product_price;
+                        $va->product_total = $Pro->product_total;
+                        $va->import_code = $request->product_code;
+                        $va->provide_id = $request->provide_id == null ? $add_newProvide : $request->provide_id;
+                        $va->import_status = $debt_status;
+                        $va->debt_import = $request->provide_debt == null ? 0 : $request->provide_debt;
+                        $va->debt_import_end = $endDateFormatted;
+                        $va->debt_import_start = $request->product_create;
+                        $va->save();
+                    }
                 }
-              }
             }
-        
+
             // $dataHistory =  [
             //     'import_code' => $request->product_code,
             //     'provide_id' => $request->provide_id == null ? $add_newProvide : $request->provide_id,

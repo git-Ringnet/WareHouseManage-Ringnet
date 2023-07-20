@@ -288,15 +288,15 @@
                 <table class="table table-hover bg-white rounded" id="inputContainer">
                     <thead>
                         <tr>
-                            <th>STT</th>
-                            <th>Tên sản phẩm</th>
-                            <th>ĐVT</th>
-                            <th>Số lượng</th>
-                            <th>Giá nhập</th>
-                            <th>Thuế</th>
-                            <th>Thành tiền</th>
-                            <th>Ghi chú</th>
-                            <th></th>
+                            <th style="width:3%;">STT</th>
+                            <th style="width:30%;">Tên sản phẩm</th>
+                            <th style="width:8%;">Đơn vị tính</th>
+                            <th style="width:8%;">Số lượng</th>
+                            <th style="width:12%;">Giá nhập</th>
+                            <th style="width:8%;">Thuế</th>
+                            <th style="width:15%;">Thành tiền</th>
+                            <th style="width:13%;">Ghi chú</th>
+                            <th style="width:0%;"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -307,14 +307,14 @@
                                 <td> <input class="form-control name_product"
                                         @if (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin')) readonly @endif required
                                         @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif type="text"
-                                        style="width:auto" name="product_name[]" value="{{ $pro->product_name }}">
+                                        name="product_name[]" value="{{ $pro->product_name }}">
                                 </td>
-                                <td> <input class="form-control text-center unit_product" style="width: 100px"
+                                <td> <input class="form-control text-center unit_product"
                                         @if (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin')) readonly @endif required type="text"
                                         name="product_unit[]" value="{{ $pro->product_unit }}"
                                         @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif> </td>
                                 <td> <input oninput="validatQtyInput(this)"
-                                        class="form-control quantity-input text-center" style="width: 80px"
+                                        class="form-control quantity-input text-center"
                                         oninput="validateNumberInput(this)"
                                         @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif required type="text"
                                         name="product_qty[]" value="{{ $pro->product_qty }}"
@@ -322,7 +322,7 @@
                                 <td> <input class="form-control text-center product_price"
                                         @if (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin')) readonly @endif required type="text"
                                         name="product_price[]" 
-                                        value="@if(fmod($pro->product_price,1) > 0){{ number_format($pro->product_price,1,'.','') }}@else{{number_format($pro->product_price)}}@endif"
+                                        value="@if(fmod($pro->product_price,2) > 0){{ number_format($pro->product_price,2,'.','') }}@else{{number_format($pro->product_price)}}@endif"
                                         @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif> </td>
                                 <td>
                                     <select name="product_tax[]" id="" class="form-control product_tax"
