@@ -663,8 +663,8 @@
                 } else if (data.hasOwnProperty('id')) {
                     alert('Lưu thông tin thành công');
                 }
-                $("#sourceTable input:not([name='product_note[]']), #sourceTable select").attr(
-                    "required", "required");
+                $("#sourceTable input:not([name='product_note[]']):not(.price_import):not(.tonkho):not(.loaihang):not(.dangGD):not(.product_tax1), #sourceTable select:not([name='product_note[]']):not(.price_import):not(.tonkho):not(.loaihang):not(.dangGD):not(.product_tax1)")
+                    .attr("required", "required");
             }
         })
     })
@@ -688,7 +688,7 @@
 
     //thêm thông tin khách hàng
     $(document).on('click', '#btn-addCustomer', function(e) {
-        $("#sourceTable input, #sourceTable select").removeAttr("required");
+        $("#sourceTable input, #sourceTable select").prop("required", false);
         e.preventDefault();
         var form = $('#export_form')[0];
         if (!form.reportValidity()) {
@@ -740,8 +740,8 @@
                     alert('Thêm thông tin thành công');
                     $('#form-guest input[name="id"]').val(data.id);
                 }
-                $("#sourceTable input:not([name='product_note[]']), #sourceTable select").attr(
-                    "required", "required");
+                $("#sourceTable input:not([name='product_note[]']):not(.price_import):not(.tonkho):not(.loaihang):not(.dangGD):not(.product_tax1), #sourceTable select:not([name='product_note[]']):not(.price_import):not(.tonkho):not(.loaihang):not(.dangGD):not(.product_tax1)")
+                    .attr("required", "required");
             }
         });
     });
@@ -1146,8 +1146,8 @@
             }
 
             ProInput.find('select').append(option);
-            dvtInput.find('input').replaceWith(dvt);
             if (productList[i].id == products[j]) {
+                dvtInput.find('input').replaceWith(dvt);
                 slInput.find('.quantity-exist').val("/" + productList[i].qty_exist);
                 thueInput.find('select').val(thue);
             }

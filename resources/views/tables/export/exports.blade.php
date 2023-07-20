@@ -171,6 +171,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <span class="search-icon"><i class="fas fa-search"></i></span>
                                             </div>
                                             <button class="dropdown-item" id="btn-id">Số hóa đơn</button>
+                                            <button class="dropdown-item" id="btn-id">ID</button>
                                             <button class="dropdown-item" id="btn-guest">Khách hàng</button>
                                             <button class="dropdown-item" id="btn-update_at">Ngày tạo</button>
                                             @if (Auth::user()->can('isAdmin'))
@@ -221,6 +222,7 @@ $index = array_search($item['label'], $numberedLabels);
                                         <div class="wrap w-100">
                                             <div class="heading-title title-wrap">
                                                 <h5>Số hóa đơn</h5>
+                                                <h5>ID</h5>
                                             </div>
                                             <div class="input-group p-2">
                                                 <label class="title" for="">Chứa kí tự</label>
@@ -413,18 +415,18 @@ $index = array_search($item['label'], $numberedLabels);
                                             </div>
                                             <div class="input-group p-2 justify-content-around">
                                                 <div class="start">
-                                                <label for="start">Từ ngày:</label>
-                                                <input type="date" id="start" name="trip_start"
-                                                    value="{{ request()->trip_start }}" min="2018-01-01"
-                                                    max="2050-12-31">
-                                            </div>
+                                                    <label for="start">Từ ngày:</label>
+                                                    <input type="date" id="start" name="trip_start"
+                                                        value="{{ request()->trip_start }}" min="2018-01-01"
+                                                        max="2050-12-31">
+                                                </div>
                                                 <div class="end">
-                                                <label for="start">Đến ngày:</label>
-                                                <input type="date" id="end" name="trip_end"
-                                                    value="{{ request()->trip_end }}" min="2018-01-01"
-                                                    max="2050-12-31">
+                                                    <label for="start">Đến ngày:</label>
+                                                    <input type="date" id="end" name="trip_end"
+                                                        value="{{ request()->trip_end }}" min="2018-01-01"
+                                                        max="2050-12-31">
+                                                </div>
                                             </div>
-                                        </div>
                                         </div>
                                         <div class="d-flex justify-contents-center align-items-baseline p-2">
                                             <button type="submit" class="btn btn-primary btn-block mr-2">Xác
@@ -501,7 +503,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             <span class="d-flex">
                                                 <a href="#" class="sort-link" data-sort-by="id"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
-                                                        type="submit">Mã đơn hàng</button></a>
+                                                        type="submit">ID</button></a>
                                                 <div class="icon" id="icon-id"></div>
                                             </span>
                                         </th>
@@ -568,7 +570,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             <td><input type="checkbox" class="cb-element" name="ids[]"
                                                     value="{{ $value->id }}"></td>
                                             <td>{{ $value->id }}</td>
-                                            <td>{{$value->export_code}}</td>
+                                            <td>{{ $value->export_code }}</td>
                                             <td>{{ $value->guest_name }}</td>
                                             <td>{{ date_format(new DateTime($value->created_at), 'd-m-Y') }}</td>
                                             @if (Auth::user()->can('isAdmin'))
@@ -1046,15 +1048,30 @@ $index = array_search($item['label'], $numberedLabels);
     }
     //xuất excel
     function exportToExcel() {
+        // Ẩn các dòng của dropdown và các phần tử khác cần ẩn khi xuất Excel
+        $('#example2 tbody tr.collapse.product-details').addClass('d-none');
+        $('.cb-element').addClass('d-none');
+        $('#checkall').addClass('d-none');
+
+        // Chờ 1 giây và sau đó hiển thị lại các dòng và phần tử đã ẩn
+        setTimeout(function() {
+            $('#example2 tbody tr.collapse.product-details').removeClass('d-none');
+            $('.cb-element').removeClass('d-none');
+            $('#checkall').removeClass('d-none');
+        }, 1000); // 1000ms tương đương 1 giây
+
         var table = document.getElementById('example2');
         var tableData = [];
 
         for (var i = 0, row; row = table.rows[i]; i++) {
-            var rowData = [];
-            for (var j = 0, cell; cell = row.cells[j]; j++) {
-                rowData.push(cell.innerText);
+            // Kiểm tra và bỏ qua các dòng đã ẩn (d-none) khi chuyển đổi thành dữ liệu Excel
+            if (!$(row).hasClass('d-none')) {
+                var rowData = [];
+                for (var j = 1, cell; cell = row.cells[j]; j++) { // Chỉ lấy từ cột thứ hai trở đi
+                    rowData.push(cell.innerText);
+                }
+                tableData.push(rowData);
             }
-            tableData.push(rowData);
         }
 
         var wb = XLSX.utils.book_new();
