@@ -7,7 +7,7 @@
             <div class="d-flex mb-1">
                 @can('view-guests')
                     <div class="class">
-                        <button onclick="exportToExcel()" type="button"
+                        <button id="EXPORT_Import" type="button"
                             class="custom-btn btn btn-outline-primary d-flex align-items-center">
                             <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24" fill="none">
@@ -601,11 +601,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 {{ $value->nhanvien }}
                                             </td>
                                             <td class="text-right">
-                                                @if (fmod($value->total_import, 1) > 0)
-                                                    {{ number_format($value->total_import, 2, '.', ',') }}
-                                                @else
-                                                    {{ number_format($value->total_import) }}
-                                                @endif
+                                                {{ number_format($value->total_import) }}
                                             </td>
                                             <td class="text-left" style="width: 125px">
                                                 @if ($value->debt != 0 && $value->debt_status != 1)
@@ -722,19 +718,15 @@ $index = array_search($item['label'], $numberedLabels);
                                                 </td>
                                                 <td class="text-right">
                                                     <p>Giá nhập</p>
-                                                    @if (fmod($item->gianhap, 1) > 0)
-                                                        {{ number_format($item->gianhap, 1, '.', ',') }}
+                                                    @if (fmod($item->gianhap, 2) > 0)
+                                                        {{ number_format($item->gianhap, 2, '.', ',') }}
                                                     @else
                                                         {{ number_format($item->gianhap) }}
                                                     @endif
                                                 </td>
                                                 <td class="text-right">
                                                     <p>Thành tiền</p>
-                                                    @if (fmod($item->gianhap * $item->soluong, 1) > 0)
-                                                        {{ number_format($item->gianhap * $item->soluong, 1, '.', ',') }}
-                                                    @else
                                                         {{ number_format($item->gianhap * $item->soluong) }}
-                                                    @endif
                                                 </td>
                                                 <td>
                                                     <p>Thuế</p>
@@ -1046,41 +1038,6 @@ $index = array_search($item['label'], $numberedLabels);
         });
     });
 
-
-
-
-    // Xuất file excel
-    function exportToExcel() {
-        // Lấy dữ liệu từ bảng HTML
-        var table = document.getElementById("example2");
-
-        // Tạo một workbook mới
-        var wb = XLSX.utils.table_to_book(table);
-
-        // Chuyển đổi workbook thành dạng tệp Excel
-        var wbout = XLSX.write(wb, {
-            bookType: "xlsx",
-            type: "array"
-        });
-
-        // Tạo một Blob từ dữ liệu Excel
-        var blob = new Blob([wbout], {
-            type: "application/octet-stream"
-        });
-
-        // Tạo URL tạm thời và tải xuống tệp Excel
-        var url = URL.createObjectURL(blob);
-        var a = document.createElement("a");
-        a.href = url;
-        a.download = "data.xlsx";
-        a.click();
-
-        // Giải phóng URL tạm thời
-        setTimeout(function() {
-            URL.revokeObjectURL(url);
-        }, 1000);
-    }
-
     // Checkbox
     $('#checkall').change(function() {
         $('.cb-element').prop('checked', this.checked);
@@ -1235,6 +1192,81 @@ $index = array_search($item['label'], $numberedLabels);
         }
 
     }
+
+    function s2ab(s) {
+        var buf = new ArrayBuffer(s.length);
+        var view = new Uint8Array(buf);
+        for (var i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xff;
+        return buf;
+    }
+
+
+    $(document).on('click','#EXPORT_Import',function(e) {
+        e.preventDefault();
+         $.ajax({
+            url: "{{ route('export_import') }}",
+            type: "get",
+            dataType: 'json',
+            success: function(response) {
+                console.log(response);
+                if (response.success) {
+                    var products = response.data;
+                    // Create a new workbook
+                    var workbook = XLSX.utils.book_new();
+                    // Create a new worksheet
+                    var worksheet = XLSX.utils.json_to_sheet(products);
+                    // Modify the column headers
+                    var headers = [
+                        'ID',
+                        'HĐ vào',
+                        'Ngày lập hóa đơn',
+                        'Nhà cung cấp',
+                        'Nhân viên',
+                        'Tổng tiền (VAT)',
+                        'Công nợ',
+                        'Trạng thái',
+                        'Ghi chú',
+                    ];
+                    // Update the column headers in the worksheet
+                    worksheet['A1'].v = headers[0];
+                    worksheet['B1'].v = headers[1];
+                    worksheet['C1'].v = headers[3];
+                    worksheet['D1'].v = headers[4];
+                    worksheet['E1'].v = headers[5];
+                    worksheet['F1'].v = headers[6];
+                    worksheet['G1'].v = headers[7];
+                    worksheet['H1'].v = headers[8];
+                    worksheet['I1'].v = headers[2];
+
+                    // Add the worksheet to the workbook
+                    XLSX.utils.book_append_sheet(workbook, worksheet, 'Debt');
+
+                    // Convert the workbook to a binary Excel file
+                    var excelFile = XLSX.write(workbook, {
+                        bookType: 'xlsx',
+                        type: 'binary'
+                    });
+
+                    // Convert the binary Excel file to a Blob
+                    var blob = new Blob([s2ab(excelFile)], {
+                        type: 'application/octet-stream'
+                    });
+
+                    // Create a temporary <a> element to trigger the file download
+                    var link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = 'CongNoNhap.xlsx';
+                    link.click();
+                } else {
+                    console.log(response.msg);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.log(error);
+            }
+        });
+    })
+
 </script>
 </body>
 
