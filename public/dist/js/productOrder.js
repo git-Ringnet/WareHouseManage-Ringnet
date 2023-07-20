@@ -199,7 +199,7 @@ function calculateTotals() {
         }
 
         if (!isNaN(productQty) && !isNaN(productPrice) && !isNaN(taxValue)) {
-            var rowTotal = productQty * productPrice;
+            var rowTotal = Math.round(productQty * productPrice);
             var rowTax = (rowTotal * taxValue) / 100;
             // Hiển thị kết quả
             $(this).find('.total-amount').val(formatCurrency(rowTotal));
@@ -214,7 +214,7 @@ function calculateTotals() {
     // Hiển thị tổng totalAmount và totalTax
     $('#total-amount-sum').text(formatCurrency(totalAmount));
     $('.total_price').val(formatCurrency(totalAmount));
-    $('#product-tax').text((formatCurrency(totalTax)));
+    $('#product-tax').text((formatCurrency(Math.round(totalTax))));
 
     // Tính tổng thành tiền và thuế
     calculateGrandTotal(totalAmount, totalTax);

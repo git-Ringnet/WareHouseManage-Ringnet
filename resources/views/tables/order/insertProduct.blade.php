@@ -644,11 +644,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 </td>
                                                 <td class="text-right">
                                                     <p>Tổng tiền</p>
-                                                    @if(fmod(($item->product_qty * $item->product_price),1) > 0)
-                                                    {{ number_format(($item->product_qty * $item->product_price),1,'.',',') }}
-                                                    @else
-                                                    {{ number_format($item->product_qty * $item->product_price) }}
-                                                    @endif
+                                                    {{ number_format($item->product_total)}}
                                                 </td>
                                                 <td></td>
                                                 <td></td>
