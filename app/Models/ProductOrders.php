@@ -30,4 +30,8 @@ class ProductOrders extends Model
     {
         return DB::table($this->table)->where('id', $id)->update($data);
     }
+    public function updateProductOrderEdit($data, $id)
+    {
+        return DB::table($this->table)->where('product_id', $id)->update($data);
+    }
 }
