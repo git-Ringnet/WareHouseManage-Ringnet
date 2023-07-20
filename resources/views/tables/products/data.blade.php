@@ -22,37 +22,6 @@
                             </svg>
                             <span>Xuất Excel</span>
                     </div>
-                    {{-- <div class="class">
-                        <a href="{{route('export')}}" class="custom-btn btn btn-outline-primary d-flex align-items-center">
-                            <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                            viewBox="0 0 24 24" fill="none">
-                            <path
-                                d="M15.0003 7.80054H16.5001C16.8979 7.80054 17.2794 7.95857 17.5607 8.23984C17.842 8.52112 18 8.9026 18 9.30039V17.1006C18 17.4983 17.842 17.8798 17.5607 18.1611C17.2794 18.4424 16.8979 18.6004 16.5001 18.6004H7.49986C7.10207 18.6004 6.72058 18.4424 6.4393 18.1611C6.15802 17.8798 6 17.4983 6 17.1006V9.30039C6 8.9026 6.15802 8.52112 6.4393 8.23984C6.72058 7.95857 7.10207 7.80054 7.49986 7.80054H8.99972"
-                                stroke="#0095F6" stroke-linecap="round" stroke-linejoin="round" />
-                            <path d="M8.99976 11.3997L11.9995 14.3994L15.0003 11.3997" stroke="#0095F6"
-                                stroke-linecap="round" stroke-linejoin="round" />
-                            <path d="M12.0006 3V13.7999" stroke="#0095F6" stroke-linecap="round"
-                                stroke-linejoin="round" />
-                        </svg>
-                        <span>Xuất Excel</span>
-                        </a>
-                    </div> --}}
-                    {{-- <div class="custom-btn btn btn-outline-primary btn-file d-flex align-items-center mx-4">
-                        <div>
-                            <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none">
-                                <path
-                                    d="M8.99972 15.7999H7.49986C7.10207 15.7999 6.72058 15.6419 6.4393 15.3606C6.15802 15.0793 6 14.6979 6 14.3001L6 6.49991C6 6.10212 6.15802 5.72062 6.4393 5.43934C6.72058 5.15806 7.10207 5.00003 7.49986 5.00003L16.5001 5.00003C16.8979 5.00003 17.2794 5.15806 17.5607 5.43934C17.842 5.72062 18 6.10212 18 6.49991V14.3001C18 14.6979 17.842 15.0793 17.5607 15.3606C17.2794 15.6419 16.8979 15.7999 16.5001 15.7999H15.0003"
-                                    stroke="#0095F6" stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M15.0005 12.2006L12.0008 9.20092L8.99994 12.2006" stroke="#0095F6"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M11.9995 20.6003L11.9995 9.80045" stroke="#0095F6" stroke-linecap="round"
-                                    stroke-linejoin="round" />
-                            </svg>
-                        </div>
-                        <span>Nhập Excel</span> <input type="file" id="import_file" onchange="importExcel()"
-                            accept=".xlsx">
-                    </div> --}}
                 @endcan
             </div>
             <div class="row m-auto filter pt-2">
@@ -637,16 +606,6 @@ $index = array_search($item['label'], $numberedLabels);
                     </div>
                     <div class="btn-nhaphang my-2">
                     </div>
-                    {{-- <div class="dropdown my-2 ml-4">
-                        <button class="custom-btn btn btn-light dropdown-toggle align-items-center d-flex h-100"
-                            type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                            aria-expanded="false">
-                            <span>Hành động khác</span>
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a href="#" id="deleteProducts" class="dropdown-item">Xóa sản phẩm</a>
-                        </div>
-                    </div> --}}
                 </div>
                 <div class="cancal_action btn ml-auto">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -812,7 +771,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     {{ $value->product_tax }}%
                                                 @endif
                                             </td>
-                                            <td>
+                                            <td class="text-right">
                                                 {{ $value->product_code}}
                                             </td>
                                             <td class="text-center">
@@ -878,59 +837,6 @@ $index = array_search($item['label'], $numberedLabels);
         }
     });
 
-    // Xuất file excel
-    // function exportToExcel() {
-    //     var table = document.getElementById('example2');
-    //     var jsonData = [];
-
-    //     // Lấy dữ liệu từ bảng HTML
-    //     for (var i = 1; i < table.rows.length; i++) {
-    //         var row = table.rows[i];
-    //         var rowData = {};
-
-    //         rowData['STT'] = row.cells[1].textContent;
-    //         rowData['Tên sản phẩm'] = row.cells[2].textContent;
-    //         rowData['Nhà cung cấp'] = row.cells[3].textContent;
-    //         rowData['ĐVT'] = row.cells[4].textContent;
-    //         rowData['Số lượng'] = row.cells[5].textContent;
-    //         rowData['Đang giao dịch'] = row.cells[6].textContent;
-    //         rowData['Đơn giá nhập'] = row.cells[7].textContent;
-    //         rowData['Trị tồn kho'] = row.cells[8].textContent;
-    //         rowData['Thuế'] = row.cells[9].textContent.trim();
-    //         rowData['Trạng thái'] = row.cells[10].textContent.trim();
-    //         jsonData.push(rowData);
-    //     }
-
-    //     // Tạo một workbook mới
-    //     var wb = XLSX.utils.book_new();
-    //     var ws = XLSX.utils.json_to_sheet(jsonData);
-
-    //     // Thêm sheet vào workbook
-    //     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-
-    //     // Chuyển đổi workbook thành dạng tệp Excel
-    //     var wbout = XLSX.write(wb, {
-    //         bookType: 'xlsx',
-    //         type: 'array'
-    //     });
-
-    //     // Tạo một Blob từ dữ liệu Excel
-    //     var blob = new Blob([wbout], {
-    //         type: 'application/octet-stream'
-    //     });
-
-    //     // Tạo URL tạm thời và tải xuống tệp Excel
-    //     var url = URL.createObjectURL(blob);
-    //     var a = document.createElement('a');
-    //     a.href = url;
-    //     a.download = 'data.xlsx';
-    //     a.click();
-
-    //     // Giải phóng URL tạm thời
-    //     setTimeout(function() {
-    //         URL.revokeObjectURL(url);
-    //     }, 1000);
-    // }
 
     $(document).on("click", '#EXPORT', function(e) {
         e.preventDefault();

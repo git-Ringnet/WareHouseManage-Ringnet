@@ -47,27 +47,27 @@
                     <div class="col-2 d-none">
                         <button type="submit" class="btn btn-primary btn-block">Tìm kiếm</button>
                     </div>
-                    
-                        <div class="ml-auto">
-                            <button class="btn btn-light" id="expandall" type="button" onclick="expand()"><svg
-                                    width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M7.23123 9.23123C7.53954 8.92292 8.03941 8.92292 8.34772 9.23123L12 12.8835L15.6523 9.23123C15.9606 8.92292 16.4605 8.92292 16.7688 9.23123C17.0771 9.53954 17.0771 10.0394 16.7688 10.3477L12.5582 14.5582C12.2499 14.8665 11.7501 14.8665 11.4418 14.5582L7.23123 10.3477C6.92292 10.0394 6.92292 9.53954 7.23123 9.23123Z"
-                                        fill="#555555" />
-                                </svg>
-                                Mở rộng tất
-                                cả</button>
-                            <button class="btn btn-light" style="display: none" id="collapseall" type="button"
-                                onclick="collapse()"><svg width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M16.7688 14.7688C16.4605 15.0771 15.9606 15.0771 15.6523 14.7688L12 11.1165L8.34772 14.7688C8.03941 15.0771 7.53954 15.0771 7.23123 14.7688C6.92292 14.4605 6.92292 13.9606 7.23123 13.6523L11.4418 9.44176C11.7501 9.13345 12.2499 9.13345 12.5582 9.44176L16.7688 13.6523C17.0771 13.9606 17.0771 14.4605 16.7688 14.7688Z"
-                                        fill="#555555" />
-                                </svg>
-                                Thu gọn tất cả</button>
-                        </div>
-                   
+
+                    <div class="ml-auto">
+                        <button class="btn btn-light" id="expandall" type="button" onclick="expand()"><svg
+                                width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M7.23123 9.23123C7.53954 8.92292 8.03941 8.92292 8.34772 9.23123L12 12.8835L15.6523 9.23123C15.9606 8.92292 16.4605 8.92292 16.7688 9.23123C17.0771 9.53954 17.0771 10.0394 16.7688 10.3477L12.5582 14.5582C12.2499 14.8665 11.7501 14.8665 11.4418 14.5582L7.23123 10.3477C6.92292 10.0394 6.92292 9.53954 7.23123 9.23123Z"
+                                    fill="#555555" />
+                            </svg>
+                            Mở rộng tất
+                            cả</button>
+                        <button class="btn btn-light" style="display: none" id="collapseall" type="button"
+                            onclick="collapse()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M16.7688 14.7688C16.4605 15.0771 15.9606 15.0771 15.6523 14.7688L12 11.1165L8.34772 14.7688C8.03941 15.0771 7.53954 15.0771 7.23123 14.7688C6.92292 14.4605 6.92292 13.9606 7.23123 13.6523L11.4418 9.44176C11.7501 9.13345 12.2499 9.13345 12.5582 9.44176L16.7688 13.6523C17.0771 13.9606 17.0771 14.4605 16.7688 14.7688Z"
+                                    fill="#555555" />
+                            </svg>
+                            Thu gọn tất cả</button>
+                    </div>
+
                 </div>
                 <div class="d-flex justify-contents-center align-items-center mr-auto row-filter my-3 m-0">
                     <div class="icon-filter mr-3">
@@ -377,7 +377,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 </option>
                                                 <option value="<="
                                                     {{ request('comparison_operator') === '<=' ? 'selected' : '' }}>
-                                                    <=</option>
+                                                    <=< /option>
                                             </select>
                                             <input class="w-50 input-quantity sum-input" type="number"
                                                 oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -399,17 +399,18 @@ $index = array_search($item['label'], $numberedLabels);
                                         </div>
                                         <div class="input-group p-2 justify-content-around">
                                             <div class="start">
-                                            <label for="start">Từ ngày:</label>
-                                            <input type="date" id="start" name="trip_start"
-                                                value="{{ request()->trip_start }}" min="2018-01-01"
-                                                max="2050-12-31">
-                                        </div>
+                                                <label for="start">Từ ngày:</label>
+                                                <input type="date" id="start" name="trip_start"
+                                                    value="{{ request()->trip_start }}" min="2018-01-01"
+                                                    max="2050-12-31">
+                                            </div>
                                             <div class="end">
-                                            <label for="start">Đến ngày:</label>
-                                            <input type="date" id="end" name="trip_end"
-                                                value="{{ request()->trip_end }}" min="2018-01-01" max="2050-12-31">
+                                                <label for="start">Đến ngày:</label>
+                                                <input type="date" id="end" name="trip_end"
+                                                    value="{{ request()->trip_end }}" min="2018-01-01"
+                                                    max="2050-12-31">
+                                            </div>
                                         </div>
-                                    </div>
                                     </div>
                                     <div class="d-flex justify-contents-center align-items-baseline p-2">
                                         <button type="submit" class="btn btn-primary btn-block mr-2">Xác
@@ -528,8 +529,8 @@ $index = array_search($item['label'], $numberedLabels);
                                             <div class="icon" id="icon-total"></div>
                                         </span>
                                     </th>
-                                    <th scope="col">
-                                        <span class="d-flex justify-content-center" style="width: 135px">
+                                    <th scope="col" style="width:11%;" class="text-center">
+                                        <span class="d-flex justify-content-center">
                                             <a href="#" class="sort-link" data-sort-by="order_status"
                                                 data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                     type="submit">Trạng thái</button></a>
@@ -552,11 +553,7 @@ $index = array_search($item['label'], $numberedLabels);
                                         <td>{{ date_format(new DateTime($va->created_at), 'd-m-Y') }}</td>
                                         <td>{{ $va->name }}</td>
                                         <td class="text-right">
-                                            @if(fmod($va->total,1) > 0)
-                                            {{ number_format($va->total,1,'.',',') }}
-                                            @else
-                                            {{ number_format($va->total) }}
-                                            @endif
+                                            {{ number_format($va->total_tax) }}
                                         </td>
                                         <td class="text-center">
                                             @if ($va->order_status == 0)
@@ -627,33 +624,48 @@ $index = array_search($item['label'], $numberedLabels);
                                             </div>
                                         </td>
                                     </tr>
+                                    <?php $stt = 0; ?>
                                     @foreach ($product as $item)
-                                 @if ($va->id == $item->id)
-                                        <tr id="product-details-{{ $va->id }}"
-                                            class="product-details collapse">
-                                           
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td style="width: 300px">
-                                                    <p>Thông tin sản phẩm</p>
-                                                    {{ $item->product_name }}
+                                        @if ($va->id == $item->id)
+                                            <tr id="product-details-{{ $va->id }}"
+                                                class="product-details collapse">
+                                                <td class="text-left">{{ $stt += 1 }}</td>
+                                                <td class="text-left w-auto">
+                                                    <p>Tên sản phẩm</p>{{ $item->product_name }}
                                                 </td>
-                                                <td>
+                                                <td class="text-left">
+                                                    <p>ĐVT</p>{{ $item->product_unit }}
+                                                </td>
+                                                <td></td>
+                                                <td class="text-right">
                                                     <p>Số lượng</p>
                                                     {{ $item->product_qty }}
                                                 </td>
                                                 <td class="text-right">
-                                                    <p>Tổng tiền</p>
-                                                    {{ number_format($item->product_total)}}
+                                                    <p>Giá nhập</p>
+                                                    @if (fmod($item->product_price, 2) > 0)
+                                                        {{ number_format($item->product_price, 2, '.', ',') }}
+                                                    @else
+                                                        {{ number_format($item->product_price) }}
+                                                    @endif
+                                                </td>
+                                                <td class="text-right">
+                                                    <p>Thành tiền</p>
+                                                    {{ number_format($item->product_total) }}
+                                                </td>
+                                               
+                                                <td>
+                                                    <p>Thuế</p>
+                                                    @if ($item->product_tax == 99)
+                                                        NOVAT
+                                                    @else
+                                                        {{ $item->product_tax }}%
+                                                    @endif
                                                 </td>
                                                 <td></td>
                                                 <td></td>
-                                                <td></td>
-                                                <td></td>
-                                         
-                                        </tr>
-                                   @endif
+                                            </tr>
+                                        @endif
                                     @endforeach
                                     <?php $stt++; ?>
                                 @endforeach
@@ -1239,7 +1251,6 @@ $index = array_search($item['label'], $numberedLabels);
         for (var i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xff;
         return buf;
     }
-
 </script>
 </body>
 

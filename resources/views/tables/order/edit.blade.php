@@ -307,14 +307,14 @@
                     <thead>
                         <tr>
                             <th style="width:3%;">STT</th>
-                                    <th style="width:30%;">Tên sản phẩm</th>
-                                    <th style="width:8%;">Đơn vị tính</th>
-                                    <th style="width:8%;">Số lượng</th>
-                                    <th style="width:12%;">Giá nhập</th>
-                                    <th style="width:8%;">Thuế</th>
-                                    <th style="width:15%;">Thành tiền</th>
-                                    <th style="width:13%;">Ghi chú</th>
-                                    <th style="width:10%;"></th>
+                            <th style="width:30%;">Tên sản phẩm</th>
+                            <th style="width:8%;">Đơn vị tính</th>
+                            <th style="width:8%;">Số lượng</th>
+                            <th style="width:12%;">Giá nhập</th>
+                            <th style="width:8%;">Thuế</th>
+                            <th style="width:15%;">Thành tiền</th>
+                            <th style="width:13%;">Ghi chú</th>
+                            <th style="width:10%;"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -322,7 +322,7 @@
                             <tr>
                                 <td class="STT"></td>
                                 <input type="hidden" name="product_id[]"
-                                    value="@if($order->order_status == 1){{ $pro->product_id }}@else{{ $pro->id }}@endif">
+                                    value="@if ($order->order_status == 1) {{ $pro->product_id }}@else{{ $pro->id }} @endif">
                                 <td> <input class="form-control name_product"
                                         @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif required
                                         @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif type="text"
@@ -345,7 +345,7 @@
                                         @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif> </td>
                                 <td>
                                     <select name="product_tax[]" id="" class="form-control product_tax"
-                                        style="width:100px;" @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) disabled @endif>>
+                                        @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) disabled @endif>>
                                         <option value="0" <?php echo $pro->product_tax == 0 ? 'selected' : ''; ?>>0%</option>
                                         <option value="8" <?php echo $pro->product_tax == 8 ? 'selected' : ''; ?>>8%</option>
                                         <option value="10" <?php echo $pro->product_tax == 10 ? 'selected' : ''; ?>>10%</option>
@@ -721,7 +721,6 @@
                 }
             })
         }
-
     })
 
 
@@ -820,7 +819,7 @@
                         price + '"></td>' +
                         '<input type="hidden" class="product_tax1">' +
                         '<td>' +
-                        '<select style="width:100px;" name="product_tax[]"class="product_tax form-control" >' +
+                        '<select name="product_tax[]"class="product_tax form-control" >' +
                         '<option value="10"' + (tax == 10 ? "selected" : "") + '>10%</option>' +
                         '<option value="0" ' + (tax == 0 ? "selected" : "") + '>0%</option>' +
                         '<option value="8" ' + (tax == 8 ? "selected" : "") + '>8%</option>' +
