@@ -432,8 +432,8 @@
 
     function calculateGrandTotal(totalAmount, totalTax) {
         var grandTotal = totalAmount + totalTax;
-        $('#grand-total').text(formatCurrency(grandTotal));
-        $('.total_import').val(formatCurrency(grandTotal));
+        $('#grand-total').text(formatCurrency(Math.round(grandTotal)));
+        $('.total_import').val(formatCurrency(Math.round(grandTotal)));
     }
 
     // Hủy đơn hàng
@@ -796,7 +796,7 @@
                     var titlesValue = THHDVu[i].textContent;
                     var numberssValue = Math.floor(SLuong[i].textContent).toString();
                     var typeValue = DVTinh[i].textContent;
-                    var price = formatCurrency(Math.floor(DGia[i].textContent).toString());
+                    var price = formatCurrency(DGia[i].textContent);
                     var totalPrice = formatCurrency(numberssValue * (price.replace(/[^0-9.-]+/g, "")));
                     var tr = '<tr>' +
                         '<td class="STT"></td>' +

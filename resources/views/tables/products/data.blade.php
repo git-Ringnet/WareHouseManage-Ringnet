@@ -797,7 +797,13 @@ $index = array_search($item['label'], $numberedLabels);
                                             <td class="text-right">
                                                 {{ $value->product_trade == null ? 0 : $value->product_trade }}
                                             </td>
-                                            <td class="text-right">{{ number_format($value->product_price) }}</td>
+                                            <td class="text-right">
+                                                @if(fmod($value->product_price,2) > 0)
+                                                {{ number_format($value->product_price,2,'.',',') }}
+                                                @else
+                                                {{ number_format($value->product_price)}}
+                                                @endif
+                                            </td>
                                             <td class="text-right">{{ number_format($value->product_total) }}</td>
                                             <td class="text-center">
                                                 @if ($value->product_tax === 99 || $value->product_tax === null)

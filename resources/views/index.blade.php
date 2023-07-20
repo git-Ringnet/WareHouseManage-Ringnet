@@ -23,7 +23,7 @@
                             <div class="col">
                                 <div class="title-index">Thông tin nhập hàng</div>
                             </div>
-                            <div class="col d-flex" style="position: relative">
+                            <div class="col d-flex">
                                 <div class="dropdown w-100">
                                     <button class="btn w-100 btn-light border rounded dropdown-toggle" id="orders"
                                         style="display: flex;
@@ -111,7 +111,6 @@
                                                 <div class="ca">Khoảng thời gian</div>
                                             </div>
                                         </div>
-
                                     </button>
                                     <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
                                         <a class="dropdown-item" id="btn-all-orders" href="#"
@@ -126,32 +125,7 @@
                                             gian</a>
                                     </div>
                                 </div>
-                                {{-- Chọn khoảng --}}
-                                <div class="block-optionss" id="times-orders-options" style="display:none">
-                                    <div class="wrap w-100">
-                                        <div class="heading-title title-wrap">
-                                            <h5>Khoảng thời gian</h5>
-                                        </div>
-                                        <div class="input-group p-2 justify-content-around">
-                                            <div class="start">
-                                                <label for="start">Từ ngày:</label>
-                                                <input type="date" name="date_start" class="date_start">
-                                            </div>
-                                            <div class="end">
-                                                <label for="start">Đến ngày:</label>
-                                                <input type="date" name="date_end" class="date_end">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex justify-contents-center align-items-baseline p-2">
-                                        <button type="button" class="suscess btn btn-primary btn-block mr-2"
-                                            value="4">Xác nhận</button>
-                                        <button type="button" id="cancel-times-orders"
-                                            class="btn btn-default btn-block">Hủy</button>
-                                    </div>
-                                </div>
                             </div>
-
                         </div>
                         <div class="row px-3 pt-2 pb-5 info-index">
                             <div class="col">
@@ -226,7 +200,9 @@
                                         <div class="value" id="import_total">100đ</div>
                                     </div>
                                 </div>
-
+                                <input type="date" name="date_start" class="date_start">
+                                <input type="date" name="date_end" class="date_end">
+                                <button class="suscess" value="4">Xác nhận</button>
                             </div>
                         </div>
                     </div>
@@ -765,19 +741,10 @@
     // Khoảng time
     $("#btn-time-orders").click(function() {
         $("#time-orders").show();
-        $("#times-orders-options").show();
         $("#all-orders").hide();
         $("#this-month-orders").hide();
         $("#last-month-orders").hide();
         $("#3last-month-orders").hide();
-    });
-    $('#cancel-times-orders').click(function(event) {
-        event.preventDefault();
-        $('#times-orders-options').hide();
-    });
-    $('.suscess').click(function(event) {
-        event.preventDefault();
-        $('#times-orders-options').hide();
     });
 
     function formatCurrency(value) {
@@ -818,13 +785,14 @@
                 data: data
             },
             success: function(data) {
+                console.log(data);
                 $('#import_id').text(data.countID);
                 $('#import_total').text(formatCurrency(data.sumTotal));
             }
         })
     })
 
-
+    
     $(document).on('click', '.suscess', function() {
         var data = $(this).val();
         var date_start = $('.date_start').val();
@@ -842,6 +810,12 @@
                 $('#import_total').text(formatCurrency(data.sumTotal));
             }
         })
+    })
+
+
+    $(document).on('change','.date_start', function(e) {
+        e.preventDefault();
+        
     })
 </script>
 
