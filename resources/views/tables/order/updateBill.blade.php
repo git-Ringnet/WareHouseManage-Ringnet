@@ -419,8 +419,8 @@
 
     function calculateGrandTotal(totalAmount, totalTax) {
         var grandTotal = totalAmount + totalTax;
-        $('#grand-total').text(formatCurrency(grandTotal));
-        $('.total_import').val(formatCurrency(grandTotal));
+        $('#grand-total').text(formatCurrency(Math.round(grandTotal)));
+        $('.total_import').val(formatCurrency(Math.round(grandTotal)));
     }
 
 

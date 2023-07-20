@@ -278,7 +278,7 @@
                     totalTax += rowTax;
                 }
             });
-            $('#product-tax').text(formatCurrency(totalTax));
+            $('#product-tax').text(formatCurrency(Math.round(totalTax)));
 
             calculateGrandTotal();
         }
@@ -288,13 +288,13 @@
             var totalTax = parseFloat($('#product-tax').text().replace(/[^0-9.-]+/g, ""));
 
             var grandTotal = totalAmount + totalTax;
-            $('#grand-total').text(formatCurrency(grandTotal));
+            $('#grand-total').text(formatCurrency(Math.round(grandTotal)));
 
             // Update data-value attribute
             $('#grand-total').attr('data-value', grandTotal);
             $('#total').val(formatCurrency(grandTotal));
             $('.total_price').val(formatCurrency(totalAmount));
-            $('.total_import').val(grandTotal);
+            $('.total_import').val(Math.round(grandTotal));
         }
 
         // Xử lý duyệt đơn nhanh
@@ -316,16 +316,19 @@
             if (checkRow() == false) {
                 alert('Vui lòng nhập ít nhất 1 sản phẩm');
                 error = true;
+                return false;
             }
 
             if ($('#provide_id').val().trim() == '' && $('#radio1').prop('checked') == true) {
                 isDuplicate = true;
                 alert('Vui lòng chọn nhà cung cấp');
+                return false;
             }
 
             if ($('#product_create').val().trim() == '') {
                 alert('Vui lòng nhập ngày hóa đơn');
                 isDuplicate = true;
+                return false;
             }
             var requiredInputs = document.querySelectorAll('input[required]');
             for (var i = 0; i < requiredInputs.length; i++) {
@@ -340,7 +343,6 @@
                 return false;
             } else {
                 var provides_id = document.getElementById('form_submit');
-
                 provides_id.setAttribute('action', '{{ route('addBill') }}');
                 provides_id.submit();
             }
@@ -590,6 +592,7 @@
                     var DGia = xmlDoc.getElementsByTagName('DGia');
                     var TSuat = xmlDoc.getElementsByTagName('TSuat');
                     var Code = xmlDoc.getElementsByTagName('SHDon');
+                    var ThTien = xmlDoc.getElementsByTagName('ThTien');
                     var ngayNhapHoaDon = xmlDoc.getElementsByTagName('NLap')[0].textContent;
                     var parts = ngayNhapHoaDon.split('-');
                     var formattedDate = parts[2] + '-' + parts[1] + '-' + parts[0];
@@ -607,8 +610,8 @@
                         var titlesValue = THHDVu[i].textContent;
                         var numberssValue = Math.floor(SLuong[i].textContent).toString();
                         var typeValue = DVTinh[i].textContent;
-                        var price = formatCurrency(Math.floor(DGia[i].textContent).toString());
-                        var totalPrice = formatCurrency(numberssValue * (price.replace(/[^0-9.-]+/g, "")));
+                        var price = formatCurrency(DGia[i].textContent);
+                        var totalPrice = ThTien[i].textContent;
                         var tr = '<tr>' +
                             '<td class="STT"> </td>' +
                             '<td><input required type="text" class="search_product form-control" name="product_name[]" value="' +

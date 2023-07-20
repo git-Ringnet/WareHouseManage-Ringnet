@@ -63,7 +63,7 @@ class DebtImportController extends Controller
             $importArray = explode(',.@', $sum);
             array_push($string, ['label' => 'Tổng tiền nhập(+VAT) ' . $import_operator, 'values' => $importArray, 'class' => 'sum-import']);
         }
-       
+
         //Trạng thái
         $status = [];
         if (!empty($request->status)) {
@@ -108,11 +108,11 @@ class DebtImportController extends Controller
 
 
         $debtsSale = DebtImport::leftjoin('users', 'debt_import.user_id', '=', 'users.id')->get();
-        $debts = $this->debts->getAllDebts($filters, $keywords, $nhanvien, $date,$provide_namearr, $status, $sortBy, $sortType);
+        $debts = $this->debts->getAllDebts($filters, $keywords, $nhanvien, $date, $provide_namearr, $status, $sortBy, $sortType);
         $product = $this->debts->getAllProductsDebts();
         $debtsCreator = $this->debts->debtsCreator();
         // dd($debts);
-        return view('tables.debtImport.debts-import', compact('title', 'debts','provides', 'debtsSale', 'product', 'string', 'sortType', 'debtsCreator'));
+        return view('tables.debtImport.debts-import', compact('title', 'debts', 'provides', 'debtsSale', 'product', 'string', 'sortType', 'debtsCreator'));
     }
 
     /**
@@ -155,7 +155,7 @@ class DebtImportController extends Controller
      */
     public function edit($id)
     {
-        $debts = DebtImport::select('debt_import.*',  'productorders.product_tax as thue','orders.product_code as madon', 'provides.provide_name as nhacungcap', 'users.name as nhanvien', 'productorders.product_qty as soluong', 'productorders.product_price as gianhap')
+        $debts = DebtImport::select('debt_import.*',  'productorders.product_tax as thue', 'orders.product_code as madon', 'provides.provide_name as nhacungcap', 'users.name as nhanvien', 'productorders.product_qty as soluong', 'productorders.product_price as gianhap')
             ->leftJoin('provides', 'provides.id', 'debt_import.provide_id')
             ->leftJoin('users', 'users.id', 'debt_import.user_id')
             ->leftJoin('orders', 'orders.id', 'debt_import.import_id')
@@ -251,16 +251,16 @@ class DebtImportController extends Controller
         if (isset($request->list_id)) {
             $list = $request->list_id;
             $listOrder = DebtImport::whereIn('id', $list)->get();
-            $history = History::leftJoin('debt_import', 'history.import_id', 'debt_import.import_id')
-                ->whereIn('debt_import.id', $list)->get();
-            foreach ($history as $value) {
-                $value->import_status = 1;
-                $value->save();
-            };
-            foreach ($listOrder as $value) {
-                $value->debt_status = 1;
-                $value->save();
+            $id_check = [];
+            foreach ($listOrder as $listorder) {
+                $listorder->debt_status = 1;
+                $listorder->save();
+                array_push($id_check, $listorder->id);
             }
+            $update = History::whereIn('import_id', $id_check)->update([
+                'import_status' => 1,
+                'debt_export_start' => Carbon::now(),
+            ]);
             session()->flash('msg', 'Thanh toán thành công');
             return response()->json(['success' => true, 'msg' => 'Thanh toán thành công']);
         }

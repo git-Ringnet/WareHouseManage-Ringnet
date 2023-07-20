@@ -584,7 +584,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('product_qty_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity product_qty-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -614,7 +614,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('export_qty_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity export_qty-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -693,7 +693,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('price_import_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity price_import-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -723,7 +723,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('import_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity import-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -753,7 +753,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('sale_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity sale-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -783,7 +783,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('total_sale_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity total-sale-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -813,7 +813,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('total_difference_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity total_difference-input"
                                                     type="text"
@@ -844,7 +844,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('tranport_fee_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity tranport_fee-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -900,21 +900,21 @@ $index = array_search($item['label'], $numberedLabels);
                                                 </ul>
                                             </div>
 
-                                                <div class="d-flex justify-contents-center align-items-baseline p-2">
-                                                    <button type="submit" class="btn btn-primary btn-block mr-2">Xác
-                                                        Nhận</button>
-                                                    <button type="button" id="cancel-unit"
-                                                        class="btn btn-default btn-block">Hủy</button>
-                                                </div>
+                                            <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                                <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                                    Nhận</button>
+                                                <button type="button" id="cancel-unit"
+                                                    class="btn btn-default btn-block">Hủy</button>
                                             </div>
                                         </div>
-                                        {{-- Thời gian --}}
-                                        <div class="block-options" id="update_at-options" style="display:none">
-                                            <div class="wrap w-100">
-                                                <div class="heading-title title-wrap">
-                                                    <h5>Thời gian</h5>
-                                                </div>
-                                                <div class="input-group p-2 justify-content-around">
+                                    </div>
+                                    {{-- Thời gian --}}
+                                    <div class="block-options" id="update_at-options" style="display:none">
+                                        <div class="wrap w-100">
+                                            <div class="heading-title title-wrap">
+                                                <h5>Thời gian</h5>
+                                            </div>
+                                            <div class="input-group p-2 justify-content-around">
                                                 <div class="start">
                                                     <label for="start">Từ ngày:</label>
                                                     <input type="date" id="start" name="trip_start"
@@ -928,19 +928,19 @@ $index = array_search($item['label'], $numberedLabels);
                                                         max="2050-12-31">
                                                 </div>
                                             </div>
-                                            </div>
-                                            <div class="d-flex justify-contents-center align-items-baseline p-2">
-                                                <button type="submit" class="btn btn-primary btn-block mr-2">Xác
-                                                    Nhận</button>
-                                                <button type="button" id="cancel-update_at"
-                                                    class="btn btn-default btn-block">Hủy</button>
-                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                            <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                                Nhận</button>
+                                            <button type="button" id="cancel-update_at"
+                                                class="btn btn-default btn-block">Hủy</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
                         </div>
+
+                    </div>
 
     </section>
     <!-- Main content -->
@@ -1183,10 +1183,10 @@ $index = array_search($item['label'], $numberedLabels);
                                             <td>{{ $item->name }}</td>
                                             <td>{{ date_format(new DateTime($item->date_time), 'd-m-Y') }}</td>
                                             <td>{{ $item->provide_name }}</td>
-                                            <td>@if($item->getProduct != null) {{ $item->getProduct->product_name }} @endif</td>
+                                            <td>{{ $item->product_name }}</td>
                                             <td>{{ $item->product_qty }}</td>
-                                            <td>@if($item->getProduct != null) {{ number_format($item->getProduct->product_price) }} @endif</td>
-                                            <td>@if($item->getProduct != null) {{ number_format($item->getProduct->product_total) }} @endif</td>
+                                            <td>{{ number_format($item->price_import) }}</td>
+                                            <td> {{ number_format($item->product_total) }}</td>
                                             <td>{{ $item->import_code }}</td>
                                             <td class="text-left" style="width: 125px">
                                                 @if ($item->debt_import != 0 && $item->import_status != 1)
