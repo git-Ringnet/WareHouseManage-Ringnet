@@ -124,7 +124,7 @@ class ReportController extends Controller
         $orders = $this->orders->allNhaphang();
         $orders = count($orders);
         //Tổng tiền đơn nhập + vat
-        $totalSum = ProductOrders::select(DB::raw('SUM((productorders.product_price * productorders.product_qty) + ((productorders.product_price * productorders.product_qty * productorders.product_tax)/100)) as total_sum'))
+        $totalSum = ProductOrders::select(DB::raw('SUM(orders.total_tax) as total_sum'))
             ->leftJoin('orders', 'orders.id', 'productorders.order_id')
             ->where('orders.order_status', 1)
             ->limit(1)

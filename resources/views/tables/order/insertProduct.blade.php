@@ -1167,9 +1167,6 @@ $index = array_search($item['label'], $numberedLabels);
             }
         });
     }
-    $(document).on('keypress', 'form', function(event) {
-        return event.keyCode != 13;
-    });
 
 
     $(document).on('click', '#exportExcelOrder', function(e) {
