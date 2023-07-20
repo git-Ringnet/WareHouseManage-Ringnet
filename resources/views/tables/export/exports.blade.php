@@ -171,7 +171,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <span class="search-icon"><i class="fas fa-search"></i></span>
                                             </div>
                                             <button class="dropdown-item" id="btn-id">Số hóa đơn</button>
-                                            <button class="dropdown-item" id="btn-id">ID</button>
+                                            {{-- <button class="dropdown-item" id="btn-id">ID</button> --}}
                                             <button class="dropdown-item" id="btn-guest">Khách hàng</button>
                                             <button class="dropdown-item" id="btn-update_at">Ngày tạo</button>
                                             @if (Auth::user()->can('isAdmin'))
@@ -222,7 +222,6 @@ $index = array_search($item['label'], $numberedLabels);
                                         <div class="wrap w-100">
                                             <div class="heading-title title-wrap">
                                                 <h5>Số hóa đơn</h5>
-                                                <h5>ID</h5>
                                             </div>
                                             <div class="input-group p-2">
                                                 <label class="title" for="">Chứa kí tự</label>
@@ -515,7 +514,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <div class="icon" id="icon-export_code"></div>
                                             </span>
                                         </th>
-                                        <th scope="col">
+                                        <th scope="col" style="width: 300px">
                                             <span class="d-flex">
                                                 <a href="#" class="sort-link" data-sort-by="guest_receiver"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"

@@ -255,11 +255,11 @@ class DebtImportController extends Controller
             foreach ($listOrder as $listorder) {
                 $listorder->debt_status = 1;
                 $listorder->save();
-                array_push($id_check, $listorder->id);
+                array_push($id_check, $listorder->import_id);
             }
             $update = History::whereIn('import_id', $id_check)->update([
                 'import_status' => 1,
-                'debt_export_start' => Carbon::now(),
+                'debt_import_start' => Carbon::now(),
             ]);
             session()->flash('msg', 'Thanh toán thành công');
             return response()->json(['success' => true, 'msg' => 'Thanh toán thành công']);

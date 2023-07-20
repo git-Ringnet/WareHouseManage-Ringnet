@@ -387,7 +387,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             <td><input type="checkbox" class="cb-element" name="ids[]"
                                                     value="{{ $item->id }}"></td>
                                             <td>{{ $item->id }}</td>
-                                            <td>{{ $item->provide_name }}</td>
+                                            <td style="width: 300px">{{ $item->provide_name }}</td>
                                             <td>{{ $item->provide_represent }}</td>
                                             <td>{{ $item->provide_phone }}</td>
                                             <td>{{ $item->provide_email }}</td>

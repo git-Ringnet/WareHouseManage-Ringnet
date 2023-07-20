@@ -75,7 +75,8 @@
                                         <div id="time-orders" style="display: none">
                                             <div class="d-flex flex-column all-orders">
                                                 <div class="ca d-flex">
-                                                    <div class="start_order"></div>->
+                                                    <div class="start_order"></div>
+                                                    <div class="muitenorder"></div>
                                                     <div class="end_order"></div>
                                                 </div>
                                                 <div class="ca text-left">Khoảng thời gian</div>
@@ -84,15 +85,16 @@
 
                                     </button>
                                     <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" id="btn-all-orders" href="#"
+                                        <a class="dropdown-item dropdown-item-orders" id="btn-all-orders" href="#"
                                             data-value="0">Tất cả</a>
-                                        <a class="dropdown-item" id="btn-this-month-orders" href="#"
-                                            data-value="1">Tháng này</a>
-                                        <a class="dropdown-item" id="btn-last-month-orders" href="#"
-                                            data-value="2">Tháng trước</a>
-                                        <a class="dropdown-item" id="btn-3last-month-orders" href="#"
-                                            data-value="3">3 tháng trước</a>
-                                        <a class="dropdown-item" id="btn-time-orders" href="#">Khoảng thời
+                                        <a class="dropdown-item dropdown-item-orders" id="btn-this-month-orders"
+                                            href="#" data-value="1">Tháng này</a>
+                                        <a class="dropdown-item dropdown-item-orders" id="btn-last-month-orders"
+                                            href="#" data-value="2">Tháng trước</a>
+                                        <a class="dropdown-item dropdown-item-orders" id="btn-3last-month-orders"
+                                            href="#" data-value="3">3 tháng trước</a>
+                                        <a class="dropdown-item dropdown-item-orders" id="btn-time-orders"
+                                            href="#">Khoảng thời
                                             gian</a>
                                     </div>
                                 </div>
@@ -208,56 +210,105 @@
                             <div class="col">
                                 <div class="title-index">Thông tin xuất hàng</div>
                             </div>
-                            <div class="col d-flex">
+                            <div class="col d-flex" style="position: relative">
                                 <div class="dropdown w-100">
-                                    <button class="btn w-100 btn-light border rounded dropdown-toggle"
+                                    <button class="btn w-100 btn-light border rounded dropdown-toggle" id="orders"
                                         style="display: flex;
                                         justify-content: space-between;
                                         align-items: center;"
                                         type="button" id="dropdownMenuButton" data-toggle="dropdown"
                                         aria-haspopup="true" aria-expanded="false">
-                                        <svg width="35" height="35" viewBox="0 0 35 35" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M21.4838 5.83398C21.9552 5.83398 22.3374 6.21618 22.3374 6.68764V11.2405C22.3374 11.712 21.9552 12.0941 21.4838 12.0941C21.0123 12.0941 20.6301 11.712 20.6301 11.2405V6.68764C20.6301 6.21618 21.0123 5.83398 21.4838 5.83398Z"
-                                                fill="#555555" />
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M12.3781 5.83398C12.8495 5.83398 13.2317 6.21618 13.2317 6.68764V11.2405C13.2317 11.712 12.8495 12.0941 12.3781 12.0941C11.9066 12.0941 11.5244 11.712 11.5244 11.2405V6.68764C11.5244 6.21618 11.9066 5.83398 12.3781 5.83398Z"
-                                                fill="#555555" />
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M5.83337 14.6544C5.83337 14.183 6.21557 13.8008 6.68703 13.8008H27.1748C27.6463 13.8008 28.0285 14.183 28.0285 14.6544C28.0285 15.1259 27.6463 15.5081 27.1748 15.5081H6.68703C6.21557 15.5081 5.83337 15.1259 5.83337 14.6544Z"
-                                                fill="#555555" />
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M6.75015 9.02811C7.33716 8.4411 8.13331 8.11133 8.96346 8.11133H24.8984C25.7286 8.11133 26.5247 8.4411 27.1117 9.02811C27.6987 9.61511 28.0285 10.4113 28.0285 11.2414V26.0382C28.0285 26.8683 27.6987 27.6645 27.1117 28.2515C26.5247 28.8385 25.7286 29.1682 24.8984 29.1682H8.96346C8.13331 29.1682 7.33716 28.8385 6.75015 28.2515C6.16315 27.6645 5.83337 26.8683 5.83337 26.0382V11.2414C5.83337 10.4113 6.16315 9.61511 6.75015 9.02811ZM8.96346 9.81865C8.58611 9.81865 8.22423 9.96854 7.95741 10.2354C7.69059 10.5022 7.54069 10.8641 7.54069 11.2414V26.0382C7.54069 26.4155 7.69059 26.7774 7.95741 27.0442C8.22423 27.311 8.58612 27.4609 8.96346 27.4609H24.8984C25.2758 27.4609 25.6376 27.311 25.9045 27.0442C26.1713 26.7774 26.3212 26.4155 26.3212 26.0382V11.2414C26.3212 10.8641 26.1713 10.5022 25.9045 10.2354C25.6376 9.96854 25.2758 9.81865 24.8984 9.81865H8.96346Z"
-                                                fill="#555555" />
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M22.6334 18.0449C22.7833 18.0443 22.9318 18.0733 23.0704 18.1303C23.209 18.1872 23.335 18.2709 23.4412 18.3767C23.5474 18.4824 23.6316 18.6081 23.6891 18.7465C23.7466 18.8849 23.7762 19.0333 23.7762 19.1831C23.7762 19.4081 23.7095 19.6279 23.5847 19.815C23.4598 20.0021 23.2823 20.148 23.0746 20.2343C22.8669 20.3205 22.6383 20.3434 22.4176 20.2998C22.1969 20.2563 21.9941 20.1483 21.8347 19.9896C21.6754 19.8308 21.5666 19.6285 21.5222 19.408C21.4778 19.1875 21.4996 18.9588 21.5851 18.7507C21.6705 18.5427 21.8157 18.3646 22.0023 18.239C22.1889 18.1133 22.4085 18.0458 22.6334 18.0449Z"
-                                                fill="#555555" />
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M16.9264 18.0703C17.0762 18.0697 17.2247 18.0987 17.3634 18.1557C17.502 18.2126 17.628 18.2963 17.7342 18.4021C17.8403 18.5078 17.9246 18.6335 17.9821 18.7719C18.0396 18.9103 18.0691 19.0587 18.0691 19.2085C18.0691 19.4335 18.0025 19.6533 17.8776 19.8404C17.7528 20.0275 17.5753 20.1734 17.3676 20.2597C17.1598 20.3459 16.9312 20.3687 16.7106 20.3252C16.4899 20.2816 16.2871 20.1737 16.1277 20.015C15.9683 19.8562 15.8596 19.6538 15.8152 19.4334C15.7707 19.2129 15.7926 18.9842 15.8781 18.7761C15.9635 18.568 16.1087 18.39 16.2953 18.2644C16.4819 18.1387 16.7015 18.0712 16.9264 18.0703Z"
-                                                fill="#555555" />
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M16.9264 22.6231C17.0762 22.6225 17.2247 22.6515 17.3634 22.7084C17.502 22.7653 17.628 22.8491 17.7342 22.9548C17.8403 23.0606 17.9246 23.1863 17.9821 23.3246C18.0396 23.463 18.0691 23.6114 18.0691 23.7613C18.0691 23.9862 18.0025 24.2061 17.8776 24.3931C17.7528 24.5802 17.5753 24.7261 17.3676 24.8124C17.1598 24.8987 16.9312 24.9215 16.7106 24.8779C16.4899 24.8344 16.2871 24.7264 16.1277 24.5677C15.9683 24.409 15.8596 24.2066 15.8152 23.9861C15.7707 23.7656 15.7926 23.5369 15.8781 23.3288C15.9635 23.1208 16.1087 22.9427 16.2953 22.8171C16.4819 22.6915 16.7015 22.624 16.9264 22.6231Z"
-                                                fill="#555555" />
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M11.2353 18.0703C11.3852 18.0697 11.5337 18.0987 11.6723 18.1557C11.8109 18.2126 11.9369 18.2963 12.0431 18.4021C12.1493 18.5078 12.2336 18.6335 12.291 18.7719C12.3485 18.9103 12.3781 19.0587 12.3781 19.2085C12.3781 19.4335 12.3115 19.6533 12.1866 19.8404C12.0617 20.0275 11.8842 20.1734 11.6765 20.2597C11.4688 20.3459 11.2402 20.3687 11.0195 20.3252C10.7988 20.2816 10.596 20.1737 10.4367 20.015C10.2773 19.8562 10.1685 19.6538 10.1241 19.4334C10.0797 19.2129 10.1016 18.9842 10.187 18.7761C10.2725 18.568 10.4177 18.39 10.6042 18.2644C10.7908 18.1387 11.0104 18.0712 11.2353 18.0703Z"
-                                                fill="#555555" />
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M11.2353 22.6231C11.3852 22.6225 11.5337 22.6515 11.6723 22.7084C11.8109 22.7653 11.9369 22.8491 12.0431 22.9548C12.1493 23.0606 12.2336 23.1863 12.291 23.3246C12.3485 23.463 12.3781 23.6114 12.3781 23.7613C12.3781 23.9862 12.3115 24.2061 12.1866 24.3931C12.0617 24.5802 11.8842 24.7261 11.6765 24.8124C11.4688 24.8987 11.2402 24.9215 11.0195 24.8779C10.7988 24.8344 10.596 24.7264 10.4367 24.5677C10.2773 24.409 10.1685 24.2066 10.1241 23.9861C10.0797 23.7656 10.1016 23.5369 10.187 23.3288C10.2725 23.1208 10.4177 22.9427 10.6042 22.8171C10.7908 22.6915 11.0104 22.624 11.2353 22.6231Z"
-                                                fill="#555555" />
-                                        </svg>
-                                        <div class="d-flex flex-column">
-                                            <div class="ca d-flex">
-                                                <div class="start">ab</div>
-                                                <div class="end">das</div>
+                                        {{-- All Export --}}
+                                        <div id="all-exports">
+                                            <div class="d-flex flex-column all-exports">
+                                                <div class="ca d-flex">
+                                                    <div class="start"></div>
+                                                    <div class="end"></div>
+                                                </div>
+                                                <div class="ca">Tất cả</div>
                                             </div>
-                                            <div class="ca">dasd</div>
                                         </div>
+                                        {{-- Tháng này Export --}}
+                                        <div id="this-month-exports" style="display: none">
+                                            <div class="d-flex flex-column all-exports">
+                                                <div class="ca d-flex">
+                                                    <div class="start"></div>
+                                                    <div class="end"></div>
+                                                </div>
+                                                <div class="ca">Tháng này</div>
+                                            </div>
+                                        </div>
+                                        {{-- Tháng trước đây Export --}}
+                                        <div id="last-month-exports" style="display: none">
+                                            <div class="d-flex flex-column all-exports">
+                                                <div class="ca d-flex">
+                                                    <div class="start"></div>
+                                                    <div class="end"></div>
+                                                </div>
+                                                <div class="ca">Tháng trước</div>
+                                            </div>
+                                        </div>
+                                        {{-- 3 Tháng trước đây Export --}}
+                                        <div id="3last-month-exports" style="display: none">
+                                            <div class="d-flex flex-column all-exports">
+                                                <div class="ca d-flex">
+                                                    <div class="start"></div>
+                                                    <div class="end"></div>
+                                                </div>
+                                                <div class="ca">3 tháng trước</div>
+                                            </div>
+                                        </div>
+                                        {{-- Khoảng thời gian Export --}}
+                                        <div id="time-exports" style="display: none">
+                                            <div class="d-flex flex-column all-exports">
+                                                <div class="ca d-flex">
+                                                    <div class="start_exports"></div>
+                                                    <div class="muiten"></div>
+                                                    <div class="end_exports"></div>
+                                                </div>
+                                                <div class="ca text-left">Khoảng thời gian</div>
+                                            </div>
+                                        </div>
+
                                     </button>
-                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" href="#">Action</a>
-                                        <a class="dropdown-item" href="#">Another action</a>
-                                        <a class="dropdown-item" href="#">Something else here</a>
+                                    <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item dropdown-item-export " id="btn-all-exports"
+                                            href="#" data-value="0">Tất cả</a>
+                                        <a class="dropdown-item dropdown-item-export" id="btn-this-month-exports"
+                                            href="#" data-value="1">Tháng này</a>
+                                        <a class="dropdown-item dropdown-item-export" id="btn-last-month-exports"
+                                            href="#" data-value="2">Tháng trước</a>
+                                        <a class="dropdown-item dropdown-item-export" id="btn-3last-month-exports"
+                                            href="#" data-value="3">3 tháng trước</a>
+                                        <a class="dropdown-item dropdown-item-export" id="btn-time-exports"
+                                            href="#">Khoảng thời
+                                            gian</a>
+                                    </div>
+                                </div>
+                                {{-- Chọn khoảng --}}
+                                <div class="block-optionss" id="times-exports-options" style="display:none">
+                                    <div class="wrap w-100">
+                                        <div class="heading-title title-wrap">
+                                            <h5>Khoảng thời gian</h5>
+                                        </div>
+                                        <div class="input-group p-2 justify-content-around">
+                                            <div class="start">
+                                                <label for="start">Từ ngày:</label>
+                                                <input type="date" name="date_start"
+                                                    class="date_start_export rounded">
+                                            </div>
+                                            <div class="end">
+                                                <label for="start">Đến ngày:</label>
+                                                <input type="date" name="date_end"
+                                                    class="date_end_export rounded">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                        <button type="button" class="success btn btn-primary btn-block mr-2"
+                                            value="4">Xác nhận</button>
+                                        <button type="button" id="cancel-times-exports"
+                                            class="btn btn-default btn-block">Hủy</button>
                                     </div>
                                 </div>
                             </div>
@@ -314,7 +365,7 @@
                                     </div>
                                     <div class="pl-2">
                                         <h5>Tổng đơn xuất</h5>
-                                        <div class="value">100</div>
+                                        <div class="value" id="export_id"></div>
                                     </div>
                                 </div>
                             </div>
@@ -333,7 +384,7 @@
                                     </div>
                                     <div class="pl-2">
                                         <h5>Tổng tiền xuất</h5>
-                                        <div class="value">100đ</div>
+                                        <div class="value" id="export_total"></div>
                                     </div>
                                 </div>
                             </div>
@@ -350,56 +401,107 @@
                             <div class="col">
                                 <div class="title-index">Thông tin tồn kho</div>
                             </div>
-                            <div class="col d-flex">
+                            <div class="col d-flex" style="position: relative">
                                 <div class="dropdown w-100">
-                                    <button class="btn w-100 btn-light border rounded dropdown-toggle"
+                                    <button class="btn w-100 btn-light border rounded dropdown-toggle" id="orders"
                                         style="display: flex;
                                         justify-content: space-between;
                                         align-items: center;"
                                         type="button" id="dropdownMenuButton" data-toggle="dropdown"
                                         aria-haspopup="true" aria-expanded="false">
-                                        <svg width="35" height="35" viewBox="0 0 35 35" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M21.4838 5.83398C21.9552 5.83398 22.3374 6.21618 22.3374 6.68764V11.2405C22.3374 11.712 21.9552 12.0941 21.4838 12.0941C21.0123 12.0941 20.6301 11.712 20.6301 11.2405V6.68764C20.6301 6.21618 21.0123 5.83398 21.4838 5.83398Z"
-                                                fill="#555555" />
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M12.3781 5.83398C12.8495 5.83398 13.2317 6.21618 13.2317 6.68764V11.2405C13.2317 11.712 12.8495 12.0941 12.3781 12.0941C11.9066 12.0941 11.5244 11.712 11.5244 11.2405V6.68764C11.5244 6.21618 11.9066 5.83398 12.3781 5.83398Z"
-                                                fill="#555555" />
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M5.83337 14.6544C5.83337 14.183 6.21557 13.8008 6.68703 13.8008H27.1748C27.6463 13.8008 28.0285 14.183 28.0285 14.6544C28.0285 15.1259 27.6463 15.5081 27.1748 15.5081H6.68703C6.21557 15.5081 5.83337 15.1259 5.83337 14.6544Z"
-                                                fill="#555555" />
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M6.75015 9.02811C7.33716 8.4411 8.13331 8.11133 8.96346 8.11133H24.8984C25.7286 8.11133 26.5247 8.4411 27.1117 9.02811C27.6987 9.61511 28.0285 10.4113 28.0285 11.2414V26.0382C28.0285 26.8683 27.6987 27.6645 27.1117 28.2515C26.5247 28.8385 25.7286 29.1682 24.8984 29.1682H8.96346C8.13331 29.1682 7.33716 28.8385 6.75015 28.2515C6.16315 27.6645 5.83337 26.8683 5.83337 26.0382V11.2414C5.83337 10.4113 6.16315 9.61511 6.75015 9.02811ZM8.96346 9.81865C8.58611 9.81865 8.22423 9.96854 7.95741 10.2354C7.69059 10.5022 7.54069 10.8641 7.54069 11.2414V26.0382C7.54069 26.4155 7.69059 26.7774 7.95741 27.0442C8.22423 27.311 8.58612 27.4609 8.96346 27.4609H24.8984C25.2758 27.4609 25.6376 27.311 25.9045 27.0442C26.1713 26.7774 26.3212 26.4155 26.3212 26.0382V11.2414C26.3212 10.8641 26.1713 10.5022 25.9045 10.2354C25.6376 9.96854 25.2758 9.81865 24.8984 9.81865H8.96346Z"
-                                                fill="#555555" />
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M22.6334 18.0449C22.7833 18.0443 22.9318 18.0733 23.0704 18.1303C23.209 18.1872 23.335 18.2709 23.4412 18.3767C23.5474 18.4824 23.6316 18.6081 23.6891 18.7465C23.7466 18.8849 23.7762 19.0333 23.7762 19.1831C23.7762 19.4081 23.7095 19.6279 23.5847 19.815C23.4598 20.0021 23.2823 20.148 23.0746 20.2343C22.8669 20.3205 22.6383 20.3434 22.4176 20.2998C22.1969 20.2563 21.9941 20.1483 21.8347 19.9896C21.6754 19.8308 21.5666 19.6285 21.5222 19.408C21.4778 19.1875 21.4996 18.9588 21.5851 18.7507C21.6705 18.5427 21.8157 18.3646 22.0023 18.239C22.1889 18.1133 22.4085 18.0458 22.6334 18.0449Z"
-                                                fill="#555555" />
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M16.9264 18.0703C17.0762 18.0697 17.2247 18.0987 17.3634 18.1557C17.502 18.2126 17.628 18.2963 17.7342 18.4021C17.8403 18.5078 17.9246 18.6335 17.9821 18.7719C18.0396 18.9103 18.0691 19.0587 18.0691 19.2085C18.0691 19.4335 18.0025 19.6533 17.8776 19.8404C17.7528 20.0275 17.5753 20.1734 17.3676 20.2597C17.1598 20.3459 16.9312 20.3687 16.7106 20.3252C16.4899 20.2816 16.2871 20.1737 16.1277 20.015C15.9683 19.8562 15.8596 19.6538 15.8152 19.4334C15.7707 19.2129 15.7926 18.9842 15.8781 18.7761C15.9635 18.568 16.1087 18.39 16.2953 18.2644C16.4819 18.1387 16.7015 18.0712 16.9264 18.0703Z"
-                                                fill="#555555" />
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M16.9264 22.6231C17.0762 22.6225 17.2247 22.6515 17.3634 22.7084C17.502 22.7653 17.628 22.8491 17.7342 22.9548C17.8403 23.0606 17.9246 23.1863 17.9821 23.3246C18.0396 23.463 18.0691 23.6114 18.0691 23.7613C18.0691 23.9862 18.0025 24.2061 17.8776 24.3931C17.7528 24.5802 17.5753 24.7261 17.3676 24.8124C17.1598 24.8987 16.9312 24.9215 16.7106 24.8779C16.4899 24.8344 16.2871 24.7264 16.1277 24.5677C15.9683 24.409 15.8596 24.2066 15.8152 23.9861C15.7707 23.7656 15.7926 23.5369 15.8781 23.3288C15.9635 23.1208 16.1087 22.9427 16.2953 22.8171C16.4819 22.6915 16.7015 22.624 16.9264 22.6231Z"
-                                                fill="#555555" />
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M11.2353 18.0703C11.3852 18.0697 11.5337 18.0987 11.6723 18.1557C11.8109 18.2126 11.9369 18.2963 12.0431 18.4021C12.1493 18.5078 12.2336 18.6335 12.291 18.7719C12.3485 18.9103 12.3781 19.0587 12.3781 19.2085C12.3781 19.4335 12.3115 19.6533 12.1866 19.8404C12.0617 20.0275 11.8842 20.1734 11.6765 20.2597C11.4688 20.3459 11.2402 20.3687 11.0195 20.3252C10.7988 20.2816 10.596 20.1737 10.4367 20.015C10.2773 19.8562 10.1685 19.6538 10.1241 19.4334C10.0797 19.2129 10.1016 18.9842 10.187 18.7761C10.2725 18.568 10.4177 18.39 10.6042 18.2644C10.7908 18.1387 11.0104 18.0712 11.2353 18.0703Z"
-                                                fill="#555555" />
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M11.2353 22.6231C11.3852 22.6225 11.5337 22.6515 11.6723 22.7084C11.8109 22.7653 11.9369 22.8491 12.0431 22.9548C12.1493 23.0606 12.2336 23.1863 12.291 23.3246C12.3485 23.463 12.3781 23.6114 12.3781 23.7613C12.3781 23.9862 12.3115 24.2061 12.1866 24.3931C12.0617 24.5802 11.8842 24.7261 11.6765 24.8124C11.4688 24.8987 11.2402 24.9215 11.0195 24.8779C10.7988 24.8344 10.596 24.7264 10.4367 24.5677C10.2773 24.409 10.1685 24.2066 10.1241 23.9861C10.0797 23.7656 10.1016 23.5369 10.187 23.3288C10.2725 23.1208 10.4177 22.9427 10.6042 22.8171C10.7908 22.6915 11.0104 22.624 11.2353 22.6231Z"
-                                                fill="#555555" />
-                                        </svg>
-                                        <div class="d-flex flex-column">
-                                            <div class="ca d-flex">
-                                                <div class="start">ab</div>
-                                                <div class="end">das</div>
+                                        {{-- All inventory --}}
+                                        <div id="all-inventory">
+                                            <div class="d-flex flex-column all-inventory">
+                                                <div class="ca d-flex">
+                                                    <div class="start"></div>
+                                                    <div class="end"></div>
+                                                </div>
+                                                <div class="ca">Tất cả</div>
                                             </div>
-                                            <div class="ca">dasd</div>
                                         </div>
+                                        {{-- Tháng này inventory --}}
+                                        <div id="this-month-inventory" style="display: none">
+                                            <div class="d-flex flex-column all-inventory">
+                                                <div class="ca d-flex">
+                                                    <div class="start"></div>
+                                                    <div class="end"></div>
+                                                </div>
+                                                <div class="ca">Tháng này</div>
+                                            </div>
+                                        </div>
+                                        {{-- Tháng trước đây inventory --}}
+                                        <div id="last-month-inventory" style="display: none">
+                                            <div class="d-flex flex-column all-inventory">
+                                                <div class="ca d-flex">
+                                                    <div class="start"></div>
+                                                    <div class="end"></div>
+                                                </div>
+                                                <div class="ca">Tháng trước</div>
+                                            </div>
+                                        </div>
+                                        {{-- 3 Tháng trước đây inventory --}}
+                                        <div id="3last-month-inventory" style="display: none">
+                                            <div class="d-flex flex-column all-inventory">
+                                                <div class="ca d-flex">
+                                                    <div class="start"></div>
+                                                    <div class="end"></div>
+                                                </div>
+                                                <div class="ca">3 tháng trước</div>
+                                            </div>
+                                        </div>
+                                        {{-- Khoảng thời gian inventory --}}
+                                        <div id="time-inventory" style="display: none">
+                                            <div class="d-flex flex-column all-inventory">
+                                                <div class="ca d-flex">
+                                                    <div class="start_inventory"></div>
+                                                    <div class="muiten"></div>
+                                                    <div class="end_inventory"></div>
+                                                </div>
+                                                <div class="ca text-left">Khoảng thời gian</div>
+                                            </div>
+                                        </div>
+
                                     </button>
-                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" href="#">Action</a>
-                                        <a class="dropdown-item" href="#">Another action</a>
-                                        <a class="dropdown-item" href="#">Something else here</a>
+                                    <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item dropdown-item-inventory " id="btn-all-inventory"
+                                            href="#" data-value="0">Tất cả</a>
+                                        <a class="dropdown-item dropdown-item-inventory" id="btn-this-month-inventory"
+                                            href="#" data-value="1">Tháng này</a>
+                                        <a class="dropdown-item dropdown-item-inventory" id="btn-last-month-inventory"
+                                            href="#" data-value="2">Tháng trước</a>
+                                        <a class="dropdown-item dropdown-item-inventory"
+                                            id="btn-3last-month-inventory" href="#" data-value="3">3 tháng
+                                            trước</a>
+                                        <a class="dropdown-item dropdown-item-inventory" id="btn-time-inventory"
+                                            href="#">Khoảng thời
+                                            gian</a>
+                                    </div>
+                                </div>
+                                {{-- Chọn khoảng --}}
+                                <div class="block-optionss" id="times-inventory-options" style="display:none">
+                                    <div class="wrap w-100">
+                                        <div class="heading-title title-wrap">
+                                            <h5>Khoảng thời gian</h5>
+                                        </div>
+                                        <div class="input-group p-2 justify-content-around">
+                                            <div class="start">
+                                                <label for="start">Từ ngày:</label>
+                                                <input type="date" name="date_start"
+                                                    class="date_start_inventory rounded">
+                                            </div>
+                                            <div class="end">
+                                                <label for="start">Đến ngày:</label>
+                                                <input type="date" name="date_end"
+                                                    class="date_end_inventory rounded">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                        <button type="button"
+                                            class="success-inventory btn btn-primary btn-block mr-2"
+                                            value="4">Xác nhận</button>
+                                        <button type="button" id="cancel-times-inventory"
+                                            class="btn btn-default btn-block">Hủy</button>
                                     </div>
                                 </div>
                             </div>
@@ -424,7 +526,7 @@
                                     </div>
                                     <div class="pl-2">
                                         <h5>Sản phẩm tồn kho</h5>
-                                        <div class="value">100</div>
+                                        <div class="value" id="inventory_id"></div>
                                     </div>
                                 </div>
                             </div>
@@ -443,7 +545,7 @@
                                     </div>
                                     <div class="pl-2">
                                         <h5>Tổng tiền tồn kho</h5>
-                                        <div class="value">100đ</div>
+                                        <div class="value" id="inventory_total"></div>
                                     </div>
                                 </div>
                             </div>
@@ -457,56 +559,105 @@
                             <div class="col">
                                 <div class="title-index">Thông tin công nợ</div>
                             </div>
-                            <div class="col d-flex">
+                            <div class="col d-flex" style="position: relative">
                                 <div class="dropdown w-100">
-                                    <button class="btn w-100 btn-light border rounded dropdown-toggle"
+                                    <button class="btn w-100 btn-light border rounded dropdown-toggle" id="orders"
                                         style="display: flex;
                                         justify-content: space-between;
                                         align-items: center;"
                                         type="button" id="dropdownMenuButton" data-toggle="dropdown"
                                         aria-haspopup="true" aria-expanded="false">
-                                        <svg width="35" height="35" viewBox="0 0 35 35" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M21.4838 5.83398C21.9552 5.83398 22.3374 6.21618 22.3374 6.68764V11.2405C22.3374 11.712 21.9552 12.0941 21.4838 12.0941C21.0123 12.0941 20.6301 11.712 20.6301 11.2405V6.68764C20.6301 6.21618 21.0123 5.83398 21.4838 5.83398Z"
-                                                fill="#555555" />
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M12.3781 5.83398C12.8495 5.83398 13.2317 6.21618 13.2317 6.68764V11.2405C13.2317 11.712 12.8495 12.0941 12.3781 12.0941C11.9066 12.0941 11.5244 11.712 11.5244 11.2405V6.68764C11.5244 6.21618 11.9066 5.83398 12.3781 5.83398Z"
-                                                fill="#555555" />
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M5.83337 14.6544C5.83337 14.183 6.21557 13.8008 6.68703 13.8008H27.1748C27.6463 13.8008 28.0285 14.183 28.0285 14.6544C28.0285 15.1259 27.6463 15.5081 27.1748 15.5081H6.68703C6.21557 15.5081 5.83337 15.1259 5.83337 14.6544Z"
-                                                fill="#555555" />
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M6.75015 9.02811C7.33716 8.4411 8.13331 8.11133 8.96346 8.11133H24.8984C25.7286 8.11133 26.5247 8.4411 27.1117 9.02811C27.6987 9.61511 28.0285 10.4113 28.0285 11.2414V26.0382C28.0285 26.8683 27.6987 27.6645 27.1117 28.2515C26.5247 28.8385 25.7286 29.1682 24.8984 29.1682H8.96346C8.13331 29.1682 7.33716 28.8385 6.75015 28.2515C6.16315 27.6645 5.83337 26.8683 5.83337 26.0382V11.2414C5.83337 10.4113 6.16315 9.61511 6.75015 9.02811ZM8.96346 9.81865C8.58611 9.81865 8.22423 9.96854 7.95741 10.2354C7.69059 10.5022 7.54069 10.8641 7.54069 11.2414V26.0382C7.54069 26.4155 7.69059 26.7774 7.95741 27.0442C8.22423 27.311 8.58612 27.4609 8.96346 27.4609H24.8984C25.2758 27.4609 25.6376 27.311 25.9045 27.0442C26.1713 26.7774 26.3212 26.4155 26.3212 26.0382V11.2414C26.3212 10.8641 26.1713 10.5022 25.9045 10.2354C25.6376 9.96854 25.2758 9.81865 24.8984 9.81865H8.96346Z"
-                                                fill="#555555" />
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M22.6334 18.0449C22.7833 18.0443 22.9318 18.0733 23.0704 18.1303C23.209 18.1872 23.335 18.2709 23.4412 18.3767C23.5474 18.4824 23.6316 18.6081 23.6891 18.7465C23.7466 18.8849 23.7762 19.0333 23.7762 19.1831C23.7762 19.4081 23.7095 19.6279 23.5847 19.815C23.4598 20.0021 23.2823 20.148 23.0746 20.2343C22.8669 20.3205 22.6383 20.3434 22.4176 20.2998C22.1969 20.2563 21.9941 20.1483 21.8347 19.9896C21.6754 19.8308 21.5666 19.6285 21.5222 19.408C21.4778 19.1875 21.4996 18.9588 21.5851 18.7507C21.6705 18.5427 21.8157 18.3646 22.0023 18.239C22.1889 18.1133 22.4085 18.0458 22.6334 18.0449Z"
-                                                fill="#555555" />
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M16.9264 18.0703C17.0762 18.0697 17.2247 18.0987 17.3634 18.1557C17.502 18.2126 17.628 18.2963 17.7342 18.4021C17.8403 18.5078 17.9246 18.6335 17.9821 18.7719C18.0396 18.9103 18.0691 19.0587 18.0691 19.2085C18.0691 19.4335 18.0025 19.6533 17.8776 19.8404C17.7528 20.0275 17.5753 20.1734 17.3676 20.2597C17.1598 20.3459 16.9312 20.3687 16.7106 20.3252C16.4899 20.2816 16.2871 20.1737 16.1277 20.015C15.9683 19.8562 15.8596 19.6538 15.8152 19.4334C15.7707 19.2129 15.7926 18.9842 15.8781 18.7761C15.9635 18.568 16.1087 18.39 16.2953 18.2644C16.4819 18.1387 16.7015 18.0712 16.9264 18.0703Z"
-                                                fill="#555555" />
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M16.9264 22.6231C17.0762 22.6225 17.2247 22.6515 17.3634 22.7084C17.502 22.7653 17.628 22.8491 17.7342 22.9548C17.8403 23.0606 17.9246 23.1863 17.9821 23.3246C18.0396 23.463 18.0691 23.6114 18.0691 23.7613C18.0691 23.9862 18.0025 24.2061 17.8776 24.3931C17.7528 24.5802 17.5753 24.7261 17.3676 24.8124C17.1598 24.8987 16.9312 24.9215 16.7106 24.8779C16.4899 24.8344 16.2871 24.7264 16.1277 24.5677C15.9683 24.409 15.8596 24.2066 15.8152 23.9861C15.7707 23.7656 15.7926 23.5369 15.8781 23.3288C15.9635 23.1208 16.1087 22.9427 16.2953 22.8171C16.4819 22.6915 16.7015 22.624 16.9264 22.6231Z"
-                                                fill="#555555" />
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M11.2353 18.0703C11.3852 18.0697 11.5337 18.0987 11.6723 18.1557C11.8109 18.2126 11.9369 18.2963 12.0431 18.4021C12.1493 18.5078 12.2336 18.6335 12.291 18.7719C12.3485 18.9103 12.3781 19.0587 12.3781 19.2085C12.3781 19.4335 12.3115 19.6533 12.1866 19.8404C12.0617 20.0275 11.8842 20.1734 11.6765 20.2597C11.4688 20.3459 11.2402 20.3687 11.0195 20.3252C10.7988 20.2816 10.596 20.1737 10.4367 20.015C10.2773 19.8562 10.1685 19.6538 10.1241 19.4334C10.0797 19.2129 10.1016 18.9842 10.187 18.7761C10.2725 18.568 10.4177 18.39 10.6042 18.2644C10.7908 18.1387 11.0104 18.0712 11.2353 18.0703Z"
-                                                fill="#555555" />
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M11.2353 22.6231C11.3852 22.6225 11.5337 22.6515 11.6723 22.7084C11.8109 22.7653 11.9369 22.8491 12.0431 22.9548C12.1493 23.0606 12.2336 23.1863 12.291 23.3246C12.3485 23.463 12.3781 23.6114 12.3781 23.7613C12.3781 23.9862 12.3115 24.2061 12.1866 24.3931C12.0617 24.5802 11.8842 24.7261 11.6765 24.8124C11.4688 24.8987 11.2402 24.9215 11.0195 24.8779C10.7988 24.8344 10.596 24.7264 10.4367 24.5677C10.2773 24.409 10.1685 24.2066 10.1241 23.9861C10.0797 23.7656 10.1016 23.5369 10.187 23.3288C10.2725 23.1208 10.4177 22.9427 10.6042 22.8171C10.7908 22.6915 11.0104 22.624 11.2353 22.6231Z"
-                                                fill="#555555" />
-                                        </svg>
-                                        <div class="d-flex flex-column">
-                                            <div class="ca d-flex">
-                                                <div class="start">ab</div>
-                                                <div class="end">das</div>
+                                        {{-- All debt --}}
+                                        <div id="all-debt">
+                                            <div class="d-flex flex-column all-debt">
+                                                <div class="ca d-flex">
+                                                    <div class="start"></div>
+                                                    <div class="end"></div>
+                                                </div>
+                                                <div class="ca">Tất cả</div>
                                             </div>
-                                            <div class="ca">dasd</div>
                                         </div>
+                                        {{-- Tháng này debt --}}
+                                        <div id="this-month-debt" style="display: none">
+                                            <div class="d-flex flex-column all-debt">
+                                                <div class="ca d-flex">
+                                                    <div class="start"></div>
+                                                    <div class="end"></div>
+                                                </div>
+                                                <div class="ca">Tháng này</div>
+                                            </div>
+                                        </div>
+                                        {{-- Tháng trước đây debt --}}
+                                        <div id="last-month-debt" style="display: none">
+                                            <div class="d-flex flex-column all-debt">
+                                                <div class="ca d-flex">
+                                                    <div class="start"></div>
+                                                    <div class="end"></div>
+                                                </div>
+                                                <div class="ca">Tháng trước</div>
+                                            </div>
+                                        </div>
+                                        {{-- 3 Tháng trước đây debt --}}
+                                        <div id="3last-month-debt" style="display: none">
+                                            <div class="d-flex flex-column all-debt">
+                                                <div class="ca d-flex">
+                                                    <div class="start"></div>
+                                                    <div class="end"></div>
+                                                </div>
+                                                <div class="ca">3 tháng trước</div>
+                                            </div>
+                                        </div>
+                                        {{-- Khoảng thời gian debt --}}
+                                        <div id="time-debt" style="display: none">
+                                            <div class="d-flex flex-column all-debt">
+                                                <div class="ca d-flex">
+                                                    <div class="start_inventory"></div>
+                                                    <div class="muiten"></div>
+                                                    <div class="end_inventory"></div>
+                                                </div>
+                                                <div class="ca text-left">Khoảng thời gian</div>
+                                            </div>
+                                        </div>
+
                                     </button>
-                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" href="#">Action</a>
-                                        <a class="dropdown-item" href="#">Another action</a>
-                                        <a class="dropdown-item" href="#">Something else here</a>
+                                    <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item dropdown-item-debt " id="btn-all-debt" href="#"
+                                            data-value="0">Tất cả</a>
+                                        <a class="dropdown-item dropdown-item-debt" id="btn-this-month-debt"
+                                            href="#" data-value="1">Tháng này</a>
+                                        <a class="dropdown-item dropdown-item-debt" id="btn-last-month-debt"
+                                            href="#" data-value="2">Tháng trước</a>
+                                        <a class="dropdown-item dropdown-item-debt" id="btn-3last-month-debt"
+                                            href="#" data-value="3">3 tháng trước</a>
+                                        <a class="dropdown-item dropdown-item-debt" id="btn-time-debt"
+                                            href="#">Khoảng thời
+                                            gian</a>
+                                    </div>
+                                </div>
+                                {{-- Chọn khoảng --}}
+                                <div class="block-optionss" id="times-debt-options" style="display:none">
+                                    <div class="wrap w-100">
+                                        <div class="heading-title title-wrap">
+                                            <h5>Khoảng thời gian</h5>
+                                        </div>
+                                        <div class="input-group p-2 justify-content-around">
+                                            <div class="start">
+                                                <label for="start">Từ ngày:</label>
+                                                <input type="date" name="date_start"
+                                                    class="date_start_debt rounded">
+                                            </div>
+                                            <div class="end">
+                                                <label for="start">Đến ngày:</label>
+                                                <input type="date" name="date_end"
+                                                    class="date_end_debt rounded">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                        <button type="button" class="success-debt btn btn-primary btn-block mr-2"
+                                            value="4">Xác nhận</button>
+                                        <button type="button" id="cancel-times-debt"
+                                            class="btn btn-default btn-block">Hủy</button>
                                     </div>
                                 </div>
                             </div>
@@ -551,7 +702,7 @@
                                     </div>
                                     <div class="pl-2">
                                         <h5>Công nợ nhập(+VAT)</h5>
-                                        <div class="value">100</div>
+                                        <div class="value" id="debt_import"></div>
                                     </div>
                                 </div>
                             </div>
@@ -594,7 +745,8 @@
                                     </div>
                                     <div class="pl-2">
                                         <h5>Công nợ xuất</h5>
-                                        <div class="value">100đ</div>
+                                        <div class="value" id="debt_export"></div>
+
                                     </div>
                                 </div>
                             </div>
@@ -611,56 +763,105 @@
                             <div class="col">
                                 <div class="title-index">Lợi nhuận</div>
                             </div>
-                            <div class="col d-flex">
+                            <div class="col d-flex" style="position: relative">
                                 <div class="dropdown w-100">
-                                    <button class="btn w-100 btn-light border rounded dropdown-toggle"
+                                    <button class="btn w-100 btn-light border rounded dropdown-toggle" id="orders"
                                         style="display: flex;
                                         justify-content: space-between;
                                         align-items: center;"
                                         type="button" id="dropdownMenuButton" data-toggle="dropdown"
                                         aria-haspopup="true" aria-expanded="false">
-                                        <svg width="35" height="35" viewBox="0 0 35 35" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M21.4838 5.83398C21.9552 5.83398 22.3374 6.21618 22.3374 6.68764V11.2405C22.3374 11.712 21.9552 12.0941 21.4838 12.0941C21.0123 12.0941 20.6301 11.712 20.6301 11.2405V6.68764C20.6301 6.21618 21.0123 5.83398 21.4838 5.83398Z"
-                                                fill="#555555" />
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M12.3781 5.83398C12.8495 5.83398 13.2317 6.21618 13.2317 6.68764V11.2405C13.2317 11.712 12.8495 12.0941 12.3781 12.0941C11.9066 12.0941 11.5244 11.712 11.5244 11.2405V6.68764C11.5244 6.21618 11.9066 5.83398 12.3781 5.83398Z"
-                                                fill="#555555" />
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M5.83337 14.6544C5.83337 14.183 6.21557 13.8008 6.68703 13.8008H27.1748C27.6463 13.8008 28.0285 14.183 28.0285 14.6544C28.0285 15.1259 27.6463 15.5081 27.1748 15.5081H6.68703C6.21557 15.5081 5.83337 15.1259 5.83337 14.6544Z"
-                                                fill="#555555" />
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M6.75015 9.02811C7.33716 8.4411 8.13331 8.11133 8.96346 8.11133H24.8984C25.7286 8.11133 26.5247 8.4411 27.1117 9.02811C27.6987 9.61511 28.0285 10.4113 28.0285 11.2414V26.0382C28.0285 26.8683 27.6987 27.6645 27.1117 28.2515C26.5247 28.8385 25.7286 29.1682 24.8984 29.1682H8.96346C8.13331 29.1682 7.33716 28.8385 6.75015 28.2515C6.16315 27.6645 5.83337 26.8683 5.83337 26.0382V11.2414C5.83337 10.4113 6.16315 9.61511 6.75015 9.02811ZM8.96346 9.81865C8.58611 9.81865 8.22423 9.96854 7.95741 10.2354C7.69059 10.5022 7.54069 10.8641 7.54069 11.2414V26.0382C7.54069 26.4155 7.69059 26.7774 7.95741 27.0442C8.22423 27.311 8.58612 27.4609 8.96346 27.4609H24.8984C25.2758 27.4609 25.6376 27.311 25.9045 27.0442C26.1713 26.7774 26.3212 26.4155 26.3212 26.0382V11.2414C26.3212 10.8641 26.1713 10.5022 25.9045 10.2354C25.6376 9.96854 25.2758 9.81865 24.8984 9.81865H8.96346Z"
-                                                fill="#555555" />
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M22.6334 18.0449C22.7833 18.0443 22.9318 18.0733 23.0704 18.1303C23.209 18.1872 23.335 18.2709 23.4412 18.3767C23.5474 18.4824 23.6316 18.6081 23.6891 18.7465C23.7466 18.8849 23.7762 19.0333 23.7762 19.1831C23.7762 19.4081 23.7095 19.6279 23.5847 19.815C23.4598 20.0021 23.2823 20.148 23.0746 20.2343C22.8669 20.3205 22.6383 20.3434 22.4176 20.2998C22.1969 20.2563 21.9941 20.1483 21.8347 19.9896C21.6754 19.8308 21.5666 19.6285 21.5222 19.408C21.4778 19.1875 21.4996 18.9588 21.5851 18.7507C21.6705 18.5427 21.8157 18.3646 22.0023 18.239C22.1889 18.1133 22.4085 18.0458 22.6334 18.0449Z"
-                                                fill="#555555" />
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M16.9264 18.0703C17.0762 18.0697 17.2247 18.0987 17.3634 18.1557C17.502 18.2126 17.628 18.2963 17.7342 18.4021C17.8403 18.5078 17.9246 18.6335 17.9821 18.7719C18.0396 18.9103 18.0691 19.0587 18.0691 19.2085C18.0691 19.4335 18.0025 19.6533 17.8776 19.8404C17.7528 20.0275 17.5753 20.1734 17.3676 20.2597C17.1598 20.3459 16.9312 20.3687 16.7106 20.3252C16.4899 20.2816 16.2871 20.1737 16.1277 20.015C15.9683 19.8562 15.8596 19.6538 15.8152 19.4334C15.7707 19.2129 15.7926 18.9842 15.8781 18.7761C15.9635 18.568 16.1087 18.39 16.2953 18.2644C16.4819 18.1387 16.7015 18.0712 16.9264 18.0703Z"
-                                                fill="#555555" />
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M16.9264 22.6231C17.0762 22.6225 17.2247 22.6515 17.3634 22.7084C17.502 22.7653 17.628 22.8491 17.7342 22.9548C17.8403 23.0606 17.9246 23.1863 17.9821 23.3246C18.0396 23.463 18.0691 23.6114 18.0691 23.7613C18.0691 23.9862 18.0025 24.2061 17.8776 24.3931C17.7528 24.5802 17.5753 24.7261 17.3676 24.8124C17.1598 24.8987 16.9312 24.9215 16.7106 24.8779C16.4899 24.8344 16.2871 24.7264 16.1277 24.5677C15.9683 24.409 15.8596 24.2066 15.8152 23.9861C15.7707 23.7656 15.7926 23.5369 15.8781 23.3288C15.9635 23.1208 16.1087 22.9427 16.2953 22.8171C16.4819 22.6915 16.7015 22.624 16.9264 22.6231Z"
-                                                fill="#555555" />
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M11.2353 18.0703C11.3852 18.0697 11.5337 18.0987 11.6723 18.1557C11.8109 18.2126 11.9369 18.2963 12.0431 18.4021C12.1493 18.5078 12.2336 18.6335 12.291 18.7719C12.3485 18.9103 12.3781 19.0587 12.3781 19.2085C12.3781 19.4335 12.3115 19.6533 12.1866 19.8404C12.0617 20.0275 11.8842 20.1734 11.6765 20.2597C11.4688 20.3459 11.2402 20.3687 11.0195 20.3252C10.7988 20.2816 10.596 20.1737 10.4367 20.015C10.2773 19.8562 10.1685 19.6538 10.1241 19.4334C10.0797 19.2129 10.1016 18.9842 10.187 18.7761C10.2725 18.568 10.4177 18.39 10.6042 18.2644C10.7908 18.1387 11.0104 18.0712 11.2353 18.0703Z"
-                                                fill="#555555" />
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M11.2353 22.6231C11.3852 22.6225 11.5337 22.6515 11.6723 22.7084C11.8109 22.7653 11.9369 22.8491 12.0431 22.9548C12.1493 23.0606 12.2336 23.1863 12.291 23.3246C12.3485 23.463 12.3781 23.6114 12.3781 23.7613C12.3781 23.9862 12.3115 24.2061 12.1866 24.3931C12.0617 24.5802 11.8842 24.7261 11.6765 24.8124C11.4688 24.8987 11.2402 24.9215 11.0195 24.8779C10.7988 24.8344 10.596 24.7264 10.4367 24.5677C10.2773 24.409 10.1685 24.2066 10.1241 23.9861C10.0797 23.7656 10.1016 23.5369 10.187 23.3288C10.2725 23.1208 10.4177 22.9427 10.6042 22.8171C10.7908 22.6915 11.0104 22.624 11.2353 22.6231Z"
-                                                fill="#555555" />
-                                        </svg>
-                                        <div class="d-flex flex-column">
-                                            <div class="ca d-flex">
-                                                <div class="start">ab</div>
-                                                <div class="end">das</div>
+                                        {{-- All profit --}}
+                                        <div id="all-profit">
+                                            <div class="d-flex flex-column all-profit">
+                                                <div class="ca d-flex">
+                                                    <div class="start"></div>
+                                                    <div class="end"></div>
+                                                </div>
+                                                <div class="ca">Tất cả</div>
                                             </div>
-                                            <div class="ca">dasd</div>
                                         </div>
+                                        {{-- Tháng này profit --}}
+                                        <div id="this-month-profit" style="display: none">
+                                            <div class="d-flex flex-column all-profit">
+                                                <div class="ca d-flex">
+                                                    <div class="start"></div>
+                                                    <div class="end"></div>
+                                                </div>
+                                                <div class="ca">Tháng này</div>
+                                            </div>
+                                        </div>
+                                        {{-- Tháng trước đây profit --}}
+                                        <div id="last-month-profit" style="display: none">
+                                            <div class="d-flex flex-column all-profit">
+                                                <div class="ca d-flex">
+                                                    <div class="start"></div>
+                                                    <div class="end"></div>
+                                                </div>
+                                                <div class="ca">Tháng trước</div>
+                                            </div>
+                                        </div>
+                                        {{-- 3 Tháng trước đây profit --}}
+                                        <div id="3last-month-profit" style="display: none">
+                                            <div class="d-flex flex-column all-profit">
+                                                <div class="ca d-flex">
+                                                    <div class="start"></div>
+                                                    <div class="end"></div>
+                                                </div>
+                                                <div class="ca">3 tháng trước</div>
+                                            </div>
+                                        </div>
+                                        {{-- Khoảng thời gian profit --}}
+                                        <div id="time-profit" style="display: none">
+                                            <div class="d-flex flex-column all-profit">
+                                                <div class="ca d-flex">
+                                                    <div class="start_inventory"></div>
+                                                    <div class="muiten"></div>
+                                                    <div class="end_inventory"></div>
+                                                </div>
+                                                <div class="ca text-left">Khoảng thời gian</div>
+                                            </div>
+                                        </div>
+
                                     </button>
-                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" href="#">Action</a>
-                                        <a class="dropdown-item" href="#">Another action</a>
-                                        <a class="dropdown-item" href="#">Something else here</a>
+                                    <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item dropdown-item-profit " id="btn-all-profit"
+                                            href="#" data-value="0">Tất cả</a>
+                                        <a class="dropdown-item dropdown-item-profit" id="btn-this-month-profit"
+                                            href="#" data-value="1">Tháng này</a>
+                                        <a class="dropdown-item dropdown-item-profit" id="btn-last-month-profit"
+                                            href="#" data-value="2">Tháng trước</a>
+                                        <a class="dropdown-item dropdown-item-profit" id="btn-3last-month-profit"
+                                            href="#" data-value="3">3 tháng trước</a>
+                                        <a class="dropdown-item dropdown-item-profit" id="btn-time-profit"
+                                            href="#">Khoảng thời
+                                            gian</a>
+                                    </div>
+                                </div>
+                                {{-- Chọn khoảng --}}
+                                <div class="block-optionss" id="times-profit-options" style="display:none">
+                                    <div class="wrap w-100">
+                                        <div class="heading-title title-wrap">
+                                            <h5>Khoảng thời gian</h5>
+                                        </div>
+                                        <div class="input-group p-2 justify-content-around">
+                                            <div class="start">
+                                                <label for="start">Từ ngày:</label>
+                                                <input type="date" name="date_start"
+                                                    class="date_start_profit rounded">
+                                            </div>
+                                            <div class="end">
+                                                <label for="start">Đến ngày:</label>
+                                                <input type="date" name="date_end"
+                                                    class="date_end_profit rounded">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                        <button type="button" class="success-profit btn btn-primary btn-block mr-2"
+                                            value="4">Xác nhận</button>
+                                        <button type="button" id="cancel-times-profit"
+                                            class="btn btn-default btn-block">Hủy</button>
                                     </div>
                                 </div>
                             </div>
@@ -681,7 +882,7 @@
                                     </div>
                                     <div class="pl-2">
                                         <h5>Tổng lợi nhuận</h5>
-                                        <div class="value">100</div>
+                                        <div class="value" id="sum-profit"></div>
                                     </div>
                                 </div>
                             </div>
@@ -696,13 +897,55 @@
 <!-- ./wrapper -->
 {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
 <script>
-    $(document).on('change','.date_start', function(e) {
+    $(document).on('change', '.date_start', function(e) {
         e.preventDefault();
         $('.start_order').text(moment($(this).val()).format("DD-MM-YYYY"));
+        $('.muitenorder').text('->');
     })
-    $(document).on('change','.date_end',function(e){
+    $(document).on('change', '.date_end', function(e) {
         e.preventDefault();
         $('.end_order').text(moment($(this).val()).format("DD-MM-YYYY"));
+        $('.muitenorder').text('->');
+    })
+    $(document).on('change', '.date_start_export', function(e) {
+        e.preventDefault();
+        $('.start_exports').text(moment($(this).val()).format("DD-MM-YYYY"));
+        $('.muiten').text('->');
+    })
+    $(document).on('change', '.date_end_export', function(e) {
+        e.preventDefault();
+        $('.end_exports').text(moment($(this).val()).format("DD-MM-YYYY"));
+        $('.muiten').text('->');
+    })
+    $(document).on('change', '.date_start_inventory', function(e) {
+        e.preventDefault();
+        $('.start_inventory').text(moment($(this).val()).format("DD-MM-YYYY"));
+        $('.muiten').text('->');
+    })
+    $(document).on('change', '.date_end_inventory', function(e) {
+        e.preventDefault();
+        $('.end_inventory').text(moment($(this).val()).format("DD-MM-YYYY"));
+        $('.muiten').text('->');
+    })
+    $(document).on('change', '.date_start_debt', function(e) {
+        e.preventDefault();
+        $('.start_debt').text(moment($(this).val()).format("DD-MM-YYYY"));
+        $('.muiten').text('->');
+    })
+    $(document).on('change', '.date_end_debt', function(e) {
+        e.preventDefault();
+        $('.end_debt').text(moment($(this).val()).format("DD-MM-YYYY"));
+        $('.muiten').text('->');
+    })
+    $(document).on('change', '.date_start_profit', function(e) {
+        e.preventDefault();
+        $('.start_profit').text(moment($(this).val()).format("DD-MM-YYYY"));
+        $('.muiten').text('->');
+    })
+    $(document).on('change', '.date_end_profit', function(e) {
+        e.preventDefault();
+        $('.end_profit').text(moment($(this).val()).format("DD-MM-YYYY"));
+        $('.muiten').text('->');
     })
     // Orders
     // Tất cả
@@ -712,9 +955,6 @@
         $("#last-month-orders").hide();
         $("#3last-month-orders").hide();
         $("#time-orders").hide();
-
-
-
     });
     // Tháng này
     $("#btn-this-month-orders").click(function() {
@@ -757,16 +997,216 @@
         event.preventDefault();
         $('#times-orders-options').hide();
     });
-    
+
+    // exports
+    // Tất cả
+    $("#btn-all-exports").click(function() {
+        $("#all-exports").show();
+        $("#this-month-exports").hide();
+        $("#last-month-exports").hide();
+        $("#3last-month-exports").hide();
+        $("#time-exports").hide();
+    });
+    // Tháng này
+    $("#btn-this-month-exports").click(function() {
+        $("#this-month-exports").show();
+        $("#all-exports").hide();
+        $("#last-month-exports").hide();
+        $("#3last-month-exports").hide();
+        $("#time-exports").hide();
+    });
+    // Tháng trước
+    $("#btn-last-month-exports").click(function() {
+        $("#last-month-exports").show();
+        $("#all-exports").hide();
+        $("#this-month-exports").hide();
+        $("#3last-month-exports").hide();
+        $("#time-exports").hide();
+    });
+    // 3 tháng trc
+    $("#btn-3last-month-exports").click(function() {
+        $("#3last-month-exports").show();
+        $("#all-exports").hide();
+        $("#this-month-exports").hide();
+        $("#last-month-exports").hide();
+        $("#time-exports").hide();
+    });
+    // Khoảng time
+    $("#btn-time-exports").click(function() {
+        $("#time-exports").show();
+        $("#times-exports-options").show();
+        $("#all-exports").hide();
+        $("#this-month-exports").hide();
+        $("#last-month-exports").hide();
+        $("#3last-month-exports").hide();
+    });
+    $('#cancel-times-exports').click(function(event) {
+        event.preventDefault();
+        $('#times-exports-options').hide();
+    });
+    $('.success').click(function(event) {
+        event.preventDefault();
+        $('#times-exports-options').hide();
+    });
+    // inventory
+    // Tất cả
+    $("#btn-all-inventory").click(function() {
+        $("#all-inventory").show();
+        $("#this-month-inventory").hide();
+        $("#last-month-inventory").hide();
+        $("#3last-month-inventory").hide();
+        $("#time-inventory").hide();
+    });
+    // Tháng này
+    $("#btn-this-month-inventory").click(function() {
+        $("#this-month-inventory").show();
+        $("#all-inventory").hide();
+        $("#last-month-inventory").hide();
+        $("#3last-month-inventory").hide();
+        $("#time-inventory").hide();
+    });
+    // Tháng trước
+    $("#btn-last-month-inventory").click(function() {
+        $("#last-month-inventory").show();
+        $("#all-inventory").hide();
+        $("#this-month-inventory").hide();
+        $("#3last-month-inventory").hide();
+        $("#time-inventory").hide();
+    });
+    // 3 tháng trc
+    $("#btn-3last-month-inventory").click(function() {
+        $("#3last-month-inventory").show();
+        $("#all-inventory").hide();
+        $("#this-month-inventory").hide();
+        $("#last-month-inventory").hide();
+        $("#time-inventory").hide();
+    });
+    // Khoảng time
+    $("#btn-time-inventory").click(function() {
+        $("#time-inventory").show();
+        $("#times-inventory-options").show();
+        $("#all-inventory").hide();
+        $("#this-month-inventory").hide();
+        $("#last-month-inventory").hide();
+        $("#3last-month-inventory").hide();
+    });
+    $('#cancel-times-inventory').click(function(event) {
+        event.preventDefault();
+        $('#times-inventory-options').hide();
+    });
+    $('.success-inventory').click(function(event) {
+        event.preventDefault();
+        $('#times-inventory-options').hide();
+    });
+    // debt
+    // Tất cả
+    $("#btn-all-debt").click(function() {
+        $("#all-debt").show();
+        $("#this-month-debt").hide();
+        $("#last-month-debt").hide();
+        $("#3last-month-debt").hide();
+        $("#time-debt").hide();
+    });
+    // Tháng này
+    $("#btn-this-month-debt").click(function() {
+        $("#this-month-debt").show();
+        $("#all-debt").hide();
+        $("#last-month-debt").hide();
+        $("#3last-month-debt").hide();
+        $("#time-debt").hide();
+    });
+    // Tháng trước
+    $("#btn-last-month-debt").click(function() {
+        $("#last-month-debt").show();
+        $("#all-debt").hide();
+        $("#this-month-debt").hide();
+        $("#3last-month-debt").hide();
+        $("#time-debt").hide();
+    });
+    // 3 tháng trc
+    $("#btn-3last-month-debt").click(function() {
+        $("#3last-month-debt").show();
+        $("#all-debt").hide();
+        $("#this-month-debt").hide();
+        $("#last-month-debt").hide();
+        $("#time-debt").hide();
+    });
+    // Khoảng time
+    $("#btn-time-debt").click(function() {
+        $("#time-debt").show();
+        $("#times-debt-options").show();
+        $("#all-debt").hide();
+        $("#this-month-debt").hide();
+        $("#last-month-debt").hide();
+        $("#3last-month-debt").hide();
+    });
+    $('#cancel-times-debt').click(function(event) {
+        event.preventDefault();
+        $('#times-debt-options').hide();
+    });
+    $('.success-debt').click(function(event) {
+        event.preventDefault();
+        $('#times-debt-options').hide();
+    });
+
+    // profit
+    // Tất cả
+    $("#btn-all-profit").click(function() {
+        $("#all-profit").show();
+        $("#this-month-profit").hide();
+        $("#last-month-profit").hide();
+        $("#3last-month-profit").hide();
+        $("#time-profit").hide();
+    });
+    // Tháng này
+    $("#btn-this-month-profit").click(function() {
+        $("#this-month-profit").show();
+        $("#all-profit").hide();
+        $("#last-month-profit").hide();
+        $("#3last-month-profit").hide();
+        $("#time-profit").hide();
+    });
+    // Tháng trước
+    $("#btn-last-month-profit").click(function() {
+        $("#last-month-profit").show();
+        $("#all-profit").hide();
+        $("#this-month-profit").hide();
+        $("#3last-month-profit").hide();
+        $("#time-profit").hide();
+    });
+    // 3 tháng trc
+    $("#btn-3last-month-profit").click(function() {
+        $("#3last-month-profit").show();
+        $("#all-profit").hide();
+        $("#this-month-profit").hide();
+        $("#last-month-profit").hide();
+        $("#time-profit").hide();
+    });
+    // Khoảng time
+    $("#btn-time-profit").click(function() {
+        $("#time-profit").show();
+        $("#times-profit-options").show();
+        $("#all-profit").hide();
+        $("#this-month-profit").hide();
+        $("#last-month-profit").hide();
+        $("#3last-month-profit").hide();
+    });
+    $('#cancel-times-profit').click(function(event) {
+        event.preventDefault();
+        $('#times-profit-options').hide();
+    });
+    $('.success-profit').click(function(event) {
+        event.preventDefault();
+        $('#times-profit-options').hide();
+    });
+
     function formatCurrency(value) {
         // Làm tròn đến 2 chữ số thập phân
         value = Math.round(value * 100) / 100;
-
         // Xử lý phần nguyên
         var parts = value.toString().split(".");
         var integerPart = parts[0];
         var formattedValue = "";
-
         // Định dạng phần nguyên
         var count = 0;
         for (var i = integerPart.length - 1; i >= 0; i--) {
@@ -776,19 +1216,23 @@
                 formattedValue = "," + formattedValue;
             }
         }
-
         // Nếu có phần thập phân, thêm vào sau phần nguyên
         if (parts.length > 1) {
             formattedValue += "." + parts[1];
         }
-
         // Trả về kết quả đã định dạng
         return formattedValue;
     }
     $(document).ready(function() {
-            $("#btn-all-orders").trigger("click");
-        });
-    $(document).on('click', '.dropdown-item', function() {
+        $("#btn-all-orders").trigger("click");
+        $("#btn-all-exports").trigger("click");
+        $("#btn-all-inventory").trigger("click");
+        $("#btn-all-debt").trigger("click");
+        $("#btn-all-profit").trigger("click");
+
+    });
+    // Nhập hàng
+    $(document).on('click', '.dropdown-item-orders', function() {
         var data = $(this).data('value');
         $.ajax({
             url: "{{ route('count') }}",
@@ -798,12 +1242,12 @@
             },
             success: function(data) {
                 $('#import_id').text(data.countID);
-                $('#import_total').text(formatCurrency(data.sumTotal));
+                if (data.sumTotal > 0) {
+                    $('#import_total').text(formatCurrency(data.sumTotal));
+                }
             }
         })
     })
-
-
     $(document).on('click', '.suscess', function() {
         var data = $(this).val();
         var date_start = $('.date_start').val();
@@ -819,6 +1263,153 @@
             success: function(data) {
                 $('#import_id').text(data.countID);
                 $('#import_total').text(formatCurrency(data.sumTotal));
+            }
+        })
+    })
+    // Xuất hàng
+    $(document).on('click', '.dropdown-item-export', function() {
+        var data = $(this).data('value');
+        $.ajax({
+            url: "{{ route('countExport') }}",
+            type: "get",
+            data: {
+                data: data
+            },
+            success: function(data) {
+                $('#export_id').text(data.countExport);
+                if (data.sumExport > 0) {
+                    $('#export_total').text(formatCurrency(data.sumExport));
+                } else {
+                    $('#export_total').text(0);
+                }
+                console.log(data);
+            }
+        })
+    })
+    $(document).on('click', '.success', function() {
+        var data = $(this).val();
+        var date_start = $('.date_start_export').val();
+        var date_end = $('.date_end_export').val();
+        $.ajax({
+            url: "{{ route('countExport') }}",
+            type: "get",
+            data: {
+                data: data,
+                date_start: date_start,
+                date_end: date_end
+            },
+            success: function(data) {
+                $('#export_id').text(data.countExport);
+                $('#export_total').text(formatCurrency(data.sumExport));
+                console.log(data);
+
+            }
+        })
+    })
+    // Inventory
+    $(document).on('click', '.dropdown-item-inventory', function() {
+        var data = $(this).data('value');
+        $.ajax({
+            url: "{{ route('countInventory') }}",
+            type: "get",
+            data: {
+                data: data
+            },
+            success: function(data) {
+                console.log(data);
+                $('#inventory_id').text(data.countInventory);
+                $('#inventory_total').text(formatCurrency(data.sumInventory));
+                console.log(data);
+            }
+        })
+    })
+    $(document).on('click', '.success-inventory', function() {
+        var data = $(this).val();
+        var date_start = $('.date_start_inventory').val();
+        var date_end = $('.date_end_inventory').val();
+        $.ajax({
+            url: "{{ route('countInventory') }}",
+            type: "get",
+            data: {
+                data: data,
+                date_start: date_start,
+                date_end: date_end
+            },
+            success: function(data) {
+                $('#inventory_id').text(data.countInventory);
+                $('#inventory_total').text(formatCurrency(data.sumInventory));
+                console.log(data);
+
+            }
+        })
+    })
+    // debt
+    $(document).on('click', '.dropdown-item-debt', function() {
+        var data = $(this).data('value');
+        $.ajax({
+            url: "{{ route('countDebt') }}",
+            type: "get",
+            data: {
+                data: data
+            },
+            success: function(data) {
+                $('#debt_export').text(formatCurrency(data[0].count));
+                $('#debt_import').text(formatCurrency(data[1].countDebtImport));
+                console.log(data);
+            }
+        })
+    })
+    $(document).on('click', '.success-debt', function() {
+        var data = $(this).val();
+        var date_start = $('.date_start_inventory').val();
+        var date_end = $('.date_end_inventory').val();
+        $.ajax({
+            url: "{{ route('countDebt') }}",
+            type: "get",
+            data: {
+                data: data,
+                date_start: date_start,
+                date_end: date_end
+            },
+            success: function(data) {
+                $('#debt_export').text(formatCurrency(data[0].count));
+                $('#debt_import').text(formatCurrency(data[1].countDebtImport));
+                console.log(data);
+
+            }
+        })
+    })
+    // profit
+    $(document).on('click', '.dropdown-item-profit', function() {
+        var data = $(this).data('value');
+        $.ajax({
+            url: "{{ route('countProfit') }}",
+            type: "get",
+            data: {
+                data: data
+            },
+            success: function(data) {
+                $('#sum-profit').text(formatCurrency(data.countProfit));
+                console.log(data);
+            }
+        })
+    })
+    $(document).on('click', '.success-profit', function() {
+        var data = $(this).val();
+        var date_start = $('.date_start_profit').val();
+        var date_end = $('.date_end_profit').val();
+        $.ajax({
+            url: "{{ route('countProfit') }}",
+            type: "get",
+            data: {
+                data: data,
+                date_start: date_start,
+                date_end: date_end
+            },
+            success: function(data) {
+                $('#sum-profit').text(formatCurrency(data.countProfit));
+                console.log(data);
+
             }
         })
     })

@@ -286,16 +286,15 @@ class DebtController extends Controller
         if (isset($request->list_id)) {
             $list = $request->list_id;
             $listOrder = Debt::whereIn('id', $list)->get();
-            $history = History::leftJoin('debts', 'history.export_id', 'debts.export_id')
-                ->whereIn('debts.id', $list)->get();
-            foreach ($history as $value) {
-                $value->export_status = 1;
-                $value->save();
-            };
-            foreach ($listOrder as $value) {
-                $value->debt_status = 1;
-                $value->save();
+            $id_check = [];
+            foreach ($listOrder as $listorder) {
+                $listorder->debt_status = 1;
+                $listorder->save();
+                array_push($id_check, $listorder->export_id);
             }
+            History::whereIn('export_id', $id_check)->update([
+                'export_status' => 1,
+            ]);
             session()->flash('msg', 'Thanh toán thành công');
             return response()->json(['success' => true, 'msg' => 'Thanh toán thành công']);
         }

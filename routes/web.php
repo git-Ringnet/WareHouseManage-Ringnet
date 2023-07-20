@@ -139,6 +139,10 @@ Route::get('/simple', function () {
 });
 Route::get('index', [DashboardController::class, 'index']);
 Route::get('/count',[DashboardController::class, 'count'])->name('count');
+Route::get('/countExport',[DashboardController::class, 'countExport'])->name('countExport');
+Route::get('/countInventory',[DashboardController::class, 'countInventory'])->name('countInventory');
+Route::get('/countDebt',[DashboardController::class, 'countDebt'])->name('countDebt');
+Route::get('/countProfit',[DashboardController::class, 'countProfit'])->name('countProfit');
 
 Route::middleware([
     'auth:sanctum',

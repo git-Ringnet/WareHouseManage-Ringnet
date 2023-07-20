@@ -67,6 +67,7 @@ class History extends Model
                 $query->orWhere('provide_name', 'like', '%' . $keywords . '%');
                 $query->orWhere('name', 'like', '%' . $keywords . '%');
                 $query->orWhere('import_code', 'like', '%' . $keywords . '%');
+                $query->orWhere('guest_name', 'like', '%' . $keywords . '%');
                 $query->orWhere('export_code', 'like', '%' . $keywords . '%');
             });
         }

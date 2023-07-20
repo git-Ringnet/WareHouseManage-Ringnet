@@ -457,7 +457,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                         value="{{ $item->id }}"></td>
                                                 <td>{{ $item->id }}</td>
 
-                                                <td>{{ $item->guest_name }}</td>
+                                                <td style="width: 300px">{{ $item->guest_name }}</td>
                                                 @if (Auth::user()->can('isAdmin'))
                                                     <td>{{ $item->users_name }}</td>
                                                 @endif

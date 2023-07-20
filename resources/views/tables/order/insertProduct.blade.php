@@ -497,7 +497,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             <div class="icon" id="icon-product_code"></div>
                                         </span>
                                     </th>
-                                    <th scope="col">
+                                    <th scope="col" style="width: 300px">
                                         <span class="d-flex">
                                             <a href="#" class="sort-link" data-sort-by="provide_name"
                                                 data-sort-type="{{ $sortType }}"><button class="btn-sort"

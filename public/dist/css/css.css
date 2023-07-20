@@ -987,6 +987,6 @@ input[type="checkbox"] {
 .block-optionss {
     position: absolute;
     z-index: 1024;
-    top: 65px;
+    top: 50px;
     background-color: #ffff;
 }
