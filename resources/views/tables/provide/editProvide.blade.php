@@ -45,19 +45,19 @@
                                     <label for="pwd">Người đại diện</label>
                                     <input type="text" class="form-control"
                                         value="{{ $provides->provide_represent }}" name="provide_represent"
-                                        placeholder="Nhập tên người đại diện" required>
+                                        placeholder="Nhập tên người đại diện">
                                 </div>
                                 <div class="mb-3">
                                     <label for="pwd">Email</label>
                                     <input type="email" class="form-control" value="{{ $provides->provide_email }}"
                                         pattern="/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/" name="provide_email"
-                                        placeholder="Nhập email" required>
+                                        placeholder="Nhập email">
                                 </div>
                                 <div class="mb-3">
                                     <label for="pwd">Số điện thoại</label>
                                     <input type="text" class="form-control" oninput=validateNumberInput(this)
                                         pattern="^(?:\+?84|0)(?:\d{9}|\d{10})$" value="{{ $provides->provide_phone }}"
-                                        name="provide_phone" placeholder="Nhập số điện thoại" required>
+                                        name="provide_phone" placeholder="Nhập số điện thoại">
                                 </div>
                                 <div class="mb-3 d-none">
                                     <label for="pwd">Trạng thái:</label>
@@ -75,7 +75,7 @@
                                     <div class="d-flex align-items-center">
                                         <input type="text" oninput="validateNumberInput(this)" class="form-control"
                                             id="debtInput" value="{{ $provides->debt }}" name="debt"
-                                            style="width:15%;" required="" disabled="">
+                                            style="width:15%;" disabled="">
                                         <span class="ml-2" id="data-debt">ngày</span>
                                         <input type="checkbox" id="debtCheckbox" value="0" name="debt"
                                             class="ml-3" <?php if ($provides->debt == 0) {

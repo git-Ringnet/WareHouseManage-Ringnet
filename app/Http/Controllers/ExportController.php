@@ -814,7 +814,7 @@ class ExportController extends Controller
                             $export->guest_id = $request->id;
                             $export->user_id = Auth::user()->id;
                             $export->total = $request->totalValue;
-                            $export->export_status = 1;
+                            $export->export_status = 2;
                             $export->note_form = $request->note_form;
                             $export->transport_fee = $request->transport_fee;
                             $export->export_code = $request->export_code;
@@ -2496,19 +2496,19 @@ class ExportController extends Controller
             $list = $request->list_id;
             $listOrder = Exports::leftJoin('product_exports', 'product_exports.export_id', 'exports.id')
                 ->leftJoin('product', 'product.id', 'product_exports.product_id')
-                ->select('exports.*', 'product.*', 'product_exports.*', 'product_exports.product_qty as soluongbandau')
+                ->leftJoin('debts', 'debts.export_id', 'exports.id')
+                ->select('exports.*', 'product.*', 'product_exports.*', 'product_exports.product_qty as soluongbandau', 'debts.debt_status as tinhtrang')
                 ->whereIn('exports.id', $list)
                 ->get();
 
             foreach ($listOrder as $orderItem) {
-                if ($orderItem->export_status == 2) {
-                    $productId = $orderItem->product_id;
+                $productId = $orderItem->product_id;
+                // Lấy số lượng từ bảng product_exports
+                $quantityFromExport = $orderItem->soluongbandau;
+                if ($orderItem->export_status == 2 && $orderItem->tinhtrang != 1) {
                     $currentQty = Product::where('id', $productId)->value('product_qty');
                     $currentPrice = Product::where('id', $productId)->value('product_price');
                     $currentTotal = Product::where('id', $productId)->value('product_total');
-
-                    // Lấy số lượng từ bảng product_exports
-                    $quantityFromExport = $orderItem->soluongbandau;
 
                     $newQty = $currentQty + $quantityFromExport;
                     $product_total = $quantityFromExport * $currentPrice;
@@ -2529,12 +2529,28 @@ class ExportController extends Controller
                     Debt::where('export_id', $orderItem->export_id)->delete();
                     //xóa lịch sử
                     History::where('export_id', $orderItem->export_id)->delete();
-                } elseif ($orderItem->export_status == 1) {
-                
+                    session()->flash('msg', 'Hủy đơn hàng thành công');
+                    return response()->json(['success' => true, 'msg' => 'Hủy Đơn Hàng thành công']);
+                } elseif ($orderItem->export_status == 1 && $orderItem->tinhtrang != 1) {
+                    $currentTrade = Product::where('id', $productId)->value('product_trade');
+                    $newTrade = ($currentTrade - $quantityFromExport) + $productId;
+                    $updateTrade = $newTrade - $productId;
+                    Product::where('id', $productId)
+                        ->update([
+                            'product_trade' => $updateTrade,
+                        ]);
+                    //cập nhật tình trạng xuất hàng
+                    Exports::where('id', $orderItem->export_id)
+                        ->update([
+                            'export_status' => 0,
+                        ]);
+                    session()->flash('msg', 'Hủy đơn hàng thành công');
+                    return response()->json(['success' => true, 'msg' => 'Hủy Đơn Hàng thành công']);
+                } elseif ($orderItem->tinhtrang == 1) {
+                    session()->flash('warning', 'Có đơn hàng đã thanh toán không thể hủy đơn!');
+                    return response()->json(['success' => false, 'msg' => 'Hủy Đơn Hàng thành công']);
                 }
             }
-            session()->flash('msg', 'Hủy đơn hàng thành công');
-            return response()->json(['success' => true, 'msg' => 'Hủy Đơn Hàng thành công']);
         }
         return response()->json(['success' => false, 'msg' => 'Not fount']);
     }
@@ -2589,5 +2605,47 @@ class ExportController extends Controller
             ->get();
         $title = 'Chi tiết đơn hàng';
         return view('tables.export.editEx', compact('exports', 'guest', 'productExport', 'product_code', 'customer', 'title'));
+    }
+    //xuất excel
+    public function export_excel()
+    {
+        $data = Exports::leftJoin('guests', 'exports.guest_id', '=', 'guests.id')
+            ->leftJoin('users', 'exports.user_id', '=', 'users.id')
+            ->select(
+                'exports.id as id',
+                'exports.export_code as sohoadon',
+                'guests.guest_name as guests',
+                'exports.created_at',
+                'users.name as name',
+                'exports.total',
+                'exports.export_status',
+            )
+            ->get();
+        $data->map(function ($da) {
+            if ($da->guests && $da->name) {
+                $da->provide_id = $da->guests;
+                $da->users_id = $da->name;
+            }
+
+            if ($da->export_status == 1) {
+                $da->export_status = "Đã báo giá";
+            } elseif ($da->export_status == 2) {
+                $da->export_status = "Đã chốt";
+            } else {
+                $da->export_status = "Đã hủy";
+            }
+
+            $da->total = number_format($da->total);
+            $da->formatted_created_at = $da->created_at->format('d-m-Y');
+
+            // Xóa các cột không cần thiết sau khi đã định dạng dữ liệu
+            unset($da->guests);
+            unset($da->name);
+            unset($da->created_at);
+
+            return $da;
+        });
+
+        return response()->json(['success' => true, 'msg' => 'Xuất file thành công', 'data' => $data]);
     }
 }
