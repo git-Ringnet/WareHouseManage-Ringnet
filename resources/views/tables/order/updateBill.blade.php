@@ -4,21 +4,27 @@
     <div class="row">
         <div class="col-sm-6 breadcrumb">
             @if ($order->order_status == 1)
-            <a href="{{route('insertProduct.index')}}">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" fill="#555555"></path>
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M17 11.9999C17 12.3289 16.7513 12.5956 16.4444 12.5956L7.55557 12.5956C7.24875 12.5956 7.00002 12.3289 7.00002 11.9999C7.00002 11.671 7.24875 11.4043 7.55557 11.4043L16.4444 11.4043C16.7513 11.4043 17 11.671 17 11.9999Z" fill="white"></path>
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M11.1244 8.17446C11.3413 8.40707 11.3413 8.78421 11.1244 9.01683L8.34199 12L11.1244 14.9832C11.3413 15.2158 11.3413 15.5929 11.1244 15.8255C10.9074 16.0582 10.5557 16.0582 10.3387 15.8255L7.16349 12.4212C6.94653 12.1886 6.94653 11.8114 7.16349 11.5788L10.3387 8.17446C10.5557 7.94185 10.9074 7.94185 11.1244 8.17446Z" fill="white"></path>
-                </svg>
-                <span class="ml-1" style="font-size: 16px; font-weight: 500; color: #555555;">Quay lại danh
-                    sách</span>
-            </a>
+                <a href="{{ route('insertProduct.index') }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path
+                            d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
+                            fill="#555555"></path>
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M17 11.9999C17 12.3289 16.7513 12.5956 16.4444 12.5956L7.55557 12.5956C7.24875 12.5956 7.00002 12.3289 7.00002 11.9999C7.00002 11.671 7.24875 11.4043 7.55557 11.4043L16.4444 11.4043C16.7513 11.4043 17 11.671 17 11.9999Z"
+                            fill="white"></path>
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M11.1244 8.17446C11.3413 8.40707 11.3413 8.78421 11.1244 9.01683L8.34199 12L11.1244 14.9832C11.3413 15.2158 11.3413 15.5929 11.1244 15.8255C10.9074 16.0582 10.5557 16.0582 10.3387 15.8255L7.16349 12.4212C6.94653 12.1886 6.94653 11.8114 7.16349 11.5788L10.3387 8.17446C10.5557 7.94185 10.9074 7.94185 11.1244 8.17446Z"
+                            fill="white"></path>
+                    </svg>
+                    <span class="ml-1" style="font-size: 16px; font-weight: 500; color: #555555;">Quay lại danh
+                        sách</span>
+                </a>
             @else
-            <span><a href="{{ route('insertProduct.index') }}">Nhập hàng</a></span>
-            <span class="mx-1"> / </span>
-            <span><b>Chi tiết đơn hàng</b></span>
+                <span><a href="{{ route('insertProduct.index') }}">Nhập hàng</a></span>
+                <span class="mx-1"> / </span>
+                <span><b>Chi tiết đơn hàng</b></span>
             @endif
-            </div>
+        </div>
         <div class="col-sm-6 position-absolute" style="top:63px;right:2%">
             <div class="w-50 position-relative" style="float: right;">
                 <div class="justify-content-between d-flex">
@@ -321,12 +327,12 @@
                                         @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif> </td>
                                 <td> <input class="form-control text-center product_price"
                                         @if (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin')) readonly @endif required type="text"
-                                        name="product_price[]" 
-                                        value="@if(fmod($pro->product_price,2) > 0){{ number_format($pro->product_price,2,'.','') }}@else{{number_format($pro->product_price)}}@endif"
+                                        name="product_price[]"
+                                        value="@if (fmod($pro->product_price, 2) > 0) {{ number_format($pro->product_price, 2, '.', '') }}@else{{ number_format($pro->product_price) }} @endif"
                                         @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif> </td>
                                 <td>
                                     <select name="product_tax[]" id="" class="form-control product_tax"
-                                        style="width:100px;" @if (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin')) disabled @endif>>
+                                        @if (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin')) disabled @endif>>
                                         <option value="0" <?php echo $pro->product_tax == 0 ? 'selected' : ''; ?>>0%</option>
                                         <option value="8" <?php echo $pro->product_tax == 8 ? 'selected' : ''; ?>>8%</option>
                                         <option value="10" <?php echo $pro->product_tax == 10 ? 'selected' : ''; ?>>10%</option>
@@ -656,7 +662,7 @@
                     if (data.success == true) {
                         alert(data.msg);
                         $('#provide_id').val(data.data.id);
-                    }else{
+                    } else {
                         alert(data.msg);
                     }
                 }
