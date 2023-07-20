@@ -364,7 +364,7 @@
                             </a>
                         </li>
                     @endcan
-                    @can('view-guests')
+                    @can('view-provides')
                         <li class="nav-item">
                             <a href="{{ route('debt.index') }}"
                                 class="nav-link {{ App\Helpers\Helper::isActiveRouteGroup('debt.index,debt.edit') }}">

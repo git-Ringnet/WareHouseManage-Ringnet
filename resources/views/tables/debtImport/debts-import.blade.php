@@ -504,7 +504,7 @@ $index = array_search($item['label'], $numberedLabels);
                                     <input type="hidden" id="sortByInput" name="sort-by" value="id">
                                     <input type="hidden" id="sortTypeInput" name="sort-type">
                                     <tr>
-                                        @can('view-provides')
+                                        @can('view-guests')
                                             <th scope="col" style="width:2%">
                                                 <span class="d-flex align-items-center">
                                                     <input type="checkbox" id="checkall">
@@ -536,6 +536,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <div class="icon" id="icon-nhacungcap"></div>
                                             </span>
                                         </th>
+                                        @if (Auth::user()->can('isAdmin'))
                                             <th scope="col">
                                                 <span class="d-flex justify-content-center align-items-center">
                                                     <a href="#" class="sort-link" data-sort-by="nhanvien"
@@ -544,6 +545,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     <div class="icon" id="icon-nhanvien"></div>
                                                 </span>
                                             </th>
+                                        @endif
                                         <th scope="col">
                                             <span class="d-flex justify-content-end align-items-end">
                                                 <a href="#" class="sort-link" data-sort-by="total_import"
@@ -588,7 +590,7 @@ $index = array_search($item['label'], $numberedLabels);
                                 <tbody>
                                     @foreach ($debts as $value)
                                         <tr class="{{ $value->id }}">
-                                            @can('view-provides')
+                                            @can('view-guests')
                                                 <td><input type="checkbox" name="ids[]" class="cb-element"
                                                         value="{{ $value->id }}"></td>
                                             @endcan
@@ -645,7 +647,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             <td class="text-center">{{ $value->debt_note }}</td>
                                             <td class="text-center">
                                                 <div class="icon">
-                                                    @if (Auth::user()->can('view-provides'))
+                                                    @if (Auth::user()->can('view-guests'))
                                                         <a href="{{ route('debt_import.edit', $value->id) }}">
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="32"
                                                                 height="32" viewBox="0 0 32 32" fill="none">
