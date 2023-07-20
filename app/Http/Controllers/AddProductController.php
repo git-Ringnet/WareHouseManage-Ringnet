@@ -960,7 +960,7 @@ class AddProductController extends Controller
                     'product_tax' => $request->product_tax[$i],
                     'provide_id' => $request->provide_id == null ? $add_newProvide : $request->provide_id
                 ];
-                $this->productOrder->updateProductOrder($data, $list_id[$i]);
+                $this->productOrder->updateProductOrderEdit($data, $list_id[$i]);
 
                 $f = ProductOrders::where('product_id', $list_id[$i])->first();
                 $this->product->updateProduct($data, $f->product_id);
