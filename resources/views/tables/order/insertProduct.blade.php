@@ -628,9 +628,10 @@ $index = array_search($item['label'], $numberedLabels);
                                         </td>
                                     </tr>
                                     @foreach ($product as $item)
+                                 @if ($va->id == $item->id)
                                         <tr id="product-details-{{ $va->id }}"
                                             class="product-details collapse">
-                                            @if ($va->id == $item->id)
+                                           
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>
@@ -650,8 +651,9 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>
-                                            @endif
+                                         
                                         </tr>
+                                   @endif
                                     @endforeach
                                     <?php $stt++; ?>
                                 @endforeach
