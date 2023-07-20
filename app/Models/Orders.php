@@ -118,13 +118,13 @@ class Orders extends Model
     }
     public function getNameProvide()
     {
-        return $this->hasOne(Provides::class,'id','provide_id');
+        return $this->hasOne(Provides::class, 'id', 'provide_id');
     }
     public function getNameUsers()
     {
-        return $this->hasOne(User::class,'id','users_id');
+        return $this->hasOne(User::class, 'id', 'users_id');
     }
-    public function reportOrders($filter = [],$name = [], $orderBy = null, $orderType = null)
+    public function reportOrders($filter = [], $name = [], $orderBy = null, $orderType = null)
     {
         $tableorders = Orders::leftJoin('users', 'users.id', 'orders.users_id')
             ->leftJoin('roles', 'users.roleid', 'roles.id')
@@ -139,31 +139,28 @@ class Orders extends Model
             }, 'product_qty_count')
 
             ->selectSub(function ($query) {
-                $query->from('productorders')
-                    ->whereColumn('productorders.order_id', 'orders.id')
+                $query->from('orders')
                     ->whereColumn('orders.users_id', 'users.id')
-                    ->selectRaw('SUM((productorders.product_price * productorders.product_qty) + ((productorders.product_price * productorders.product_qty * productorders.product_tax)/100))');
+                    ->selectRaw('SUM(orders.total_tax)');
             }, 'total_sum')
-       
+
             ->selectSub(function ($query) {
                 $query->from('debt_import')
                     ->whereColumn('debt_import.user_id', 'users.id')
                     ->selectRaw('SUM(total_import)');
-            }, 'total_debt')
-       
-            ->distinct();
-            if (!empty($filter)) {
-                $tableorders = $tableorders->where($filter);
-            }
-            if (!empty($name)) {
-                $tableorders = $tableorders->whereIn('users.name', $name);
-            }
-            if (!empty($orderBy) && !empty($orderType)) {
-                if ($orderBy == 'updated_at') {
-                    $orderBy = "orders." . $orderBy;
-                };
-                $tableorders = $tableorders->orderBy('orders.id', $orderType);
-            }
+            }, 'total_debt')->distinct();
+        if (!empty($filter)) {
+            $tableorders = $tableorders->where($filter);
+        }
+        if (!empty($name)) {
+            $tableorders = $tableorders->whereIn('users.name', $name);
+        }
+        if (!empty($orderBy) && !empty($orderType)) {
+            if ($orderBy == 'updated_at') {
+                $orderBy = "orders." . $orderBy;
+            };
+            $tableorders = $tableorders->orderBy('orders.id', $orderType);
+        }
         $tableorders = $tableorders->get();
 
         return $tableorders;
