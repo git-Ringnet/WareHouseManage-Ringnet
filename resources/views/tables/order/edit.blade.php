@@ -3,21 +3,27 @@
 <div class="content-wrapper">
     <div class="row">
         <div class="col-sm-6 breadcrumb">
-        @if ($order->order_status == 1 || $order->order_status == 2)
-        <a href="{{route('insertProduct.index')}}">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" fill="#555555"></path>
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M17 11.9999C17 12.3289 16.7513 12.5956 16.4444 12.5956L7.55557 12.5956C7.24875 12.5956 7.00002 12.3289 7.00002 11.9999C7.00002 11.671 7.24875 11.4043 7.55557 11.4043L16.4444 11.4043C16.7513 11.4043 17 11.671 17 11.9999Z" fill="white"></path>
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M11.1244 8.17446C11.3413 8.40707 11.3413 8.78421 11.1244 9.01683L8.34199 12L11.1244 14.9832C11.3413 15.2158 11.3413 15.5929 11.1244 15.8255C10.9074 16.0582 10.5557 16.0582 10.3387 15.8255L7.16349 12.4212C6.94653 12.1886 6.94653 11.8114 7.16349 11.5788L10.3387 8.17446C10.5557 7.94185 10.9074 7.94185 11.1244 8.17446Z" fill="white"></path>
-            </svg>
-            <span class="ml-1" style="font-size: 16px; font-weight: 500; color: #555555;">Quay lại danh
-                sách</span>
-        </a>
-        @else
-        <span><a href="{{ route('insertProduct.index') }}">Nhập hàng</a></span>
-        <span class="mx-1"> / </span>
-        <span><b>Chi tiết đơn hàng</b></span>
-        @endif
+            @if ($order->order_status == 1 || $order->order_status == 2)
+                <a href="{{ route('insertProduct.index') }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path
+                            d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
+                            fill="#555555"></path>
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M17 11.9999C17 12.3289 16.7513 12.5956 16.4444 12.5956L7.55557 12.5956C7.24875 12.5956 7.00002 12.3289 7.00002 11.9999C7.00002 11.671 7.24875 11.4043 7.55557 11.4043L16.4444 11.4043C16.7513 11.4043 17 11.671 17 11.9999Z"
+                            fill="white"></path>
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M11.1244 8.17446C11.3413 8.40707 11.3413 8.78421 11.1244 9.01683L8.34199 12L11.1244 14.9832C11.3413 15.2158 11.3413 15.5929 11.1244 15.8255C10.9074 16.0582 10.5557 16.0582 10.3387 15.8255L7.16349 12.4212C6.94653 12.1886 6.94653 11.8114 7.16349 11.5788L10.3387 8.17446C10.5557 7.94185 10.9074 7.94185 11.1244 8.17446Z"
+                            fill="white"></path>
+                    </svg>
+                    <span class="ml-1" style="font-size: 16px; font-weight: 500; color: #555555;">Quay lại danh
+                        sách</span>
+                </a>
+            @else
+                <span><a href="{{ route('insertProduct.index') }}">Nhập hàng</a></span>
+                <span class="mx-1"> / </span>
+                <span><b>Chi tiết đơn hàng</b></span>
+            @endif
         </div>
         <div class="col-sm-6 position-absolute" style="top:63px;right:2%">
             <div class="w-50 position-relative" style="float: right;">
@@ -244,7 +250,7 @@
                         <div class="d-flex align-items-center" style="width:101%;">
                             <input name="provide_debt" id="debtInput" class="form-control" type="text"
                                 name="debt" style="width:15%;" value="{{ $provide_order[0]->debt }}"
-                                @if($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif >
+                                @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif>
                             <span class="ml-2" id="data-debt" style="color: rgb(29, 28, 32);">ngày</span>
                             <input type="checkbox" id="debtCheckbox" value="0" <?php echo $provide_order[0]->debt == 0 ? 'checked' : ''; ?>
                                 style="margin-left:10%;">
@@ -260,8 +266,9 @@
                 <div class="d-flex">
                     <div style="width:42%;">
                         <label for="" style="padding: 0 0.75rem;">Số hóa đơn</label>
-                        <input placeholder="Số hóa đơn" oninput="validateBillInput(this)" type="text" name="product_code" class="form-control"
-                            value="{{ $order->product_code }}" @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif
+                        <input placeholder="Số hóa đơn" oninput="validateBillInput(this)" type="text"
+                            name="product_code" class="form-control" value="{{ $order->product_code }}"
+                            @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif
                             @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif>
                     </div>
                     <div>
@@ -314,7 +321,8 @@
                         @foreach ($product_order as $pro)
                             <tr>
                                 <td class="STT"></td>
-                                <input type="hidden" name="product_id[]" value="{{ $pro->id }}">
+                                <input type="hidden" name="product_id[]"
+                                    value="@if($order->order_status == 1){{ $pro->product_id }}@else{{ $pro->id }}@endif">
                                 <td> <input class="form-control name_product"
                                         @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif required
                                         @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif type="text"
@@ -333,7 +341,7 @@
                                 <td> <input class="form-control text-center product_price"
                                         @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif required type="text"
                                         name="product_price[]"
-                                        value="@if(fmod($pro->product_price,1) > 0){{ number_format($pro->product_price,1,'.','') }}@else{{number_format($pro->product_price)}}@endif"
+                                        value="@if (fmod($pro->product_price, 2) > 0) {{ number_format($pro->product_price, 2, '.', '') }}@else{{ number_format($pro->product_price) }} @endif"
                                         @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif> </td>
                                 <td>
                                     <select name="product_tax[]" id="" class="form-control product_tax"
@@ -345,8 +353,8 @@
                                     </select>
                                 </td>
                                 <input type="hidden" class="product_tax1">
-                                <td> <input class="form-control text-center total-amount" readonly
-                                        type="text" name="product_total[]" value="{{ $pro->product_total }}">
+                                <td> <input class="form-control text-center total-amount" readonly type="text"
+                                        name="product_total[]" value="{{ $pro->product_total }}">
                                 </td>
                                 <td> <input class="form-control" @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif
                                         type="text" name="product_trademark[]"
@@ -484,8 +492,8 @@
             if (checkDuplicateRows()) {
                 alert('Sản phẩm đã tồn tại');
             }
-            if($('#product_create').val().trim() == ''){
-                er =true;
+            if ($('#product_create').val().trim() == '') {
+                er = true;
                 alert('Vui lòng nhập ngày hóa đơn');
             }
             // Kiểm tra có lỗi hay không
@@ -527,10 +535,10 @@
         var tr = '<tr>' +
             '<td class="STT"></td>' +
             '<td>' +
-            '<input id="search" type="text" placeholder="Nhập thông tin sản phẩm" name="product_name[]" class="search_product form-control name_product" onkeyup="filterFunction()"> ' +
+            '<input style="width:300px !important;"  id="search" type="text" placeholder="Nhập thông tin sản phẩm" name="product_name[]" class="search_product form-control name_product" onkeyup="filterFunction()"> ' +
             '</td>' +
-            '<td><input required type="text" class="form-control text-center unit_product" style="width:100px" name="product_unit[]"></td>' +
-            '<td><input required type="text" oninput="validatQtyInput(this)" name="product_qty[]" class="quantity-input form-control text-center"></td>' +
+            '<td><input required type="text" class="form-control text-center unit_product" style="width:130px" name="product_unit[]"></td>' +
+            '<td><input required type="text" style="width:60px;" oninput="validatQtyInput(this)" name="product_qty[]" class="quantity-input form-control text-center"></td>' +
             '<td><input required type="text" class="form-control text-center product_price" name="product_price[]"></td>' +
             '<td>' +
             '<select name="product_tax[]" class="product_tax form-control" style="width:100px">' +
@@ -707,7 +715,7 @@
                     if (data.success == true) {
                         alert(data.msg);
                         $('#provide_id').val(data.data.id);
-                    }else{
+                    } else {
                         alert(data.msg);
                     }
                 }
@@ -742,7 +750,7 @@
                     er = true;
                     alert('Sản phẩm đã tồn tại');
                 }
-                if($('#product_create').val().trim() == ''){
+                if ($('#product_create').val().trim() == '') {
                     er = true;
                     alert('Vui lòng nhập ngày hóa đơn');
                 }
@@ -764,9 +772,9 @@
     function myFunction() {
         let text = "Bạn có muốn thực hiện thao tác không ?";
         if (confirm(text) == true) {
-            return true 
+            return true
         } else {
-            return false 
+            return false
         }
     }
 

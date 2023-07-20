@@ -108,9 +108,23 @@
                                     </div>
                                 </div>
                                 <ul id="myUL" class="bg-white position-absolute rounded shadow p-0 scroll-data"
+                                style="z-index: 99; width:37%;">
+                                @foreach ($provide as $value)
+                                    <li class="p-2">
+                                        <a href="#" name="search-info" class="text-dark justify-content-between p-2 search-info"  id="{{$value->id}}">
+                                            <span class="w-50">
+                                                {{$value->provide_name}}
+                                            </span>
+                                        </a>
+                                    </li>
+                                @endforeach
+                                </ul>
+
+                                
+                                {{-- <ul id="myUL" class="bg-white position-absolute rounded shadow p-0 scroll-data"
                                     style="z-index: 99; width:37%;">
                                     @foreach ($provide as $value)
-                                        <li>
+                                        <li class="p-2">
                                             <a href="#"
                                                 class="text-dark d-flex justify-content-between p-2 search-info"
                                                 id="{{ $value->id }}" name="search-info">
@@ -118,7 +132,7 @@
                                             </a>
                                         </li>
                                     @endforeach
-                                </ul>
+                                </ul> --}}
                             </div>
                         </div>
                     </div>

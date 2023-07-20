@@ -87,4 +87,14 @@ class DebtImport extends Model
         return DB::table($this->table)->where('import_id', $id)->update($data);
     }
 
+
+    public function getProvide() {
+        return $this->hasOne(Provides::class,'id','provide_id');
+    }
+    public function getUsers() {
+        return $this->hasOne(User::class,'id','user_id');
+    }
+    public function getCode() {
+        return $this->hasOne(Orders::class,'id','import_id');
+    }
 }

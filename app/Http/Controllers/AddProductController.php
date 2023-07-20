@@ -949,6 +949,7 @@ class AddProductController extends Controller
             $getdate = Orders::find($request->order_id)->created_at;
 
             // Chỉnh sửa thông tin sản phẩm 
+
             for ($i = 0; $i < count($list_id); $i++) {
                 $data = [
                     'product_name' => $request->product_name[$i],
@@ -960,8 +961,8 @@ class AddProductController extends Controller
                     'provide_id' => $request->provide_id == null ? $add_newProvide : $request->provide_id
                 ];
                 $this->productOrder->updateProductOrder($data, $list_id[$i]);
-
-                $f = ProductOrders::findOrFail($list_id[$i]);
+                
+                $f = ProductOrders::where('product_id',$list_id[$i])->first();
                 $this->product->updateProduct($data, $f->product_id);
             }
 
@@ -1008,7 +1009,7 @@ class AddProductController extends Controller
                 'created_at' => $getdate
             ];
             $this->debtImport->updateDebtImport($dataImport, $request->order_id);
-
+            
             foreach($list_id as $value){
               $upPro = History::where('product_id',$value)->get();
               foreach($upPro as $va){
