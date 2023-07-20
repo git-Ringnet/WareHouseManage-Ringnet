@@ -112,7 +112,7 @@ Route::PUT('/updateProduct/{id}', [ProductsController::class, 'updateProduct'])-
 
 Route::get('/export_product', [ProductController::class, 'export'])->name('export');
 Route::get('/export_order', [AddProductController::class, 'export_order'])->name('export_order');
-Route::get('/export_import',[DebtController::class,'export_import'])->name('export_import');
+Route::get('/export_import',[DebtImportController::class,'export_import'])->name('export_import');
 
 Route::get('/show_provide', [AddProductController::class, 'show_provide'])->name('show_provide');
 Route::get('/update_provide', [AddProductController::class, 'update_provide'])->name('update_provide');

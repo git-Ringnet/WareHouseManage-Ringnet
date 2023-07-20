@@ -1463,7 +1463,8 @@ $index = array_search($item['label'], $numberedLabels);
                     list_id: list_id,
                 },
                 success: function(data) {
-                    location.reload();
+                    console.log(data);
+                    // location.reload();
                 }
             })
         }
