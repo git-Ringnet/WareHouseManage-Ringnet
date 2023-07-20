@@ -309,7 +309,7 @@
                             <tr id="dynamic-row-{{ $index }}">
                                 <td class="soTT"><?php echo $stt++; ?></td>
                                 <td>
-                                    <select class="child-select p-1 form-control productName" style="width: 220px"
+                                    <select disabled class="child-select p-1 form-control productName" style="width: 220px"
                                         name="product_id[]">
                                         <option value="{{ $value_export->product_id }}">
                                             {{ $value_export->product_name }}
