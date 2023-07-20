@@ -42,18 +42,18 @@
                                 <div class="mb-3">
                                     <label for="pwd">Người đại diện</label>
                                     <input type="text" class="form-control" name="provide_represent"
-                                        placeholder="Nhập tên đại diện" required>
+                                        placeholder="Nhập tên đại diện">
                                 </div>
                                 <div class="mb-3">
                                     <label for="pwd">Email</label>
                                     <input type="email" pattern="/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/"
-                                        class="form-control" name="provide_email" placeholder="Nhập email" required>
+                                        class="form-control" name="provide_email" placeholder="Nhập email">
                                 </div>
                                 <div class="mb-3">
                                     <label for="pwd">Số điện thoại</label>
                                     <input type="text" class="form-control" name="provide_phone"
                                         oninput=validateNumberInput(this) pattern="^(?:\+?84|0)(?:\d{9}|\d{10})$"
-                                        placeholder="Nhập số điện thoại" required>
+                                        placeholder="Nhập số điện thoại">
                                 </div>
                                 <div class="mb-3 d-none">
                                     <label for="pwd">Trạng thái:</label>

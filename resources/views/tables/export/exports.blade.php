@@ -19,7 +19,7 @@
                         <span>Tạo đơn</span>
                     </button>
                 </a>
-                <button style="margin-left:24px" type="button" onclick="exportToExcel()"
+                <button style="margin-left:24px" type="button" id="exportExcelOrder"
                     class="custom-btn btn btn-outline-primary border-primary d-flex align-items-center">
                     <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                         viewBox="0 0 24 24" fill="none">
@@ -392,7 +392,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('comparison_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity sum-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -650,9 +650,9 @@ $index = array_search($item['label'], $numberedLabels);
                                         </tr>
                                         {{-- @endif --}}
                                         @foreach ($productEx as $item)
-                                            <tr id="product-details-{{ $value->id }}"
-                                                class="collapse product-details">
-                                                @if ($value->id == $item->export_id)
+                                            @if ($value->id == $item->export_id)
+                                                <tr id="product-details-{{ $value->id }}"
+                                                    class="collapse product-details">
                                                     <td></td>
                                                     <td></td>
                                                     <td style="width:300px">
@@ -670,8 +670,8 @@ $index = array_search($item['label'], $numberedLabels);
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>
-                                                @endif
-                                            </tr>
+                                                </tr>
+                                            @endif
                                         @endforeach
                                     @endforeach
                                 </tbody>
@@ -1205,6 +1205,74 @@ $index = array_search($item['label'], $numberedLabels);
         } else {
             $('.multiple_action').hide();
         }
+    }
+    //xuất excel all
+    $(document).on('click', '#exportExcelOrder', function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: "{{ route('export_excel') }}",
+            type: "get",
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    var data = response.data;
+                    var workbook = XLSX.utils.book_new();
+                    var worksheet = XLSX.utils.json_to_sheet(data);
+
+                    // Modify the column headers
+                    var headers = [
+                        'ID',
+                        'Số hóa đơn',
+                        'Khách hàng',
+                        'Ngày tạo',
+                        'Người tạo',
+                        'Tổng tiền',
+                        'Trạng thái',
+                    ];
+
+                    // Update the column headers in the worksheet
+                    worksheet['B1'].v = headers[1];
+                    worksheet['C1'].v = headers[5];
+                    worksheet['D1'].v = headers[6];
+                    worksheet['E1'].v = headers[2];
+                    worksheet['F1'].v = headers[4];
+                    worksheet['G1'].v = headers[3];
+                    worksheet['A1'].v = headers[0];
+
+                    // Add the worksheet to the workbook
+                    XLSX.utils.book_append_sheet(workbook, worksheet, 'Data');
+
+                    // Convert the workbook to a binary Excel file
+                    var excelFile = XLSX.write(workbook, {
+                        bookType: 'xlsx',
+                        type: 'binary'
+                    });
+
+                    // Convert the binary Excel file to a Blob
+                    var blob = new Blob([s2ab(excelFile)], {
+                        type: 'application/octet-stream'
+                    });
+
+                    // Create a temporary <a> element to trigger the file download
+                    var link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = 'exports.xlsx';
+                    link.click();
+                } else {
+                    console.log(response.msg);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.log(error);
+            }
+        });
+    });
+
+    function s2ab(s) {
+        var buf = new ArrayBuffer(s.length);
+        var view = new Uint8Array(buf);
+        for (var i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xff;
+        return buf;
     }
 </script>
 </body>
