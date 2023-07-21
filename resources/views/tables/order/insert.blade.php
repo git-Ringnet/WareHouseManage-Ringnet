@@ -275,12 +275,12 @@
         function calculateTotalTax() {
             var totalTax = 0;
             $('tr').each(function() {
-                var rowTax = parseFloat($(this).find('.product_tax1').text().replace(/[^0-9.-]+/g, ""));
+                var rowTax = Math.round(parseFloat($(this).find('.product_tax1').text().replace(/[^0-9.-]+/g, "")));
                 if (!isNaN(rowTax)) {
                     totalTax += rowTax;
                 }
             });
-            $('#product-tax').text(formatCurrency((totalTax)));
+            $('#product-tax').text(formatCurrency(Math.round(totalTax)));
 
             calculateGrandTotal();
         }

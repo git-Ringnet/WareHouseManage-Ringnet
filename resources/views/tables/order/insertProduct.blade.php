@@ -613,7 +613,8 @@ $index = array_search($item['label'], $numberedLabels);
                                             </div>
                                         </td>
                                         <td class="text-center">
-                                            <div id="dropdown_item{{ $va->id }}" class="dropdownitem" data-toggle="collapse"
+                                            <div id="dropdown_item{{ $va->id }}" class="dropdownitem"
+                                                data-toggle="collapse"
                                                 data-target="#product-details-<?php echo $va->id; ?>">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
                                                     viewBox="0 0 32 32" fill="none">
@@ -660,7 +661,6 @@ $index = array_search($item['label'], $numberedLabels);
                                                         {{ $item->product_tax }}%
                                                     @endif
                                                 </td>
-                                                 <td></td>
                                                 <td></td>
                                                 <td></td>
                                             </tr>

@@ -1069,7 +1069,7 @@ class AddProductController extends Controller
     // Exprort Order
     public function export_order()
     {
-        $data = Orders::select('id', 'product_code', 'provide_id', 'users_id', 'order_status', 'total', 'created_at')
+        $data = Orders::select('id', 'product_code', 'provide_id', 'users_id', 'order_status', 'total_tax', 'created_at')
             ->with('getNameProvide')
             ->with('getNameUsers')
             ->get();
@@ -1084,7 +1084,7 @@ class AddProductController extends Controller
                 } else {
                     $da->order_status = "Đã hủy";
                 }
-                $da->total = number_format($da->total);
+                $da->total = number_format($da->total_tax);
                 $da->formatted_created_at = $da->created_at->format('d-m-Y');
             }
             // Loại bỏ các cột không cần thiết

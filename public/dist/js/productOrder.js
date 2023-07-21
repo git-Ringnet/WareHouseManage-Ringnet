@@ -200,10 +200,10 @@ function calculateTotals() {
 
         if (!isNaN(productQty) && !isNaN(productPrice) && !isNaN(taxValue)) {
             var rowTotal = Math.round(productQty * productPrice);
-            var rowTax = (rowTotal * taxValue) / 100;
+            var rowTax = Math.round((rowTotal * taxValue) / 100);
             // Hiển thị kết quả
             $(this).find('.total-amount').val(formatCurrency(rowTotal));
-            $(this).find('.product_tax1').text(rowTax.toFixed(2));
+            $(this).find('.product_tax1').text(rowTax);
 
             // Cộng dồn vào tổng totalAmount và totalTax
             totalAmount += rowTotal;
