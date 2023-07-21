@@ -124,7 +124,7 @@ class Orders extends Model
     {
         return $this->hasOne(User::class, 'id', 'users_id');
     }
-    public function reportOrders($filter = [], $name = [], $orderBy = null, $orderType = null)
+    public function reportOrders($filter = [], $name = [],$roles=[], $orderBy = null, $orderType = null)
     {
         $tableorders = Orders::leftJoin('users', 'users.id', 'orders.users_id')
             ->leftJoin('roles', 'users.roleid', 'roles.id')
@@ -154,6 +154,9 @@ class Orders extends Model
         }
         if (!empty($name)) {
             $tableorders = $tableorders->whereIn('users.name', $name);
+        }
+        if (!empty($roles)) {
+            $tableorders = $tableorders->whereIn('users.roleid', $roles);
         }
         if (!empty($orderBy) && !empty($orderType)) {
             if ($orderBy == 'updated_at') {

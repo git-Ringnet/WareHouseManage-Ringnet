@@ -24,11 +24,11 @@ class DatabaseSeeder extends Seeder
         // ]);
         $this->call([
             // CategorySeeder::class,
-            // DetailsSeeder::class,
-            GuestsSeeder::class,
-            // ProductSeeder::class,
-            // productsSeeder::class,
-            ProvidesSeeder::class,
+            // // DetailsSeeder::class,
+            // GuestsSeeder::class,
+            // // ProductSeeder::class,
+            // // productsSeeder::class,
+            // ProvidesSeeder::class,
             // // // SerinumbersSeeder::class,
             UsersTableSeeder::class,
             RolesTableSeeder::class,

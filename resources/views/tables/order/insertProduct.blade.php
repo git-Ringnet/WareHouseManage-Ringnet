@@ -663,6 +663,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 </td>
                                                 <td></td>
                                                 <td></td>
+                                                <td></td>
                                             </tr>
                                         @endif
                                     @endforeach
@@ -1072,6 +1073,7 @@ $index = array_search($item['label'], $numberedLabels);
         svgs.addClass("svginative")
     }
 
+
     var dropdownItems = $('[id^="dropdown_item"]');
     dropdownItems.each(function() {
         $(this).on('click', function() {
@@ -1080,16 +1082,24 @@ $index = array_search($item['label'], $numberedLabels);
             var parentElement = $(this).parent().parent();
             console.log(parentElement);
             if (isActive) {
-                $('#expandall').show();
-                $('#collapseall').hide();
+                dropdownItems.each(function() {
+                    if ($(this).hasClass('dropdown-item-active')) {
+                        $('#expandall').show();
+                        $('#collapseall').hide();
+                    }
+                })
                 $(this).removeClass('dropdown-item-active');
                 parentElement.css('background', '#E9ECEF');
                 svgElement.removeClass("svgactive")
                 svgElement.addClass("svginative")
             }
             if (!isActive) {
-                $('#expandall').hide();
-                $('#collapseall').show();
+                dropdownItems.each(function() {
+                    if (!$(this).hasClass('dropdown-item-active')) {
+                        $('#expandall').hide();
+                        $('#collapseall').show();
+                    }
+                })
                 $(this).addClass('dropdown-item-active');
                 parentElement.css('background', '#ADB5BD');
                 svgElement.addClass("svgactive")

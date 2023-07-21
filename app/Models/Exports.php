@@ -123,7 +123,8 @@ class Exports extends Model
         // dd($products);
         return $products;
     }
-    public function reportExports($filter = [],$name = [], $orderBy = null, $orderType = null)
+
+    public function reportExports($filter = [], $name = [],$roles=[], $orderBy = null, $orderType = null)
     {
         //Table xuất hàng
         $Tableexports = Exports::leftJoin('users', 'users.id', 'exports.user_id')
@@ -156,18 +157,21 @@ class Exports extends Model
                     ->selectRaw('SUM(total_sales)');
             }, 'tongcongno')
             ->distinct();
-            if (!empty($filter)) {
-                $Tableexports = $Tableexports->where($filter);
-            }
-            if (!empty($name)) {
-                $Tableexports = $Tableexports->whereIn('users.name', $name);
-            }
-            if (!empty($orderBy) && !empty($orderType)) {
-                if ($orderBy == 'updated_at') {
-                    $orderBy = "exports." . $orderBy;
-                };
-                $Tableexports = $Tableexports->orderBy('exports.id', $orderType);
-            }
+        if (!empty($filter)) {
+            $Tableexports = $Tableexports->where($filter);
+        }
+        if (!empty($name)) {
+            $Tableexports = $Tableexports->whereIn('users.name', $name);
+        }
+        if (!empty($roles)) {
+            $Tableexports = $Tableexports->whereIn('users.roleid', $roles);
+        }
+        if (!empty($orderBy) && !empty($orderType)) {
+            if ($orderBy == 'updated_at') {
+                $orderBy = "exports." . $orderBy;
+            };
+            $Tableexports = $Tableexports->orderBy('exports.id', $orderType);
+        }
         $Tableexports = $Tableexports->get();
         // dd($Tableexports);
 

@@ -10,6 +10,105 @@
             <a href="{{ route('indexExport') }}" class="title mr-2 pt-2 px-1 before">
                 Xuất hàng
             </a>
+            <div class="ml-auto">
+                <div class="col d-flex" style="position: relative; width: 220px">
+                    <div class="dropdown w-100">
+                        <button class="btn w-100 btn-light border rounded dropdown-toggle" id="orders"
+                            style="display: flex;
+                            justify-content: space-between;
+                            align-items: center;"
+                            type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+                            {{-- All orders --}}
+                            <div id="all-orders">
+                                <div class="d-flex flex-column all-orders">
+                                    <div class="ca d-flex">
+                                        <div class="start"></div>
+                                        <div class="end"></div>
+                                    </div>
+                                    <div class="ca">Tất cả</div>
+                                </div>
+                            </div>
+                            {{-- Tháng này Orders --}}
+                            <div id="this-month-orders" style="display: none">
+                                <div class="d-flex flex-column all-orders">
+                                    <div class="ca d-flex">
+                                        <div class="start"></div>
+                                        <div class="end"></div>
+                                    </div>
+                                    <div class="ca">Tháng này</div>
+                                </div>
+                            </div>
+                            {{-- Tháng trước đây Orders --}}
+                            <div id="last-month-orders" style="display: none">
+                                <div class="d-flex flex-column all-orders">
+                                    <div class="ca d-flex">
+                                        <div class="start"></div>
+                                        <div class="end"></div>
+                                    </div>
+                                    <div class="ca">Tháng trước</div>
+                                </div>
+                            </div>
+                            {{-- 3 Tháng trước đây Orders --}}
+                            <div id="3last-month-orders" style="display: none">
+                                <div class="d-flex flex-column all-orders">
+                                    <div class="ca d-flex">
+                                        <div class="start"></div>
+                                        <div class="end"></div>
+                                    </div>
+                                    <div class="ca">3 tháng trước</div>
+                                </div>
+                            </div>
+                            {{-- Khoảng thời gian Orders --}}
+                            <div id="time-orders" style="display: none">
+                                <div class="d-flex flex-column all-orders">
+                                    <div class="ca d-flex">
+                                        <div class="start_order"></div>
+                                        <div class="muitenorder"></div>
+                                        <div class="end_order"></div>
+                                    </div>
+                                    <div class="ca text-left">Khoảng thời gian</div>
+                                </div>
+                            </div>
+
+                        </button>
+                        <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item dropdown-item-orders" id="btn-all-orders" href="#"
+                                data-value="0">Tất cả</a>
+                            <a class="dropdown-item dropdown-item-orders" id="btn-this-month-orders" href="#"
+                                data-value="1">Tháng này</a>
+                            <a class="dropdown-item dropdown-item-orders" id="btn-last-month-orders" href="#"
+                                data-value="2">Tháng trước</a>
+                            <a class="dropdown-item dropdown-item-orders" id="btn-3last-month-orders" href="#"
+                                data-value="3">3 tháng trước</a>
+                            <a class="dropdown-item dropdown-item-orders" id="btn-time-orders" href="#">Khoảng
+                                thời
+                                gian</a>
+                        </div>
+                    </div>
+                    {{-- Chọn khoảng --}}
+                    <div class="block-optionss" id="times-orders-options" style="display:none">
+                        <div class="wrap w-100">
+                            <div class="input-group p-2 justify-content-around">
+                                <div class="start">
+                                    <label for="start">Từ ngày</label>
+                                    <input type="date" name="date_start" class="date_start rounded">
+                                </div>
+                                <div class="end">
+                                    <label for="start">Đến ngày</label>
+                                    <input type="date" name="date_end" class="date_end rounded">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-contents-center align-items-baseline p-2">
+                            <button type="button" class="suscess btn btn-primary btn-block mr-2" value="4">Xác
+                                nhận</button>
+                            <button type="button" id="cancel-times-orders"
+                                class="btn btn-default btn-block">Hủy</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <hr class="hr">
         <div class="container-fluided">
@@ -216,7 +315,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             <button class="dropdown-item" id="btn-roles">Vai trò</button>
                                         </div>
                                         @if (!empty($string))
-                                            <a class="btn-delete-filter" href="{{ route('debt.index') }}"><span>Tắt
+                                            <a class="btn-delete-filter" href="{{ route('indexImport') }}"><span>Tắt
                                                     bộ
                                                     lọc</span></a>
                                         @endif
@@ -301,7 +400,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             </div>
                                         </div>
                                         <div class="d-flex justify-contents-center align-items-baseline p-2">
-                                            <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                            <button type="submit" id="submit-email" class="btn btn-primary btn-block mr-2">Xác
                                                 Nhận</button>
                                             <button type="button" id="cancel-email"
                                                 class="btn btn-default btn-block">Hủy</button>
@@ -449,29 +548,30 @@ $index = array_search($item['label'], $numberedLabels);
                                     <tr>
                                         <th scope="col">STT</th>
                                         <th scope="col"><span class="d-flex justify-content-start">
-                                            <a href="#" class="sort-link" data-sort-by="nhanvien"
-                                                data-sort-type="{{ $sortType }}"><button class="btn-sort"
-                                                    type="submit">Nhân viên</button></a>
-                                            <div class="icon" id="icon-nhanvien"></div>
-                                        </span></th>
+                                                <a href="#" class="sort-link" data-sort-by="nhanvien"
+                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
+                                                        type="submit">Nhân viên</button></a>
+                                                <div class="icon" id="icon-nhanvien"></div>
+                                            </span></th>
                                         <th scope="col"><span class="d-flex">
-                                            <a href="#" class="sort-link" data-sort-by="email"
-                                                data-sort-type="{{ $sortType }}"><button class="btn-sort"
-                                                    type="submit">Email</button></a>
-                                            <div class="icon" id="icon-email"></div>
-                                        </span></th>
+                                                <a href="#" class="sort-link" data-sort-by="email"
+                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
+                                                        type="submit">Email</button></a>
+                                                <div class="icon" id="icon-email"></div>
+                                            </span></th>
                                         <th scope="col"><span class="d-flex justify-content-center">
-                                            <a href="#" class="sort-link" data-sort-by="vaitro"
-                                                data-sort-type="{{ $sortType }}"><button class="btn-sort"
-                                                    type="submit">Vai trò</button></a>
-                                            <div class="icon" id="icon-vaitro"></div>
-                                        </span></th>
-                                        <th scope="col" class="text-right"><span class="d-flex justify-content-end">
-                                            <a href="#" class="sort-link" data-sort-by="product_qty_count"
-                                                data-sort-type="{{ $sortType }}"><button class="btn-sort"
-                                                    type="submit">Tổng đơn nhập</button></a>
-                                            <div class="icon" id="icon-product_qty_count"></div>
-                                        </span></th>
+                                                <a href="#" class="sort-link" data-sort-by="vaitro"
+                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
+                                                        type="submit">Vai trò</button></a>
+                                                <div class="icon" id="icon-vaitro"></div>
+                                            </span></th>
+                                        <th scope="col" class="text-right"><span
+                                                class="d-flex justify-content-end">
+                                                <a href="#" class="sort-link" data-sort-by="product_qty_count"
+                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
+                                                        type="submit">Tổng đơn nhập</button></a>
+                                                <div class="icon" id="icon-product_qty_count"></div>
+                                            </span></th>
                                         <th scope="col">
                                             <span class="d-flex justify-content-end">
                                                 <a href="#" class="sort-link" data-sort-by="total_sum"
@@ -653,6 +753,14 @@ $index = array_search($item['label'], $numberedLabels);
         $('#guest-options').hide();
     });
 
+    $(document).ready(function() {
+        $(".email-input").on("keypress", function(event) {
+            if (event.which === 13) {
+                event.preventDefault();
+                $("#submit-email").click(); 
+            }
+        });
+    });
     // Check box
     $(document).ready(function() {
         // Chọn tất cả các checkbox
@@ -796,79 +904,12 @@ $index = array_search($item['label'], $numberedLabels);
         }
     });
 
-    $(document).on('click', '.cancal_action', function(e) {
-        e.preventDefault();
-        $('.cb-element:checked').prop('checked', false);
-        $('#checkall').prop('checked', false);
-        updateMultipleActionVisibility()
-    })
-
-    // Hiển thị form multiple action
-    function updateMultipleActionVisibility() {
-        if ($('.cb-element:checked').length > 0) {
-            $('.multiple_action').show();
-            $('.count_checkbox').text('Đã chọn ' + $('.cb-element:checked').length);
-        } else {
-            $('.multiple_action').hide();
-        }
-    }
-
-    $('.product_category').change(function() {
-        var product_id = $(this).attr('id');
-        var category_id = $(this).val();
-        var newRow = $('<tr>');
-        newRow.attr('id', 'newRow');
-        $('#example2').append(newRow);
-        $.ajax({
-            url: "{{ route('ajax') }}",
-            type: "get",
-            data: {
-                product_id: product_id,
-                category_id: category_id
-            },
-            success: function(data) {
-                alert('Thay đổi thành công');
-            }
-        });
-    })
-
-
 
     //Xử lí tìm kiếm bộ lọc tổng
     function filterFunction() {
         var input = $("#myInput");
         var filter = input.val().toUpperCase();
         var buttons = $("#dropdown-menu button");
-
-        buttons.each(function() {
-            var text = $(this).text();
-            if (text.toUpperCase().indexOf(filter) > -1) {
-                $(this).show();
-            } else {
-                $(this).hide();
-            }
-        });
-    }
-
-    function filterTrademark() {
-        var input = $("#myInput-trademark");
-        var filter = input.val().toUpperCase();
-        var buttons = $(".ks-cboxtags-trademark li");
-
-        buttons.each(function() {
-            var text = $(this).text();
-            if (text.toUpperCase().indexOf(filter) > -1) {
-                $(this).show();
-            } else {
-                $(this).hide();
-            }
-        });
-    }
-
-    function filterCategory() {
-        var input = $("#myInput-category");
-        var filter = input.val().toUpperCase();
-        var buttons = $(".ks-cboxtags-category li");
 
         buttons.each(function() {
             var text = $(this).text();
@@ -896,20 +937,6 @@ $index = array_search($item['label'], $numberedLabels);
     }
 
 
-    function filterStatus() {
-        var input = $("#myInput-status");
-        var filter = input.val().toUpperCase();
-        var buttons = $(".ks-cboxtags-status li");
-
-        buttons.each(function() {
-            var text = $(this).text();
-            if (text.toUpperCase().indexOf(filter) > -1) {
-                $(this).show();
-            } else {
-                $(this).hide();
-            }
-        });
-    }
     //Sort
     $(document).ready(function() {
         // Khôi phục trạng thái icon khi tải lại trang
@@ -963,40 +990,6 @@ $index = array_search($item['label'], $numberedLabels);
     function updateDeleteItemValue(label) {
         document.getElementById('delete-item-input').value = label;
     }
-
-
-    function myFunction() {
-        let text = "Bạn có chắc chắn thanh toán các đơn đã chọn không?";
-        if (confirm(text) == true) {
-            return true
-        } else {
-            return false
-        }
-
-    }
-    // AJAX Thanh toán Payment
-    $(document).on('click', '#paymentdebt', function(e) {
-        e.preventDefault();
-        if (myFunction()) {
-            const list_id = [];
-            $('input[name="ids[]"]').each(function() {
-                if ($(this).is(':checked')) {
-                    var value = $(this).val();
-                    list_id.push(value);
-                }
-            });
-            $.ajax({
-                url: "{{ route('paymentdebt') }}",
-                type: "get",
-                data: {
-                    list_id: list_id,
-                },
-                success: function(data) {
-                    location.reload();
-                }
-            })
-        }
-    })
 </script>
 </body>
 

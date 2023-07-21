@@ -111,7 +111,7 @@ class ReportController extends Controller
         }
         $allRoles = new Roles();
         $allRoles = $allRoles->getAll();
-        $Tableexports = $this->exports->reportExports($filters, $nhanvien, $sortBy, $sortType);
+        $Tableexports = $this->exports->reportExports($filters, $nhanvien, $roles, $sortBy, $sortType);
         return view('tables.report.report-export', compact('title', 'debtsSale', 'allRoles', 'string', 'Tableexports', 'sortType', 'exports', 'sumExport', 'formattedLoinhuan', 'CongNo'));
     }
 
@@ -187,8 +187,10 @@ class ReportController extends Controller
         } else {
             $sortType = 'desc';
         }
-        $tableorders = $this->orders->reportOrders($filters, $nhanvien, $sortBy, $sortType);
+        $tableorders = $this->orders->reportOrders($filters, $nhanvien, $roles, $sortBy, $sortType);
+        $allRoles = new Roles();
+        $allRoles = $allRoles->getAll();
         // dd($tableorders);
-        return view('tables.report.report-import', compact('title', 'debtsSale', 'string', 'tableorders', 'sortType', 'orders', 'sumTotalOrders', 'sumDebtImportVAT', 'tableorders', 'exports', 'sumExport', 'formattedLoinhuan', 'CongNo'));
+        return view('tables.report.report-import', compact('title','allRoles', 'debtsSale', 'string', 'tableorders', 'sortType', 'orders', 'sumTotalOrders', 'sumDebtImportVAT', 'tableorders', 'exports', 'sumExport', 'formattedLoinhuan', 'CongNo'));
     }
 }

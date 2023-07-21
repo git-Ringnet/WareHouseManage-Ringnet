@@ -124,8 +124,8 @@
                         </div>
                         <div class="row px-3 pt-2 pb-5 info-index">
                             <div class="col">
-                                <div class="d-flex ">
-                                    <div class="icon-index">
+                                <div class="d-flex pt-1">
+                                    <div class="icon-index d-none d-lg-block">
                                         <svg width="70" height="70" viewBox="0 0 70 70" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path
@@ -178,8 +178,8 @@
                                 </div>
                             </div>
                             <div class="col">
-                                <div class="d-flex">
-                                    <div class="icon-index">
+                                <div class="d-flex pt-1">
+                                    <div class="icon-index d-none d-lg-block">
                                         <svg width="70" height="70" viewBox="0 0 70 70" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path
@@ -310,8 +310,8 @@
                         </div>
                         <div class="row px-3 pt-2 pb-5 info-index">
                             <div class="col">
-                                <div class="d-flex ">
-                                    <div class="icon-index">
+                                <div class="d-flex pt-1">
+                                    <div class="icon-index d-none d-lg-block">
                                         <svg width="70" height="70" viewBox="0 0 70 70" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path
@@ -365,8 +365,8 @@
                                 </div>
                             </div>
                             <div class="col">
-                                <div class="d-flex">
-                                    <div class="icon-index">
+                                <div class="d-flex pt-1">
+                                    <div class="icon-index d-none d-lg-block">
                                         <svg width="70" height="70" viewBox="0 0 70 70" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path
@@ -501,8 +501,8 @@
                         </div>
                         <div class="row px-3 pt-2 pb-5 info-index">
                             <div class="col">
-                                <div class="d-flex ">
-                                    <div class="icon-index">
+                                <div class="d-flex pt-1">
+                                    <div class="icon-index d-none d-lg-block">
                                         <svg width="70" height="70" viewBox="0 0 70 70" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path
@@ -524,8 +524,8 @@
                                 </div>
                             </div>
                             <div class="col">
-                                <div class="d-flex">
-                                    <div class="icon-index">
+                                <div class="d-flex pt-1">
+                                    <div class="icon-index d-none d-lg-block">
                                         <svg width="70" height="70" viewBox="0 0 70 70" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path
@@ -655,8 +655,8 @@
                         </div>
                         <div class="row px-3 pt-2 pb-5 info-index">
                             <div class="col">
-                                <div class="d-flex ">
-                                    <div class="icon-index">
+                                <div class="d-flex pt-1">
+                                    <div class="icon-index d-none d-lg-block">
                                         <svg width="70" height="70" viewBox="0 0 70 70" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path
@@ -698,8 +698,8 @@
                                 </div>
                             </div>
                             <div class="col">
-                                <div class="d-flex">
-                                    <div class="icon-index">
+                                <div class="d-flex pt-1">
+                                    <div class="icon-index d-none d-lg-block">
                                         <svg width="70" height="70" viewBox="0 0 70 70" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path
@@ -857,8 +857,8 @@
                         </div>
                         <div class="row px-3 pt-2 pb-5 info-index">
                             <div class="col">
-                                <div class="d-flex ">
-                                    <div class="icon-index">
+                                <div class="d-flex pt-1">
+                                    <div class="icon-index d-none d-lg-block">
                                         <svg width="70" height="70" viewBox="0 0 70 70" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path

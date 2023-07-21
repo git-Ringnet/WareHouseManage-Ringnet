@@ -348,7 +348,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             </div>
                                         </div>
                                         <div class="d-flex justify-contents-center align-items-baseline p-2">
-                                            <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                            <button type="submit" id="submit-email" class="btn btn-primary btn-block mr-2">Xác
                                                 Nhận</button>
                                             <button type="button" id="cancel-email"
                                                 class="btn btn-default btn-block">Hủy</button>
@@ -969,56 +969,14 @@ $index = array_search($item['label'], $numberedLabels);
         }, 1000);
     }
 
-    // Checkbox
-    $('#checkall').change(function() {
-        $('.cb-element').prop('checked', this.checked);
-        updateMultipleActionVisibility()
-    });
-    $('.cb-element').change(function() {
-        updateMultipleActionVisibility()
-        if ($('.cb-element:checked').length == $('.cb-element').length) {
-            $('#checkall').prop('checked', true);
-        } else {
-            $('#checkall').prop('checked', false);
-        }
-    });
-
-    $(document).on('click', '.cancal_action', function(e) {
-        e.preventDefault();
-        $('.cb-element:checked').prop('checked', false);
-        $('#checkall').prop('checked', false);
-        updateMultipleActionVisibility()
-    })
-
-    // Hiển thị form multiple action
-    function updateMultipleActionVisibility() {
-        if ($('.cb-element:checked').length > 0) {
-            $('.multiple_action').show();
-            $('.count_checkbox').text('Đã chọn ' + $('.cb-element:checked').length);
-        } else {
-            $('.multiple_action').hide();
-        }
-    }
-
-    $('.product_category').change(function() {
-        var product_id = $(this).attr('id');
-        var category_id = $(this).val();
-        var newRow = $('<tr>');
-        newRow.attr('id', 'newRow');
-        $('#example2').append(newRow);
-        $.ajax({
-            url: "{{ route('ajax') }}",
-            type: "get",
-            data: {
-                product_id: product_id,
-                category_id: category_id
-            },
-            success: function(data) {
-                alert('Thay đổi thành công');
+    $(document).ready(function() {
+        $(".email-input").on("keypress", function(event) {
+            if (event.which === 13) {
+                event.preventDefault();
+                $("#submit-email").click(); 
             }
         });
-    })
-
+    });
 
 
     //Xử lí tìm kiếm bộ lọc tổng
