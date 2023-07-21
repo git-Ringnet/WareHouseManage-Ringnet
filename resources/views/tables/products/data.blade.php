@@ -9,7 +9,7 @@
                 @can('view-provides')
                     <div class="class">
                         <button type="button" class="custom-btn btn btn-outline-primary d-flex align-items-center"
-                            id="EXPORT" onclick="exportToExcel()">
+                            id="EXPORT">
                             <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24" fill="none">
                                 <path
@@ -239,8 +239,8 @@ $index = array_search($item['label'], $numberedLabels);
                                         $price_inven = null;
                                     }
                                     ?>
-                                      {{-- Tìm hóa đơn vào --}}
-                                      <div class="block-options" id="hdv-options" style="display:none">
+                                    {{-- Tìm hóa đơn vào --}}
+                                    <div class="block-options" id="hdv-options" style="display:none">
                                         <div class="wrap w-100">
                                             <div class="heading-title title-wrap">
                                                 <h5>Hóa đơn vào</h5>
@@ -304,8 +304,8 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </li>
                                                     <li>
                                                         <input type="checkbox" id="status_inactive"
-                                                            {{ in_array(1, $status) ? 'checked' : '' }} name="status[]"
-                                                            value="1">
+                                                            {{ in_array(1, $status) ? 'checked' : '' }}
+                                                            name="status[]" value="1">
                                                         <label id="status_value" for="">Gần hết</label>
                                                     </li>
                                                     <li>
@@ -859,78 +859,6 @@ $index = array_search($item['label'], $numberedLabels);
         }
     });
 
-
-    $(document).on("click", '#EXPORT', function(e) {
-        e.preventDefault();
-        $.ajax({
-            url: "{{ route('export') }}",
-            type: "get",
-            dataType: 'json',
-            success: function(response) {
-                if (response.success) {
-                    var products = response.data;
-
-                    // Create a new workbook
-                    var workbook = XLSX.utils.book_new();
-
-                    // Create a new worksheet
-                    var worksheet = XLSX.utils.json_to_sheet(products);
-
-                    // Modify the column headers
-                    var headers = [
-                        'ID',
-                        'Tên sản phẩm',
-                        'Đơn vị tính',
-                        'Tồn kho',
-                        'Giá nhập',
-                        'Thuế',
-                        'Tổng tiền',
-                        'Nhà cung cấp',
-                        'Đang giao dịch',
-                        'Ghi chú',
-                    ];
-
-                    // Update the column headers in the worksheet
-                    worksheet['A1'].v = headers[0];
-                    worksheet['B1'].v = headers[1];
-                    worksheet['C1'].v = headers[2];
-                    worksheet['D1'].v = headers[3];
-                    worksheet['E1'].v = headers[4];
-                    worksheet['F1'].v = headers[5];
-                    worksheet['G1'].v = headers[6];
-                    worksheet['H1'].v = headers[7];
-                    worksheet['I1'].v = headers[8];
-                    worksheet['J1'].v = headers[9];
-
-                    // Add the worksheet to the workbook
-                    XLSX.utils.book_append_sheet(workbook, worksheet, 'Products');
-
-                    // Convert the workbook to a binary Excel file
-                    var excelFile = XLSX.write(workbook, {
-                        bookType: 'xlsx',
-                        type: 'binary'
-                    });
-
-                    // Convert the binary Excel file to a Blob
-                    var blob = new Blob([s2ab(excelFile)], {
-                        type: 'application/octet-stream'
-                    });
-
-                    // Create a temporary <a> element to trigger the file download
-                    var link = document.createElement('a');
-                    link.href = URL.createObjectURL(blob);
-                    link.download = 'products.xlsx';
-                    link.click();
-                } else {
-                    console.log(response.msg);
-                }
-            },
-            error: function(xhr, status, error) {
-                console.log(error);
-            }
-        });
-    });
-
     function s2ab(s) {
         var buf = new ArrayBuffer(s.length);
         var view = new Uint8Array(buf);
@@ -1369,6 +1297,80 @@ $index = array_search($item['label'], $numberedLabels);
 
                 // Chuyển hướng đến trang mới với id sản phẩm được gửi đi
                 window.location.href = url + '?products=' + selectedProducts.join(',');
+            }
+        });
+    });
+
+
+    $(document).on("click", '#EXPORT', function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: "{{ route('export') }}",
+            type: "get",
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    var products = response.data;
+
+                    // Create a new workbook
+                    var workbook = XLSX.utils.book_new();
+
+                    // Create a new worksheet
+                    var worksheet = XLSX.utils.json_to_sheet(products);
+
+                    // Modify the column headers
+                    var headers = [
+                        'ID',
+                        'Tên sản phẩm',
+                        'Nhà cung cấp',
+                        'Đơn vị tính',
+                        'Số lượng',
+                        'Đang giao dịch',
+                        'Giá nhập',
+                        'Trị tồn kho',
+                        'Thuế',
+                        'HD vào',
+                        'Tình trạng',
+                    ];
+
+                    // Update the column headers in the worksheet
+                    worksheet['A1'].v = headers[0];
+                    worksheet['B1'].v = headers[1];
+                    worksheet['C1'].v = headers[2];
+                    worksheet['D1'].v = headers[3];
+                    worksheet['E1'].v = headers[4];
+                    worksheet['F1'].v = headers[5];
+                    worksheet['G1'].v = headers[6];
+                    worksheet['H1'].v = headers[7];
+                    worksheet['I1'].v = headers[8];
+                    worksheet['J1'].v = headers[9];
+                    worksheet['K1'].v = headers[10];
+
+                    // Add the worksheet to the workbook
+                    XLSX.utils.book_append_sheet(workbook, worksheet, 'product');
+
+                    // Convert the workbook to a binary Excel file
+                    var excelFile = XLSX.write(workbook, {
+                        bookType: 'xlsx',
+                        type: 'binary'
+                    });
+
+                    // Convert the binary Excel file to a Blob
+                    var blob = new Blob([s2ab(excelFile)], {
+                        type: 'application/octet-stream'
+                    });
+
+                    // Create a temporary <a> element to trigger the file download
+                    var link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = 'TonKho.xlsx';
+                    link.click();
+                } else {
+                    console.log(response.msg);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.log(error);
             }
         });
     });

@@ -231,7 +231,7 @@
 
             if (!isNaN(productQty) && !isNaN(productPrice)) {
                 var totalAmount = productQty * productPrice;
-                $(this).closest('tr').find('.total-amount').val(formatCurrency(totalAmount));
+                $(this).closest('tr').find('.total-amount').val(formatCurrency(Math.round(totalAmount)));
 
                 calculateTotalAmount();
                 calculateTotalTax();
@@ -280,7 +280,7 @@
                     totalTax += rowTax;
                 }
             });
-            $('#product-tax').text(formatCurrency(Math.round(totalTax)));
+            $('#product-tax').text(formatCurrency((totalTax)));
 
             calculateGrandTotal();
         }

@@ -525,7 +525,7 @@ $index = array_search($item['label'], $numberedLabels);
                                         <span class="d-flex float-right">
                                             <a href="#" class="sort-link" data-sort-by="total"
                                                 data-sort-type="{{ $sortType }}"><button class="btn-sort"
-                                                    type="submit">Tổng tiền</button></a>
+                                                    type="submit">Tổng tiền (+VAT)</button></a>
                                             <div class="icon" id="icon-total"></div>
                                         </span>
                                     </th>

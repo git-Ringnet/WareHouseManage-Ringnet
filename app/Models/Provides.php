@@ -74,4 +74,14 @@ class Provides extends Model
     {
         return DB::table($this->table)->where('id', $id)->update($data);
     }
+    public function checkProvidesCode($provide_code,$data){
+        $data1 = DB::table($this->table)->where('provide_code', $provide_code)->first();
+        if($data1 === null){
+            $id = DB::table($this->table)->insertGetId($data);
+            return $id;
+        }else{
+            DB::table($this->table)->where('id', $data1->id)->update($data);
+            return $id = $data1->id;
+        }
+    }
 }

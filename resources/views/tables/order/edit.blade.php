@@ -342,7 +342,7 @@
                                 <td> <input class="form-control text-center product_price"
                                         @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif required type="text"
                                         name="product_price[]"
-                                        value="@if (fmod($pro->product_price, 2) > 0) {{ number_format($pro->product_price, 2, '.', '') }}@else{{ number_format($pro->product_price) }} @endif"
+                                        value="@if (fmod($pro->product_price, 2) > 0) {{ number_format($pro->product_price, 2, '.', ',') }}@else{{ number_format($pro->product_price) }} @endif"
                                         @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif> </td>
                                 <td>
                                     <select name="product_tax[]" id="" class="form-control product_tax"

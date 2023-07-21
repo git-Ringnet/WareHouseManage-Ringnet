@@ -216,49 +216,23 @@ class ProductController extends Controller
 
     public function export()
     {
-        $products = Product::select('id', 'product_name', 'product_unit', 'product_qty', 'product_price', 'product_tax', 'product_total', 'provide_id', 'product_trade')
+        $products = Product::select('id', 'product_name', 'provide_id','product_unit', 'product_qty', 'product_trade','product_price', 'product_total', 'product_tax','product_code','product_trademark' )
             ->where('product_qty', '>', 0)
             ->with('getNameProvide')
             ->get();
         foreach ($products as $product) {
             if ($product->getNameProvide) {
                 $product->provide_id = $product->getNameProvide->provide_name;
-                $product->product_price = number_format($product->product_price);
+                $product->product_price = fmod($product->product_price, 2) > 0 ? number_format($product->product_price,2,'.',',') : number_format($product->product_price);
                 $product->product_total = number_format($product->product_total);
+                if($product->product_qty < 6){
+                    $product->product_trademark = "Gần hết";
+                }else{
+                    $product->product_trademark = "Sẵn hàng";
+                }
             }
+            unset($product->getNameProvide);
         }
         return response()->json(['success' => true, 'msg' => 'Xuất file thành công', 'data' => $products]);
     }
-
-
-    // public function export()
-    // {
-    //     $products = Product::all();
-
-    //     $filename = 'products.xls';
-    //     $path = storage_path('app/' . $filename);
-
-    //     $file = fopen($path, 'w');
-
-    //     fputcsv($file, ['ID', 'Tên sản phẩm', 'Đơn vị tính', 'Tồn kho', 'Giá nhập', 'Thuế', 'Tổng tiền', 'Nhà cung cấp', 'Đang giao dịch']);
-
-
-    //     foreach ($products as $product) {
-    //         fputcsv($file, [
-    //             $product->id,
-    //             $product->product_name,
-    //             $product->product_unit,
-    //             $product->product_qty,
-    //             $product->product_price,
-    //             $product->tax,
-    //             $product->total,
-    //             $product->getNameProvide->provide_name,
-    //             $product->product_trade,
-    //         ]);
-    //     }
-
-    //     fclose($file);  
-
-    //     return response()->download($path, $filename)->deleteFileAfterSend(true);
-    // }
 }
