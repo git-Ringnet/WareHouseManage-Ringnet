@@ -266,7 +266,7 @@ class ExportController extends Controller
                                 $history->export_id = $export->id;
                                 $history->product_id = $productID;
                                 $history->import_id = $import_id;
-                                $history->date_time = Carbon::now();
+                                $history->date_time = $export->created_at;
                                 $history->user_id = Auth::user()->id;
                                 $history->provide_id = $provide_id;
                                 $history->product_name = $nameProduct;
@@ -372,6 +372,7 @@ class ExportController extends Controller
                                 ->leftJoin('exports', 'product_exports.export_id', 'exports.id')
                                 ->leftJoin('debts', 'debts.export_id', 'exports.id')
                                 ->where('product.id', $productID)
+                                ->where('exports.id', $export->id)
                                 ->value('debts.debt_status');
                             //cập nhật tình trạng xuất hàng cho bảng History
                             History::where('export_id', $history->export_id)
@@ -479,7 +480,7 @@ class ExportController extends Controller
                                 $history->export_id = $export->id;
                                 $history->product_id = $productID;
                                 $history->import_id = $import_id;
-                                $history->date_time = Carbon::now();
+                                $history->date_time = $export->created_at;
                                 $history->user_id = Auth::user()->id;
                                 $history->provide_id = $provide_id;
                                 $history->product_name = $nameProduct;
@@ -566,7 +567,6 @@ class ExportController extends Controller
                             // dd($endDateFormatted);
                             $debt->date_end = $endDateFormatted;
 
-
                             // Xử lí status debt
                             $endDate = Carbon::parse($endDateFormatted);
                             $currentDate = Carbon::now();
@@ -594,6 +594,7 @@ class ExportController extends Controller
                                 ->leftJoin('exports', 'product_exports.export_id', 'exports.id')
                                 ->leftJoin('debts', 'debts.export_id', 'exports.id')
                                 ->where('product.id', $productID)
+                                ->where('exports.id', $export->id)
                                 ->value('debts.debt_status');
                             //cập nhật tình trạng xuất hàng cho bảng History
                             History::where('export_id', $history->export_id)
@@ -685,7 +686,7 @@ class ExportController extends Controller
                                 $history->export_id = $export->id;
                                 $history->product_id = $productID;
                                 $history->import_id = $import_id;
-                                $history->date_time = Carbon::now();
+                                $history->date_time = $export->created_at;
                                 $history->user_id = Auth::user()->id;
                                 $history->provide_id = $provide_id;
                                 $history->product_name = $nameProduct;
@@ -799,6 +800,7 @@ class ExportController extends Controller
                                 ->leftJoin('exports', 'product_exports.export_id', 'exports.id')
                                 ->leftJoin('debts', 'debts.export_id', 'exports.id')
                                 ->where('product.id', $productID)
+                                ->where('exports.id', $export->id)
                                 ->value('debts.debt_status');
                             //cập nhật tình trạng xuất hàng cho bảng History
                             History::where('export_id', $history->export_id)
@@ -890,7 +892,7 @@ class ExportController extends Controller
                                 $history->export_id = $export->id;
                                 $history->product_id = $productID;
                                 $history->import_id = $import_id;
-                                $history->date_time = Carbon::now();
+                                $history->date_time = $export->created_at;
                                 $history->user_id = Auth::user()->id;
                                 $history->provide_id = $provide_id;
                                 $history->product_name = $nameProduct;
@@ -1004,6 +1006,7 @@ class ExportController extends Controller
                                 ->leftJoin('exports', 'product_exports.export_id', 'exports.id')
                                 ->leftJoin('debts', 'debts.export_id', 'exports.id')
                                 ->where('product.id', $productID)
+                                ->where('exports.id', $export->id)
                                 ->value('debts.debt_status');
                             //cập nhật tình trạng xuất hàng cho bảng History
                             History::where('export_id', $history->export_id)
@@ -1408,7 +1411,11 @@ class ExportController extends Controller
                             $history->export_id = $exports->id;
                             $history->import_id = $import_id;
                             $history->product_id = $productID;
-                            $history->date_time = Carbon::now();
+                            if ($request->export_create == null) {
+                                $history->date_time = Carbon::now();
+                            } else {
+                                $history->date_time = $request->export_create;
+                            }
                             $history->user_id = Auth::user()->id;
                             $history->provide_id = $provide_id;
                             $history->product_name = $nameProduct;
@@ -1505,7 +1512,11 @@ class ExportController extends Controller
                             $history->export_id = $exports->id;
                             $history->import_id = $import_id;
                             $history->product_id = $productID;
-                            $history->date_time = Carbon::now();
+                            if ($request->export_create == null) {
+                                $history->date_time = Carbon::now();
+                            } else {
+                                $history->date_time = $request->export_create;
+                            }
                             $history->user_id = Auth::user()->id;
                             $history->provide_id = $provide_id;
                             $history->product_name = $nameProduct;
@@ -1622,6 +1633,7 @@ class ExportController extends Controller
                         ->leftJoin('exports', 'product_exports.export_id', 'exports.id')
                         ->leftJoin('debts', 'debts.export_id', 'exports.id')
                         ->where('product.id', $productID)
+                        ->where('exports.id', $exports->id)
                         ->value('debts.debt_status');
                     //cập nhật tình trạng xuất hàng cho bảng History
                     History::where('export_id', $history->export_id)
@@ -1929,74 +1941,65 @@ class ExportController extends Controller
                     return redirect()->route('exports.index')->with('warning', 'Chưa được thêm sản phẩm nào!');
                 }
             } elseif ($action === 'action4') {
-                $checkStatus = Exports::leftJoin('product_exports', 'product_exports.export_id', 'exports.id')
-                    ->leftJoin('product', 'product.id', 'product_exports.product_id')
-                    ->leftJoin('debts', 'debts.export_id', 'exports.id')
-                    ->where('exports.id', $exports->id)
-                    ->value('debts.debt_status');
-                if ($checkStatus !== 1) {
-                    // Lấy danh sách sản phẩm đã tồn tại trong xuất hàng
-                    if ($exports->productExports != null) {
-                        foreach ($exports->productExports as $productExport) {
-                            $existingProductIDs[] = $productExport->product_id;
-                            $existingProductQuantities[$productExport->product_id] = $productExport->product_qty;
-                        }
+                // Lấy danh sách sản phẩm đã tồn tại trong xuất hàng
+                if ($exports->productExports != null) {
+                    foreach ($exports->productExports as $productExport) {
+                        $existingProductIDs[] = $productExport->product_id;
+                        $existingProductQuantities[$productExport->product_id] = $productExport->product_qty;
                     }
-                    // Cập nhật thông tin sản phẩm đang tồn tại
-                    for ($i = 0; $i < count($productIDs); $i++) {
-                        $productID = $productIDs[$i];
-                        $productQty = $productQtys[$i];
-                        $nameProduct = Product::where('id', $productID)->value('product_name');
-
-                        if (in_array($productID, $existingProductIDs)) {
-                            $proExport = ProductExports::where('export_id', $id)
-                                ->where('product_id', $productID)
-                                ->first();
-
-                            $proExport->product_unit = $request->product_unit[$i];
-                            $proExport->product_qty = $productQty;
-                            $proExport->product_price = $request->product_price[$i];
-                            $proExport->product_note = $request->product_note[$i];
-                            $proExport->product_tax = $request->product_tax[$i];
-                            $proExport->product_total = $request->totalValue;
-                            $proExport->save();
-                            //số lượng hiện tại
-                            $currentQty = Product::where('id', $productID)->value('product_qty');
-                            //giá nhập
-                            $currentPrice = Product::where('id', $productID)->value('product_price');
-                            //giá trị tồn kho
-                            $currentTotal = Product::where('id', $productID)->value('product_total');
-                            $newQty = $currentQty + $productQty;
-                            $product_total = $productQty * $currentPrice;
-                            $total = $product_total + $currentTotal;
-                            Product::where('id', $productID)
-                                ->update([
-                                    'product_qty' => $newQty,
-                                    'product_total' => $total,
-                                ]);
-                        }
-                        $totalQtyNeeded += $productQty;
-                    }
-                    //cập nhật tình trạng xuất hàng
-                    $exports->export_status = 0;
-                    $exports->total = $request->totalValue;
-                    $exports->note_form = $request->note_form;
-                    $exports->transport_fee = $request->transport_fee;
-                    $exports->export_code = $request->export_code;
-                    if ($request->export_create == null) {
-                        $exports->created_at = Carbon::now();
-                    } else {
-                        $exports->created_at = $request->export_create;
-                    }
-                    $exports->save();
-                    //xóa công nợ
-                    Debt::where('export_id', $exports->id)->delete();
-                    //xóa lịch sử
-                    History::where('export_id', $exports->id)->delete();
-                    return redirect()->route('exports.index')->with('msg', 'Hủy đơn thành công!');
-                } else {
-                    return redirect()->route('exports.index')->with('warning', 'Đơn hàng đã thanh toán không thể hủy đơn!');
                 }
+                // Cập nhật thông tin sản phẩm đang tồn tại
+                for ($i = 0; $i < count($productIDs); $i++) {
+                    $productID = $productIDs[$i];
+                    $productQty = $productQtys[$i];
+                    $nameProduct = Product::where('id', $productID)->value('product_name');
+
+                    if (in_array($productID, $existingProductIDs)) {
+                        $proExport = ProductExports::where('export_id', $id)
+                            ->where('product_id', $productID)
+                            ->first();
+
+                        $proExport->product_unit = $request->product_unit[$i];
+                        $proExport->product_qty = $productQty;
+                        $proExport->product_price = $request->product_price[$i];
+                        $proExport->product_note = $request->product_note[$i];
+                        $proExport->product_tax = $request->product_tax[$i];
+                        $proExport->product_total = $request->totalValue;
+                        $proExport->save();
+                        //số lượng hiện tại
+                        $currentQty = Product::where('id', $productID)->value('product_qty');
+                        //giá nhập
+                        $currentPrice = Product::where('id', $productID)->value('product_price');
+                        //giá trị tồn kho
+                        $currentTotal = Product::where('id', $productID)->value('product_total');
+                        $newQty = $currentQty + $productQty;
+                        $product_total = $productQty * $currentPrice;
+                        $total = $product_total + $currentTotal;
+                        Product::where('id', $productID)
+                            ->update([
+                                'product_qty' => $newQty,
+                                'product_total' => $total,
+                            ]);
+                    }
+                    $totalQtyNeeded += $productQty;
+                }
+                //cập nhật tình trạng xuất hàng
+                $exports->export_status = 0;
+                $exports->total = $request->totalValue;
+                $exports->note_form = $request->note_form;
+                $exports->transport_fee = $request->transport_fee;
+                $exports->export_code = $request->export_code;
+                if ($request->export_create == null) {
+                    $exports->created_at = Carbon::now();
+                } else {
+                    $exports->created_at = $request->export_create;
+                }
+                $exports->save();
+                //xóa công nợ
+                Debt::where('export_id', $exports->id)->delete();
+                //xóa lịch sử
+                History::where('export_id', $exports->id)->delete();
+                return redirect()->route('exports.index')->with('msg', 'Hủy đơn thành công!');
             }
             //Chỉnh sửa khi chốt đơn 
             elseif ($action === 'action5') {
@@ -2361,12 +2364,6 @@ class ExportController extends Controller
                         $debt->debt_status = 3;
                     }
                     $debt->save();
-                    //tình trạng xuất hàng
-                    $export_status = Product::leftJoin('product_exports', 'product_exports.product_id', 'product.id')
-                        ->leftJoin('exports', 'product_exports.export_id', 'exports.id')
-                        ->leftJoin('debts', 'debts.export_id', 'exports.id')
-                        ->where('product.id', $productID)
-                        ->value('debts.debt_status');
                     //cập nhật tình trạng xuất hàng cho bảng History
                     for ($i = 0; $i < count($productIDs); $i++) {
                         $productID = $productIDs[$i];
@@ -2376,7 +2373,7 @@ class ExportController extends Controller
                         if ($history) {
                             $history->update([
                                 'guest_id' => $exports->guest_id,
-                                'export_status' => $export_status,
+                                'export_status' => $debt->debt_status,
                                 'debt_export_end' => $debt->date_end,
                             ]);
                         }
@@ -2514,7 +2511,7 @@ class ExportController extends Controller
                 $productId = $orderItem->product_id;
                 // Lấy số lượng từ bảng product_exports
                 $quantityFromExport = $orderItem->soluongbandau;
-                if ($orderItem->export_status == 2 && $orderItem->tinhtrang != 1) {
+                if ($orderItem->export_status == 2) {
                     $currentQty = Product::where('id', $productId)->value('product_qty');
                     $currentPrice = Product::where('id', $productId)->value('product_price');
                     $currentTotal = Product::where('id', $productId)->value('product_total');
@@ -2540,7 +2537,7 @@ class ExportController extends Controller
                     History::where('export_id', $orderItem->export_id)->delete();
                     session()->flash('msg', 'Hủy đơn hàng thành công');
                     return response()->json(['success' => true, 'msg' => 'Hủy Đơn Hàng thành công']);
-                } elseif ($orderItem->export_status == 1 && $orderItem->tinhtrang != 1) {
+                } elseif ($orderItem->export_status == 1) {
                     $currentTrade = Product::where('id', $productId)->value('product_trade');
                     $newTrade = ($currentTrade - $quantityFromExport) + $productId;
                     $updateTrade = $newTrade - $productId;
@@ -2555,9 +2552,6 @@ class ExportController extends Controller
                         ]);
                     session()->flash('msg', 'Hủy đơn hàng thành công');
                     return response()->json(['success' => true, 'msg' => 'Hủy Đơn Hàng thành công']);
-                } elseif ($orderItem->tinhtrang == 1) {
-                    session()->flash('warning', 'Có đơn hàng đã thanh toán không thể hủy đơn!');
-                    return response()->json(['success' => false, 'msg' => 'Hủy Đơn Hàng thành công']);
                 }
             }
         }
@@ -2628,10 +2622,12 @@ class ExportController extends Controller
                 'users.name as name',
                 'exports.total',
                 'exports.export_status',
-            )
-            ->where('users.id', Auth::user()->id)
-            ->whereOr('users.id')
-            ->get();
+            );
+        if (Auth::user()->roleid != 1) {
+            $data->where('users.id', Auth::user()->id);
+        }
+        $data = $data->get();
+
 
         $data->map(function ($da) {
             if ($da->guests && $da->name) {
