@@ -1298,9 +1298,12 @@
                 var rowTotal = productQty * productPrice;
                 var rowTax = (rowTotal * taxValue) / 100;
 
+                // Làm tròn từng thuế
+                rowTax = Math.round(rowTax);
+                $(this).find('.product_tax1').text(formatCurrency(rowTax));
+
                 // Hiển thị kết quả
                 $(this).find('.total-amount').text(formatCurrency(Math.round(rowTotal)));
-                $(this).find('.product_tax1').text(Math.round(rowTax));
 
                 // Cộng dồn vào tổng totalAmount và totalTax
                 totalAmount += rowTotal;
