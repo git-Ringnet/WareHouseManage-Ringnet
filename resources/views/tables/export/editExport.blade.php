@@ -409,7 +409,10 @@
                                         class="form-control text-center product_price" style="width: 140px"
                                         <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                             echo 'readonly';
-                                        } ?> value={{ number_format($value_export->product_price) }}
+                                        } ?>
+                                        value=@if (fmod($value_export->product_price, 1) == 0) {{ number_format($value_export->product_price, 0, '.', ',') }}
+                                        @else
+                                        {{ number_format($value_export->product_price, 2, '.', ',') }} @endif
                                         required="">
                                 </td>
                                 <td>
@@ -1296,8 +1299,8 @@
                 var rowTax = (rowTotal * taxValue) / 100;
 
                 // Hiển thị kết quả
-                $(this).find('.total-amount').text(formatCurrency(rowTotal.toFixed(2)));
-                $(this).find('.product_tax1').text(rowTax.toFixed(2));
+                $(this).find('.total-amount').text(formatCurrency(Math.round(rowTotal)));
+                $(this).find('.product_tax1').text(Math.round(rowTax));
 
                 // Cộng dồn vào tổng totalAmount và totalTax
                 totalAmount += rowTotal;
@@ -1306,8 +1309,8 @@
         });
 
         // Hiển thị tổng totalAmount và totalTax
-        $('#total-amount-sum').text(formatCurrency(totalAmount.toFixed(2)));
-        $('#product-tax').text(formatCurrency(totalTax.toFixed(2)));
+        $('#total-amount-sum').text(formatCurrency(Math.round(totalAmount)));
+        $('#product-tax').text(formatCurrency(Math.round(totalTax)));
 
         // Tính tổng thành tiền và thuế
         calculateGrandTotal(totalAmount, totalTax);
@@ -1315,10 +1318,10 @@
 
     function calculateGrandTotal(totalAmount, totalTax) {
         var grandTotal = totalAmount + totalTax;
-        $('#grand-total').text(formatCurrency(grandTotal.toFixed(2)));
+        $('#grand-total').text(formatCurrency(Math.round(grandTotal)));
 
         // Cập nhật giá trị data-value
-        $('#grand-total').attr('data-value', grandTotal.toFixed(2));
+        $('#grand-total').attr('data-value', grandTotal);
         $('#total').val(totalAmount);
     }
 
