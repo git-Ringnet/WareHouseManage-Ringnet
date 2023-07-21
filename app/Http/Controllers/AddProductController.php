@@ -183,7 +183,8 @@ class AddProductController extends Controller
             if (
                 $request->provide_name_new != null && $request->provide_address_new != null && $request->provide_code_new != null
             ) {
-                $new_provide = $this->provides->addProvides($dataProvide);
+                $new_provide = $this->provides->checkProvidesCode($request->provide_code_new,$dataProvide);
+                // $new_provide = $this->provides->addProvides($dataProvide);
             }
         } else {
             $this->provides->updateProvides($dataProvide, $request->provide_id);
@@ -277,7 +278,8 @@ class AddProductController extends Controller
         ];
         if ($request->provide_id === null) {
             if ($request->provide_name_new != null && $request->provide_address_new != null && $request->provide_code_new != null) {
-                $newProvide = $this->provides->addProvides($dataProvide);
+                // $newProvide = $this->provides->addProvides($dataProvide);
+                $newProvide = $this->provides->checkProvidesCode($request->provide_code_new,$dataProvide);
             }
         } else {
             $this->provides->updateProvides($dataProvide, $request->provide_id);
@@ -494,7 +496,8 @@ class AddProductController extends Controller
             if (
                 $request->provide_name_new != null && $request->provide_address_new != null && $request->provide_code_new != null
             ) {
-                $new =  $this->provides->addProvides($dataProvide);
+                $new = $this->provides->checkProvidesCode($request->provide_code_new,$dataProvide);
+                // $new =  $this->provides->addProvides($dataProvide);
             }
         } else {
             $this->provides->updateProvides($dataProvide, $request['provide_id']);
@@ -632,7 +635,8 @@ class AddProductController extends Controller
 
         if ($request->provide_id == null) {
             if ($request->provide_name_new != null && $request->provide_address_new != null && $request->provide_code_new != null) {
-                $new_provide =  $this->provides->addProvides($dataProvide);
+                // $new_provide =  $this->provides->addProvides($dataProvide);
+                $new_provide = $this->provides->checkProvidesCode($request->provide_code_new,$dataProvide);
             }
         } else {
             $this->provides->updateProvides($dataProvide, $request->provide_id);
@@ -933,7 +937,8 @@ class AddProductController extends Controller
 
             // Kiểm tra thông tin nhà cung cấp
             if ($request->provide_id == null) {
-                $add_newProvide = $this->provides->addProvides($dataProvide);
+                $add_newProvide = $this->provides->checkProvidesCode($request->provide_code_new,$dataProvide);
+                // $add_newProvide = $this->provides->addProvides($dataProvide);
             } else {
                 $this->provides->updateProvides($dataProvide, $request->provide_id);
             }
