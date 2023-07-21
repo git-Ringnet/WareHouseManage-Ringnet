@@ -648,25 +648,36 @@ $index = array_search($item['label'], $numberedLabels);
                                             </td>
                                         </tr>
                                         {{-- @endif --}}
+                                        <?php $count = 1; ?>
                                         @foreach ($productEx as $item)
                                             @if ($value->id == $item->export_id)
                                                 <tr id="product-details-{{ $value->id }}"
                                                     class="collapse product-details">
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td style="width:300px">
-                                                        <p>Thông tin sản phẩm</p>{{ $item->product_name }}
+                                                    <td><?php echo $count++; ?></td>
+                                                    <td style="width:200px">
+                                                        <p>Tên sản phẩm</p>{{ $item->product_name }}
                                                     </td>
-                                                    <td>
+                                                    <td></td>
+                                                    <td class="text-right">
                                                         <p>Số lượng</p>{{ $item->product_qty }}
                                                     </td>
                                                     <td></td>
-                                                    <td>
-                                                        <p>Tổng tiền</p>
+                                                    <td class="text-right">
+                                                        <p>Giá bán</p>
+                                                        {{ number_format($item->product_price) }}
+                                                    </td>
+                                                    <td class="text-right">
+                                                        <p>Thành tiền</p>
                                                         {{ number_format($item->product_price * $item->product_qty) }}
                                                     </td>
-                                                    <td></td>
-                                                    <td></td>
+                                                    <td class="text-right">
+                                                        <p>Thuế</p>
+                                                        @if ($item->product_tax == 99 || $item->product_tax === null)
+                                                            NOVAT
+                                                        @else
+                                                            {{ $item->product_tax }}%
+                                                        @endif
+                                                    </td>
                                                     <td></td>
                                                     <td></td>
                                                 </tr>
@@ -1215,28 +1226,22 @@ $index = array_search($item['label'], $numberedLabels);
             success: function(response) {
                 if (response.success) {
                     var data = response.data;
+
+                    // Create a new array of objects with properties in the desired order
+                    var modifiedData = data.map(function(item) {
+                        return {
+                            'ID': item.id,
+                            'Số hóa đơn': item['sohoadon'],
+                            'Khách hàng': item['guest_id'],
+                            'Ngày tạo': item['formatted_created_at'],
+                            'Người tạo': item['users_id'],
+                            'Tổng tiền': item['total'],
+                            'Trạng thái': item['export_status'],
+                        };
+                    });
+
                     var workbook = XLSX.utils.book_new();
-                    var worksheet = XLSX.utils.json_to_sheet(data);
-
-                    // Modify the column headers
-                    var headers = [
-                        'ID',
-                        'Số hóa đơn',
-                        'Khách hàng',
-                        'Ngày tạo',
-                        'Người tạo',
-                        'Tổng tiền',
-                        'Trạng thái',
-                    ];
-
-                    // Update the column headers in the worksheet
-                    worksheet['B1'].v = headers[1];
-                    worksheet['C1'].v = headers[5];
-                    worksheet['D1'].v = headers[6];
-                    worksheet['E1'].v = headers[2];
-                    worksheet['F1'].v = headers[4];
-                    worksheet['G1'].v = headers[3];
-                    worksheet['A1'].v = headers[0];
+                    var worksheet = XLSX.utils.json_to_sheet(modifiedData);
 
                     // Add the worksheet to the workbook
                     XLSX.utils.book_append_sheet(workbook, worksheet, 'Data');

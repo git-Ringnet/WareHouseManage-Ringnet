@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Debt;
 use App\Models\DebtImport;
 use App\Models\Exports;
 use App\Models\History;
@@ -964,6 +965,32 @@ class AddProductController extends Controller
 
                 $f = ProductOrders::where('product_id', $list_id[$i])->first();
                 $this->product->updateProduct($data, $f->product_id);
+                //Cập nhật công nợ xuất
+                $exports = Exports::leftJoin('product_exports', 'product_exports.export_id', 'exports.id')
+                    ->leftJoin('product', 'product_exports.product_id', 'product.id')
+                    ->where('product.id', $request->product_id)->first();
+
+                // Lấy thông tin productExports từ exports
+                $productExports = $exports->productExports;
+                $totalSales = 0;
+                $totalImport = 0;
+                $totalDifference = 0;
+
+                foreach ($productExports as $productExport) {
+                    // Tính toán giá trị total_sales
+                    $totalSales += $productExport->product_price * $productExport->product_qty;
+
+                    // Tính toán giá trị total_import
+                    $product = Product::find($productExport->product_id);
+                    $totalImport += $product->product_price * $productExport->product_qty;
+                }
+                // Tính toán giá trị total_difference
+                $totalDifference = $totalSales - $totalImport - $exports->transport_fee;
+                // Tạo đối tượng Debt và cập nhật giá trị
+                $debt = Debt::where('export_id', $exports->id)->first();
+                $debt->total_import = $totalImport;
+                $debt->total_difference = $totalDifference;
+                $debt->save();
             }
 
             $startDate = Carbon::parse($request->product_create); // Chuyển đổi ngày bắt đầu thành đối tượng Carbon
@@ -984,7 +1011,6 @@ class AddProductController extends Controller
             } else {
                 $daysDiff = $daysDiffs;
             }
-
 
             if ($request->provide_debt == 0) {
                 $debt_status = 4;

@@ -970,12 +970,7 @@
     //ngăn chặn click
     $(document).ready(function() {
         $('#chot_don').on('click', function(event) {
-            var inputs = document.getElementsByTagName("input");
             var selects = document.getElementsByTagName("select");
-
-            for (var i = 0; i < inputs.length; i++) {
-                inputs[i].removeAttribute("readonly");
-            }
 
             for (var j = 0; j < selects.length; j++) {
                 selects[j].removeAttribute("disabled");
@@ -991,12 +986,7 @@
         });
 
         $('#luu').on('click', function() {
-            var inputs = document.getElementsByTagName("input");
             var selects = document.getElementsByTagName("select");
-
-            for (var i = 0; i < inputs.length; i++) {
-                inputs[i].removeAttribute("readonly");
-            }
 
             for (var j = 0; j < selects.length; j++) {
                 selects[j].removeAttribute("disabled");
