@@ -223,6 +223,7 @@ class ProductController extends Controller
         foreach ($products as $product) {
             if ($product->getNameProvide) {
                 $product->provide_id = $product->getNameProvide->provide_name;
+                $product->product_trade = $product->product_trade == null ? 0 : $product->product_trade;
                 $product->product_price = fmod($product->product_price, 2) > 0 ? number_format($product->product_price,2,'.',',') : number_format($product->product_price);
                 $product->product_total = number_format($product->product_total);
                 if($product->product_qty < 6){

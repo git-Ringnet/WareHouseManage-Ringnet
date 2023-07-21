@@ -1069,14 +1069,17 @@ class AddProductController extends Controller
     // Exprort Order
     public function export_order()
     {
-        $data = Orders::select('id', 'product_code', 'provide_id', 'users_id', 'order_status', 'total_tax', 'created_at')
+        $data = Orders::select('id', 'product_code', 'provide_id', 'created_at','users_id', 'total_tax','order_status')
             ->with('getNameProvide')
             ->with('getNameUsers')
             ->get();
         foreach ($data as $da) {
             if ($da->getNameProvide && $da->getNameUsers) {
+                $da->product_code = $da->product_code;
                 $da->provide_id = $da->getNameProvide->provide_name;
+                $da->created_at = $da->created_at->format('d-m-Y');
                 $da->users_id = $da->getNameUsers->name;
+                $da->total_tax = number_format($da->total_tax);
                 if ($da->order_status == 0) {
                     $da->order_status = "Chờ duyệt";
                 } elseif ($da->order_status == 1) {
@@ -1084,13 +1087,10 @@ class AddProductController extends Controller
                 } else {
                     $da->order_status = "Đã hủy";
                 }
-                $da->total = number_format($da->total_tax);
-                $da->formatted_created_at = $da->created_at->format('d-m-Y');
             }
             // Loại bỏ các cột không cần thiết
             unset($da->getNameProvide);
             unset($da->getNameUsers);
-            unset($da->created_at);
         }
         return response()->json(['success' => true, 'msg' => 'Xuất file thành công', 'data' => $data]);
     }
