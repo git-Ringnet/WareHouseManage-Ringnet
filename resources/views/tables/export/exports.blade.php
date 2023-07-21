@@ -658,7 +658,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                         <p>Tên sản phẩm</p>{{ $item->product_name }}
                                                     </td>
                                                     <td></td>
-                                                    <td class="text-right">
+                                                    <td class="text-left">
                                                         <p>Số lượng</p>{{ $item->product_qty }}
                                                     </td>
                                                     <td></td>
@@ -670,7 +670,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                         <p>Thành tiền</p>
                                                         {{ number_format($item->product_price * $item->product_qty) }}
                                                     </td>
-                                                    <td class="text-right">
+                                                    <td class="text-center">
                                                         <p>Thuế</p>
                                                         @if ($item->product_tax == 99 || $item->product_tax === null)
                                                             NOVAT
