@@ -594,9 +594,9 @@
             '<div class="form-group">' +
             '<label>Công nợ:</label>' +
             '<div class="d-flex align-items-center" style="width:101%;">' +
-            '<input type="text" oninput="validateNumberInput(this)" class="form-control" id="debtInput" value="0" name="debt" style="width:15%;">' +
+            '<input type="text" oninput="validateNumberInput(this)" class="form-control" id="debtInput" value="" name="debt" style="width:15%;">' +
             '<span class="ml-2" id="data-debt">ngày</span>' +
-            '<input type="checkbox" checked id="debtCheckbox" value="0" style="margin-left:10%;">' +
+            '<input type="checkbox" id="debtCheckbox" value="0" style="margin-left:10%;">' +
             '<span class="ml-2">Thanh toán tiền mặt</span>' +
             '</div>' + '</div>' +
             '<div class="form-group">' +
@@ -604,15 +604,6 @@
             '<input type="text" class="form-control" id="guest_note" placeholder="Nhập thông tin" name="guest_note" value="">' +
             '</div>' + '</div></div></div>'
         );
-        //Công nợ
-        var isChecked = $('#debtCheckbox').is(':checked');
-        // Đặt trạng thái của input dựa trên checkbox
-        $('#debtInput').prop('disabled', isChecked);
-        // Xử lý sự kiện khi checkbox thay đổi
-        $(document).on('change', '#debtCheckbox', function() {
-            var isChecked = $(this).is(':checked');
-            $('#debtInput').prop('disabled', isChecked);
-        });
         $('#click').val(2);
         $('#updateClick').val(2);
         $('#checkguest').val(2);
