@@ -291,7 +291,7 @@ class DebtImportController extends Controller
                     $va->debt_status = "Đến hạn";
                 }
                 $va->total_import = number_format($va->total_import);
-                $va->date =  Carbon::parse($va->date_start)->format('Y-m-d');
+                $va->date =  Carbon::parse($va->date_start)->format('d-m-Y');
             }
             unset($va->getProvide);
             unset($va->getUsers);

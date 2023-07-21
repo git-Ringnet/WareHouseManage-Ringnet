@@ -120,6 +120,7 @@
                     @if (Auth::user()->id == $order->users_id || Auth::user()->can('isAdmin'))
                         @if ($order->order_status == 0)
                             <button class="btn btn-danger text-white" id="add_bill">Duyệt đơn</button>
+                            <a href="#" class="btn btn-secondary mx-4" id="deleteBill">Hủy đơn</a>
                         @endif
                         @if ($order->order_status == 1)
                             <a href="#" class="btn btn-secondary" id="updateBill">Chỉnh sửa</a>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\History;
 use App\Models\Provides;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class HistoryController extends Controller
@@ -113,8 +114,8 @@ class HistoryController extends Controller
             $saleArray = explode(',.@', $sum);
             array_push($string, ['label' => 'Lợi nhuận ' . $total_difference_operator, 'values' => $saleArray, 'class' => 'total_difference']);
         }
-         // Chi phí vận chuyển
-         if (!empty($request->tranport_fee_operator) && !empty($request->tranport_fee)) {
+        // Chi phí vận chuyển
+        if (!empty($request->tranport_fee_operator) && !empty($request->tranport_fee)) {
             $sum = $request->input('tranport_fee');
             $tranport_fee_operator = $request->input('tranport_fee_operator');
             $filters[] = ['tranport_fee', $tranport_fee_operator, $sum];
@@ -191,8 +192,8 @@ class HistoryController extends Controller
 
         $debtsSale =  History::leftjoin('users', 'history.user_id', '=', 'users.id')->get();
         $provides = History::leftjoin('provides', 'history.provide_id', '=', 'provides.id')->get();
-        
-        $history = $this->history->getAllHistory($filters, $keywords, $date,$provide_namearr, $guest, $status, $unitarr, $status_export, $sortBy, $sortType);
+
+        $history = $this->history->getAllHistory($filters, $keywords, $date, $provide_namearr, $guest, $status, $unitarr, $status_export, $sortBy, $sortType);
 
         return view('tables.history.historyindex', compact('history', 'title', 'guests', 'debtsSale', 'provides', 'string', 'sortType'));
     }
@@ -261,5 +262,81 @@ class HistoryController extends Controller
     public function destroy($id)
     {
         //
+    }
+    public function exportHistory()
+    {
+        $data = History::select(
+            'id',
+            'user_id',
+            'date_time',
+            'provide_id',
+            'product_name',
+            'product_qty',
+            'price_import',
+            'product_total',
+            'import_code',
+            'debt_import',
+            'import_status',
+            'guest_id',
+            'export_qty',
+            'export_unit',
+            'price_export',
+            'export_total',
+            'export_code',
+            'debt_export',
+            'export_status',
+            'total_difference',
+            'tranport_fee',
+            'history_note'
+        )
+        ->with('getUsers')
+        ->with('getProvides')
+        ->with('getGuests')
+            ->get();
+
+        foreach ($data as $row) {
+            if ($row->getUsers && $row->getProvides && $row->getGuests) {
+                $row->user_id = $row->getUsers->name;
+                $row->date_time = Carbon::parse($row->date_time)->format('d-m-Y');
+                $row->provide_id = $row->getProvides->provide_name;
+                $row->price_import = number_format($row->price_import);
+                $row->product_total = number_format($row->product_total);
+                if ($row->import_status == 0) {
+                    $row->import_status = "Quá hạn";
+                } elseif ($row->import_status == 1) {
+                    $row->import_status = "Thanh toán đủ";
+                } elseif ($row->import_status == 2) {
+                    $row->import_status = "Gần đến hạn";
+                } elseif ($row->import_status == 3) {
+                    $row->import_status = "Công nợ";
+                } elseif ($row->import_status == 4) {
+                    $row->import_status = "Chưa thanh toán";
+                } else {
+                    $row->import_status = "Đến hạn";
+                }
+                $row->guest_id = $row->getGuests->guest_name;
+                $row->price_export = number_format($row->price_export);
+                $row->export_total = number_format($row->export_total);
+                if ($row->export_status == 0) {
+                    $row->export_status = "Quá hạn";
+                } elseif ($row->export_status == 1) {
+                    $row->export_status = "Thanh toán đủ";
+                } elseif ($row->export_status == 2) {
+                    $row->export_status = "Gần đến hạn";
+                } elseif ($row->export_status == 3) {
+                    $row->export_status = "Công nợ";
+                } elseif ($row->export_status == 4) {
+                    $row->export_status = "Chưa thanh toán";
+                } else {
+                    $row->export_status = "Đến hạn";
+                }
+                $row->total_difference = number_format($row->total_difference);
+                $row->tranport_fee = number_format($row->tranport_fee);
+            }
+            unset($row->getUsers);
+            unset($row->getProvides);
+            unset($row->getGuests);
+        }
+        return response()->json(['success' => true, 'msg' => 'Xuất file thành công', 'data' => $data]);
     }
 }

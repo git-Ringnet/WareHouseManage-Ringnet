@@ -301,4 +301,41 @@ class DebtController extends Controller
         return response()->json(['success' => false, 'warning' => 'Thanh toán thất bại!']);
         session()->flash('msg', 'Thanh toán thất bại!');
     }
+    public function exportDebt()
+    {
+        $data = Debt::select('id', 'export_id', 'guest_id', 'user_id', 'total_sales', 'total_import', 'debt_transport_fee', 'total_difference', 'debt', 'debt_status','debt_note')
+            ->with('getCode')
+            ->with('getGuests')
+            ->with('getUsers')
+            ->get();
+
+        foreach ($data as $row) {
+            if ($row->getCode && $row->getGuests && $row->getUsers) {
+                $row->export_id = $row->getCode->export_code;
+                $row->guest_id = $row->getGuests->guest_name;
+                $row->user_id = $row->getUsers->name;
+                $row->total_sales = number_format($row->total_sales);
+                $row->total_import = number_format($row->total_import);
+                $row->debt_transport_fee = number_format($row->debt_transport_fee);
+                $row->total_difference = number_format($row->total_difference);
+                if ($row->debt_status == 0) {
+                    $row->debt_status = "Quá hạn";
+                } elseif ($row->debt_status == 1) {
+                    $row->debt_status = "Thanh toán đủ";
+                } elseif ($row->debt_status == 2) {
+                    $row->debt_status = "Gần đến hạn";
+                } elseif ($row->debt_status == 3) {
+                    $row->debt_status = "Công nợ";
+                } elseif ($row->debt_status == 4) {
+                    $row->debt_status = "Chưa thanh toán";
+                } else {
+                    $row->debt_status = "Đến hạn";
+                }
+                unset($row->getCode);
+                unset($row->getUsers);
+                unset($row->getGuests);
+            }
+        }
+        return response()->json(['success' => true, 'msg' => 'Xuất file thành công', 'data' => $data]);
+    }
 }

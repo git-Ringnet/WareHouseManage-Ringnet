@@ -131,4 +131,14 @@ class History extends Model
     {
         return $this->hasOne(Product::class,'id','product_id');
     }
+
+    public function getUsers() {
+        return $this->hasOne(User::class,'id','user_id');
+    }
+    public function getProvides() {
+        return $this->hasOne(Provides::class,'id','provide_id');
+    }
+    public function getGuests() {
+        return $this->hasOne(Guests::class,'id','guest_id');
+    }
 }
