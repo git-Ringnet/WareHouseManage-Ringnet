@@ -2535,8 +2535,6 @@ class ExportController extends Controller
                     Debt::where('export_id', $orderItem->export_id)->delete();
                     //xóa lịch sử
                     History::where('export_id', $orderItem->export_id)->delete();
-                    session()->flash('msg', 'Hủy đơn hàng thành công');
-                    return response()->json(['success' => true, 'msg' => 'Hủy Đơn Hàng thành công']);
                 } elseif ($orderItem->export_status == 1) {
                     $currentTrade = Product::where('id', $productId)->value('product_trade');
                     $newTrade = ($currentTrade - $quantityFromExport) + $productId;
@@ -2550,10 +2548,10 @@ class ExportController extends Controller
                         ->update([
                             'export_status' => 0,
                         ]);
-                    session()->flash('msg', 'Hủy đơn hàng thành công');
-                    return response()->json(['success' => true, 'msg' => 'Hủy Đơn Hàng thành công']);
                 }
             }
+            session()->flash('msg', 'Hủy đơn hàng thành công');
+            return response()->json(['success' => true, 'msg' => 'Hủy Đơn Hàng thành công']);
         }
         return response()->json(['success' => false, 'msg' => 'Not fount']);
     }

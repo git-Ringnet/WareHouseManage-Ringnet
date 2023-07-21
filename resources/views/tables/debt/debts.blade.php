@@ -861,10 +861,12 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <td class="text-left w-auto">
                                                     <p>Tên sản phẩm</p>{{ $item->tensanpham }}
                                                 </td>
-                                                <td></td>
                                                 <td class="text-right">
                                                     <p>Số lượng</p>{{ $item->soluong }}
                                                 </td>
+                                                @if (Auth::user()->can('isAdmin'))
+                                                    <td></td>
+                                                @endif
                                                 <td class="text-right">
                                                     <p>Giá bán</p>{{ number_format($item->giaban) }}
                                                 </td>
@@ -877,9 +879,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     <p>Chênh lệch</p>
                                                     {{ number_format($item->giaban * $item->soluong - $item->gianhap * $item->soluong) }}
                                                 </td>
-                                                @if (Auth::user()->can('isAdmin'))
-                                                    <td></td>
-                                                @endif
+                                                <td></td>
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>

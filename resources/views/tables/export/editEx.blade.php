@@ -309,8 +309,8 @@
                             <tr id="dynamic-row-{{ $index }}">
                                 <td class="soTT"><?php echo $stt++; ?></td>
                                 <td>
-                                    <select disabled class="child-select p-1 form-control productName" style="width: 220px"
-                                        name="product_id[]">
+                                    <select disabled class="child-select p-1 form-control productName"
+                                        style="width: 220px" name="product_id[]">
                                         <option value="{{ $value_export->product_id }}">
                                             {{ $value_export->product_name }}
                                         </option>
@@ -1207,9 +1207,12 @@
                 var rowTotal = productQty * productPrice;
                 var rowTax = (rowTotal * taxValue) / 100;
 
+                // Làm tròn từng thuế
+                rowTax = Math.round(rowTax);
+                $(this).find('.product_tax1').text(formatCurrency(rowTax));
+
                 // Hiển thị kết quả
-                $(this).find('.total-amount').text(formatCurrency(rowTotal.toFixed(2)));
-                $(this).find('.product_tax1').text(rowTax.toFixed(2));
+                $(this).find('.total-amount').text(formatCurrency(Math.round(rowTotal)));
 
                 // Cộng dồn vào tổng totalAmount và totalTax
                 totalAmount += rowTotal;
@@ -1218,8 +1221,8 @@
         });
 
         // Hiển thị tổng totalAmount và totalTax
-        $('#total-amount-sum').text(formatCurrency(totalAmount.toFixed(2)));
-        $('#product-tax').text(formatCurrency(totalTax.toFixed(2)));
+        $('#total-amount-sum').text(formatCurrency(Math.round(totalAmount)));
+        $('#product-tax').text(formatCurrency(Math.round(totalTax)));
 
         // Tính tổng thành tiền và thuế
         calculateGrandTotal(totalAmount, totalTax);
