@@ -1055,17 +1055,6 @@ class AddProductController extends Controller
                     }
                 }
             }
-
-            // $dataHistory =  [
-            //     'import_code' => $request->product_code,
-            //     'provide_id' => $request->provide_id == null ? $add_newProvide : $request->provide_id,
-            //     'product_total' => $total_import,
-            //     'import_status' => $debt_status,
-            //     'debt_import' => $request->provide_debt == null ? 0 : $request->provide_debt,
-            //     'debt_import_end' => $endDateFormatted,
-            //     'debt_import_start' => $request->product_create,
-            // ];
-            // $this->history->updateHistoryByImport($dataHistory, $request->order_id);
             return redirect()->route('insertProduct.index')->with('msg', 'Chỉnh sửa đơn hàng thành công');
         }
     }
@@ -1090,7 +1079,7 @@ class AddProductController extends Controller
                     $da->order_status = "Đã hủy";
                 }
                 $da->total = number_format($da->total);
-                $da->formatted_created_at = $da->created_at->format('Y-m-d');
+                $da->formatted_created_at = $da->created_at->format('d-m-Y');
             }
             // Loại bỏ các cột không cần thiết
             unset($da->getNameProvide);

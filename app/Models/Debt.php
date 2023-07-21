@@ -95,4 +95,16 @@ class Debt extends Model
         $debtsCreator = DB::table($this->table)->where('user_id', $userId)->paginate(20);
         return $debtsCreator;
     }
+
+    public function getUsers() {
+        return $this->hasOne(User::class,'id','user_id');
+    }
+
+    public function getCode() {
+        return $this->hasOne(Exports::class,'id','export_id');
+    }
+
+    public function getGuests() {
+        return $this->hasOne(Guests::class,'id','guest_id');
+    }
 }

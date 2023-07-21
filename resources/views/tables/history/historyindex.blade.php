@@ -7,7 +7,7 @@
             <div class="d-flex mb-1">
                 @can('view-guests')
                     <div class="class">
-                        <button onclick="exportToExcel()" type="button"
+                        <button type="button" id="EXPORT_HISTORY"
                             class="custom-btn btn btn-outline-primary d-flex align-items-center">
                             <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24" fill="none">
@@ -2012,6 +2012,104 @@ $index = array_search($item['label'], $numberedLabels);
                 $(this).hide();
             }
         });
+    }
+
+
+    $(document).on('click', '#EXPORT_HISTORY', function(e){
+        e.preventDefault();
+        $.ajax({
+            url: "{{ route('exportHistory') }}",
+            type: "get",
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    var products = response.data;
+                    // Create a new workbook
+                    var workbook = XLSX.utils.book_new();
+                    // Create a new worksheet
+                    var worksheet = XLSX.utils.json_to_sheet(products);
+                    // Modify the column headers
+                    var headers = [
+                        'ID',
+                        'Nhân viên',
+                        'Thời gian',
+                        'NCC',
+                        'Mặt hàng',
+                        'SL nhập',
+                        'Giá nhập',
+                        'Thành tiền nhập',
+                        'HĐ vào',
+                        'Công nợ nhập',
+                        'Tình trạng nhập',
+                        'Khách hàng',
+                        'SL xuất',
+                        'ĐVT',
+                        'Giá bán',
+                        'Thành tiền xuất',
+                        'HD ra',
+                        'Công nợ xuất',
+                        'Tình trạng xuất',
+                        'Lợi nhuận',
+                        'Chi phí VC',
+                        'Ghi chú'
+                    ];
+                    // Update the column headers in the worksheet
+                    worksheet['A1'].v = headers[0];
+                    worksheet['B1'].v = headers[1];
+                    worksheet['C1'].v = headers[2];
+                    worksheet['D1'].v = headers[3];
+                    worksheet['E1'].v = headers[4];
+                    worksheet['F1'].v = headers[5];
+                    worksheet['G1'].v = headers[6];
+                    worksheet['H1'].v = headers[7];
+                    worksheet['I1'].v = headers[8];
+                    worksheet['J1'].v = headers[9];
+                    worksheet['K1'].v = headers[10];
+                    worksheet['L1'].v = headers[11];
+                    worksheet['M1'].v = headers[12];
+                    worksheet['N1'].v = headers[13];
+                    worksheet['O1'].v = headers[14];
+                    worksheet['P1'].v = headers[15];
+                    worksheet['Q1'].v = headers[16];
+                    worksheet['R1'].v = headers[17];
+                    worksheet['S1'].v = headers[18];
+                    worksheet['T1'].v = headers[19];
+                    worksheet['U1'].v = headers[20];
+                    worksheet['V1'].v = headers[21];
+                    // Add the worksheet to the workbook
+                    XLSX.utils.book_append_sheet(workbook, worksheet, 'history');
+
+                    // Convert the workbook to a binary Excel file
+                    var excelFile = XLSX.write(workbook, {
+                        bookType: 'xlsx',
+                        type: 'binary'
+                    });
+
+                    // Convert the binary Excel file to a Blob
+                    var blob = new Blob([s2ab(excelFile)], {
+                        type: 'application/octet-stream'
+                    });
+
+                    // Create a temporary <a> element to trigger the file download
+                    var link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = 'LichSuGD.xlsx';
+                    link.click();
+                } else {
+                    console.log(response.msg);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.log(error);
+            }
+        });
+    })
+
+    function s2ab(s) {
+        var buf = new ArrayBuffer(s.length);
+        var view = new Uint8Array(buf);
+        for (var i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xff;
+        return buf;
     }
 </script>
 </body>
