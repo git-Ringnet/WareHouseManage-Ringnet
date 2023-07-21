@@ -300,9 +300,9 @@
             '<div class="form-group">' +
             '<label>Công nợ:</label>' +
             '<div class="d-flex align-items-center" style="width:101%;">' +
-            '<input type="text" oninput="validateNumberInput(this)" class="form-control" id="debtInput" value="0" name="debt" style="width:15%;">' +
+            '<input type="text" oninput="validateNumberInput(this)" class="form-control" id="debtInput" value="" name="debt" style="width:15%;">' +
             '<span class="ml-2" id="data-debt">ngày</span>' +
-            '<input type="checkbox" checked id="debtCheckbox" value="0" style="margin-left:10%;">' +
+            '<input type="checkbox" id="debtCheckbox" value="0" style="margin-left:10%;">' +
             '<span class="ml-2">Thanh toán tiền mặt</span>' +
             '</div>' + '</div>' +
             '<div class="form-group">' +
@@ -310,15 +310,6 @@
             '<input type="text" class="form-control" id="guest_note" placeholder="Nhập thông tin" name="guest_note" value="">' +
             '</div>' + '</div></div></div>'
         );
-        //Công nợ
-        var isChecked = $('#debtCheckbox').is(':checked');
-        // Đặt trạng thái của input dựa trên checkbox
-        $('#debtInput').prop('disabled', isChecked);
-        // Xử lý sự kiện khi checkbox thay đổi
-        $(document).on('change', '#debtCheckbox', function() {
-            var isChecked = $(this).is(':checked');
-            $('#debtInput').prop('disabled', isChecked);
-        });
         $('#checkguest').val(2);
         //Công nợ
         $(document).on('change', '#debtCheckbox', function() {
@@ -579,14 +570,16 @@
             });
         });
     });
-    //Công nợ
-    var isChecked = $('#debtCheckbox').is(':checked');
-    // Đặt trạng thái của input dựa trên checkbox
-    $('#debtInput').prop('disabled', isChecked);
-    // Xử lý sự kiện khi checkbox thay đổi
-    $(document).on('change', '#debtCheckbox', function() {
-        var isChecked = $(this).is(':checked');
+    $(document).ready(function() {
+        //Công nợ
+        var isChecked = $('#debtCheckbox').is(':checked');
+        // Đặt trạng thái của input dựa trên checkbox
         $('#debtInput').prop('disabled', isChecked);
+        // Xử lý sự kiện khi checkbox thay đổi
+        $(document).on('change', '#debtCheckbox', function() {
+            var isChecked = $(this).is(':checked');
+            $('#debtInput').prop('disabled', isChecked);
+        });
     });
 
     //Giới hạn số lượng
@@ -868,7 +861,7 @@
 
         if (!isNaN(productQty) && !isNaN(productPrice)) {
             var totalAmount = productQty * productPrice;
-            $(this).closest('tr').find('.total-amount').val(formatCurrency(totalAmount));
+            $(this).closest('tr').find('.total-amount').val(formatCurrency(Math.round(totalAmount)));
 
             calculateTotalAmount();
             calculateTotalTax();
@@ -892,7 +885,7 @@
             var totalAmount = productQty * productPrice;
             var taxAmount = (totalAmount * taxValue) / 100;
 
-            row.find('.product_tax1').text(taxAmount);
+            row.find('.product_tax1').text(Math.round(taxAmount));
         }
     }
 
@@ -904,6 +897,7 @@
                 totalAmount += rowTotal;
             }
         });
+        totalAmount = Math.round(totalAmount); // Làm tròn thành số nguyên
         $('#total-amount-sum').text(formatCurrency(totalAmount));
         calculateTotalTax();
         calculateGrandTotal();
@@ -917,6 +911,7 @@
                 totalTax += rowTax;
             }
         });
+        totalTax = Math.round(totalTax); // Làm tròn thành số nguyên
         $('#product-tax').text(formatCurrency(totalTax));
 
         calculateGrandTotal();
@@ -927,6 +922,7 @@
         var totalTax = parseFloat($('#product-tax').text().replace(/[^0-9.-]+/g, ""));
 
         var grandTotal = totalAmount + totalTax;
+        grandTotal = Math.round(grandTotal); // Làm tròn thành số nguyên
         $('#grand-total').text(formatCurrency(grandTotal));
 
         // Update data-value attribute
