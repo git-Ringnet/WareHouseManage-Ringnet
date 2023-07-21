@@ -1189,6 +1189,7 @@ $index = array_search($item['label'], $numberedLabels);
             type: "get",
             dataType: 'json',
             success: function(response) {
+                console.log(response);
                 if (response.success) {
                     var products = response.data;
                     // Create a new workbook
@@ -1202,20 +1203,20 @@ $index = array_search($item['label'], $numberedLabels);
                         'Nhà cung cấp',
                         'Ngày lập hóa đơn',
                         'Người tạo',
-                        'Tổng tiền',
+                        'Tổng tiền (+VAT)',
                         'Trạng thái',
                     ];
                     // Update the column headers in the worksheet
                     worksheet['A1'].v = headers[0];
                     worksheet['B1'].v = headers[1];
                     worksheet['C1'].v = headers[2];
-                    worksheet['D1'].v = headers[4];
-                    worksheet['E1'].v = headers[6];
+                    worksheet['D1'].v = headers[3];
+                    worksheet['E1'].v = headers[4];
                     worksheet['F1'].v = headers[5];
-                    worksheet['G1'].v = headers[3];
+                    worksheet['G1'].v = headers[6];
 
                     // Add the worksheet to the workbook
-                    XLSX.utils.book_append_sheet(workbook, worksheet, 'Products');
+                    XLSX.utils.book_append_sheet(workbook, worksheet, 'nhaphang');
 
                     // Convert the workbook to a binary Excel file
                     var excelFile = XLSX.write(workbook, {

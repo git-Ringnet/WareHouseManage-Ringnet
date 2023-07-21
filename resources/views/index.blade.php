@@ -1380,7 +1380,6 @@
                 $('#debt_export').text(formatCurrency(data[0].count));
                 $('#debt_import').text(formatCurrency(data[1].countDebtImport));
                 console.log(data);
-
             }
         })
     })
