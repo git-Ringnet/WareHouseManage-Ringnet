@@ -23,7 +23,7 @@
                             <div class="col">
                                 <div class="title-index">Thông tin nhập hàng</div>
                             </div>
-                            <div class="col d-flex" style="position: relative">
+                            <div class="col d-flex" style="position: relative;height:60px;">
                                 <div class="dropdown w-100">
                                     <button class="btn w-100 btn-light border rounded dropdown-toggle" id="orders"
                                         style="display: flex;
@@ -101,16 +101,13 @@
                                 {{-- Chọn khoảng --}}
                                 <div class="block-optionss" id="times-orders-options" style="display:none">
                                     <div class="wrap w-100">
-                                        <div class="heading-title title-wrap">
-                                            <h5>Khoảng thời gian</h5>
-                                        </div>
                                         <div class="input-group p-2 justify-content-around">
                                             <div class="start">
-                                                <label for="start">Từ ngày:</label>
+                                                <label for="start">Từ ngày</label>
                                                 <input type="date" name="date_start" class="date_start rounded">
                                             </div>
                                             <div class="end">
-                                                <label for="start">Đến ngày:</label>
+                                                <label for="start">Đến ngày</label>
                                                 <input type="date" name="date_end" class="date_end rounded">
                                             </div>
                                         </div>
@@ -210,7 +207,7 @@
                             <div class="col">
                                 <div class="title-index">Thông tin xuất hàng</div>
                             </div>
-                            <div class="col d-flex" style="position: relative">
+                            <div class="col d-flex" style="position: relative;height:60px;">
                                 <div class="dropdown w-100">
                                     <button class="btn w-100 btn-light border rounded dropdown-toggle" id="orders"
                                         style="display: flex;
@@ -288,17 +285,15 @@
                                 {{-- Chọn khoảng --}}
                                 <div class="block-optionss" id="times-exports-options" style="display:none">
                                     <div class="wrap w-100">
-                                        <div class="heading-title title-wrap">
-                                            <h5>Khoảng thời gian</h5>
-                                        </div>
+                                        
                                         <div class="input-group p-2 justify-content-around">
                                             <div class="start">
-                                                <label for="start">Từ ngày:</label>
+                                                <label for="start">Từ ngày</label>
                                                 <input type="date" name="date_start"
                                                     class="date_start_export rounded">
                                             </div>
                                             <div class="end">
-                                                <label for="start">Đến ngày:</label>
+                                                <label for="start">Đến ngày</label>
                                                 <input type="date" name="date_end"
                                                     class="date_end_export rounded">
                                             </div>
@@ -401,7 +396,7 @@
                             <div class="col">
                                 <div class="title-index">Thông tin tồn kho</div>
                             </div>
-                            <div class="col d-flex" style="position: relative">
+                            <div class="col d-flex" style="position: relative;height:60px;">
                                 <div class="dropdown w-100">
                                     <button class="btn w-100 btn-light border rounded dropdown-toggle" id="orders"
                                         style="display: flex;
@@ -454,7 +449,7 @@
                                             <div class="d-flex flex-column all-inventory">
                                                 <div class="ca d-flex">
                                                     <div class="start_inventory"></div>
-                                                    <div class="muiten"></div>
+                                                    <div class="muiten-inventory"></div>
                                                     <div class="end_inventory"></div>
                                                 </div>
                                                 <div class="ca text-left">Khoảng thời gian</div>
@@ -480,17 +475,15 @@
                                 {{-- Chọn khoảng --}}
                                 <div class="block-optionss" id="times-inventory-options" style="display:none">
                                     <div class="wrap w-100">
-                                        <div class="heading-title title-wrap">
-                                            <h5>Khoảng thời gian</h5>
-                                        </div>
+                                       
                                         <div class="input-group p-2 justify-content-around">
                                             <div class="start">
-                                                <label for="start">Từ ngày:</label>
+                                                <label for="start">Từ ngày</label>
                                                 <input type="date" name="date_start"
                                                     class="date_start_inventory rounded">
                                             </div>
                                             <div class="end">
-                                                <label for="start">Đến ngày:</label>
+                                                <label for="start">Đến ngày</label>
                                                 <input type="date" name="date_end"
                                                     class="date_end_inventory rounded">
                                             </div>
@@ -559,7 +552,7 @@
                             <div class="col">
                                 <div class="title-index">Thông tin công nợ</div>
                             </div>
-                            <div class="col d-flex" style="position: relative">
+                            <div class="col d-flex" style="position: relative;height:60px;">
                                 <div class="dropdown w-100">
                                     <button class="btn w-100 btn-light border rounded dropdown-toggle" id="orders"
                                         style="display: flex;
@@ -611,9 +604,9 @@
                                         <div id="time-debt" style="display: none">
                                             <div class="d-flex flex-column all-debt">
                                                 <div class="ca d-flex">
-                                                    <div class="start_inventory"></div>
-                                                    <div class="muiten"></div>
-                                                    <div class="end_inventory"></div>
+                                                    <div class="start_debt"></div>
+                                                    <div class="muiten-debt"></div>
+                                                    <div class="end_debt"></div>
                                                 </div>
                                                 <div class="ca text-left">Khoảng thời gian</div>
                                             </div>
@@ -637,17 +630,15 @@
                                 {{-- Chọn khoảng --}}
                                 <div class="block-optionss" id="times-debt-options" style="display:none">
                                     <div class="wrap w-100">
-                                        <div class="heading-title title-wrap">
-                                            <h5>Khoảng thời gian</h5>
-                                        </div>
+                                       
                                         <div class="input-group p-2 justify-content-around">
                                             <div class="start">
-                                                <label for="start">Từ ngày:</label>
+                                                <label for="start">Từ ngày</label>
                                                 <input type="date" name="date_start"
                                                     class="date_start_debt rounded">
                                             </div>
                                             <div class="end">
-                                                <label for="start">Đến ngày:</label>
+                                                <label for="start">Đến ngày</label>
                                                 <input type="date" name="date_end"
                                                     class="date_end_debt rounded">
                                             </div>
@@ -763,7 +754,7 @@
                             <div class="col">
                                 <div class="title-index">Lợi nhuận</div>
                             </div>
-                            <div class="col d-flex" style="position: relative">
+                            <div class="col d-flex" style="position: relative;height:60px;">
                                 <div class="dropdown w-100">
                                     <button class="btn w-100 btn-light border rounded dropdown-toggle" id="orders"
                                         style="display: flex;
@@ -815,9 +806,9 @@
                                         <div id="time-profit" style="display: none">
                                             <div class="d-flex flex-column all-profit">
                                                 <div class="ca d-flex">
-                                                    <div class="start_inventory"></div>
-                                                    <div class="muiten"></div>
-                                                    <div class="end_inventory"></div>
+                                                    <div class="start_profit"></div>
+                                                    <div class="muiten-profit"></div>
+                                                    <div class="end_profit"></div>
                                                 </div>
                                                 <div class="ca text-left">Khoảng thời gian</div>
                                             </div>
@@ -841,17 +832,15 @@
                                 {{-- Chọn khoảng --}}
                                 <div class="block-optionss" id="times-profit-options" style="display:none">
                                     <div class="wrap w-100">
-                                        <div class="heading-title title-wrap">
-                                            <h5>Khoảng thời gian</h5>
-                                        </div>
+                                       
                                         <div class="input-group p-2 justify-content-around">
                                             <div class="start">
-                                                <label for="start">Từ ngày:</label>
+                                                <label for="start">Từ ngày</label>
                                                 <input type="date" name="date_start"
                                                     class="date_start_profit rounded">
                                             </div>
                                             <div class="end">
-                                                <label for="start">Đến ngày:</label>
+                                                <label for="start">Đến ngày</label>
                                                 <input type="date" name="date_end"
                                                     class="date_end_profit rounded">
                                             </div>
@@ -920,32 +909,32 @@
     $(document).on('change', '.date_start_inventory', function(e) {
         e.preventDefault();
         $('.start_inventory').text(moment($(this).val()).format("DD-MM-YYYY"));
-        $('.muiten').text('->');
+        $('.muiten-inventory').text('->');
     })
     $(document).on('change', '.date_end_inventory', function(e) {
         e.preventDefault();
         $('.end_inventory').text(moment($(this).val()).format("DD-MM-YYYY"));
-        $('.muiten').text('->');
+        $('.muiten-inventory').text('->');
     })
     $(document).on('change', '.date_start_debt', function(e) {
         e.preventDefault();
         $('.start_debt').text(moment($(this).val()).format("DD-MM-YYYY"));
-        $('.muiten').text('->');
+        $('.muiten-debt').text('->');
     })
     $(document).on('change', '.date_end_debt', function(e) {
         e.preventDefault();
         $('.end_debt').text(moment($(this).val()).format("DD-MM-YYYY"));
-        $('.muiten').text('->');
+        $('.muiten-debt').text('->');
     })
     $(document).on('change', '.date_start_profit', function(e) {
         e.preventDefault();
         $('.start_profit').text(moment($(this).val()).format("DD-MM-YYYY"));
-        $('.muiten').text('->');
+        $('.muiten-profit').text('->');
     })
     $(document).on('change', '.date_end_profit', function(e) {
         e.preventDefault();
         $('.end_profit').text(moment($(this).val()).format("DD-MM-YYYY"));
-        $('.muiten').text('->');
+        $('.muiten-profit').text('->');
     })
     // Orders
     // Tất cả
@@ -1201,35 +1190,51 @@
     });
 
     function formatCurrency(value) {
-        // Làm tròn đến 2 chữ số thập phân
-        value = Math.round(value * 100) / 100;
-        // Xử lý phần nguyên
-        var parts = value.toString().split(".");
-        var integerPart = parts[0];
-        var formattedValue = "";
-        // Định dạng phần nguyên
-        var count = 0;
-        for (var i = integerPart.length - 1; i >= 0; i--) {
-            formattedValue = integerPart.charAt(i) + formattedValue;
-            count++;
-            if (count % 3 === 0 && i !== 0) {
-                formattedValue = "," + formattedValue;
-            }
+    // Làm tròn đến 2 chữ số thập phân
+    value = Math.round(value * 100) / 100;
+    
+    // Check if the value is negative
+    var isNegative = value < 0;
+    value = Math.abs(value); // Get the absolute value for formatting
+    
+    // Xử lý phần nguyên
+    var parts = value.toFixed(2).toString().split(".");
+    var integerPart = parts[0];
+    var formattedValue = "";
+
+    // Định dạng phần nguyên
+    var count = 0;
+    for (var i = integerPart.length - 1; i >= 0; i--) {
+        formattedValue = integerPart.charAt(i) + formattedValue;
+        count++;
+        if (count % 3 === 0 && i !== 0) {
+            formattedValue = "," + formattedValue;
         }
-        // Nếu có phần thập phân, thêm vào sau phần nguyên
-        if (parts.length > 1) {
-            formattedValue += "." + parts[1];
-        }
-        // Trả về kết quả đã định dạng
-        return formattedValue;
     }
+
+    // Nếu có phần thập phân, thêm vào sau phần nguyên
+    if (parts.length > 1) {
+        formattedValue += "." + parts[1];
+    } else {
+        // Always ensure two decimal places
+        formattedValue += ".00";
+    }
+
+    // Nếu là số âm, thêm dấu "-" vào đầu chuỗi
+    if (isNegative) {
+        formattedValue = "-" + formattedValue;
+    }
+
+    // Trả về kết quả đã định dạng
+    return formattedValue;
+}
+
     $(document).ready(function() {
         $("#btn-all-orders").trigger("click");
         $("#btn-all-exports").trigger("click");
         $("#btn-all-inventory").trigger("click");
         $("#btn-all-debt").trigger("click");
         $("#btn-all-profit").trigger("click");
-
     });
     // Nhập hàng
     $(document).on('click', '.dropdown-item-orders', function() {

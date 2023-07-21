@@ -710,7 +710,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             </span>
                                         </th>
                                         <th scope="col">
-                                            <span class="d-flex justify-content-end align-items-center">
+                                            <span class="d-flex justify-content-start align-items-center">
                                                 <a href="#" class="sort-link" data-sort-by="debt_note"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Ghi
@@ -736,13 +736,13 @@ $index = array_search($item['label'], $numberedLabels);
                                                     {{ $value->khachhang }}
                                                 </td>
                                                 @if (Auth::user()->can('isAdmin'))
-                                                    <td class="text-center">{{ $value->nhanvien }}</td>
+                                                    <td class="text-left">{{ $value->nhanvien }}</td>
                                                 @endif
-                                                <td class="text-center">
+                                                <td class="text-right">
                                                     {{ number_format($value->total_sales) }}
                                                 </td>
-                                                <td class="text-center">{{ number_format($value->total_import) }}</td>
-                                                <td class="text-center">
+                                                <td class="text-right">{{ number_format($value->total_import) }}</td>
+                                                <td class="text-right">
                                                     {{ number_format($value->debt_transport_fee) }}
                                                 </td>
                                                 <td class="text-right">{{ number_format($value->total_difference) }}
@@ -782,7 +782,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                         <span class="p-2 bg-warning rounded">Đến hạn</span>
                                                     @endif
                                                 </td>
-                                                <td class="text-center">{{ $value->debt_note }}</td>
+                                                <td class="text-left">{{ $value->debt_note }}</td>
                                                 <td class="text-center">
                                                     <div class="icon">
                                                         @if (Auth::user()->can('view-guests'))

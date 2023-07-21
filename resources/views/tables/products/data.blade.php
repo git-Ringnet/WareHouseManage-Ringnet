@@ -161,6 +161,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <button class="dropdown-item" id="btn-price_inven">Trị tồn
                                                     kho</button>
                                                 <button class="dropdown-item" id="btn-tax">Thuế</button>
+                                                <button class="dropdown-item" id="btn-hdv">Hóa đơn vào</button>
                                                 <button class="dropdown-item" id="btn-status">Trạng thái</button>
                                             </div>
                                         </div>
@@ -238,6 +239,25 @@ $index = array_search($item['label'], $numberedLabels);
                                         $price_inven = null;
                                     }
                                     ?>
+                                      {{-- Tìm hóa đơn vào --}}
+                                      <div class="block-options" id="hdv-options" style="display:none">
+                                        <div class="wrap w-100">
+                                            <div class="heading-title title-wrap">
+                                                <h5>Hóa đơn vào</h5>
+                                            </div>
+                                            <div class="input-group p-2">
+                                                <label class="title" for="">Chứa kí tự</label>
+                                                <input type="search" name="hdv" class="form-control hdv-input"
+                                                    value="{{ request()->hdv }}" placeholder="Nhập thông tin..">
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                            <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                                Nhận</button>
+                                            <button type="button" id="cancel-hdv"
+                                                class="btn btn-default btn-block">Hủy</button>
+                                        </div>
+                                    </div>
                                     <div class="block-options" id="id-options" style="display:none">
                                         <div class="wrap w-100">
                                             <div class="heading-title title-wrap">
@@ -471,7 +491,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('comparison_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 quantity-input input-so" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -501,7 +521,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('trade_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 trade-input input-so" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -531,7 +551,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('avg_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 avg-input" type="text" name="avg"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -560,7 +580,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('price_inven_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 price_inven-input input-so" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -633,7 +653,7 @@ $index = array_search($item['label'], $numberedLabels);
                                     <input type="hidden" id="sortByInput" name="sort-by" value="id">
                                     <input type="hidden" id="sortTypeInput" name="sort-type" value="">
                                     <tr>
-                                        @can('view-provides')
+                                        @can('view-guests')
                                             <th scope="col" style="width:2%">
                                                 <span class="d-flex">
                                                     <input type="checkbox" id="checkall">
@@ -746,8 +766,10 @@ $index = array_search($item['label'], $numberedLabels);
                                 <tbody>
                                     @foreach ($products as $value)
                                         <tr>
-                                            <td><input type="checkbox" class="cb-element" name="product[]"
-                                                    value="{{ $value->id }}"></td>
+                                            @can('view-guests')
+                                                <td><input type="checkbox" class="cb-element" name="product[]"
+                                                        value="{{ $value->id }}"></td>
+                                            @endcan
                                             <td class="text-left">{{ $value->id }}</td>
                                             <td class="text-left">{{ $value->product_name }}</td>
                                             <td class="text-left">{{ $value->provide }}</td>
@@ -757,10 +779,10 @@ $index = array_search($item['label'], $numberedLabels);
                                                 {{ $value->product_trade == null ? 0 : $value->product_trade }}
                                             </td>
                                             <td class="text-right">
-                                                @if(fmod($value->product_price,2) > 0)
-                                                {{ number_format($value->product_price,2,'.',',') }}
+                                                @if (fmod($value->product_price, 2) > 0)
+                                                    {{ number_format($value->product_price, 2, '.', ',') }}
                                                 @else
-                                                {{ number_format($value->product_price)}}
+                                                    {{ number_format($value->product_price) }}
                                                 @endif
                                             </td>
                                             <td class="text-right">{{ number_format($value->product_total) }}</td>
@@ -771,8 +793,8 @@ $index = array_search($item['label'], $numberedLabels);
                                                     {{ $value->product_tax }}%
                                                 @endif
                                             </td>
-                                            <td class="text-right">
-                                                {{ $value->product_code}}
+                                            <td class="text-center">
+                                                {{ $value->product_code }}
                                             </td>
                                             <td class="text-center">
                                                 @if ($value->product_qty == 0)
@@ -978,7 +1000,24 @@ $index = array_search($item['label'], $numberedLabels);
             }
         })
     })
-
+    // Hóa đơn vào
+    $('#btn-hdv').click(function(event) {
+        event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
+        $('#hdv-options').toggle();
+    });
+    $('#cancel-hdv').click(function(event) {
+        event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
+        $('.hdv-input').val('');
+        $('#hdv-options').hide();
+    });
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-hdv', function() {
+            $('.hdv-input').val('');
+            document.getElementById('search-filter').submit();
+        });
+    });
     // Tên sản phẩm
     $('#btn-id').click(function(event) {
         event.preventDefault();

@@ -52,6 +52,13 @@ class ProductController extends Controller
         $providearr = [];
         $string = array();
         $class = '';
+        //Hóa đơn vào
+        if (!empty($request->hdv)) {
+            $hdv = $request->hdv;
+            array_push($filters, ['product_code', 'like', '%' . $hdv . '%']);
+            $nameArr = explode(',.@', $hdv);
+            array_push($string, ['label' => 'Hóa đơn vào:', 'values' => $nameArr, 'class' => 'hdv']);
+        }
 
         // Tên sản phẩm
         $products_name = null;

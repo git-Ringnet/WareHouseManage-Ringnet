@@ -520,7 +520,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             </span>
                                         </th>
                                         <th scope="col">
-                                            <span class="d-flex align-items-center">
+                                            <span class="d-flex align-items-start">
                                                 <a href="#" class="sort-link" data-sort-by="ngaytao"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Ngày nhập hóa đơn</button></a>
@@ -537,7 +537,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             </span>
                                         </th>
                                             <th scope="col">
-                                                <span class="d-flex justify-content-center align-items-center">
+                                                <span class="d-flex justify-content-start align-items-center">
                                                     <a href="#" class="sort-link" data-sort-by="nhanvien"
                                                         data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                             type="submit">Nhân viên</button></a>
@@ -572,7 +572,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             </span>
                                         </th>
                                         <th scope="col">
-                                            <span class="d-flex justify-content-end align-items-center">
+                                            <span class="d-flex justify-content-start align-items-center">
                                                 <a href="#" class="sort-link" data-sort-by="debt_note"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Ghi
@@ -593,11 +593,11 @@ $index = array_search($item['label'], $numberedLabels);
                                                         value="{{ $value->id }}"></td>
                                             @endcan
                                             <td class="text-left">{{ $value->madon }}</td>
-                                            <td class="text-center">
+                                            <td class="text-left">
                                                 {{ date_format(new DateTime($value->ngaytao), 'd-m-Y') }}
                                             </td>
                                             <td class="text-left">{{ $value->nhacungcap }}</td>
-                                            <td class="text-center">
+                                            <td class="text-left">
                                                 {{ $value->nhanvien }}
                                             </td>
                                             <td class="text-right">
@@ -638,7 +638,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     <span class="p-2 bg-warning rounded">Đến hạn</span>
                                                 @endif
                                             </td>
-                                            <td class="text-center">{{ $value->debt_note }}</td>
+                                            <td class="text-left">{{ $value->debt_note }}</td>
                                             <td class="text-center">
                                                 <div class="icon">
                                                     @if (Auth::user()->can('view-provides'))

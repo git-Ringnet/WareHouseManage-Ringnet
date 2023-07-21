@@ -588,7 +588,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     type="submit">Email</button></a>
                                             <div class="icon" id="icon-email"></div>
                                         </span></th>
-                                        <th scope="col"><span class="d-flex">
+                                        <th scope="col"><span class="d-flex justify-content-center">
                                             <a href="#" class="sort-link" data-sort-by="vaitro"
                                                 data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                     type="submit">Vai trò</button></a>
@@ -601,7 +601,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             <div class="icon" id="icon-donxuat"></div>
                                         </span></th>
                                         <th scope="col">
-                                            <span class="d-flex justify-content-center">
+                                            <span class="d-flex justify-content-end">
                                                 <a href="#" class="sort-link" data-sort-by="tongtienxuat"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Tổng tiền xuất</button></a>
@@ -609,7 +609,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             </span>
                                         </th>
                                         <th scope="col">
-                                            <span class="d-flex justify-content-center">
+                                            <span class="d-flex justify-content-end">
                                                 <a href="#" class="sort-link" data-sort-by="tongloinhuan"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Tổng lợi nhuận</button></a>
@@ -617,7 +617,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             </span>
                                         </th>
                                         <th scope="col">
-                                            <span class="d-flex justify-content-center">
+                                            <span class="d-flex justify-content-end">
                                                 <a href="#" class="sort-link" data-sort-by="tongcongno"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Tổng công nợ</button></a>
@@ -634,13 +634,13 @@ $index = array_search($item['label'], $numberedLabels);
                                             <td><?php echo $count++; ?></td>
                                             <td>{{ $value->nhanvien }}</td>
                                             <td>{{ $value->email }}</td>
-                                            <td>{{ $value->vaitro }}</td>
+                                            <td class="text-center">{{ $value->vaitro }}</td>
                                             <td class="text-right">{{ $value->donxuat }}</td>
-                                            <td class="text-center">{{ number_format($value->tongtienxuat) }}
+                                            <td class="text-right">{{ number_format($value->tongtienxuat) }}
                                             </td>
-                                            <td class="text-center">{{ number_format($value->tongloinhuan) }}
+                                            <td class="text-right">{{ number_format($value->tongloinhuan) }}
                                             </td>
-                                            <td class="text-center">{{ number_format($value->tongcongno) }}
+                                            <td class="text-right">{{ number_format($value->tongcongno) }}
                                             </td>
                                         </tr>
                                     @endforeach

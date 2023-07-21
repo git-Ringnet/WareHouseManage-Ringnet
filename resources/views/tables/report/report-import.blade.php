@@ -448,7 +448,7 @@ $index = array_search($item['label'], $numberedLabels);
                                         value="{{ $sortType }}">
                                     <tr>
                                         <th scope="col">STT</th>
-                                        <th scope="col"><span class="d-flex justify-content-center">
+                                        <th scope="col"><span class="d-flex justify-content-start">
                                             <a href="#" class="sort-link" data-sort-by="nhanvien"
                                                 data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                     type="submit">Nhân viên</button></a>
@@ -460,7 +460,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     type="submit">Email</button></a>
                                             <div class="icon" id="icon-email"></div>
                                         </span></th>
-                                        <th scope="col"><span class="d-flex">
+                                        <th scope="col"><span class="d-flex justify-content-center">
                                             <a href="#" class="sort-link" data-sort-by="vaitro"
                                                 data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                     type="submit">Vai trò</button></a>
@@ -481,7 +481,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             </span>
                                         </th>
                                         <th scope="col">
-                                            <span class="d-flex justify-content-center">
+                                            <span class="d-flex justify-content-end">
                                                 <a href="#" class="sort-link" data-sort-by="total_debt"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Tổng công nợ(+VAT)</button></a>
@@ -496,12 +496,12 @@ $index = array_search($item['label'], $numberedLabels);
                                     @foreach ($tableorders as $item)
                                         <tr>
                                             <td><?php echo $stt++; ?></td>
-                                            <td class="text-center">{{ $item->nhanvien }}</td>
+                                            <td class="text-left">{{ $item->nhanvien }}</td>
                                             <td>{{ $item->email }}</td>
-                                            <td>{{ $item->vaitro }}</td>
+                                            <td class="text-center">{{ $item->vaitro }}</td>
                                             <td class="text-right">{{ $item->product_qty_count }}</td>
-                                            <td class="text-center">{{ number_format($item->total_sum) }}</td>
-                                            <td class="text-center">{{ number_format($item->total_debt) }}
+                                            <td class="text-right">{{ number_format($item->total_sum) }}</td>
+                                            <td class="text-right">{{ number_format($item->total_debt) }}
                                             </td>
                                         </tr>
                                     @endforeach

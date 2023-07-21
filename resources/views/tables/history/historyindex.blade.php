@@ -5,7 +5,6 @@
     <section class="content-header">
         <div class="container-fluided">
             <div class="d-flex mb-1">
-                @can('view-guests')
                     <div class="class">
                         <button type="button" id="EXPORT_HISTORY"
                             class="custom-btn btn btn-outline-primary d-flex align-items-center">
@@ -22,7 +21,6 @@
                             <span>Xuất Excel</span>
                         </button>
                     </div>
-                @endcan
             </div>
             <div class="row m-auto filter pt-2">
                 <form class="w-100" action="" method="get" id='search-filter'>
@@ -1030,7 +1028,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             </span>
                                         </th>
                                         <th scope="col">
-                                            <span class="d-flex align-items-center">
+                                            <span class="d-flex justify-content-end align-items-end">
                                                 <a href="#" class="sort-link" data-sort-by="product_qty"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">SL nhập</button></a>
@@ -1038,7 +1036,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             </span>
                                         </th>
                                         <th scope="col">
-                                            <span class="d-flex align-items-center">
+                                            <span class="d-flex justify-content-end align-items-center">
                                                 <a href="#" class="sort-link" data-sort-by="price_import"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Giá nhập</button></a>
@@ -1054,7 +1052,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             </span>
                                         </th>
                                         <th scope="col">
-                                            <span class="d-flex align-items-center">
+                                            <span class="d-flex justify-content-center align-items-center">
                                                 <a href="#" class="sort-link" data-sort-by="import_code"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">HĐ vào</button></a>
@@ -1062,7 +1060,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             </span>
                                         </th>
                                         <th scope="col" class="text-center">
-                                            <span class="d-flex justify-content-center align-items-center"
+                                            <span class="d-flex justify-content-start align-items-center"
                                                 style="width:125px;">
                                                 <a href="#" class="sort-link" data-sort-by="debt_import"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
@@ -1080,7 +1078,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             </span>
                                         </th>
                                         <th scope="col" class="text-center">
-                                            <span class="d-flex justify-content-center align-items-center"
+                                            <span class="d-flex justify-content-start align-items-center"
                                                 style="width:110px;">
                                                 <a href="#" class="sort-link" data-sort-by="guest_name"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
@@ -1089,7 +1087,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             </span>
                                         </th>
                                         <th scope="col">
-                                            <span class="d-flex align-items-center">
+                                            <span class="d-flex justify-content-end align-items-center">
                                                 <a href="#" class="sort-link" data-sort-by="export_qty"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">SL xuất</button></a>
@@ -1105,7 +1103,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             </span>
                                         </th>
                                         <th scope="col">
-                                            <span class="d-flex align-items-center">
+                                            <span class="d-flex justify-content-end align-items-center">
                                                 <a href="#" class="sort-link" data-sort-by="price_export"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Giá bán</button></a>
@@ -1113,7 +1111,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             </span>
                                         </th>
                                         <th scope="col">
-                                            <span class="d-flex align-items-center">
+                                            <span class="d-flex justify-content-end align-items-center">
                                                 <a href="#" class="sort-link" data-sort-by="export_total"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Thành tiền xuất</button></a>
@@ -1121,7 +1119,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             </span>
                                         </th>
                                         <th scope="col">
-                                            <span class="d-flex align-items-center">
+                                            <span class="d-flex justify-content-center align-items-center">
                                                 <a href="#" class="sort-link" data-sort-by="export_code"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">HĐ ra</button></a>
@@ -1129,7 +1127,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             </span>
                                         </th>
                                         <th scope="col" class="text-left">
-                                            <span class="d-flex justify-content-center align-items-start"
+                                            <span class="d-flex justify-content-start align-items-start"
                                                 style="width:125px;">
                                                 <a href="#" class="sort-link" data-sort-by="debt_export"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
@@ -1146,7 +1144,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             </span>
                                         </th>
                                         <th scope="col">
-                                            <span class="d-flex align-items-center">
+                                            <span class="d-flex justify-content-end align-items-center">
                                                 <a href="#" class="sort-link" data-sort-by="total_difference"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Lợi nhuận</button></a>
@@ -1154,7 +1152,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             </span>
                                         </th>
                                         <th scope="col">
-                                            <span class="d-flex align-items-center">
+                                            <span class="d-flex justify-content-end align-items-center">
                                                 <a href="#" class="sort-link" data-sort-by="tranport_fee"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Chi phí VC</button></a>
@@ -1162,7 +1160,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             </span>
                                         </th>
                                         <th scope="col">
-                                            <span class="d-flex justify-content-end align-items-center">
+                                            <span class="d-flex justify-content-start align-items-center">
                                                 <a href="#" class="sort-link" data-sort-by="history_note"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Ghi
@@ -1184,10 +1182,10 @@ $index = array_search($item['label'], $numberedLabels);
                                             <td>{{ date_format(new DateTime($item->date_time), 'd-m-Y') }}</td>
                                             <td>{{ $item->provide_name }}</td>
                                             <td>{{ $item->product_name }}</td>
-                                            <td>{{ $item->product_qty }}</td>
-                                            <td>{{ number_format($item->price_import) }}</td>
-                                            <td> {{ number_format($item->product_total) }}</td>
-                                            <td>{{ $item->import_code }}</td>
+                                            <td class="text-right">{{ $item->product_qty }}</td>
+                                            <td class="text-right">{{ number_format($item->price_import) }}</td>
+                                            <td class="text-right"> {{ number_format($item->product_total) }}</td>
+                                            <td class="text-center">{{ $item->import_code }}</td>
                                             <td class="text-left" style="width: 125px">
                                                 @if ($item->debt_import != 0 && $item->import_status != 1)
                                                     {{ $item->debt_import . ' ' }}ngày
@@ -1208,7 +1206,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     $input_value = request('payment');
                                                 @endphp
                                             </td>
-                                            <td class="text-center">
+                                            <td class="text-center" style="width:135px;">
                                                 @if ($item->import_status == 1)
                                                     <span class="p-2 bg-success rounded">Thanh toán đủ</span>
                                                 @elseif ($item->import_status == 2)
@@ -1224,11 +1222,11 @@ $index = array_search($item['label'], $numberedLabels);
                                                 @endif
                                             </td>
                                             <td>{{ $item->guest_name }}</td>
-                                            <td>{{ $item->export_qty }}</td>
+                                            <td class="text-right">{{ $item->export_qty }}</td>
                                             <td>{{ $item->export_unit }}</td>
-                                            <td>{{ number_format($item->price_export) }}</td>
-                                            <td>{{ number_format($item->export_total) }}</td>
-                                            <td>{{ $item->export_code }}</td>
+                                            <td class="text-right">{{ number_format($item->price_export) }}</td>
+                                            <td class="text-right">{{ number_format($item->export_total) }}</td>
+                                            <td class="text-center">{{ $item->export_code }}</td>
                                             <td class="text-left" style="width: 125px">
                                                 @if ($item->debt_export != 0 && $item->export_status != 1)
                                                     {{ $item->debt_export . ' ' }}ngày
@@ -1263,9 +1261,9 @@ $index = array_search($item['label'], $numberedLabels);
                                                     <span class="p-2 bg-warning rounded">Đến hạn</span>
                                                 @endif
                                             </td>
-                                            <td>{{ number_format($item->total_difference) }}</td>
-                                            <td>{{ number_format($item->tranport_fee) }}</td>
-                                            <td>{{ $item->history_note }}</td>
+                                            <td class="text-right">{{ number_format($item->total_difference) }}</td>
+                                            <td class="text-right">{{ number_format($item->tranport_fee) }}</td>
+                                            <td class="text-left">{{ $item->history_note }}</td>
                                             <td></td>
                                             <td></td>
                                         </tr>

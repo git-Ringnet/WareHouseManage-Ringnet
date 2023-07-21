@@ -386,11 +386,11 @@ class DashboardController extends Controller
         // Xử lý lấy tất cả hơn nhập
         if ($data['data'] == 0) {
             $count = Debt::selectSub(function ($query) {
-                $query->from('debts')
+                $query->from('debts')->where('debt_status','!=',1)
                     ->selectRaw('SUM(total_sales)');
             }, 'count')->first();
             $countDebtImport = DebtImport::selectSub(function ($query) {
-                $query->from('debt_import')
+                $query->from('debt_import')->where('debt_status','!=',1)->where('debt_status','!=',1)
                     ->selectRaw('SUM(total_import)');
             }, 'countDebtImport')->first();
             array_push($data1, $count);
@@ -398,12 +398,12 @@ class DashboardController extends Controller
             return $data1;
         } elseif ($data['data'] == 1) {  //Xử lý lấy dữ liệu tháng này
             $count = Debt::selectSub(function ($query) use ($today) {
-                $query->from('debts')
+                $query->from('debts')->where('debt_status','!=',1)
                     ->whereMonth('created_at', $today->month)
                     ->selectRaw('SUM(total_sales)');
             }, 'count')->first();
             $countDebtImport = DebtImport::selectSub(function ($query) use ($today) {
-                $query->from('debt_import')
+                $query->from('debt_import')->where('debt_status','!=',1)->where('debt_status','!=',1)
                     ->whereMonth('created_at', $today->month)
                     ->selectRaw('SUM(total_import)');
             }, 'countDebtImport')->first();
@@ -414,13 +414,13 @@ class DashboardController extends Controller
             if ($today->month == 1) {
                 $lastMonth = $today->subMonth();
                 $count = Debt::selectSub(function ($query) use ($lastMonth) {
-                    $query->from('debts')
+                    $query->from('debts')->where('debt_status','!=',1)
                         ->whereMonth('created_at', $lastMonth->month)
                         ->whereYear('created_at', $lastMonth->year)
                         ->selectRaw('SUM(total_sales)');
                 },  'count')->first();
                 $countDebtImport = DebtImport::selectSub(function ($query) use ($lastMonth) {
-                    $query->from('debt_import')
+                    $query->from('debt_import')->where('debt_status','!=',1)
                         ->whereMonth('created_at', $lastMonth->month)
                         ->whereYear('created_at', $lastMonth->year)
                         ->selectRaw('SUM(total_import)');
@@ -428,12 +428,12 @@ class DashboardController extends Controller
             } else {
                 $lastMonth = $today->subMonthNoOverflow();
                 $count = Debt::selectSub(function ($query) use ($lastMonth) {
-                    $query->from('debts')
+                    $query->from('debts')->where('debt_status','!=',1)
                         ->whereMonth('created_at', $lastMonth->month)
                         ->selectRaw('SUM(total_sales)');
                 },  'count')->first();
                 $countDebtImport = DebtImport::selectSub(function ($query) use ($lastMonth) {
-                    $query->from('debt_import')
+                    $query->from('debt_import')->where('debt_status','!=',1)
                         ->whereMonth('created_at', $lastMonth->month)
                         ->selectRaw('SUM(total_import)');
                 },  'countDebtImport')->first();
@@ -445,14 +445,14 @@ class DashboardController extends Controller
             if ($today->month == 1) {
                 $lastMonth = $today->subMonth(3);
                 $count = Debt::selectSub(function ($query) use ($lastMonth) {
-                    $query->from('debts')
+                    $query->from('debts')->where('debt_status','!=',1)
                         ->whereMonth('created_at', '>=', $lastMonth->month)
                         ->whereMonth('created_at', '<=', ($lastMonth->month + 2))
                         ->whereYear('created_at', $lastMonth->year)
                         ->selectRaw('SUM(total_sales)');
                 },  'count')->first();
                 $countDebtImport = DebtImport::selectSub(function ($query) use ($lastMonth) {
-                    $query->from('debt_import')
+                    $query->from('debt_import')->where('debt_status','!=',1)
                         ->whereMonth('created_at', '>=', $lastMonth->month)
                         ->whereMonth('created_at', '<=', ($lastMonth->month + 2))
                         ->whereYear('created_at', $lastMonth->year)
@@ -461,13 +461,13 @@ class DashboardController extends Controller
             } else {
                 $lastMonth = $today->subMonthNoOverflow(3);
                 $count = Debt::selectSub(function ($query) use ($lastMonth) {
-                    $query->from('debts')
+                    $query->from('debts')->where('debt_status','!=',1)
                         ->whereMonth('created_at', '>=', $lastMonth->month)
                         ->whereMonth('created_at', '<=', ($lastMonth->month + 2))
                         ->selectRaw('SUM(total_sales)');
                 },  'count')->first();
                 $countDebtImport = DebtImport::selectSub(function ($query) use ($lastMonth) {
-                    $query->from('debt_import')
+                    $query->from('debt_import')->where('debt_status','!=',1)
                         ->whereMonth('created_at', '>=', $lastMonth->month)
                         ->whereMonth('created_at', '<=', ($lastMonth->month + 2))
                         ->selectRaw('SUM(total_import)');
@@ -480,13 +480,13 @@ class DashboardController extends Controller
             $date_start = Carbon::parse($data['date_start']);
             $date_end = Carbon::parse($data['date_end']);
             $count = Debt::selectSub(function ($query) use ($date_start, $date_end) {
-                $query->from('debts')
+                $query->from('debts')->where('debt_status','!=',1)
                     ->where('created_at', '>=', $date_start)
                     ->where('created_at', '<=', $date_end)
                     ->selectRaw('SUM(total_sales)');
             },  'count')->first();
             $countDebtImport = DebtImport::selectSub(function ($query) use ($date_start, $date_end) {
-                $query->from('debt_import')
+                $query->from('debt_import')->where('debt_status','!=',1)
                     ->where('created_at', '>=', $date_start)
                     ->where('created_at', '<=', $date_end)
                     ->selectRaw('SUM(total_import)');

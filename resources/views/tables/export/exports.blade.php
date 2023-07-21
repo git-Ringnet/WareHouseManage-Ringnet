@@ -661,7 +661,9 @@ $index = array_search($item['label'], $numberedLabels);
                                                     <td class="text-left">
                                                         <p>Số lượng</p>{{ $item->product_qty }}
                                                     </td>
+                                                    @if (Auth::user()->can('isAdmin'))
                                                     <td></td>
+                                                     @endif
                                                     <td class="text-right">
                                                         <p>Giá bán</p>
                                                         {{ number_format($item->product_price) }}
