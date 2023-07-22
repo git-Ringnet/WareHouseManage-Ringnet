@@ -1289,9 +1289,11 @@ class ExportController extends Controller
      */
     public function edit($id)
     {
-        $exports = Exports::where('exports.id',$id)
-        ->leftJoin('debts', 'debts.export_id', 'exports.id')
-        ->first();
+        $exports = Exports::where('exports.id', $id)
+            ->first();
+        $check = Exports::where('exports.id', $id)
+            ->leftJoin('debts', 'debts.export_id', 'exports.id')
+            ->first();
         $guest = Guests::find($exports->guest_id);
         $customer = Guests::all();
         $productExport = productExports::select('product_exports.*', 'product.product_tax as thue')
@@ -1305,7 +1307,7 @@ class ExportController extends Controller
             ->selectRaw('COALESCE((product.product_qty - COALESCE(product.product_trade, 0)), 0) as qty_exist')
             ->get();
         $title = 'Chi tiết đơn hàng';
-        return view('tables.export.editExport', compact('exports', 'guest', 'productExport', 'product_code', 'customer', 'title'));
+        return view('tables.export.editExport', compact('check','exports', 'guest', 'productExport', 'product_code', 'customer', 'title'));
     }
 
     /**
@@ -2391,7 +2393,7 @@ class ExportController extends Controller
                             ]);
                         }
                     }
-                    return redirect()->route('exports.index')->with('msg', 'Duyệt đơn thành công!');
+                    return redirect()->route('exports.index')->with('msg', 'Chỉnh sửa đơn hàng thành công!');
                 } else {
                     return redirect()->route('exports.index')->with('warning', 'Chưa được thêm sản phẩm nào!');
                 }

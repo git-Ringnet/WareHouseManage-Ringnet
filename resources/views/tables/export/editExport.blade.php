@@ -148,12 +148,12 @@
                 @endif
                 @if ($exports->export_status == 2)
                     @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
-                        @if ($exports->debt_status != 1)
+                        @if ($check->debt_status != 1)
                             <a class="btn btn-secondary text-white" id="chinhsua"
                                 href="{{ route('editEx', ['id' => $exports->id]) }}">Chỉnh sửa</a>
                         @endif
                         @if ($exports->export_status != 0)
-                            <button type="submit" class="btn btn-secondary <?php if ($exports->debt_status != 1) {
+                            <button type="submit" class="btn btn-secondary <?php if ($check->debt_status != 1) {
                                 echo 'mx-4';
                             } ?>"
                                 onclick="validateAndSubmit(event)" id="huydon" name="submitBtn"
