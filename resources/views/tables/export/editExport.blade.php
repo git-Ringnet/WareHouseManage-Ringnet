@@ -368,7 +368,7 @@
                                 <td>
                                     @if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin')))
                                         <input type="text" title="{{ $value_export->product_name }}"
-                                            style="width: 220px" class="form-control productName"
+                                            style="width: 300px" class="form-control productName"
                                             readonly value="{{ $value_export->product_name }}">
                                         @else
                                         <select class="child-select p-1 form-control productName" style="width: 220px"
