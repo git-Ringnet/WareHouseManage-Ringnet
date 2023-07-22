@@ -2086,6 +2086,11 @@ class ExportController extends Controller
                                 ->first();
                             if ($history) {
                                 if ($request->export_create == null) {
+                                    $history->date_time = Carbon::now();
+                                } else {
+                                    $history->date_time = $request->export_create;
+                                }
+                                if ($request->export_create == null) {
                                     $history->debt_export_start = Carbon::now();
                                 } else {
                                     $history->debt_export_start = $request->export_create;

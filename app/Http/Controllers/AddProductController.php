@@ -183,7 +183,7 @@ class AddProductController extends Controller
             if (
                 $request->provide_name_new != null && $request->provide_address_new != null && $request->provide_code_new != null
             ) {
-                $new_provide = $this->provides->checkProvidesCode($request->provide_code_new,$dataProvide);
+                $new_provide = $this->provides->checkProvidesCode($request->provide_code_new, $dataProvide);
                 // $new_provide = $this->provides->addProvides($dataProvide);
             }
         } else {
@@ -279,7 +279,7 @@ class AddProductController extends Controller
         if ($request->provide_id === null) {
             if ($request->provide_name_new != null && $request->provide_address_new != null && $request->provide_code_new != null) {
                 // $newProvide = $this->provides->addProvides($dataProvide);
-                $newProvide = $this->provides->checkProvidesCode($request->provide_code_new,$dataProvide);
+                $newProvide = $this->provides->checkProvidesCode($request->provide_code_new, $dataProvide);
             }
         } else {
             $this->provides->updateProvides($dataProvide, $request->provide_id);
@@ -416,7 +416,7 @@ class AddProductController extends Controller
             $endDate = Carbon::parse($endDate);
             $currentDate = Carbon::now();
             $daysDiffss = $currentDate->diffInDays($endDate);
-            
+
 
             if ($endDate < $currentDate) {
                 $daysDiff = -$daysDiffss;
@@ -434,7 +434,7 @@ class AddProductController extends Controller
             } else {
                 $debt->debt_status = 3;
             }
-            
+
             $debt->created_at = $updateOrder->created_at;
             $debt->save();
             return redirect()->route('insertProduct.index')->with('msg', 'Đơn hàng đã được duyệt');
@@ -497,7 +497,7 @@ class AddProductController extends Controller
             if (
                 $request->provide_name_new != null && $request->provide_address_new != null && $request->provide_code_new != null
             ) {
-                $new = $this->provides->checkProvidesCode($request->provide_code_new,$dataProvide);
+                $new = $this->provides->checkProvidesCode($request->provide_code_new, $dataProvide);
                 // $new =  $this->provides->addProvides($dataProvide);
             }
         } else {
@@ -576,9 +576,9 @@ class AddProductController extends Controller
             $endDate = Carbon::parse($endDate); // Chuyển đổi ngày kết thúc thành đối tượng Carbon
 
             $currentDate = Carbon::now(); // Lấy ngày hiện tại thành đối tượng Carbon
-            
+
             $daysDiffss = $currentDate->diffInDays($endDate);
-            
+
             if ($endDate < $currentDate) {
                 $daysDiff = -$daysDiffss;
             } else {
@@ -595,8 +595,8 @@ class AddProductController extends Controller
             } else {
                 $debt->debt_status = 3;
             }
-            
-            
+
+
             $debt->created_at = $updateOrder->created_at;
             $debt->save();
         } else {
@@ -638,7 +638,7 @@ class AddProductController extends Controller
         if ($request->provide_id == null) {
             if ($request->provide_name_new != null && $request->provide_address_new != null && $request->provide_code_new != null) {
                 // $new_provide =  $this->provides->addProvides($dataProvide);
-                $new_provide = $this->provides->checkProvidesCode($request->provide_code_new,$dataProvide);
+                $new_provide = $this->provides->checkProvidesCode($request->provide_code_new, $dataProvide);
             }
         } else {
             $this->provides->updateProvides($dataProvide, $request->provide_id);
@@ -939,7 +939,7 @@ class AddProductController extends Controller
 
             // Kiểm tra thông tin nhà cung cấp
             if ($request->provide_id == null) {
-                $add_newProvide = $this->provides->checkProvidesCode($request->provide_code_new,$dataProvide);
+                $add_newProvide = $this->provides->checkProvidesCode($request->provide_code_new, $dataProvide);
                 // $add_newProvide = $this->provides->addProvides($dataProvide);
             } else {
                 $this->provides->updateProvides($dataProvide, $request->provide_id);
@@ -994,7 +994,7 @@ class AddProductController extends Controller
                     // Tính toán giá trị total_difference
                     $totalDifference = $totalSales - $totalImport - $exports->transport_fee;
                     // Tạo đối tượng Debt và cập nhật giá trị
-                    $debt = Debt::where('export_id', $exports->id)->first();
+                    $debt = Debt::where('export_id', $exports->export_id)->first();
                     $debt->total_import = $totalImport;
                     $debt->total_difference = $totalDifference;
                     $debt->save();
@@ -1009,19 +1009,19 @@ class AddProductController extends Controller
             // Định dạng ngày kết thúc theo ý muốn
             $endDateFormatted = $endDate->format('Y-m-d');
 
-             $endDate = Carbon::parse($endDate); // Chuyển đổi ngày kết thúc thành đối tượng Carbon
+            $endDate = Carbon::parse($endDate); // Chuyển đổi ngày kết thúc thành đối tượng Carbon
 
             $currentDate = Carbon::now(); // Lấy ngày hiện tại thành đối tượng Carbon
 
             $daysDiffss = $currentDate->diffInDays($endDate);
-            
+
             if ($endDate < $currentDate) {
                 $daysDiff = -$daysDiffss;
             } else {
                 $daysDiff = $daysDiffss;
             }
-            
-            
+
+
 
             if ($request->provide_debt == 0) {
                 $debt_status = 4;
@@ -1074,7 +1074,7 @@ class AddProductController extends Controller
     // Exprort Order
     public function export_order()
     {
-        $data = Orders::select('id', 'product_code', 'provide_id', 'created_at','users_id', 'total_tax','order_status')
+        $data = Orders::select('id', 'product_code', 'provide_id', 'created_at', 'users_id', 'total_tax', 'order_status')
             ->with('getNameProvide')
             ->with('getNameUsers')
             ->get();
