@@ -841,6 +841,8 @@ class AddProductController extends Controller
             Orders::whereIn('id', $id_order)->update(
                 ['order_status' => 2]
             );
+            session()->flash('msg', 'Hủy đơn hàng thành công !');
+            return response()->json(['success' => true, 'msg' => 'Hủy đơn hàng thành công']);
         }
         return response()->json(['success' => false, 'msg' => 'Not found']);
     }
@@ -950,7 +952,8 @@ class AddProductController extends Controller
                 'product_code' => $request->product_code,
                 'created_at' => $request->product_create,
                 'provide_id' => $request->provide_id == null ? $add_newProvide : $request->provide_id,
-                'total' => $total_price
+                'total' => $total_import,
+                'total_tax' => $total_import
             ];
             $this->orders->updateOrder($dataOrder, $request->order_id);
 
@@ -971,6 +974,7 @@ class AddProductController extends Controller
                 $this->productOrder->updateProductOrderEdit($data, $list_id[$i]);
 
                 $f = ProductOrders::where('product_id', $list_id[$i])->first();
+                $data['product_code'] = $request->product_code;
                 $this->product->updateProduct($data, $f->product_id);
                 //Cập nhật công nợ xuất
                 $productIds = $request->product_id;
@@ -1005,7 +1009,7 @@ class AddProductController extends Controller
                     }
                 }
             }
-
+    
             $startDate = Carbon::parse($request->product_create); // Chuyển đổi ngày bắt đầu thành đối tượng Carbon
             $daysToAdd = $request->provide_debt; // Số ngày cần thêm
 

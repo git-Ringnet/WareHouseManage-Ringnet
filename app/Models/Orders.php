@@ -171,4 +171,7 @@ class Orders extends Model
 
         return $tableorders;
     }
+    public function getStatus() {
+        return $this->hasOne(DebtImport::class,'import_id','id');
+    }
 }
