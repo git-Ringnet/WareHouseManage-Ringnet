@@ -368,9 +368,9 @@
                                 <td>
                                     @if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin')))
                                         <input type="text" title="{{ $value_export->product_name }}"
-                                            style="width: 300px" class="form-control productName"
-                                            readonly value="{{ $value_export->product_name }}">
-                                        @else
+                                            style="width: 300px" class="form-control productName" readonly
+                                            value="{{ $value_export->product_name }}">
+                                    @else
                                         <select class="child-select p-1 form-control productName" style="width: 220px"
                                             name="product_id[]" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                                 echo 'disabled';
@@ -1384,7 +1384,17 @@
         return formattedValue;
     }
 
-    //hàm kiểm tra submit
+    var isSubmitting = false;
+
+    // Hàm chặn alert trong phạm vi trang hiện tại
+    function blockAlertInCurrentPage() {
+        var backupAlert = window.alert;
+        window.alert = function() {
+            return true;
+        };
+        return backupAlert;
+    }
+
     function validateAndSubmit(event) {
         var formGuest = $('#form-guest');
         var productList = $('.productName');
@@ -1394,12 +1404,16 @@
             $('.product_price, [name^="product_price"], #transport_fee').each(function() {
                 var newValue = $(this).val().replace(/,/g, '');
                 $(this).val(newValue);
-                $('#btn-customer').click();
-                window.backupAlert = window.alert;
-                window.alert = function() {
-                    return true
-                };
             });
+
+            // Đánh dấu trạng thái đang submit
+            isSubmitting = true;
+            var restoreAlert = blockAlertInCurrentPage();
+            $('#btn-customer').click();
+
+            // Đánh dấu trạng thái đã hoàn thành submit
+            isSubmitting = false;
+            window.alert = restoreAlert;
         } else {
             if (formGuest.length === 0) {
                 alert('Lỗi: Chưa nhập thông tin khách hàng!');
@@ -1409,6 +1423,20 @@
             event.preventDefault();
         }
     }
+
+    // Hàm kiểm tra khi có alert được gọi
+    function checkAlert() {
+        // Chặn alert nếu đang trong quá trình submit
+        if (isSubmitting) {
+            return true;
+        } else {
+            // Nếu không đang submit, cho phép alert bình thường
+            return false;
+        }
+    }
+
+    // Gán hàm kiểm tra alert vào window.alert
+    window.alert = checkAlert;
 
     //format giá
     var inputElement = document.getElementById('product_price');
