@@ -1289,7 +1289,9 @@ class ExportController extends Controller
      */
     public function edit($id)
     {
-        $exports = Exports::find($id);
+        $exports = Exports::where('exports.id',$id)
+        ->leftJoin('debts', 'debts.export_id', 'exports.id')
+        ->first();
         $guest = Guests::find($exports->guest_id);
         $customer = Guests::all();
         $productExport = productExports::select('product_exports.*', 'product.product_tax as thue')
