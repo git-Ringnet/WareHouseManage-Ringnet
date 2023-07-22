@@ -200,6 +200,75 @@ $index = array_search($item['label'], $numberedLabels);
                                     </a>
                                 </span>
                             @endforeach
+                            @if (Auth::user()->can('isAdmin'))
+                            @php  $nhanvien = [];
+                            if (isset(request()->nhanvien)) {
+                                $nhanvien = request()->nhanvien;
+                            } else {
+                                $nhanvien = [];
+                            } @endphp
+                            <div class="filter-admin">
+                                <button class="btn btn-filter btn-light mr-2" id="btn-nhanvien" type="button">
+                                    <span>
+                                        Nhân viên
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M7.23123 9.23123C7.53954 8.92292 8.03941 8.92292 8.34772 9.23123L12 12.8835L15.6523 9.23123C15.9606 8.92292 16.4605 8.92292 16.7688 9.23123C17.0771 9.53954 17.0771 10.0394 16.7688 10.3477L12.5582 14.5582C12.2499 14.8665 11.7501 14.8665 11.4418 14.5582L7.23123 10.3477C6.92292 10.0394 6.92292 9.53954 7.23123 9.23123Z"
+                                                fill="#555555" />
+                                        </svg>
+
+                                    </span>
+                                </button>
+                                {{-- Nhân viên admin --}}
+                                <div class="block-options-admin" id="creator-options" style="display:none">
+                                    <div class="wrap w-100">
+                                        <div class="heading-title title-wrap">
+                                            <h5>Nhân viên</h5>
+                                        </div>
+                                        <div class="search-container px-2 mt-2">
+                                            <input type="text" placeholder="Tìm kiếm" id="myInput-creator"
+                                                class="pr-4 w-100 input-search" onkeyup="filterCreator()">
+                                            <span class="search-icon"><i class="fas fa-search"></i></span>
+                                        </div>
+                                        <div
+                                            class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
+                                            <a class="cursor select-all-creator mr-auto">Chọn tất cả</a>
+                                            <a class="cursor deselect-all-creator">Hủy chọn</a>
+                                        </div>
+                                        <div class="ks-cboxtags-container">
+                                            <ul class="ks-cboxtags ks-cboxtags-creator p-0 mb-1 px-2">
+                                                @if (!empty($debtsSale))
+                                                    @php
+                                                        $seenValues = [];
+                                                    @endphp
+                                                    @foreach ($debtsSale as $value)
+                                                        @if (!in_array($value->name, $seenValues))
+                                                            <li>
+                                                                <input type="checkbox" id="name_active"
+                                                                    {{ in_array($value->name, $nhanvien) ? 'checked' : '' }}
+                                                                    name="nhanvien[]" value="{{ $value->name }}">
+                                                                <label id="nhanvien"
+                                                                    for="">{{ $value->name }}</label>
+                                                            </li>
+                                                            @php
+                                                                $seenValues[] = $value->name;
+                                                            @endphp
+                                                        @endif
+                                                    @endforeach
+                                                @endif
+                                            </ul>
+                                        </div>
+                                        <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                            <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                                Nhận</button>
+                                            <button type="button" id="cancel-creator"
+                                                class="btn btn-default btn-block">Hủy</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @endif
                             <div class="class" style="order:999">
                                 <div class="filter-options">
                                     <div class="dropdown">
@@ -225,7 +294,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     onkeyup="filterFunction()">
                                                 <span class="search-icon"><i class="fas fa-search"></i></span>
                                             </div>
-                                            @if (Auth::user()->can('isAdmin'))
+                                            @if (!Auth::user()->can('isAdmin'))
                                                 <button class="dropdown-item" id="btn-creator">Nhân viên</button>
                                             @endif
                                             <button class="dropdown-item" id="btn-email">Email</button>
@@ -839,6 +908,18 @@ $index = array_search($item['label'], $numberedLabels);
         $('.guest-input').val('');
         $('#guest-options').hide();
     });
+    $('#btn-nhanvien').click(function(event) {
+        event.preventDefault();
+        $('#creator-options input').addClass('creator-checkbox');
+        $('.btn-filter').prop('disabled', true);
+        $('#creator-options').toggle();
+    });
+    $('#cancel-creator').click(function(event) {
+        event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
+        $('#creator-options input[type="checkbox"]').prop('checked', false);
+        $('#creator-options').hide();
+    });
 
     // Check box
     $(document).ready(function() {
@@ -1118,6 +1199,34 @@ $index = array_search($item['label'], $numberedLabels);
             return false
         }
 
+    }
+    function filterCreator() {
+        var input = $("#myInput-creator");
+        var filter = input.val().toUpperCase();
+        var buttons = $(".ks-cboxtags-creator li");
+
+        buttons.each(function() {
+            var text = $(this).text();
+            if (text.toUpperCase().indexOf(filter) > -1) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    }
+    function filterRoles() {
+        var input = $("#myInput-roles");
+        var filter = input.val().toUpperCase();
+        var buttons = $(".ks-cboxtags-roles li");
+
+        buttons.each(function() {
+            var text = $(this).text();
+            if (text.toUpperCase().indexOf(filter) > -1) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
     }
     // AJAX Thanh toán Payment
     $(document).on('click', '#paymentdebt', function(e) {

@@ -175,7 +175,7 @@ class ReportController extends Controller
             array_push($string, ['label' => 'Vai trò:', 'values' => $selectedRoleNames, 'class' => 'roles']);
         }
 
-        $debtsSale = Exports::leftjoin('users', 'exports.user_id', '=', 'users.id')->get();
+        $debtsSale = Orders::leftjoin('users', 'orders.users_id', '=', 'users.id')->get();
         $sortType = $request->input('sort-type');
         $sortBy = $request->input('sort-by');
         $allowSort = ['asc', 'desc'];

@@ -123,7 +123,7 @@
 
                         </div>
                         <div class="row px-3 pt-2 pb-5 info-index">
-                            <div class="col">
+                            <div class="col-12 col-lg">
                                 <div class="d-flex pt-1">
                                     <div class="icon-index d-none d-lg-block">
                                         <svg width="70" height="70" viewBox="0 0 70 70" fill="none"
@@ -173,11 +173,11 @@
                                     </div>
                                     <div class="pl-2">
                                         <h5>Tổng đơn nhập</h5>
-                                        <div class="value" id="import_id"></div>
+                                        <div class="value text-left" id="import_id"></div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col">
+                            <div class="col-12 col-lg">
                                 <div class="d-flex pt-1">
                                     <div class="icon-index d-none d-lg-block">
                                         <svg width="70" height="70" viewBox="0 0 70 70" fill="none"
@@ -192,7 +192,7 @@
                                     </div>
                                     <div class="pl-2">
                                         <h5>Tổng tiền nhập(+VAT)</h5>
-                                        <div class="value" id="import_total"></div>
+                                        <div class="value text-left" id="import_total"></div>
                                     </div>
                                 </div>
 
@@ -309,7 +309,7 @@
                             </div>
                         </div>
                         <div class="row px-3 pt-2 pb-5 info-index">
-                            <div class="col">
+                            <div class="col-12 col-lg">
                                 <div class="d-flex pt-1">
                                     <div class="icon-index d-none d-lg-block">
                                         <svg width="70" height="70" viewBox="0 0 70 70" fill="none"
@@ -360,11 +360,11 @@
                                     </div>
                                     <div class="pl-2">
                                         <h5>Tổng đơn xuất</h5>
-                                        <div class="value" id="export_id"></div>
+                                        <div class="value text-left" id="export_id"></div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col">
+                            <div class="col-12 col-lg">
                                 <div class="d-flex pt-1">
                                     <div class="icon-index d-none d-lg-block">
                                         <svg width="70" height="70" viewBox="0 0 70 70" fill="none"
@@ -379,7 +379,7 @@
                                     </div>
                                     <div class="pl-2">
                                         <h5>Tổng tiền xuất</h5>
-                                        <div class="value" id="export_total"></div>
+                                        <div class="value text-left" id="export_total"></div>
                                     </div>
                                 </div>
                             </div>
@@ -500,7 +500,7 @@
                             </div>
                         </div>
                         <div class="row px-3 pt-2 pb-5 info-index">
-                            <div class="col">
+                            <div class="col-12 col-lg">
                                 <div class="d-flex pt-1">
                                     <div class="icon-index d-none d-lg-block">
                                         <svg width="70" height="70" viewBox="0 0 70 70" fill="none"
@@ -519,11 +519,11 @@
                                     </div>
                                     <div class="pl-2">
                                         <h5>Sản phẩm tồn kho</h5>
-                                        <div class="value" id="inventory_id"></div>
+                                        <div class="value text-left" id="inventory_id"></div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col">
+                            <div class="col-12 col-lg">
                                 <div class="d-flex pt-1">
                                     <div class="icon-index d-none d-lg-block">
                                         <svg width="70" height="70" viewBox="0 0 70 70" fill="none"
@@ -538,7 +538,7 @@
                                     </div>
                                     <div class="pl-2">
                                         <h5>Tổng tiền tồn kho</h5>
-                                        <div class="value" id="inventory_total"></div>
+                                        <div class="value text-left" id="inventory_total"></div>
                                     </div>
                                 </div>
                             </div>
@@ -654,7 +654,7 @@
                             </div>
                         </div>
                         <div class="row px-3 pt-2 pb-5 info-index">
-                            <div class="col">
+                            <div class="col-12 col-lg">
                                 <div class="d-flex pt-1">
                                     <div class="icon-index d-none d-lg-block">
                                         <svg width="70" height="70" viewBox="0 0 70 70" fill="none"
@@ -693,11 +693,11 @@
                                     </div>
                                     <div class="pl-2">
                                         <h5>Công nợ nhập(+VAT)</h5>
-                                        <div class="value" id="debt_import"></div>
+                                        <div class="value text-left" id="debt_import"></div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col">
+                            <div class="col-12 col-lg">
                                 <div class="d-flex pt-1">
                                     <div class="icon-index d-none d-lg-block">
                                         <svg width="70" height="70" viewBox="0 0 70 70" fill="none"
@@ -736,7 +736,7 @@
                                     </div>
                                     <div class="pl-2">
                                         <h5>Công nợ xuất</h5>
-                                        <div class="value" id="debt_export"></div>
+                                        <div class="value text-left" id="debt_export"></div>
 
                                     </div>
                                 </div>
@@ -856,7 +856,7 @@
                             </div>
                         </div>
                         <div class="row px-3 pt-2 pb-5 info-index">
-                            <div class="col">
+                            <div class="col-12 col-lg">
                                 <div class="d-flex pt-1">
                                     <div class="icon-index d-none d-lg-block">
                                         <svg width="70" height="70" viewBox="0 0 70 70" fill="none"
@@ -871,7 +871,7 @@
                                     </div>
                                     <div class="pl-2">
                                         <h5>Tổng lợi nhuận</h5>
-                                        <div class="value" id="sum-profit"></div>
+                                        <div class="value text-left" id="sum-profit"></div>
                                     </div>
                                 </div>
                             </div>

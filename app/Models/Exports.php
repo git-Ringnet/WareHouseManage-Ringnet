@@ -47,10 +47,8 @@ class Exports extends Model
         // dd($exports = $exports->wherebetween('exports.updated_at', $date));
         if (!empty($keywords)) {
             $exports = $exports->where(function ($query) use ($keywords) {
-                $query->orWhere('exports.export_status', 'like', '%' . $keywords . '%');
-                $query->orWhere('guests.guest_receiver', 'like', '%' . $keywords . '%');
                 $query->orWhere('guests.guest_name', 'like', '%' . $keywords . '%');
-                $query->orWhere('users.name', 'like', '%' . $keywords . '%');
+                $query->orWhere('exports.export_code', 'like', '%' . $keywords . '%');
             });
         }
 

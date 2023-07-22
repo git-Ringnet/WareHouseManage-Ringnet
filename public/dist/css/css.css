@@ -8,6 +8,14 @@
     border-radius: 8px;
     left: -40px !important;
 }
+.block-options-admin {
+    width: 250px;
+    background-color: #fff;
+    border-radius: 8px;
+    left: 60px !important;
+    position: absolute;
+    z-index: 1024;
+}
 
 .block-optionsss {
     width: 320px;
@@ -740,7 +748,7 @@ input[type="number"] {
     padding: 5px;
 }
 
-.filter-options ul label {
+.filter-options ul label,.block-options-admin label {
     font-weight: 400 !important;
     color: #555555;
     margin: 0;
@@ -751,7 +759,7 @@ input[type="number"] {
 .filter-options li:hover,
 .filter-options label:hover,
 .profile-li:hover,
-.logout-li:hover {
+.logout-li:hover,.block-options-admin li:hover {
     background-color: #ebebeb;
     transition: background-color 0.3s ease;
     cursor: pointer;
@@ -1048,4 +1056,7 @@ input[type="checkbox"] {
     border: 1px solid var(--gray-2-disable-outline, #D6D6D6);
     background: var(--white, #FFF);
     padding: 4px;
+}
+.info-index h5{
+    text-align: left;
 }
