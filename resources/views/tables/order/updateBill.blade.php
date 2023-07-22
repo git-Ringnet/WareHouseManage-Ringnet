@@ -328,7 +328,7 @@
                                 <td> <input class="form-control text-center product_price"
                                         @if (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin')) readonly @endif required type="text"
                                         name="product_price[]"
-                                        value="@if (fmod($pro->product_price, 2) > 0) {{ number_format($pro->product_price, 2, '.', ',') }}@else{{ number_format($pro->product_price) }} @endif"
+                                        value="@if (fmod($pro->product_price, 2) > 0) {{ number_format($pro->product_price, 2, '.', ',') }}@else{{ number_format($pro->product_price) }}@endif"
                                         @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif> </td>
                                 <td>
                                     <select name="product_tax[]" id="" class="form-control product_tax"
@@ -543,15 +543,15 @@
                     '</div>' + '</div>' + '<div class="col-sm-6">' +
                     '<div class="form-group">' +
                     '<label for="email">Người đại diện:</label>' +
-                    '<input required type="text" class="form-control" id="provide_represent" placeholder="Nhập thông tin" name="provide_represent" value="' +
+                    '<input type="text" class="form-control" id="provide_represent" placeholder="Nhập thông tin" name="provide_represent" value="' +
                     (data.provide_represent == null ? "" : data.provide_represent) + '">' +
                     '</div>' + '<div class="form-group">' +
                     '<label for="email">Email:</label>' +
-                    '<input required type="email" class="form-control" id="provide_email" placeholder="Nhập thông tin" name="provide_email" value="' +
+                    '<input type="email" class="form-control" id="provide_email" placeholder="Nhập thông tin" name="provide_email" value="' +
                     (data.provide_email == null ? "" : data.provide_email) + '">' +
                     '</div>' + '<div class="form-group">' +
                     '<label for="email">Số điện thoại:</label>' +
-                    '<input oninput="validateBillInput(this)" required type="text" class="form-control" id="provide_phone" placeholder="Nhập thông tin" name="provide_phone" value="' +
+                    '<input oninput="validateBillInput(this)" type="text" class="form-control" id="provide_phone" placeholder="Nhập thông tin" name="provide_phone" value="' +
                     (data.provide_phone == null ? "" : data.provide_phone) + '">' +
                     '</div>' + '<div class="form-group">' +
                     '<label for="email">Công nợ:</label>' +

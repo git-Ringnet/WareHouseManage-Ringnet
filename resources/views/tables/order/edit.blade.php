@@ -123,8 +123,12 @@
                             <a href="#" class="btn btn-secondary mx-4" id="deleteBill">Hủy đơn</a>
                         @endif
                         @if ($order->order_status == 1)
-                            <a href="#" class="btn btn-secondary" id="updateBill">Chỉnh sửa</a>
-                            <a href="#" class="btn btn-secondary mx-4" id="deleteBill">Hủy đơn</a>
+                            @if ($order->getStatus)
+                                @if ($order->getStatus->debt_status != 1)
+                                    <a href="#" class="btn btn-secondary mr-4" id="updateBill">Chỉnh sửa</a>
+                                @endif
+                            @endif
+                            <a href="#" class="btn btn-secondary" id="deleteBill">Hủy đơn</a>
                         @endif
                         <a href="#" class="btn btn-secondary" style="opacity: 0"></a>
                     @endif
