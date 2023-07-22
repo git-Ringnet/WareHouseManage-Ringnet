@@ -184,6 +184,7 @@ class ExportController extends Controller
                             } else {
                                 $guest->debt = $request->debt;
                             }
+                            $guest->user_id = Auth::user()->id;
                             $guest->save();
                             // Tạo đơn xuất hàng
                             $export = new Exports();
@@ -1080,6 +1081,7 @@ class ExportController extends Controller
                             } else {
                                 $guest->debt = $request->debt;
                             }
+                            $guest->user_id = Auth::user()->id;
                             $guest->save();
                             // Tạo đơn xuất hàng
                             $export = new Exports();
@@ -1712,6 +1714,7 @@ class ExportController extends Controller
                         } else {
                             $guest->debt = $request->debt;
                         }
+                        $guest->user_id = Auth::user()->id;
                         $guest->save();
                         // Tạo đơn xuất hàng
                         $exports->guest_id = $guest->id;
@@ -1921,6 +1924,7 @@ class ExportController extends Controller
                         } else {
                             $guest->debt = $request->debt;
                         }
+                        $guest->user_id = Auth::user()->id;
                         $guest->save();
                         $exports->guest_id = $guest->id;
                         $exports->user_id = Auth::user()->id;
@@ -2285,6 +2289,7 @@ class ExportController extends Controller
                         } else {
                             $guest->debt = $request->debt;
                         }
+                        $guest->user_id = Auth::user()->id;
                         $guest->save();
                         // Tạo đơn xuất hàng
                         $exports->guest_id = $guest->id;
