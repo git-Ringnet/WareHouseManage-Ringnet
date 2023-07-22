@@ -147,6 +147,7 @@ class Orders extends Model
             ->selectSub(function ($query) {
                 $query->from('debt_import')
                     ->whereColumn('debt_import.user_id', 'users.id')
+                    ->where('debt_import.debt_status', '!=', 1)
                     ->selectRaw('SUM(total_import)');
             }, 'total_debt')->distinct();
         if (!empty($filter)) {

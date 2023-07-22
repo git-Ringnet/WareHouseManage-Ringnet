@@ -153,6 +153,7 @@ class Exports extends Model
             ->selectSub(function ($query) {
                 $query->from('debts')
                     ->where('exports.export_status', 2)
+                    ->where('debts.debt_status', '!=', 1)
                     ->whereColumn('debts.user_id', 'users.id')
                     ->selectRaw('SUM(total_sales)');
             }, 'tongcongno')

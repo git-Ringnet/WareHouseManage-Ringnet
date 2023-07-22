@@ -35,7 +35,8 @@ class ReportController extends Controller
         $sumLoinhuan = Debt::select(DB::raw('SUM(total_difference) as tongLoiNhuan'))->limit(1)->first();
         $formattedLoinhuan = number_format($sumLoinhuan->tongLoiNhuan);
         //Tổng công nợ
-        $sumCongNo = Debt::select(DB::raw('SUM(total_sales) as tongCongNo'))->limit(1)->first();
+        $sumCongNo = Debt::select(DB::raw('SUM(total_sales) as tongCongNo'))
+            ->where('debts.debt_status', '!=', 1)->limit(1)->first();
         $CongNo = $sumCongNo->tongCongNo;
 
 
@@ -130,7 +131,8 @@ class ReportController extends Controller
             ->first();
         $sumTotalOrders = $totalSum->total_sum;
         //Tổng công nợ + vat
-        $sumDebtImport = DebtImport::select(DB::raw('SUM(total_import) as total_import'))->limit(1)
+        $sumDebtImport = DebtImport::select(DB::raw('SUM(total_import) as total_import'))
+            ->where('debt_import.debt_status', '!=', 1)->limit(1)
             ->first();
         $sumDebtImportVAT = $sumDebtImport->total_import;
         //table nhập hàng
