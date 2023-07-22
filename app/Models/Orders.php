@@ -142,7 +142,8 @@ class Orders extends Model
             ->selectSub(function ($query) {
                 $query->from('orders')
                     ->whereColumn('orders.users_id', 'users.id')
-                    ->selectRaw('SUM(orders.total_tax)');
+                    ->selectRaw('SUM(orders.total_tax)')
+                    ->where('orders.order_status', 1);
             }, 'total_sum')
 
             ->selectSub(function ($query) {
