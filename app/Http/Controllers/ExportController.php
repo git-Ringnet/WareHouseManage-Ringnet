@@ -2382,6 +2382,7 @@ class ExportController extends Controller
                             ->where('product_id', $productID)->first();
                         if ($history) {
                             $history->update([
+                                'debt_export' => $debt->debt,
                                 'guest_id' => $exports->guest_id,
                                 'export_status' => $debt->debt_status,
                                 'debt_export_end' => $debt->date_end,
