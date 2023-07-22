@@ -366,24 +366,27 @@
                             <tr id="dynamic-row-{{ $index }}">
                                 <td class="soTT"><?php echo $stt++; ?></td>
                                 <td>
-                                    {{-- <input type="text" title="{{ $value_export->product_name }}"
-                                            style="width: 220px" class="child-select p-1 form-control productName"
-                                            readonly value="{{ $value_export->product_name }}"> --}}
-                                    <select class="child-select p-1 form-control productName" style="width: 220px"
-                                        name="product_id[]" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                            echo 'disabled';
-                                        } ?>>
-                                        <option value="{{ $value_export->product_id }}">
-                                            {{ $value_export->product_name }}
-                                        </option>
-                                        @foreach ($product_code as $value_code)
-                                            <option value="{{ $value_code->id }}" class="<?php if ($value_code->id === $value_export->product_id) {
-                                                echo 'd-none';
-                                            } ?>">
-                                                {{ $value_code->product_name }}
+                                    @if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin')))
+                                        <input type="text" title="{{ $value_export->product_name }}"
+                                            style="width: 220px" class="form-control productName"
+                                            readonly value="{{ $value_export->product_name }}">
+                                        @else
+                                        <select class="child-select p-1 form-control productName" style="width: 220px"
+                                            name="product_id[]" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                                echo 'disabled';
+                                            } ?>>
+                                            <option value="{{ $value_export->product_id }}">
+                                                {{ $value_export->product_name }}
                                             </option>
-                                        @endforeach
-                                    </select>
+                                            @foreach ($product_code as $value_code)
+                                                <option value="{{ $value_code->id }}" class="<?php if ($value_code->id === $value_export->product_id) {
+                                                    echo 'd-none';
+                                                } ?>">
+                                                    {{ $value_code->product_name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    @endif
                                 </td>
                                 <td>
                                     <input type="text" id="product_unit" readonly style="width: 80px"

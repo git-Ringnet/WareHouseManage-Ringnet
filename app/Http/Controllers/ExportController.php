@@ -2393,7 +2393,7 @@ class ExportController extends Controller
                             ]);
                         }
                     }
-                    return redirect()->route('exports.index')->with('msg', 'Chỉnh sửa đơn hàng thành công!');
+                    return redirect()->route('exports.index')->with('msg', 'Chỉnh sửa đơn hàng thành công');
                 } else {
                     return redirect()->route('exports.index')->with('warning', 'Chưa được thêm sản phẩm nào!');
                 }
