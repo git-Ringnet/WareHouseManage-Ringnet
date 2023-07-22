@@ -124,7 +124,7 @@ class Exports extends Model
         return $products;
     }
 
-    public function reportExports($filter = [], $name = [],$roles=[], $orderBy = null, $orderType = null)
+    public function reportExports($filter = [], $name = [], $roles = [], $orderBy = null, $orderType = null)
     {
         //Table xuất hàng
         $Tableexports = Exports::leftJoin('users', 'users.id', 'exports.user_id')
@@ -136,7 +136,7 @@ class Exports extends Model
                 $query->from('exports')
                     ->where('exports.export_status', 2)
                     ->whereColumn('exports.user_id', 'users.id')
-                    ->selectRaw('COUNT(id)');
+                    ->selectRaw('COUNT(exports.id)');
             }, 'donxuat')
             ->selectSub(function ($query) {
                 $query->from('exports')
@@ -147,13 +147,13 @@ class Exports extends Model
             ->selectSub(function ($query) {
                 $query->from('debts')
                     ->where('exports.export_status', 2)
-                    ->whereColumn('exports.user_id', 'users.id')
-                    ->selectRaw('SUM(total_difference)');
+                    ->whereColumn('debts.user_id', 'users.id')
+                    ->selectRaw('SUM(debts.total_difference)');
             }, 'tongloinhuan')
             ->selectSub(function ($query) {
                 $query->from('debts')
                     ->where('exports.export_status', 2)
-                    ->whereColumn('exports.user_id', 'users.id')
+                    ->whereColumn('debts.user_id', 'users.id')
                     ->selectRaw('SUM(total_sales)');
             }, 'tongcongno')
             ->distinct();
