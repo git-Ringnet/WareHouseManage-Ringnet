@@ -973,31 +973,36 @@ class AddProductController extends Controller
                 $f = ProductOrders::where('product_id', $list_id[$i])->first();
                 $this->product->updateProduct($data, $f->product_id);
                 //Cập nhật công nợ xuất
+                $productIds = $request->product_id;
                 $exports = Exports::leftJoin('product_exports', 'product_exports.export_id', 'exports.id')
                     ->leftJoin('product', 'product_exports.product_id', 'product.id')
-                    ->where('product.id', $request->product_id)->first();
+                    ->select('exports.*')
+                    ->where('exports.export_status', 2)
+                    ->whereIn('product.id', $productIds)
+                    ->get();
                 if ($exports !== null) {
-                    // Lấy thông tin productExports từ exports
-                    $productExports = $exports->productExports;
-                    $totalSales = 0;
-                    $totalImport = 0;
-                    $totalDifference = 0;
+                    foreach ($exports as $export) {
+                        // Tính toán giá trị total_sales và total_import
+                        $totalSales = 0;
+                        $totalImport = 0;
 
-                    foreach ($productExports as $productExport) {
-                        // Tính toán giá trị total_sales
-                        $totalSales += $productExport->product_price * $productExport->product_qty;
+                        foreach ($export->productExports as $productExport) {
+                            $totalSales += $productExport->product_price * $productExport->product_qty;
 
-                        // Tính toán giá trị total_import
-                        $product = Product::find($productExport->product_id);
-                        $totalImport += $product->product_price * $productExport->product_qty;
+                            // Lấy thông tin product từ product_id
+                            $product = Product::find($productExport->product_id);
+                            $totalImport += $product->product_price * $productExport->product_qty;
+                        }
+
+                        // Tính toán giá trị total_difference
+                        $totalDifference = $totalSales - $totalImport - $export->transport_fee;
+
+                        // Cập nhật bảng Debt
+                        $debt = Debt::where('export_id', $export->id)->first();
+                        $debt->total_import = $totalImport;
+                        $debt->total_difference = $totalDifference;
+                        $debt->save();
                     }
-                    // Tính toán giá trị total_difference
-                    $totalDifference = $totalSales - $totalImport - $exports->transport_fee;
-                    // Tạo đối tượng Debt và cập nhật giá trị
-                    $debt = Debt::where('export_id', $exports->export_id)->first();
-                    $debt->total_import = $totalImport;
-                    $debt->total_difference = $totalDifference;
-                    $debt->save();
                 }
             }
 
