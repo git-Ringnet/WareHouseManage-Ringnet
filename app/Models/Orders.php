@@ -23,7 +23,7 @@ class Orders extends Model
         }
         $orders = Orders::join('users', 'users.id', '=', 'orders.users_id')
             ->leftJoin('provides', 'provides.id', '=', 'orders.provide_id')
-            ->select('orders.id', 'orders.product_code', 'provides.provide_name', 'users.name', 'orders.total','orders.total_tax',  'orders.created_at', 'orders.updated_at', 'order_status')
+            ->select('orders.id', 'orders.product_code', 'provides.provide_name', 'users.name', 'orders.total', 'orders.total_tax',  'orders.created_at', 'orders.updated_at', 'order_status')
             ->whereIn('orders.id', $productIds);
         // Các điều kiện tìm kiếm và lọc dữ liệu ở đây
 
@@ -124,7 +124,7 @@ class Orders extends Model
     {
         return $this->hasOne(User::class, 'id', 'users_id');
     }
-    public function reportOrders($filter = [], $name = [],$roles=[], $orderBy = null, $orderType = null)
+    public function reportOrders($filter = [], $name = [], $roles = [], $orderBy = null, $orderType = null)
     {
         $tableorders = Orders::leftJoin('users', 'users.id', 'orders.users_id')
             ->leftJoin('roles', 'users.roleid', 'roles.id')

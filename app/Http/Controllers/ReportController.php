@@ -124,8 +124,7 @@ class ReportController extends Controller
         $orders = $this->orders->allNhaphang();
         $orders = count($orders);
         //Tổng tiền đơn nhập + vat
-        $totalSum = ProductOrders::select(DB::raw('SUM(orders.total_tax) as total_sum'))
-            ->leftJoin('orders', 'orders.id', 'productorders.order_id')
+        $totalSum = Orders::select(DB::raw('SUM(orders.total_tax) as total_sum'))
             ->where('orders.order_status', 1)
             ->limit(1)
             ->first();
@@ -135,7 +134,7 @@ class ReportController extends Controller
             ->first();
         $sumDebtImportVAT = $sumDebtImport->total_import;
         //table nhập hàng
-        
+
         //Tổng đơn xuất
         $exports = $this->exports->alldonxuat();
         $exports = count($exports);
@@ -191,6 +190,6 @@ class ReportController extends Controller
         $allRoles = new Roles();
         $allRoles = $allRoles->getAll();
         // dd($tableorders);
-        return view('tables.report.report-import', compact('title','allRoles', 'debtsSale', 'string', 'tableorders', 'sortType', 'orders', 'sumTotalOrders', 'sumDebtImportVAT', 'tableorders', 'exports', 'sumExport', 'formattedLoinhuan', 'CongNo'));
+        return view('tables.report.report-import', compact('title', 'allRoles', 'debtsSale', 'string', 'tableorders', 'sortType', 'orders', 'sumTotalOrders', 'sumDebtImportVAT', 'tableorders', 'exports', 'sumExport', 'formattedLoinhuan', 'CongNo'));
     }
 }
