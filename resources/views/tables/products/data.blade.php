@@ -779,7 +779,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 {{ $value->product_trade == null ? 0 : $value->product_trade }}
                                             </td>
                                             <td class="text-right">
-                                                @if (fmod($value->product_price, 2) > 0)
+                                                @if (fmod($value->product_price, 1) > 0)
                                                     {{ number_format($value->product_price, 2, '.', ',') }}
                                                 @else
                                                     {{ number_format($value->product_price) }}

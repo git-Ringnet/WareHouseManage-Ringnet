@@ -718,7 +718,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 </td>
                                                 <td class="text-left">
                                                     <p>Giá nhập</p>
-                                                    @if (fmod($item->gianhap, 2) > 0)
+                                                    @if (fmod($item->gianhap, 1) > 0)
                                                         {{ number_format($item->gianhap, 2, '.', ',') }}
                                                     @else
                                                         {{ number_format($item->gianhap) }}
