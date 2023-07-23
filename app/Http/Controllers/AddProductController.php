@@ -960,7 +960,6 @@ class AddProductController extends Controller
             $getdate = Orders::find($request->order_id)->created_at;
 
             // Chỉnh sửa thông tin sản phẩm 
-
             for ($i = 0; $i < count($list_id); $i++) {
                 $data = [
                     'product_name' => $request->product_name[$i],
@@ -974,6 +973,14 @@ class AddProductController extends Controller
                 $this->productOrder->updateProductOrderEdit($data, $list_id[$i]);
 
                 $f = ProductOrders::where('product_id', $list_id[$i])->first();
+                $getProductQty = productExports::selectRaw('sum(product_qty) as total_qty')
+                ->where('product_exports.product_id',$list_id[$i])
+                ->join('exports','product_exports.export_id','exports.id')
+                ->where('exports.export_status',2)->first();
+
+                if($getProductQty !== null){
+                   $data['product_total'] = ($request->product_qty[$i] - $getProductQty->total_qty) * $product_price[$i];
+                }
                 $data['product_code'] = $request->product_code;
                 $this->product->updateProduct($data, $f->product_id);
                 //Cập nhật công nợ xuất
