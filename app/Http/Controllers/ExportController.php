@@ -1307,7 +1307,7 @@ class ExportController extends Controller
             ->selectRaw('COALESCE((product.product_qty - COALESCE(product.product_trade, 0)), 0) as qty_exist')
             ->get();
         $title = 'Chi tiết đơn hàng';
-        return view('tables.export.editExport', compact('check','exports', 'guest', 'productExport', 'product_code', 'customer', 'title'));
+        return view('tables.export.editExport', compact('check', 'exports', 'guest', 'productExport', 'product_code', 'customer', 'title'));
     }
 
     /**

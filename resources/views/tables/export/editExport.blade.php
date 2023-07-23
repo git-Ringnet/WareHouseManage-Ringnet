@@ -370,9 +370,10 @@
                                         <input type="text" title="{{ $value_export->product_name }}"
                                             style="width: 300px" class="form-control productName" readonly
                                             value="{{ $value_export->product_name }}">
-                                    @else
-                                        <select class="child-select p-1 form-control productName" style="width: 220px"
-                                            name="product_id[]" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                        <select class="child-select p-1 form-control productName <?php if ($exports->export_status != 1) {
+                                            echo 'd-none';
+                                        } ?>"
+                                            style="width: 220px" name="product_id[]" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                                 echo 'disabled';
                                             } ?>>
                                             <option value="{{ $value_export->product_id }}">
