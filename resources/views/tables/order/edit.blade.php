@@ -168,15 +168,15 @@
                                             class="bg-white position-absolute rounded shadow p-0 scroll-data "
                                             style="z-index: 99; width:37%;">
                                             @foreach ($provide as $value)
-                                                <li <?php if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) {
-                                                    echo 'class="d-none"';
-                                                } ?>>
-                                                    <a href="#"
-                                                        class="text-dark d-flex justify-content-between p-2 search-info select_page"
-                                                        id="{{ $value->id }}" name="select_page">
-                                                        <span class="w-50">{{ $value->provide_name }}</span>
-                                                    </a>
-                                                </li>
+                                                @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin')))
+                                                    <li id="{{ $value->id }}" class="search-info">
+                                                        <a href="#"
+                                                            class="text-dark d-flex justify-content-between p-2 search-info select_page"
+                                                            name="select_page">
+                                                            <span class="w-50">{{ $value->provide_name }}</span>
+                                                        </a>
+                                                    </li>
+                                                @endif
                                             @endforeach
                                         </ul>
                                     </div>

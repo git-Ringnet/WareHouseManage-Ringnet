@@ -545,7 +545,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 </span>
                                             </th>
                                         <th scope="col">
-                                            <span class="d-flex justify-content-end align-items-end">
+                                            <span class="d-flex justify-content-center align-items-center">
                                                 <a href="#" class="sort-link" data-sort-by="total_import"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Tổng
@@ -600,7 +600,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             <td class="text-left">
                                                 {{ $value->nhanvien }}
                                             </td>
-                                            <td class="text-right">
+                                            <td class="text-center">
                                                 {{ number_format($value->total_import) }}
                                             </td>
                                             <td class="text-left" style="width: 125px">
@@ -713,10 +713,10 @@ $index = array_search($item['label'], $numberedLabels);
                                                     <p>ĐVT</p>
                                                     {{ $item->dvt }}
                                                 </td>
-                                                <td class="text-right">
+                                                <td class="text-left">
                                                     <p>Số lượng</p>{{ $item->soluong }}
                                                 </td>
-                                                <td class="text-right">
+                                                <td class="text-left">
                                                     <p>Giá nhập</p>
                                                     @if (fmod($item->gianhap, 2) > 0)
                                                         {{ number_format($item->gianhap, 2, '.', ',') }}
@@ -724,7 +724,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                         {{ number_format($item->gianhap) }}
                                                     @endif
                                                 </td>
-                                                <td class="text-right">
+                                                <td class="text-center">
                                                     <p>Thành tiền</p>
                                                         {{ number_format($item->gianhap * $item->soluong) }}
                                                 </td>

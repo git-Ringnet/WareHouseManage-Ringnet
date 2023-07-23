@@ -110,10 +110,8 @@
                                 <ul id="myUL" class="bg-white position-absolute rounded shadow p-0 scroll-data"
                                     style="z-index: 99; width:37%;">
                                     @foreach ($provide as $value)
-                                        <li class="p-2">
-                                            <a href="#" name="search-info"
-                                                class="text-dark justify-content-between p-2 search-info"
-                                                id="{{ $value->id }}">
+                                        <li class="p-2 search-info" name="search-info" id="{{ $value->id }}">
+                                            <a href="#" class="text-dark justify-content-between p-2">
                                                 <span class="w-50">
                                                     {{ $value->provide_name }}
                                                 </span>
