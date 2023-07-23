@@ -528,15 +528,15 @@
                     '<div class="row p-3">' +
                     '<div class="col-sm-6">' +
                     '<div class="form-group">' +
-                    '<label for="congty">Công ty:</label>' +
+                    '<label for="congty" class="required-label">Công ty:</label>' +
                     '<input required type="text" class="form-control" id="provide_name" placeholder="Nhập thông tin" name="provide_name" value="' +
                     data.provide_name + '">' +
                     '</div>' + '<div class="form-group">' +
-                    '<label>Địa chỉ xuất hóa đơn:</label>' +
+                    '<label class="required-label">Địa chỉ xuất hóa đơn:</label>' +
                     '<input required type="text" class="form-control" id="provide_address" placeholder="Nhập thông tin" name="provide_address" value="' +
                     data.provide_address + '">' +
                     '</div>' + '<div class="form-group">' +
-                    '<label for="email">Mã số thuế:</label>' +
+                    '<label for="email" class="required-label">Mã số thuế:</label>' +
                     '<input required type="text" class="form-control" id="provide_code" placeholder="Nhập thông tin" name="provide_code" value="' +
                     data.provide_code + '">' +
                     '</div>' + '<div class="form-group">' +
