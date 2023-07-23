@@ -654,16 +654,16 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <tr id="product-details-{{ $value->id }}"
                                                     class="collapse product-details">
                                                     <td><?php echo $count++; ?></td>
-                                                    <td style="width:200px">
+                                                    <td style="text-left w-auto">
                                                         <p>Tên sản phẩm</p>{{ $item->product_name }}
                                                     </td>
+                                                    @if (Auth::user()->can('isAdmin'))
+                                                        <td></td>
+                                                    @endif
                                                     <td></td>
-                                                    <td class="text-left">
+                                                    <td class="text-right">
                                                         <p>Số lượng</p>{{ $item->product_qty }}
                                                     </td>
-                                                    @if (Auth::user()->can('isAdmin'))
-                                                    <td></td>
-                                                     @endif
                                                     <td class="text-right">
                                                         <p>Giá bán</p>
                                                         {{ number_format($item->product_price) }}
