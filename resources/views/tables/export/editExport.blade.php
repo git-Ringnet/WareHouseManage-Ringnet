@@ -442,7 +442,7 @@
                                 </td>
                                 <td>
                                     <select disabled name="product_tax[]" class="product_tax form-control text-center"
-                                        style="width: 80px;" id="product_tax" required <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                        style="width: 100px;" id="product_tax" required <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                             echo 'disabled';
                                         } ?>>
                                         <option value="0" <?php if ($value_export->thue == 0) {
