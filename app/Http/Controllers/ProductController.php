@@ -136,16 +136,17 @@ class ProductController extends Controller
         if (!empty($request->taxarr)) {
             $taxarr = $request->input('taxarr', []);
             array_push($string, ['label' => 'Thuế:', 'values' => $taxarr, 'class' => 'tax']);
-        }
+        }   
+        $perPage = $request->input('perPageinput',10); 
 
         //lấy tất cả products
-        $products = $products = $this->products->getAllProduct($filters, $status, $products_name, $providearr, $unitarr, $taxarr, $keywords, $sortByArr);
+        $products = $products = $this->products->getAllProduct($filters,$perPage, $status, $products_name, $providearr, $unitarr, $taxarr, $keywords, $sortByArr);
 
         // Đơn vị tính
         $unit = Product::all();
 
         $title = 'Tồn kho';
-        return view('tables.products.data', compact('products', 'string', 'provide', 'unit', 'sortType', 'title'));
+        return view('tables.products.data', compact('products','perPage', 'string', 'provide', 'unit', 'sortType', 'title'));
     }
 
     /**

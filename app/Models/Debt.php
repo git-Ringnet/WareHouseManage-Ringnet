@@ -26,7 +26,7 @@ class Debt extends Model
         'date_end',
         'date_start',
     ];
-    public function getAllDebts($filter = [], $keywords = null, $name = [], $date = [],$guest=[], $datepaid = [], $status = [], $orderBy = null, $orderType = null)
+    public function getAllDebts($filter = [],$perPage, $keywords = null, $name = [], $date = [],$guest=[], $datepaid = [], $status = [], $orderBy = null, $orderType = null)
     {
         $debts = Debt::select('debts.*', 'exports.id as madon', 'guests.guest_name as khachhang', 'users.name as nhanvien', 'exports.updated_at as debtdate','exports.export_code as hdr')
             ->leftJoin('guests', 'guests.id', 'debts.guest_id')
@@ -74,7 +74,7 @@ class Debt extends Model
         }
 
 
-        $debts = $debts->orderBy('debts.id', 'desc')->paginate(20);
+        $debts = $debts->orderBy('debts.id', 'desc')->paginate($perPage);
 
 
         return $debts;
@@ -89,10 +89,10 @@ class Debt extends Model
         ->leftJoin('product', 'product.id', 'product_exports.product_id')->get();
         return $product;
     }
-    public function debtsCreator()
+    public function debtsCreator($perPage)
     {
         $userId = Auth::user()->id;
-        $debtsCreator = DB::table($this->table)->where('user_id', $userId)->paginate(20);
+        $debtsCreator = DB::table($this->table)->where('user_id', $userId)->paginate($perPage);
         return $debtsCreator;
     }
 

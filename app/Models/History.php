@@ -42,7 +42,7 @@ class History extends Model
         'tranport_fee',
         'history_note',
     ];
-    public function getAllHistory($filters = [], $keywords = null, $date = [], $provide_namearr = [], $guest = [], $status = [], $unitarr = [], $status_export = [], $orderBy = null, $orderType = null)
+    public function getAllHistory($filters = [],$perPage, $keywords = null, $date = [], $provide_namearr = [], $guest = [], $status = [], $unitarr = [], $status_export = [], $orderBy = null, $orderType = null)
     {   
         // $list = [3,1,1];
 
@@ -102,7 +102,7 @@ class History extends Model
         }
 
 
-        $history = $history->orderBy('history.id', 'desc')->paginate(20);
+        $history = $history->orderBy('history.id', 'desc')->paginate($perPage);
 
 
         return $history;

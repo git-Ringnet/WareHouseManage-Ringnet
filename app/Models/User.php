@@ -67,7 +67,7 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
-    public function getAllUsers($filter = [], $name = null, $phonenumber = null, $email = null, $status = [], $roles = [], $keywords = null, $orderBy = null, $orderType = null)
+    public function getAllUsers($filter = [],$perPage, $name = null, $phonenumber = null, $email = null, $status = [], $roles = [], $keywords = null, $orderBy = null, $orderType = null)
     {
         // $users = DB::select('SELECT * FROM users');
         $users = DB::table($this->table)
@@ -113,7 +113,8 @@ class User extends Authenticatable
             $users = $users->orderBy($orderBy, $orderType);
         }
         // dd($users);
-        $users = $users->paginate(20);
+        // dd($perPage);
+        $users = $users->paginate($perPage);
         return $users;
     }
     public function addUser($data)

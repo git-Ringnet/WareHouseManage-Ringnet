@@ -3,14 +3,114 @@
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-        <div class="link-report mb-1 mr-auto d-flex mt-auto">
+        <div class="link-report mb-1 mr-auto d-flex mt-auto row">
             <a href="{{ route('indexImport') }}" class="title mr-2 pt-2 px-1 before" href="">
                 Nhập hàng
             </a>
             <a href="{{ route('indexExport') }}" class="title mr-2 pt-2 px-1 active">
                 Xuất hàng
             </a>
+            <div class="ml-auto choosetime">
+                <div class="col d-flex" style="position: relative; width: 280px">
+                    <div class="dropdown w-100">
+                        <button class="btn w-100 btn-light border rounded dropdown-toggle" id="orders"
+                            style="display: flex;
+                            justify-content: space-between;
+                            align-items: center;"
+                            type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+                            {{-- All orders --}}
+                            <div id="all-orders">
+                                <div class="d-flex flex-column all-orders">
+                                    <div class="ca d-flex">
+                                        <div class="it0"></div>
+                                        <div class="id0"></div>
+                                    </div>
+                                    <div class="ca text-left">Tất cả</div>
+                                </div>
+                            </div>
+                            {{-- Tháng này Orders --}}
+                            <div id="this-month-orders" style="display: none">
+                                <div class="d-flex flex-column all-orders">
+                                    <div class="ca d-flex">
+                                        <div class="it1"></div>
+                                        <div class="id1"></div>
+                                    </div>
+                                    <div class="ca text-left">Tháng này</div>
+                                </div>
+                            </div>
+                            {{-- Tháng trước đây Orders --}}
+                            <div id="last-month-orders" style="display: none">
+                                <div class="d-flex flex-column all-orders">
+                                    <div class="ca d-flex">
+                                        <div class="it2"></div>
+                                        <div class="id2"></div>
+                                    </div>
+                                    <div class="ca text-left">Tháng trước</div>
+                                </div>
+                            </div>
+                            {{-- 3 Tháng trước đây Orders --}}
+                            <div id="3last-month-orders" style="display: none">
+                                <div class="d-flex flex-column all-orders">
+                                    <div class="ca d-flex">
+                                        <div class="it3"></div>
+                                        <div class="id3"></div>
+                                    </div>
+                                    <div class="ca text-left">3 tháng trước</div>
+                                </div>
+                            </div>
+                            {{-- Khoảng thời gian Orders --}}
+                            <div id="time-orders" style="display: none">
+                                <div class="d-flex flex-column all-orders">
+                                    <div class="ca d-flex">
+                                        <div class="start_order"></div>
+                                        <div class="muitenorder"></div>
+                                        <div class="end_order"></div>
+                                    </div>
+                                    <div class="ca text-left">Khoảng thời gian</div>
+                                </div>
+                            </div>
+
+                        </button>
+                        <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item dropdown-item-orders" id="btn-all-orders" href="#"
+                                data-value="0">Tất cả</a>
+                            <a class="dropdown-item dropdown-item-orders" id="btn-this-month-orders" href="#"
+                                data-value="1">Tháng này</a>
+                            <a class="dropdown-item dropdown-item-orders" id="btn-last-month-orders" href="#"
+                                data-value="2">Tháng trước</a>
+                            <a class="dropdown-item dropdown-item-orders" id="btn-3last-month-orders" href="#"
+                                data-value="3">3 tháng trước</a>
+                            <a class="dropdown-item dropdown-item-orders" id="btn-time-orders" href="#">Khoảng
+                                thời
+                                gian</a>
+                        </div>
+                    </div>
+                    {{-- Chọn khoảng --}}
+                    <div class="block-optionss" id="times-orders-options" style="display:none">
+                        <div class="wrap w-100">
+                            <div class="input-group p-2 justify-content-around">
+                                <div class="start">
+                                    <label for="start">Từ ngày</label>
+                                    <input type="date" name="date_start" class="date_start rounded">
+                                </div>
+                                <div class="end">
+                                    <label for="start">Đến ngày</label>
+                                    <input type="date" name="date_end" class="date_end rounded">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-contents-center align-items-baseline p-2">
+                            <button type="button" class="suscess btn btn-primary btn-block mr-2" value="4">Xác
+                                nhận</button>
+                            <button type="button" id="cancel-times-orders"
+                                class="btn btn-default btn-block">Hủy</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+
         <hr class="hr">
         <div class="container-fluided">
             <div class="">
@@ -60,7 +160,8 @@
                                     </svg>
                                 </div>
                                 <div class="ml-2">
-                                    <p class="m-0">Tổng đơn xuất</p><b class="m-0">{{ $exports }}</b>
+                                    <p class="m-0">Tổng đơn xuất</p><b class="m-0"
+                                        id="export_id">{{ $exports }}</b>
                                 </div>
                             </div>
                         </div>
@@ -77,8 +178,8 @@
                                     </svg>
                                 </div>
                                 <div class="ml-2">
-                                    <p class="m-0">Tổng tiền xuất</p><b
-                                        class="m-0">{{ number_format($sumExport) }}</b>
+                                    <p class="m-0">Tổng tiền xuất</p><b class="m-0"
+                                        id="export_total">{{ number_format($sumExport) }}</b>
                                 </div>
                             </div>
                         </div>
@@ -95,7 +196,8 @@
                                     </svg>
                                 </div>
                                 <div class="ml-2">
-                                    <p class="m-0">Tổng lợi nhuận</p><b class="m-0">{{ $formattedLoinhuan }}</b>
+                                    <p class="m-0">Tổng lợi nhuận</p><b class="m-0"
+                                        id="countProfit">{{ $formattedLoinhuan }}</b>
                                 </div>
                             </div>
                         </div>
@@ -112,8 +214,8 @@
                                     </svg>
                                 </div>
                                 <div class="ml-2">
-                                    <p class="m-0">Tổng công nợ</p><b
-                                        class="m-0">{{ number_format($CongNo) }}</b>
+                                    <p class="m-0">Tổng công nợ</p><b class="m-0"
+                                        id="countDebt">{{ number_format($CongNo) }}</b>
                                 </div>
                             </div>
                         </div>
@@ -201,73 +303,74 @@ $index = array_search($item['label'], $numberedLabels);
                                 </span>
                             @endforeach
                             @if (Auth::user()->can('isAdmin'))
-                            @php  $nhanvien = [];
-                            if (isset(request()->nhanvien)) {
-                                $nhanvien = request()->nhanvien;
-                            } else {
-                                $nhanvien = [];
-                            } @endphp
-                            <div class="filter-admin">
-                                <button class="btn btn-filter btn-light mr-2" id="btn-nhanvien" type="button">
-                                    <span>
-                                        Nhân viên
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M7.23123 9.23123C7.53954 8.92292 8.03941 8.92292 8.34772 9.23123L12 12.8835L15.6523 9.23123C15.9606 8.92292 16.4605 8.92292 16.7688 9.23123C17.0771 9.53954 17.0771 10.0394 16.7688 10.3477L12.5582 14.5582C12.2499 14.8665 11.7501 14.8665 11.4418 14.5582L7.23123 10.3477C6.92292 10.0394 6.92292 9.53954 7.23123 9.23123Z"
-                                                fill="#555555" />
-                                        </svg>
+                                @php $nhanvien = [];
+                                    if (isset(request()->nhanvien)) {
+                                        $nhanvien = request()->nhanvien;
+                                    } else {
+                                        $nhanvien = [];
+                                } @endphp
+                                <div class="filter-admin">
+                                    <button class="btn btn-filter btn-light mr-2" id="btn-nhanvien" type="button">
+                                        <span>
+                                            Nhân viên
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M7.23123 9.23123C7.53954 8.92292 8.03941 8.92292 8.34772 9.23123L12 12.8835L15.6523 9.23123C15.9606 8.92292 16.4605 8.92292 16.7688 9.23123C17.0771 9.53954 17.0771 10.0394 16.7688 10.3477L12.5582 14.5582C12.2499 14.8665 11.7501 14.8665 11.4418 14.5582L7.23123 10.3477C6.92292 10.0394 6.92292 9.53954 7.23123 9.23123Z"
+                                                    fill="#555555" />
+                                            </svg>
 
-                                    </span>
-                                </button>
-                                {{-- Nhân viên admin --}}
-                                <div class="block-options-admin" id="creator-options" style="display:none">
-                                    <div class="wrap w-100">
-                                        <div class="heading-title title-wrap">
-                                            <h5>Nhân viên</h5>
-                                        </div>
-                                        <div class="search-container px-2 mt-2">
-                                            <input type="text" placeholder="Tìm kiếm" id="myInput-creator"
-                                                class="pr-4 w-100 input-search" onkeyup="filterCreator()">
-                                            <span class="search-icon"><i class="fas fa-search"></i></span>
-                                        </div>
-                                        <div
-                                            class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
-                                            <a class="cursor select-all-creator mr-auto">Chọn tất cả</a>
-                                            <a class="cursor deselect-all-creator">Hủy chọn</a>
-                                        </div>
-                                        <div class="ks-cboxtags-container">
-                                            <ul class="ks-cboxtags ks-cboxtags-creator p-0 mb-1 px-2">
-                                                @if (!empty($debtsSale))
-                                                    @php
-                                                        $seenValues = [];
-                                                    @endphp
-                                                    @foreach ($debtsSale as $value)
-                                                        @if (!in_array($value->name, $seenValues))
-                                                            <li>
-                                                                <input type="checkbox" id="name_active"
-                                                                    {{ in_array($value->name, $nhanvien) ? 'checked' : '' }}
-                                                                    name="nhanvien[]" value="{{ $value->name }}">
-                                                                <label id="nhanvien"
-                                                                    for="">{{ $value->name }}</label>
-                                                            </li>
-                                                            @php
-                                                                $seenValues[] = $value->name;
-                                                            @endphp
-                                                        @endif
-                                                    @endforeach
-                                                @endif
-                                            </ul>
-                                        </div>
-                                        <div class="d-flex justify-contents-center align-items-baseline p-2">
-                                            <button type="submit" class="btn btn-primary btn-block mr-2">Xác
-                                                Nhận</button>
-                                            <button type="button" id="cancel-creator"
-                                                class="btn btn-default btn-block">Hủy</button>
+                                        </span>
+                                    </button>
+                                    {{-- Nhân viên admin --}}
+                                    <div class="block-options-admin" id="creator-options" style="display:none">
+                                        <div class="wrap w-100">
+                                            <div class="heading-title title-wrap">
+                                                <h5>Nhân viên</h5>
+                                            </div>
+                                            <div class="search-container px-2 mt-2">
+                                                <input type="text" placeholder="Tìm kiếm" id="myInput-creator"
+                                                    class="pr-4 w-100 input-search" onkeyup="filterCreator()">
+                                                <span class="search-icon"><i class="fas fa-search"></i></span>
+                                            </div>
+                                            <div
+                                                class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
+                                                <a class="cursor select-all-creator mr-auto">Chọn tất cả</a>
+                                                <a class="cursor deselect-all-creator">Hủy chọn</a>
+                                            </div>
+                                            <div class="ks-cboxtags-container">
+                                                <ul class="ks-cboxtags ks-cboxtags-creator p-0 mb-1 px-2">
+                                                    @if (!empty($debtsSale))
+                                                        @php
+                                                            $seenValues = [];
+                                                        @endphp
+                                                        @foreach ($debtsSale as $value)
+                                                            @if (!in_array($value->name, $seenValues))
+                                                                <li>
+                                                                    <input type="checkbox" id="name_active"
+                                                                        {{ in_array($value->name, $nhanvien) ? 'checked' : '' }}
+                                                                        name="nhanvien[]"
+                                                                        value="{{ $value->name }}">
+                                                                    <label id="nhanvien"
+                                                                        for="">{{ $value->name }}</label>
+                                                                </li>
+                                                                @php
+                                                                    $seenValues[] = $value->name;
+                                                                @endphp
+                                                            @endif
+                                                        @endforeach
+                                                    @endif
+                                                </ul>
+                                            </div>
+                                            <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                                <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                                    Nhận</button>
+                                                <button type="button" id="cancel-creator"
+                                                    class="btn btn-default btn-block">Hủy</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                             @endif
                             <div class="class" style="order:999">
                                 <div class="filter-options">
@@ -417,7 +520,8 @@ $index = array_search($item['label'], $numberedLabels);
                                             </div>
                                         </div>
                                         <div class="d-flex justify-contents-center align-items-baseline p-2">
-                                            <button type="submit" id="submit-email" class="btn btn-primary btn-block mr-2">Xác
+                                            <button type="submit" id="submit-email"
+                                                class="btn btn-primary btn-block mr-2">Xác
                                                 Nhận</button>
                                             <button type="button" id="cancel-email"
                                                 class="btn btn-default btn-block">Hủy</button>
@@ -486,7 +590,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('sale_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity sale-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -516,7 +620,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('import_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity export-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -546,7 +650,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('difference_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity difference-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -568,15 +672,15 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <h5>Tổng công nợ</h5>
                                             </div>
                                             <div class="input-group p-2 justify-content-around">
-                                                <select class="sum_debt_operator input-so"
-                                                    name="sum_debt_operator" style="width: 40%">
+                                                <select class="sum_debt_operator input-so" name="sum_debt_operator"
+                                                    style="width: 40%">
                                                     <option value=">="
                                                         {{ request('sum_debt_operator') === '>=' ? 'selected' : '' }}>
                                                         >=
                                                     </option>
                                                     <option value="<="
                                                         {{ request('sum_debt_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity sum_debt-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -640,35 +744,37 @@ $index = array_search($item['label'], $numberedLabels);
                         <div class="card-body">
                             <table id="example2" class="table table-hover">
                                 <thead>
+                                    <input type="hidden" id="perPageinput" name="perPageinput" value="10">
                                     <input type="hidden" id="sortByInput" name="sort-by" value="">
-                                        <input type="hidden" id="sortTypeInput" name="sort-type"
-                                            value="{{ $sortType }}">
+                                    <input type="hidden" id="sortTypeInput" name="sort-type"
+                                        value="{{ $sortType }}">
                                     <tr>
                                         <th scope="col">STT</th>
                                         <th scope="col"><span class="d-flex">
-                                            <a href="#" class="sort-link" data-sort-by="user_id"
-                                                data-sort-type="{{ $sortType }}"><button class="btn-sort"
-                                                    type="submit">Nhân viên</button></a>
-                                            <div class="icon" id="icon-user_id"></div>
-                                        </span></th>
+                                                <a href="#" class="sort-link" data-sort-by="user_id"
+                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
+                                                        type="submit">Nhân viên</button></a>
+                                                <div class="icon" id="icon-user_id"></div>
+                                            </span></th>
                                         <th scope="col"><span class="d-flex">
-                                            <a href="#" class="sort-link" data-sort-by="email"
-                                                data-sort-type="{{ $sortType }}"><button class="btn-sort"
-                                                    type="submit">Email</button></a>
-                                            <div class="icon" id="icon-email"></div>
-                                        </span></th>
+                                                <a href="#" class="sort-link" data-sort-by="email"
+                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
+                                                        type="submit">Email</button></a>
+                                                <div class="icon" id="icon-email"></div>
+                                            </span></th>
                                         <th scope="col"><span class="d-flex justify-content-center">
-                                            <a href="#" class="sort-link" data-sort-by="vaitro"
-                                                data-sort-type="{{ $sortType }}"><button class="btn-sort"
-                                                    type="submit">Vai trò</button></a>
-                                            <div class="icon" id="icon-vaitro"></div>
-                                        </span></th>
-                                        <th scope="col" class="text-right"><span class="d-flex justify-content-end">
-                                            <a href="#" class="sort-link" data-sort-by="donxuat"
-                                                data-sort-type="{{ $sortType }}"><button class="btn-sort"
-                                                    type="submit">Tổng đơn xuất</button></a>
-                                            <div class="icon" id="icon-donxuat"></div>
-                                        </span></th>
+                                                <a href="#" class="sort-link" data-sort-by="vaitro"
+                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
+                                                        type="submit">Vai trò</button></a>
+                                                <div class="icon" id="icon-vaitro"></div>
+                                            </span></th>
+                                        <th scope="col" class="text-right"><span
+                                                class="d-flex justify-content-end">
+                                                <a href="#" class="sort-link" data-sort-by="donxuat"
+                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
+                                                        type="submit">Tổng đơn xuất</button></a>
+                                                <div class="icon" id="icon-donxuat"></div>
+                                            </span></th>
                                         <th scope="col">
                                             <span class="d-flex justify-content-end">
                                                 <a href="#" class="sort-link" data-sort-by="tongtienxuat"
@@ -717,6 +823,17 @@ $index = array_search($item['label'], $numberedLabels);
                             </table>
                         </div>
                     </div>
+                    <div class="paginator mt-4 d-flex justify-content-start">
+                        <span class="text-perpage">
+                            Số hàng mỗi trang:
+                            <select name="perPage" id="perPage">
+                                <option value="5" {{ $perPage == 5 ? 'selected' : '' }}>5</option>
+                                <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
+                                <option value="20" {{ $perPage == 25 ? 'selected' : '' }}>25</option>
+                                <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
+                            </select>
+                        </span>
+                    </div>
                     <div class="paginator mt-4 d-flex justify-content-end">
                         @if (Auth::user()->can('isAdmin'))
                             {{-- {{ $debts->appends(request()->except('page'))->links() }} --}}
@@ -734,6 +851,190 @@ $index = array_search($item['label'], $numberedLabels);
 </div>
 <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
 <script>
+        $('#perPage').on('change', function(e) {
+        e.preventDefault();
+        var perPageValue = $(this).val();
+        $('#perPageinput').val(perPageValue);
+        $('#search-filter').submit();
+    });
+    // Tất cả
+    $("#btn-all-orders").click(function() {
+        $("#all-orders").show();
+        $("#this-month-orders").hide();
+        $("#last-month-orders").hide();
+        $("#3last-month-orders").hide();
+        $("#time-orders").hide();
+    });
+    // Tháng này
+    $("#btn-this-month-orders").click(function() {
+        $("#this-month-orders").show();
+        $("#all-orders").hide();
+        $("#last-month-orders").hide();
+        $("#3last-month-orders").hide();
+        $("#time-orders").hide();
+    });
+    // Tháng trước
+    $("#btn-last-month-orders").click(function() {
+        $("#last-month-orders").show();
+        $("#all-orders").hide();
+        $("#this-month-orders").hide();
+        $("#3last-month-orders").hide();
+        $("#time-orders").hide();
+    });
+    // 3 tháng trc
+    $("#btn-3last-month-orders").click(function() {
+        $("#3last-month-orders").show();
+        $("#all-orders").hide();
+        $("#this-month-orders").hide();
+        $("#last-month-orders").hide();
+        $("#time-orders").hide();
+    });
+    // Khoảng time
+    $("#btn-time-orders").click(function() {
+        $("#time-orders").show();
+        $("#times-orders-options").show();
+        $("#all-orders").hide();
+        $("#this-month-orders").hide();
+        $("#last-month-orders").hide();
+        $("#3last-month-orders").hide();
+    });
+    $('#cancel-times-orders').click(function(event) {
+        event.preventDefault();
+        $('#times-orders-options').hide();
+    });
+    $('.suscess').click(function(event) {
+        event.preventDefault();
+        $('#times-orders-options').hide();
+    });
+    $(document).on('change', '.date_start', function(e) {
+        e.preventDefault();
+        $('.start_order').text(moment($(this).val()).format("DD-MM-YYYY"));
+        $('.muitenorder').text('->');
+    })
+    $(document).on('change', '.date_end', function(e) {
+        e.preventDefault();
+        $('.end_order').text(moment($(this).val()).format("DD-MM-YYYY"));
+        $('.muitenorder').text('->');
+    })
+
+    function formatDate(date) {
+        var day = date.getDate();
+        var month = date.getMonth() + 1; // Tháng tính từ 0 đến 11, cần +1
+        var year = date.getFullYear();
+
+        // Đảm bảo hiển thị 2 chữ số cho ngày và tháng
+        day = (day < 10) ? '0' + day : day;
+        month = (month < 10) ? '0' + month : month;
+
+        return day + '-' + month + '-' + year;
+    }
+
+    function formatCurrency(value) {
+        // Làm tròn đến 2 chữ số thập phân
+        value = Math.round(value * 100) / 100;
+
+        // Check if the value is negative
+        var isNegative = value < 0;
+        value = Math.abs(value); // Get the absolute value for formatting
+
+        // Xử lý phần nguyên
+        var parts = value.toFixed(2).toString().split(".");
+        var integerPart = parts[0];
+        var formattedValue = "";
+
+        // Định dạng phần nguyên
+        var count = 0;
+        for (var i = integerPart.length - 1; i >= 0; i--) {
+            formattedValue = integerPart.charAt(i) + formattedValue;
+            count++;
+            if (count % 3 === 0 && i !== 0) {
+                formattedValue = "," + formattedValue;
+            }
+        }
+
+        // Nếu có phần thập phân, thêm vào sau phần nguyên
+        if (parts.length > 1) {
+            formattedValue += "." + parts[1];
+        } else {
+            // Always ensure two decimal places
+            formattedValue += ".00";
+        }
+
+        // Nếu là số âm, thêm dấu "-" vào đầu chuỗi
+        if (isNegative) {
+            formattedValue = "-" + formattedValue;
+        }
+
+        // Trả về kết quả đã định dạng
+        return formattedValue;
+    }
+    // Nhập hàng
+    $(document).on('click', '.dropdown-item-orders', function() {
+        var dataid = $(this).data('value');
+        $.ajax({
+            url: "{{ route('timeExport') }}",
+            type: "get",
+            data: {
+                data: dataid
+            },
+            success: function(data) {
+                $('#export_id').text(data.countExport);
+                if (data.sumExport > 0) {
+                    $('#export_total').text(formatCurrency(data.sumExport));
+                } else {
+                    $('#export_total').text(0);
+                }
+                if (data.countDebt > 0) {
+                    $('#countDebt').text(formatCurrency(data.countDebt));
+                } else {
+                    $('#countDebt').text(0);
+                }
+                if (data.countProfit > 0) {
+                    $('#countProfit').text(formatCurrency(data.countProfit));
+                } else {
+                    $('#countProfit').text(0);
+                }
+                if (data.start_date && data.end_date) {
+                    var stId = '.it' + dataid;
+                    var edId = '.id' + dataid;
+                    $(stId).text(data.start_date)
+                    $(edId).text(data.end_date)
+                }
+            }
+        })
+    })
+    $(document).on('click', '.suscess', function() {
+        var data = $(this).val();
+        var date_start = $('.date_start').val();
+        var date_end = $('.date_end').val();
+        $.ajax({
+            url: "{{ route('timeExport') }}",
+            type: "get",
+            data: {
+                data: data,
+                date_start: date_start,
+                date_end: date_end
+            },
+            success: function(data) {
+                $('#export_id').text(data.countExport);
+                if (data.sumExport > 0) {
+                    $('#export_total').text(formatCurrency(data.sumExport));
+                } else {
+                    $('#export_total').text(0);
+                }
+                if (data.countDebt > 0) {
+                    $('#countDebt').text(formatCurrency(data.countDebt));
+                } else {
+                    $('#countDebt').text(0);
+                }
+                if (data.countProfit > 0) {
+                    $('#countProfit').text(formatCurrency(data.countProfit));
+                } else {
+                    $('#countProfit').text(0);
+                }
+            }
+        })
+    })
     $('#search-icon').on('click', function(e) {
         e.preventDefault();
         $('#search-filter').submit();
@@ -1054,7 +1355,7 @@ $index = array_search($item['label'], $numberedLabels);
         $(".email-input").on("keypress", function(event) {
             if (event.which === 13) {
                 event.preventDefault();
-                $("#submit-email").click(); 
+                $("#submit-email").click();
             }
         });
     });
@@ -1200,6 +1501,7 @@ $index = array_search($item['label'], $numberedLabels);
         }
 
     }
+
     function filterCreator() {
         var input = $("#myInput-creator");
         var filter = input.val().toUpperCase();
@@ -1214,6 +1516,7 @@ $index = array_search($item['label'], $numberedLabels);
             }
         });
     }
+
     function filterRoles() {
         var input = $("#myInput-roles");
         var filter = input.val().toUpperCase();

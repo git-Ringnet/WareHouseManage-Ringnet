@@ -39,8 +39,8 @@
             <form class="w-100" action="" method="get" id='search-filter'>
                 <div class="row mr-0">
                     <div class="col-5">
-                        <input type="text" placeholder="Tìm kiếm theo số hóa đơn hoặc nhà cung cấp"
-                            name="keywords" class="pr-4 form-control input-search w-100 searchkeyword"
+                        <input type="text" placeholder="Tìm kiếm theo số hóa đơn hoặc nhà cung cấp" name="keywords"
+                            class="pr-4 form-control input-search w-100 searchkeyword"
                             value="{{ request()->keywords }}">
                         <span id="search-icon" class="search-icon"><i class="fas fa-search"></i></span>
                     </div>
@@ -477,6 +477,7 @@ $index = array_search($item['label'], $numberedLabels);
                         <table id="example2" class="table table-hover">
                             <thead>
                                 <tr>
+                                    <input type="hidden" id="perPageinput" name="perPageinput" value="10">
                                     <input type="hidden" id="sortByInput" name="sort-by" value="id">
                                     <input type="hidden" id="sortTypeInput" name="sort-type"
                                         value="{{ $sortType }}">
@@ -529,8 +530,8 @@ $index = array_search($item['label'], $numberedLabels);
                                             <div class="icon" id="icon-total"></div>
                                         </span>
                                     </th>
-                                    <th scope="col" style="width:11%;" class="text-center">
-                                        <span class="d-flex justify-content-center">
+                                    <th scope="col" class="text-center">
+                                        <span class="d-flex justify-content-center" style="width:135px;">
                                             <a href="#" class="sort-link" data-sort-by="order_status"
                                                 data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                     type="submit">Trạng thái</button></a>
@@ -555,7 +556,7 @@ $index = array_search($item['label'], $numberedLabels);
                                         <td class="text-right">
                                             {{ number_format($va->total_tax) }}
                                         </td>
-                                        <td class="text-center">
+                                        <td class="text-center" style="width: 135px">
                                             @if ($va->order_status == 0)
                                                 <span class="p-2 bg-warning rounded">Chờ duyệt</span>
                                             @elseif($va->order_status == 1)
@@ -675,6 +676,17 @@ $index = array_search($item['label'], $numberedLabels);
                 </div>
             </div>
         </div>
+        <div class="paginator mt-4 d-flex justify-content-start">
+            <span>
+                Số hàng mỗi trang:
+                <select name="perPage" id="perPage">
+                    <option value="5" {{ $perPage == 5 ? 'selected' : '' }}>5</option>
+                    <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
+                    <option value="20" {{ $perPage == 25 ? 'selected' : '' }}>25</option>
+                    <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
+                </select>
+            </span>
+        </div>
         <!-- <button type="submit" name="confirmBill" id="confirmBill" class="btn btn-primary">Duyệt đơn nhanh</button> -->
         <div class="paginator mt-4 d-flex justify-content-end">
             {{ $orders->appends(request()->except('page'))->links() }}
@@ -684,6 +696,12 @@ $index = array_search($item['label'], $numberedLabels);
     <!-- /.content -->
 </div>
 <script>
+        $('#perPage').on('change', function(e) {
+        e.preventDefault();
+        var perPageValue = $(this).val();
+        $('#perPageinput').val(perPageValue);
+        $('#search-filter').submit();
+    });
     // Xử lí filter ngày tháng
     $(document).ready(function() {
         $('#end').change(function() {
@@ -1074,7 +1092,12 @@ $index = array_search($item['label'], $numberedLabels);
     }
 
 
+
     var dropdownItems = $('[id^="dropdown_item"]');
+    function checkActiveItems() {
+        var activeItemCount = dropdownItems.filter('.dropdown-item-active').length;
+        return activeItemCount;
+    }
     dropdownItems.each(function() {
         $(this).on('click', function() {
             var isActive = $(this).hasClass('dropdown-item-active');
@@ -1082,28 +1105,24 @@ $index = array_search($item['label'], $numberedLabels);
             var parentElement = $(this).parent().parent();
             console.log(parentElement);
             if (isActive) {
-                dropdownItems.each(function() {
-                    if ($(this).hasClass('dropdown-item-active')) {
-                        $('#expandall').show();
-                        $('#collapseall').hide();
-                    }
-                })
                 $(this).removeClass('dropdown-item-active');
                 parentElement.css('background', '#E9ECEF');
                 svgElement.removeClass("svgactive")
                 svgElement.addClass("svginative")
             }
             if (!isActive) {
-                dropdownItems.each(function() {
-                    if (!$(this).hasClass('dropdown-item-active')) {
-                        $('#expandall').hide();
-                        $('#collapseall').show();
-                    }
-                })
                 $(this).addClass('dropdown-item-active');
                 parentElement.css('background', '#ADB5BD');
                 svgElement.addClass("svgactive")
                 svgElement.removeClass("svginative")
+            }
+            if (checkActiveItems() > 0) {
+                $('#expandall').hide();
+                $('#collapseall').show();
+              
+            } else {
+                $('#expandall').show();
+                $('#collapseall').hide();
             }
         });
     });

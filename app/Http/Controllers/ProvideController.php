@@ -81,13 +81,13 @@ class ProvideController extends Controller
 
 
         $keywords = null;
-
+        $perPage = $request->input('perPageinput',10); 
         if (!empty($request->keywords)) {
             $keywords = $request->keywords;
         }
-        $provides = $this->provides->getAllProvides($filters, $name, $represent, $phonenumber, $email, $status, $keywords, $sortByArr);
+        $provides = $this->provides->getAllProvides($filters, $perPage,$name, $represent, $phonenumber, $email, $status, $keywords, $sortByArr);
         $title = 'Nhà cung cấp';
-        return view('tables.provide.provides', compact('provides', 'sortType', 'string', 'title'));
+        return view('tables.provide.provides', compact('provides', 'perPage','sortType', 'string', 'title'));
     }
 
     /**

@@ -22,7 +22,7 @@ class DebtImport extends Model
         'debt_status',
         'debt_note',
     ];
-    public function getAllDebts($filter = [], $keywords = null, $name = [], $date = [], $provide_name = [], $status = [], $orderBy = null, $orderType = null)
+    public function getAllDebts($filter = [],$perPage, $keywords = null, $name = [], $date = [], $provide_name = [], $status = [], $orderBy = null, $orderType = null)
     {
         $debt_import = DB::table($this->table)
             ->leftJoin('provides', 'provides.id', 'debt_import.provide_id')
@@ -60,7 +60,7 @@ class DebtImport extends Model
         }
 
 
-        $debt_import = $debt_import->orderBy('debt_import.id', 'desc')->paginate(20);
+        $debt_import = $debt_import->orderBy('debt_import.id', 'desc')->paginate($perPage);
 
 
         return $debt_import;
@@ -75,10 +75,10 @@ class DebtImport extends Model
             ->leftJoin('product', 'product.id', 'productorders.product_id')->get();
         return $product;
     }
-    public function debtsCreator()
+    public function debtsCreator($perPage)
     {
         $userId = Auth::user()->id;
-        $debtsCreator = DB::table($this->table)->where('user_id', $userId)->paginate(20);
+        $debtsCreator = DB::table($this->table)->where('user_id', $userId)->paginate($perPage);
         return $debtsCreator;
     }
    

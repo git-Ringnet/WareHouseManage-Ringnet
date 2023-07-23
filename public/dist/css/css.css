@@ -903,6 +903,10 @@ input[type="checkbox"] {
         flex: 0 0 100%;
 
     }
+    .link-report .choosetime{
+        left: 0;
+        bottom: 40px !important;
+    }
 }
 
 .svgactive {
@@ -974,6 +978,15 @@ input[type="checkbox"] {
     font-weight: 600;
     color: #0095F6;
 }
+.link-report {
+    position: relative;
+}
+.link-report .choosetime{
+    position: absolute;
+    right: 0;
+    bottom: 10px;
+}
+
 
 .link-report .before {
     font-size: 16px;
@@ -1063,4 +1076,16 @@ input[type="checkbox"] {
 /**/
 #myUL li:hover{
     background: #ECECEC;
+}
+.text-perpage{
+    font-size: 14px;
+font-style: normal;
+font-weight: 500;
+color: var(--secondary-gray-5-default, #555);
+}
+.text-perpage #perPage{
+    border-radius: 8px;
+    border: 1px solid var(--secondary-gray-5-default, #555);
+    background: var(--gray-11-hover-select, #ECECEC);
+    padding: 8px 16px;
 }
