@@ -388,6 +388,23 @@
                                             @endforeach
                                         </select>
                                     @endif
+                                    @if ($exports->export_status == 1)
+                                        <select class="child-select p-1 form-control productName"
+                                            style="width: 220px" name="product_id[]" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                                echo 'disabled';
+                                            } ?>>
+                                            <option value="{{ $value_export->product_id }}">
+                                                {{ $value_export->product_name }}
+                                            </option>
+                                            @foreach ($product_code as $value_code)
+                                                <option value="{{ $value_code->id }}" class="<?php if ($value_code->id === $value_export->product_id) {
+                                                    echo 'd-none';
+                                                } ?>">
+                                                    {{ $value_code->product_name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    @endif
                                 </td>
                                 <td>
                                     <input type="text" id="product_unit" readonly style="width: 80px"
