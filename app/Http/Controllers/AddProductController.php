@@ -1078,7 +1078,7 @@ class AddProductController extends Controller
                         $va->debt_import = $request->provide_debt == null ? 0 : $request->provide_debt;
                         $va->debt_import_end = $endDateFormatted;
                         $va->debt_import_start = $request->product_create;
-                        $va->total_difference = ($Pro->product_price * $va->export_qty) - ($va->export_qty * $va->price_export);
+                        $va->total_difference = ($va->price_export * $va->export_qty) - ($va->export_qty * $Pro->product_price);
                         $va->save();
                     }
                 }
