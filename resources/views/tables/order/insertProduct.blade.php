@@ -643,7 +643,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 </td>
                                                 <td class="text-right">
                                                     <p>Giá nhập</p>
-                                                    @if (fmod($item->product_price, 2) > 0)
+                                                    @if (fmod($item->product_price, 1) > 0)
                                                         {{ number_format($item->product_price, 2, '.', ',') }}
                                                     @else
                                                         {{ number_format($item->product_price) }}

@@ -1067,7 +1067,7 @@ class AddProductController extends Controller
                 $upPro = History::where('product_id', $value)->get();
                 foreach ($upPro as $va) {
                     if ($value == $va->product_id) {
-                        $Pro = Product::find($value);
+                        $Pro = ProductOrders::where('product_id',$value)->first();
                         $va->product_name = $Pro->product_name;
                         $va->product_unit = $Pro->product_unit;
                         $va->price_import = $Pro->product_price;
@@ -1078,6 +1078,7 @@ class AddProductController extends Controller
                         $va->debt_import = $request->provide_debt == null ? 0 : $request->provide_debt;
                         $va->debt_import_end = $endDateFormatted;
                         $va->debt_import_start = $request->product_create;
+                        $va->total_difference = ($Pro->product_price * $va->export_qty) - ($va->export_qty * $va->price_export);
                         $va->save();
                     }
                 }
