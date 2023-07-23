@@ -35,40 +35,40 @@
                                         <div id="all-orders">
                                             <div class="d-flex flex-column all-orders">
                                                 <div class="ca d-flex">
-                                                    <div class="start"></div>
-                                                    <div class="end"></div>
+                                                    <div id="it0"></div>->
+                                                    <div id="id0"></div>
                                                 </div>
-                                                <div class="ca">Tất cả</div>
+                                                <div class="ca text-left">Tất cả</div>
                                             </div>
                                         </div>
                                         {{-- Tháng này Orders --}}
                                         <div id="this-month-orders" style="display: none">
                                             <div class="d-flex flex-column all-orders">
                                                 <div class="ca d-flex">
-                                                    <div class="start"></div>
-                                                    <div class="end"></div>
+                                                    <div id="it1"></div>->
+                                                    <div id="id1"></div>
                                                 </div>
-                                                <div class="ca">Tháng này</div>
+                                                <div class="ca text-left">Tháng này</div>
                                             </div>
                                         </div>
                                         {{-- Tháng trước đây Orders --}}
                                         <div id="last-month-orders" style="display: none">
                                             <div class="d-flex flex-column all-orders">
                                                 <div class="ca d-flex">
-                                                    <div class="start"></div>
-                                                    <div class="end"></div>
+                                                    <div id="it2"></div>->
+                                                    <div id="id2"></div>
                                                 </div>
-                                                <div class="ca">Tháng trước</div>
+                                                <div class="ca text-left">Tháng trước</div>
                                             </div>
                                         </div>
                                         {{-- 3 Tháng trước đây Orders --}}
                                         <div id="3last-month-orders" style="display: none">
                                             <div class="d-flex flex-column all-orders">
                                                 <div class="ca d-flex">
-                                                    <div class="start"></div>
-                                                    <div class="end"></div>
+                                                    <div id="it3"></div>->
+                                                    <div id="id3"></div>
                                                 </div>
-                                                <div class="ca">3 tháng trước</div>
+                                                <div class="ca text-left">3 tháng trước</div>
                                             </div>
                                         </div>
                                         {{-- Khoảng thời gian Orders --}}
@@ -104,7 +104,8 @@
                                         <div class="input-group p-2 justify-content-around">
                                             <div class="start">
                                                 <label for="start">Từ ngày</label>
-                                                <input type="date" name="date_start" class="date_start rounded">
+                                                <input type="date" name="date_start"
+                                                    class="date_start rounded">
                                             </div>
                                             <div class="end">
                                                 <label for="start">Đến ngày</label>
@@ -219,40 +220,40 @@
                                         <div id="all-exports">
                                             <div class="d-flex flex-column all-exports">
                                                 <div class="ca d-flex">
-                                                    <div class="start"></div>
-                                                    <div class="end"></div>
+                                                    <div id="et0"></div>->
+                                                    <div id="ed0"></div>
                                                 </div>
-                                                <div class="ca">Tất cả</div>
+                                                <div class="ca text-left">Tất cả</div>
                                             </div>
                                         </div>
                                         {{-- Tháng này Export --}}
                                         <div id="this-month-exports" style="display: none">
                                             <div class="d-flex flex-column all-exports">
                                                 <div class="ca d-flex">
-                                                    <div class="start"></div>
-                                                    <div class="end"></div>
+                                                    <div id="et1"></div>->
+                                                    <div id="ed1"></div>
                                                 </div>
-                                                <div class="ca">Tháng này</div>
+                                                <div class="ca text-left">Tháng này</div>
                                             </div>
                                         </div>
                                         {{-- Tháng trước đây Export --}}
                                         <div id="last-month-exports" style="display: none">
                                             <div class="d-flex flex-column all-exports">
                                                 <div class="ca d-flex">
-                                                    <div class="start"></div>
-                                                    <div class="end"></div>
+                                                    <div id="et2"></div>->
+                                                    <div id="ed2"></div>
                                                 </div>
-                                                <div class="ca">Tháng trước</div>
+                                                <div class="ca text-left">Tháng trước</div>
                                             </div>
                                         </div>
                                         {{-- 3 Tháng trước đây Export --}}
                                         <div id="3last-month-exports" style="display: none">
                                             <div class="d-flex flex-column all-exports">
                                                 <div class="ca d-flex">
-                                                    <div class="start"></div>
-                                                    <div class="end"></div>
+                                                    <div id="et3"></div>->
+                                                    <div id="ed3"></div>
                                                 </div>
-                                                <div class="ca">3 tháng trước</div>
+                                                <div class="ca text-left">3 tháng trước</div>
                                             </div>
                                         </div>
                                         {{-- Khoảng thời gian Export --}}
@@ -285,7 +286,7 @@
                                 {{-- Chọn khoảng --}}
                                 <div class="block-optionss" id="times-exports-options" style="display:none">
                                     <div class="wrap w-100">
-                                        
+
                                         <div class="input-group p-2 justify-content-around">
                                             <div class="start">
                                                 <label for="start">Từ ngày</label>
@@ -408,40 +409,40 @@
                                         <div id="all-inventory">
                                             <div class="d-flex flex-column all-inventory">
                                                 <div class="ca d-flex">
-                                                    <div class="start"></div>
-                                                    <div class="end"></div>
+                                                    <div id="ivent0"></div>->
+                                                    <div id="ivend0"></div>
                                                 </div>
-                                                <div class="ca">Tất cả</div>
+                                                <div class="ca text-left">Tất cả</div>
                                             </div>
                                         </div>
                                         {{-- Tháng này inventory --}}
                                         <div id="this-month-inventory" style="display: none">
                                             <div class="d-flex flex-column all-inventory">
                                                 <div class="ca d-flex">
-                                                    <div class="start"></div>
-                                                    <div class="end"></div>
+                                                    <div id="ivent1"></div>->
+                                                    <div id="ivend1"></div>
                                                 </div>
-                                                <div class="ca">Tháng này</div>
+                                                <div class="ca text-left">Tháng này</div>
                                             </div>
                                         </div>
                                         {{-- Tháng trước đây inventory --}}
                                         <div id="last-month-inventory" style="display: none">
                                             <div class="d-flex flex-column all-inventory">
                                                 <div class="ca d-flex">
-                                                    <div class="start"></div>
-                                                    <div class="end"></div>
+                                                    <div id="ivent2"></div>->
+                                                    <div id="ivend2"></div>
                                                 </div>
-                                                <div class="ca">Tháng trước</div>
+                                                <div class="ca text-left">Tháng trước</div>
                                             </div>
                                         </div>
                                         {{-- 3 Tháng trước đây inventory --}}
                                         <div id="3last-month-inventory" style="display: none">
                                             <div class="d-flex flex-column all-inventory">
                                                 <div class="ca d-flex">
-                                                    <div class="start"></div>
-                                                    <div class="end"></div>
+                                                    <div id="ivent3"></div>->
+                                                    <div id="ivend3"></div>
                                                 </div>
-                                                <div class="ca">3 tháng trước</div>
+                                                <div class="ca text-left">3 tháng trước</div>
                                             </div>
                                         </div>
                                         {{-- Khoảng thời gian inventory --}}
@@ -475,7 +476,7 @@
                                 {{-- Chọn khoảng --}}
                                 <div class="block-optionss" id="times-inventory-options" style="display:none">
                                     <div class="wrap w-100">
-                                       
+
                                         <div class="input-group p-2 justify-content-around">
                                             <div class="start">
                                                 <label for="start">Từ ngày</label>
@@ -564,40 +565,40 @@
                                         <div id="all-debt">
                                             <div class="d-flex flex-column all-debt">
                                                 <div class="ca d-flex">
-                                                    <div class="start"></div>
-                                                    <div class="end"></div>
+                                                    <div id="debtt0"></div>->
+                                                    <div id="debtd0"></div>
                                                 </div>
-                                                <div class="ca">Tất cả</div>
+                                                <div class="ca text-left">Tất cả</div>
                                             </div>
                                         </div>
                                         {{-- Tháng này debt --}}
                                         <div id="this-month-debt" style="display: none">
                                             <div class="d-flex flex-column all-debt">
                                                 <div class="ca d-flex">
-                                                    <div class="start"></div>
-                                                    <div class="end"></div>
+                                                    <div id="debtt1"></div>->
+                                                    <div id="debtd1"></div>
                                                 </div>
-                                                <div class="ca">Tháng này</div>
+                                                <div class="ca text-left">Tháng này</div>
                                             </div>
                                         </div>
                                         {{-- Tháng trước đây debt --}}
                                         <div id="last-month-debt" style="display: none">
                                             <div class="d-flex flex-column all-debt">
                                                 <div class="ca d-flex">
-                                                    <div class="start"></div>
-                                                    <div class="end"></div>
+                                                    <div id="debtt2"></div>->
+                                                    <div id="debtd2"></div>
                                                 </div>
-                                                <div class="ca">Tháng trước</div>
+                                                <div class="ca text-left">Tháng trước</div>
                                             </div>
                                         </div>
                                         {{-- 3 Tháng trước đây debt --}}
                                         <div id="3last-month-debt" style="display: none">
                                             <div class="d-flex flex-column all-debt">
                                                 <div class="ca d-flex">
-                                                    <div class="start"></div>
-                                                    <div class="end"></div>
+                                                    <div id="debtt3"></div>->
+                                                    <div id="debtd3"></div>
                                                 </div>
-                                                <div class="ca">3 tháng trước</div>
+                                                <div class="ca text-left">3 tháng trước</div>
                                             </div>
                                         </div>
                                         {{-- Khoảng thời gian debt --}}
@@ -630,7 +631,7 @@
                                 {{-- Chọn khoảng --}}
                                 <div class="block-optionss" id="times-debt-options" style="display:none">
                                     <div class="wrap w-100">
-                                       
+
                                         <div class="input-group p-2 justify-content-around">
                                             <div class="start">
                                                 <label for="start">Từ ngày</label>
@@ -639,8 +640,7 @@
                                             </div>
                                             <div class="end">
                                                 <label for="start">Đến ngày</label>
-                                                <input type="date" name="date_end"
-                                                    class="date_end_debt rounded">
+                                                <input type="date" name="date_end" class="date_end_debt rounded">
                                             </div>
                                         </div>
                                     </div>
@@ -766,40 +766,40 @@
                                         <div id="all-profit">
                                             <div class="d-flex flex-column all-profit">
                                                 <div class="ca d-flex">
-                                                    <div class="start"></div>
-                                                    <div class="end"></div>
+                                                    <div id="prot0"></div>->
+                                                    <div id="prod0"></div>
                                                 </div>
-                                                <div class="ca">Tất cả</div>
+                                                <div class="ca text-left">Tất cả</div>
                                             </div>
                                         </div>
                                         {{-- Tháng này profit --}}
                                         <div id="this-month-profit" style="display: none">
                                             <div class="d-flex flex-column all-profit">
                                                 <div class="ca d-flex">
-                                                    <div class="start"></div>
-                                                    <div class="end"></div>
+                                                    <div id="prot1"></div>->
+                                                    <div id="prod1"></div>
                                                 </div>
-                                                <div class="ca">Tháng này</div>
+                                                <div class="ca text-left">Tháng này</div>
                                             </div>
                                         </div>
                                         {{-- Tháng trước đây profit --}}
                                         <div id="last-month-profit" style="display: none">
                                             <div class="d-flex flex-column all-profit">
                                                 <div class="ca d-flex">
-                                                    <div class="start"></div>
-                                                    <div class="end"></div>
+                                                    <div id="prot2"></div>->
+                                                    <div id="prod2"></div>
                                                 </div>
-                                                <div class="ca">Tháng trước</div>
+                                                <div class="ca text-left">Tháng trước</div>
                                             </div>
                                         </div>
                                         {{-- 3 Tháng trước đây profit --}}
                                         <div id="3last-month-profit" style="display: none">
                                             <div class="d-flex flex-column all-profit">
                                                 <div class="ca d-flex">
-                                                    <div class="start"></div>
-                                                    <div class="end"></div>
+                                                    <div id="prot3"></div>->
+                                                    <div id="prod3"></div>
                                                 </div>
-                                                <div class="ca">3 tháng trước</div>
+                                                <div class="ca text-left">3 tháng trước</div>
                                             </div>
                                         </div>
                                         {{-- Khoảng thời gian profit --}}
@@ -832,7 +832,7 @@
                                 {{-- Chọn khoảng --}}
                                 <div class="block-optionss" id="times-profit-options" style="display:none">
                                     <div class="wrap w-100">
-                                       
+
                                         <div class="input-group p-2 justify-content-around">
                                             <div class="start">
                                                 <label for="start">Từ ngày</label>
@@ -1190,66 +1190,84 @@
     });
 
     function formatCurrency(value) {
-    // Làm tròn đến 2 chữ số thập phân
-    value = Math.round(value * 100) / 100;
-    
-    // Check if the value is negative
-    var isNegative = value < 0;
-    value = Math.abs(value); // Get the absolute value for formatting
-    
-    // Xử lý phần nguyên
-    var parts = value.toFixed(2).toString().split(".");
-    var integerPart = parts[0];
-    var formattedValue = "";
+        // Làm tròn đến 2 chữ số thập phân
+        value = Math.round(value * 100) / 100;
 
-    // Định dạng phần nguyên
-    var count = 0;
-    for (var i = integerPart.length - 1; i >= 0; i--) {
-        formattedValue = integerPart.charAt(i) + formattedValue;
-        count++;
-        if (count % 3 === 0 && i !== 0) {
-            formattedValue = "," + formattedValue;
+        // Check if the value is negative
+        var isNegative = value < 0;
+        value = Math.abs(value); // Get the absolute value for formatting
+
+        // Xử lý phần nguyên
+        var parts = value.toFixed(2).toString().split(".");
+        var integerPart = parts[0];
+        var formattedValue = "";
+
+        // Định dạng phần nguyên
+        var count = 0;
+        for (var i = integerPart.length - 1; i >= 0; i--) {
+            formattedValue = integerPart.charAt(i) + formattedValue;
+            count++;
+            if (count % 3 === 0 && i !== 0) {
+                formattedValue = "," + formattedValue;
+            }
         }
+
+        // Nếu có phần thập phân, thêm vào sau phần nguyên
+        if (parts.length > 1) {
+            formattedValue += "." + parts[1];
+        } else {
+            // Always ensure two decimal places
+            formattedValue += ".00";
+        }
+
+        // Nếu là số âm, thêm dấu "-" vào đầu chuỗi
+        if (isNegative) {
+            formattedValue = "-" + formattedValue;
+        }
+
+        // Trả về kết quả đã định dạng
+        return formattedValue;
     }
+    window.onload = function() {
+        $("#btn-all-orders").click();
+        $("#btn-all-exports").click();
+        $("#btn-all-inventory").click();
+        $("#btn-all-debt").click();
+        $("#btn-all-profit").click();
+    };
 
-    // Nếu có phần thập phân, thêm vào sau phần nguyên
-    if (parts.length > 1) {
-        formattedValue += "." + parts[1];
-    } else {
-        // Always ensure two decimal places
-        formattedValue += ".00";
+    function formatDate(date) {
+        var day = date.getDate();
+        var month = date.getMonth() + 1; // Tháng tính từ 0 đến 11, cần +1
+        var year = date.getFullYear();
+
+        // Đảm bảo hiển thị 2 chữ số cho ngày và tháng
+        day = (day < 10) ? '0' + day : day;
+        month = (month < 10) ? '0' + month : month;
+
+        return day + '-' + month + '-' + year;
     }
-
-    // Nếu là số âm, thêm dấu "-" vào đầu chuỗi
-    if (isNegative) {
-        formattedValue = "-" + formattedValue;
-    }
-
-    // Trả về kết quả đã định dạng
-    return formattedValue;
-}
-
-    $(document).ready(function() {
-        $("#btn-all-orders").trigger("click");
-        $("#btn-all-exports").trigger("click");
-        $("#btn-all-inventory").trigger("click");
-        $("#btn-all-debt").trigger("click");
-        $("#btn-all-profit").trigger("click");
-    });
     // Nhập hàng
     $(document).on('click', '.dropdown-item-orders', function() {
-        var data = $(this).data('value');
+        var dataid = $(this).data('value');
         $.ajax({
             url: "{{ route('count') }}",
             type: "get",
             data: {
-                data: data
+                data: dataid
             },
             success: function(data) {
                 $('#import_id').text(data.countID);
                 if (data.sumTotal > 0) {
                     $('#import_total').text(formatCurrency(data.sumTotal));
                 }
+                if (data.start_date && data.end_date) {
+                    var stId = '#it' + dataid;
+                    var edId = '#id' + dataid;
+                    $(stId).text(data.start_date)
+                    $(edId).text(data.end_date)
+                }
+                console.log(dataid);
             }
         })
     })
@@ -1268,17 +1286,18 @@
             success: function(data) {
                 $('#import_id').text(data.countID);
                 $('#import_total').text(formatCurrency(data.sumTotal));
+                console.log(data);
             }
         })
     })
     // Xuất hàng
     $(document).on('click', '.dropdown-item-export', function() {
-        var data = $(this).data('value');
+        var dataid = $(this).data('value');
         $.ajax({
             url: "{{ route('countExport') }}",
             type: "get",
             data: {
-                data: data
+                data: dataid
             },
             success: function(data) {
                 $('#export_id').text(data.countExport);
@@ -1286,6 +1305,12 @@
                     $('#export_total').text(formatCurrency(data.sumExport));
                 } else {
                     $('#export_total').text(0);
+                }
+                if (data.start_date && data.end_date) {
+                    var stId = '#et' + dataid;
+                    var edId = '#ed' + dataid;
+                    $(stId).text(data.start_date)
+                    $(edId).text(data.end_date)
                 }
                 console.log(data);
             }
@@ -1313,17 +1338,23 @@
     })
     // Inventory
     $(document).on('click', '.dropdown-item-inventory', function() {
-        var data = $(this).data('value');
+        var dataid = $(this).data('value');
         $.ajax({
             url: "{{ route('countInventory') }}",
             type: "get",
             data: {
-                data: data
+                data: dataid
             },
             success: function(data) {
                 console.log(data);
                 $('#inventory_id').text(data.countInventory);
                 $('#inventory_total').text(formatCurrency(data.sumInventory));
+                if (data.start_date && data.end_date) {
+                    var stId = '#ivent' + dataid;
+                    var edId = '#ivend' + dataid;
+                    $(stId).text(data.start_date)
+                    $(edId).text(data.end_date)
+                }
                 console.log(data);
             }
         })
@@ -1350,16 +1381,30 @@
     })
     // debt
     $(document).on('click', '.dropdown-item-debt', function() {
-        var data = $(this).data('value');
+        var dataid = $(this).data('value');
         $.ajax({
             url: "{{ route('countDebt') }}",
             type: "get",
             data: {
-                data: data
+                data: dataid
             },
             success: function(data) {
-                $('#debt_export').text(formatCurrency(data[0].count));
-                $('#debt_import').text(formatCurrency(data[1].countDebtImport));
+                if(data.debt_export > 0){
+                    $('#debt_export').text(formatCurrency(data.debt_export));
+                }else{
+                    $('#debt_export').text(0);
+                }
+                if(data.debt_import > 0){
+                    $('#debt_import').text(formatCurrency(data.debt_import));
+                }else{
+                    $('#debt_import').text(0);
+                }  
+                if (data.start_date && data.end_date) {
+                    var stId = '#debtt' + dataid;
+                    var edId = '#debtd' + dataid;
+                    $(stId).text(data.start_date)
+                    $(edId).text(data.end_date)
+                }
                 console.log(data);
             }
         })
@@ -1377,24 +1422,38 @@
                 date_end: date_end
             },
             success: function(data) {
-                $('#debt_export').text(formatCurrency(data[0].count));
-                $('#debt_import').text(formatCurrency(data[1].countDebtImport));
+                if(data.debt_export > 0){
+                    $('#debt_export').text(formatCurrency(data.debt_export));
+                }else{
+                    $('#debt_export').text(0);
+                }
+                if(data.debt_import > 0){
+                    $('#debt_import').text(formatCurrency(data.debt_import));
+                }else{
+                    $('#debt_import').text(0);
+                }   
                 console.log(data);
             }
         })
     })
     // profit
     $(document).on('click', '.dropdown-item-profit', function() {
-        var data = $(this).data('value');
+        var dataid = $(this).data('value');
         $.ajax({
             url: "{{ route('countProfit') }}",
             type: "get",
             data: {
-                data: data
+                data: dataid
             },
             success: function(data) {
                 $('#sum-profit').text(formatCurrency(data.countProfit));
-                console.log(data);
+                if (data.start_date && data.end_date) {
+                    var stId = '#prot' + dataid;
+                    var edId = '#prod' + dataid;
+                    $(stId).text(data.start_date)
+                    $(edId).text(data.end_date)
+                }
+                console.log(dataid);
             }
         })
     })

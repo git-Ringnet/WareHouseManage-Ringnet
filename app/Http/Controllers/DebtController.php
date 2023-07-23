@@ -145,12 +145,13 @@ class DebtController extends Controller
         }
 
         $guests = Debt::leftjoin('guests', 'guests.id', '=', 'debts.guest_id')->select('guests.guest_name as guests')->get();
+        $perPage = $request->input('perPageinput',10); 
 
         $debtsSale = Debt::leftjoin('users', 'debts.user_id', '=', 'users.id')->get();
-        $debts = $this->debts->getAllDebts($filters, $keywords, $nhanvien, $date, $guest, $datepaid, $status, $sortBy, $sortType);
+        $debts = $this->debts->getAllDebts($filters,$perPage, $keywords, $nhanvien, $date, $guest, $datepaid, $status, $sortBy, $sortType);
         $product = $this->debts->getAllProductsDebts();
-        $debtsCreator = $this->debts->debtsCreator();
-        return view('tables.debt.debts', compact('title', 'debts', 'debtsSale', 'guests', 'product', 'string', 'sortType', 'debtsCreator'));
+        $debtsCreator = $this->debts->debtsCreator($perPage);
+        return view('tables.debt.debts', compact('title','perPage', 'debts', 'debtsSale', 'guests', 'product', 'string', 'sortType', 'debtsCreator'));
     }
 
     /**

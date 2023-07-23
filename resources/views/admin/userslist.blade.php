@@ -353,6 +353,7 @@ $index = array_search($item['label'], $numberedLabels);
                             <table id="example2" class="table table-hover">
                                 <thead>
                                     <tr>
+                                        <input type="hidden" id="perPageinput" name="perPageinput" value="10">
                                         <input type="hidden" id="sortByInput" name="sort-by" value="id">
                                         <input type="hidden" id="sortTypeInput" name="sort-type"
                                             value="{{ $sortType }}">
@@ -490,6 +491,17 @@ $index = array_search($item['label'], $numberedLabels);
                         </div>
                         <!-- /.card-body -->
                     </div>
+                    <div class="paginator mt-4 d-flex justify-content-start">
+                        <span class="text-perpage">
+                            Số hàng mỗi trang:
+                            <select name="perPage" id="perPage">
+                                <option value="5" {{ $perPage == 5 ? 'selected' : '' }}>5</option>
+                                <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
+                                <option value="20" {{ $perPage == 25 ? 'selected' : '' }}>25</option>
+                                <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
+                            </select>
+                        </span>
+                    </div>
                     <div class="paginator mt-4 d-flex justify-content-end">
                         {{ $usersList->appends(request()->except('page'))->links() }}
                     </div>
@@ -505,6 +517,12 @@ $index = array_search($item['label'], $numberedLabels);
 <script>
     $('#search-icon').on('click', function(e) {
         e.preventDefault();
+        $('#search-filter').submit();
+    });
+    $('#perPage').on('change', function(e) {
+        e.preventDefault();
+        var perPageValue = $(this).val();
+        $('#perPageinput').val(perPageValue);
         $('#search-filter').submit();
     });
     $(document).ready(function() {

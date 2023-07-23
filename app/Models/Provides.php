@@ -13,7 +13,7 @@ class Provides extends Model
         'provide_name', 'provide_represent', 'provide_phone', 'provide_email', 'provide_status', 'provide_address', 'provide_code'
     ];
     protected $table = 'provides';
-    public function getAllProvides($filter = [], $name = null, $represent = null, $phonenumber = null, $email = null, $status = [], $keywords = null, $sortByArr = null)
+    public function getAllProvides($filter = [],$perPage, $name = null, $represent = null, $phonenumber = null, $email = null, $status = [], $keywords = null, $sortByArr = null)
     {
         $provides = DB::table($this->table)
             ->select('provides.*');
@@ -62,7 +62,7 @@ class Provides extends Model
             });
         }
         // dd($provides);
-        $provides = $provides->orderBy('id', 'asc')->paginate(20);
+        $provides = $provides->orderBy('id', 'asc')->paginate($perPage);
         return $provides;
     }
 

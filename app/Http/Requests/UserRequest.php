@@ -41,7 +41,7 @@ class UserRequest extends FormRequest
                     $fail('Bắt buộc phải chọn chức vụ');
                 }
             }],
-            'phonenumber' => ['required', 'numeric', 'digits_between:1,11']
+            'phonenumber' => ['nullable','numeric', 'digits_between:1,11']
         ];
     }
 
@@ -54,6 +54,7 @@ class UserRequest extends FormRequest
             'email.unique' => 'Email đã được sử dụng',
             'password.min' => 'Mật khẩu phải chứa ít nhất 8 ký tự',
             'password.required' => 'Vui lòng nhập mật khẩu',
+            'confirm_password.min' => 'Mật khẩu phải chứa ít nhất 8 ký tự',
             'confirm_password.required' => 'Vui lòng xác nhận mật khẩu',
             'confirm_password.same' => 'Mật khẩu xác nhận không khớp',
             'role.required' => 'Vui lòng chọn quyền',

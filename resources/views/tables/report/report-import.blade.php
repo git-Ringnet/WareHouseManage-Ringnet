@@ -10,8 +10,8 @@
             <a href="{{ route('indexExport') }}" class="title mr-2 pt-2 px-1 before">
                 Xuất hàng
             </a>
-            <div class="ml-auto">
-                <div class="col d-flex" style="position: relative; width: 220px">
+            <div class="ml-auto choosetime">
+                <div class="col d-flex" style="position: relative; width: 280px">
                     <div class="dropdown w-100">
                         <button class="btn w-100 btn-light border rounded dropdown-toggle" id="orders"
                             style="display: flex;
@@ -23,40 +23,40 @@
                             <div id="all-orders">
                                 <div class="d-flex flex-column all-orders">
                                     <div class="ca d-flex">
-                                        <div class="start"></div>
-                                        <div class="end"></div>
+                                        <div class="it0"></div>
+                                        <div class="id0"></div>
                                     </div>
-                                    <div class="ca">Tất cả</div>
+                                    <div class="ca text-left">Tất cả</div>
                                 </div>
                             </div>
                             {{-- Tháng này Orders --}}
                             <div id="this-month-orders" style="display: none">
                                 <div class="d-flex flex-column all-orders">
                                     <div class="ca d-flex">
-                                        <div class="start"></div>
-                                        <div class="end"></div>
+                                        <div class="it1"></div>
+                                        <div class="id1"></div>
                                     </div>
-                                    <div class="ca">Tháng này</div>
+                                    <div class="ca text-left">Tháng này</div>
                                 </div>
                             </div>
                             {{-- Tháng trước đây Orders --}}
                             <div id="last-month-orders" style="display: none">
                                 <div class="d-flex flex-column all-orders">
                                     <div class="ca d-flex">
-                                        <div class="start"></div>
-                                        <div class="end"></div>
+                                        <div class="it2"></div>
+                                        <div class="id2"></div>
                                     </div>
-                                    <div class="ca">Tháng trước</div>
+                                    <div class="ca text-left">Tháng trước</div>
                                 </div>
                             </div>
                             {{-- 3 Tháng trước đây Orders --}}
                             <div id="3last-month-orders" style="display: none">
                                 <div class="d-flex flex-column all-orders">
                                     <div class="ca d-flex">
-                                        <div class="start"></div>
-                                        <div class="end"></div>
+                                        <div class="it3"></div>
+                                        <div class="id3"></div>
                                     </div>
-                                    <div class="ca">3 tháng trước</div>
+                                    <div class="ca text-left">3 tháng trước</div>
                                 </div>
                             </div>
                             {{-- Khoảng thời gian Orders --}}
@@ -159,7 +159,7 @@
                                     </svg>
                                 </div>
                                 <div class="ml-2">
-                                    <p class="m-0">Tổng đơn nhập</p><b class="m-0">{{ $orders }}</b>
+                                    <p class="m-0">Tổng đơn nhập</p><b class="m-0" id="import_id">{{ $orders }}</b>
                                 </div>
                             </div>
                         </div>
@@ -177,7 +177,7 @@
                                 </div>
                                 <div class="ml-2">
                                     <p class="m-0">Tổng tiền nhập (+VAT)</p><b
-                                        class="m-0">{{ number_format($sumTotalOrders) }}</b>
+                                        class="m-0" id="import_total">{{ number_format($sumTotalOrders) }}</b>
                                 </div>
                             </div>
                         </div>
@@ -195,7 +195,7 @@
                                 </div>
                                 <div class="ml-2">
                                     <p class="m-0">Tổng công nợ (+VAT)</p><b
-                                        class="m-0">{{ number_format($sumDebtImportVAT) }}</b>
+                                        class="m-0" id="import_total">{{ number_format($sumDebtImportVAT) }}</b>
                                 </div>
                             </div>
                         </div>
@@ -612,6 +612,7 @@ $index = array_search($item['label'], $numberedLabels);
                         <div class="card-body">
                             <table id="example2" class="table table-hover">
                                 <thead>
+                                    <input type="hidden" id="perPageinput" name="perPageinput" value="10">
                                     <input type="hidden" id="sortByInput" name="sort-by" value="">
                                     <input type="hidden" id="sortTypeInput" name="sort-type"
                                         value="{{ $sortType }}">
@@ -679,6 +680,17 @@ $index = array_search($item['label'], $numberedLabels);
                             </table>
                         </div>
                     </div>
+                    <div class="paginator mt-4 d-flex justify-content-start">
+                        <span class="text-perpage">
+                            Số hàng mỗi trang:
+                            <select name="perPage" id="perPage">
+                                <option value="5" {{ $perPage == 5 ? 'selected' : '' }}>5</option>
+                                <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
+                                <option value="20" {{ $perPage == 25 ? 'selected' : '' }}>25</option>
+                                <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
+                            </select>
+                        </span>
+                    </div>
                     <div class="paginator mt-4 d-flex justify-content-end">
                         @if (Auth::user()->can('isAdmin'))
                             {{-- {{ $debts->appends(request()->except('page'))->links() }} --}}
@@ -696,6 +708,182 @@ $index = array_search($item['label'], $numberedLabels);
 </div>
 <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
 <script>
+    $('#perPage').on('change', function(e) {
+        e.preventDefault();
+        var perPageValue = $(this).val();
+        $('#perPageinput').val(perPageValue);
+        $('#search-filter').submit();
+    });
+     // Tất cả
+     $("#btn-all-orders").click(function() {
+        $("#all-orders").show();
+        $("#this-month-orders").hide();
+        $("#last-month-orders").hide();
+        $("#3last-month-orders").hide();
+        $("#time-orders").hide();
+    });
+    // Tháng này
+    $("#btn-this-month-orders").click(function() {
+        $("#this-month-orders").show();
+        $("#all-orders").hide();
+        $("#last-month-orders").hide();
+        $("#3last-month-orders").hide();
+        $("#time-orders").hide();
+    });
+    // Tháng trước
+    $("#btn-last-month-orders").click(function() {
+        $("#last-month-orders").show();
+        $("#all-orders").hide();
+        $("#this-month-orders").hide();
+        $("#3last-month-orders").hide();
+        $("#time-orders").hide();
+    });
+    // 3 tháng trc
+    $("#btn-3last-month-orders").click(function() {
+        $("#3last-month-orders").show();
+        $("#all-orders").hide();
+        $("#this-month-orders").hide();
+        $("#last-month-orders").hide();
+        $("#time-orders").hide();
+    });
+    // Khoảng time
+    $("#btn-time-orders").click(function() {
+        $("#time-orders").show();
+        $("#times-orders-options").show();
+        $("#all-orders").hide();
+        $("#this-month-orders").hide();
+        $("#last-month-orders").hide();
+        $("#3last-month-orders").hide();
+    });
+    $('#cancel-times-orders').click(function(event) {
+        event.preventDefault();
+        $('#times-orders-options').hide();
+    });
+    $('.suscess').click(function(event) {
+        event.preventDefault();
+        $('#times-orders-options').hide();
+    });
+    $(document).on('change', '.date_start', function(e) {
+        e.preventDefault();
+        $('.start_order').text(moment($(this).val()).format("DD-MM-YYYY"));
+        $('.muitenorder').text('->');
+    })
+    $(document).on('change', '.date_end', function(e) {
+        e.preventDefault();
+        $('.end_order').text(moment($(this).val()).format("DD-MM-YYYY"));
+        $('.muitenorder').text('->');
+    })
+
+    function formatDate(date) {
+        var day = date.getDate();
+        var month = date.getMonth() + 1; // Tháng tính từ 0 đến 11, cần +1
+        var year = date.getFullYear();
+
+        // Đảm bảo hiển thị 2 chữ số cho ngày và tháng
+        day = (day < 10) ? '0' + day : day;
+        month = (month < 10) ? '0' + month : month;
+
+        return day + '-' + month + '-' + year;
+    }
+    function formatCurrency(value) {
+        // Làm tròn đến 2 chữ số thập phân
+        value = Math.round(value * 100) / 100;
+
+        // Check if the value is negative
+        var isNegative = value < 0;
+        value = Math.abs(value); // Get the absolute value for formatting
+
+        // Xử lý phần nguyên
+        var parts = value.toFixed(2).toString().split(".");
+        var integerPart = parts[0];
+        var formattedValue = "";
+
+        // Định dạng phần nguyên
+        var count = 0;
+        for (var i = integerPart.length - 1; i >= 0; i--) {
+            formattedValue = integerPart.charAt(i) + formattedValue;
+            count++;
+            if (count % 3 === 0 && i !== 0) {
+                formattedValue = "," + formattedValue;
+            }
+        }
+
+        // Nếu có phần thập phân, thêm vào sau phần nguyên
+        if (parts.length > 1) {
+            formattedValue += "." + parts[1];
+        } else {
+            // Always ensure two decimal places
+            formattedValue += ".00";
+        }
+
+        // Nếu là số âm, thêm dấu "-" vào đầu chuỗi
+        if (isNegative) {
+            formattedValue = "-" + formattedValue;
+        }
+
+        // Trả về kết quả đã định dạng
+        return formattedValue;
+    }
+    // Nhập hàng
+    $(document).on('click', '.dropdown-item-orders', function() {
+        var dataid = $(this).data('value');
+        $.ajax({
+            url: "{{ route('timeImport') }}",
+            type: "get",
+            data: {
+                data: dataid
+            },
+            success: function(data) {
+                    $('#import_id').text(data.countID);
+                if (data.sumTotal > 0) {
+                    $('#import_total').text(formatCurrency(data.sumTotal));
+                }else{
+                    $('#import_total').text(0);
+                }
+                if (data.countDebtImport > 0) {
+                    $('#countDebtImport').text(formatCurrency(data.countDebtImport));
+                }
+                else{
+                    $('#countDebtImport').text(0);
+                }
+                if (data.start_date && data.end_date) {
+                    var stId = '.it' + dataid;
+                    var edId = '.id' + dataid;
+                    $(stId).text(data.start_date)
+                    $(edId).text(data.end_date)
+                }
+            }
+        })
+    })
+    $(document).on('click', '.suscess', function() {
+        var data = $(this).val();
+        var date_start = $('.date_start').val();
+        var date_end = $('.date_end').val();
+        $.ajax({
+            url: "{{ route('timeImport') }}",
+            type: "get",
+            data: {
+                data: data,
+                date_start: date_start,
+                date_end: date_end
+            },
+            success: function(data) {
+                $('#import_id').text(data[0].countID);
+                if (data[0].sumTotal > 0) {
+                    $('#import_total').text(formatCurrency(data[0].sumTotal));
+                }else{
+                    $('#import_total').text(formatCurrency(0));
+                }
+                if (data[1].countDebtImport > 0) {
+                    $('#countDebtImport').text(formatCurrency(data[1].countDebtImport));
+                }
+                else{
+                    $('#countDebtImport').text(0);
+                }
+            }
+        })
+    })
+    
     $('#search-icon').on('click', function(e) {
         e.preventDefault();
         $('#search-filter').submit();

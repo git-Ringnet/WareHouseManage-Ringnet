@@ -14,7 +14,7 @@ class Orders extends Model
     ];
     protected $table = 'orders';
 
-    public function getAllOrders($filter = [], $status = [], $provide_name = [], $name = [], $date = [], $keywords = null, $orderBy = null, $orderType = null)
+    public function getAllOrders($filter = [],$perPage, $status = [], $provide_name = [], $name = [], $date = [], $keywords = null, $orderBy = null, $orderType = null)
     {
         $productIds = array();
         $order = Orders::orderByDesc('id')->get();
@@ -62,7 +62,7 @@ class Orders extends Model
             $orders = $orders->orderBy($orderBy, $orderType);
         }
 
-        $orders = $orders->orderBy('orders.id', 'desc')->paginate(20);
+        $orders = $orders->orderBy('orders.id', 'desc')->paginate($perPage);
         return $orders;
     }
     // public function getProvide()

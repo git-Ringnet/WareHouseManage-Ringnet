@@ -494,6 +494,7 @@ $index = array_search($item['label'], $numberedLabels);
                             <table id="example2" class="table table-hover">
                                 <thead>
                                     <tr>
+                                        <input type="hidden" id="perPageinput" name="perPageinput" value="10">
                                         <input type="hidden" id="sortByInput" name="sort-by" value="id">
                                         <input type="hidden" id="sortTypeInput" name="sort-type"
                                             value="{{ $sortType }}">
@@ -691,6 +692,17 @@ $index = array_search($item['label'], $numberedLabels);
                         </div>
                         <!-- /.card-body -->
                     </div>
+                    <div class="paginator mt-4 d-flex justify-content-start">
+                        <span class="text-perpage">
+                            Số hàng mỗi trang:
+                            <select name="perPage" id="perPage">
+                                <option value="5" {{ $perPage == 5 ? 'selected' : '' }}>5</option>
+                                <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
+                                <option value="20" {{ $perPage == 25 ? 'selected' : '' }}>25</option>
+                                <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
+                            </select>
+                        </span>
+                    </div>
                     <div class="paginator mt-4 d-flex justify-content-end">
                         {{ $export->appends(request()->except('page'))->links() }}
                     </div>
@@ -704,6 +716,12 @@ $index = array_search($item['label'], $numberedLabels);
     <!-- /.content -->
 </div>
 <script>
+        $('#perPage').on('change', function(e) {
+        e.preventDefault();
+        var perPageValue = $(this).val();
+        $('#perPageinput').val(perPageValue);
+        $('#search-filter').submit();
+    });
     $('#search-icon').on('click', function(e) {
         e.preventDefault();
         $('#search-filter').submit();
@@ -738,6 +756,10 @@ $index = array_search($item['label'], $numberedLabels);
     }
 
     var dropdownItems = $('[id^="dropdown_item"]');
+    function checkActiveItems() {
+        var activeItemCount = dropdownItems.filter('.dropdown-item-active').length;
+        return activeItemCount;
+    }
     dropdownItems.each(function() {
         $(this).on('click', function() {
             var isActive = $(this).hasClass('dropdown-item-active');
@@ -745,20 +767,24 @@ $index = array_search($item['label'], $numberedLabels);
             var parentElement = $(this).parent().parent();
             console.log(parentElement);
             if (isActive) {
-                $('#expandall').show();
-                $('#collapseall').hide();
                 $(this).removeClass('dropdown-item-active');
                 parentElement.css('background', '#E9ECEF');
                 svgElement.removeClass("svgactive")
                 svgElement.addClass("svginative")
             }
             if (!isActive) {
-                $('#expandall').hide();
-                $('#collapseall').show();
                 $(this).addClass('dropdown-item-active');
                 parentElement.css('background', '#ADB5BD');
                 svgElement.addClass("svgactive")
                 svgElement.removeClass("svginative")
+            }
+            if (checkActiveItems() > 0) {
+                $('#expandall').hide();
+                $('#collapseall').show();
+              
+            } else {
+                $('#expandall').show();
+                $('#collapseall').hide();
             }
         });
     });

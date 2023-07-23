@@ -97,12 +97,13 @@ class GuestsController extends Controller
         if (!empty($request->keywords)) {
             $keywords = $request->keywords;
         }
+        $perPage = $request->input('perPageinput',10); 
         $users = User::whereIn('roleid', [1, 3])->get();
-        $guests = $this->guests->getAllguests($filters, $users_name, $name, $represent, $phonenumber, $email, $status, $keywords, $sortByArr);
+        $guests = $this->guests->getAllguests($filters,$perPage, $users_name, $name, $represent, $phonenumber, $email, $status, $keywords, $sortByArr);
         // dd($guests);
         $title = 'Khách hàng';
-        $guestsCreator = $this->guests->guestsCreator();
-        return view('tables.guest.guests', compact('guests', 'users', 'sortType', 'string', 'title', 'guestsCreator'));
+        $guestsCreator = $this->guests->guestsCreator($perPage);
+        return view('tables.guest.guests', compact('guests', 'perPage','users', 'sortType', 'string', 'title', 'guestsCreator'));
     }
 
     /**

@@ -26,7 +26,7 @@ class Guests extends Model
         'debt'
     ];
     protected $table = 'guests';
-    public function getAllGuests($filter = [],$users_name=[],$name = null,$represent = null,$phonenumber = null,$email = null, $status = [], $keywords = null, $sortByArr = null)
+    public function getAllGuests($filter = [],$perPage,$users_name=[],$name = null,$represent = null,$phonenumber = null,$email = null, $status = [], $keywords = null, $sortByArr = null)
     {
         $guests = DB::table($this->table)
             ->leftJoin('users', 'guests.user_id', '=', 'users.id')
@@ -80,13 +80,13 @@ class Guests extends Model
             });
         }
         // dd($guests);
-        $guests = $guests->orderBy('id', 'asc')->paginate(20);
+        $guests = $guests->orderBy('id', 'asc')->paginate($perPage);
         return $guests;
     }
-    public function guestsCreator()
+    public function guestsCreator($perPage)
     {
         $userId = Auth::user()->id;
-        $guests = DB::table($this->table)->where('user_id', $userId)->paginate(20);
+        $guests = DB::table($this->table)->where('user_id', $userId)->paginate($perPage);
         return $guests;
     }
 }

@@ -650,6 +650,7 @@ $index = array_search($item['label'], $numberedLabels);
                         <div class="card-body">
                             <table id="example2" class="table table-hover">
                                 <thead>
+                                    <input type="hidden" id="perPageinput" name="perPageinput" value="10">
                                     <input type="hidden" id="sortByInput" name="sort-by" value="id">
                                     <input type="hidden" id="sortTypeInput" name="sort-type" value="">
                                     <tr>
@@ -668,7 +669,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <div class="icon" id="icon-id"></div>
                                             </span>
                                         </th>
-                                        <th scope="col">
+                                        <th scope="col" style="width:300px">
                                             <span class="d-flex">
                                                 <a href="#" class="sort-link" data-sort-by="product_name"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
@@ -817,6 +818,17 @@ $index = array_search($item['label'], $numberedLabels);
                             </table>
                         </div>
                     </div>
+                    <div class="paginator mt-4 d-flex justify-content-start">
+                        <span class="text-perpage">
+                            Số hàng mỗi trang:
+                            <select name="perPage" id="perPage">
+                                <option value="5" {{ $perPage == 5 ? 'selected' : '' }}>5</option>
+                                <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
+                                <option value="20" {{ $perPage == 25 ? 'selected' : '' }}>25</option>
+                                <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
+                            </select>
+                        </span>
+                    </div>
                     <div class="paginator mt-4 d-flex justify-content-end">
                         {{ $products->appends(request()->except('page'))->links() }}
                     </div>
@@ -830,6 +842,12 @@ $index = array_search($item['label'], $numberedLabels);
 </div>
 <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
 <script>
+        $('#perPage').on('change', function(e) {
+        e.preventDefault();
+        var perPageValue = $(this).val();
+        $('#perPageinput').val(perPageValue);
+        $('#search-filter').submit();
+    });
     $('#search-icon').on('click', function(e) {
         e.preventDefault();
         $('#search-filter').submit();

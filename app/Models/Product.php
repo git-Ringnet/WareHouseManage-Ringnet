@@ -14,7 +14,7 @@ class Product extends Model
     protected $fillable = [
         'product_name','product_unit','product_qty','product_price','product_tax','product_total','provide_id','product_trade','product_trademark'
      ];
-    public function getAllProduct($filters = [], $status = [], $products_name = null, $providearr, $unitarr,$taxarr, $keywords = null, $sortByArr = null)
+    public function getAllProduct($filters = [],$perPage, $status = [], $products_name = null, $providearr, $unitarr,$taxarr, $keywords = null, $sortByArr = null)
     {
         //lấy tất cả products
         $products = DB::table($this->table)
@@ -75,7 +75,7 @@ class Product extends Model
             });
         }
         $products = $products->where('product.product_qty','>',0);
-        $products = $products->orderBy('product.created_at', 'asc')->paginate(20);
+        $products = $products->orderBy('product.created_at', 'asc')->paginate($perPage);
 
         return $products;
     }

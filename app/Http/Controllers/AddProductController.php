@@ -137,7 +137,9 @@ class AddProductController extends Controller
         foreach ($order as $value) {
             array_push($productIds, $value->id);
         }
-        $orders = $this->orders->getAllOrders($filters, $status, $provide_namearr, $name, $date, $keywords, $sortBy, $sortType);
+        $perPage = $request->input('perPageinput',10); 
+
+        $orders = $this->orders->getAllOrders($filters,$perPage, $status, $provide_namearr, $name, $date, $keywords, $sortBy, $sortType);
         $product = ProductOrders::with('getCodeProduct')
             ->join('orders', 'productorders.order_id', '=', 'orders.id')
             ->whereIn('orders.id', $productIds)
@@ -145,7 +147,7 @@ class AddProductController extends Controller
         $ordersNameAndProvide = Orders::leftjoin('provides', 'orders.provide_id', '=', 'provides.id')
             ->leftjoin('users', 'orders.users_id', '=', 'users.id')->get();
         $title = 'Nhập hàng';
-        return view('tables.order.insertProduct', compact('orders', 'product', 'sortType', 'string', 'ordersNameAndProvide', 'provides', 'title'));
+        return view('tables.order.insertProduct', compact('orders','perPage', 'product', 'sortType', 'string', 'ordersNameAndProvide', 'provides', 'title'));
     }
 
     /**

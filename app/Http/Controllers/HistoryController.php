@@ -187,15 +187,15 @@ class HistoryController extends Controller
         } else {
             $sortType = 'desc';
         }
-
+        $perPage = $request->input('perPageinput',10); 
         $guests = History::leftjoin('guests', 'guests.id', '=', 'history.guest_id')->select('guests.guest_name as guests', 'history.export_unit as unit')->get();
 
         $debtsSale =  History::leftjoin('users', 'history.user_id', '=', 'users.id')->get();
         $provides = History::leftjoin('provides', 'history.provide_id', '=', 'provides.id')->get();
 
-        $history = $this->history->getAllHistory($filters, $keywords, $date, $provide_namearr, $guest, $status, $unitarr, $status_export, $sortBy, $sortType);
+        $history = $this->history->getAllHistory($filters,$perPage, $keywords, $date, $provide_namearr, $guest, $status, $unitarr, $status_export, $sortBy, $sortType);
 
-        return view('tables.history.historyindex', compact('history', 'title', 'guests', 'debtsSale', 'provides', 'string', 'sortType'));
+        return view('tables.history.historyindex', compact('history','perPage', 'title', 'guests', 'debtsSale', 'provides', 'string', 'sortType'));
     }
 
     /**

@@ -12,7 +12,7 @@ class Exports extends Model
     protected $table = 'exports';
 
     use HasFactory;
-    public function getAllExports($filter = [], $status = [], $name = [], $guest = [], $date = [], $keywords = null, $orderBy = null, $orderType = null)
+    public function getAllExports($filter = [],$perPage, $status = [], $name = [], $guest = [], $date = [], $keywords = null, $orderBy = null, $orderType = null)
     {
 
         $exports = DB::table($this->table)
@@ -59,7 +59,7 @@ class Exports extends Model
             $exports = $exports->orderBy($orderBy, $orderType);
         }
 
-        $exports = $exports->orderBy('exports.id', 'desc')->paginate(20);
+        $exports = $exports->orderBy('exports.id', 'desc')->paginate($perPage);
         return $exports;
     }
     public function productExports()

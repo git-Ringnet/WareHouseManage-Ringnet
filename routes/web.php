@@ -91,6 +91,9 @@ Route::get('/editEx/{id}', [ExportController::class, 'editEx'])->name('editEx');
 //Báo cáo
 Route::get('/indexExport', [ReportController::class, 'indexExport'])->name('indexExport');
 Route::get('/indexImport', [ReportController::class, 'indexImport'])->name('indexImport');
+Route::get('/timeImport',[ReportController::class, 'timeImport'])->name('timeImport');
+Route::get('/timeExport',[ReportController::class, 'timeExport'])->name('timeExport');
+
 
 //kiểm tra số lượng trong xuất hàng
 Route::get('checkqty', [ExportController::class, 'checkqty'])->name('checkqty');

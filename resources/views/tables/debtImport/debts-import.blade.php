@@ -136,6 +136,75 @@ $index = array_search($item['label'], $numberedLabels);
                                     </a>
                                 </span>
                             @endforeach
+                            @if (Auth::user()->can('isAdmin'))
+                            @php  $nhanvien = [];
+                            if (isset(request()->nhanvien)) {
+                                $nhanvien = request()->nhanvien;
+                            } else {
+                                $nhanvien = [];
+                            } @endphp
+                            <div class="filter-admin">
+                                <button class="btn btn-filter btn-light mr-2" id="btn-nhanvien" type="button">
+                                    <span>
+                                        Nhân viên
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M7.23123 9.23123C7.53954 8.92292 8.03941 8.92292 8.34772 9.23123L12 12.8835L15.6523 9.23123C15.9606 8.92292 16.4605 8.92292 16.7688 9.23123C17.0771 9.53954 17.0771 10.0394 16.7688 10.3477L12.5582 14.5582C12.2499 14.8665 11.7501 14.8665 11.4418 14.5582L7.23123 10.3477C6.92292 10.0394 6.92292 9.53954 7.23123 9.23123Z"
+                                                fill="#555555" />
+                                        </svg>
+
+                                    </span>
+                                </button>
+                                {{-- Nhân viên admin --}}
+                                <div class="block-options-admin" id="creator-options" style="display:none">
+                                    <div class="wrap w-100">
+                                        <div class="heading-title title-wrap">
+                                            <h5>Nhân viên</h5>
+                                        </div>
+                                        <div class="search-container px-2 mt-2">
+                                            <input type="text" placeholder="Tìm kiếm" id="myInput-creator"
+                                                class="pr-4 w-100 input-search" onkeyup="filterCreator()">
+                                            <span class="search-icon"><i class="fas fa-search"></i></span>
+                                        </div>
+                                        <div
+                                            class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
+                                            <a class="cursor select-all-creator mr-auto">Chọn tất cả</a>
+                                            <a class="cursor deselect-all-creator">Hủy chọn</a>
+                                        </div>
+                                        <div class="ks-cboxtags-container">
+                                            <ul class="ks-cboxtags ks-cboxtags-creator p-0 mb-1 px-2">
+                                                @if (!empty($debtsSale))
+                                                    @php
+                                                        $seenValues = [];
+                                                    @endphp
+                                                    @foreach ($debtsSale as $value)
+                                                        @if (!in_array($value->name, $seenValues))
+                                                            <li>
+                                                                <input type="checkbox" id="name_active"
+                                                                    {{ in_array($value->name, $nhanvien) ? 'checked' : '' }}
+                                                                    name="nhanvien[]" value="{{ $value->name }}">
+                                                                <label id="nhanvien"
+                                                                    for="">{{ $value->name }}</label>
+                                                            </li>
+                                                            @php
+                                                                $seenValues[] = $value->name;
+                                                            @endphp
+                                                        @endif
+                                                    @endforeach
+                                                @endif
+                                            </ul>
+                                        </div>
+                                        <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                            <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                                Nhận</button>
+                                            <button type="button" id="cancel-creator"
+                                                class="btn btn-default btn-block">Hủy</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @endif
                             <div class="class" style="order:999">
                                 <div class="filter-options">
                                     <div class="dropdown">
@@ -165,7 +234,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             <button class="dropdown-item" id="btn-update_at">Ngày nhập hóa
                                                 đơn</button>
                                             <button class="dropdown-item" id="btn-provide_name">Nhà cung cấp</button>
-                                            @if (Auth::user()->can('isAdmin'))
+                                            @if (!Auth::user()->can('isAdmin'))
                                                 <button class="dropdown-item" id="btn-creator">Nhân viên</button>
                                             @endif
                                             <button class="dropdown-item" id="btn-sum-import">Tổng tiền
@@ -500,6 +569,7 @@ $index = array_search($item['label'], $numberedLabels);
                         <div class="card-body">
                             <table id="example2" class="table table-hover">
                                 <thead>
+                                    <input type="hidden" id="perPageinput" name="perPageinput" value="10">
                                     {{-- SortType --}}
                                     <input type="hidden" id="sortByInput" name="sort-by" value="id">
                                     <input type="hidden" id="sortTypeInput" name="sort-type">
@@ -562,8 +632,8 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <div class="icon" id="icon-debt"></div>
                                             </span>
                                         </th>
-                                        <th scope="col" class="text-center" style="width:14%;">
-                                            <span class="d-flex justify-content-center align-items-center">
+                                        <th scope="col" class="text-center">
+                                            <span class="d-flex justify-content-center align-items-center" style="width:135px;">
                                                 <a href="#" class="sort-link" data-sort-by="debt_status"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Trạng
@@ -750,6 +820,17 @@ $index = array_search($item['label'], $numberedLabels);
                             </table>
                         </div>
                     </div>
+                    <div class="paginator mt-4 d-flex justify-content-start">
+                        <span class="text-perpage">
+                            Số hàng mỗi trang:
+                            <select name="perPage" id="perPage">
+                                <option value="5" {{ $perPage == 5 ? 'selected' : '' }}>5</option>
+                                <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
+                                <option value="20" {{ $perPage == 25 ? 'selected' : '' }}>25</option>
+                                <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
+                            </select>
+                        </span>
+                    </div>
                     <div class="paginator mt-4 d-flex justify-content-end">
                         @if (Auth::user()->can('isAdmin'))
                             {{ $debts->appends(request()->except('page'))->links() }}
@@ -824,7 +905,18 @@ $index = array_search($item['label'], $numberedLabels);
         svgs.addClass("svginative")
     }
 
+    $('#perPage').on('change', function(e) {
+        e.preventDefault();
+        var perPageValue = $(this).val();
+        $('#perPageinput').val(perPageValue);
+        $('#search-filter').submit();
+    });
     var dropdownItems = $('[id^="dropdown_item"]');
+    function checkActiveItems() {
+        var activeItemCount = dropdownItems.filter('.dropdown-item-active').length;
+        return activeItemCount;
+    }
+    
     dropdownItems.each(function() {
         $(this).on('click', function() {
             var isActive = $(this).hasClass('dropdown-item-active');
@@ -832,20 +924,24 @@ $index = array_search($item['label'], $numberedLabels);
             var parentElement = $(this).parent().parent();
             console.log(parentElement);
             if (isActive) {
-                $('#expandall').show();
-                $('#collapseall').hide();
                 $(this).removeClass('dropdown-item-active');
                 parentElement.css('background', '#E9ECEF');
                 svgElement.removeClass("svgactive")
                 svgElement.addClass("svginative")
             }
             if (!isActive) {
-                $('#expandall').hide();
-                $('#collapseall').show();
                 $(this).addClass('dropdown-item-active');
                 parentElement.css('background', '#ADB5BD');
                 svgElement.addClass("svgactive")
                 svgElement.removeClass("svginative")
+            }
+            if (checkActiveItems() > 0) {
+                $('#expandall').hide();
+                $('#collapseall').show();
+              
+            } else {
+                $('#expandall').show();
+                $('#collapseall').hide();
             }
         });
     });
@@ -1085,6 +1181,18 @@ $index = array_search($item['label'], $numberedLabels);
         });
     }
 
+    $('#btn-nhanvien').click(function(event) {
+        event.preventDefault();
+        $('#creator-options input').addClass('creator-checkbox');
+        $('.btn-filter').prop('disabled', true);
+        $('#creator-options').toggle();
+    });
+    $('#cancel-creator').click(function(event) {
+        event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
+        $('#creator-options input[type="checkbox"]').prop('checked', false);
+        $('#creator-options').hide();
+    });
     function filterCreator() {
         var input = $("#myInput-creator");
         var filter = input.val().toUpperCase();
