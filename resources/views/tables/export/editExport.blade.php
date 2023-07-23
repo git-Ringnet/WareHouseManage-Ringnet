@@ -348,32 +348,33 @@
                 <table class="table" id="sourceTable">
                     <thead class="bg-white border-0 rounded-top">
                         <tr>
-                            <th>STT</th>
-                            <th>Tên sản phẩm</th>
-                            <th>ĐVT</th>
-                            <th>Số lượng</th>
-                            <th>Giá bán</th>
-                            <th>Thuế</th>
-                            <th>Thành tiền</th>
-                            <th>Ghi chú</th>
-                            <th></th>
-                            <th></th>
+                            <th style="width:3%;">STT</th>
+                            <th style="width:30%;">Tên sản phẩm</th>
+                            <th style="width:8%;">ĐVT</th>
+                            <th style="width:8%">Số lượng</th>
+                            <th style="width:12%;">Giá bán</th>
+                            <th style="width:8%;">Thuế</th>
+                            <th style="width:15%;">Thành tiền</th>
+                            <th style="width:13%;">Ghi chú</th>
+                            <th style="width:10%;"></th>
+                            @if ($exports->export_status != 2)
+                            <th style="width:10%;"></th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
                         <?php $stt = 1; ?>
                         @foreach ($productExport as $index => $value_export)
-                            <tr id="dynamic-row-{{ $index }}">
+                            <tr>
                                 <td class="soTT"><?php echo $stt++; ?></td>
                                 <td>
                                     @if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin')))
                                         <input type="text" title="{{ $value_export->product_name }}"
-                                            style="width: 300px" class="form-control productName" readonly
-                                            value="{{ $value_export->product_name }}">
+                                            class="form-control" readonly value="{{ $value_export->product_name }}">
                                         <select class="child-select p-1 form-control productName <?php if ($exports->export_status != 1) {
                                             echo 'd-none';
                                         } ?>"
-                                            style="width: 220px" name="product_id[]" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                            name="product_id[]" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                                 echo 'disabled';
                                             } ?>>
                                             <option value="{{ $value_export->product_id }}">
@@ -390,7 +391,7 @@
                                     @endif
                                     @if ($exports->export_status == 1)
                                         <select class="child-select p-1 form-control productName"
-                                            style="width: 220px" name="product_id[]" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                            name="product_id[]" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                                 echo 'disabled';
                                             } ?>>
                                             <option value="{{ $value_export->product_id }}">
@@ -407,7 +408,7 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <input type="text" id="product_unit" readonly style="width: 80px"
+                                    <input type="text" id="product_unit" readonly
                                         class="product_unit form-control text-center" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                             echo 'readonly';
                                         } ?>
@@ -417,11 +418,11 @@
                                 <td>
                                     <div class='d-flex'>
                                         <input type="text" oninput="limitMaxEdit(this)" id="product_qty"
-                                            class="quantity-input form-control text-center" style="width: 50px"
-                                            <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                            class="quantity-input form-control text-center" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                                 echo 'readonly';
-                                            } ?> value="{{ $value_export->product_qty }}"
-                                            name="product_qty[]" required="">
+                                            } ?>
+                                            value="{{ $value_export->product_qty }}" name="product_qty[]"
+                                            required="" style="width:50px;">
                                         <input type="text" readonly="" class="quantity-exist form-control"
                                             required=""
                                             value="/{{ $value_export->tonkho + $value_export->product_qty }}"
@@ -432,8 +433,7 @@
                                 </td>
                                 <td>
                                     <input type="text" id="product_price" name="product_price[]"
-                                        class="form-control text-center product_price" style="width: 140px"
-                                        <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                        class="form-control text-center product_price" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                             echo 'readonly';
                                         } ?>
                                         value=@if (fmod($value_export->product_price, 1) == 0) {{ number_format($value_export->product_price, 0, '.', ',') }}
@@ -443,7 +443,7 @@
                                 </td>
                                 <td>
                                     <select disabled name="product_tax[]" class="product_tax form-control text-center"
-                                        style="width: 100px;" id="product_tax" required <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                        style="width: 80px;" id="product_tax" required <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                             echo 'disabled';
                                         } ?>>
                                         <option value="0" <?php if ($value_export->thue == 0) {
@@ -461,14 +461,13 @@
                                     </select>
                                 </td>
                                 <td><span class="total-amount form-control text-center"
-                                        style="background:#e9ecef; width:140px">0</span>
+                                        style="background:#e9ecef;">0</span>
                                 </td>
                                 <td>
-                                    <input type="text" id="" name="product_note[]"
-                                        class="form-control w-auto" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                    <input type="text" id="" name="product_note[]" class="form-control"
+                                        <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                             echo 'readonly';
-                                        } ?>
-                                        value="{{ $value_export->product_note }}">
+                                        } ?> value="{{ $value_export->product_note }}">
                                 </td>
                                 <td data-toggle='modal' data-target='#productModal' class='productMD'><img
                                         src="../../dist/img/icon/Group.png"></td>
@@ -572,7 +571,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" style="word-wrap: break-word">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
@@ -637,6 +636,7 @@
                 idProduct: idProduct,
             },
             success: function(response) {
+                console.log(response);
                 var productPrice = parseFloat(response.product_price);
                 var formattedPrice;
                 if (Number.isInteger(productPrice)) {
@@ -752,7 +752,7 @@
                 "text": nextSoTT
             });
             const ProInput = $("<td>" +
-                "<select class='child-select p-1 productName form-control' style='width:220px' required name='product_id[]'>" +
+                "<select class='child-select p-1 productName form-control' required name='product_id[]'>" +
                 "<option value=''>Lựa chọn sản phẩm</option>" +
                 '@foreach ($product_code as $value)' +
                 "<option value='{{ $value->id }}'>{{ $value->product_name }}</option>" +
