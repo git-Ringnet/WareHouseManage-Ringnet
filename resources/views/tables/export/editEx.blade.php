@@ -310,7 +310,7 @@
                                 <td class="soTT"><?php echo $stt++; ?></td>
                                 <td>
                                     <select disabled class="child-select p-1 form-control productName"
-                                       name="product_id[]">
+                                       name="product_id[]" style="width: 220px;">
                                         <option value="{{ $value_export->product_id }}">
                                             {{ $value_export->product_name }}
                                         </option>
@@ -463,7 +463,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" style="word-wrap: break-word">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>

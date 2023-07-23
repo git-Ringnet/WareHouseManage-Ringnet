@@ -109,10 +109,9 @@
                                 style="z-index: 99;width:37%;">
                                 @foreach ($customer as $item)
                                     @if (Auth::user()->id == $item->user_id || Auth::user()->can('isAdmin'))
-                                        <li class="p-2">
+                                        <li class="p-2 search-info" id="{{ $item->id }}" name="search-info">
                                             <a href="#"
-                                                class="text-dark justify-content-between p-2 search-info"
-                                                id="{{ $item->id }}" name="search-info">
+                                                class="text-dark justify-content-between p-2">
                                                 <span class="w-50">{{ $item->guest_name }}</span>
                                             </a>
                                         </li>
@@ -141,16 +140,16 @@
                 <table class="table table-hover bg-white rounded" id="sourceTable">
                     <thead class="">
                         <tr>
-                            <th>STT</th>
-                            <th>Tên sản phẩm</th>
-                            <th>ĐVT</th>
-                            <th>Số lượng</th>
-                            <th>Giá bán</th>
-                            <th>Thuế</th>
-                            <th>Thành tiền</th>
-                            <th>Ghi chú</th>
-                            <th></th>
-                            <th></th>
+                            <th style="width:3%;">STT</th>
+                            <th style="width:30%;">Tên sản phẩm</th>
+                            <th style="width:8%;">ĐVT</th>
+                            <th style="width:8%">Số lượng</th>
+                            <th style="width:12%;">Giá bán</th>
+                            <th style="width:8%;">Thuế</th>
+                            <th style="width:15%;">Thành tiền</th>
+                            <th style="width:13%;">Ghi chú</th>
+                            <th style="width:10%;"></th>
+                            <th style="width:10%;"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -223,7 +222,7 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <div class="modal-body">
+                        <div class="modal-body" style="word-wrap: break-word">
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
@@ -357,7 +356,7 @@
                 "text": nextSoTT
             });
             const ProInput = $("<td>" +
-                "<select class='child-select p-1 productName form-control' style='width:220px' required name='product_id[]'>" +
+                "<select class='child-select p-1 productName form-control' required name='product_id[]'>" +
                 "<option value=''>Lựa chọn sản phẩm</option>" +
                 '@foreach ($product as $value)' +
                 "<option value='{{ $value->id }}'>{{ $value->product_name }}</option>" +
@@ -365,7 +364,7 @@
                 "</select>" +
                 "</td>");
             const dvtInput = $(
-                "<td><input type='text' readonly id='product_unit' class='product_unit form-control' style='width:100px' name='product_unit[]' required></td>"
+                "<td><input type='text' readonly id='product_unit' class='product_unit form-control' name='product_unit[]' required></td>"
             );
             const slInput = $(
                 "<td>" +
@@ -390,7 +389,7 @@
                 "</select>" +
                 "</td>");
             const thanhTienInput = $(
-                "<td><input readonly class='total-amount form-control text-center' value='' style='width:140px;'></td>"
+                "<td><input readonly class='total-amount form-control text-center' value=''></td>"
             );
             const info = $(
                 "<td data-toggle='modal' data-target='#productModal'><img src='../dist/img/icon/Group.png'></td>"
@@ -1086,11 +1085,11 @@
         var selectedProducts = products.slice();
 
         const ProInput = $(
-            "<td><select class='child-select p-1 productName form-control' style='width:220px' required name='product_id[]'></select></td>"
+            "<td><select class='child-select p-1 productName form-control' required name='product_id[]'></select></td>"
         );
 
         const dvtInput = $(
-            "<td><input type='text' id='product_unit' class='product_unit form-control' style='width:100px' name='product_unit[]' required></td>"
+            "<td><input type='text' id='product_unit' class='product_unit form-control' name='product_unit[]' required></td>"
         );
 
         const slInput = $(
@@ -1116,7 +1115,7 @@
             "</select>" +
             "</td>");
         const thanhTienInput = $(
-            "<td><input readonly class='total-amount form-control text-center' value='' style='width:140px;'></td>"
+            "<td><input readonly class='total-amount form-control text-center' value=''></td>"
         );
         const info = $(
             "<td data-toggle='modal' data-target='#productModal'><img src='../dist/img/icon/Group.png'></td>"
@@ -1140,7 +1139,6 @@
             let dvt = $("<input>", {
                 "value": productList[i].product_unit,
                 "class": "product_unit form-control",
-                "style": "width:100px",
                 "name": "product_unit[]",
                 "readonly": "readonly"
             });
