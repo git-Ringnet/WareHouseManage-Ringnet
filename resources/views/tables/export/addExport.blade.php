@@ -381,7 +381,7 @@
                 "<td><input type='text' class='note_product form-control' style='width:140px' name='product_note[]'></td>"
             );
             const thueInput = $("<td>" +
-                "<select disabled name='product_tax[]' class='product_tax p-1 form-control' style='width:80px' id='product_tax' required>" +
+                "<select disabled name='product_tax[]' class='product_tax p-1 form-control' style='width:100px' id='product_tax' required>" +
                 "<option value='0'>0%</option>" +
                 "<option value='8'>8%</option>" +
                 "<option value='10'>10%</option>" +
@@ -1107,7 +1107,7 @@
             "<td><input type='text' class='note_product form-control' style='width:140px' name='product_note[]'></td>"
         );
         const thueInput = $("<td>" +
-            "<select disabled name='product_tax[]' class='product_tax p-1 form-control' style='width:80px' id='product_tax' required>" +
+            "<select disabled name='product_tax[]' class='product_tax p-1 form-control' style='width:100px' id='product_tax' required>" +
             "<option value='0'>0%</option>" +
             "<option value='8'>8%</option>" +
             "<option value='10'>10%</option>" +
