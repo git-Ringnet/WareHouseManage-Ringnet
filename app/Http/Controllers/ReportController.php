@@ -220,6 +220,7 @@ class ReportController extends Controller
             $countDebtImport = DebtImport::selectSub(function ($query) use ($today) {
                 $query->from('debt_import')->where('debt_status', '!=', 1)
                     ->whereMonth('created_at', $today->month)
+                    ->whereYear('created_at', $today->year)
                     ->selectRaw('SUM(total_import)');
             }, 'countDebtImport')->first();
             $minCreatedAt = Carbon::parse($count->minCreatedAt);
@@ -237,16 +238,19 @@ class ReportController extends Controller
             $count = Orders::selectSub(function ($query) use ($today) {
                 $query->from('Orders')->where('orders.order_status', '=', 1)
                     ->whereMonth('created_at', $today->month)
+                    ->whereYear('created_at', $today->year)
                     ->selectRaw('COUNT(id)');
             }, 'countID')
                 ->selectSub(function ($query) use ($today) {
                     $query->from('Orders')->where('orders.order_status', '=', 1)
                         ->whereMonth('created_at', $today->month)
+                        ->whereYear('created_at', $today->year)
                         ->selectRaw('SUM(total_tax)');
                 }, 'sumTotal')->first();
             $countDebtImport = DebtImport::selectSub(function ($query) use ($today) {
                 $query->from('debt_import')->where('debt_status', '!=', 1)
                     ->whereMonth('created_at', $today->month)
+                    ->whereYear('created_at', $today->year)
                     ->selectRaw('SUM(total_import)');
             }, 'countDebtImport')->first();
             return [
@@ -287,16 +291,19 @@ class ReportController extends Controller
                 $count = Orders::selectSub(function ($query) use ($lastMonth) {
                     $query->from('Orders')->where('orders.order_status', '=', 1)
                         ->whereMonth('created_at', $lastMonth->month)
+                        ->whereYear('created_at', $lastMonth->year)
                         ->selectRaw('COUNT(id)');
                 }, 'countID')
                     ->selectSub(function ($query) use ($lastMonth) {
                         $query->from('Orders')->where('orders.order_status', '=', 1)
                             ->whereMonth('created_at', $lastMonth->month)
+                            ->whereYear('created_at', $lastMonth->year)
                             ->selectRaw('SUM(total_tax)');
                     }, 'sumTotal')->first();
                 $countDebtImport = DebtImport::selectSub(function ($query) use ($lastMonth) {
                     $query->from('debt_import')->where('debt_status', '!=', 1)
                         ->whereMonth('created_at', $lastMonth->month)
+                        ->whereYear('created_at', $lastMonth->year)
                         ->selectRaw('SUM(total_import)');
                 },  'countDebtImport')->first();
             }
@@ -341,18 +348,21 @@ class ReportController extends Controller
                     $query->from('Orders')->where('orders.order_status', '=', 1)
                         ->whereMonth('created_at', '>=', $lastMonth->month)
                         ->whereMonth('created_at', '<=', ($lastMonth->month + 2))
+                        ->whereYear('created_at', $lastMonth->year)
                         ->selectRaw('COUNT(id)');
                 }, 'countID')
                     ->selectSub(function ($query) use ($lastMonth) {
                         $query->from('Orders')->where('orders.order_status', '=', 1)
                             ->whereMonth('created_at', '>=', $lastMonth->month)
                             ->whereMonth('created_at', '<=', ($lastMonth->month + 2))
+                            ->whereYear('created_at', $lastMonth->year)
                             ->selectRaw('SUM(total_tax)');
                     }, 'sumTotal')->first();
                 $countDebtImport = DebtImport::selectSub(function ($query) use ($lastMonth) {
                     $query->from('debt_import')->where('debt_status', '!=', 1)
                         ->whereMonth('created_at', '>=', $lastMonth->month)
                         ->whereMonth('created_at', '<=', ($lastMonth->month + 2))
+                        ->whereYear('created_at', $lastMonth->year)
                         ->selectRaw('SUM(total_import)');
                 },  'countDebtImport')->first();
             }
@@ -433,22 +443,26 @@ class ReportController extends Controller
             $count = Exports::selectSub(function ($query) use ($today) {
                 $query->from('exports')->where('exports.export_status', '=', 2)
                     ->whereMonth('created_at', $today->month)
+                    ->whereYear('created_at', $today->year)
                     ->selectRaw('COUNT(id)');
             }, 'countExport')
                 ->selectSub(function ($query) use ($today) {
                     $query->from('exports')->where('exports.export_status', '=', 2)
                         ->whereMonth('created_at', $today->month)
+                        ->whereYear('created_at', $today->year)
                         ->selectRaw('SUM(total)');
                 }, 'sumExport')
                 ->first();
             $countDebt = Debt::selectSub(function ($query) use ($today) {
                 $query->from('debts')->where('debt_status', '!=', 1)
                     ->whereMonth('created_at', $today->month)
+                    ->whereYear('created_at', $today->year)
                     ->selectRaw('SUM(total_sales)');
             }, 'countDebt')->first();
             $countProfit = Debt::selectSub(function ($query) use ($today) {
                 $query->from('debts')
                     ->whereMonth('created_at', $today->month)
+                    ->whereYear('created_at', $today->year)
                     ->selectRaw('sum(total_difference)');
             }, 'countProfit')
                 ->first();
@@ -498,22 +512,26 @@ class ReportController extends Controller
                 $count = Exports::selectSub(function ($query) use ($lastMonth) {
                     $query->from('exports')->where('exports.export_status', '=', 2)
                         ->whereMonth('created_at', $lastMonth->month)
+                        ->whereYear('created_at', $lastMonth->year)
                         ->selectRaw('COUNT(id)');
                 }, 'countExport')
                     ->selectSub(function ($query) use ($lastMonth) {
                         $query->from('exports')->where('exports.export_status', '=', 2)
                             ->whereMonth('created_at', $lastMonth->month)
+                            ->whereYear('created_at', $lastMonth->year)
                             ->selectRaw('SUM(total)');
                     }, 'sumExport')
                     ->first();
                 $countDebt = Debt::selectSub(function ($query) use ($lastMonth) {
                     $query->from('debts')->where('debt_status', '!=', 1)
                         ->whereMonth('created_at', $lastMonth->month)
+                        ->whereYear('created_at', $lastMonth->year)
                         ->selectRaw('SUM(total_sales)');
                 },  'countDebt')->first();
                 $countProfit = Debt::selectSub(function ($query) use ($lastMonth) {
                     $query->from('debts')
                         ->whereMonth('created_at', $lastMonth->month)
+                        ->whereYear('created_at', $lastMonth->year)
                         ->selectRaw('sum(total_difference)');
                 }, 'countProfit')
                     ->first();
@@ -569,12 +587,14 @@ class ReportController extends Controller
                     $query->from('exports')->where('exports.export_status', '=', 2)
                         ->whereMonth('created_at', '>=', $lastMonth->month)
                         ->whereMonth('created_at', '<=', ($lastMonth->month + 2))
+                        ->whereYear('created_at', $lastMonth->year)
                         ->selectRaw('COUNT(id)');
                 }, 'countExport')
                     ->selectSub(function ($query) use ($lastMonth) {
                         $query->from('exports')->where('exports.export_status', '=', 2)
                             ->whereMonth('created_at', '>=', $lastMonth->month)
                             ->whereMonth('created_at', '<=', ($lastMonth->month + 2))
+                            ->whereYear('created_at', $lastMonth->year)
                             ->selectRaw('SUM(total)');
                     }, 'sumExport')
                     ->first();
@@ -582,6 +602,7 @@ class ReportController extends Controller
                     $query->from('debts')->where('debt_status', '!=', 1)
                         ->whereMonth('created_at', '>=', $lastMonth->month)
                         ->whereMonth('created_at', '<=', ($lastMonth->month + 2))
+                        ->whereYear('created_at', $lastMonth->year)
                         ->selectRaw('SUM(total_sales)');
                 },  'countDebt')->first();
                 $countProfit = Debt::selectSub(function ($query) use ($lastMonth) {
