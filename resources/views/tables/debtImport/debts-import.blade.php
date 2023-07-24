@@ -632,8 +632,8 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <div class="icon" id="icon-debt"></div>
                                             </span>
                                         </th>
-                                        <th scope="col" class="text-center">
-                                            <span class="d-flex justify-content-center align-items-center" style="width:135px;">
+                                        <th scope="col" class="text-center" style="width:15%;">
+                                            <span class="d-flex justify-content-center align-items-center">
                                                 <a href="#" class="sort-link" data-sort-by="debt_status"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Trạng
