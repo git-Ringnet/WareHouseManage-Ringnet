@@ -324,7 +324,7 @@ $index = array_search($item['label'], $numberedLabels);
                             <table id="example2" class="table table-hover">
                                 <thead>
                                     <tr>
-                                        <input type="hidden" id="perPageinput" name="perPageinput" value="10">
+                                        <input type="hidden" id="perPageinput" name="perPageinput" value="{{request()->perPageinput}}">
                                         <input type="hidden" id="sortByInput" name="sort-by" value="id">
                                         <input type="hidden" id="sortTypeInput" name="sort-type"
                                             value="{{ $sortType }}">
@@ -446,7 +446,7 @@ $index = array_search($item['label'], $numberedLabels);
                             <select name="perPage" id="perPage">
                                 <option value="5" {{ $perPage == 5 ? 'selected' : '' }}>5</option>
                                 <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
-                                <option value="20" {{ $perPage == 25 ? 'selected' : '' }}>25</option>
+                                <option value="25" {{ $perPage == 25 ? 'selected' : '' }}>25</option>
                                 <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
                             </select>
                         </span>

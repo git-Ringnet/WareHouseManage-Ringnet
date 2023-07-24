@@ -35,7 +35,7 @@
                                         <div id="all-orders">
                                             <div class="d-flex flex-column all-orders">
                                                 <div class="ca d-flex">
-                                                    <div id="it0"></div>->
+                                                    <div id="it0">{{$count->minCreatedAt}}</div>->
                                                     <div id="id0"></div>
                                                 </div>
                                                 <div class="ca text-left">Tất cả</div>
@@ -174,7 +174,7 @@
                                     </div>
                                     <div class="pl-2">
                                         <h5>Tổng đơn nhập</h5>
-                                        <div class="value text-left" id="import_id"></div>
+                                        <div class="value text-left" id="import_id">{{$count->countID}}</div>
                                     </div>
                                 </div>
                             </div>
@@ -193,7 +193,7 @@
                                     </div>
                                     <div class="pl-2">
                                         <h5>Tổng tiền nhập(+VAT)</h5>
-                                        <div class="value text-left" id="import_total"></div>
+                                        <div class="value text-left" id="import_total">{{$count->sumTotal}}</div>
                                     </div>
                                 </div>
 
@@ -1229,11 +1229,11 @@
         return formattedValue;
     }
     window.onload = function() {
-        $("#btn-all-orders").click();
-        $("#btn-all-exports").click();
-        $("#btn-all-inventory").click();
-        $("#btn-all-debt").click();
-        $("#btn-all-profit").click();
+        // $("#btn-all-orders").click();
+        // $("#btn-all-exports").click();
+        // $("#btn-all-inventory").click();
+        // $("#btn-all-debt").click();
+        // $("#btn-all-profit").click();
     };
 
     function formatDate(date) {
