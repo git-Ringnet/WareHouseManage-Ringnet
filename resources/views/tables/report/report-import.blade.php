@@ -195,7 +195,7 @@
                                 </div>
                                 <div class="ml-2">
                                     <p class="m-0">Tổng công nợ (+VAT)</p><b
-                                        class="m-0" id="import_total">{{ number_format($sumDebtImportVAT) }}</b>
+                                        class="m-0" id="countDebtImport">{{ number_format($sumDebtImportVAT) }}</b>
                                 </div>
                             </div>
                         </div>
