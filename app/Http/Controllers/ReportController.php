@@ -114,7 +114,8 @@ class ReportController extends Controller
         $allRoles = new Roles();
         $allRoles = $allRoles->getAll();
         $Tableexports = $this->exports->reportExports($filters, $nhanvien, $roles, $sortBy, $sortType);
-        return view('tables.report.report-export', compact('title', 'debtsSale', 'allRoles', 'string', 'Tableexports', 'sortType', 'exports', 'sumExport', 'formattedLoinhuan', 'CongNo'));
+        $perPage = $request->input('perPageinput',10); 
+        return view('tables.report.report-export', compact('perPage','title', 'debtsSale', 'allRoles', 'string', 'Tableexports', 'sortType', 'exports', 'sumExport', 'formattedLoinhuan', 'CongNo'));
     }
 
 
@@ -193,7 +194,8 @@ class ReportController extends Controller
         $allRoles = new Roles();
         $allRoles = $allRoles->getAll();
         // dd($tableorders);
-        return view('tables.report.report-import', compact('title', 'allRoles', 'debtsSale', 'string', 'tableorders', 'sortType', 'orders', 'sumTotalOrders', 'sumDebtImportVAT', 'tableorders', 'exports', 'sumExport', 'formattedLoinhuan', 'CongNo'));
+        $perPage = $request->input('perPageinput',10); 
+        return view('tables.report.report-import', compact('perPage','title', 'allRoles', 'debtsSale', 'string', 'tableorders', 'sortType', 'orders', 'sumTotalOrders', 'sumDebtImportVAT', 'tableorders', 'exports', 'sumExport', 'formattedLoinhuan', 'CongNo'));
     }
     public function timeImport(Request $request)
     {
