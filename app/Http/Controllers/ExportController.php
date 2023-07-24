@@ -108,12 +108,12 @@ class ExportController extends Controller
         $exports = Exports::leftjoin('guests', 'exports.guest_id', '=', 'guests.id')
             ->leftjoin('users', 'exports.user_id', '=', 'users.id')->select('guests.guest_name as guests', 'users.name as name')->get();
         $productEx = productExports::all();
-        $perPage = $request->input('perPageinput',10); 
-        $export = $this->exports->getAllExports($filters,$perPage, $status, $name, $guest, $date, $keywords, $sortBy, $sortType);
+        $perPage = $request->input('perPageinput', 10);
+        $export = $this->exports->getAllExports($filters, $perPage, $status, $name, $guest, $date, $keywords, $sortBy, $sortType);
         $title = 'Xuất hàng';
         $productsCreator = $this->exports->productsCreator();
         // dd($productsCreator);
-        return view('tables.export.exports', compact('productEx', 'perPage','export', 'exports', 'sortType', 'string', 'title', 'productsCreator'));
+        return view('tables.export.exports', compact('productEx', 'perPage', 'export', 'exports', 'sortType', 'string', 'title', 'productsCreator'));
     }
 
     /**
@@ -2118,6 +2118,9 @@ class ExportController extends Controller
                                 }
                                 $history->debt_import_start = $date_import->date_start;
                                 $history->debt_import_end = $date_import->date_end;
+                                $history->tranport_fee = 0;
+                                $history->history_note = null;
+                                $history->save();
                                 if ($firstProduct && $history->tranport_fee === null || $firstProduct && $history->tranport_fee === 0) {
                                     $history->total_difference = ($productQty * $request->product_price[$i]) - ($product->product_price * $productQty) - $request->transport_fee;
                                     $history->tranport_fee = $request->transport_fee;
@@ -2126,7 +2129,6 @@ class ExportController extends Controller
                                     $history->total_difference = ($productQty * $request->product_price[$i]) - ($product->product_price * $productQty);
                                     $history->tranport_fee = 0;
                                 }
-                                $history->history_note = null;
                                 $history->save();
                             }
                         } else {
