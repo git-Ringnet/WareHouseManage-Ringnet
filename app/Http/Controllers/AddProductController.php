@@ -137,9 +137,8 @@ class AddProductController extends Controller
         foreach ($order as $value) {
             array_push($productIds, $value->id);
         }
-        $perPage = $request->input('perPageinput',10); 
-
-        $orders = $this->orders->getAllOrders($filters,$perPage, $status, $provide_namearr, $name, $date, $keywords, $sortBy, $sortType);
+        $perPage = $request->input('perPageinput', 10);
+        $orders = $this->orders->getAllOrders($filters, $perPage, $status, $provide_namearr, $name, $date, $keywords, $sortBy, $sortType);
         $product = ProductOrders::with('getCodeProduct')
             ->join('orders', 'productorders.order_id', '=', 'orders.id')
             ->whereIn('orders.id', $productIds)
@@ -147,7 +146,7 @@ class AddProductController extends Controller
         $ordersNameAndProvide = Orders::leftjoin('provides', 'orders.provide_id', '=', 'provides.id')
             ->leftjoin('users', 'orders.users_id', '=', 'users.id')->get();
         $title = 'Nhập hàng';
-        return view('tables.order.insertProduct', compact('orders','perPage', 'product', 'sortType', 'string', 'ordersNameAndProvide', 'provides', 'title'));
+        return view('tables.order.insertProduct', compact('orders', 'perPage', 'product', 'sortType', 'string', 'ordersNameAndProvide', 'provides', 'title'));
     }
 
     /**
@@ -976,12 +975,12 @@ class AddProductController extends Controller
 
                 $f = ProductOrders::where('product_id', $list_id[$i])->first();
                 $getProductQty = productExports::selectRaw('sum(product_qty) as total_qty')
-                ->where('product_exports.product_id',$list_id[$i])
-                ->join('exports','product_exports.export_id','exports.id')
-                ->where('exports.export_status',2)->first();
+                    ->where('product_exports.product_id', $list_id[$i])
+                    ->join('exports', 'product_exports.export_id', 'exports.id')
+                    ->where('exports.export_status', 2)->first();
 
-                if($getProductQty !== null){
-                   $data['product_total'] = ($request->product_qty[$i] - $getProductQty->total_qty) * $product_price[$i];
+                if ($getProductQty !== null) {
+                    $data['product_total'] = ($request->product_qty[$i] - $getProductQty->total_qty) * $product_price[$i];
                 }
                 $data['product_code'] = $request->product_code;
                 $this->product->updateProduct($data, $f->product_id);
@@ -1018,7 +1017,7 @@ class AddProductController extends Controller
                     }
                 }
             }
-    
+
             $startDate = Carbon::parse($request->product_create); // Chuyển đổi ngày bắt đầu thành đối tượng Carbon
             $daysToAdd = $request->provide_debt; // Số ngày cần thêm
 
@@ -1069,7 +1068,7 @@ class AddProductController extends Controller
                 $upPro = History::where('product_id', $value)->get();
                 foreach ($upPro as $va) {
                     if ($value == $va->product_id) {
-                        $Pro = ProductOrders::where('product_id',$value)->first();
+                        $Pro = ProductOrders::where('product_id', $value)->first();
                         $va->product_name = $Pro->product_name;
                         $va->product_unit = $Pro->product_unit;
                         $va->price_import = $Pro->product_price;

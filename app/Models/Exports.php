@@ -58,7 +58,6 @@ class Exports extends Model
             };
             $exports = $exports->orderBy($orderBy, $orderType);
         }
-
         $exports = $exports->orderBy('exports.id', 'desc')->paginate($perPage);
         return $exports;
     }

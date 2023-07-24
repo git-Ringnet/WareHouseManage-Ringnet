@@ -32,23 +32,8 @@ class DashboardController extends Controller
         // Tất cả
         $orders = $this->orders->allNhaphang();
         $orders = count($orders);
-        $today = Carbon::today();
         $getMinDateOrders = $this->orders->getMinDateOrders();
-        $count = Orders::selectSub(function ($query) {
-            $query->from('Orders')->where('orders.order_status', '=', 1)
-                ->selectRaw('count(id)');
-        }, 'countID')
-            ->selectSub(function ($query) {
-                $query->from('Orders')->where('orders.order_status', '=', 1)
-                    ->selectRaw('SUM(total_tax)');
-            }, 'sumTotal') // Lấy ngày created_at bé nhất
-            ->selectSub(function ($query) {
-                $query->from('Orders')->where('orders.order_status', '=', 1)
-                    ->selectRaw('MIN(created_at)');
-            }, 'minCreatedAt')
-            ->first();
-        // Xuất hàng
-        return view('index', compact('title','count', 'orders', 'getMinDateOrders'));
+        return view('index', compact('title', 'orders', 'getMinDateOrders'));
     }
 
     // Nhập hàng

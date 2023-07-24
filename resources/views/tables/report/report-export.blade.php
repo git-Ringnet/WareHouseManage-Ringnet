@@ -24,6 +24,7 @@
                                 <div class="d-flex flex-column all-orders">
                                     <div class="ca d-flex">
                                         <div class="it0"></div>
+                                        <div class="muiten-all"></div>
                                         <div class="id0"></div>
                                     </div>
                                     <div class="ca text-left">Tất cả</div>
@@ -33,7 +34,7 @@
                             <div id="this-month-orders" style="display: none">
                                 <div class="d-flex flex-column all-orders">
                                     <div class="ca d-flex">
-                                        <div class="it1"></div>
+                                        <div class="it1"></div>->
                                         <div class="id1"></div>
                                     </div>
                                     <div class="ca text-left">Tháng này</div>
@@ -43,7 +44,7 @@
                             <div id="last-month-orders" style="display: none">
                                 <div class="d-flex flex-column all-orders">
                                     <div class="ca d-flex">
-                                        <div class="it2"></div>
+                                        <div class="it2"></div>->
                                         <div class="id2"></div>
                                     </div>
                                     <div class="ca text-left">Tháng trước</div>
@@ -53,7 +54,7 @@
                             <div id="3last-month-orders" style="display: none">
                                 <div class="d-flex flex-column all-orders">
                                     <div class="ca d-flex">
-                                        <div class="it3"></div>
+                                        <div class="it3"></div>->
                                         <div class="id3"></div>
                                     </div>
                                     <div class="ca text-left">3 tháng trước</div>
@@ -744,7 +745,7 @@ $index = array_search($item['label'], $numberedLabels);
                         <div class="card-body">
                             <table id="example2" class="table table-hover">
                                 <thead>
-                                    <input type="hidden" id="perPageinput" name="perPageinput" value="{{request()->perPageinput}}">
+                                    <input type="hidden" id="perPageinput" name="perPageinput" value="{{ request()->perPageinput ?? 10 }}">
                                     <input type="hidden" id="sortByInput" name="sort-by" value="">
                                     <input type="hidden" id="sortTypeInput" name="sort-type"
                                         value="{{ $sortType }}">
@@ -915,6 +916,14 @@ $index = array_search($item['label'], $numberedLabels);
         e.preventDefault();
         $('.end_order').text(moment($(this).val()).format("DD-MM-YYYY"));
         $('.muitenorder').text('->');
+    })
+    $(document).on('click', '#btn-all-orders', function(e) {
+        e.preventDefault();
+        $('.muiten-all').text('->');
+    })
+    $(document).on('click', '#btn-all-orders', function(e) {
+        e.preventDefault();
+        $('.muiten-all').text('->');
     })
 
     function formatDate(date) {
