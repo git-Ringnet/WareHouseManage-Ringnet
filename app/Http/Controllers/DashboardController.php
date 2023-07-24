@@ -508,11 +508,15 @@ class DashboardController extends Controller
                     ->selectRaw('MIN(created_at)');
             }, 'importCreatedAt')->first();
 
-            $minCreatedAt = Carbon::parse(min($countDebtImport->importCreatedAt,$count->exportCreatedAt));
+            $minCreatedAt = Carbon::parse($countDebtImport->importCreatedAt);       
+            $minCreatedAt12 = Carbon::parse($count->exportCreatedAt);           
+            $smallerDate = $minCreatedAt->min($minCreatedAt12);
+
+
             return [
                 'debt_import' =>$countDebtImport->countDebtImport,
-                'debt_export' =>$count->count,
-                'start_date' => $minCreatedAt->format('d-m-Y'),
+                'debt_export' =>$count->count,      
+                'start_date' => $smallerDate->format('d-m-Y'),
                 'end_date' =>$today->format('d-m-Y'),
             ];
         } elseif ($data['data'] == 1) {  //Xử lý lấy dữ liệu tháng này
