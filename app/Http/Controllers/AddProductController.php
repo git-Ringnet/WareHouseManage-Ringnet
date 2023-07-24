@@ -53,7 +53,7 @@ class AddProductController extends Controller
             $id = $request->id;
             array_push($filters, ['orders.product_code', 'like', '%' . $id . '%']);
             $nameArr = explode(',.@', $id);
-            array_push($string, ['label' => 'Số hóa :', 'values' => $nameArr, 'class' => 'id']);
+            array_push($string, ['label' => 'Số hóa đơn:', 'values' => $nameArr, 'class' => 'id']);
         }
         //Nhà cung cấp
         if (!empty($request->guest)) {

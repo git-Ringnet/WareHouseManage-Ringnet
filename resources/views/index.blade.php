@@ -210,7 +210,7 @@
                             </div>
                             <div class="col d-flex" style="position: relative;height:60px;">
                                 <div class="dropdown w-100">
-                                    <button class="btn w-100 btn-light border rounded dropdown-toggle" id="orders"
+                                    <button class="btn w-100 btn-light border rounded dropdown-toggle" id="exports"
                                         style="display: flex;
                                         justify-content: space-between;
                                         align-items: center;"
@@ -399,7 +399,7 @@
                             </div>
                             <div class="col d-flex" style="position: relative;height:60px;">
                                 <div class="dropdown w-100">
-                                    <button class="btn w-100 btn-light border rounded dropdown-toggle" id="orders"
+                                    <button class="btn w-100 btn-light border rounded dropdown-toggle" id="invento"
                                         style="display: flex;
                                         justify-content: space-between;
                                         align-items: center;"
@@ -555,7 +555,7 @@
                             </div>
                             <div class="col d-flex" style="position: relative;height:60px;">
                                 <div class="dropdown w-100">
-                                    <button class="btn w-100 btn-light border rounded dropdown-toggle" id="orders"
+                                    <button class="btn w-100 btn-light border rounded dropdown-toggle" id="debtss"
                                         style="display: flex;
                                         justify-content: space-between;
                                         align-items: center;"
@@ -756,7 +756,7 @@
                             </div>
                             <div class="col d-flex" style="position: relative;height:60px;">
                                 <div class="dropdown w-100">
-                                    <button class="btn w-100 btn-light border rounded dropdown-toggle" id="orders"
+                                    <button class="btn w-100 btn-light border rounded dropdown-toggle" id="profitt"
                                         style="display: flex;
                                         justify-content: space-between;
                                         align-items: center;"
@@ -977,14 +977,17 @@
         $("#this-month-orders").hide();
         $("#last-month-orders").hide();
         $("#3last-month-orders").hide();
+        $('#orders').prop('disabled', true);
     });
     $('#cancel-times-orders').click(function(event) {
         event.preventDefault();
         $('#times-orders-options').hide();
+        $('#orders').prop('disabled', false);
     });
     $('.suscess').click(function(event) {
         event.preventDefault();
         $('#times-orders-options').hide();
+        $('#orders').prop('disabled', false);
     });
 
     // exports
@@ -1028,14 +1031,17 @@
         $("#this-month-exports").hide();
         $("#last-month-exports").hide();
         $("#3last-month-exports").hide();
+        $('#exports').prop('disabled', true);
     });
     $('#cancel-times-exports').click(function(event) {
         event.preventDefault();
         $('#times-exports-options').hide();
+        $('#exports').prop('disabled', false);
     });
     $('.success').click(function(event) {
         event.preventDefault();
         $('#times-exports-options').hide();
+        $('#exports').prop('disabled', false);
     });
     // inventory
     // Tất cả
@@ -1078,14 +1084,17 @@
         $("#this-month-inventory").hide();
         $("#last-month-inventory").hide();
         $("#3last-month-inventory").hide();
+        $('#invento').prop('disabled', true);
     });
     $('#cancel-times-inventory').click(function(event) {
         event.preventDefault();
         $('#times-inventory-options').hide();
+        $('#invento').prop('disabled', false);
     });
     $('.success-inventory').click(function(event) {
         event.preventDefault();
         $('#times-inventory-options').hide();
+        $('#invento').prop('disabled', false);
     });
     // debt
     // Tất cả
@@ -1128,14 +1137,17 @@
         $("#this-month-debt").hide();
         $("#last-month-debt").hide();
         $("#3last-month-debt").hide();
+        $('#debtss').prop('disabled', true);
     });
     $('#cancel-times-debt').click(function(event) {
         event.preventDefault();
         $('#times-debt-options').hide();
+        $('#debtss').prop('disabled', false);
     });
     $('.success-debt').click(function(event) {
         event.preventDefault();
         $('#times-debt-options').hide();
+        $('#debtss').prop('disabled', false);
     });
 
     // profit
@@ -1179,14 +1191,17 @@
         $("#this-month-profit").hide();
         $("#last-month-profit").hide();
         $("#3last-month-profit").hide();
+        $('#profitt').prop('disabled', true);
     });
     $('#cancel-times-profit').click(function(event) {
         event.preventDefault();
         $('#times-profit-options').hide();
+        $('#profitt').prop('disabled', false);
     });
     $('.success-profit').click(function(event) {
         event.preventDefault();
         $('#times-profit-options').hide();
+        $('#profitt').prop('disabled', false);
     });
 
     function formatCurrency(value) {
@@ -1261,13 +1276,16 @@
                 if (data.sumTotal > 0) {
                     $('#import_total').text(formatCurrency(data.sumTotal));
                 }
+                else {
+                    $('#import_total').text(0);
+                }
                 if (data.start_date && data.end_date) {
                     var stId = '#it' + dataid;
                     var edId = '#id' + dataid;
                     $(stId).text(data.start_date)
                     $(edId).text(data.end_date)
                 }
-                console.log(dataid);
+                
             }
         })
     })
@@ -1286,7 +1304,7 @@
             success: function(data) {
                 $('#import_id').text(data.countID);
                 $('#import_total').text(formatCurrency(data.sumTotal));
-                console.log(data);
+                
             }
         })
     })
@@ -1312,7 +1330,7 @@
                     $(stId).text(data.start_date)
                     $(edId).text(data.end_date)
                 }
-                console.log(data);
+                
             }
         })
     })
@@ -1331,7 +1349,7 @@
             success: function(data) {
                 $('#export_id').text(data.countExport);
                 $('#export_total').text(formatCurrency(data.sumExport));
-                console.log(data);
+                
 
             }
         })
@@ -1346,7 +1364,7 @@
                 data: dataid
             },
             success: function(data) {
-                console.log(data);
+                
                 $('#inventory_id').text(data.countInventory);
                 $('#inventory_total').text(formatCurrency(data.sumInventory));
                 if (data.start_date && data.end_date) {
@@ -1355,7 +1373,7 @@
                     $(stId).text(data.start_date)
                     $(edId).text(data.end_date)
                 }
-                console.log(data);
+                
             }
         })
     })
@@ -1374,7 +1392,7 @@
             success: function(data) {
                 $('#inventory_id').text(data.countInventory);
                 $('#inventory_total').text(formatCurrency(data.sumInventory));
-                console.log(data);
+                
 
             }
         })
@@ -1405,7 +1423,7 @@
                     $(stId).text(data.start_date)
                     $(edId).text(data.end_date)
                 }
-                console.log(data);
+                
             }
         })
     })
@@ -1432,7 +1450,7 @@
                 }else{
                     $('#debt_import').text(0);
                 }   
-                console.log(data);
+                
             }
         })
     })
@@ -1453,7 +1471,7 @@
                     $(stId).text(data.start_date)
                     $(edId).text(data.end_date)
                 }
-                console.log(dataid);
+                
             }
         })
     })
@@ -1471,7 +1489,7 @@
             },
             success: function(data) {
                 $('#sum-profit').text(formatCurrency(data.countProfit));
-                console.log(data);
+                
 
             }
         })
