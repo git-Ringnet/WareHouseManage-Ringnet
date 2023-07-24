@@ -84,7 +84,7 @@ class Orders extends Model
     public function allNhaphang()
     {
         $orders = DB::table($this->table)
-            ->where('orders.order_status', '!=', 2)
+            ->where('orders.order_status', '=', 1)
             ->get();
         return $orders;
     }
