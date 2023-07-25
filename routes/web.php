@@ -137,6 +137,9 @@ Route::get('/add_newProvide', [AddProductController::class, 'add_newProvide'])->
 // Kiểm tra serial number tồn tại chưa
 Route::get('/checkSN', [AddProductController::class, 'checkSN'])->name('checkSN');
 
+//Kiểm tra tình trạng đơn xuất
+Route::get('/checkStatusEx', [ExportController::class, 'checkStatusEx'])->name('checkStatusEx');
+
 //xuất excel bảng export
 Route::get('/export_excel', [ExportController::class, 'export_excel'])->name('export_excel');
 

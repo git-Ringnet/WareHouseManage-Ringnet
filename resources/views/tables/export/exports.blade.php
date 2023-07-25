@@ -391,7 +391,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('comparison_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity sum-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -447,7 +447,7 @@ $index = array_search($item['label'], $numberedLabels);
             <div class="d-flex justify-content-between align-items-center">
                 <span class="count_checkbox mr-5"></span>
                 <div class="row action">
-                    {{-- <div class="btn-xoahang my-2 ml-3">
+                    <div class="btn-xoahang my-2 ml-3">
                         <button id="deleteExports" type="button"
                             class="btn btn-group btn-light d-flex align-items-center h-100">
                             <svg class="mr-1" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -458,7 +458,7 @@ $index = array_search($item['label'], $numberedLabels);
                             </svg>
                             <span>Xóa đơn</span>
                         </button>
-                    </div> --}}
+                    </div>
                     <div class="btn-huy my-2 ml-4">
                         <button id="cancelBillExport" class="btn btn-group btn-light d-flex align-items-center h-100">
                             <svg class="mr-1" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -494,7 +494,8 @@ $index = array_search($item['label'], $numberedLabels);
                             <table id="example2" class="table table-hover">
                                 <thead>
                                     <tr>
-                                        <input type="hidden" id="perPageinput" name="perPageinput" value="{{ request()->perPageinput ?? 10 }}">
+                                        <input type="hidden" id="perPageinput" name="perPageinput"
+                                            value="{{ request()->perPageinput ?? 10 }}">
                                         <input type="hidden" id="sortByInput" name="sort-by" value="id">
                                         <input type="hidden" id="sortTypeInput" name="sort-type"
                                             value="{{ $sortType }}">
@@ -716,7 +717,7 @@ $index = array_search($item['label'], $numberedLabels);
     <!-- /.content -->
 </div>
 <script>
-        $('#perPage').on('change', function(e) {
+    $('#perPage').on('change', function(e) {
         e.preventDefault();
         var perPageValue = $(this).val();
         $('#perPageinput').val(perPageValue);
@@ -756,6 +757,7 @@ $index = array_search($item['label'], $numberedLabels);
     }
 
     var dropdownItems = $('[id^="dropdown_item"]');
+
     function checkActiveItems() {
         var activeItemCount = dropdownItems.filter('.dropdown-item-active').length;
         return activeItemCount;
@@ -781,7 +783,7 @@ $index = array_search($item['label'], $numberedLabels);
             if (checkActiveItems() > 0) {
                 $('#expandall').hide();
                 $('#collapseall').show();
-              
+
             } else {
                 $('#expandall').show();
                 $('#collapseall').hide();
@@ -1217,6 +1219,35 @@ $index = array_search($item['label'], $numberedLabels);
     $('#checkall').change(function() {
         $('.cb-element').prop('checked', this.checked);
         updateMultipleActionVisibility();
+        const arrId = [];
+        $('input[name="ids[]"]').each(function() {
+            if ($(this).is(':checked')) {
+                var value = $(this).val();
+                arrId.push(value);
+            }
+        });
+
+        $.ajax({
+            url: "{{ route('checkStatusEx') }}",
+            type: "get",
+            data: {
+                arrId: arrId,
+            },
+            success: function(data) {
+                let hasExportStatus2 = false;
+
+                data.forEach(function(exportItem) {
+                    if (exportItem.export_status === 2) {
+                        hasExportStatus2 = true;
+                    }
+                });
+                if (hasExportStatus2) {
+                    $('.btn-xoahang').hide();
+                } else {
+                    $('.btn-xoahang').show();
+                }
+            }
+        });
     });
 
     $('.cb-element').change(function() {
@@ -1226,8 +1257,36 @@ $index = array_search($item['label'], $numberedLabels);
         } else {
             $('#checkall').prop('checked', false);
         }
-    });
+        const arrId = [];
+        $('input[name="ids[]"]').each(function() {
+            if ($(this).is(':checked')) {
+                var value = $(this).val();
+                arrId.push(value);
+            }
+        });
 
+        $.ajax({
+            url: "{{ route('checkStatusEx') }}",
+            type: "get",
+            data: {
+                arrId: arrId,
+            },
+            success: function(data) {
+                let hasExportStatus2 = false;
+
+                data.forEach(function(exportItem) {
+                    if (exportItem.export_status === 2) {
+                        hasExportStatus2 = true;
+                    }
+                });
+                if (hasExportStatus2) {
+                    $('.btn-xoahang').hide();
+                } else {
+                    $('.btn-xoahang').show();
+                }
+            }
+        });
+    });
 
     $(document).on('click', '.cancal_action', function(e) {
         e.preventDefault();

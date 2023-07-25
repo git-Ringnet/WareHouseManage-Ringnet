@@ -2514,6 +2514,17 @@ class ExportController extends Controller
         session()->flash('warning', 'Không tìm thấy đơn hàng cần xóa');
         return response()->json(['success' => false, 'msg' => 'Không tìm thấy đơn hàng cần xóa']);
     }
+
+    //Kiểm tra tình trạng xuất
+    public function checkStatusEx(Request $request)
+    {
+        if (isset($request->arrId)) {
+            $list = $request->arrId;
+            $exports = Exports::whereIn('id', $list)->get();
+            return $exports;
+        }
+    }
+
     public function cancelBillExport(Request $request)
     {
         if (isset($request->list_id)) {
