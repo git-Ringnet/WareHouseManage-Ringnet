@@ -12,7 +12,7 @@ class Exports extends Model
     protected $table = 'exports';
 
     use HasFactory;
-    public function getAllExports($filter = [],$perPage, $status = [], $name = [], $guest = [], $date = [], $keywords = null, $orderBy = null, $orderType = null)
+    public function getAllExports($filter = [], $perPage, $status = [], $name = [], $guest = [], $date = [], $keywords = null, $orderBy = null, $orderType = null)
     {
 
         $exports = DB::table($this->table)
@@ -128,7 +128,7 @@ class Exports extends Model
             ->leftJoin('roles', 'users.roleid', 'roles.id')
             ->leftJoin('debts', 'debts.export_id', 'exports.id')
             ->where('exports.export_status', 2)
-            ->select('users.name as nhanvien', 'roles.name as vaitro', 'users.email as email')
+            ->select('users.name as nhanvien', 'roles.name as vaitro', 'users.email as email', 'users.id as userid')
             ->selectSub(function ($query) {
                 $query->from('exports')
                     ->where('exports.export_status', 2)
@@ -173,6 +173,62 @@ class Exports extends Model
         $Tableexports = $Tableexports->get();
         // dd($Tableexports);
 
+        return $Tableexports;
+    }
+    public function dataReportAjax($filter = [])
+    {
+        $Tableexports = Exports::leftJoin('users', 'users.id', 'exports.user_id')
+            ->leftJoin('roles', 'users.roleid', 'roles.id')
+            ->leftJoin('debts', 'debts.export_id', 'exports.id')
+            ->where('exports.export_status', 2)
+            ->select('users.name as nhanvien', 'roles.name as vaitro', 'users.email as email', 'users.id as userid')
+            ->selectSub(function ($query) use ($filter) {
+                $query->from('exports')
+                    ->where('exports.export_status', 2)
+                    ->whereColumn('exports.user_id', 'users.id')
+                    ->when(!empty($filter), function ($query) use ($filter) {
+                        $startDate = $filter[0];
+                        $endDate = $filter[1];
+                        return $query->whereBetween('created_at', [$startDate, $endDate]);
+                    })
+                    ->selectRaw('COUNT(exports.id)');
+            }, 'donxuat')
+            ->selectSub(function ($query) use ($filter) {
+                $query->from('exports')
+                    ->where('exports.export_status', 2)
+                    ->whereColumn('exports.user_id', 'users.id')
+                    ->when(!empty($filter), function ($query) use ($filter) {
+                        $startDate = $filter[0];
+                        $endDate = $filter[1];
+                        return $query->whereBetween('created_at', [$startDate, $endDate]);
+                    })
+                    ->selectRaw('SUM(total)');
+            }, 'tongtienxuat')
+            ->selectSub(function ($query) use ($filter) {
+                $query->from('debts')
+                    ->where('exports.export_status', 2)
+                    ->whereColumn('debts.user_id', 'users.id')
+                    ->when(!empty($filter), function ($query) use ($filter) {
+                        $startDate = $filter[0];
+                        $endDate = $filter[1];
+                        return $query->whereBetween('created_at', [$startDate, $endDate]);
+                    })
+                    ->selectRaw('SUM(debts.total_difference)');
+            }, 'tongloinhuan')
+            ->selectSub(function ($query) use ($filter) {
+                $query->from('debts')
+                    ->where('exports.export_status', 2)
+                    ->where('debts.debt_status', '!=', 1)
+                    ->whereColumn('debts.user_id', 'users.id')
+                    ->when(!empty($filter), function ($query) use ($filter) {
+                        $startDate = $filter[0];
+                        $endDate = $filter[1];
+                        return $query->whereBetween('created_at', [$startDate, $endDate]);
+                    })
+                    ->selectRaw('SUM(total_sales)');
+            }, 'tongcongno')
+            ->distinct();
+        $Tableexports = $Tableexports->get();
         return $Tableexports;
     }
 }

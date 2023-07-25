@@ -770,8 +770,8 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <div class="icon" id="icon-debt"></div>
                                             </span>
                                         </th>
-                                        <th scope="col" class="text-center" style="width:15%;">
-                                            <span class="d-flex justify-content-center align-items-center">
+                                        <th scope="col" class="text-center">
+                                            <span class="d-flex justify-content-center align-items-center" style="width:135px;">
                                                 <a href="#" class="sort-link" data-sort-by="debt_status"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Trạng
@@ -1221,7 +1221,7 @@ $index = array_search($item['label'], $numberedLabels);
     $(document).ready(function() {
         // Chọn tất cả các checkbox
         $('.select-all-creator').click(function() {
-            $('#creator-options input[type="checkbox"]').prop('checked', true);
+            $('#creator-options input[type="checkbox"]:visible').prop('checked', true);
         });
 
         // Hủy tất cả các checkbox
@@ -1232,7 +1232,7 @@ $index = array_search($item['label'], $numberedLabels);
     $(document).ready(function() {
         // Chọn tất cả các checkbox
         $('.select-all').click(function() {
-            $('#status-options input[type="checkbox"]').prop('checked', true);
+            $('#status-options input[type="checkbox"]:visible').prop('checked', true);
         });
 
         // Hủy tất cả các checkbox
@@ -1241,7 +1241,7 @@ $index = array_search($item['label'], $numberedLabels);
         });
         // Chọn tất cả các checkbox
         $('.select-all-guest').click(function() {
-            $('#guest-options input[type="checkbox"]').prop('checked', true);
+            $('#guest-options input[type="checkbox"]:visible').prop('checked', true);
         });
 
         // Hủy tất cả các checkbox

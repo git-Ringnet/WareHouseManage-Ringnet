@@ -632,8 +632,8 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <div class="icon" id="icon-debt"></div>
                                             </span>
                                         </th>
-                                        <th scope="col" class="text-center" style="width:15%;">
-                                            <span class="d-flex justify-content-center align-items-center">
+                                        <th scope="col" class="text-center">
+                                            <span class="d-flex justify-content-center align-items-center" style="width:135px;">
                                                 <a href="#" class="sort-link" data-sort-by="debt_status"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Trạng
@@ -693,7 +693,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     $input_value = request('payment');
                                                 @endphp
                                             </td>
-                                            <td class="text-center">
+                                            <td class="text-center" style="width: 135px">
                                                 @if ($value->debt_status == 1)
                                                     <span class="p-2 bg-success rounded">Thanh toán đủ</span>
                                                 @elseif ($value->debt_status == 2)
@@ -1065,7 +1065,7 @@ $index = array_search($item['label'], $numberedLabels);
     // Check box
     $(document).ready(function() {
         $('.select-all-provide_name').click(function() {
-            $('#provide_name-options input[type="checkbox"]').prop('checked', true);
+            $('#provide_name-options input[type="checkbox"]:visible').prop('checked', true);
         });
 
         // Hủy tất cả các checkbox
@@ -1074,7 +1074,7 @@ $index = array_search($item['label'], $numberedLabels);
         });
         // Chọn tất cả các checkbox
         $('.select-all-creator').click(function() {
-            $('#creator-options input[type="checkbox"]').prop('checked', true);
+            $('#creator-options input[type="checkbox"]:visible').prop('checked', true);
         });
 
         // Hủy tất cả các checkbox
@@ -1083,7 +1083,7 @@ $index = array_search($item['label'], $numberedLabels);
         });
         // Chọn tất cả các checkbox
         $('.select-all').click(function() {
-            $('#status-options input[type="checkbox"]').prop('checked', true);
+            $('#status-options input[type="checkbox"]:visible').prop('checked', true);
         });
 
         // Hủy tất cả các checkbox

@@ -8,7 +8,7 @@
     <section class="content-header">
         <div class="row m-0 mb-1">
             <a href="{{ route('insertProduct.create') }}">
-                <button type="button" class="custom-btn btn btn-primary d-flex align-items-center h-100">
+                <button type="button" class="custom-btn btn btn-primary d-flex align-items-center h-100" style="margin-right:24px">
                     <svg class="mr-1" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd"
@@ -21,7 +21,7 @@
                     <span>Tạo đơn</span>
                 </button>
             </a>
-            <button style="margin-left:24px" type="button" id="exportExcelOrder"
+            <button type="button" id="exportExcelOrder"
                 class="custom-btn btn btn-outline-primary border-primary d-flex align-items-center">
                 <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                     fill="none">
@@ -250,14 +250,24 @@ $index = array_search($item['label'], $numberedLabels);
                                         <div class="ks-cboxtags-container">
                                             <ul class="ks-cboxtags ks-cboxtags-provide_name p-0 mb-1 px-2">
                                                 @if (!empty($provides))
+                                                    @php
+                                                        $seenValues = [];
+                                                    @endphp
                                                     @foreach ($provides as $value)
-                                                        <li>
-                                                            <input type="checkbox" id="roles_active"
-                                                                {{ in_array($value->id, $provide_namearr) ? 'checked' : '' }}
-                                                                name="provide_namearr[]" value="{{ $value->id }}">
-                                                            <label for="">{{ $value->provide_name }}</label>
-                                                        </li>
-                                                    @endforeach
+                                                        @if (!in_array($value->provide_name, $seenValues))
+                                                            <li>
+                                                                <input type="checkbox" id="roles_active"
+                                                                    {{ in_array($value->id, $provide_namearr) ? 'checked' : '' }}
+                                                                    name="provide_namearr[]"
+                                                                    value="{{ $value->id }}">
+                                                                <label
+                                                                    for="">{{ $value->provide_name }}</label>
+                                                            </li>
+                                                            @php
+                                                            $seenValues[] = $value->provide_name;
+                                                        @endphp
+                                                    @endif
+                                                        @endforeach
                                                 @endif
                                             </ul>
                                         </div>
@@ -377,7 +387,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 </option>
                                                 <option value="<="
                                                     {{ request('comparison_operator') === '<=' ? 'selected' : '' }}>
-                                                    <=</option>
+                                                    <=< /option>
                                             </select>
                                             <input class="w-50 input-quantity sum-input" type="number"
                                                 oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -477,7 +487,8 @@ $index = array_search($item['label'], $numberedLabels);
                         <table id="example2" class="table table-hover">
                             <thead>
                                 <tr>
-                                    <input type="hidden" id="perPageinput" name="perPageinput" value="{{ request()->perPageinput ?? 10 }}">
+                                    <input type="hidden" id="perPageinput" name="perPageinput"
+                                        value="{{ request()->perPageinput ?? 10 }}">
                                     <input type="hidden" id="sortByInput" name="sort-by" value="id">
                                     <input type="hidden" id="sortTypeInput" name="sort-type"
                                         value="{{ $sortType }}">
@@ -696,7 +707,7 @@ $index = array_search($item['label'], $numberedLabels);
     <!-- /.content -->
 </div>
 <script>
-        $('#perPage').on('change', function(e) {
+    $('#perPage').on('change', function(e) {
         e.preventDefault();
         var perPageValue = $(this).val();
         $('#perPageinput').val(perPageValue);
@@ -911,7 +922,7 @@ $index = array_search($item['label'], $numberedLabels);
     $(document).ready(function() {
         // Chọn tất cả các checkbox
         $('.select-all-provide_name').click(function() {
-            $('#provide_name-options input[type="checkbox"]').prop('checked', true);
+            $('#provide_name-options input[type="checkbox"]:visible').prop('checked', true);
         });
 
         // Hủy tất cả các checkbox
@@ -919,7 +930,7 @@ $index = array_search($item['label'], $numberedLabels);
             $('#provide_name-options input[type="checkbox"]').prop('checked', false);
         });
         $('.select-all-creator').click(function() {
-            $('#creator-options input[type="checkbox"]').prop('checked', true);
+            $('#creator-options input[type="checkbox"]:visible').prop('checked', true);
         });
 
         // Hủy tất cả các checkbox
@@ -930,7 +941,7 @@ $index = array_search($item['label'], $numberedLabels);
     $(document).ready(function() {
         // Chọn tất cả các checkbox
         $('.select-all').click(function() {
-            $('#status-options input[type="checkbox"]').prop('checked', true);
+            $('#status-options input[type="checkbox"]:visible').prop('checked', true);
         });
 
         // Hủy tất cả các checkbox
@@ -1094,6 +1105,7 @@ $index = array_search($item['label'], $numberedLabels);
 
 
     var dropdownItems = $('[id^="dropdown_item"]');
+
     function checkActiveItems() {
         var activeItemCount = dropdownItems.filter('.dropdown-item-active').length;
         return activeItemCount;
@@ -1119,7 +1131,7 @@ $index = array_search($item['label'], $numberedLabels);
             if (checkActiveItems() > 0) {
                 $('#expandall').hide();
                 $('#collapseall').show();
-              
+
             } else {
                 $('#expandall').show();
                 $('#collapseall').hide();

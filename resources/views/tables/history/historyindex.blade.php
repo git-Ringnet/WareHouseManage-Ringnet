@@ -5,29 +5,29 @@
     <section class="content-header">
         <div class="container-fluided">
             <div class="d-flex mb-1">
-                    <div class="class">
-                        <button type="button" id="EXPORT_HISTORY"
-                            class="custom-btn btn btn-outline-primary d-flex align-items-center">
-                            <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none">
-                                <path
-                                    d="M15.0003 7.80054H16.5001C16.8979 7.80054 17.2794 7.95857 17.5607 8.23984C17.842 8.52112 18 8.9026 18 9.30039V17.1006C18 17.4983 17.842 17.8798 17.5607 18.1611C17.2794 18.4424 16.8979 18.6004 16.5001 18.6004H7.49986C7.10207 18.6004 6.72058 18.4424 6.4393 18.1611C6.15802 17.8798 6 17.4983 6 17.1006V9.30039C6 8.9026 6.15802 8.52112 6.4393 8.23984C6.72058 7.95857 7.10207 7.80054 7.49986 7.80054H8.99972"
-                                    stroke="#0095F6" stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M8.99976 11.3997L11.9995 14.3994L15.0003 11.3997" stroke="#0095F6"
-                                    stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M12.0006 3V13.7999" stroke="#0095F6" stroke-linecap="round"
-                                    stroke-linejoin="round" />
-                            </svg>
-                            <span>Xuất Excel</span>
-                        </button>
-                    </div>
+                <div class="class">
+                    <button type="button" id="EXPORT_HISTORY"
+                        class="custom-btn btn btn-outline-primary d-flex align-items-center">
+                        <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                            viewBox="0 0 24 24" fill="none">
+                            <path
+                                d="M15.0003 7.80054H16.5001C16.8979 7.80054 17.2794 7.95857 17.5607 8.23984C17.842 8.52112 18 8.9026 18 9.30039V17.1006C18 17.4983 17.842 17.8798 17.5607 18.1611C17.2794 18.4424 16.8979 18.6004 16.5001 18.6004H7.49986C7.10207 18.6004 6.72058 18.4424 6.4393 18.1611C6.15802 17.8798 6 17.4983 6 17.1006V9.30039C6 8.9026 6.15802 8.52112 6.4393 8.23984C6.72058 7.95857 7.10207 7.80054 7.49986 7.80054H8.99972"
+                                stroke="#0095F6" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M8.99976 11.3997L11.9995 14.3994L15.0003 11.3997" stroke="#0095F6"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M12.0006 3V13.7999" stroke="#0095F6" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                        <span>Xuất Excel</span>
+                    </button>
+                </div>
             </div>
             <div class="row m-auto filter pt-2">
                 <form class="w-100" action="" method="get" id='search-filter'>
                     <div class="row mr-0">
                         <div class="col-5">
-                            <input type="text" placeholder="Tên sản phẩm, hóa đơn vào, ra, khách hàng, nhà cung cấp" name="keywords"
-                                class="pr-4 input-search w-100 form-control searchkeyword"
+                            <input type="text" placeholder="Tên sản phẩm, hóa đơn vào, ra, khách hàng, nhà cung cấp"
+                                name="keywords" class="pr-4 input-search w-100 form-control searchkeyword"
                                 value="{{ request()->keywords }}">
                             <span id="search-icon" class="search-icon"><i class="fas fa-search"></i></span>
                         </div>
@@ -368,15 +368,23 @@ $index = array_search($item['label'], $numberedLabels);
                                             <div class="ks-cboxtags-container">
                                                 <ul class="ks-cboxtags ks-cboxtags-provide_name p-0 mb-1 px-2">
                                                     @if (!empty($provides))
+                                                        @php
+                                                            $seenValues = [];
+                                                        @endphp
                                                         @foreach ($provides as $value)
-                                                            <li>
-                                                                <input type="checkbox" id="roles_active"
-                                                                    {{ in_array($value->id, $provide_namearr) ? 'checked' : '' }}
-                                                                    name="provide_namearr[]"
-                                                                    value="{{ $value->id }}">
-                                                                <label
-                                                                    for="">{{ $value->provide_name }}</label>
-                                                            </li>
+                                                            @if (!in_array($value->provide_name, $seenValues))
+                                                                <li>
+                                                                    <input type="checkbox" id="roles_active"
+                                                                        {{ in_array($value->id, $provide_namearr) ? 'checked' : '' }}
+                                                                        name="provide_namearr[]"
+                                                                        value="{{ $value->id }}">
+                                                                    <label
+                                                                        for="">{{ $value->provide_name }}</label>
+                                                                </li>
+                                                                @php
+                                                                    $seenValues[] = $value->provide_name;
+                                                                @endphp
+                                                            @endif
                                                         @endforeach
                                                     @endif
                                                 </ul>
@@ -582,7 +590,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('product_qty_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity product_qty-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -612,7 +620,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('export_qty_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity export_qty-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -691,7 +699,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('price_import_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity price_import-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -721,7 +729,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('import_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity import-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -751,7 +759,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('sale_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity sale-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -781,7 +789,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('total_sale_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity total-sale-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -811,7 +819,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('total_difference_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity total_difference-input"
                                                     type="text"
@@ -842,7 +850,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('tranport_fee_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity tranport_fee-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -984,7 +992,8 @@ $index = array_search($item['label'], $numberedLabels);
                             <table id="example2" class="table table-hover">
                                 <thead>
                                     {{-- SortType --}}
-                                    <input type="hidden" id="perPageinput" name="perPageinput" value="{{ request()->perPageinput ?? 10 }}">
+                                    <input type="hidden" id="perPageinput" name="perPageinput"
+                                        value="{{ request()->perPageinput ?? 10 }}">
                                     <input type="hidden" id="sortByInput" name="sort-by" value="history.id">
                                     <input type="hidden" id="sortTypeInput" name="sort-type">
                                     <tr>
@@ -1272,25 +1281,27 @@ $index = array_search($item['label'], $numberedLabels);
                                 </tbody>
                             </table>
                         </div>
+
                     </div>
-                    <div class="paginator mt-4 d-flex justify-content-start">
-                        <span class="text-perpage">
-                            Số hàng mỗi trang:
-                            <select name="perPage" id="perPage">
-                                <option value="5" {{ $perPage == 5 ? 'selected' : '' }}>5</option>
-                                <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
-                                <option value="25" {{ $perPage == 25 ? 'selected' : '' }}>25</option>
-                                <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
-                            </select>
-                        </span>
-                    </div>
-                    <div class="paginator mt-4 d-flex justify-content-end">
-                        @if (Auth::user()->can('isAdmin'))
-                            {{ $history->appends(request()->except('page'))->links() }}
-                        @else
-                            {{ $history->appends(request()->except('page'))->links() }}
-                        @endif
-                    </div>
+                        <div class="paginator mt-4 d-flex justify-content-start">
+                            <span class="text-perpage">
+                                Số hàng mỗi trang:
+                                <select name="perPage" id="perPage">
+                                    <option value="5" {{ $perPage == 5 ? 'selected' : '' }}>5</option>
+                                    <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
+                                    <option value="25" {{ $perPage == 25 ? 'selected' : '' }}>25</option>
+                                    <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
+                                </select>
+                            </span>
+                        </div>
+                        <div class="paginator mt-4 d-flex justify-content-end">
+                            @if (Auth::user()->can('isAdmin'))
+                                {{ $history->appends(request()->except('page'))->links() }}
+                            @else
+                                {{ $history->appends(request()->except('page'))->links() }}
+                            @endif
+                        </div>
+              
                 </div>
             </div>
 
@@ -1301,7 +1312,7 @@ $index = array_search($item['label'], $numberedLabels);
 </div>
 <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
 <script>
-        $('#perPage').on('change', function(e) {
+    $('#perPage').on('change', function(e) {
         e.preventDefault();
         var perPageValue = $(this).val();
         $('#perPageinput').val(perPageValue);
@@ -1384,7 +1395,7 @@ $index = array_search($item['label'], $numberedLabels);
             checkbox.prop('checked', !checkbox.prop('checked')); // Đảo ngược trạng thái checked
         }
     });
-    
+
     $('#btn-update_at').click(function(event) {
         event.preventDefault();
         $('.btn-filter').prop('disabled', true);
@@ -1611,7 +1622,7 @@ $index = array_search($item['label'], $numberedLabels);
     // Check box
     $(document).ready(function() {
         $('.select-all-provide_name').click(function() {
-            $('#provide_name-options input[type="checkbox"]').prop('checked', true);
+            $('#provide_name-options input[type="checkbox"]:visible').prop('checked', true);
         });
 
         // Hủy tất cả các checkbox
@@ -1620,7 +1631,7 @@ $index = array_search($item['label'], $numberedLabels);
         });
         // Chọn tất cả các checkbox
         $('.select-all-creator').click(function() {
-            $('#creator-options input[type="checkbox"]').prop('checked', true);
+            $('#creator-options input[type="checkbox"]:visible').prop('checked', true);
         });
 
         // Hủy tất cả các checkbox
@@ -1629,7 +1640,7 @@ $index = array_search($item['label'], $numberedLabels);
         });
         // Chọn tất cả các checkbox
         $('.select-all').click(function() {
-            $('#status-options input[type="checkbox"]').prop('checked', true);
+            $('#status-options input[type="checkbox"]:visible').prop('checked', true);
         });
 
         // Hủy tất cả các checkbox
@@ -1642,7 +1653,7 @@ $index = array_search($item['label'], $numberedLabels);
         });
         // Chọn tất cả các checkbox
         $('.select-all-guest').click(function() {
-            $('#guest-options input[type="checkbox"]').prop('checked', true);
+            $('#guest-options input[type="checkbox"]:visible').prop('checked', true);
         });
 
         // Hủy tất cả các checkbox
@@ -1650,7 +1661,7 @@ $index = array_search($item['label'], $numberedLabels);
             $('#guest-options input[type="checkbox"]').prop('checked', false);
         });
         $('.select-all-unit').click(function() {
-            $('#unit-options input[type="checkbox"]').prop('checked', true);
+            $('#unit-options input[type="checkbox"]:visible').prop('checked', true);
         });
 
         // Hủy tất cả các checkbox
@@ -1659,7 +1670,7 @@ $index = array_search($item['label'], $numberedLabels);
         });
 
         $('.select-all-status-export').click(function() {
-            $('#status_export-options input[type="checkbox"]').prop('checked', true);
+            $('#status_export-options input[type="checkbox"]:visible').prop('checked', true);
         });
 
         // Hủy tất cả các checkbox
@@ -2015,6 +2026,7 @@ $index = array_search($item['label'], $numberedLabels);
         }
 
     }
+
     function filterGuest() {
         var input = $("#myInput-guest");
         var filter = input.val().toUpperCase();
@@ -2031,7 +2043,7 @@ $index = array_search($item['label'], $numberedLabels);
     }
 
 
-    $(document).on('click', '#EXPORT_HISTORY', function(e){
+    $(document).on('click', '#EXPORT_HISTORY', function(e) {
         e.preventDefault();
         $.ajax({
             url: "{{ route('exportHistory') }}",

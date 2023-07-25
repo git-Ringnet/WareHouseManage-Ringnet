@@ -114,8 +114,8 @@ class ReportController extends Controller
         $allRoles = new Roles();
         $allRoles = $allRoles->getAll();
         $Tableexports = $this->exports->reportExports($filters, $nhanvien, $roles, $sortBy, $sortType);
-        $perPage = $request->input('perPageinput',10); 
-        return view('tables.report.report-export', compact('perPage','title', 'debtsSale', 'allRoles', 'string', 'Tableexports', 'sortType', 'exports', 'sumExport', 'formattedLoinhuan', 'CongNo'));
+        $perPage = $request->input('perPageinput', 10);
+        return view('tables.report.report-export', compact('perPage', 'title', 'debtsSale', 'allRoles', 'string', 'Tableexports', 'sortType', 'exports', 'sumExport', 'formattedLoinhuan', 'CongNo'));
     }
 
 
@@ -194,8 +194,8 @@ class ReportController extends Controller
         $allRoles = new Roles();
         $allRoles = $allRoles->getAll();
         // dd($tableorders);
-        $perPage = $request->input('perPageinput',10); 
-        return view('tables.report.report-import', compact('perPage','title', 'allRoles', 'debtsSale', 'string', 'tableorders', 'sortType', 'orders', 'sumTotalOrders', 'sumDebtImportVAT', 'tableorders', 'exports', 'sumExport', 'formattedLoinhuan', 'CongNo'));
+        $perPage = $request->input('perPageinput', 10);
+        return view('tables.report.report-import', compact('perPage', 'title', 'allRoles', 'debtsSale', 'string', 'tableorders', 'sortType', 'orders', 'sumTotalOrders', 'sumDebtImportVAT', 'tableorders', 'exports', 'sumExport', 'formattedLoinhuan', 'CongNo'));
     }
     public function timeImport(Request $request)
     {
@@ -224,7 +224,16 @@ class ReportController extends Controller
                     ->selectRaw('SUM(total_import)');
             }, 'countDebtImport')->first();
             $minCreatedAt = Carbon::parse($count->minCreatedAt);
+            $filters = [];
+            $filters[] = $minCreatedAt;
+            $filters[] = Carbon::today();
+            $tableorders = $this->orders->dataReportAjax($filters);
+            $test1 = [];
+            foreach ($tableorders as $item) {
+                $test1[] = $item;
+            }
             return [
+                'test' => $test1,
                 'countID' => $count->countID,
                 'sumTotal' => $count->sumTotal,
                 'countDebtImport' => $countDebtImport->countDebtImport,
@@ -253,7 +262,16 @@ class ReportController extends Controller
                     ->whereYear('created_at', $today->year)
                     ->selectRaw('SUM(total_import)');
             }, 'countDebtImport')->first();
+            $filters = [];
+            $filters[] = $today->startOfMonth();
+            $filters[] = Carbon::today();
+            $tableorders = $this->orders->dataReportAjax($filters);
+            $test1 = [];
+            foreach ($tableorders as $item) {
+                $test1[] = $item;
+            }
             return [
+                'test' => $test1,
                 'countID' => $count->countID,
                 'sumTotal' => $count->sumTotal,
                 'countDebtImport' => $countDebtImport->countDebtImport,
@@ -284,6 +302,14 @@ class ReportController extends Controller
                         ->whereYear('created_at', $lastMonth->year)
                         ->selectRaw('SUM(total_import)');
                 },  'countDebtImport')->first();
+                $filters = [];
+                $filters[] = Carbon::parse($lastMonth->startOfMonth());
+                $filters[] = Carbon::parse($lastMonth->endOfMonth());
+                $tableorders = $this->orders->dataReportAjax($filters);
+                $test1 = [];
+                foreach ($tableorders as $item) {
+                    $test1[] = $item;
+                }
             } else {
                 $lastMonth = $today->subMonthNoOverflow();
                 $firstDayOfMonth = $today->startOfMonth()->format('d-m-Y');
@@ -306,8 +332,17 @@ class ReportController extends Controller
                         ->whereYear('created_at', $lastMonth->year)
                         ->selectRaw('SUM(total_import)');
                 },  'countDebtImport')->first();
+                $filters = [];
+                $filters[] = Carbon::parse($lastMonth->startOfMonth());
+                $filters[] = Carbon::parse($lastMonth->endOfMonth());
+                $tableorders = $this->orders->dataReportAjax($filters);
+                $test1 = [];
+                foreach ($tableorders as $item) {
+                    $test1[] = $item;
+                }
             }
             return [
+                'test' => $test1,
                 'countID' => $count->countID,
                 'sumTotal' => $count->sumTotal,
                 'countDebtImport' => $countDebtImport->countDebtImport,
@@ -318,7 +353,7 @@ class ReportController extends Controller
             if ($today->month == 1) {
                 $lastMonth = $today->subMonth(3);
                 $firstDayOfMonth = $lastMonth->startOfMonth()->format('d-m-Y');
-                $lastDayOfMonth = $today->endOfMonth()->addMonths(2)->format('d-m-Y');
+                $lastDayOfMonth = $lastMonth->endOfMonth()->addMonths(2)->format('d-m-Y');
                 $count = Orders::selectSub(function ($query) use ($lastMonth) {
                     $query->from('Orders')->where('orders.order_status', '=', 1)
                         ->whereMonth('created_at', '>=', $lastMonth->month)
@@ -340,10 +375,18 @@ class ReportController extends Controller
                         ->whereYear('created_at', $lastMonth->year)
                         ->selectRaw('SUM(total_import)');
                 },  'countDebtImport')->first();
+                $filters = [];
+                $filters[] = Carbon::parse($lastMonth->startOfMonth());
+                $filters[] = Carbon::parse($lastMonth->endOfMonth()->addMonths(2));
+                $tableorders = $this->orders->dataReportAjax($filters);
+                $test1 = [];
+                foreach ($tableorders as $item) {
+                    $test1[] = $item;
+                }
             } else {
                 $lastMonth = $today->subMonthNoOverflow(3);
                 $firstDayOfMonth = $lastMonth->startOfMonth()->format('d-m-Y');
-                $lastDayOfMonth = $today->endOfMonth()->addMonths(2)->format('d-m-Y');
+                $lastDayOfMonth = $lastMonth->endOfMonth()->addMonths(2)->format('d-m-Y');
                 $count = Orders::selectSub(function ($query) use ($lastMonth) {
                     $query->from('Orders')->where('orders.order_status', '=', 1)
                         ->whereMonth('created_at', '>=', $lastMonth->month)
@@ -365,8 +408,17 @@ class ReportController extends Controller
                         ->whereYear('created_at', $lastMonth->year)
                         ->selectRaw('SUM(total_import)');
                 },  'countDebtImport')->first();
+                $filters = [];
+                $filters[] = Carbon::parse($lastMonth->startOfMonth());
+                $filters[] = Carbon::parse($lastMonth->endOfMonth()->addMonths(2));
+                $tableorders = $this->orders->dataReportAjax($filters);
+                $test1 = [];
+                foreach ($tableorders as $item) {
+                    $test1[] = $item;
+                }
             }
             return [
+                'test' => $test1,
                 'countID' => $count->countID,
                 'sumTotal' => $count->sumTotal,
                 'countDebtImport' => $countDebtImport->countDebtImport,
@@ -394,8 +446,17 @@ class ReportController extends Controller
                     ->where('created_at', '<=', $date_end)
                     ->selectRaw('SUM(total_import)');
             },  'countDebtImport')->first();
+            $filters = [];
+            $filters[] = Carbon::parse($data['date_start']);
+            $filters[] = Carbon::parse($data['date_end']);
+            $tableorders = $this->orders->dataReportAjax($filters);
+            $test1 = [];
+            foreach ($tableorders as $item) {
+                $test1[] = $item;
+            }
             array_push($data1, $count);
             array_push($data1, $countDebtImport);
+            array_push($data1, $test1);
             return $data1;
         }
     }
@@ -428,7 +489,16 @@ class ReportController extends Controller
             }, 'countProfit')
                 ->first();
             $minCreatedAt = Carbon::parse($count->minCreatedAt);
+            $filters = [];
+            $filters[] = $minCreatedAt;
+            $filters[] = Carbon::today();
+            $Tableexports = $this->exports->dataReportAjax($filters);
+            $test1 = [];
+            foreach ($Tableexports as $item) {
+                $test1[] = $item;
+            }
             return [
+                'test' => $test1,
                 'countExport' => $count->countExport,
                 'sumExport' => $count->sumExport,
                 'countDebt' => $countDebt->countDebt,
@@ -466,7 +536,16 @@ class ReportController extends Controller
                     ->selectRaw('sum(total_difference)');
             }, 'countProfit')
                 ->first();
+            $filters = [];
+            $filters[] = $today->startOfMonth();
+            $filters[] = Carbon::today();
+            $Tableexports = $this->exports->dataReportAjax($filters);
+            $test1 = [];
+            foreach ($Tableexports as $item) {
+                $test1[] = $item;
+            }
             return [
+                'test' => $test1,
                 'countDebt' => $countDebt->countDebt,
                 'countProfit' => $countProfit->countProfit,
                 'countExport' => $count->countExport,
@@ -505,6 +584,14 @@ class ReportController extends Controller
                         ->selectRaw('sum(total_difference)');
                 }, 'countProfit')
                     ->first();
+                $filters = [];
+                $filters[] = Carbon::parse($lastMonth->startOfMonth());
+                $filters[] = Carbon::parse($lastMonth->endOfMonth());
+                $Tableexports = $this->exports->dataReportAjax($filters);
+                $test1 = [];
+                foreach ($Tableexports as $item) {
+                    $test1[] = $item;
+                }
             } else {
                 $lastMonth = $today->subMonthNoOverflow();
                 $firstDayOfMonth = $today->startOfMonth()->format('d-m-Y');
@@ -535,8 +622,17 @@ class ReportController extends Controller
                         ->selectRaw('sum(total_difference)');
                 }, 'countProfit')
                     ->first();
+                $filters = [];
+                $filters[] = Carbon::parse($lastMonth->startOfMonth());
+                $filters[] = Carbon::parse($lastMonth->endOfMonth());
+                $Tableexports = $this->exports->dataReportAjax($filters);
+                $test1 = [];
+                foreach ($Tableexports as $item) {
+                    $test1[] = $item;
+                }
             }
             return [
+                'test'=>$test1,
                 'countDebt' => $countDebt->countDebt,
                 'countProfit' => $countProfit->countProfit,
                 'countExport' => $count->countExport,
@@ -548,7 +644,7 @@ class ReportController extends Controller
             if ($today->month == 1) {
                 $lastMonth = $today->subMonth(3);
                 $firstDayOfMonth = $lastMonth->startOfMonth()->format('d-m-Y');
-                $lastDayOfMonth = $today->endOfMonth()->addMonths(2)->format('d-m-Y');
+                $lastDayOfMonth = $lastMonth->endOfMonth()->addMonths(2)->format('d-m-Y');
                 $count = Exports::selectSub(function ($query) use ($lastMonth) {
                     $query->from('exports')->where('exports.export_status', '=', 2)
                         ->whereMonth('created_at', '>=', $lastMonth->month)
@@ -579,10 +675,18 @@ class ReportController extends Controller
                         ->selectRaw('sum(total_difference)');
                 }, 'countProfit')
                     ->first();
+                $filters = [];
+                $filters[] = Carbon::parse($lastMonth->startOfMonth());
+                $filters[] = Carbon::parse($lastMonth->endOfMonth()->addMonths(2));
+                $Tableexports = $this->exports->dataReportAjax($filters);
+                $test1 = [];
+                foreach ($Tableexports as $item) {
+                    $test1[] = $item;
+                }
             } else {
                 $lastMonth = $today->subMonthNoOverflow(3);
                 $firstDayOfMonth = $lastMonth->startOfMonth()->format('d-m-Y');
-                $lastDayOfMonth = $today->endOfMonth()->addMonths(2)->format('d-m-Y');
+                $lastDayOfMonth = $lastMonth->endOfMonth()->addMonths(2)->format('d-m-Y');
                 $count = Exports::selectSub(function ($query) use ($lastMonth) {
                     $query->from('exports')->where('exports.export_status', '=', 2)
                         ->whereMonth('created_at', '>=', $lastMonth->month)
@@ -612,8 +716,17 @@ class ReportController extends Controller
                         ->whereYear('created_at', $lastMonth->year)
                         ->selectRaw('sum(total_difference)');
                 }, 'countProfit')->first();
+                $filters = [];
+                $filters[] = Carbon::parse($lastMonth->startOfMonth());
+                $filters[] = Carbon::parse($lastMonth->endOfMonth()->addMonths(2));
+                $Tableexports = $this->exports->dataReportAjax($filters);
+                $test1 = [];
+                foreach ($Tableexports as $item) {
+                    $test1[] = $item;
+                }
             }
             return [
+                'test' => $test1,
                 'countDebt' => $countDebt->countDebt,
                 'countProfit' => $countProfit->countProfit,
                 'countExport' => $count->countExport,
@@ -650,7 +763,16 @@ class ReportController extends Controller
                     ->where('created_at', '<=', $date_end)
                     ->selectRaw('SUM(total_sales)');
             },  'countDebt')->first();
+            $filters = [];
+            $filters[] = Carbon::parse($data['date_start']);
+            $filters[] = Carbon::parse($data['date_end']);
+            $Tableexports = $this->exports->dataReportAjax($filters);
+            $test1 = [];
+            foreach ($Tableexports as $item) {
+                $test1[] = $item;
+            }
             return [
+                'test' => $test1,
                 'countDebt' => $countDebt->countDebt,
                 'countProfit' => $countProfit->countProfit,
                 'countExport' => $count->countExport,

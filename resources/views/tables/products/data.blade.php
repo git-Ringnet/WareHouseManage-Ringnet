@@ -28,7 +28,7 @@
                 <form class="w-100" action="" method="get" id='search-filter'>
                     <div class="row mr-0">
                         <div class="col-5">
-                            <input type="text" placeholder="Tìm kiếm theo mã sản phẩm hoặc tên sản phẩm"
+                            <input type="text" placeholder="Tìm kiếm tên sản phẩm hoặc nhà cung cấp"
                                 name="keywords" class="pr-4 input-search w-100 form-control searchkeyword"
                                 value="{{ request()->keywords }}">
                             <span id="search-icon" class="search-icon"><i class="fas fa-search"></i></span>
@@ -325,7 +325,7 @@ $index = array_search($item['label'], $numberedLabels);
                                         </div>
                                     </div>
                                     {{-- filter Nhà cung cấp --}}
-                                    <div class="block-options" id="category-options" style="display:none">
+                                    <div class="block-optionsss" id="category-options" style="display:none">
                                         <div class="wrap w-100">
                                             <div class="heading-title title-wrap">
                                                 <h5>Nhà cung cấp</h5>
@@ -491,7 +491,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('comparison_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 quantity-input input-so" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -521,7 +521,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('trade_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 trade-input input-so" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -551,7 +551,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('avg_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 avg-input" type="text" name="avg"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -580,7 +580,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('price_inven_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 price_inven-input input-so" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -650,7 +650,8 @@ $index = array_search($item['label'], $numberedLabels);
                         <div class="card-body">
                             <table id="example2" class="table table-hover">
                                 <thead>
-                                    <input type="hidden" id="perPageinput" name="perPageinput" value="{{ request()->perPageinput ?? 10 }}">
+                                    <input type="hidden" id="perPageinput" name="perPageinput"
+                                        value="{{ request()->perPageinput ?? 10 }}">
                                     <input type="hidden" id="sortByInput" name="sort-by" value="id">
                                     <input type="hidden" id="sortTypeInput" name="sort-type" value="">
                                     <tr>
@@ -842,7 +843,7 @@ $index = array_search($item['label'], $numberedLabels);
 </div>
 <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
 <script>
-        $('#perPage').on('change', function(e) {
+    $('#perPage').on('change', function(e) {
         e.preventDefault();
         var perPageValue = $(this).val();
         $('#perPageinput').val(perPageValue);
@@ -905,6 +906,20 @@ $index = array_search($item['label'], $numberedLabels);
         $('#checkall').prop('checked', false);
         updateMultipleActionVisibility()
     })
+    function filterCategory() {
+        var input = $("#myInput-category");
+        var filter = input.val().toUpperCase();
+        var buttons = $(".ks-cboxtags-category li");
+
+        buttons.each(function() {
+            var text = $(this).text();
+            if (text.toUpperCase().indexOf(filter) > -1) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    }
 
     // Hiển thị form multiple action
     function updateMultipleActionVisibility() {
@@ -1105,21 +1120,8 @@ $index = array_search($item['label'], $numberedLabels);
         });
     }
 
-    function filterCategory() {
-        var input = $("#myInput-category");
-        var filter = input.val().toUpperCase();
-        var buttons = $(".ks-cboxtags-category li");
-
-        buttons.each(function() {
-            var text = $(this).text();
-            if (text.toUpperCase().indexOf(filter) > -1) {
-                $(this).show();
-            } else {
-                $(this).hide();
-            }
-        });
-    }
-
+    $(document).ready(function() {
+    // Chức năng filterStatus
     function filterStatus() {
         var input = $("#myInput-status");
         var filter = input.val().toUpperCase();
@@ -1135,6 +1137,19 @@ $index = array_search($item['label'], $numberedLabels);
         });
     }
 
+        // Gọi hàm filterStatus khi nhập vào input
+        $("#myInput-status").on("keyup", filterStatus);
+
+        // Chọn tất cả các checkbox
+        $('.select-all').click(function() {
+            $(".ks-cboxtags-status input[type='checkbox']:visible").prop('checked', true);
+        });
+
+        // Hủy tất cả các checkbox
+        $('.deselect-all').click(function() {
+            $(".ks-cboxtags-status input[type='checkbox']:visible").prop('checked', false);
+        });
+    });
     function filterTax() {
         var input = $("#myInput-tax");
         var filter = input.val().toUpperCase();
@@ -1207,7 +1222,7 @@ $index = array_search($item['label'], $numberedLabels);
     $(document).ready(function() {
         // Chọn tất cả các checkbox
         $('.select-all-category').click(function() {
-            $('#category-options input[type="checkbox"]').prop('checked', true);
+        $('#category-options input[type="checkbox"]:visible').prop('checked', true);
         });
 
         // Hủy tất cả các checkbox
@@ -1218,7 +1233,7 @@ $index = array_search($item['label'], $numberedLabels);
     $(document).ready(function() {
         // Chọn tất cả các checkbox
         $('.select-all').click(function() {
-            $('#status-options input[type="checkbox"]').prop('checked', true);
+            $('#status-options input[type="checkbox"]:visible').prop('checked', true);
         });
 
         // Hủy tất cả các checkbox
@@ -1229,7 +1244,7 @@ $index = array_search($item['label'], $numberedLabels);
     $(document).ready(function() {
         // Chọn tất cả các checkbox
         $('.select-all-trademark').click(function() {
-            $('#trademark-options input[type="checkbox"]').prop('checked', true);
+            $('#trademark-options input[type="checkbox"]:visible').prop('checked', true);
         });
 
         // Hủy tất cả các checkbox
@@ -1240,7 +1255,7 @@ $index = array_search($item['label'], $numberedLabels);
     $(document).ready(function() {
         // Chọn tất cả các checkbox
         $('.select-all-tax').click(function() {
-            $('#tax-options input[type="checkbox"]').prop('checked', true);
+            $('#tax-options input[type="checkbox"]:visible').prop('checked', true);
         });
 
         // Hủy tất cả các checkbox

@@ -811,12 +811,12 @@ $index = array_search($item['label'], $numberedLabels);
                                             <td>{{ $value->nhanvien }}</td>
                                             <td>{{ $value->email }}</td>
                                             <td class="text-center">{{ $value->vaitro }}</td>
-                                            <td class="text-right">{{ $value->donxuat }}</td>
-                                            <td class="text-right">{{ number_format($value->tongtienxuat) }}
+                                            <td class="text-right" id="soluong{{$value->userid}}">{{ $value->donxuat }}</td>
+                                            <td class="text-right" id="tongxuat{{$value->userid}}">{{ number_format($value->tongtienxuat) }}
                                             </td>
-                                            <td class="text-right">{{ number_format($value->tongloinhuan) }}
+                                            <td class="text-right" id="loinhuan{{$value->userid}}">{{ number_format($value->tongloinhuan) }}
                                             </td>
-                                            <td class="text-right">{{ number_format($value->tongcongno) }}
+                                            <td class="text-right" id="congno{{$value->userid}}">{{ number_format($value->tongcongno) }}
                                             </td>
                                         </tr>
                                     @endforeach
@@ -988,17 +988,17 @@ $index = array_search($item['label'], $numberedLabels);
             },
             success: function(data) {
                 $('#export_id').text(data.countExport);
-                if (data.sumExport > 0) {
+                if (data.sumExport != null) {
                     $('#export_total').text(formatCurrency(data.sumExport));
                 } else {
                     $('#export_total').text(0);
                 }
-                if (data.countDebt > 0) {
+                if (data.countDebt != null) {
                     $('#countDebt').text(formatCurrency(data.countDebt));
                 } else {
                     $('#countDebt').text(0);
                 }
-                if (data.countProfit > 0) {
+                if (data.countProfit != null) {
                     $('#countProfit').text(formatCurrency(data.countProfit));
                 } else {
                     $('#countProfit').text(0);
@@ -1009,6 +1009,13 @@ $index = array_search($item['label'], $numberedLabels);
                     $(stId).text(data.start_date)
                     $(edId).text(data.end_date)
                 }
+                data.test.forEach(function(item, index) {
+                    $('#soluong' + (index + 1)).text(item.donxuat);
+                    $('#tongxuat' + (index + 1)).text(item.tongtienxuat);
+                    $('#loinhuan' + (index + 1)).text(item.tongloinhuan);
+                    $('#congno' + (index + 1)).text(item.tongcongno);
+                });
+                console.log(data);
             }
         })
     })
@@ -1026,21 +1033,27 @@ $index = array_search($item['label'], $numberedLabels);
             },
             success: function(data) {
                 $('#export_id').text(data.countExport);
-                if (data.sumExport > 0) {
+                if (data.sumExport != null) {
                     $('#export_total').text(formatCurrency(data.sumExport));
                 } else {
                     $('#export_total').text(0);
                 }
-                if (data.countDebt > 0) {
+                if (data.countDebt != null) {
                     $('#countDebt').text(formatCurrency(data.countDebt));
                 } else {
                     $('#countDebt').text(0);
                 }
-                if (data.countProfit > 0) {
+                if (data.countProfit != null) {
                     $('#countProfit').text(formatCurrency(data.countProfit));
                 } else {
                     $('#countProfit').text(0);
                 }
+                data.test.forEach(function(item, index) {
+                    $('#soluong' + (index + 1)).text(item.donxuat);
+                    $('#tongxuat' + (index + 1)).text(item.tongtienxuat);
+                    $('#loinhuan' + (index + 1)).text(item.tongloinhuan);
+                    $('#congno' + (index + 1)).text(item.tongcongno);
+                });
             }
         })
     })
@@ -1108,7 +1121,7 @@ $index = array_search($item['label'], $numberedLabels);
     $(document).ready(function() {
         // Chọn tất cả các checkbox
         $('.select-all-roles').click(function() {
-            $('#role-options input[type="checkbox"]').prop('checked', true);
+            $('#role-options input[type="checkbox"]:visible').prop('checked', true);
         });
 
         // Hủy tất cả các checkbox
@@ -1235,7 +1248,7 @@ $index = array_search($item['label'], $numberedLabels);
     $(document).ready(function() {
         // Chọn tất cả các checkbox
         $('.select-all-creator').click(function() {
-            $('#creator-options input[type="checkbox"]').prop('checked', true);
+            $('#creator-options input[type="checkbox"]:visible').prop('checked', true);
         });
 
         // Hủy tất cả các checkbox
@@ -1246,7 +1259,7 @@ $index = array_search($item['label'], $numberedLabels);
     $(document).ready(function() {
         // Chọn tất cả các checkbox
         $('.select-all').click(function() {
-            $('#status-options input[type="checkbox"]').prop('checked', true);
+            $('#status-options input[type="checkbox"]:visible').prop('checked', true);
         });
 
         // Hủy tất cả các checkbox
@@ -1255,7 +1268,7 @@ $index = array_search($item['label'], $numberedLabels);
         });
         // Chọn tất cả các checkbox
         $('.select-all-guest').click(function() {
-            $('#guest-options input[type="checkbox"]').prop('checked', true);
+            $('#guest-options input[type="checkbox"]:visible').prop('checked', true);
         });
 
         // Hủy tất cả các checkbox

@@ -14,7 +14,7 @@ class Orders extends Model
     ];
     protected $table = 'orders';
 
-    public function getAllOrders($filter = [],$perPage, $status = [], $provide_name = [], $name = [], $date = [], $keywords = null, $orderBy = null, $orderType = null)
+    public function getAllOrders($filter = [], $perPage, $status = [], $provide_name = [], $name = [], $date = [], $keywords = null, $orderBy = null, $orderType = null)
     {
         $productIds = array();
         $order = Orders::orderByDesc('id')->get();
@@ -130,7 +130,7 @@ class Orders extends Model
         $tableorders = Orders::leftJoin('users', 'users.id', 'orders.users_id')
             ->leftJoin('roles', 'users.roleid', 'roles.id')
             ->leftJoin('debts', 'debts.export_id', 'orders.id')
-            ->select('users.name as nhanvien', 'roles.name as vaitro', 'users.email as email')
+            ->select('users.name as nhanvien', 'roles.name as vaitro', 'users.email as email', 'users.id as userid')
             ->where('orders.order_status', 1)
             ->selectSub(function ($query) {
                 $query->from('Orders')
@@ -168,10 +168,54 @@ class Orders extends Model
             $tableorders = $tableorders->orderBy('orders.id', $orderType);
         }
         $tableorders = $tableorders->get();
-
         return $tableorders;
     }
-    public function getStatus() {
-        return $this->hasOne(DebtImport::class,'import_id','id');
+    public function dataReportAjax($filter = [])
+    {
+        $tableorders = Orders::leftJoin('users', 'users.id', 'orders.users_id')
+            ->leftJoin('roles', 'users.roleid', 'roles.id')
+            ->leftJoin('debts', 'debts.export_id', 'orders.id')
+            ->select('users.name as nhanvien', 'roles.name as vaitro', 'users.email as email', 'users.id as userid')
+            ->where('orders.order_status', 1)
+            ->selectSub(function ($query) use ($filter) {
+                $query->from('Orders')
+                    ->where('orders.order_status', 1)
+                    ->whereColumn('orders.users_id', 'users.id')
+                    ->when(!empty($filter), function ($query) use ($filter) {
+                        $startDate = $filter[0];
+                        $endDate = $filter[1];
+                        return $query->whereBetween('created_at',[$startDate, $endDate]);
+                    })
+                    ->selectRaw('COUNT(id)');
+            }, 'product_qty_count')
+            ->selectSub(function ($query) use ($filter) {
+                $query->from('orders')
+                    ->whereColumn('orders.users_id', 'users.id')
+                    ->when(!empty($filter), function ($query) use ($filter) {
+                        $startDate = $filter[0];
+                        $endDate = $filter[1];
+                        return $query->whereBetween('created_at',[$startDate, $endDate]);
+                    })
+                    ->selectRaw('SUM(orders.total_tax)')
+                    ->where('orders.order_status', 1);
+            }, 'total_sum')
+            ->selectSub(function ($query) use ($filter) {
+                $query->from('debt_import')
+                    ->whereColumn('debt_import.user_id', 'users.id')
+                    ->where('debt_import.debt_status', '!=', 1)
+                    ->when(!empty($filter), function ($query) use ($filter) {
+                        $startDate = $filter[0];
+                        $endDate = $filter[1];
+                        return $query->whereBetween('created_at',[$startDate, $endDate]);
+                    })
+                    ->selectRaw('SUM(total_import)');
+            }, 'total_debt')
+            ->distinct();
+        $tableorders = $tableorders->get();
+        return $tableorders;
+    }
+    public function getStatus()
+    {
+        return $this->hasOne(DebtImport::class, 'import_id', 'id');
     }
 }

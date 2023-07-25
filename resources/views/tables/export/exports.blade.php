@@ -6,7 +6,7 @@
         <div class="container-fluided">
             <div class="row m-0 mb-1">
                 <a href="{{ route('exports.create') }}">
-                    <button type="button" class="custom-btn btn btn-primary d-flex align-items-center h-100">
+                    <button type="button" class="custom-btn btn btn-primary d-flex align-items-center h-100" style="margin-right:24px">
                         <svg class="mr-1" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" clip-rule="evenodd"
@@ -19,7 +19,7 @@
                         <span>Tạo đơn</span>
                     </button>
                 </a>
-                <button style="margin-left:24px" type="button" id="exportExcelOrder"
+                <button type="button" id="exportExcelOrder"
                     class="custom-btn btn btn-outline-primary border-primary d-flex align-items-center">
                     <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                         viewBox="0 0 24 24" fill="none">
@@ -526,10 +526,10 @@ $index = array_search($item['label'], $numberedLabels);
                                         </th>
                                         <th scope="col">
                                             <span class="d-flex">
-                                                <a href="#" class="sort-link" data-sort-by="updated_at"
+                                                <a href="#" class="sort-link" data-sort-by="created_at"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Ngày tạo</button></a>
-                                                <div class="icon" id="icon-updated_at"></div>
+                                                <div class="icon" id="icon-created_at"></div>
                                             </span>
                                         </th>
                                         @if (Auth::user()->can('isAdmin'))
@@ -898,7 +898,7 @@ $index = array_search($item['label'], $numberedLabels);
     $(document).ready(function() {
         // Chọn tất cả các checkbox
         $('.select-all-creator').click(function() {
-            $('#creator-options input[type="checkbox"]').prop('checked', true);
+            $('#creator-options input[type="checkbox"]:visible').prop('checked', true);
         });
 
         // Hủy tất cả các checkbox
@@ -909,7 +909,7 @@ $index = array_search($item['label'], $numberedLabels);
     $(document).ready(function() {
         // Chọn tất cả các checkbox
         $('.select-all').click(function() {
-            $('#status-options input[type="checkbox"]').prop('checked', true);
+            $('#status-options input[type="checkbox"]:visible').prop('checked', true);
         });
 
         // Hủy tất cả các checkbox
@@ -918,7 +918,7 @@ $index = array_search($item['label'], $numberedLabels);
         });
         // Chọn tất cả các checkbox
         $('.select-all-guest').click(function() {
-            $('#guest-options input[type="checkbox"]').prop('checked', true);
+            $('#guest-options input[type="checkbox"]:visible').prop('checked', true);
         });
 
         // Hủy tất cả các checkbox

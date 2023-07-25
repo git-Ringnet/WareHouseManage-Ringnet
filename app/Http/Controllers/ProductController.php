@@ -119,7 +119,7 @@ class ProductController extends Controller
             $keywords = $request->keywords;
         }
 
-        $provide = Provides::all();
+        // $provide = Provides::all();
         $providearr = [];
         if (!empty($request->providearr)) {
             $providearr = $request->input('providearr', []);
@@ -138,7 +138,7 @@ class ProductController extends Controller
             array_push($string, ['label' => 'Thuế:', 'values' => $taxarr, 'class' => 'tax']);
         }   
         $perPage = $request->input('perPageinput',10); 
-
+        $provide = Product::leftJoin('provides', 'provides.id', '=', 'product.provide_id')->where('product.product_qty','>',0)->get();
         //lấy tất cả products
         $products = $products = $this->products->getAllProduct($filters,$perPage, $status, $products_name, $providearr, $unitarr, $taxarr, $keywords, $sortByArr);
 

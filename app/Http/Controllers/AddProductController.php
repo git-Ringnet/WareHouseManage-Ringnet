@@ -73,7 +73,7 @@ class AddProductController extends Controller
         }
 
         //Nhà cung cấp
-        $provides = Provides::all();
+        $provides = Orders::leftjoin('provides', 'orders.provide_id', '=', 'provides.id')->get();
         $provide_namearr = [];
         if (!empty($request->provide_namearr)) {
             $provide_namearr = $request->input('provide_namearr', []);
