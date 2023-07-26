@@ -30,8 +30,4 @@ class ProductOrders extends Model
     {
         return DB::table($this->table)->where('product_id', $id)->update($data);
     }
-
-    public function getOrderCode(){
-        return $this->hasOne(Orders::class, 'id', 'order_id');
-    }
 }

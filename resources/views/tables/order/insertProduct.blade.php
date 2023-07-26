@@ -8,8 +8,7 @@
     <section class="content-header">
         <div class="row m-0 mb-1">
             <a href="{{ route('insertProduct.create') }}">
-                <button type="button" class="custom-btn btn btn-primary d-flex align-items-center h-100"
-                    style="margin-right:24px">
+                <button type="button" class="custom-btn btn btn-primary d-flex align-items-center h-100" style="margin-right:24px">
                     <svg class="mr-1" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd"
@@ -265,10 +264,10 @@ $index = array_search($item['label'], $numberedLabels);
                                                                     for="">{{ $value->provide_name }}</label>
                                                             </li>
                                                             @php
-                                                                $seenValues[] = $value->provide_name;
-                                                            @endphp
-                                                        @endif
-                                                    @endforeach
+                                                            $seenValues[] = $value->provide_name;
+                                                        @endphp
+                                                    @endif
+                                                        @endforeach
                                                 @endif
                                             </ul>
                                         </div>
@@ -464,17 +463,6 @@ $index = array_search($item['label'], $numberedLabels);
                                     stroke-linejoin="round" />
                             </svg>
                             <span class="px-1">Hủy đơn</span>
-                        </button>
-                    </div>
-                    <div class="btn-duyet my-2">
-                        <button id="accessBills" class="btn btn-group btn-light d-flex align-items-center ml-4">
-                            <svg width="18" height="13" viewBox="0 0 18 13" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M17.2803 0.21967C17.5732 0.512563 17.5732 0.987437 17.2803 1.28033L6.28033 12.2803C5.98744 12.5732 5.51256 12.5732 5.21967 12.2803L0.21967 7.28033C-0.0732233 6.98744 -0.0732233 6.51256 0.21967 6.21967C0.512563 5.92678 0.987437 5.92678 1.28033 6.21967L5.75 10.6893L16.2197 0.21967C16.5126 -0.0732233 16.9874 -0.0732233 17.2803 0.21967Z"
-                                    fill="#555555"></path>
-                            </svg>
-                            <span class="px-1">Duyệt đơn</span>
                         </button>
                     </div>
                 </div>
@@ -755,29 +743,6 @@ $index = array_search($item['label'], $numberedLabels);
                 list_id: list_id,
             },
             success: function(data) {
-                console.log(data);
-                location.reload();
-            }
-        })
-    })
-
-    // AJAX duyệt nhanh nhiều đơn hàng
-    $(document).on('click', '#accessBills', function(e) {
-        e.preventDefault();
-        const list_id = [];
-        $('input[name="ids[]"]').each(function() {
-            if ($(this).is(':checked')) {
-                var value = $(this).val();
-                list_id.push(value);
-            }
-        });
-        $.ajax({
-            url: "{{ route('accessBills') }}",
-            type: "get",
-            data: {
-                list_id: list_id,
-            },
-            success: function(data) {
                 location.reload();
             }
         })
@@ -857,38 +822,6 @@ $index = array_search($item['label'], $numberedLabels);
             $('.count_checkbox').text('Đã chọn ' + $('.cb-element:checked').length);
         } else {
             $('.multiple_action').hide();
-        }
-
-        var allDataSame = true;
-        var firstData = null;
-        $('input[name="ids[]"]').each(function() {
-            if ($(this).is(':checked')) {
-                var data = $(this).closest('tr').find('td:eq(7)').text().trim();
-                if (firstData === null) {
-                    firstData = data;
-                } else if (firstData !== data) {
-                    allDataSame = false;
-                    return false; 
-                }
-            }
-        });
-        if(allDataSame == false){
-            $('.multiple_action').hide();
-        }
-
-        // Apply actions based on the data value
-        if (allDataSame && firstData === "Đã nhập hàng") {
-            $('.btn-xoahang').hide();
-            $('.btn-duyet').hide();
-            $('.btn-huy').show();
-        } else if (allDataSame && firstData === "Đã hủy") {
-            $('.btn-duyet').hide();
-            $('.btn-huy').hide();
-            $('.btn-xoahang').show();
-        } else {
-            $('.btn-xoahang').hide();
-            $('.btn-huy').hide();
-            $('.btn-duyet').show();
         }
     }
 
@@ -989,8 +922,7 @@ $index = array_search($item['label'], $numberedLabels);
     $(document).ready(function() {
         // Chọn tất cả các checkbox
         $('.select-all-provide_name').click(function() {
-            $('#provide_name-options input[type="checkbox"]:visible').prop('checked',
-                true);
+            $('#provide_name-options input[type="checkbox"]:visible').prop('checked', true);
         });
 
         // Hủy tất cả các checkbox
