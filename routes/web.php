@@ -134,15 +134,9 @@ Route::post('/insertProductP', [AddProductController::class, 'addBill'])->name('
 Route::put('/deleteBill/{id?}', [AddProductController::class, 'deleteBill'])->name('deleteBill');
 Route::get('/deleteOrder', [AddProductController::class, 'deleteOrder'])->name('deleteOrder');
 Route::get('/cancelBill', [AddProductController::class, 'cancelBill'])->name('cancelBill');
-Route::get('/accessBills', [AddProductController::class, 'accessBills'])->name('accessBills');
+Route::get('/confirmBill', [AddProductController::class, 'confirmBill'])->name('confirmBill');
 Route::get('/showProduct', [AddProductController::class, 'showProduct'])->name('showProduct');
 Route::get('/add_newProvide', [AddProductController::class, 'add_newProvide'])->name('add_newProvide');
-
-// Xóa đơn đã hủy
-Route::get('/delBillCancel',[AddProductController::class,'delBillCancel'])->name('delBillCancel');
-
-// Kiểm tra tình trạng massAction
-
 
 // Kiểm tra serial number tồn tại chưa
 Route::get('/checkSN', [AddProductController::class, 'checkSN'])->name('checkSN');
