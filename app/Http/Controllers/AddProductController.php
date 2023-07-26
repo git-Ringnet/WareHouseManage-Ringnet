@@ -12,6 +12,7 @@ use App\Models\productExports;
 use App\Models\ProductOrders;
 use App\Models\Products;
 use App\Models\Provides;
+use App\Models\Serinumbers;
 use App\Models\User;
 use DateTime;
 use Illuminate\Support\Carbon;
@@ -878,6 +879,23 @@ class AddProductController extends Controller
         } else {
             session()->flash('msg', 'Mã số thuế đã tồn tại!');
             return response()->json(['success' => false, 'msg' => 'Mã số thuế đã tồn tại !']);
+        }
+    }
+
+    // Kiểm tra serial number đã tồn tại chưa
+    public function checkSN(Request $request)
+    {
+        $listSN = $request->input('listSN');
+        $products_id = $request->input('products_id');
+        $existingSN = [];
+        $check = Serinumbers::whereIn('products_id', $products_id)
+            ->whereIN('serinumber', $listSN)
+            ->first();
+        if (!$check) {
+            return response()->json(['success' => true, 'msg' => 'Thêm sản phẩm thành công!']);
+        } else {
+            $existingSN[] = $check->serinumber;
+            return response()->json(['success' => false, 'msg' => 'Serial number đã tồn tại', 'existingSN' => $existingSN]);
         }
     }
 

@@ -9,6 +9,7 @@ use App\Models\History;
 use App\Models\Product;
 use App\Models\productExports;
 use App\Models\Products;
+use App\Models\Serinumbers;
 use App\Models\User;
 use DateTime;
 use Illuminate\Http\Request;
@@ -2583,7 +2584,39 @@ class ExportController extends Controller
         }
         return response()->json(['success' => false, 'msg' => 'Not fount']);
     }
+    public function checkqty(Request $request)
+    {
+        $productIDs = $request->input('productIDs');
+        $productQtys = $request->input('productQtys');
 
+        // Kiểm tra số lượng sản phẩm
+        $productQtyMap = [];
+        $hasEnoughQty = true;
+
+        for ($i = 0; $i < count($productIDs); $i++) {
+            $productID = $productIDs[$i];
+            $productQty = $productQtys[$i];
+
+            // Kiểm tra và cập nhật seri_status
+            $hasEnoughQty = true;
+            foreach ($productQtyMap as $productID => $productQty) {
+                $serinumbers = Serinumbers::where('product_id', $productID)
+                    ->where('seri_status', 1)
+                    ->limit($productQty)
+                    ->get();
+
+                if (count($serinumbers) < $productQty) {
+                    $hasEnoughQty = false;
+                    break;
+                }
+            }
+
+            if (!$hasEnoughQty) {
+                return response()->json(['success' => false, 'message' => 'Vượt quá số lượng tồn kho!']);
+            }
+        }
+        return response()->json(['success' => true]);
+    }
 
     public function editEx($id)
     {

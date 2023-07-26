@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
             // // ProductSeeder::class,
             // // productsSeeder::class,
             // ProvidesSeeder::class,
+            // // // SerinumbersSeeder::class,
             UsersTableSeeder::class,
             RolesTableSeeder::class,
             // DebtSeeder::class,
