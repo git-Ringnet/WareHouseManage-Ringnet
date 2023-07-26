@@ -441,7 +441,7 @@ $index = array_search($item['label'], $numberedLabels);
             <div class="d-flex justify-content-between align-items-center">
                 <span class="count_checkbox mr-5"></span>
                 <div class="row action">
-                    {{-- <div class="btn-xoahang my-2 ml-3">
+                    <div class="btn-xoahang my-2 ml-3">
                         <button id="deleteOrder" type="button"
                             class="btn btn-group btn-light d-flex align-items-center h-100">
                             <svg class="mr-1" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -452,7 +452,7 @@ $index = array_search($item['label'], $numberedLabels);
                             </svg>
                             <span>Xóa đơn</span>
                         </button>
-                    </div> --}}
+                    </div>
                     <div class="btn-huy my-2">
                         <button id="cancelBill" class="btn btn-group btn-light d-flex align-items-center ml-4">
                             <svg class="mr-1" width="24" height="24" viewBox="0 0 24 24" fill="none"

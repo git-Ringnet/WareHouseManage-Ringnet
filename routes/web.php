@@ -95,6 +95,10 @@ Route::get('/timeImport',[ReportController::class, 'timeImport'])->name('timeImp
 Route::get('/timeExport',[ReportController::class, 'timeExport'])->name('timeExport');
 
 
+// Export DATABASE
+Route::get('/export_database',[ReportController::class, 'exportDatabase'])->name('exportDatabase');
+Route::get('/importDatabase',[ReportController::class, 'importDatabase'])->name('importDatabase');
+
 //kiểm tra số lượng trong xuất hàng
 Route::get('checkqty', [ExportController::class, 'checkqty'])->name('checkqty');
 
