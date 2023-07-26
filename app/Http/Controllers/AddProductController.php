@@ -267,6 +267,11 @@ class AddProductController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $updateOrder = Orders::find($id);
+        // Kiểm tra tình trạng 
+        if ($updateOrder->order_status == 2 || $updateOrder->order_status == 1) {
+            return redirect()->route('insertProduct.index')->with('msg', 'Thao tác không thành công');
+        }
         $dataProvide = [
             'provide_name' => $request->provide_id == null ? $request->provide_name_new : ($request->options == 2 ? $request->provide_name_new : $request->provide_name),
             'provide_represent' => $request->provide_id == null ? $request->provide_represent_new : ($request->options == 2 ? $request->provide_represent_new : $request->provide_represent),
@@ -279,14 +284,12 @@ class AddProductController extends Controller
         ];
         if ($request->provide_id === null) {
             if ($request->provide_name_new != null && $request->provide_address_new != null && $request->provide_code_new != null) {
-                // $newProvide = $this->provides->addProvides($dataProvide);
                 $newProvide = $this->provides->checkProvidesCode($request->provide_code_new, $dataProvide);
             }
         } else {
             $this->provides->updateProvides($dataProvide, $request->provide_id);
         }
 
-        $updateOrder = Orders::find($id);
         $product_id = $request->product_id;
         $product_name = $request->product_name;
         $product_unit = $request->product_unit;
@@ -298,10 +301,6 @@ class AddProductController extends Controller
         $total_import =  str_replace(',', '', $request->total_import);
         $arr_new_product = [];
         $id_product = [];
-        // Kiểm tra tình trạng 
-        if ($updateOrder->order_status == 2) {
-            return redirect()->route('insertProduct.index')->with('msg', 'Đơn hàng đã hủy không thể chỉnh sửa');
-        }
         $updateOrder->total = 0;
         if ($updateOrder->order_status == 0) {
             for ($i = 0; $i < count($product_name); $i++) {
@@ -625,6 +624,11 @@ class AddProductController extends Controller
     // Thêm hàng mới vào Order
     public function addBillEdit(Request $request)
     {
+        $order = Orders::findOrFail($request->order_id);
+        // Kiểm tra tình trạng 
+        if ($order->order_status == 2 || $order->order_status == 1) {
+            return redirect()->route('insertProduct.index')->with('warning', 'Thao tác không thành công');
+        }
         $dataProvide = [
             'provide_name' => $request->provide_id == null ? $request->provide_name_new : ($request->options == 2 ? $request->provide_name_new : $request->provide_name),
             'provide_represent' => $request->provide_id == null ? $request->provide_represent_new : ($request->options == 2 ? $request->provide_represent_new : $request->provide_represent),
@@ -645,11 +649,6 @@ class AddProductController extends Controller
             $this->provides->updateProvides($dataProvide, $request->provide_id);
         }
 
-        $order = Orders::findOrFail($request->order_id);
-        // Kiểm tra tình trạng 
-        if ($order->order_status == 2) {
-            return redirect()->route('insertProduct.index')->with('msg', 'Đơn hàng đã hủy không thể chỉnh sửa');
-        }
         $order->total = 0;
         if ($order->order_status != 1) {
             $product_id = $request->product_id;
@@ -726,7 +725,7 @@ class AddProductController extends Controller
         }
     }
 
-    // Hủy đơn
+    // Hủy đơn trong edit
     public function deleteBill(Request $request)
     {
         $check = false;
@@ -746,12 +745,12 @@ class AddProductController extends Controller
                     // Kiểm tra sản phẩm đã bán ra chưa
                     $check_Exp = Exports::where('id', $check_PExport->export_id)->first();
                     // Sản phẩm đang báo giá
-                    if ($check_Exp->export_status == 1) {
+                    if ($check && $check_Exp->export_status == 1) {
                         $check = true;
                         return redirect()->route('insertProduct.index')->with('warning', 'Sản phẩm đã tồn tại trong đơn xuất hàng không thể hủy đơn');
                     }
                     // Sản phẩm đã bán ra
-                    if ($check_Exp->export_status == 2) {
+                    if ($check && $check_Exp->export_status == 2) {
                         $check = true;
                         return redirect()->route('insertProduct.index')->with('warning', 'Sản phẩm đã bán không thể hủy đơn');
                     }
@@ -786,7 +785,7 @@ class AddProductController extends Controller
         return response()->json(['success' => false, 'msg' => 'Không tìm thấy đơn hàng cần xóa']);
     }
 
-    // Hủy nhiểu đơn hàng
+    // Hủy nhiểu đơn hàng ĐÂY
     public function cancelBill(Request $request)
     {
         if (isset($request->list_id)) {
@@ -796,42 +795,34 @@ class AddProductController extends Controller
             $list = [];
             foreach ($listOrders as $listOrder) {
                 array_push($list, $listOrder->id);
-                if ($listOrder->order_status == 0) {
-                    $listOrder->order_status = 2;
-                    $listOrder->save();
-                    array_push($lisst, $listOrder->id);
-                } else {
+                if ($listOrder->order_status == 1) {
                     $id_product = ProductOrders::where('order_id', $listOrder->id)->get();
                     foreach ($id_product as $va) {
                         $check_PExport = productExports::where('product_id', $va->product_id)->first();
                         if ($check_PExport) {
                             $check_Exp = Exports::where('id', $check_PExport->export_id)->first();
-                            if ($check_Exp->export_status != 0) {
+                            if ($check_Exp && $check_Exp->export_status != 0) {
                                 array_push($lisst, $listOrder->id);
                             }
                         }
                     }
                 }
             }
-
             $l = array_diff($list, $lisst);
-            // Lấy danh sách các `id` của bản ghi có `debt_status` khác 1
+            // // Lấy danh sách các `id` của bản ghi có `debt_status` khác 1
             $id_delete = DebtImport::whereIn('import_id', $l)
                 ->pluck('id')
                 ->all();
-
             // Lấy danh sách order
             $id_order = DebtImport::whereIn('import_id', $l)
                 ->pluck('import_id')
                 ->all();
-
             // Lấy thông tin của các bản ghi cần xóa và lưu thông tin của các bản ghi này vào mảng $del
             $del = DebtImport::whereIn('debt_import.id', $id_delete)
                 ->join('productorders', 'productorders.order_id', 'debt_import.import_id')
                 ->join('product', 'product.id', 'productorders.product_id')
                 ->pluck('product.id')
                 ->all();
-
             // Xóa các bản ghi có `id` nằm trong mảng $id_delete
             DebtImport::whereIn('id', $id_delete)->delete();
 
@@ -903,17 +894,20 @@ class AddProductController extends Controller
     public function updateBill(Request $request)
     {
         $order = Orders::findOrFail($request->order_id);
-        $provide_order = Provides::where('id', $order->provide_id)->get();
-        $provide = Provides::all();
-        $product_order = ProductOrders::with('getCodeProduct')->where('order_id', $order->id)->get();
-        $productIds = array();
-        foreach ($product_order as $value) {
-            array_push($productIds, $value->id);
+        if ($order->order_status == 1) {
+            $provide_order = Provides::where('id', $order->provide_id)->get();
+            $provide = Provides::all();
+            $product_order = ProductOrders::with('getCodeProduct')->where('order_id', $order->id)->get();
+            $productIds = array();
+            foreach ($product_order as $value) {
+                array_push($productIds, $value->id);
+            }
+            $debt_import = DebtImport::where('import_id', $order->id)->get();
+            $title = 'Chỉnh sửa đơn nhập hàng';
+            return view('tables.order.updateBill', compact('debt_import', 'provide', 'order', 'product_order', 'provide_order', 'title'));
+        } else {
+            return redirect()->route('insertProduct.index')->with('warning', "Thao tác không được phép");
         }
-        $debt_import = DebtImport::where('import_id', $order->id)->get();
-        $title = 'Chỉnh sửa đơn nhập hàng';
-
-        return view('tables.order.updateBill', compact('debt_import', 'provide', 'order', 'product_order', 'provide_order', 'title'));
     }
 
     // Chỉnh sửa đơn hàng đã duyệt
@@ -1117,5 +1111,29 @@ class AddProductController extends Controller
         }
         return response()->json(['success' => true, 'msg' => 'Xuất file thành công', 'data' => $data]);
     }
-    
+
+    // Xóa đơn đã hủy
+    public function delBillCancel(Request $request)
+    {
+        $check = $this->orders->delBillCamcel($request->idBill);
+        if ($check == 0) {
+            session()->flash('msg', 'Xóa đơn hàng thành công!');
+            return response()->json(['success' => true, 'redirect_url' => route('insertProduct.index'), 'msg' => 'Xóa đơn hàng thành công']);
+        } else {
+            return response()->json(['success' => false]);
+        }
+    }
+
+    // Duyệt nhiều đơn hàng
+    public function accessBills(Request $request)
+    {
+        $da = $this->orders->accessBill($request->list_id);
+        if ($da == 0) {
+            session()->flash('msg', 'Duyệt đơn hàng thành công !');
+            return response()->json(['success' => true, 'redirect_url' => route('insertProduct.index'), 'msg' => 'Duyệt đơn hàng thành công']);
+        } else {
+            session()->flash('warning', 'Thao tác không thành công !');
+            return response()->json(['success' => true, 'redirect_url' => route('insertProduct.index'), 'warning' => 'Thao tác không thành công !']);
+        }
+    }
 }

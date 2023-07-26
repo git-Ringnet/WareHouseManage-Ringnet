@@ -119,7 +119,7 @@
                 </li>
                 <li>
                     <label class="btn btn-primary btn-file">
-                        Restore <input type="file" style="display: none;" required id="file_restone" accept=".sql">
+                        Restore <input type="file" style="display: none;" id="file_restone" accept=".sql">
                     </label>
                 </li>
             </ul>
