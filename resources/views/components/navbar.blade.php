@@ -112,6 +112,16 @@
                         @endif
                     </a>
                 </li>
+                <li>
+                    <a href="{{ route('exportDatabase') }}" class="m-4">
+                        <button class="btn btn-primary">Backup</button>
+                    </a>
+                </li>
+                <li>
+                    <label class="btn btn-primary btn-file">
+                        Restore <input type="file" style="display: none;" required id="file_restone" accept=".sql">
+                    </label>
+                </li>
             </ul>
 
             <!-- Right navbar links -->
@@ -611,4 +621,21 @@
                 }
             });
         });
+        $(document).on('change','#file_restone',function(e){
+            e.preventDefault();
+            var fileName = e.target.files[0].name;
+            $.ajax({
+                url: "{{ route('importDatabase') }}",
+                type: "get",
+                data: {
+                    fileName: fileName,
+                },
+                success: function(data) {
+                    if (data.success == true) {
+                        location.reload();
+                    }
+                }
+
+            })
+        })
     </script>

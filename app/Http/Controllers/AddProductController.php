@@ -1117,4 +1117,5 @@ class AddProductController extends Controller
         }
         return response()->json(['success' => true, 'msg' => 'Xuất file thành công', 'data' => $data]);
     }
+    
 }

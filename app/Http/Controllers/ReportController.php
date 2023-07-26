@@ -11,7 +11,10 @@ use App\Models\ProductOrders;
 use App\Models\Roles;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 
 class ReportController extends Controller
 {
@@ -779,5 +782,65 @@ class ReportController extends Controller
                 'sumExport' => $count->sumExport,
             ];
         }
+    }
+
+    // Backup DATABASE
+    public function exportDatabase()
+    {
+        // Đường dẫn đến thư mục lưu trữ các file backup
+        $backupPath = "C:/backup/";
+
+        // Đảm bảo thư mục backup tồn tại
+        if (!file_exists($backupPath)) {
+            mkdir($backupPath, 0755, true);
+        }
+
+        // Thay đổi các thông số dưới đây nếu cần thiết
+        $dbUsername = 'root';
+        $dbName = 'laravel';
+        $dbPass = ''; // If you have a password, provide it here.
+
+        // Tên file backup dựa trên thời gian hiện tại
+        $fileName = 'backup_' . date('d_m_Y') . '.sql';
+
+        // Sử dụng lệnh mysqldump để xuất cơ sở dữ liệu
+        $passwordOption = $dbPass !== '' ? "-p$dbPass" : "";
+
+        // Use > "$backupPath$fileName" for output redirection
+        $command = "mysqldump -u $dbUsername $passwordOption $dbName > $backupPath$fileName";
+        exec($command);
+
+        // Trả về file backup để tải xuống
+        return back()->with('msg', 'Backup dữ liệu thành công !');
+    }
+
+    // Restore DATABASE
+    public function importDatabase(Request $request)
+    {
+        $dbNameImport = $request->fileName;
+        // Đường dẫn đến thư mục lưu trữ các file backup
+        $backupPath = "C:/backup/";
+        
+        // Đảm bảo thư mục backup tồn tại
+        if (!file_exists($backupPath)) {
+            mkdir($backupPath, 0755, true);
+        }
+
+        // Thay đổi các thông số dưới đây nếu cần thiết
+        $dbUsername = 'root';
+        $dbName = 'laravel';
+        $dbPass = ''; // If you have a password, provide it here.
+
+        // Tên file backup dựa trên thời gian hiện tại
+
+        // Sử dụng lệnh mysqldump để xuất cơ sở dữ liệu
+        $passwordOption = $dbPass !== '' ? "-p$dbPass" : "";
+
+        $command = "mysql -u $dbUsername $passwordOption $dbName < $backupPath$dbNameImport";
+        exec($command);
+
+        // Trả về file backup để tải xuống
+        session()->flash('msg', 'Restore dữ liệu thành công !');
+        return response()->json(['success' => true, 'msg' => 'Restore dữ liệu thành công !']);
     }
 }
