@@ -10,10 +10,6 @@ class ProductOrders extends Model
 {
     use HasFactory;
     protected $table = 'productorders';
-    public function serinumbes()
-    {
-        return $this->hasMany(Serinumbers::class, 'product_id', 'product_id');
-    }
     public function getCodeProduct()
     {
         return $this->hasOne(Products::class, 'id', 'products_id');
