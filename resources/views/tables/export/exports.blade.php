@@ -36,7 +36,7 @@
             <div class="row m-auto filter pt-2">
                 <form class="w-100" action="" method="get" id='search-filter'>
                     <div class="row  mr-0">
-                        <div class="col-5">
+                        <div class="col-md-5">
                             <input type="text" placeholder="Tìm kiếm theo số hóa đơn hoặc tên khách hàng"
                                 name="keywords" class="pr-4 form-control input-search w-100 searchkeyword"
                                 value="{{ request()->keywords }}">
@@ -447,6 +447,19 @@ $index = array_search($item['label'], $numberedLabels);
             <div class="d-flex justify-content-between align-items-center">
                 <span class="count_checkbox mr-5"></span>
                 <div class="row action">
+                    <div class="btn-chotdon my-2 ml-3">
+                        <button type="button" id="btn-chot"
+                            class="btn btn-group btn-light d-flex align-items-center h-100">
+                            <svg class="mr-1" width="24" height="24" viewBox="0 0 18 13" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M17.2803 0.21967C17.5732 0.512563 17.5732 0.987437 17.2803 1.28033L6.28033 12.2803C5.98744 12.5732 5.51256 12.5732 5.21967 12.2803L0.21967 7.28033C-0.0732233 6.98744 -0.0732233 6.51256 0.21967 6.21967C0.512563 5.92678 0.987437 5.92678 1.28033 6.21967L5.75 10.6893L16.2197 0.21967C16.5126 -0.0732233 16.9874 -0.0732233 17.2803 0.21967Z"
+                                    fill="#555555">
+                                </path>
+                            </svg>
+                            <span>Chốt đơn</span>
+                        </button>
+                    </div>
                     <div class="btn-xoahang my-2 ml-3">
                         <button id="deleteExports" type="button"
                             class="btn btn-group btn-light d-flex align-items-center h-100">
@@ -1215,6 +1228,31 @@ $index = array_search($item['label'], $numberedLabels);
         }
     })
 
+    //Chốt đơn
+    $(document).on('click', '#btn-chot', function(e) {
+        e.preventDefault();
+        const list_id = [];
+        $('input[name="ids[]"]').each(function() {
+            if ($(this).is(':checked')) {
+                var value = $(this).val();
+                list_id.push(value);
+            }
+        });
+        $.ajax({
+            url: "{{ route('chotDonCheckBox') }}",
+            type: "get",
+            data: {
+                list_id: list_id,
+            },
+            success: function(data) {
+                if (data.success == true) {
+                    updateMultipleActionVisibility();
+                    location.reload();
+                }
+            }
+        })
+    })
+
     // Checkbox
     $('#checkall').change(function() {
         $('.cb-element').prop('checked', this.checked);
@@ -1235,16 +1273,56 @@ $index = array_search($item['label'], $numberedLabels);
             },
             success: function(data) {
                 let hasExportStatus2 = false;
+                let hasExportStatus0 = false;
+                let hasExportStatus1 = false;
 
                 data.forEach(function(exportItem) {
                     if (exportItem.export_status === 2) {
                         hasExportStatus2 = true;
+                    } else if (exportItem.export_status === 0) {
+                        hasExportStatus0 = true;
+                    } else if (exportItem.export_status === 1) {
+                        hasExportStatus1 = true;
                     }
                 });
-                if (hasExportStatus2) {
+
+                if (hasExportStatus2 && !hasExportStatus0 && !hasExportStatus1) {
+                    // Case: Only export_status === 2
                     $('.btn-xoahang').hide();
-                } else {
+                    $('.btn-chotdon').hide();
+                    $('.btn-huy').show();
+                    $('.multiple_action').show();
+
+                } else if (hasExportStatus1 && !hasExportStatus0 && !hasExportStatus2) {
+                    // Case: Only export_status === 1
+                    $('.btn-xoahang').hide();
+                    $('.btn-chotdon').show();
+                    $('.btn-huy').show();
+                    $('.multiple_action').show();
+                } else if (hasExportStatus0 && !hasExportStatus1 && !hasExportStatus2) {
+                    // Case: Only export_status === 0
                     $('.btn-xoahang').show();
+                    $('.btn-chotdon').hide();
+                    $('.btn-huy').hide();
+                    $('.multiple_action').show();
+                } else if (hasExportStatus2 && hasExportStatus0 && !hasExportStatus1) {
+                    // Case: export_status === 2 and export_status === 0
+                    $('.multiple_action').hide();
+                } else if (hasExportStatus2 && !hasExportStatus0 && hasExportStatus1) {
+                    // Case: export_status === 2 and export_status === 1
+                    $('.btn-xoahang').hide();
+                    $('.btn-chotdon').hide();
+                    $('.btn-huy').show();
+                    $('.multiple_action').show();
+                } else if (hasExportStatus1 && hasExportStatus0 && !hasExportStatus2) {
+                    // Case: export_status === 1 and export_status === 0
+                    $('.btn-xoahang').hide();
+                    $('.btn-chotdon').show();
+                    $('.btn-huy').show();
+                    $('.multiple_action').hide();
+                } else {
+                    // Case: Orther
+                    $('.multiple_action').hide();
                 }
             }
         });
@@ -1252,7 +1330,7 @@ $index = array_search($item['label'], $numberedLabels);
 
     $('.cb-element').change(function() {
         updateMultipleActionVisibility();
-        if ($('.cb-element:checked').length == $('.cb-element').length) {
+        if ($('.cb-element:checked').length === $('.cb-element').length) {
             $('#checkall').prop('checked', true);
         } else {
             $('#checkall').prop('checked', false);
@@ -1273,16 +1351,56 @@ $index = array_search($item['label'], $numberedLabels);
             },
             success: function(data) {
                 let hasExportStatus2 = false;
+                let hasExportStatus0 = false;
+                let hasExportStatus1 = false;
 
                 data.forEach(function(exportItem) {
                     if (exportItem.export_status === 2) {
                         hasExportStatus2 = true;
+                    } else if (exportItem.export_status === 0) {
+                        hasExportStatus0 = true;
+                    } else if (exportItem.export_status === 1) {
+                        hasExportStatus1 = true;
                     }
                 });
-                if (hasExportStatus2) {
+
+                if (hasExportStatus2 && !hasExportStatus0 && !hasExportStatus1) {
+                    // Case: Only export_status === 2
                     $('.btn-xoahang').hide();
-                } else {
+                    $('.btn-chotdon').hide();
+                    $('.btn-huy').show();
+                    $('.multiple_action').show();
+
+                } else if (hasExportStatus1 && !hasExportStatus0 && !hasExportStatus2) {
+                    // Case: Only export_status === 1
+                    $('.btn-xoahang').hide();
+                    $('.btn-chotdon').show();
+                    $('.btn-huy').show();
+                    $('.multiple_action').show();
+                } else if (hasExportStatus0 && !hasExportStatus1 && !hasExportStatus2) {
+                    // Case: Only export_status === 0
                     $('.btn-xoahang').show();
+                    $('.btn-chotdon').hide();
+                    $('.btn-huy').hide();
+                    $('.multiple_action').show();
+                } else if (hasExportStatus2 && hasExportStatus0 && !hasExportStatus1) {
+                    // Case: export_status === 2 and export_status === 0
+                    $('.multiple_action').hide();
+                } else if (hasExportStatus2 && !hasExportStatus0 && hasExportStatus1) {
+                    // Case: export_status === 2 and export_status === 1
+                    $('.btn-xoahang').hide();
+                    $('.btn-chotdon').hide();
+                    $('.btn-huy').show();
+                    $('.multiple_action').show();
+                } else if (hasExportStatus1 && hasExportStatus0 && !hasExportStatus2) {
+                    // Case: export_status === 1 and export_status === 0
+                    $('.btn-xoahang').hide();
+                    $('.btn-chotdon').show();
+                    $('.btn-huy').show();
+                    $('.multiple_action').hide();
+                } else {
+                    // Case: Orther
+                    $('.multiple_action').hide();
                 }
             }
         });
@@ -1303,6 +1421,7 @@ $index = array_search($item['label'], $numberedLabels);
             $('.multiple_action').hide();
         }
     }
+
     //xuất excel all
     $(document).on('click', '#exportExcelOrder', function(e) {
         e.preventDefault();

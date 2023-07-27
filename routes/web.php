@@ -150,6 +150,9 @@ Route::get('/checkStatusEx', [ExportController::class, 'checkStatusEx'])->name('
 //xuất excel bảng export
 Route::get('/export_excel', [ExportController::class, 'export_excel'])->name('export_excel');
 
+//Chốt đơn checkbox
+Route::get('/chotDonCheckBox', [ExportController::class, 'chotDonCheckBox'])->name('chotDonCheckBox');
+
 Route::get('/simple', function () {
     return view('tables.simple');
 });

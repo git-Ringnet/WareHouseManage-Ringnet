@@ -23,7 +23,7 @@
             <div class="row m-auto filter pt-2">
                 <form class="w-100" action="" method="get" id='search-filter'>
                     <div class="row mr-0">
-                        <div class="col-5">
+                        <div class="col-md-5">
                             <input type="text" name="keywords" class="form-control searchkeyword"
                                 value="{{ request()->keywords }}" placeholder="Tìm kiếm đơn vị, đại diện hoặc email">
                             <span id="search-icon" class="search-icon"><i class="fas fa-search"></i></span>
