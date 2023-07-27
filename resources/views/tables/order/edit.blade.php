@@ -473,6 +473,28 @@
         }
     });
 
+    // Xóa đơn đã hủy
+    $('#delBill').on('click', function(e) {
+        e.preventDefault();
+        var idBill = $(this).data('value');
+        $.ajax({
+            url: "{{ route('delBillCancel') }}",
+            type: "get",
+            data: {
+                idBill: idBill
+            },
+            success: function(data) {
+                if (data.success == true) {
+                    window.location.href = data.redirect_url;
+                } else {
+                    alert('Xóa đơn hàng thất bại');
+                }
+            }
+        })
+
+    })
+
+
     // Kiểm tra dữ liệu trước khi submit
     var checkSubmit = false;
 
@@ -775,9 +797,9 @@
         }
     })
 
-    $('#delBill').on('click', function(e){
+    $('#delBill').on('click', function(e) {
         e.preventDefault();
-        
+
     })
     // Hàm kiểm tra xác nhận người dùng
     function myFunction() {
