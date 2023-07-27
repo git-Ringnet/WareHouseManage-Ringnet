@@ -131,7 +131,7 @@
                             <a href="#" class="btn btn-secondary" id="deleteBill">Hủy đơn</a>
                         @endif
                         @if ($order->order_status == 2)
-                            <a href="#" class="btn btn-danger" id="delBill">Xóa đơn</a>
+                            <a href="#" class="btn btn-danger" id="delBill" data-value="{{$order->id}}">Xóa đơn</a>
                         @endif
                         <a href="#" class="btn btn-secondary" style="opacity: 0"></a>
                     @endif
@@ -484,11 +484,12 @@
                 idBill: idBill
             },
             success: function(data) {
-                if (data.success == true) {
-                    window.location.href = data.redirect_url;
-                } else {
-                    alert('Xóa đơn hàng thất bại');
-                }
+                console.log(data);
+                // if (data.success == true) {
+                //     window.location.href = data.redirect_url;
+                // } else {
+                //     alert('Xóa đơn hàng thất bại');
+                // }
             }
         })
 
@@ -797,10 +798,6 @@
         }
     })
 
-    $('#delBill').on('click', function(e) {
-        e.preventDefault();
-
-    })
     // Hàm kiểm tra xác nhận người dùng
     function myFunction() {
         let text = "Bạn có muốn thực hiện thao tác không ?";

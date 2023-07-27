@@ -270,7 +270,7 @@ class AddProductController extends Controller
         $updateOrder = Orders::find($id);
         // Kiểm tra tình trạng 
         if ($updateOrder->order_status == 2 || $updateOrder->order_status == 1) {
-            return redirect()->route('insertProduct.index')->with('msg', 'Thao tác không thành công');
+            return redirect()->route('insertProduct.index')->with('warning', 'Thao tác không thành công');
         }
         $dataProvide = [
             'provide_name' => $request->provide_id == null ? $request->provide_name_new : ($request->options == 2 ? $request->provide_name_new : $request->provide_name),
@@ -760,11 +760,13 @@ class AddProductController extends Controller
             if ($check === false) {
                 $debt = DebtImport::where('import_id', $checkOrder->id)
                     ->first();
-                $checkOrder->order_status = 2;
-                $checkOrder->save();
-                $debt->delete();
-                Product::whereIn('id', $request->product_id)->delete();
-                return redirect()->route('insertProduct.index')->with('msg', 'Hủy đơn hàng thành công');
+                if ($debt) {
+                    $checkOrder->order_status = 2;
+                    $checkOrder->save();
+                    $debt->delete();
+                    Product::whereIn('id', $request->product_id)->delete();
+                    return redirect()->route('insertProduct.index')->with('msg', 'Hủy đơn hàng thành công');
+                }
             }
         }
     }
@@ -794,7 +796,10 @@ class AddProductController extends Controller
             $list = [];
             foreach ($listOrders as $listOrder) {
                 array_push($list, $listOrder->id);
-                if ($listOrder->order_status == 1) {
+                if ($listOrder->order_status == 0) {
+                    $listOrder->order_status = 2;
+                    $listOrder->save();
+                } else {
                     $id_product = ProductOrders::where('order_id', $listOrder->id)->get();
                     foreach ($id_product as $va) {
                         $check_PExport = productExports::where('product_id', $va->product_id)->first();
