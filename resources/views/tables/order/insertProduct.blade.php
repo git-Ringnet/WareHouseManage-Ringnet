@@ -756,6 +756,7 @@ $index = array_search($item['label'], $numberedLabels);
             },
             success: function(data) {
                 location.reload();
+                // console.log(data);
             }
         })
     })
