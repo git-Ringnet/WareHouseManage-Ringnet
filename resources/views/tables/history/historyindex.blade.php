@@ -25,7 +25,7 @@
             <div class="row m-auto filter pt-2">
                 <form class="w-100" action="" method="get" id='search-filter'>
                     <div class="row mr-0">
-                        <div class="col-5">
+                        <div class="col-md-5">
                             <input type="text" placeholder="Tên sản phẩm, hóa đơn vào, ra, khách hàng, nhà cung cấp"
                                 name="keywords" class="pr-4 input-search w-100 form-control searchkeyword"
                                 value="{{ request()->keywords }}">
