@@ -184,7 +184,7 @@ class Orders extends Model
                     ->when(!empty($filter), function ($query) use ($filter) {
                         $startDate = $filter[0];
                         $endDate = $filter[1];
-                        return $query->whereBetween('created_at',[$startDate, $endDate]);
+                        return $query->whereBetween('created_at', [$startDate, $endDate]);
                     })
                     ->selectRaw('COUNT(id)');
             }, 'product_qty_count')
@@ -194,7 +194,7 @@ class Orders extends Model
                     ->when(!empty($filter), function ($query) use ($filter) {
                         $startDate = $filter[0];
                         $endDate = $filter[1];
-                        return $query->whereBetween('created_at',[$startDate, $endDate]);
+                        return $query->whereBetween('created_at', [$startDate, $endDate]);
                     })
                     ->selectRaw('SUM(orders.total_tax)')
                     ->where('orders.order_status', 1);
@@ -206,7 +206,7 @@ class Orders extends Model
                     ->when(!empty($filter), function ($query) use ($filter) {
                         $startDate = $filter[0];
                         $endDate = $filter[1];
-                        return $query->whereBetween('created_at',[$startDate, $endDate]);
+                        return $query->whereBetween('created_at', [$startDate, $endDate]);
                     })
                     ->selectRaw('SUM(total_import)');
             }, 'total_debt')
@@ -217,5 +217,47 @@ class Orders extends Model
     public function getStatus()
     {
         return $this->hasOne(DebtImport::class, 'import_id', 'id');
+    }
+
+    public function delBillCamcel($id)
+    {
+        $check = DB::table($this->table)->where('id', $id)
+            ->where('order_status', 2)
+            ->first();
+        if ($check) {
+            DB::table($this->table)->where('id', $id)->delete();
+            return $status = 0;
+        } else {
+            return $status = 1;
+        }
+    }
+
+
+    public function accessBill($list_ID)
+    {
+        $check = DB::table($this->table)->whereIn('id', $list_ID)->get();
+        $status = 1;
+        foreach ($check as $c) {
+            if ($c->order_status == 0) {
+                $status = 0;
+                DB::table($this->table)->where('id', $c->id)->update(['order_status' => 1]);
+                $productOrders = ProductOrders::where('order_id', $c->id)->get();
+                foreach ($productOrders as $order) {
+                    $product = Product::create([
+                        'product_name' => $order->product_name,
+                        'product_unit' => $order->product_unit,
+                        'product_qty' => $order->product_qty,
+                        'product_price' => $order->product_price,
+                        'product_tax' => $order->product_tax,
+                        'product_total' => $order->product_total,
+                        'provide_id' => $order->provide_id,
+                        'product_trademark' => $order->product_trademark,
+                        'product_code' => $order->getOrderCode === null ? "" : $order->getOrderCode->product_code,
+                    ]);
+                    $order->update(['product_id' => $product->id]);
+                }
+            }
+        }
+        return $status;
     }
 }

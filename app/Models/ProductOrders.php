@@ -23,7 +23,8 @@ class ProductOrders extends Model
         'product_price', 'order_id'
     ];
 
-    public function addProductOrder($data){
+    public function addProductOrder($data)
+    {
         return DB::table($this->table)->insertGetId($data);
     }
     public function updateProductOrder($data, $id)
@@ -33,5 +34,9 @@ class ProductOrders extends Model
     public function updateProductOrderEdit($data, $id)
     {
         return DB::table($this->table)->where('product_id', $id)->update($data);
+    }
+    public function getOrderCode()
+    {
+        return $this->hasOne(Orders::class, 'id', 'order_id');
     }
 }
