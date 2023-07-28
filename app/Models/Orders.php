@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -232,7 +233,6 @@ class Orders extends Model
         }
     }
 
-
     public function accessBill($list_ID)
     {
         $check = DB::table($this->table)->whereIn('id', $list_ID)->get();
@@ -256,8 +256,64 @@ class Orders extends Model
                     ]);
                     $order->update(['product_id' => $product->id]);
                 }
+                $NCC = Provides::find($c->provide_id);
+
+                $startDate = Carbon::parse($c->created_at);
+                $daysToAdd = $NCC->debt;
+
+                $endDate = $startDate->copy()->addDays($daysToAdd);
+
+                $endDateFormatted = $endDate->format('Y-m-d');
+
+                $endDate = Carbon::parse($endDate);
+
+                $currentDate = Carbon::now();
+
+                $daysDiffss = $currentDate->diffInDays($endDate);
+
+                if ($endDate < $currentDate) {
+                    $daysDiff = -$daysDiffss;
+                } else {
+                    $daysDiff = $daysDiffss;
+                }
+
+                if ($NCC->debt == 0) {
+                    $debt_status = 4;
+                } elseif ($daysDiff <= 3 && $daysDiff > 0) {
+                    $debt_status = 2;
+                } elseif ($daysDiff == 0) {
+                    $debt_status = 5;
+                } elseif ($daysDiff < 0) {
+                    $debt_status = 0;
+                } else {
+                    $debt_status = 3;
+                }
+
+                DebtImport::create([
+                    'provide_id' => $c->provide_id,
+                    'user_id' => $c->users_id,
+                    'import_id' => $c->id,
+                    'total_import' => $c->total_tax,
+                    'debt' => $NCC->debt,
+                    'date_start' => $c->created_at,
+                    'date_end' => $endDateFormatted,
+                    'debt_status' => $debt_status,
+                    'created_at' => $c->created_at
+                ]);
             }
         }
         return $status;
+    }
+
+    public function checkExist($id)
+    {
+        $check = DB::table($this->table)->where('id', $id)
+            ->where('order_status', 1)
+            ->first();
+        if ($check) {
+            return $status = 0;
+        } else {
+            return $status = 1;
+        }
     }
 }
