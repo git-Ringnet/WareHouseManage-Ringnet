@@ -796,10 +796,9 @@ class AddProductController extends Controller
             $list = [];
             foreach ($listOrders as $listOrder) {
                 array_push($list, $listOrder->id);
-                if ($listOrder->order_status == 0) {
-                    $listOrder->order_status = 2;
-                    $listOrder->save();
-                } else {
+                if ($listOrder->order_status == 1) {
+                    // $listOrder->order_status = 2;
+                    // $listOrder->save();
                     $id_product = ProductOrders::where('order_id', $listOrder->id)->get();
                     foreach ($id_product as $va) {
                         $check_PExport = productExports::where('product_id', $va->product_id)->first();
@@ -814,6 +813,7 @@ class AddProductController extends Controller
             }
 
             $l = array_diff($list, $lisst);
+
             // Lấy danh sách các `id` của bản ghi có `debt_status` khác 1
             $id_delete = DebtImport::whereIn('import_id', $l)
                 ->pluck('id')
@@ -841,8 +841,12 @@ class AddProductController extends Controller
             Orders::whereIn('id', $id_order)->update(
                 ['order_status' => 2]
             );
-            session()->flash('msg', 'Hủy đơn hàng thành công !');
-            return response()->json(['success' => true, 'msg' => 'Hủy đơn hàng thành công']);
+            if (count($lisst) > 0) {
+                session()->flash('warning', 'Đơn hàng ' . str_replace(['[', ']'], '', json_encode($lisst)) . ' đã tồn tại trong xuất hàng không thể hủy !');
+            } else {
+                session()->flash('msg', 'Hủy đơn hàng thành công !');
+            }
+            return response()->json(['success' => true, 'msg' => 'Hủy đơn hàng thành công','data'=> $lisst]);
         }
         return response()->json(['success' => false, 'msg' => 'Not found']);
     }
@@ -922,172 +926,174 @@ class AddProductController extends Controller
     // Chỉnh sửa đơn hàng đã duyệt
     public function updateBillEdit(Request $request)
     {
-        $checkStatus = DebtImport::findOrFail($request->debtimport_id)->debt_status;
-        if ($checkStatus == 1) {
-            return redirect()->route('insertProduct.index')->with('warning', 'Công nợ đã thanh toán không thể chỉnh sửa');
-        } else {
-            $list_id = $request->product_id;
-            $total_import =  str_replace(',', '', $request->total_import);
-            $product_price =  str_replace(',', '', $request->product_price);
-            $product_total = str_replace(',', '', $request->product_total);
-            $total_price = str_replace(',', '', $request->total_price);
-
-            $dataProvide = [
-                'provide_name' => $request->provide_id == null ? $request->provide_name_new : ($request->options == 2 ? $request->provide_name_new : $request->provide_name),
-                'provide_represent' => $request->provide_id == null ? $request->provide_represent_new : ($request->options == 2 ? $request->provide_represent_new : $request->provide_represent),
-                'provide_phone' => $request->provide_id == null ? $request->provide_phone_new : ($request->options == 2 ? $request->provide_phone_new : $request->provide_phone),
-                'provide_email' => $request->provide_id == null ? $request->provide_email_new : ($request->options == 2 ? $request->provide_email_new : $request->provide_email),
-                'provide_status' => 1,
-                'provide_address' => $request->provide_id == null ? $request->provide_address_new : ($request->options == 2 ? $request->provide_address_new : $request->provide_address),
-                'provide_code' => $request->provide_id == null ? $request->provide_code_new : ($request->options == 2 ? $request->provide_code_new : $request->provide_code),
-                'debt' => $request->provide_debt == null ? 0 : $request->provide_debt
-            ];
-
-            // Kiểm tra thông tin nhà cung cấp
-            if ($request->provide_id == null) {
-                $add_newProvide = $this->provides->checkProvidesCode($request->provide_code_new, $dataProvide);
-                // $add_newProvide = $this->provides->addProvides($dataProvide);
+        if ($this->orders->checkExist($request->order_id) == 0) {
+            $checkStatus = DebtImport::findOrFail($request->debtimport_id)->debt_status;
+            if ($checkStatus == 1) {
+                return redirect()->route('insertProduct.index')->with('warning', 'Công nợ đã thanh toán không thể chỉnh sửa');
             } else {
-                $this->provides->updateProvides($dataProvide, $request->provide_id);
-            }
+                $list_id = $request->product_id;
+                $total_import =  str_replace(',', '', $request->total_import);
+                $product_price =  str_replace(',', '', $request->product_price);
+                $product_total = str_replace(',', '', $request->product_total);
+                $total_price = str_replace(',', '', $request->total_price);
 
-            // Chỉnh sửa thông tin bảng order
-            $dataOrder = [
-                'product_code' => $request->product_code,
-                'created_at' => $request->product_create,
-                'provide_id' => $request->provide_id == null ? $add_newProvide : $request->provide_id,
-                'total' => $total_import,
-                'total_tax' => $total_import
-            ];
-            $this->orders->updateOrder($dataOrder, $request->order_id);
-
-            $getdate = Orders::find($request->order_id)->created_at;
-
-            // Chỉnh sửa thông tin sản phẩm 
-            for ($i = 0; $i < count($list_id); $i++) {
-                $data = [
-                    'product_name' => $request->product_name[$i],
-                    'product_unit' => $request->product_unit[$i],
-                    'product_trademark' => $request->product_trademark[$i],
-                    'product_price' => $product_price[$i],
-                    'product_total' => $product_total[$i],
-                    'product_tax' => $request->product_tax[$i],
-                    'provide_id' => $request->provide_id == null ? $add_newProvide : $request->provide_id
+                $dataProvide = [
+                    'provide_name' => $request->provide_id == null ? $request->provide_name_new : ($request->options == 2 ? $request->provide_name_new : $request->provide_name),
+                    'provide_represent' => $request->provide_id == null ? $request->provide_represent_new : ($request->options == 2 ? $request->provide_represent_new : $request->provide_represent),
+                    'provide_phone' => $request->provide_id == null ? $request->provide_phone_new : ($request->options == 2 ? $request->provide_phone_new : $request->provide_phone),
+                    'provide_email' => $request->provide_id == null ? $request->provide_email_new : ($request->options == 2 ? $request->provide_email_new : $request->provide_email),
+                    'provide_status' => 1,
+                    'provide_address' => $request->provide_id == null ? $request->provide_address_new : ($request->options == 2 ? $request->provide_address_new : $request->provide_address),
+                    'provide_code' => $request->provide_id == null ? $request->provide_code_new : ($request->options == 2 ? $request->provide_code_new : $request->provide_code),
+                    'debt' => $request->provide_debt == null ? 0 : $request->provide_debt
                 ];
-                $this->productOrder->updateProductOrderEdit($data, $list_id[$i]);
 
-                $f = ProductOrders::where('product_id', $list_id[$i])->first();
-                $getProductQty = productExports::selectRaw('sum(product_qty) as total_qty')
-                    ->where('product_exports.product_id', $list_id[$i])
-                    ->join('exports', 'product_exports.export_id', 'exports.id')
-                    ->where('exports.export_status', 2)->first();
-
-                if ($getProductQty !== null) {
-                    $data['product_total'] = ($request->product_qty[$i] - $getProductQty->total_qty) * $product_price[$i];
+                // Kiểm tra thông tin nhà cung cấp
+                if ($request->provide_id == null) {
+                    $add_newProvide = $this->provides->checkProvidesCode($request->provide_code_new, $dataProvide);
+                    // $add_newProvide = $this->provides->addProvides($dataProvide);
+                } else {
+                    $this->provides->updateProvides($dataProvide, $request->provide_id);
                 }
-                $data['product_code'] = $request->product_code;
-                $this->product->updateProduct($data, $f->product_id);
-                //Cập nhật công nợ xuất
-                $productIds = $request->product_id;
-                $exports = Exports::leftJoin('product_exports', 'product_exports.export_id', 'exports.id')
-                    ->leftJoin('product', 'product_exports.product_id', 'product.id')
-                    ->select('exports.*')
-                    ->where('exports.export_status', 2)
-                    ->whereIn('product.id', $productIds)
-                    ->get();
-                if ($exports !== null) {
-                    foreach ($exports as $export) {
-                        // Tính toán giá trị total_sales và total_import
-                        $totalSales = 0;
-                        $totalImport = 0;
 
-                        foreach ($export->productExports as $productExport) {
-                            $totalSales += $productExport->product_price * $productExport->product_qty;
+                // Chỉnh sửa thông tin bảng order
+                $dataOrder = [
+                    'product_code' => $request->product_code,
+                    'created_at' => $request->product_create,
+                    'provide_id' => $request->provide_id == null ? $add_newProvide : $request->provide_id,
+                    'total' => $total_import,
+                    'total_tax' => $total_import
+                ];
+                $this->orders->updateOrder($dataOrder, $request->order_id);
 
-                            // Lấy thông tin product từ product_id
-                            $product = Product::find($productExport->product_id);
-                            $totalImport += $product->product_price * $productExport->product_qty;
+                $getdate = Orders::find($request->order_id)->created_at;
+
+                // Chỉnh sửa thông tin sản phẩm 
+                for ($i = 0; $i < count($list_id); $i++) {
+                    $data = [
+                        'product_name' => $request->product_name[$i],
+                        'product_unit' => $request->product_unit[$i],
+                        'product_trademark' => $request->product_trademark[$i],
+                        'product_price' => $product_price[$i],
+                        'product_total' => $product_total[$i],
+                        'product_tax' => $request->product_tax[$i],
+                        'provide_id' => $request->provide_id == null ? $add_newProvide : $request->provide_id
+                    ];
+                    $this->productOrder->updateProductOrderEdit($data, $list_id[$i]);
+
+                    $f = ProductOrders::where('product_id', $list_id[$i])->first();
+                    $getProductQty = productExports::selectRaw('sum(product_qty) as total_qty')
+                        ->where('product_exports.product_id', $list_id[$i])
+                        ->join('exports', 'product_exports.export_id', 'exports.id')
+                        ->where('exports.export_status', 2)->first();
+
+                    if ($getProductQty !== null) {
+                        $data['product_total'] = ($request->product_qty[$i] - $getProductQty->total_qty) * $product_price[$i];
+                    }
+                    $data['product_code'] = $request->product_code;
+                    $this->product->updateProduct($data, $f->product_id);
+                    //Cập nhật công nợ xuất
+                    $productIds = $request->product_id;
+                    $exports = Exports::leftJoin('product_exports', 'product_exports.export_id', 'exports.id')
+                        ->leftJoin('product', 'product_exports.product_id', 'product.id')
+                        ->select('exports.*')
+                        ->where('exports.export_status', 2)
+                        ->whereIn('product.id', $productIds)
+                        ->get();
+                    if ($exports !== null) {
+                        foreach ($exports as $export) {
+                            // Tính toán giá trị total_sales và total_import
+                            $totalSales = 0;
+                            $totalImport = 0;
+
+                            foreach ($export->productExports as $productExport) {
+                                $totalSales += $productExport->product_price * $productExport->product_qty;
+
+                                // Lấy thông tin product từ product_id
+                                $product = Product::find($productExport->product_id);
+                                $totalImport += $product->product_price * $productExport->product_qty;
+                            }
+
+                            // Tính toán giá trị total_difference
+                            $totalDifference = $totalSales - $totalImport - $export->transport_fee;
+
+                            // Cập nhật bảng Debt
+                            $debt = Debt::where('export_id', $export->id)->first();
+                            $debt->total_import = $totalImport;
+                            $debt->total_difference = $totalDifference;
+                            $debt->save();
                         }
-
-                        // Tính toán giá trị total_difference
-                        $totalDifference = $totalSales - $totalImport - $export->transport_fee;
-
-                        // Cập nhật bảng Debt
-                        $debt = Debt::where('export_id', $export->id)->first();
-                        $debt->total_import = $totalImport;
-                        $debt->total_difference = $totalDifference;
-                        $debt->save();
                     }
                 }
-            }
 
-            $startDate = Carbon::parse($request->product_create); // Chuyển đổi ngày bắt đầu thành đối tượng Carbon
-            $daysToAdd = $request->provide_debt; // Số ngày cần thêm
+                $startDate = Carbon::parse($request->product_create);
+                $daysToAdd = $request->provide_debt;
 
-            $endDate = $startDate->copy()->addDays($daysToAdd); // Thêm số ngày vào ngày bắt đầu để tính ngày kết thúc
+                $endDate = $startDate->copy()->addDays($daysToAdd); // Thêm số ngày vào ngày bắt đầu để tính ngày kết thúc
 
-            // Định dạng ngày kết thúc theo ý muốn
-            $endDateFormatted = $endDate->format('Y-m-d');
+                // Định dạng ngày kết thúc theo ý muốn
+                $endDateFormatted = $endDate->format('Y-m-d');
 
-            $endDate = Carbon::parse($endDate); // Chuyển đổi ngày kết thúc thành đối tượng Carbon
+                $endDate = Carbon::parse($endDate); // Chuyển đổi ngày kết thúc thành đối tượng Carbon
 
-            $currentDate = Carbon::now(); // Lấy ngày hiện tại thành đối tượng Carbon
+                $currentDate = Carbon::now(); // Lấy ngày hiện tại thành đối tượng Carbon
 
-            $daysDiffss = $currentDate->diffInDays($endDate);
+                $daysDiffss = $currentDate->diffInDays($endDate);
 
-            if ($endDate < $currentDate) {
-                $daysDiff = -$daysDiffss;
-            } else {
-                $daysDiff = $daysDiffss;
-            }
+                if ($endDate < $currentDate) {
+                    $daysDiff = -$daysDiffss;
+                } else {
+                    $daysDiff = $daysDiffss;
+                }
 
+                if ($request->provide_debt == 0) {
+                    $debt_status = 4;
+                } elseif ($daysDiff <= 3 && $daysDiff > 0) {
+                    $debt_status = 2;
+                } elseif ($daysDiff == 0) {
+                    $debt_status = 5;
+                } elseif ($daysDiff < 0) {
+                    $debt_status = 0;
+                } else {
+                    $debt_status = 3;
+                }
 
+                // Chỉnh sửa công nợ
+                $dataImport = [
+                    'provide_id' => $request->provide_id == null ? $add_newProvide : $request->provide_id,
+                    'total_import' => $total_import,
+                    'debt' => $request->provide_debt == null ? 0 : $request->provide_debt,
+                    'date_start' => $request->product_create,
+                    'date_end' => $endDateFormatted,
+                    'debt_status' => $debt_status,
+                    'created_at' => $getdate
+                ];
+                $this->debtImport->updateDebtImport($dataImport, $request->order_id);
 
-            if ($request->provide_debt == 0) {
-                $debt_status = 4;
-            } elseif ($daysDiff <= 3 && $daysDiff > 0) {
-                $debt_status = 2;
-            } elseif ($daysDiff == 0) {
-                $debt_status = 5;
-            } elseif ($daysDiff < 0) {
-                $debt_status = 0;
-            } else {
-                $debt_status = 3;
-            }
-
-            // Chỉnh sửa công nợ
-            $dataImport = [
-                'provide_id' => $request->provide_id == null ? $add_newProvide : $request->provide_id,
-                'total_import' => $total_import,
-                'debt' => $request->provide_debt == null ? 0 : $request->provide_debt,
-                'date_start' => $request->product_create,
-                'date_end' => $endDateFormatted,
-                'debt_status' => $debt_status,
-                'created_at' => $getdate
-            ];
-            $this->debtImport->updateDebtImport($dataImport, $request->order_id);
-
-            foreach ($list_id as $value) {
-                $upPro = History::where('product_id', $value)->get();
-                foreach ($upPro as $va) {
-                    if ($value == $va->product_id) {
-                        $Pro = ProductOrders::where('product_id', $value)->first();
-                        $va->product_name = $Pro->product_name;
-                        $va->product_unit = $Pro->product_unit;
-                        $va->price_import = $Pro->product_price;
-                        $va->product_total = $Pro->product_total;
-                        $va->import_code = $request->product_code;
-                        $va->provide_id = $request->provide_id == null ? $add_newProvide : $request->provide_id;
-                        $va->import_status = $debt_status;
-                        $va->debt_import = $request->provide_debt == null ? 0 : $request->provide_debt;
-                        $va->debt_import_end = $endDateFormatted;
-                        $va->debt_import_start = $request->product_create;
-                        $va->total_difference = ($va->price_export * $va->export_qty) - ($va->export_qty * $Pro->product_price) - $va->tranport_fee;
-                        $va->save();
+                foreach ($list_id as $value) {
+                    $upPro = History::where('product_id', $value)->get();
+                    foreach ($upPro as $va) {
+                        if ($value == $va->product_id) {
+                            $Pro = ProductOrders::where('product_id', $value)->first();
+                            $va->product_name = $Pro->product_name;
+                            $va->product_unit = $Pro->product_unit;
+                            $va->price_import = $Pro->product_price;
+                            $va->product_total = $Pro->product_total;
+                            $va->import_code = $request->product_code;
+                            $va->provide_id = $request->provide_id == null ? $add_newProvide : $request->provide_id;
+                            $va->import_status = $debt_status;
+                            $va->debt_import = $request->provide_debt == null ? 0 : $request->provide_debt;
+                            $va->debt_import_end = $endDateFormatted;
+                            $va->debt_import_start = $request->product_create;
+                            $va->total_difference = ($va->price_export * $va->export_qty) - ($va->export_qty * $Pro->product_price) - $va->tranport_fee;
+                            $va->save();
+                        }
                     }
                 }
+                return redirect()->route('insertProduct.index')->with('msg', 'Chỉnh sửa đơn hàng thành công');
             }
-            return redirect()->route('insertProduct.index')->with('msg', 'Chỉnh sửa đơn hàng thành công');
+        } else {
+            return redirect()->route('insertProduct.index')->with('warning', 'Đơn hàng đã hủy không thể chỉnh sửa');
         }
     }
 
