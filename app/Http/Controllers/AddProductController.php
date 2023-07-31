@@ -185,7 +185,6 @@ class AddProductController extends Controller
                 $request->provide_name_new != null && $request->provide_address_new != null && $request->provide_code_new != null
             ) {
                 $new_provide = $this->provides->checkProvidesCode($request->provide_code_new, $dataProvide);
-                // $new_provide = $this->provides->addProvides($dataProvide);
             }
         } else {
             $this->provides->updateProvides($dataProvide, $request->provide_id);
@@ -203,7 +202,7 @@ class AddProductController extends Controller
             $order->users_id = Auth::user()->id;
             $order->order_status = 0;
             $order->product_code = $request->product_code;
-            $order->created_at = $request->product_create;
+            $order->created_at =  $request->product_create == null ? Carbon::now() : $request->product_create;
             $order->total += $product_total[$i];
             $order->total_tax = $request->total_import;
             $order->save();
@@ -337,7 +336,7 @@ class AddProductController extends Controller
                 $updateOrder->provide_id = $request->provide_id == null ? $newProvide : $request->provide_id;
                 $updateOrder->total += $product_total[$i];
                 $updateOrder->product_code = $request->product_code;
-                $updateOrder->created_at = $request->product_create;
+                $updateOrder->created_at = $request->product_create === null ? Carbon::now() : $request->product_create;
                 $updateOrder->total_tax = $total_import;
                 $updateOrder->save();
             }
@@ -401,9 +400,9 @@ class AddProductController extends Controller
             $debt->import_id = $updateOrder->id;
             $debt->total_import = $total_import;
             $debt->debt = $request->provide_debt == null ? 0 : $request->provide_debt;
-            $debt->date_start = $request->product_create;
+            $debt->date_start = $request->product_create === null ? Carbon::now() : $request->product_create;
 
-            $startDate = Carbon::parse($request->product_create); // Chuyển đổi ngày bắt đầu thành đối tượng Carbon
+            $startDate = Carbon::parse($request->product_create === null ? Carbon::now() : $request->product_create); // Chuyển đổi ngày bắt đầu thành đối tượng Carbon
             $daysToAdd = $debt->debt; // Số ngày cần thêm
 
             $endDate = $startDate->copy()->addDays($daysToAdd); // Thêm số ngày vào ngày bắt đầu để tính ngày kết thúc
@@ -509,7 +508,7 @@ class AddProductController extends Controller
             'users_id' => Auth::user()->id,
             'order_status' => 0,
             'product_code' =>  $request->product_code,
-            'created_at' => $request->product_create,
+            'created_at' => $request->product_create === null ? Carbon::now() : $request->product_create,
             'total' => $total_price,
             'total_tax' => $request->total_import
         ];
@@ -561,9 +560,9 @@ class AddProductController extends Controller
             $debt->total_import = $total_import;
             $debt->debt = $request->provide_debt == null ? 0 : $request->provide_debt;
 
-            $debt->date_start = $request->product_create;
+            $debt->date_start = $request->product_create === null ? Carbon::now() : $request->product_create;
 
-            $startDate = Carbon::parse($request->product_create); // Chuyển đổi ngày bắt đầu thành đối tượng Carbon
+            $startDate = Carbon::parse($request->product_create === null ? Carbon::now() : $request->product_create); // Chuyển đổi ngày bắt đầu thành đối tượng Carbon
             $daysToAdd = $debt->debt; // Số ngày cần thêm
 
             $endDate = $startDate->copy()->addDays($daysToAdd); // Thêm số ngày vào ngày bắt đầu để tính ngày kết thúc
@@ -684,7 +683,7 @@ class AddProductController extends Controller
                 $order->provide_id = $request->provide_id == null ? $new_provide : $request->provide_id;
                 $order->total += $product_total[$i];
                 $order->product_code = $request->product_code;
-                $order->created_at = $request->product_create;
+                $order->created_at = $request->product_create === null ? Carbon::now() : $request->product_create;
                 $order->total_tax = $total_tax;
                 $order->save();
             }
@@ -959,7 +958,7 @@ class AddProductController extends Controller
                 // Chỉnh sửa thông tin bảng order
                 $dataOrder = [
                     'product_code' => $request->product_code,
-                    'created_at' => $request->product_create,
+                    'created_at' => $request->product_create === null ? Carbon::now() : $request->product_create,
                     'provide_id' => $request->provide_id == null ? $add_newProvide : $request->provide_id,
                     'total' => $total_import,
                     'total_tax' => $total_import
@@ -1026,7 +1025,7 @@ class AddProductController extends Controller
                     }
                 }
 
-                $startDate = Carbon::parse($request->product_create);
+                $startDate = Carbon::parse($request->product_create === null ? Carbon::now() : $request->product_create);
                 $daysToAdd = $request->provide_debt;
 
                 $endDate = $startDate->copy()->addDays($daysToAdd); // Thêm số ngày vào ngày bắt đầu để tính ngày kết thúc
@@ -1063,7 +1062,7 @@ class AddProductController extends Controller
                     'provide_id' => $request->provide_id == null ? $add_newProvide : $request->provide_id,
                     'total_import' => $total_import,
                     'debt' => $request->provide_debt == null ? 0 : $request->provide_debt,
-                    'date_start' => $request->product_create,
+                    'date_start' => $request->product_create === null ? Carbon::now() : $request->product_create,
                     'date_end' => $endDateFormatted,
                     'debt_status' => $debt_status,
                     'created_at' => $getdate
@@ -1084,7 +1083,7 @@ class AddProductController extends Controller
                             $va->import_status = $debt_status;
                             $va->debt_import = $request->provide_debt == null ? 0 : $request->provide_debt;
                             $va->debt_import_end = $endDateFormatted;
-                            $va->debt_import_start = $request->product_create;
+                            $va->debt_import_start = $request->product_create === null ? Carbon::now() : $request->product_create;
                             $va->total_difference = ($va->price_export * $va->export_qty) - ($va->export_qty * $Pro->product_price) - $va->tranport_fee;
                             $va->save();
                         }
