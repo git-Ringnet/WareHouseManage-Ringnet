@@ -28,73 +28,92 @@
         <div class="col-sm-6 position-absolute" style="top:63px;right:2%">
             <div class="w-50 position-relative" style="float: right;">
                 <div class="justify-content-between d-flex">
+                    @if($order->order_status == 2)
                     <span style="z-index: 99">
-                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="15.6667" cy="15.667" r="13" fill="#09BD3C" />
-                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                d="M22.1072 12.2929C22.4977 12.6834 22.4977 13.3166 22.1072 13.7071L15.4405 20.3738C15.05 20.7643 14.4168 20.7643 14.0263 20.3738L10.0263 16.3738C9.63577 15.9832 9.63577 15.3501 10.0263 14.9596C10.4168 14.569 11.05 14.569 11.4405 14.9596L14.7334 18.2525L20.693 12.2929C21.0835 11.9024 21.7166 11.9024 22.1072 12.2929Z"
-                                fill="white" />
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M16 5C9.92487 5 5 9.92487 5 16C5 22.0751 9.92487 27 16 27C22.0751 27 27 22.0751 27 16C27 9.92487 22.0751 5 16 5ZM3 16C3 8.8203 8.8203 3 16 3C23.1797 3 29 8.8203 29 16C29 23.1797 23.1797 29 16 29C8.8203 29 3 23.1797 3 16Z" fill="#D6D6D6"></path>
+                            <path d="M22.1578 15.9997C22.1578 19.4006 19.4008 22.1576 15.9999 22.1576C12.599 22.1576 9.84204 19.4006 9.84204 15.9997C9.84204 12.5988 12.599 9.8418 15.9999 9.8418C19.4008 9.8418 22.1578 12.5988 22.1578 15.9997Z" fill="#D6D6D6"></path>
                         </svg>
-                        <p class="text-center p-0 m-0">
-                            <svg width="6" height="6" viewBox="0 0 6 6" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="3" cy="3" r="3" fill="#09BD3C" />
-                            </svg>
-                        </p>
+                        <p class="p-0 m-0"></p>
                     </span>
                     <span style="z-index: 99">
-                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="15.6667" cy="15.667" r="13" fill="#09BD3C" />
-                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                d="M22.1072 12.2929C22.4977 12.6834 22.4977 13.3166 22.1072 13.7071L15.4405 20.3738C15.05 20.7643 14.4168 20.7643 14.0263 20.3738L10.0263 16.3738C9.63577 15.9832 9.63577 15.3501 10.0263 14.9596C10.4168 14.569 11.05 14.569 11.4405 14.9596L14.7334 18.2525L20.693 12.2929C21.0835 11.9024 21.7166 11.9024 22.1072 12.2929Z"
-                                fill="white" />
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M16 5C9.92487 5 5 9.92487 5 16C5 22.0751 9.92487 27 16 27C22.0751 27 27 22.0751 27 16C27 9.92487 22.0751 5 16 5ZM3 16C3 8.8203 8.8203 3 16 3C23.1797 3 29 8.8203 29 16C29 23.1797 23.1797 29 16 29C8.8203 29 3 23.1797 3 16Z" fill="#D6D6D6"></path>
+                            <path d="M22.1578 15.9997C22.1578 19.4006 19.4008 22.1576 15.9999 22.1576C12.599 22.1576 9.84204 19.4006 9.84204 15.9997C9.84204 12.5988 12.599 9.8418 15.9999 9.8418C19.4008 9.8418 22.1578 12.5988 22.1578 15.9997Z" fill="#D6D6D6"></path>
                         </svg>
-                        <p class="text-center p-0 m-0">
-                            <svg width="6" height="6" viewBox="0 0 6 6" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="3" cy="3" r="3" fill="#09BD3C" />
-                            </svg>
-                        </p>
+                        <p class="p-0 m-0"></p>
                     </span>
-                    @if ($order->order_status == 1)
-                        <span style="z-index: 99">
-                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="15.6667" cy="15.667" r="13" fill="#09BD3C" />
-                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M22.1072 12.2929C22.4977 12.6834 22.4977 13.3166 22.1072 13.7071L15.4405 20.3738C15.05 20.7643 14.4168 20.7643 14.0263 20.3738L10.0263 16.3738C9.63577 15.9832 9.63577 15.3501 10.0263 14.9596C10.4168 14.569 11.05 14.569 11.4405 14.9596L14.7334 18.2525L20.693 12.2929C21.0835 11.9024 21.7166 11.9024 22.1072 12.2929Z"
-                                    fill="white" />
-                            </svg>
-                            <p class="text-center p-0 m-0">
-                                <svg width="6" height="6" viewBox="0 0 6 6" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <circle cx="3" cy="3" r="3" fill="#09BD3C" />
-                                </svg>
-                            </p>
-                        </span>
+                    <span style="z-index: 99">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M16 5C9.92487 5 5 9.92487 5 16C5 22.0751 9.92487 27 16 27C22.0751 27 27 22.0751 27 16C27 9.92487 22.0751 5 16 5ZM3 16C3 8.8203 8.8203 3 16 3C23.1797 3 29 8.8203 29 16C29 23.1797 23.1797 29 16 29C8.8203 29 3 23.1797 3 16Z" fill="#D6D6D6"></path>
+                            <path d="M22.1578 15.9997C22.1578 19.4006 19.4008 22.1576 15.9999 22.1576C12.599 22.1576 9.84204 19.4006 9.84204 15.9997C9.84204 12.5988 12.599 9.8418 15.9999 9.8418C19.4008 9.8418 22.1578 12.5988 22.1578 15.9997Z" fill="#D6D6D6"></path>
+                        </svg>
+                        <p class="p-0 m-0"></p>
+                    </span>
                     @else
-                        <span style="z-index: 99">
-                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
+                    <span style="z-index: 99">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="15.6667" cy="15.667" r="13" fill="#09BD3C" />
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M22.1072 12.2929C22.4977 12.6834 22.4977 13.3166 22.1072 13.7071L15.4405 20.3738C15.05 20.7643 14.4168 20.7643 14.0263 20.3738L10.0263 16.3738C9.63577 15.9832 9.63577 15.3501 10.0263 14.9596C10.4168 14.569 11.05 14.569 11.4405 14.9596L14.7334 18.2525L20.693 12.2929C21.0835 11.9024 21.7166 11.9024 22.1072 12.2929Z"
+                                fill="white" />
+                        </svg>
+                        <p class="text-center p-0 m-0">
+                            <svg width="6" height="6" viewBox="0 0 6 6" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M16 5C9.92487 5 5 9.92487 5 16C5 22.0751 9.92487 27 16 27C22.0751 27 27 22.0751 27 16C27 9.92487 22.0751 5 16 5ZM3 16C3 8.8203 8.8203 3 16 3C23.1797 3 29 8.8203 29 16C29 23.1797 23.1797 29 16 29C8.8203 29 3 23.1797 3 16Z"
-                                    fill="#D6D6D6" />
-                                <path
-                                    d="M22.1578 15.9997C22.1578 19.4006 19.4008 22.1576 15.9999 22.1576C12.599 22.1576 9.84204 19.4006 9.84204 15.9997C9.84204 12.5988 12.599 9.8418 15.9999 9.8418C19.4008 9.8418 22.1578 12.5988 22.1578 15.9997Z"
-                                    fill="#D6D6D6" />
+                                <circle cx="3" cy="3" r="3" fill="#09BD3C" />
                             </svg>
-                            <p class="p-0 m-0"></p>
-                        </span>
+                        </p>
+                    </span>
+                    <span style="z-index: 99">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="15.6667" cy="15.667" r="13" fill="#09BD3C" />
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M22.1072 12.2929C22.4977 12.6834 22.4977 13.3166 22.1072 13.7071L15.4405 20.3738C15.05 20.7643 14.4168 20.7643 14.0263 20.3738L10.0263 16.3738C9.63577 15.9832 9.63577 15.3501 10.0263 14.9596C10.4168 14.569 11.05 14.569 11.4405 14.9596L14.7334 18.2525L20.693 12.2929C21.0835 11.9024 21.7166 11.9024 22.1072 12.2929Z"
+                                fill="white" />
+                        </svg>
+                        <p class="text-center p-0 m-0">
+                            <svg width="6" height="6" viewBox="0 0 6 6" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="3" cy="3" r="3" fill="#09BD3C" />
+                            </svg>
+                        </p>
+                    </span>
+                    @if($order->order_status == 1)
+                    <span style="z-index: 99">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="15.6667" cy="15.667" r="13" fill="#09BD3C" />
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M22.1072 12.2929C22.4977 12.6834 22.4977 13.3166 22.1072 13.7071L15.4405 20.3738C15.05 20.7643 14.4168 20.7643 14.0263 20.3738L10.0263 16.3738C9.63577 15.9832 9.63577 15.3501 10.0263 14.9596C10.4168 14.569 11.05 14.569 11.4405 14.9596L14.7334 18.2525L20.693 12.2929C21.0835 11.9024 21.7166 11.9024 22.1072 12.2929Z"
+                                fill="white" />
+                        </svg>
+                        <p class="text-center p-0 m-0">
+                            <svg width="6" height="6" viewBox="0 0 6 6" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="3" cy="3" r="3" fill="#09BD3C" />
+                            </svg>
+                        </p>
+                    </span>
+                    @else
+                    <span style="z-index: 99">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M16 5C9.92487 5 5 9.92487 5 16C5 22.0751 9.92487 27 16 27C22.0751 27 27 22.0751 27 16C27 9.92487 22.0751 5 16 5ZM3 16C3 8.8203 8.8203 3 16 3C23.1797 3 29 8.8203 29 16C29 23.1797 23.1797 29 16 29C8.8203 29 3 23.1797 3 16Z" fill="#D6D6D6"></path>
+                            <path d="M22.1578 15.9997C22.1578 19.4006 19.4008 22.1576 15.9999 22.1576C12.599 22.1576 9.84204 19.4006 9.84204 15.9997C9.84204 12.5988 12.599 9.8418 15.9999 9.8418C19.4008 9.8418 22.1578 12.5988 22.1578 15.9997Z" fill="#D6D6D6"></path>
+                        </svg>
+                        <p class="p-0 m-0"></p>
+                    </span>
                     @endif
-                </div>
-                <div class="position-absolute" style="top: 32px; z-index: 0;left: 17px">
-                    <svg height="4" viewBox="0 0 364 3" fill="none" style="width: 95%"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <line x1="0.999268" y1="1.50098" x2="363.001" y2="1.50098" stroke="#FFFFFF"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
+                    <div class="position-absolute" style="top: 32px; z-index: 0;left: 17px">
+                        <svg height="4" viewBox="0 0 364 3" fill="none" style="width: 95%"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <line x1="0.999268" y1="1.50098" x2="363.001" y2="1.50098" stroke="#FFFFFF"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    @endif
                 </div>
                 <div class="justify-content-between d-flex">
                     <b>Tạo đơn</b>
@@ -131,7 +150,8 @@
                             <a href="#" class="btn btn-secondary" id="deleteBill">Hủy đơn</a>
                         @endif
                         @if ($order->order_status == 2)
-                            <a href="#" class="btn btn-danger" id="delBill" data-value="{{$order->id}}">Xóa đơn</a>
+                            <a href="#" class="btn btn-danger" id="delBill"
+                                data-value="{{ $order->id }}">Xóa đơn</a>
                         @endif
                         <a href="#" class="btn btn-secondary" style="opacity: 0"></a>
                     @endif
@@ -369,7 +389,7 @@
                                         value=" {{ $pro->product_trademark }}"
                                         @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif> </td>
                                 <td>
-                                    @if ($order->order_status != 1)
+                                    @if ($order->order_status != 1 && $order->order_status != 2)
                                         <a href="javascript:;" class="deleteRow">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
                                                 viewBox="0 0 32 32" fill="none">
@@ -484,12 +504,11 @@
                 idBill: idBill
             },
             success: function(data) {
-                console.log(data);
-                // if (data.success == true) {
-                //     window.location.href = data.redirect_url;
-                // } else {
-                //     alert('Xóa đơn hàng thất bại');
-                // }
+                if (data.success == true) {
+                    window.location.href = data.redirect_url;
+                } else {
+                    alert('Xóa đơn hàng thất bại');
+                }
             }
         })
 
@@ -560,36 +579,7 @@
         $('#form_submit')[0].submit();
     })
 
-    var rowCount = $('.table_list_order tbody tr').length;
-    $('.addRow').on('click', function() {
-        updateRowNumbers();
-        var tr = '<tr>' +
-            '<td class="STT"></td>' +
-            '<td>' +
-            '<input  id="search" type="text" placeholder="Nhập thông tin sản phẩm" name="product_name[]" class="form-control name_product" onkeyup="filterFunction()"> ' +
-            '</td>' +
-            '<td><input required type="text" class="form-control text-center unit_product" name="product_unit[]"></td>' +
-            '<td><input required type="text" oninput="validatQtyInput(this)" name="product_qty[]" class="quantity-input form-control text-center"></td>' +
-            '<td><input required type="text" class="form-control text-center product_price" name="product_price[]"></td>' +
-            '<td>' +
-            '<select name="product_tax[]" class="product_tax form-control">' +
-            '<option value="10">10%</option>' +
-            '<option value="0">0%</option>' +
-            '<option value="8">8%</option>' +
-            '<option value="99">NOVAT</option>' +
-            '</select>' +
-            '</td>' +
-            '<td><input readonly type="text" class="form-control text-center total-amount" name="product_total[]"></td>' +
-            '<td><input type="text" class="form-control" name="product_trademark[]"></td>' +
-            '<td><a href="javascript:;" class="deleteRow"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.0606 6.66675C13.6589 6.66675 13.3333 6.99236 13.3333 7.39402C13.3333 7.79568 13.6589 8.12129 14.0606 8.12129H17.9394C18.341 8.12129 18.6667 7.79568 18.6667 7.39402C18.6667 6.99236 18.341 6.66675 17.9394 6.66675H14.0606ZM8 10.3031C8 9.90143 8.32561 9.57582 8.72727 9.57582H10.1818H21.8182H23.2727C23.6744 9.57582 24 9.90143 24 10.3031C24 10.7048 23.6744 11.0304 23.2727 11.0304H22.5455V22.6667C22.5455 24.2819 21.2158 25.5758 19.6179 25.5758H12.3452C11.9637 25.5755 11.5854 25.4997 11.2333 25.3528C10.8812 25.2059 10.5617 24.9908 10.2931 24.7199C10.0244 24.449 9.81206 24.1276 9.66816 23.7743C9.52463 23.4219 9.45204 23.0447 9.45455 22.6642V11.0304H8.72727C8.32561 11.0304 8 10.7048 8 10.3031ZM10.9091 22.6723V11.0304H21.0909V22.6667C21.0909 23.4623 20.4288 24.1213 19.6179 24.1213H12.3458C12.1562 24.1211 11.9684 24.0834 11.7934 24.0104C11.6183 23.9374 11.4595 23.8304 11.3259 23.6958C11.1924 23.5611 11.0868 23.4013 11.0153 23.2257C10.9437 23.05 10.9076 22.8619 10.9091 22.6723ZM17.9394 13.4546C18.3411 13.4546 18.6667 13.7802 18.6667 14.1819V20.9698C18.6667 21.3714 18.3411 21.6971 17.9394 21.6971C17.5377 21.6971 17.2121 21.3714 17.2121 20.9698V14.1819C17.2121 13.7802 17.5377 13.4546 17.9394 13.4546ZM14.7879 14.1819C14.7879 13.7802 14.4623 13.4546 14.0606 13.4546C13.6589 13.4546 13.3333 13.7802 13.3333 14.1819V20.9698C13.3333 21.3714 13.6589 21.6971 14.0606 21.6971C14.4623 21.6971 14.7879 21.3714 14.7879 20.9698V14.1819Z" fill="#555555"/></svg></a></td>' +
-            '</tr>';
-        $('#inputContainer tbody').append(tr);
-        setSTT();
-        rowCount++;
-        checkRow();
-    });
     setSTT();
-
 
     // AJAX hiển thị thông tin nhà cung cấp 
     $('.search-info').click(function() {
@@ -651,7 +641,6 @@
                 );
                 $('#provide_id').val(data.id);
                 var isChecked = $('#debtCheckbox').is(':checked');
-                console.log(isChecked);
                 // Đặt trạng thái của input dựa trên checkbox
                 $('#debtInput').prop('disabled', isChecked);
                 // Xử lý sự kiện khi checkbox thay đổi
@@ -780,10 +769,10 @@
                     er = true;
                     alert('Sản phẩm đã tồn tại');
                 }
-                if ($('#product_create').val().trim() == '') {
-                    er = true;
-                    alert('Vui lòng nhập ngày hóa đơn');
-                }
+                // if ($('#product_create').val().trim() == '') {
+                //     er = true;
+                //     alert('Vui lòng nhập ngày hóa đơn');
+                // }
                 if (er) {
                     return false;
                 } else {
@@ -863,7 +852,6 @@
                         '</tr>';
                     $('#inputContainer tbody').append(tr);
                     deleteDuplicateTr();
-                    rowCount++;
                     calculateTotals();
                     setSTT();
                 }
