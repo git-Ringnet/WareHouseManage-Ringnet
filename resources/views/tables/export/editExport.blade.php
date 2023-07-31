@@ -161,6 +161,10 @@
                         @endif
                     @endif
                 @endif
+                @if ($exports->export_status == 0)
+                    <button type="submit" class="btn btn-danger text-white" name="submitBtn" value="action6"
+                        onclick="validateAndSubmit(event)" id="chot_don">Xóa đơn</button>
+                @endif
                 {{-- <a href="#" class="btn border border-secondary mr-4">Xuất file</a> --}}
             </div>
             <div class="container-fluided position-relative">
@@ -197,9 +201,9 @@
                                         style="z-index: 99;width:37%;">
                                         @foreach ($customer as $item)
                                             @if (Auth::user()->id == $item->user_id || Auth::user()->can('isAdmin'))
-                                                <li class="p-2 search-info" id="{{ $item->id }}" name="search-info"">
-                                                    <a href="#"
-                                                        class="text-dark justify-content-between p-2">
+                                                <li class="p-2 search-info" id="{{ $item->id }}"
+                                                    name="search-info"">
+                                                    <a href="#" class="text-dark justify-content-between p-2">
                                                         <span class="w-50">{{ $item->guest_name }}</span>
                                                     </a>
                                                 </li>
@@ -357,7 +361,7 @@
                             <th style="width:13%;">Ghi chú</th>
                             <th style="width:10%;"></th>
                             @if ($exports->export_status != 2)
-                            <th style="width:10%;"></th>
+                                <th style="width:10%;"></th>
                             @endif
                         </tr>
                     </thead>
@@ -389,8 +393,8 @@
                                         </select>
                                     @endif
                                     @if ($exports->export_status == 1)
-                                        <select class="child-select p-1 form-control productName"
-                                            name="product_id[]" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                        <select class="child-select p-1 form-control productName" name="product_id[]"
+                                            <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                                 echo 'disabled';
                                             } ?>>
                                             <option value="{{ $value_export->product_id }}">
