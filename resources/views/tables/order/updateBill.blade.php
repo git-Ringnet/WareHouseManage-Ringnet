@@ -540,7 +540,6 @@
                 );
                 $('#provide_id').val(data.id);
                 var isChecked = $('#debtCheckbox').is(':checked');
-                console.log(isChecked);
                 // Đặt trạng thái của input dựa trên checkbox
                 $('#debtInput').prop('disabled', isChecked);
                 // Xử lý sự kiện khi checkbox thay đổi
