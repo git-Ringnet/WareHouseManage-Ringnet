@@ -6,7 +6,8 @@
         <div class="container-fluided">
             <div class="row m-0 mb-1">
                 <a href="{{ route('exports.create') }}">
-                    <button type="button" class="custom-btn btn btn-primary d-flex align-items-center h-100" style="margin-right:24px">
+                    <button type="button" class="custom-btn btn btn-primary d-flex align-items-center h-100"
+                        style="margin-right:24px">
                         <svg class="mr-1" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" clip-rule="evenodd"
@@ -1257,75 +1258,6 @@ $index = array_search($item['label'], $numberedLabels);
     $('#checkall').change(function() {
         $('.cb-element').prop('checked', this.checked);
         updateMultipleActionVisibility();
-        const arrId = [];
-        $('input[name="ids[]"]').each(function() {
-            if ($(this).is(':checked')) {
-                var value = $(this).val();
-                arrId.push(value);
-            }
-        });
-
-        $.ajax({
-            url: "{{ route('checkStatusEx') }}",
-            type: "get",
-            data: {
-                arrId: arrId,
-            },
-            success: function(data) {
-                let hasExportStatus2 = false;
-                let hasExportStatus0 = false;
-                let hasExportStatus1 = false;
-
-                data.forEach(function(exportItem) {
-                    if (exportItem.export_status === 2) {
-                        hasExportStatus2 = true;
-                    } else if (exportItem.export_status === 0) {
-                        hasExportStatus0 = true;
-                    } else if (exportItem.export_status === 1) {
-                        hasExportStatus1 = true;
-                    }
-                });
-
-                if (hasExportStatus2 && !hasExportStatus0 && !hasExportStatus1) {
-                    // Case: Only export_status === 2
-                    $('.btn-xoahang').hide();
-                    $('.btn-chotdon').hide();
-                    $('.btn-huy').show();
-                    $('.multiple_action').show();
-
-                } else if (hasExportStatus1 && !hasExportStatus0 && !hasExportStatus2) {
-                    // Case: Only export_status === 1
-                    $('.btn-xoahang').hide();
-                    $('.btn-chotdon').show();
-                    $('.btn-huy').show();
-                    $('.multiple_action').show();
-                } else if (hasExportStatus0 && !hasExportStatus1 && !hasExportStatus2) {
-                    // Case: Only export_status === 0
-                    $('.btn-xoahang').show();
-                    $('.btn-chotdon').hide();
-                    $('.btn-huy').hide();
-                    $('.multiple_action').show();
-                } else if (hasExportStatus2 && hasExportStatus0 && !hasExportStatus1) {
-                    // Case: export_status === 2 and export_status === 0
-                    $('.multiple_action').hide();
-                } else if (hasExportStatus2 && !hasExportStatus0 && hasExportStatus1) {
-                    // Case: export_status === 2 and export_status === 1
-                    $('.btn-xoahang').hide();
-                    $('.btn-chotdon').hide();
-                    $('.btn-huy').show();
-                    $('.multiple_action').show();
-                } else if (hasExportStatus1 && hasExportStatus0 && !hasExportStatus2) {
-                    // Case: export_status === 1 and export_status === 0
-                    $('.btn-xoahang').hide();
-                    $('.btn-chotdon').show();
-                    $('.btn-huy').show();
-                    $('.multiple_action').hide();
-                } else {
-                    // Case: Orther
-                    $('.multiple_action').hide();
-                }
-            }
-        });
     });
 
     $('.cb-element').change(function() {
@@ -1335,75 +1267,6 @@ $index = array_search($item['label'], $numberedLabels);
         } else {
             $('#checkall').prop('checked', false);
         }
-        const arrId = [];
-        $('input[name="ids[]"]').each(function() {
-            if ($(this).is(':checked')) {
-                var value = $(this).val();
-                arrId.push(value);
-            }
-        });
-
-        $.ajax({
-            url: "{{ route('checkStatusEx') }}",
-            type: "get",
-            data: {
-                arrId: arrId,
-            },
-            success: function(data) {
-                let hasExportStatus2 = false;
-                let hasExportStatus0 = false;
-                let hasExportStatus1 = false;
-
-                data.forEach(function(exportItem) {
-                    if (exportItem.export_status === 2) {
-                        hasExportStatus2 = true;
-                    } else if (exportItem.export_status === 0) {
-                        hasExportStatus0 = true;
-                    } else if (exportItem.export_status === 1) {
-                        hasExportStatus1 = true;
-                    }
-                });
-
-                if (hasExportStatus2 && !hasExportStatus0 && !hasExportStatus1) {
-                    // Case: Only export_status === 2
-                    $('.btn-xoahang').hide();
-                    $('.btn-chotdon').hide();
-                    $('.btn-huy').show();
-                    $('.multiple_action').show();
-
-                } else if (hasExportStatus1 && !hasExportStatus0 && !hasExportStatus2) {
-                    // Case: Only export_status === 1
-                    $('.btn-xoahang').hide();
-                    $('.btn-chotdon').show();
-                    $('.btn-huy').show();
-                    $('.multiple_action').show();
-                } else if (hasExportStatus0 && !hasExportStatus1 && !hasExportStatus2) {
-                    // Case: Only export_status === 0
-                    $('.btn-xoahang').show();
-                    $('.btn-chotdon').hide();
-                    $('.btn-huy').hide();
-                    $('.multiple_action').show();
-                } else if (hasExportStatus2 && hasExportStatus0 && !hasExportStatus1) {
-                    // Case: export_status === 2 and export_status === 0
-                    $('.multiple_action').hide();
-                } else if (hasExportStatus2 && !hasExportStatus0 && hasExportStatus1) {
-                    // Case: export_status === 2 and export_status === 1
-                    $('.btn-xoahang').hide();
-                    $('.btn-chotdon').hide();
-                    $('.btn-huy').show();
-                    $('.multiple_action').show();
-                } else if (hasExportStatus1 && hasExportStatus0 && !hasExportStatus2) {
-                    // Case: export_status === 1 and export_status === 0
-                    $('.btn-xoahang').hide();
-                    $('.btn-chotdon').show();
-                    $('.btn-huy').show();
-                    $('.multiple_action').hide();
-                } else {
-                    // Case: Orther
-                    $('.multiple_action').hide();
-                }
-            }
-        });
     });
 
     $(document).on('click', '.cancal_action', function(e) {
@@ -1417,6 +1280,44 @@ $index = array_search($item['label'], $numberedLabels);
         if ($('.cb-element:checked').length > 0) {
             $('.multiple_action').show();
             $('.count_checkbox').text('Đã chọn ' + $('.cb-element:checked').length);
+        } else {
+            $('.multiple_action').hide();
+        }
+
+        var selectedStates = []; // Mảng lưu trữ các trạng thái đã chọn
+        $('input[name="ids[]"]').each(function() {
+            if ($(this).is(':checked')) {
+                var data = $(this).closest('tr').find('td:eq(7)').text().trim();
+                selectedStates.push(data); // Thêm trạng thái vào mảng
+            }
+        });
+
+        var isDaBaoGia = selectedStates.includes("Đã báo giá");
+        var isDaChot = selectedStates.includes("Đã chốt");
+        var isDaHuy = selectedStates.includes("Đã hủy");
+
+        if (isDaBaoGia && isDaChot && isDaHuy) {
+            $('.multiple_action').hide();
+        } else if (isDaBaoGia && isDaChot) {
+            $('.btn-xoahang').hide();
+            $('.btn-huy').show();
+            $('.btn-chotdon').hide();
+        } else if (isDaBaoGia && isDaHuy) {
+            $('.multiple_action').hide();
+        } else if (isDaChot && isDaHuy) {
+            $('.multiple_action').hide();
+        } else if (isDaBaoGia) {
+            $('.btn-xoahang').hide();
+            $('.btn-chotdon').show();
+            $('.btn-huy').show();
+        } else if (isDaChot) {
+            $('.btn-xoahang').hide();
+            $('.btn-chotdon').hide();
+            $('.btn-huy').show();
+        } else if (isDaHuy) {
+            $('.btn-xoahang').show();
+            $('.btn-chotdon').hide();
+            $('.btn-huy').hide();
         } else {
             $('.multiple_action').hide();
         }
