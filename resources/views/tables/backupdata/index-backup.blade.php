@@ -30,7 +30,7 @@
         <div class="container-fluided">
             <div class="row mb-4">
                 <a href="{{ route('exportDatabase') }}" class="ml-auto mr-2">
-                    <button type="button" class="custom-btn btn btn-primary d-flex align-items-center h-100">
+                    <button type="button" class="custom-btn btn btn-primary d-flex align-items-center h-100 mr-2">
                         <svg class="mr-1" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" clip-rule="evenodd"
@@ -43,6 +43,23 @@
                         <span>Tạo bản sao lưu</span>
                     </button>
                 </a>
+                <form action="{{ route('importDatabase') }}" enctype="multipart/form-data" method="POST"
+                    id="restore_data" class="btn btn-default d-flex align-items-center h-100 custom-btn">
+                    @csrf
+                    <label class="btn-file mb-0 wf-500" style="color:#0095F6; font-weight : 500">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none" class="mr-1">
+                            <path
+                                d="M6.78565 11.9915C7.26909 11.9915 7.71035 11.9915 8.1516 11.9915C8.23486 11.9915 8.31812 11.9899 8.40082 11.9926C8.5923 11.9987 8.72995 12.0903 8.80599 12.2657C8.88425 12.445 8.84429 12.6071 8.71108 12.7425C8.40082 13.0589 8.08666 13.3713 7.77362 13.6855C7.28519 14.1762 6.79731 14.6679 6.30721 15.1569C6.03135 15.4322 5.81489 15.4322 5.54125 15.158C4.75809 14.3737 3.97771 13.5873 3.19344 12.8047C3.03969 12.6509 2.94423 12.4861 3.03581 12.2679C3.13016 12.0431 3.31666 11.9871 3.54367 11.9899C4.02822 11.996 4.51221 11.9915 5.01619 11.9915C5.03173 11.7812 5.04227 11.5769 5.0617 11.3732C5.33145 8.55805 6.6752 6.39617 9.13957 5.02744C14.0156 2.31941 19.6492 5.27333 20.8021 10.2814C21.7784 14.5225 19.0442 18.8202 14.7788 19.7643C12.3693 20.2977 10.1664 19.8015 8.1838 18.3334C7.74531 18.0087 7.65762 17.4681 7.964 17.0546C8.26983 16.6422 8.80821 16.5761 9.25003 16.9114C10.4556 17.825 11.811 18.2396 13.3223 18.1885C16.042 18.0969 18.502 16.0228 19.0726 13.3219C19.8113 9.82465 17.4652 6.4217 13.9246 5.85334C10.641 5.32605 7.4134 7.66055 6.89777 10.9414C6.84504 11.28 6.8245 11.6241 6.78565 11.9915Z"
+                                fill="#0095F6" />
+                            <path
+                                d="M12.129 10.7643C12.129 10.2315 12.1274 9.69806 12.1296 9.16522C12.1312 8.74062 12.406 8.44811 12.7945 8.44922C13.183 8.45033 13.4567 8.74339 13.4578 9.17022C13.4606 10.091 13.4617 11.0118 13.4556 11.9326C13.4545 12.0675 13.4955 12.143 13.6132 12.2118C14.4075 12.6758 15.1973 13.1476 15.9876 13.6183C16.238 13.7676 16.3568 13.9952 16.3246 14.281C16.2935 14.5602 16.1342 14.7733 15.8572 14.8244C15.6868 14.8555 15.4692 14.8433 15.3238 14.7606C14.398 14.2344 13.485 13.6855 12.5714 13.1382C12.2767 12.9611 12.1279 12.6925 12.129 12.3434C12.1301 11.8166 12.129 11.2905 12.129 10.7643Z"
+                                fill="#0095F6" />
+                        </svg>
+                        Khôi phục<input type="file" style="display: none;" id="file_restore" accept=".sql"
+                            name="file">
+                    </label>
+                </form>
             </div>
         </div><!-- /.container-fluided -->
     </section>
@@ -76,13 +93,22 @@
                                             </td>
                                             <td>{{ round(filesize(storage_path('app/backupdata/' . $file)) / 1024, 2) }}
                                                 KB</td>
-                                            <td class="d-flex align-items-baseline"><a href="{{ route('downloadBackup', ['file' => $file]) }}" download><svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M20.0004 10.4023H22.0002C22.5306 10.4023 23.0392 10.613 23.4143 10.9881C23.7893 11.3631 24 11.8718 24 12.4021V22.8024C24 23.3328 23.7893 23.8414 23.4143 24.2165C23.0392 24.5915 22.5306 24.8022 22.0002 24.8022H9.99982C9.46943 24.8022 8.96077 24.5915 8.58573 24.2165C8.21069 23.8414 8 23.3328 8 22.8024V12.4021C8 11.8718 8.21069 11.3631 8.58573 10.9881C8.96077 10.613 9.46943 10.4023 9.99982 10.4023H11.9996" stroke="#555555" stroke-linecap="round" stroke-linejoin="round"/>
-                                                <path d="M11.9996 15.1992L15.9993 19.1988L20.0004 15.1992" stroke="#555555" stroke-linecap="round" stroke-linejoin="round"/>
-                                                <path d="M16.0007 4V18.3999" stroke="#555555" stroke-linecap="round" stroke-linejoin="round"/>
-                                                </svg>
+                                            <td class="d-flex align-items-baseline"><a
+                                                    href="{{ route('downloadBackup', ['file' => $file]) }}"
+                                                    download><svg width="32" height="32" viewBox="0 0 32 32"
+                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M20.0004 10.4023H22.0002C22.5306 10.4023 23.0392 10.613 23.4143 10.9881C23.7893 11.3631 24 11.8718 24 12.4021V22.8024C24 23.3328 23.7893 23.8414 23.4143 24.2165C23.0392 24.5915 22.5306 24.8022 22.0002 24.8022H9.99982C9.46943 24.8022 8.96077 24.5915 8.58573 24.2165C8.21069 23.8414 8 23.3328 8 22.8024V12.4021C8 11.8718 8.21069 11.3631 8.58573 10.9881C8.96077 10.613 9.46943 10.4023 9.99982 10.4023H11.9996"
+                                                            stroke="#555555" stroke-linecap="round"
+                                                            stroke-linejoin="round" />
+                                                        <path d="M11.9996 15.1992L15.9993 19.1988L20.0004 15.1992"
+                                                            stroke="#555555" stroke-linecap="round"
+                                                            stroke-linejoin="round" />
+                                                        <path d="M16.0007 4V18.3999" stroke="#555555"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                    </svg>
                                                 </a>
-                                 
+
                                                 <form onclick="return confirm('Bạn có chắc chắn muốn xoá !!')"
                                                     action="{{ route('deleteBackup', ['file' => $file]) }}"
                                                     method="post">
@@ -116,7 +142,12 @@
 </div>
 </section>
 </div>
-<script></script>
+<script>
+        $(document).on('change','#file_restore',function(e){
+            e.preventDefault();
+            $('#restore_data')[0].submit();
+        })
+</script>
 </body>
 
 </html>

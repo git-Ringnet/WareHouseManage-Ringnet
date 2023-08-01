@@ -102,7 +102,7 @@ Route::get('/timeExport',[ReportController::class, 'timeExport'])->name('timeExp
 
 // Export DATABASE
 Route::get('/export_database',[ReportController::class, 'exportDatabase'])->name('exportDatabase');
-Route::get('/importDatabase',[ReportController::class, 'importDatabase'])->name('importDatabase');
+Route::POST('/importDatabase',[ReportController::class, 'importDatabase'])->name('importDatabase');
 
 
 //kiểm tra số lượng trong xuất hàng
