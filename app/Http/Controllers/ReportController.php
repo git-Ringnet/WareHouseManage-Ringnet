@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
+use ZipArchive;
 
 class ReportController extends Controller
 {
@@ -635,7 +636,7 @@ class ReportController extends Controller
                 }
             }
             return [
-                'test'=>$test1,
+                'test' => $test1,
                 'countDebt' => $countDebt->countDebt,
                 'countProfit' => $countProfit->countProfit,
                 'countExport' => $count->countExport,
@@ -786,33 +787,42 @@ class ReportController extends Controller
 
     // Backup DATABASE
     public function exportDatabase()
-    {
-        // Đường dẫn đến thư mục lưu trữ các file backup
-        $backupPath = "C:/backup/";
+{
+    // Đường dẫn đến thư mục lưu trữ các file backup
+    $backupPath = storage_path('app/backupdata/');
 
-        // Đảm bảo thư mục backup tồn tại
-        if (!file_exists($backupPath)) {
-            mkdir($backupPath, 0755, true);
-        }
+    // Thay đổi các thông số dưới đây nếu cần thiết
+    $dbUsername = 'root';
+    $dbName = 'laravel';
+    $dbPass = ''; // If you have a password, provide it here.
 
-        // Thay đổi các thông số dưới đây nếu cần thiết
-        $dbUsername = 'root';
-        $dbName = 'laravel';
-        $dbPass = ''; // If you have a password, provide it here.
+    // Sử dụng lệnh mysqldump để xuất cơ sở dữ liệu
+    $passwordOption = $dbPass !== '' ? "-p$dbPass" : "";
 
-        // Tên file backup dựa trên thời gian hiện tại
-        $fileName = 'backup_' . date('d_m_Y') . '.sql';
+    // Lấy ngày giờ hiện tại của hệ thống máy tính
+    $date = date('d_m_Y_H_i_s');
 
-        // Sử dụng lệnh mysqldump để xuất cơ sở dữ liệu
-        $passwordOption = $dbPass !== '' ? "-p$dbPass" : "";
+    // Thực hiện mysqldump để tạo file SQL và lưu vào thư mục tạm thời
+    $fileName = "backup_$date.sql";
+    $command = "mysqldump -u $dbUsername $passwordOption $dbName > $backupPath$fileName";
+    exec($command);
 
-        // Use > "$backupPath$fileName" for output redirection
-        $command = "mysqldump -u $dbUsername $passwordOption $dbName > $backupPath$fileName";
-        exec($command);
-
-        // Trả về file backup để tải xuống
-        return back()->with('msg', 'Backup dữ liệu thành công !');
+    // Tạo tệp zip và nén tệp SQL vào trong đó
+    $zip = new ZipArchive();
+    $zipFileName = "backup_$date.zip";
+    if ($zip->open($backupPath . $zipFileName, ZipArchive::CREATE) === TRUE) {
+        $zip->addFile($backupPath . $fileName, $fileName);
+        $zip->close();
     }
+
+    // Xóa tệp SQL không nén nữa
+    unlink($backupPath . $fileName);
+
+    // Trả về file backup để tải xuống
+    return back()->with('msg', 'Backup dữ liệu thành công !');
+}
+
+
 
     // Restore DATABASE
     public function importDatabase(Request $request)
@@ -820,7 +830,7 @@ class ReportController extends Controller
         $dbNameImport = $request->fileName;
         // Đường dẫn đến thư mục lưu trữ các file backup
         $backupPath = "C:/backup/";
-        
+
         // Đảm bảo thư mục backup tồn tại
         if (!file_exists($backupPath)) {
             mkdir($backupPath, 0755, true);

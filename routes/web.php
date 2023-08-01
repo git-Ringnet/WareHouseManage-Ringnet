@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AddProductController;
 use App\Http\Controllers\AjaxController;
+use App\Http\Controllers\BackUpController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DebtController;
 use App\Http\Controllers\DebtImportController;
@@ -27,7 +28,6 @@ use App\Models\DebtImport;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 Route::prefix('admin')->name('admin.')->middleware('permission:admin')->group(function () {
     Route::get('userlist', [UsersController::class, 'show'])->name('userslist');
     Route::get('adduser', [UsersController::class, 'add'])->name('add');
@@ -55,6 +55,10 @@ Route::get('/deleteListGuest', [GuestsController::class, 'deleteListGuest'])->na
 Route::get('/activeStatusGuest', [GuestsController::class, 'activeStatusGuest'])->name('activeStatusGuest');
 Route::get('/disableStatusGuest', [GuestsController::class, 'disableStatusGuest'])->name('disableStatusGuest');
 Route::get('/updatestatus', [GuestsController::class, 'updateStatus'])->name('updateKH');
+
+Route::resource('backupdata', BackUpController::class);
+Route::get('/download/{file?}', [BackUpController::class, 'downloadBackup'])->name('downloadBackup');
+Route::delete('/deleteBackup/{file}', [BackupController::class, 'deleteBackup'])->name('deleteBackup');
 
 //xuat hang
 Route::resource('exports', ExportController::class)->middleware('permission:admin,sale');
@@ -95,9 +99,11 @@ Route::get('/timeImport',[ReportController::class, 'timeImport'])->name('timeImp
 Route::get('/timeExport',[ReportController::class, 'timeExport'])->name('timeExport');
 
 
+
 // Export DATABASE
 Route::get('/export_database',[ReportController::class, 'exportDatabase'])->name('exportDatabase');
 Route::get('/importDatabase',[ReportController::class, 'importDatabase'])->name('importDatabase');
+
 
 //kiểm tra số lượng trong xuất hàng
 Route::get('checkqty', [ExportController::class, 'checkqty'])->name('checkqty');

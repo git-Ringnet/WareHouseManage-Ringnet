@@ -179,7 +179,6 @@ class ProductsController extends Controller
         $title = 'Sản phẩm';
         return view('tables.products.data', compact('products', 'product', 'string', 'sortType', 'trademarks', 'title'));
     }
-
     /**
      * Show the form for creating a new resource.
      *
