@@ -1100,3 +1100,58 @@ color: var(--secondary-gray-5-default, #555);
 #restore_data:hover svg path{
     stroke: none;
 }
+#section_products .multiple_action{
+    background: #333333;
+    border-radius: 4px;
+}
+
+#section_products .multiple_action .count_checkbox,.order_content .multiple_action .count_checkbox{
+    font-size: 16px;
+    font-weight: 600;
+    color: #FFFFFF;
+    padding-left: 0.75rem;
+    text-align: center;
+}
+#section_products .multiple_action{
+    display: none;
+}
+#section_products,.order_content{
+    position: relative;
+}
+.action::after {
+    content: "";
+    width: 1px;
+    background-color: #FFFFFF;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    margin-left: 5px;
+}
+
+/* Order */
+#order_products #items_action span{
+    font-size: 14px;
+    font-weight: 500;
+}
+#order_products .filter{
+    padding-top: 1.375rem;
+}
+#order_products .row-filter{
+    margin-top: 1.35rem ;
+}
+
+.order_content .multiple_action{
+    background: #333333;
+    border-radius: 4px;
+}
+.order_content .multiple_action .count_checkbox{
+    font-size: 16px;
+    font-weight: 600;
+    color: #FFFFFF;
+}
+.order_content .multiple_action{
+    display: none;
+}
+.highlight {
+    border: 2px solid red;
+}
