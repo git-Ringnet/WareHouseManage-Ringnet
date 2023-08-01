@@ -44,7 +44,7 @@
                     </button>
                 </a>
                 <form action="{{ route('importDatabase') }}" enctype="multipart/form-data" method="POST"
-                    id="restore_data" class="btn btn-default d-flex align-items-center h-100 custom-btn">
+                    id="restore_data" class="btn btn-outline-primary d-flex align-items-center h-100 custom-btn">
                     @csrf
                     <label class="btn-file mb-0 wf-500" style="color:#0095F6; font-weight : 500">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
