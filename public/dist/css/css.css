@@ -1088,3 +1088,15 @@ color: var(--secondary-gray-5-default, #555);
     background: var(--gray-11-hover-select, #ECECEC);
     padding: 8px 16px;
 }
+
+
+#restore_data, #restore_data label{
+    cursor: pointer;
+}
+#restore_data:hover{
+    background: none;
+}
+
+#restore_data:hover svg path{
+    stroke: none;
+}
