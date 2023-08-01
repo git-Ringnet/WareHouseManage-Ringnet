@@ -787,70 +787,69 @@ class ReportController extends Controller
 
     // Backup DATABASE
     public function exportDatabase()
-{
-    // Đường dẫn đến thư mục lưu trữ các file backup
-    $backupPath = storage_path('app/backupdata/');
-
-    // Thay đổi các thông số dưới đây nếu cần thiết
-    $dbUsername = 'root';
-    $dbName = 'laravel';
-    $dbPass = ''; // If you have a password, provide it here.
-
-    // Sử dụng lệnh mysqldump để xuất cơ sở dữ liệu
-    $passwordOption = $dbPass !== '' ? "-p$dbPass" : "";
-
-    // Lấy ngày giờ hiện tại của hệ thống máy tính
-    $date = date('d_m_Y_H_i_s');
-
-    // Thực hiện mysqldump để tạo file SQL và lưu vào thư mục tạm thời
-    $fileName = "backup_$date.sql";
-    $command = "mysqldump -u $dbUsername $passwordOption $dbName > $backupPath$fileName";
-    exec($command);
-
-    // Tạo tệp zip và nén tệp SQL vào trong đó
-    $zip = new ZipArchive();
-    $zipFileName = "backup_$date.zip";
-    if ($zip->open($backupPath . $zipFileName, ZipArchive::CREATE) === TRUE) {
-        $zip->addFile($backupPath . $fileName, $fileName);
-        $zip->close();
-    }
-
-    // Xóa tệp SQL không nén nữa
-    unlink($backupPath . $fileName);
-
-    // Trả về file backup để tải xuống
-    return back()->with('msg', 'Backup dữ liệu thành công !');
-}
-
-
-
-    // Restore DATABASE
-    public function importDatabase(Request $request)
     {
-        $dbNameImport = $request->fileName;
         // Đường dẫn đến thư mục lưu trữ các file backup
-        $backupPath = "C:/backup/";
-
-        // Đảm bảo thư mục backup tồn tại
-        if (!file_exists($backupPath)) {
-            mkdir($backupPath, 0755, true);
-        }
+        $backupPath = storage_path('app/backupdata/');
 
         // Thay đổi các thông số dưới đây nếu cần thiết
         $dbUsername = 'root';
         $dbName = 'laravel';
         $dbPass = ''; // If you have a password, provide it here.
 
-        // Tên file backup dựa trên thời gian hiện tại
-
         // Sử dụng lệnh mysqldump để xuất cơ sở dữ liệu
         $passwordOption = $dbPass !== '' ? "-p$dbPass" : "";
 
-        $command = "mysql -u $dbUsername $passwordOption $dbName < $backupPath$dbNameImport";
+        // Lấy ngày giờ hiện tại của hệ thống máy tính
+        $date = date('d_m_Y_H_i_s');
+
+        // Thực hiện mysqldump để tạo file SQL và lưu vào thư mục tạm thời
+        $fileName = "backup_$date.sql";
+        $command = "mysqldump -u $dbUsername $passwordOption $dbName > $backupPath$fileName";
         exec($command);
 
+        // Tạo tệp zip và nén tệp SQL vào trong đó
+        $zip = new ZipArchive();
+        $zipFileName = "backup_$date.zip";
+        if ($zip->open($backupPath . $zipFileName, ZipArchive::CREATE) === TRUE) {
+            $zip->addFile($backupPath . $fileName, $fileName);
+            $zip->close();
+        }
+
+        // Xóa tệp SQL không nén nữa
+        unlink($backupPath . $fileName);
+
         // Trả về file backup để tải xuống
-        session()->flash('msg', 'Restore dữ liệu thành công !');
-        return response()->json(['success' => true, 'msg' => 'Restore dữ liệu thành công !']);
+        return back()->with('msg', 'Backup dữ liệu thành công !');
+    }
+
+    // Restore DATABASE
+    public function importDatabase(Request $request)
+    {
+        $getFile = $request->file('file');
+        $name = $getFile->getClientOriginalName();
+        $fullPath = storage_path('backup');
+
+        if (!file_exists($fullPath)) {
+            mkdir($fullPath, 0755, true);
+        }
+
+        // Lưu file vào thư mục backup
+        $getFile->move($fullPath, $name);
+
+        $dbUsername = 'root';
+        $dbName = 'laravel';
+        $dbPass = '';
+        $passwordOption = $dbPass !== '' ? "-p$dbPass" : "";
+
+        $command = "mysql -u $dbUsername $passwordOption $dbName < \"$fullPath/$name\"";
+        exec($command);
+
+        // Import xong, tiến hành xóa file
+        $filePath = "$fullPath/$name";
+        if (file_exists($filePath)) {
+            unlink($filePath); // Xóa file
+        }
+
+        return redirect()->back()->with('msg', 'Restore dữ liệu thành công !');
     }
 }

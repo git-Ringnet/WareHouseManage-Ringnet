@@ -112,16 +112,6 @@
                         @endif
                     </a>
                 </li>
-                <li>
-                    <a href="{{ route('exportDatabase') }}" class="m-4">
-                        <button class="btn btn-primary">Backup</button>
-                    </a>
-                </li>
-                <li>
-                    <label class="btn btn-primary btn-file">
-                        Restore <input type="file" style="display: none;" id="file_restone" accept=".sql">
-                    </label>
-                </li>
             </ul>
 
             <!-- Right navbar links -->
@@ -173,7 +163,8 @@
                                         </li>
                                         <hr class="m-0">
                                         <li class="profile-li px-3 py-1">
-                                            <a class="text-sm text-custom" href="{{ route('backupdata.index') }}">Dữ liệu</a>
+                                            <a class="text-sm text-custom" href="{{ route('backupdata.index') }}">Dữ
+                                                liệu</a>
                                         </li>
                                         <hr class="m-0">
                                         <li class="logout-li px-3 py-1">
@@ -625,21 +616,4 @@
                 }
             });
         });
-        $(document).on('change','#file_restone',function(e){
-            e.preventDefault();
-            var fileName = e.target.files[0].name;
-            $.ajax({
-                url: "{{ route('importDatabase') }}",
-                type: "get",
-                data: {
-                    fileName: fileName,
-                },
-                success: function(data) {
-                    if (data.success == true) {
-                        location.reload();
-                    }
-                }
-
-            })
-        })
     </script>
