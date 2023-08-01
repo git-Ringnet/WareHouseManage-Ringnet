@@ -790,7 +790,9 @@ class ReportController extends Controller
     {
         // Đường dẫn đến thư mục lưu trữ các file backup
         $backupPath = storage_path('app/backupdata/');
-
+        if (!file_exists($backupPath)) {
+            mkdir($backupPath, 0755, true);
+        }
         // Thay đổi các thông số dưới đây nếu cần thiết
         $dbUsername = 'root';
         $dbName = 'laravel';

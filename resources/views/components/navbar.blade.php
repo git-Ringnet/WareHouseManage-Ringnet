@@ -161,11 +161,13 @@
                                             <a class="text-sm text-custom" href="{{ route('profile.show') }}">Thông
                                                 tin</a>
                                         </li>
+                                        @can('isAdmin')
                                         <hr class="m-0">
                                         <li class="profile-li px-3 py-1">
                                             <a class="text-sm text-custom" href="{{ route('backupdata.index') }}">Dữ
                                                 liệu</a>
                                         </li>
+                                        @endcan
                                         <hr class="m-0">
                                         <li class="logout-li px-3 py-1">
                                             <form class="" method="POST" action="{{ route('logout') }}" x-data>
