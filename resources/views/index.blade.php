@@ -35,8 +35,8 @@
                                         <div id="all-orders">
                                             <div class="d-flex flex-column all-orders">
                                                 <div class="ca d-flex">
-                                                    <div id="it0"></div>->
-                                                    <div id="id0"></div>
+                                                    <div id="it0">{{ $ordersAll['start_date'] }}</div>->
+                                                    <div id="id0">{{ $ordersAll['end_date'] }}</div>
                                                 </div>
                                                 <div class="ca text-left">Tất cả</div>
                                             </div>
@@ -104,8 +104,7 @@
                                         <div class="input-group p-2 justify-content-around">
                                             <div class="start">
                                                 <label for="start">Từ ngày</label>
-                                                <input type="date" name="date_start"
-                                                    class="date_start rounded">
+                                                <input type="date" name="date_start" class="date_start rounded">
                                             </div>
                                             <div class="end">
                                                 <label for="start">Đến ngày</label>
@@ -174,7 +173,7 @@
                                     </div>
                                     <div class="pl-2">
                                         <h5>Tổng đơn nhập</h5>
-                                        <div class="value text-left" id="import_id"></div>
+                                        <div class="value text-left" id="import_id">{{ number_format($ordersAll['countID']) }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -193,7 +192,7 @@
                                     </div>
                                     <div class="pl-2">
                                         <h5>Tổng tiền nhập(+VAT)</h5>
-                                        <div class="value text-left" id="import_total"></div>
+                                        <div class="value text-left" id="import_total">{{ number_format($ordersAll['sumTotal']) }}</div>
                                     </div>
                                 </div>
 
@@ -220,8 +219,8 @@
                                         <div id="all-exports">
                                             <div class="d-flex flex-column all-exports">
                                                 <div class="ca d-flex">
-                                                    <div id="et0"></div>->
-                                                    <div id="ed0"></div>
+                                                    <div id="et0">{{ $exportAll['start_date'] }}</div>->
+                                                    <div id="ed0">{{ $exportAll['end_date'] }}</div>
                                                 </div>
                                                 <div class="ca text-left">Tất cả</div>
                                             </div>
@@ -361,7 +360,7 @@
                                     </div>
                                     <div class="pl-2">
                                         <h5>Tổng đơn xuất</h5>
-                                        <div class="value text-left" id="export_id"></div>
+                                        <div class="value text-left" id="export_id">{{ number_format($exportAll['countExport']) }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -380,7 +379,7 @@
                                     </div>
                                     <div class="pl-2">
                                         <h5>Tổng tiền xuất</h5>
-                                        <div class="value text-left" id="export_total"></div>
+                                        <div class="value text-left" id="export_total">{{ number_format($exportAll['sumExport']) }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -409,8 +408,8 @@
                                         <div id="all-inventory">
                                             <div class="d-flex flex-column all-inventory">
                                                 <div class="ca d-flex">
-                                                    <div id="ivent0"></div>->
-                                                    <div id="ivend0"></div>
+                                                    <div id="ivent0">{{ $inventAll['start_date'] }}</div>->
+                                                    <div id="ivend0">{{ $inventAll['end_date'] }}</div>
                                                 </div>
                                                 <div class="ca text-left">Tất cả</div>
                                             </div>
@@ -520,7 +519,7 @@
                                     </div>
                                     <div class="pl-2">
                                         <h5>Sản phẩm tồn kho</h5>
-                                        <div class="value text-left" id="inventory_id"></div>
+                                        <div class="value text-left" id="inventory_id">{{ number_format($inventAll['countInventory']) }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -539,7 +538,7 @@
                                     </div>
                                     <div class="pl-2">
                                         <h5>Tổng tiền tồn kho</h5>
-                                        <div class="value text-left" id="inventory_total"></div>
+                                        <div class="value text-left" id="inventory_total">{{ number_format($inventAll['sumInventory']) }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -565,8 +564,8 @@
                                         <div id="all-debt">
                                             <div class="d-flex flex-column all-debt">
                                                 <div class="ca d-flex">
-                                                    <div id="debtt0"></div>->
-                                                    <div id="debtd0"></div>
+                                                    <div id="debtt0">{{ $debts['start_date'] }}</div>->
+                                                    <div id="debtd0">{{ $debts['end_date'] }}</div>
                                                 </div>
                                                 <div class="ca text-left">Tất cả</div>
                                             </div>
@@ -693,7 +692,7 @@
                                     </div>
                                     <div class="pl-2">
                                         <h5>Công nợ nhập(+VAT)</h5>
-                                        <div class="value text-left" id="debt_import"></div>
+                                        <div class="value text-left" id="debt_import">{{ number_format($debts['debt_import']) }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -736,7 +735,7 @@
                                     </div>
                                     <div class="pl-2">
                                         <h5>Công nợ xuất</h5>
-                                        <div class="value text-left" id="debt_export"></div>
+                                        <div class="value text-left" id="debt_export">{{ number_format($debts['debt_export']) }}</div>
 
                                     </div>
                                 </div>
@@ -766,8 +765,8 @@
                                         <div id="all-profit">
                                             <div class="d-flex flex-column all-profit">
                                                 <div class="ca d-flex">
-                                                    <div id="prot0"></div>->
-                                                    <div id="prod0"></div>
+                                                    <div id="prot0">{{ $profitAll['start_date'] }}</div>->
+                                                    <div id="prod0">{{ $profitAll['end_date'] }}</div>
                                                 </div>
                                                 <div class="ca text-left">Tất cả</div>
                                             </div>
@@ -871,7 +870,8 @@
                                     </div>
                                     <div class="pl-2">
                                         <h5>Tổng lợi nhuận</h5>
-                                        <div class="value text-left" id="sum-profit"></div>
+                                        <div class="value text-left" id="sum-profit">
+                                            {{ number_format($profitAll['countProfit']) }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -1243,13 +1243,13 @@
         // Trả về kết quả đã định dạng
         return formattedValue;
     }
-    window.onload = function() {
-        $("#btn-all-orders").click();
-        $("#btn-all-exports").click();
-        $("#btn-all-inventory").click();
-        $("#btn-all-debt").click();
-        $("#btn-all-profit").click();
-    };
+    // window.onload = function() {
+    //     $("#btn-all-orders").click();
+    //     $("#btn-all-exports").click();
+    //     $("#btn-all-inventory").click();
+    //     $("#btn-all-debt").click();
+    //     $("#btn-all-profit").click();
+    // };
 
     function formatDate(date) {
         var day = date.getDate();
@@ -1275,8 +1275,7 @@
                 $('#import_id').text(data.countID);
                 if (data.sumTotal > 0) {
                     $('#import_total').text(formatCurrency(data.sumTotal));
-                }
-                else {
+                } else {
                     $('#import_total').text(0);
                 }
                 if (data.start_date && data.end_date) {
@@ -1285,7 +1284,7 @@
                     $(stId).text(data.start_date)
                     $(edId).text(data.end_date)
                 }
-                
+
             }
         })
     })
@@ -1304,7 +1303,7 @@
             success: function(data) {
                 $('#import_id').text(data.countID);
                 $('#import_total').text(formatCurrency(data.sumTotal));
-                
+
             }
         })
     })
@@ -1330,7 +1329,7 @@
                     $(stId).text(data.start_date)
                     $(edId).text(data.end_date)
                 }
-                
+
             }
         })
     })
@@ -1349,7 +1348,7 @@
             success: function(data) {
                 $('#export_id').text(data.countExport);
                 $('#export_total').text(formatCurrency(data.sumExport));
-                
+
 
             }
         })
@@ -1364,7 +1363,7 @@
                 data: dataid
             },
             success: function(data) {
-                
+
                 $('#inventory_id').text(data.countInventory);
                 $('#inventory_total').text(formatCurrency(data.sumInventory));
                 if (data.start_date && data.end_date) {
@@ -1373,7 +1372,7 @@
                     $(stId).text(data.start_date)
                     $(edId).text(data.end_date)
                 }
-                
+
             }
         })
     })
@@ -1392,7 +1391,7 @@
             success: function(data) {
                 $('#inventory_id').text(data.countInventory);
                 $('#inventory_total').text(formatCurrency(data.sumInventory));
-                
+
 
             }
         })
@@ -1407,23 +1406,23 @@
                 data: dataid
             },
             success: function(data) {
-                if(data.debt_export > 0){
+                if (data.debt_export > 0) {
                     $('#debt_export').text(formatCurrency(data.debt_export));
-                }else{
+                } else {
                     $('#debt_export').text(0);
                 }
-                if(data.debt_import > 0){
+                if (data.debt_import > 0) {
                     $('#debt_import').text(formatCurrency(data.debt_import));
-                }else{
+                } else {
                     $('#debt_import').text(0);
-                }  
+                }
                 if (data.start_date && data.end_date) {
                     var stId = '#debtt' + dataid;
                     var edId = '#debtd' + dataid;
                     $(stId).text(data.start_date)
                     $(edId).text(data.end_date)
                 }
-                
+
             }
         })
     })
@@ -1440,17 +1439,17 @@
                 date_end: date_end
             },
             success: function(data) {
-                if(data.debt_export > 0){
+                if (data.debt_export > 0) {
                     $('#debt_export').text(formatCurrency(data.debt_export));
-                }else{
+                } else {
                     $('#debt_export').text(0);
                 }
-                if(data.debt_import > 0){
+                if (data.debt_import > 0) {
                     $('#debt_import').text(formatCurrency(data.debt_import));
-                }else{
+                } else {
                     $('#debt_import').text(0);
-                }   
-                
+                }
+
             }
         })
     })
@@ -1471,7 +1470,7 @@
                     $(stId).text(data.start_date)
                     $(edId).text(data.end_date)
                 }
-                
+
             }
         })
     })
@@ -1489,7 +1488,7 @@
             },
             success: function(data) {
                 $('#sum-profit').text(formatCurrency(data.countProfit));
-                
+
 
             }
         })

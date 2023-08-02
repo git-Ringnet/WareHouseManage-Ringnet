@@ -308,12 +308,12 @@ $index = array_search($item['label'], $numberedLabels);
                                                             name="status[]" value="1">
                                                         <label id="status_value" for="">Gần hết</label>
                                                     </li>
-                                                    <li>
+                                                    {{-- <li>
                                                         <input type="checkbox" id="status"
                                                             {{ in_array(0, $status) ? 'checked' : '' }}
                                                             name="status[]" value="0">
                                                         <label for="">Hết hàng</label>
-                                                    </li>
+                                                    </li> --}}
                                                 </ul>
                                             </div>
                                             <div class="d-flex justify-contents-center align-items-baseline p-2">

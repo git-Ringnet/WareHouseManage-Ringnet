@@ -33,7 +33,111 @@ class DashboardController extends Controller
         $orders = $this->orders->allNhaphang();
         $orders = count($orders);
         $getMinDateOrders = $this->orders->getMinDateOrders();
-        return view('index', compact('title', 'orders', 'getMinDateOrders'));
+        $today = Carbon::today();
+        $count = Orders::selectSub(function ($query) {
+            $query->from('Orders')->where('orders.order_status', '=', 1)
+                ->selectRaw('count(id)');
+        }, 'countID')
+            ->selectSub(function ($query) {
+                $query->from('Orders')->where('orders.order_status', '=', 1)
+                    ->selectRaw('SUM(total_tax)');
+            }, 'sumTotal') // Lấy ngày created_at bé nhất
+            ->selectSub(function ($query) {
+                $query->from('Orders')->where('orders.order_status', '=', 1)
+                    ->selectRaw('MIN(created_at)');
+            }, 'minCreatedAt')
+            ->first();
+        $minCreatedAt = Carbon::parse($count->minCreatedAt);
+        $ordersAll = [
+            'countID' => $count->countID,
+            'sumTotal' => $count->sumTotal,
+            'start_date' => $minCreatedAt->format('d-m-Y'), // Định dạng lại ngày bắt đầu
+            'end_date' => $today->format('d-m-Y'), // Định dạng lại ngày hôm nay
+        ];
+        $countExport = Exports::selectSub(function ($query) {
+            $query->from('exports')->where('exports.export_status', '=', 2)
+                ->selectRaw('count(id)');
+        }, 'countExport')
+            ->selectSub(function ($query) {
+                $query->from('exports')->where('exports.export_status', '=', 2)
+                    ->selectRaw('SUM(total)');
+            }, 'sumExport') // Lấy ngày created_at bé nhất
+            ->selectSub(function ($query) {
+                $query->from('exports')->where('exports.export_status', '=', 2)
+                    ->selectRaw('MIN(created_at)');
+            }, 'minCreatedAt')
+            ->first();
+        $minCreatedAt = Carbon::parse($countExport->minCreatedAt);
+        $exportAll = [
+            'countExport' => $countExport->countExport,
+            'sumExport' => $countExport->sumExport,
+            'start_date' => $minCreatedAt->format('d-m-Y'), // Định dạng lại ngày bắt đầu
+            'end_date' => $today->format('d-m-Y'), // Định dạng lại ngày hôm nay
+        ];
+        $countInvent = Product::selectSub(function ($query) {
+            $query->from('product')->where('product.product_qty', '>', 0)
+                ->selectRaw('count(id)');
+        }, 'countInventory')
+            ->selectSub(function ($query) {
+                $query->from('product')->where('product.product_qty', '>', 0)
+                    ->selectRaw('SUM(product_total)');
+            }, 'sumInventory') // Lấy ngày created_at bé nhất
+            ->selectSub(function ($query) {
+                $query->from('product')->where('product.product_qty', '>', 0)
+                    ->selectRaw('MIN(created_at)');
+            }, 'minCreatedAt')
+            ->first();
+        $minCreatedAt = Carbon::parse($countInvent->minCreatedAt);
+        $inventAll = [
+            'countInventory' => $countInvent->countInventory,
+            'sumInventory' => $countInvent->sumInventory,
+            'start_date' => $minCreatedAt->format('d-m-Y'), // Định dạng lại ngày bắt đầu
+            'end_date' => $today->format('d-m-Y'), // Định dạng lại ngày hôm nay
+        ];
+
+        $countDebtExport = Debt::selectSub(function ($query) {
+            $query->from('debts')->where('debt_status', '!=', 1)
+                ->selectRaw('SUM(total_sales)');
+        }, 'count')->selectSub(function ($query) {
+            $query->from('debts')->where('debt_status', '!=', 1)
+                ->selectRaw('MIN(created_at)');
+        }, 'exportCreatedAt')->first();
+        $countDebtImport = DebtImport::selectSub(function ($query) {
+            $query->from('debt_import')->where('debt_status', '!=', 1)
+                ->selectRaw('SUM(total_import)');
+        }, 'countDebtImport')->selectSub(function ($query) {
+            $query->from('debt_import')->where('debt_status', '!=', 1)
+                ->selectRaw('MIN(created_at)');
+        }, 'importCreatedAt')->first();
+
+        $minCreatedAt = Carbon::parse($countDebtImport->importCreatedAt);
+        $minCreatedAt12 = Carbon::parse($countDebtExport->exportCreatedAt);
+        $smallerDate = $minCreatedAt->min($minCreatedAt12);
+        $debts = [
+            'debt_import' => $countDebtImport->countDebtImport,
+            'debt_export' => $countDebtExport->count,
+            'start_date' => $smallerDate->format('d-m-Y'),
+            'end_date' => $today->format('d-m-Y'),
+        ];
+        $countProfit = Debt::selectSub(function ($query) {
+            $query->from('debts')
+                ->selectRaw('sum(total_difference)');
+        }, 'countProfit')
+            // Lấy ngày created_at bé nhất
+            ->selectSub(function ($query) {
+                $query->from('debts')
+                    ->selectRaw('MIN(created_at)');
+            }, 'minCreatedAt')
+            ->first();
+        $minCreatedAt = Carbon::parse($countProfit->minCreatedAt);
+
+        $profitAll =[
+            'countProfit' => $countProfit->countProfit,
+            'start_date' => $minCreatedAt->format('d-m-Y'), // Định dạng lại ngày bắt đầu
+            'end_date' => $today->format('d-m-Y'), // Định dạng lại ngày hôm nay
+        ];
+
+        return view('index', compact('title', 'orders', 'ordersAll', 'exportAll','inventAll','debts','profitAll', 'getMinDateOrders'));
     }
 
     // Nhập hàng
