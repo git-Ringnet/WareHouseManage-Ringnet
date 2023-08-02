@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Models\Products;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
@@ -775,5 +776,14 @@ class DashboardController extends Controller
                 ->first();
             return $count;
         }
+    }
+    public function test()
+    {
+        // Thử lấy dữ liệu từ cache
+        $products = Cache::remember('products_cache', 50, function () {
+            return Product::all();
+        });
+
+        return view('tables.order.test', compact('products'));
     }
 }

@@ -176,6 +176,7 @@ Route::middleware([
 ])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 });
+Route::get('/test',[DashboardController::class, 'test'])->name('test');
 //chuyen trang
 Route::get('/{name?}', function ($name = "index") {
     return view($name);
