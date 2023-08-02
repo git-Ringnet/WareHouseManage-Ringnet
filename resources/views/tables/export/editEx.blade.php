@@ -1,5 +1,5 @@
 <x-navbar :title="$title"></x-navbar>
-<div class="content-wrapper export-add">
+<div class="content-wrapper export-add padding-112">
     <div class="row">
         <div class="col-sm-6 breadcrumb">
             @if ($exports->export_status == 2)

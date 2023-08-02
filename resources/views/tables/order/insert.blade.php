@@ -1,7 +1,7 @@
 <x-navbar :title="$title"></x-navbar>
 @if (Auth::check() != null)
     <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
+    <div class="content-wrapper padding-112">
         <div class="row">
             <div class="col-sm-6 breadcrumb">
                 <span> <a href="{{ route('insertProduct.index') }}"> Nhập hàng</a></span>

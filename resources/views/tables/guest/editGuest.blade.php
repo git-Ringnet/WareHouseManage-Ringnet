@@ -1,6 +1,6 @@
 <x-navbar :title="$title"></x-navbar>
 <!-- Content Wrapper. Contains page content -->
-<div class="content-wrapper">
+<div class="content-wrapper padding-112">
     <div class="breadcrumb">
         <span><a href="{{ route('guests.index') }}">Khách hàng</a></span>
         <span class="px-1">/</span>

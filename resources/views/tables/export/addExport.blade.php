@@ -1,5 +1,5 @@
 <x-navbar :title="$title"></x-navbar>
-<div class="content-wrapper export-add">
+<div class="content-wrapper export-add padding-112">
     <div class="row">
         <div class="col-sm-6 breadcrumb">
             <span><a href="{{ route('exports.index') }}">Xuất hàng</a></span>

@@ -1,6 +1,6 @@
 <x-navbar :title="$title"></x-navbar>
 <!-- Content Wrapper. Contains page content -->
-<div class="content-wrapper">
+<div class="content-wrapper padding-112">
     <div class="row">
         <div class="col-sm-6 breadcrumb">
             @if ($order->order_status == 1)

@@ -1,6 +1,6 @@
 <!-- Công nợ -->
 <x-navbar :title="$title"></x-navbar>
-<div class="content-wrapper">
+<div class="content-wrapper padding-112">
     <div class="breadcrumb">
         <span><a href="{{ route('debt_import.index') }}">Công nợ nhập</a></span>
         <span class="px-1">/</span>
