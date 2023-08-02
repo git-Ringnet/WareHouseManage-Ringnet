@@ -14,7 +14,7 @@
             {{ $title }}
         @endif
     </title>
-    <link rel="icon" type="image/x-icon" href="{{ asset('dist/img/icon/favicon.ico') }}">
+    <link rel="icon" type="image/x-icon" href="{{ asset('dist/img/icon/logoRingnet.ico') }}">
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -528,6 +528,9 @@
                         </a>
                     </li>
                 </ul>
+                <div class="w-75 d-block mt-2" style="margin: 0 auto;">
+                    <img src="../../dist/img/logoRingnet.png" alt="" class="w-100">
+                </div>
             </nav>
             <!-- /.sidebar-menu -->
         </div>
