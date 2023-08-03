@@ -596,14 +596,20 @@ td p {
     scrollbar-color: #999999 #f0f0f0;
     /* màu của thanh cuộn */
     box-shadow: none;
+}
+
+.scroll-custom{
+    max-height: 60vh;
+    /* ẩn thanh cuộn trên các trình duyệt mới */
+    scrollbar-color: #999999 #f0f0f0;
     overflow-y: scroll;
     scrollbar-width: none;
     -ms-overflow-style: none;
 }
 
-.card::-webkit-scrollbar {
+/* .card::-webkit-scrollbar {
     width: 0;
-}
+} */
 
 .btn-primary {
     background-color: #0095f6;

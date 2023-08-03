@@ -590,7 +590,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('product_qty_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
                                                 <input class="w-50 input-quantity product_qty-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -620,7 +620,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('export_qty_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
                                                 <input class="w-50 input-quantity export_qty-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -699,7 +699,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('price_import_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
                                                 <input class="w-50 input-quantity price_import-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -729,7 +729,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('import_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
                                                 <input class="w-50 input-quantity import-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -759,7 +759,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('sale_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
                                                 <input class="w-50 input-quantity sale-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -789,7 +789,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('total_sale_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
                                                 <input class="w-50 input-quantity total-sale-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -819,7 +819,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('total_difference_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
                                                 <input class="w-50 input-quantity total_difference-input"
                                                     type="text"
@@ -850,7 +850,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('tranport_fee_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
                                                 <input class="w-50 input-quantity tranport_fee-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -984,7 +984,7 @@ $index = array_search($item['label'], $numberedLabels);
         <div class="">
             <div class="row">
                 <div class="col col-12">
-                    <div class="card">
+                    <div class="card scroll-custom">
                         <div class="card-header">
                             <h3 class="card-title"></h3>
                         </div>
@@ -1006,7 +1006,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             </span>
                                         </th>
                                         <th scope="col">
-                                            <span class="d-flex align-items-center">
+                                            <span class="d-flex align-items-center" style="width:100px;">
                                                 <a href="#" class="sort-link" data-sort-by="name"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Nhân viên</button></a>
@@ -1022,7 +1022,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             </span>
                                         </th>
                                         <th scope="col" class="text-left">
-                                            <span class="d-flex justify-content-start" style="width:100px;">
+                                            <span class="d-flex justify-content-start" style="width:300px;">
                                                 <a href="#" class="sort-link" data-sort-by="provide_name"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">NCC</button></a>
@@ -1030,7 +1030,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             </span>
                                         </th>
                                         <th scope="col" class="text-left">
-                                            <span class="d-flex justify-content-start" style="width:110px;">
+                                            <span class="d-flex justify-content-start" style="width:300px;">
                                                 <a href="#" class="sort-link" data-sort-by="product_name"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Mặt hàng</button></a>
@@ -1089,7 +1089,7 @@ $index = array_search($item['label'], $numberedLabels);
                                         </th>
                                         <th scope="col" class="text-center">
                                             <span class="d-flex justify-content-start align-items-center"
-                                                style="width:110px;">
+                                                style="width:300px;">
                                                 <a href="#" class="sort-link" data-sort-by="guest_name"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Khách hàng</button></a>
