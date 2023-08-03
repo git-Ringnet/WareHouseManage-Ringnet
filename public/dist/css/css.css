@@ -7,6 +7,7 @@
     border-radius: 8px;
     left: -40px !important;
 }
+
 .block-options-admin {
     width: 250px;
     background-color: #fff;
@@ -253,7 +254,7 @@ nav.main-header.navbar.navbar-expand.navbar-white.navbar-light {
     position: relative;
 }
 
-.padding-112{
+.padding-112 {
     padding-top: 112px;
 }
 
@@ -595,6 +596,13 @@ td p {
     scrollbar-color: #999999 #f0f0f0;
     /* màu của thanh cuộn */
     box-shadow: none;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.card::-webkit-scrollbar {
+    width: 0;
 }
 
 .btn-primary {
@@ -751,7 +759,8 @@ input[type="number"] {
     padding: 5px;
 }
 
-.filter-options ul label,.block-options-admin label {
+.filter-options ul label,
+.block-options-admin label {
     font-weight: 400 !important;
     color: #555555;
     margin: 0;
@@ -762,7 +771,8 @@ input[type="number"] {
 .filter-options li:hover,
 .filter-options label:hover,
 .profile-li:hover,
-.logout-li:hover,.block-options-admin li:hover {
+.logout-li:hover,
+.block-options-admin li:hover {
     background-color: #ebebeb;
     transition: background-color 0.3s ease;
     cursor: pointer;
@@ -906,7 +916,8 @@ input[type="checkbox"] {
         flex: 0 0 100%;
 
     }
-    .link-report .choosetime{
+
+    .link-report .choosetime {
         left: 0;
         bottom: 40px !important;
     }
@@ -981,10 +992,12 @@ input[type="checkbox"] {
     font-weight: 600;
     color: #0095F6;
 }
+
 .link-report {
     position: relative;
 }
-.link-report .choosetime{
+
+.link-report .choosetime {
     position: absolute;
     right: 0;
     bottom: 10px;
@@ -1066,6 +1079,7 @@ input[type="checkbox"] {
     font-size: 14px;
     font-weight: 400;
 }
+
 .block-optionss .start input,
 .block-optionss .end input {
     border-radius: 8px;
@@ -1073,20 +1087,24 @@ input[type="checkbox"] {
     background: var(--white, #FFF);
     padding: 4px;
 }
-.info-index h5{
+
+.info-index h5 {
     text-align: left;
 }
+
 /**/
-#myUL li:hover{
+#myUL li:hover {
     background: #ECECEC;
 }
-.text-perpage{
+
+.text-perpage {
     font-size: 14px;
-font-style: normal;
-font-weight: 500;
-color: var(--secondary-gray-5-default, #555);
+    font-style: normal;
+    font-weight: 500;
+    color: var(--secondary-gray-5-default, #555);
 }
-.text-perpage #perPage{
+
+.text-perpage #perPage {
     border-radius: 8px;
     border: 1px solid var(--secondary-gray-5-default, #555);
     background: var(--gray-11-hover-select, #ECECEC);
@@ -1094,34 +1112,42 @@ color: var(--secondary-gray-5-default, #555);
 }
 
 
-#restore_data, #restore_data label{
+#restore_data,
+#restore_data label {
     cursor: pointer;
 }
-#restore_data:hover{
+
+#restore_data:hover {
     background: none;
 }
 
-#restore_data:hover svg path{
+#restore_data:hover svg path {
     stroke: none;
 }
-#section_products .multiple_action{
+
+#section_products .multiple_action {
     background: #333333;
     border-radius: 4px;
 }
 
-#section_products .multiple_action .count_checkbox,.order_content .multiple_action .count_checkbox{
+#section_products .multiple_action .count_checkbox,
+.order_content .multiple_action .count_checkbox {
     font-size: 16px;
     font-weight: 600;
     color: #FFFFFF;
     padding-left: 0.75rem;
     text-align: center;
 }
-#section_products .multiple_action{
+
+#section_products .multiple_action {
     display: none;
 }
-#section_products,.order_content{
+
+#section_products,
+.order_content {
     position: relative;
 }
+
 .action::after {
     content: "";
     width: 1px;
@@ -1133,29 +1159,66 @@ color: var(--secondary-gray-5-default, #555);
 }
 
 /* Order */
-#order_products #items_action span{
+#order_products #items_action span {
     font-size: 14px;
     font-weight: 500;
 }
-#order_products .filter{
+
+#order_products .filter {
     padding-top: 1.375rem;
 }
-#order_products .row-filter{
-    margin-top: 1.35rem ;
+
+#order_products .row-filter {
+    margin-top: 1.35rem;
 }
 
-.order_content .multiple_action{
+.order_content .multiple_action {
     background: #333333;
     border-radius: 4px;
 }
-.order_content .multiple_action .count_checkbox{
+
+.order_content .multiple_action .count_checkbox {
     font-size: 16px;
     font-weight: 600;
     color: #FFFFFF;
 }
-.order_content .multiple_action{
+
+.order_content .multiple_action {
     display: none;
 }
+
 .highlight {
     border: 2px solid red;
+}
+
+/*Phân trang*/
+.pagination {
+    display: inline-block;
+    margin: 10px 0;
+}
+
+.pagination ul {
+    list-style: none;
+    padding: 0;
+    display: inline-flex;
+}
+
+.pagination a,
+.pagination span {
+    padding: 8px 19px;
+    border: 1px solid #ddd;
+    text-decoration: none;
+    color: #333;
+    border-radius: 10px;
+    background-color: #f8f9fa;
+}
+
+.pagination a:hover{
+    background-color: transparent;
+}
+
+.pagination .active a {
+    background-color: #0095f6;
+    color: #fff;
+    border-color: #0095f6;
 }

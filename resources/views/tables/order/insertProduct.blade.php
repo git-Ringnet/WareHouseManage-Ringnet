@@ -443,8 +443,7 @@ $index = array_search($item['label'], $numberedLabels);
                 <span class="count_checkbox mr-5"></span>
                 <div class="row action">
                     <div class="btn-xoahang my-2">
-                        <button id="deleteOrder"
-                            class="btn btn-group btn-light d-flex align-items-center ml-4">
+                        <button id="deleteOrder" class="btn btn-group btn-light d-flex align-items-center ml-4">
                             <svg class="mr-1" width="24" height="24" viewBox="0 0 24 24" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" clip-rule="evenodd"
@@ -711,9 +710,38 @@ $index = array_search($item['label'], $numberedLabels);
             </span>
         </div>
         <!-- <button type="submit" name="confirmBill" id="confirmBill" class="btn btn-primary">Duyệt đơn nhanh</button> -->
-        <div class="paginator mt-4 d-flex justify-content-end">
+        {{-- <div class="paginator mt-4 d-flex justify-content-end">
             {{ $orders->appends(request()->except('page'))->links() }}
-        </div>
+        </div> --}}
+        @if ($orders->count() > 0)
+            @php
+                $paginationRange = App\Helpers\PaginationHelper::calculatePaginationRange($orders->currentPage(), $orders->lastPage());
+            @endphp
+            <div class="pagination mt-4 d-flex justify-content-end">
+                <ul>
+                    @if ($paginationRange['start'] > 1)
+                        <li><a href="{{ $orders->url(1) }}">1</a></li>
+                        @if ($paginationRange['start'] > 2)
+                            <li><span>...</span></li>
+                        @endif
+                    @endif
+
+                    @for ($i = $paginationRange['start']; $i <= $paginationRange['end']; $i++)
+                        <li class="{{ $i == $orders->currentPage() ? 'active' : '' }}">
+                            <a href="{{ $orders->url($i) }}">{{ $i }}</a>
+                        </li>
+                    @endfor
+
+                    @if ($paginationRange['end'] < $orders->lastPage())
+                        @if ($paginationRange['end'] < $orders->lastPage() - 1)
+                            <li><span>...</span></li>
+                        @endif
+                        <li><a href="{{ $orders->url($orders->lastPage()) }}">{{ $orders->lastPage() }}</a>
+                        </li>
+                    @endif
+                </ul>
+            </div>
+        @endif
     </section>
 
     <!-- /.content -->

@@ -137,73 +137,73 @@ $index = array_search($item['label'], $numberedLabels);
                                 </span>
                             @endforeach
                             @if (Auth::user()->can('isAdmin'))
-                            @php  $nhanvien = [];
-                            if (isset(request()->nhanvien)) {
-                                $nhanvien = request()->nhanvien;
-                            } else {
-                                $nhanvien = [];
-                            } @endphp
-                            <div class="filter-admin">
-                                <button class="btn btn-filter btn-light mr-2" id="btn-nhanvien" type="button">
-                                    <span>
-                                        Nhân viên
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M7.23123 9.23123C7.53954 8.92292 8.03941 8.92292 8.34772 9.23123L12 12.8835L15.6523 9.23123C15.9606 8.92292 16.4605 8.92292 16.7688 9.23123C17.0771 9.53954 17.0771 10.0394 16.7688 10.3477L12.5582 14.5582C12.2499 14.8665 11.7501 14.8665 11.4418 14.5582L7.23123 10.3477C6.92292 10.0394 6.92292 9.53954 7.23123 9.23123Z"
-                                                fill="#555555" />
-                                        </svg>
+                                @php $nhanvien = [];
+                                    if (isset(request()->nhanvien)) {
+                                        $nhanvien = request()->nhanvien;
+                                    } else {
+                                        $nhanvien = [];
+                                } @endphp
+                                <div class="filter-admin">
+                                    <button class="btn btn-filter btn-light mr-2" id="btn-nhanvien" type="button">
+                                        <span>
+                                            Nhân viên
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M7.23123 9.23123C7.53954 8.92292 8.03941 8.92292 8.34772 9.23123L12 12.8835L15.6523 9.23123C15.9606 8.92292 16.4605 8.92292 16.7688 9.23123C17.0771 9.53954 17.0771 10.0394 16.7688 10.3477L12.5582 14.5582C12.2499 14.8665 11.7501 14.8665 11.4418 14.5582L7.23123 10.3477C6.92292 10.0394 6.92292 9.53954 7.23123 9.23123Z"
+                                                    fill="#555555" />
+                                            </svg>
 
-                                    </span>
-                                </button>
-                                {{-- Nhân viên admin --}}
-                                <div class="block-options-admin" id="creator-options" style="display:none">
-                                    <div class="wrap w-100">
-                                        <div class="heading-title title-wrap">
-                                            <h5>Nhân viên</h5>
-                                        </div>
-                                        <div class="search-container px-2 mt-2">
-                                            <input type="text" placeholder="Tìm kiếm" id="myInput-creator"
-                                                class="pr-4 w-100 input-search" onkeyup="filterCreator()">
-                                            <span class="search-icon"><i class="fas fa-search"></i></span>
-                                        </div>
-                                        <div
-                                            class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
-                                            <a class="cursor select-all-creator mr-auto">Chọn tất cả</a>
-                                            <a class="cursor deselect-all-creator">Hủy chọn</a>
-                                        </div>
-                                        <div class="ks-cboxtags-container">
-                                            <ul class="ks-cboxtags ks-cboxtags-creator p-0 mb-1 px-2">
-                                                @if (!empty($debtsSale))
-                                                    @php
-                                                        $seenValues = [];
-                                                    @endphp
-                                                    @foreach ($debtsSale as $value)
-                                                        @if (!in_array($value->name, $seenValues))
-                                                            <li>
-                                                                <input type="checkbox" id="name_active"
-                                                                    {{ in_array($value->name, $nhanvien) ? 'checked' : '' }}
-                                                                    name="nhanvien[]" value="{{ $value->name }}">
-                                                                <label id="nhanvien"
-                                                                    for="">{{ $value->name }}</label>
-                                                            </li>
-                                                            @php
-                                                                $seenValues[] = $value->name;
-                                                            @endphp
-                                                        @endif
-                                                    @endforeach
-                                                @endif
-                                            </ul>
-                                        </div>
-                                        <div class="d-flex justify-contents-center align-items-baseline p-2">
-                                            <button type="submit" class="btn btn-primary btn-block mr-2">Xác
-                                                Nhận</button>
-                                            <button type="button" id="cancel-creator"
-                                                class="btn btn-default btn-block">Hủy</button>
+                                        </span>
+                                    </button>
+                                    {{-- Nhân viên admin --}}
+                                    <div class="block-options-admin" id="creator-options" style="display:none">
+                                        <div class="wrap w-100">
+                                            <div class="heading-title title-wrap">
+                                                <h5>Nhân viên</h5>
+                                            </div>
+                                            <div class="search-container px-2 mt-2">
+                                                <input type="text" placeholder="Tìm kiếm" id="myInput-creator"
+                                                    class="pr-4 w-100 input-search" onkeyup="filterCreator()">
+                                                <span class="search-icon"><i class="fas fa-search"></i></span>
+                                            </div>
+                                            <div
+                                                class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
+                                                <a class="cursor select-all-creator mr-auto">Chọn tất cả</a>
+                                                <a class="cursor deselect-all-creator">Hủy chọn</a>
+                                            </div>
+                                            <div class="ks-cboxtags-container">
+                                                <ul class="ks-cboxtags ks-cboxtags-creator p-0 mb-1 px-2">
+                                                    @if (!empty($debtsSale))
+                                                        @php
+                                                            $seenValues = [];
+                                                        @endphp
+                                                        @foreach ($debtsSale as $value)
+                                                            @if (!in_array($value->name, $seenValues))
+                                                                <li>
+                                                                    <input type="checkbox" id="name_active"
+                                                                        {{ in_array($value->name, $nhanvien) ? 'checked' : '' }}
+                                                                        name="nhanvien[]" value="{{ $value->name }}">
+                                                                    <label id="nhanvien"
+                                                                        for="">{{ $value->name }}</label>
+                                                                </li>
+                                                                @php
+                                                                    $seenValues[] = $value->name;
+                                                                @endphp
+                                                            @endif
+                                                        @endforeach
+                                                    @endif
+                                                </ul>
+                                            </div>
+                                            <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                                <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                                    Nhận</button>
+                                                <button type="button" id="cancel-creator"
+                                                    class="btn btn-default btn-block">Hủy</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                             @endif
                             <div class="class" style="order:999">
                                 <div class="filter-options">
@@ -476,7 +476,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('import_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity import-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -569,7 +569,8 @@ $index = array_search($item['label'], $numberedLabels);
                         <div class="card-body">
                             <table id="example2" class="table table-hover">
                                 <thead>
-                                    <input type="hidden" id="perPageinput" name="perPageinput" value="{{ request()->perPageinput ?? 10 }}">
+                                    <input type="hidden" id="perPageinput" name="perPageinput"
+                                        value="{{ request()->perPageinput ?? 10 }}">
                                     {{-- SortType --}}
                                     <input type="hidden" id="sortByInput" name="sort-by" value="id">
                                     <input type="hidden" id="sortTypeInput" name="sort-type">
@@ -606,14 +607,14 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <div class="icon" id="icon-nhacungcap"></div>
                                             </span>
                                         </th>
-                                            <th scope="col">
-                                                <span class="d-flex justify-content-start align-items-center">
-                                                    <a href="#" class="sort-link" data-sort-by="nhanvien"
-                                                        data-sort-type="{{ $sortType }}"><button class="btn-sort"
-                                                            type="submit">Nhân viên</button></a>
-                                                    <div class="icon" id="icon-nhanvien"></div>
-                                                </span>
-                                            </th>
+                                        <th scope="col">
+                                            <span class="d-flex justify-content-start align-items-center">
+                                                <a href="#" class="sort-link" data-sort-by="nhanvien"
+                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
+                                                        type="submit">Nhân viên</button></a>
+                                                <div class="icon" id="icon-nhanvien"></div>
+                                            </span>
+                                        </th>
                                         <th scope="col">
                                             <span class="d-flex justify-content-center align-items-center">
                                                 <a href="#" class="sort-link" data-sort-by="total_import"
@@ -633,7 +634,8 @@ $index = array_search($item['label'], $numberedLabels);
                                             </span>
                                         </th>
                                         <th scope="col" class="text-center">
-                                            <span class="d-flex justify-content-center align-items-center" style="width:135px;">
+                                            <span class="d-flex justify-content-center align-items-center"
+                                                style="width:135px;">
                                                 <a href="#" class="sort-link" data-sort-by="debt_status"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Trạng
@@ -796,7 +798,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 </td>
                                                 <td class="text-center">
                                                     <p>Thành tiền</p>
-                                                        {{ number_format($item->gianhap * $item->soluong) }}
+                                                    {{ number_format($item->gianhap * $item->soluong) }}
                                                 </td>
                                                 <td>
                                                     <p>Thuế</p>
@@ -831,16 +833,52 @@ $index = array_search($item['label'], $numberedLabels);
                             </select>
                         </span>
                     </div>
-                    <div class="paginator mt-4 d-flex justify-content-end">
+                    {{-- <div class="paginator mt-4 d-flex justify-content-end">
                         @if (Auth::user()->can('isAdmin'))
                             {{ $debts->appends(request()->except('page'))->links() }}
                         @else
                             {{ $debtsCreator->appends(request()->except('page'))->links() }}
                         @endif
-                    </div>
+                    </div> --}}
+                    @php
+                        use App\Helpers\PaginationHelper;
+                        
+                        $debtsPagination = Auth::user()->can('isAdmin') ? $debts : $debtsCreator;
+                        $paginationRange = PaginationHelper::calculatePaginationRange($debtsPagination->currentPage(), $debtsPagination->lastPage());
+                        
+                        $showFirstEllipsis = $paginationRange['start'] > 2;
+                        $showLastEllipsis = $paginationRange['end'] < $debtsPagination->lastPage() - 1;
+                    @endphp
+
+                    @if ($debtsPagination->count() > 0)
+                        <div class="pagination mt-4 d-flex justify-content-end">
+                            <ul>
+                                @if ($paginationRange['start'] > 1)
+                                    <li><a href="{{ $debtsPagination->url(1) }}">1</a></li>
+                                    @if ($showFirstEllipsis)
+                                        <li><span>...</span></li>
+                                    @endif
+                                @endif
+
+                                @for ($i = $paginationRange['start']; $i <= $paginationRange['end']; $i++)
+                                    <li class="{{ $i == $debtsPagination->currentPage() ? 'active' : '' }}">
+                                        <a href="{{ $debtsPagination->url($i) }}">{{ $i }}</a>
+                                    </li>
+                                @endfor
+
+                                @if ($paginationRange['end'] < $debtsPagination->lastPage())
+                                    @if ($showLastEllipsis)
+                                        <li><span>...</span></li>
+                                    @endif
+                                    <li><a
+                                            href="{{ $debtsPagination->url($debtsPagination->lastPage()) }}">{{ $debtsPagination->lastPage() }}</a>
+                                    </li>
+                                @endif
+                            </ul>
+                        </div>
+                    @endif
                 </div>
             </div>
-
         </div>
     </section>
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -912,11 +950,12 @@ $index = array_search($item['label'], $numberedLabels);
         $('#search-filter').submit();
     });
     var dropdownItems = $('[id^="dropdown_item"]');
+
     function checkActiveItems() {
         var activeItemCount = dropdownItems.filter('.dropdown-item-active').length;
         return activeItemCount;
     }
-    
+
     dropdownItems.each(function() {
         $(this).on('click', function() {
             var isActive = $(this).hasClass('dropdown-item-active');
@@ -938,7 +977,7 @@ $index = array_search($item['label'], $numberedLabels);
             if (checkActiveItems() > 0) {
                 $('#expandall').hide();
                 $('#collapseall').show();
-              
+
             } else {
                 $('#expandall').show();
                 $('#collapseall').hide();
@@ -1193,6 +1232,7 @@ $index = array_search($item['label'], $numberedLabels);
         $('#creator-options input[type="checkbox"]').prop('checked', false);
         $('#creator-options').hide();
     });
+
     function filterCreator() {
         var input = $("#myInput-creator");
         var filter = input.val().toUpperCase();
@@ -1309,9 +1349,9 @@ $index = array_search($item['label'], $numberedLabels);
     }
 
 
-    $(document).on('click','#EXPORT_Import',function(e) {
+    $(document).on('click', '#EXPORT_Import', function(e) {
         e.preventDefault();
-         $.ajax({
+        $.ajax({
             url: "{{ route('export_import') }}",
             type: "get",
             dataType: 'json',
@@ -1374,7 +1414,6 @@ $index = array_search($item['label'], $numberedLabels);
             }
         });
     })
-
 </script>
 </body>
 

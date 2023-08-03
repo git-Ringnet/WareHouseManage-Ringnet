@@ -1283,28 +1283,56 @@ $index = array_search($item['label'], $numberedLabels);
                         </div>
 
                     </div>
-                        <div class="paginator mt-4 d-flex justify-content-start">
-                            <span class="text-perpage">
-                                Số hàng mỗi trang:
-                                <select name="perPage" id="perPage">
-                                    <option value="5" {{ $perPage == 5 ? 'selected' : '' }}>5</option>
-                                    <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
-                                    <option value="25" {{ $perPage == 25 ? 'selected' : '' }}>25</option>
-                                    <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
-                                </select>
-                            </span>
+                    <div class="paginator mt-4 d-flex justify-content-start">
+                        <span class="text-perpage">
+                            Số hàng mỗi trang:
+                            <select name="perPage" id="perPage">
+                                <option value="5" {{ $perPage == 5 ? 'selected' : '' }}>5</option>
+                                <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
+                                <option value="25" {{ $perPage == 25 ? 'selected' : '' }}>25</option>
+                                <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
+                            </select>
+                        </span>
+                    </div>
+                    {{-- <div class="paginator mt-4 d-flex justify-content-end">
+                        @if (Auth::user()->can('isAdmin'))
+                            {{ $history->appends(request()->except('page'))->links() }}
+                        @else
+                            {{ $history->appends(request()->except('page'))->links() }}
+                        @endif
+                    </div> --}}
+                    @if ($history->count() > 0)
+                        @php
+                            $paginationRange = App\Helpers\PaginationHelper::calculatePaginationRange($history->currentPage(), $history->lastPage());
+                        @endphp
+                        <div class="pagination mt-4 d-flex justify-content-end">
+                            <ul>
+                                @if ($paginationRange['start'] > 1)
+                                    <li><a href="{{ $history->url(1) }}">1</a></li>
+                                    @if ($paginationRange['start'] > 2)
+                                        <li><span>...</span></li>
+                                    @endif
+                                @endif
+
+                                @for ($i = $paginationRange['start']; $i <= $paginationRange['end']; $i++)
+                                    <li class="{{ $i == $history->currentPage() ? 'active' : '' }}">
+                                        <a href="{{ $history->url($i) }}">{{ $i }}</a>
+                                    </li>
+                                @endfor
+
+                                @if ($paginationRange['end'] < $history->lastPage())
+                                    @if ($paginationRange['end'] < $history->lastPage() - 1)
+                                        <li><span>...</span></li>
+                                    @endif
+                                    <li><a
+                                            href="{{ $history->url($history->lastPage()) }}">{{ $history->lastPage() }}</a>
+                                    </li>
+                                @endif
+                            </ul>
                         </div>
-                        <div class="paginator mt-4 d-flex justify-content-end">
-                            @if (Auth::user()->can('isAdmin'))
-                                {{ $history->appends(request()->except('page'))->links() }}
-                            @else
-                                {{ $history->appends(request()->except('page'))->links() }}
-                            @endif
-                        </div>
-              
+                    @endif
                 </div>
             </div>
-
         </div>
     </section>
     <meta name="csrf-token" content="{{ csrf_token() }}">

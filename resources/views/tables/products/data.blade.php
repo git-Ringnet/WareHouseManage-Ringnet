@@ -28,8 +28,8 @@
                 <form class="w-100" action="" method="get" id='search-filter'>
                     <div class="row mr-0">
                         <div class="col-md-5">
-                            <input type="text" placeholder="Tìm kiếm tên sản phẩm hoặc nhà cung cấp"
-                                name="keywords" class="pr-4 input-search w-100 form-control searchkeyword"
+                            <input type="text" placeholder="Tìm kiếm tên sản phẩm hoặc nhà cung cấp" name="keywords"
+                                class="pr-4 input-search w-100 form-control searchkeyword"
                                 value="{{ request()->keywords }}">
                             <span id="search-icon" class="search-icon"><i class="fas fa-search"></i></span>
                         </div>
@@ -830,12 +830,41 @@ $index = array_search($item['label'], $numberedLabels);
                             </select>
                         </span>
                     </div>
-                    <div class="paginator mt-4 d-flex justify-content-end">
+                    {{-- <div class="paginator mt-4 d-flex justify-content-end">
                         {{ $products->appends(request()->except('page'))->links() }}
-                    </div>
+                    </div> --}}
+                    @if ($products->count() > 0)
+                        @php
+                            $paginationRange = PaginationHelper::calculatePaginationRange($products->currentPage(), $products->lastPage());
+                        @endphp
+
+                        <div class="pagination mt-4 d-flex justify-content-end">
+                            <ul>
+                                @if ($paginationRange['start'] > 1)
+                                    <li><a href="{{ $products->url(1) }}">1</a></li>
+                                    @if ($paginationRange['start'] > 2)
+                                        <li><span>...</span></li>
+                                    @endif
+                                @endif
+
+                                @for ($i = $paginationRange['start']; $i <= $paginationRange['end']; $i++)
+                                    <li class="{{ $i == $products->currentPage() ? 'active' : '' }}">
+                                        <a href="{{ $products->url($i) }}">{{ $i }}</a>
+                                    </li>
+                                @endfor
+
+                                @if ($paginationRange['end'] < $products->lastPage())
+                                    @if ($paginationRange['end'] < $products->lastPage() - 1)
+                                        <li><span>...</span></li>
+                                    @endif
+                                    <li><a href="{{ $products->url($products->lastPage()) }}">{{ $products->lastPage() }}</a>
+                                    </li>
+                                @endif
+                            </ul>
+                        </div>
+                    @endif
                 </div>
             </div>
-
         </div>
     </section>
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -906,6 +935,7 @@ $index = array_search($item['label'], $numberedLabels);
         $('#checkall').prop('checked', false);
         updateMultipleActionVisibility()
     })
+
     function filterCategory() {
         var input = $("#myInput-category");
         var filter = input.val().toUpperCase();
@@ -1121,21 +1151,21 @@ $index = array_search($item['label'], $numberedLabels);
     }
 
     $(document).ready(function() {
-    // Chức năng filterStatus
-    function filterStatus() {
-        var input = $("#myInput-status");
-        var filter = input.val().toUpperCase();
-        var buttons = $(".ks-cboxtags-status li");
+        // Chức năng filterStatus
+        function filterStatus() {
+            var input = $("#myInput-status");
+            var filter = input.val().toUpperCase();
+            var buttons = $(".ks-cboxtags-status li");
 
-        buttons.each(function() {
-            var text = $(this).text();
-            if (text.toUpperCase().indexOf(filter) > -1) {
-                $(this).show();
-            } else {
-                $(this).hide();
-            }
-        });
-    }
+            buttons.each(function() {
+                var text = $(this).text();
+                if (text.toUpperCase().indexOf(filter) > -1) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        }
 
         // Gọi hàm filterStatus khi nhập vào input
         $("#myInput-status").on("keyup", filterStatus);
@@ -1150,6 +1180,7 @@ $index = array_search($item['label'], $numberedLabels);
             $(".ks-cboxtags-status input[type='checkbox']:visible").prop('checked', false);
         });
     });
+
     function filterTax() {
         var input = $("#myInput-tax");
         var filter = input.val().toUpperCase();
@@ -1222,7 +1253,7 @@ $index = array_search($item['label'], $numberedLabels);
     $(document).ready(function() {
         // Chọn tất cả các checkbox
         $('.select-all-category').click(function() {
-        $('#category-options input[type="checkbox"]:visible').prop('checked', true);
+            $('#category-options input[type="checkbox"]:visible').prop('checked', true);
         });
 
         // Hủy tất cả các checkbox

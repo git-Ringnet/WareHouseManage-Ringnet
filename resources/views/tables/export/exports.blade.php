@@ -718,9 +718,39 @@ $index = array_search($item['label'], $numberedLabels);
                             </select>
                         </span>
                     </div>
-                    <div class="paginator mt-4 d-flex justify-content-end">
+                    {{-- <div class="paginator mt-4 d-flex justify-content-end">
                         {{ $export->appends(request()->except('page'))->links() }}
-                    </div>
+                    </div> --}}
+                    @if ($export->count() > 0)
+                        @php
+                            $paginationRange = App\Helpers\PaginationHelper::calculatePaginationRange($export->currentPage(), $export->lastPage());
+                        @endphp
+                        <div class="pagination mt-4 d-flex justify-content-end">
+                            <ul>
+                                @if ($paginationRange['start'] > 1)
+                                    <li><a href="{{ $export->url(1) }}">1</a></li>
+                                    @if ($paginationRange['start'] > 2)
+                                        <li><span>...</span></li>
+                                    @endif
+                                @endif
+
+                                @for ($i = $paginationRange['start']; $i <= $paginationRange['end']; $i++)
+                                    <li class="{{ $i == $export->currentPage() ? 'active' : '' }}">
+                                        <a href="{{ $export->url($i) }}">{{ $i }}</a>
+                                    </li>
+                                @endfor
+
+                                @if ($paginationRange['end'] < $export->lastPage())
+                                    @if ($paginationRange['end'] < $export->lastPage() - 1)
+                                        <li><span>...</span></li>
+                                    @endif
+                                    <li><a
+                                            href="{{ $export->url($export->lastPage()) }}">{{ $export->lastPage() }}</a>
+                                    </li>
+                                @endif
+                            </ul>
+                        </div>
+                    @endif
                 </div>
                 <!-- /.col -->
             </div>

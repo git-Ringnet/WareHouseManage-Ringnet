@@ -361,10 +361,11 @@ $index = array_search($item['label'], $numberedLabels);
                             <span>Thay đổi người phụ trách</span>
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            @if(!empty($users))
-                            @foreach($users as $item)
-                            <button id="activeStatusGuest{{$item->id}}" data-id="{{ $item->id }}" class="dropdown-item">{{ $item->name }}</button>
-                            @endforeach
+                            @if (!empty($users))
+                                @foreach ($users as $item)
+                                    <button id="activeStatusGuest{{ $item->id }}" data-id="{{ $item->id }}"
+                                        class="dropdown-item">{{ $item->name }}</button>
+                                @endforeach
                             @endif
                         </div>
                     </div>
@@ -391,7 +392,8 @@ $index = array_search($item['label'], $numberedLabels);
                             <table id="example2" class="table table-hover">
                                 <thead>
                                     <tr>
-                                        <input type="hidden" id="perPageinput" name="perPageinput" value="{{ request()->perPageinput ?? 10 }}">
+                                        <input type="hidden" id="perPageinput" name="perPageinput"
+                                            value="{{ request()->perPageinput ?? 10 }}">
                                         <input type="hidden" id="sortByInput" name="sort-by" value="id">
                                         <input type="hidden" id="sortTypeInput" name="sort-type"
                                             value="{{ $sortType }}">
@@ -525,14 +527,50 @@ $index = array_search($item['label'], $numberedLabels);
                             </select>
                         </span>
                     </div>
-                    <div class="paginator mt-4 d-flex justify-content-end">
+                    {{-- <div class="paginator mt-4 d-flex justify-content-end">
                         @if (Auth::user()->can('isAdmin'))
                             {{ $guests->appends(request()->except('page'))->links() }}
                         @else
                             {{ $guestsCreator->appends(request()->except('page'))->links() }}
                         @endif
-                    </div>
+                    </div> --}}
+                    @php
+                        use App\Helpers\PaginationHelper;
+                        
+                        $guestPagination = Auth::user()->can('isAdmin') ? $guests : $guestsCreator;
+                        $paginationRange = PaginationHelper::calculatePaginationRange($guestPagination->currentPage(), $guestPagination->lastPage());
+                        
+                        $showFirstEllipsis = $paginationRange['start'] > 2;
+                        $showLastEllipsis = $paginationRange['end'] < $guestPagination->lastPage() - 1;
+                    @endphp
 
+                    @if ($guestPagination->count() > 0)
+                        <div class="pagination mt-4 d-flex justify-content-end">
+                            <ul>
+                                @if ($paginationRange['start'] > 1)
+                                    <li><a href="{{ $guestPagination->url(1) }}">1</a></li>
+                                    @if ($showFirstEllipsis)
+                                        <li><span>...</span></li>
+                                    @endif
+                                @endif
+
+                                @for ($i = $paginationRange['start']; $i <= $paginationRange['end']; $i++)
+                                    <li class="{{ $i == $guestPagination->currentPage() ? 'active' : '' }}">
+                                        <a href="{{ $guestPagination->url($i) }}">{{ $i }}</a>
+                                    </li>
+                                @endfor
+
+                                @if ($paginationRange['end'] < $guestPagination->lastPage())
+                                    @if ($showLastEllipsis)
+                                        <li><span>...</span></li>
+                                    @endif
+                                    <li><a
+                                            href="{{ $guestPagination->url($guestPagination->lastPage()) }}">{{ $guestPagination->lastPage() }}</a>
+                                    </li>
+                                @endif
+                            </ul>
+                        </div>
+                    @endif
                 </div>
                 <!-- /.col -->
             </div>
@@ -543,7 +581,7 @@ $index = array_search($item['label'], $numberedLabels);
     <!-- /.content -->
 </div>
 <script>
-        $('#perPage').on('change', function(e) {
+    $('#perPage').on('change', function(e) {
         e.preventDefault();
         var perPageValue = $(this).val();
         $('#perPageinput').val(perPageValue);
@@ -835,31 +873,31 @@ $index = array_search($item['label'], $numberedLabels);
     })
     // AJAX disable user
     $(document).on('click', '[id^="activeStatusGuest"]', function(e) {
-    e.preventDefault();
-    if (myFunctionCancel()) {
-        const list_id = [];
-        $('input[name="ids[]"]').each(function() {
-            if ($(this).is(':checked')) {
-                var value = $(this).val();
-                list_id.push(value);
-            }
-        });
+        e.preventDefault();
+        if (myFunctionCancel()) {
+            const list_id = [];
+            $('input[name="ids[]"]').each(function() {
+                if ($(this).is(':checked')) {
+                    var value = $(this).val();
+                    list_id.push(value);
+                }
+            });
 
-        var id = $(this).data('id'); // Lấy giá trị id từ data-id của button
+            var id = $(this).data('id'); // Lấy giá trị id từ data-id của button
 
-        $.ajax({
-            url: '{{ route('activeStatusGuest') }}',
-            type: "GET",
-            data: {
-                list_id: list_id,
-                id: id // Truyền giá trị id vào trong Ajax request
-            },
-            success: function(data) {
-                location.reload();
-            },
-        });
-    }
-});
+            $.ajax({
+                url: '{{ route('activeStatusGuest') }}',
+                type: "GET",
+                data: {
+                    list_id: list_id,
+                    id: id // Truyền giá trị id vào trong Ajax request
+                },
+                success: function(data) {
+                    location.reload();
+                },
+            });
+        }
+    });
 
 
     function myFunction() {

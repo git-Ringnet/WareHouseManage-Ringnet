@@ -451,9 +451,39 @@ $index = array_search($item['label'], $numberedLabels);
                             </select>
                         </span>
                     </div>
-                    <div class="paginator mt-4 d-flex justify-content-end">
+                    {{-- <div class="paginator mt-4 d-flex justify-content-end">
                         {{ $provides->appends(request()->except('page'))->links() }}
-                    </div>
+                    </div> --}}
+                    @if ($provides->count() > 0)
+                        @php
+                            $paginationRange = App\Helpers\PaginationHelper::calculatePaginationRange($provides->currentPage(), $provides->lastPage());
+                        @endphp
+                        <div class="pagination mt-4 d-flex justify-content-end">
+                            <ul>
+                                @if ($paginationRange['start'] > 1)
+                                    <li><a href="{{ $provides->url(1) }}">1</a></li>
+                                    @if ($paginationRange['start'] > 2)
+                                        <li><span>...</span></li>
+                                    @endif
+                                @endif
+
+                                @for ($i = $paginationRange['start']; $i <= $paginationRange['end']; $i++)
+                                    <li class="{{ $i == $provides->currentPage() ? 'active' : '' }}">
+                                        <a href="{{ $provides->url($i) }}">{{ $i }}</a>
+                                    </li>
+                                @endfor
+
+                                @if ($paginationRange['end'] < $provides->lastPage())
+                                    @if ($paginationRange['end'] < $provides->lastPage() - 1)
+                                        <li><span>...</span></li>
+                                    @endif
+                                    <li><a
+                                            href="{{ $provides->url($provides->lastPage()) }}">{{ $provides->lastPage() }}</a>
+                                    </li>
+                                @endif
+                            </ul>
+                        </div>
+                    @endif
                 </div>
                 <!-- /.col -->
             </div>
