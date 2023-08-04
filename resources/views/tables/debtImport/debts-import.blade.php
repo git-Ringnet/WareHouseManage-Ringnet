@@ -835,14 +835,14 @@ $index = array_search($item['label'], $numberedLabels);
                             </select>
                         </span>
                     </div>
-                    {{-- <div class="paginator mt-4 d-flex justify-content-end">
+                    <div class="paginator mt-4 d-flex justify-content-end">
                         @if (Auth::user()->can('isAdmin'))
                             {{ $debts->appends(request()->except('page'))->links() }}
                         @else
                             {{ $debtsCreator->appends(request()->except('page'))->links() }}
                         @endif
-                    </div> --}}
-                    @php
+                    </div>
+                    {{-- @php
                         use App\Helpers\PaginationHelper;
                         
                         $debtsPagination = Auth::user()->can('isAdmin') ? $debts : $debtsCreator;
@@ -878,7 +878,7 @@ $index = array_search($item['label'], $numberedLabels);
                                 @endif
                             </ul>
                         </div>
-                    @endif
+                    @endif --}}
                 </div>
             </div>
         </div>

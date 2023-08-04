@@ -451,10 +451,10 @@ $index = array_search($item['label'], $numberedLabels);
                             </select>
                         </span>
                     </div>
-                    {{-- <div class="paginator mt-4 d-flex justify-content-end">
+                    <div class="paginator mt-4 d-flex justify-content-end">
                         {{ $provides->appends(request()->except('page'))->links() }}
-                    </div> --}}
-                    @if ($provides->count() > 0)
+                    </div>
+                    {{-- @if ($provides->count() > 0)
                         @php
                             $paginationRange = App\Helpers\PaginationHelper::calculatePaginationRange($provides->currentPage(), $provides->lastPage());
                         @endphp
@@ -483,7 +483,7 @@ $index = array_search($item['label'], $numberedLabels);
                                 @endif
                             </ul>
                         </div>
-                    @endif
+                    @endif --}}
                 </div>
                 <!-- /.col -->
             </div>

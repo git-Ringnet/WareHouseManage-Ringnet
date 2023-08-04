@@ -710,10 +710,10 @@ $index = array_search($item['label'], $numberedLabels);
             </span>
         </div>
         <!-- <button type="submit" name="confirmBill" id="confirmBill" class="btn btn-primary">Duyệt đơn nhanh</button> -->
-        {{-- <div class="paginator mt-4 d-flex justify-content-end">
+        <div class="paginator mt-4 d-flex justify-content-end">
             {{ $orders->appends(request()->except('page'))->links() }}
-        </div> --}}
-        @if ($orders->count() > 0)
+        </div>
+        {{-- @if ($orders->count() > 0)
             @php
                 $paginationRange = App\Helpers\PaginationHelper::calculatePaginationRange($orders->currentPage(), $orders->lastPage());
             @endphp
@@ -741,7 +741,7 @@ $index = array_search($item['label'], $numberedLabels);
                     @endif
                 </ul>
             </div>
-        @endif
+        @endif --}}
     </section>
 
     <!-- /.content -->

@@ -1294,14 +1294,14 @@ $index = array_search($item['label'], $numberedLabels);
                             </select>
                         </span>
                     </div>
-                    {{-- <div class="paginator mt-4 d-flex justify-content-end">
+                    <div class="paginator mt-4 d-flex justify-content-end">
                         @if (Auth::user()->can('isAdmin'))
                             {{ $history->appends(request()->except('page'))->links() }}
                         @else
                             {{ $history->appends(request()->except('page'))->links() }}
                         @endif
-                    </div> --}}
-                    @if ($history->count() > 0)
+                    </div>
+                    {{-- @if ($history->count() > 0)
                         @php
                             $paginationRange = App\Helpers\PaginationHelper::calculatePaginationRange($history->currentPage(), $history->lastPage());
                         @endphp
@@ -1330,7 +1330,7 @@ $index = array_search($item['label'], $numberedLabels);
                                 @endif
                             </ul>
                         </div>
-                    @endif
+                    @endif --}}
                 </div>
             </div>
         </div>

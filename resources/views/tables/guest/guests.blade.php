@@ -527,14 +527,14 @@ $index = array_search($item['label'], $numberedLabels);
                             </select>
                         </span>
                     </div>
-                    {{-- <div class="paginator mt-4 d-flex justify-content-end">
+                    <div class="paginator mt-4 d-flex justify-content-end">
                         @if (Auth::user()->can('isAdmin'))
                             {{ $guests->appends(request()->except('page'))->links() }}
                         @else
                             {{ $guestsCreator->appends(request()->except('page'))->links() }}
                         @endif
-                    </div> --}}
-                    @php
+                    </div>
+                    {{-- @php
                         use App\Helpers\PaginationHelper;
                         
                         $guestPagination = Auth::user()->can('isAdmin') ? $guests : $guestsCreator;
@@ -570,7 +570,7 @@ $index = array_search($item['label'], $numberedLabels);
                                 @endif
                             </ul>
                         </div>
-                    @endif
+                    @endif --}}
                 </div>
                 <!-- /.col -->
             </div>
