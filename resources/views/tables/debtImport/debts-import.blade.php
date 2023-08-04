@@ -773,9 +773,10 @@ $index = array_search($item['label'], $numberedLabels);
                                                 </div>
                                                 <?php $stt = 0; ?>
                                                 @foreach ($product as $item)
+                                                @if ($value->import_id == $item->import_id)
                                         <tr id="product-details-{{ $value->id }}"
                                             class="collapse product-details">
-                                            @if ($value->import_id == $item->import_id)
+                                         
                                                 <td class="text-left"><?php echo $stt += 1; ?>
                                                 </td>
                                                 <td class="text-left w-auto">
@@ -812,8 +813,9 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>
-                                            @endif
+                                          
                                         </tr>
+                                    @endif
                                     @endforeach
                                     </td>
                                     </tr>
