@@ -562,13 +562,13 @@ $index = array_search($item['label'], $numberedLabels);
         <div class="">
             <div class="row">
                 <div class="col col-12">
-                    <div class="card">
+                    <div class="card scroll-custom">
                         <div class="card-header">
                             <h3 class="card-title"></h3>
                         </div>
                         <div class="card-body">
                             <table id="example2" class="table table-hover">
-                                <thead>
+                                <thead class="sticky-head">
                                     <input type="hidden" id="perPageinput" name="perPageinput"
                                         value="{{ request()->perPageinput ?? 10 }}">
                                     {{-- SortType --}}

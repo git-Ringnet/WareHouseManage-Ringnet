@@ -649,7 +649,7 @@ $index = array_search($item['label'], $numberedLabels);
                         </div>
                         <div class="card-body">
                             <table id="example2" class="table table-hover">
-                                <thead>
+                                <thead class="sticky-head">
                                     <input type="hidden" id="perPageinput" name="perPageinput"
                                         value="{{ request()->perPageinput ?? 10 }}">
                                     <input type="hidden" id="sortByInput" name="sort-by" value="id">
