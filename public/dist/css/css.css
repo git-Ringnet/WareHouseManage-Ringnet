@@ -598,13 +598,21 @@ td p {
     box-shadow: none;
 }
 
-.scroll-custom{
+.scroll-custom {
     max-height: 60vh;
     /* ẩn thanh cuộn trên các trình duyệt mới */
     scrollbar-color: #999999 #f0f0f0;
     overflow-y: scroll;
     scrollbar-width: none;
     -ms-overflow-style: none;
+}
+
+.sticky-head {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: #ffffff;
+    width: 100%;
 }
 
 /* .card::-webkit-scrollbar {
@@ -1219,7 +1227,7 @@ input[type="checkbox"] {
     background-color: #f8f9fa;
 }
 
-.pagination a:hover{
+.pagination a:hover {
     background-color: transparent;
 }
 

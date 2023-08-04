@@ -502,11 +502,11 @@ $index = array_search($item['label'], $numberedLabels);
         <div class="container-fluided">
             <div class="row">
                 <div class="col-12">
-                    <div class="card">
+                    <div class="card scroll-custom">
                         <!-- /.card-header -->
                         <div class="card-body">
                             <table id="example2" class="table table-hover">
-                                <thead>
+                                <thead class="sticky-head">
                                     <tr>
                                         <input type="hidden" id="perPageinput" name="perPageinput"
                                             value="{{ request()->perPageinput ?? 10 }}">
