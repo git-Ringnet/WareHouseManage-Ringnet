@@ -192,7 +192,7 @@
                                     </div>
                                     <div class="pl-2">
                                         <h5>Tổng tiền nhập(+VAT)</h5>
-                                        <div class="value text-left" id="import_total">{{ number_format($ordersAll['sumTotal']) }}</div>
+                                        <div class="value text-left" id="import_total">{{ number_format($ordersAll['sumTotal'],2) }}</div>
                                     </div>
                                 </div>
 
@@ -379,7 +379,7 @@
                                     </div>
                                     <div class="pl-2">
                                         <h5>Tổng tiền xuất</h5>
-                                        <div class="value text-left" id="export_total">{{ number_format($exportAll['sumExport']) }}</div>
+                                        <div class="value text-left" id="export_total">{{ number_format($exportAll['sumExport'],2) }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -538,7 +538,7 @@
                                     </div>
                                     <div class="pl-2">
                                         <h5>Tổng tiền tồn kho</h5>
-                                        <div class="value text-left" id="inventory_total">{{ number_format($inventAll['sumInventory']) }}</div>
+                                        <div class="value text-left" id="inventory_total">{{ number_format($inventAll['sumInventory'],2) }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -692,7 +692,7 @@
                                     </div>
                                     <div class="pl-2">
                                         <h5>Công nợ nhập(+VAT)</h5>
-                                        <div class="value text-left" id="debt_import">{{ number_format($debts['debt_import']) }}</div>
+                                        <div class="value text-left" id="debt_import">{{ number_format($debts['debt_import'],2) }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -735,7 +735,7 @@
                                     </div>
                                     <div class="pl-2">
                                         <h5>Công nợ xuất</h5>
-                                        <div class="value text-left" id="debt_export">{{ number_format($debts['debt_export']) }}</div>
+                                        <div class="value text-left" id="debt_export">{{ number_format($debts['debt_export'],2) }}</div>
 
                                     </div>
                                 </div>
@@ -871,7 +871,7 @@
                                     <div class="pl-2">
                                         <h5>Tổng lợi nhuận</h5>
                                         <div class="value text-left" id="sum-profit">
-                                            {{ number_format($profitAll['countProfit']) }}</div>
+                                            {{ number_format($profitAll['countProfit'],2) }}</div>
                                     </div>
                                 </div>
                             </div>
