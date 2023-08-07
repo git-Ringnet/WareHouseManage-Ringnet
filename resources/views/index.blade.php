@@ -173,7 +173,8 @@
                                     </div>
                                     <div class="pl-2">
                                         <h5>Tổng đơn nhập</h5>
-                                        <div class="value text-left" id="import_id">{{ number_format($ordersAll['countID']) }}</div>
+                                        <div class="value text-left" id="import_id">
+                                            {{ number_format($ordersAll['countID']) }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -192,7 +193,8 @@
                                     </div>
                                     <div class="pl-2">
                                         <h5>Tổng tiền nhập(+VAT)</h5>
-                                        <div class="value text-left" id="import_total">{{ number_format($ordersAll['sumTotal'],2) }}</div>
+                                        <div class="value text-left" id="import_total">
+                                            {{ number_format($ordersAll['sumTotal']) }}</div>
                                     </div>
                                 </div>
 
@@ -360,7 +362,8 @@
                                     </div>
                                     <div class="pl-2">
                                         <h5>Tổng đơn xuất</h5>
-                                        <div class="value text-left" id="export_id">{{ number_format($exportAll['countExport']) }}</div>
+                                        <div class="value text-left" id="export_id">
+                                            {{ number_format($exportAll['countExport']) }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -379,7 +382,8 @@
                                     </div>
                                     <div class="pl-2">
                                         <h5>Tổng tiền xuất</h5>
-                                        <div class="value text-left" id="export_total">{{ number_format($exportAll['sumExport'],2) }}</div>
+                                        <div class="value text-left" id="export_total">
+                                            {{ number_format($exportAll['sumExport']) }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -519,7 +523,8 @@
                                     </div>
                                     <div class="pl-2">
                                         <h5>Sản phẩm tồn kho</h5>
-                                        <div class="value text-left" id="inventory_id">{{ number_format($inventAll['countInventory']) }}</div>
+                                        <div class="value text-left" id="inventory_id">
+                                            {{ number_format($inventAll['countInventory']) }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -538,7 +543,8 @@
                                     </div>
                                     <div class="pl-2">
                                         <h5>Tổng tiền tồn kho</h5>
-                                        <div class="value text-left" id="inventory_total">{{ number_format($inventAll['sumInventory'],2) }}</div>
+                                        <div class="value text-left" id="inventory_total">
+                                            {{ number_format($inventAll['sumInventory']) }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -692,7 +698,8 @@
                                     </div>
                                     <div class="pl-2">
                                         <h5>Công nợ nhập(+VAT)</h5>
-                                        <div class="value text-left" id="debt_import">{{ number_format($debts['debt_import'],2) }}</div>
+                                        <div class="value text-left" id="debt_import">
+                                            {{ number_format($debts['debt_import']) }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -735,7 +742,8 @@
                                     </div>
                                     <div class="pl-2">
                                         <h5>Công nợ xuất</h5>
-                                        <div class="value text-left" id="debt_export">{{ number_format($debts['debt_export'],2) }}</div>
+                                        <div class="value text-left" id="debt_export">
+                                            {{ number_format($debts['debt_export']) }}</div>
 
                                     </div>
                                 </div>
@@ -871,7 +879,7 @@
                                     <div class="pl-2">
                                         <h5>Tổng lợi nhuận</h5>
                                         <div class="value text-left" id="sum-profit">
-                                            {{ number_format($profitAll['countProfit'],2) }}</div>
+                                            {{ number_format($profitAll['countProfit']) }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -1205,35 +1213,15 @@
     });
 
     function formatCurrency(value) {
-        // Làm tròn đến 2 chữ số thập phân
-        value = Math.round(value * 100) / 100;
+        // Làm tròn đến số nguyên (bỏ qua phần thập phân)
+        value = Math.round(value);
 
         // Check if the value is negative
         var isNegative = value < 0;
         value = Math.abs(value); // Get the absolute value for formatting
 
         // Xử lý phần nguyên
-        var parts = value.toFixed(2).toString().split(".");
-        var integerPart = parts[0];
-        var formattedValue = "";
-
-        // Định dạng phần nguyên
-        var count = 0;
-        for (var i = integerPart.length - 1; i >= 0; i--) {
-            formattedValue = integerPart.charAt(i) + formattedValue;
-            count++;
-            if (count % 3 === 0 && i !== 0) {
-                formattedValue = "," + formattedValue;
-            }
-        }
-
-        // Nếu có phần thập phân, thêm vào sau phần nguyên
-        if (parts.length > 1) {
-            formattedValue += "." + parts[1];
-        } else {
-            // Always ensure two decimal places
-            formattedValue += ".00";
-        }
+        var formattedValue = value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
         // Nếu là số âm, thêm dấu "-" vào đầu chuỗi
         if (isNegative) {
@@ -1243,6 +1231,7 @@
         // Trả về kết quả đã định dạng
         return formattedValue;
     }
+
     // window.onload = function() {
     //     $("#btn-all-orders").click();
     //     $("#btn-all-exports").click();
