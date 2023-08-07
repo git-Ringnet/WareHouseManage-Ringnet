@@ -497,7 +497,6 @@ class AddProductController extends Controller
                 $request->provide_name_new != null && $request->provide_address_new != null && $request->provide_code_new != null
             ) {
                 $new = $this->provides->checkProvidesCode($request->provide_code_new, $dataProvide);
-                // $new =  $this->provides->addProvides($dataProvide);
             }
         } else {
             $this->provides->updateProvides($dataProvide, $request['provide_id']);
@@ -547,6 +546,7 @@ class AddProductController extends Controller
                 $pro = $this->product->addProduct($data1);
                 $updateP = ProductOrders::where('id', $id_product[$i])->first();
                 $updateP->product_id = $pro;
+                $updateP->created_at = Carbon::now();
                 $updateP->save();
             }
 
@@ -931,6 +931,7 @@ class AddProductController extends Controller
                 return redirect()->route('insertProduct.index')->with('warning', 'Công nợ đã thanh toán không thể chỉnh sửa');
             } else {
                 $list_id = $request->product_id;
+                $product_order = $request->product_order;
                 $total_import =  str_replace(',', '', $request->total_import);
                 $product_price =  str_replace(',', '', $request->product_price);
                 $product_total = str_replace(',', '', $request->product_total);
@@ -950,7 +951,6 @@ class AddProductController extends Controller
                 // Kiểm tra thông tin nhà cung cấp
                 if ($request->provide_id == null) {
                     $add_newProvide = $this->provides->checkProvidesCode($request->provide_code_new, $dataProvide);
-                    // $add_newProvide = $this->provides->addProvides($dataProvide);
                 } else {
                     $this->provides->updateProvides($dataProvide, $request->provide_id);
                 }
@@ -976,11 +976,15 @@ class AddProductController extends Controller
                         'product_price' => $product_price[$i],
                         'product_total' => $product_total[$i],
                         'product_tax' => $request->product_tax[$i],
+                        'product_qty' => $request->product_qty[$i],
+                        // 'id' => $request->product_order[$i],
                         'provide_id' => $request->provide_id == null ? $add_newProvide : $request->provide_id
                     ];
-                    $this->productOrder->updateProductOrderEdit($data, $list_id[$i]);
+                    $f = ProductOrders::where('product_id', $list_id[$i])
+                    ->where('order_id',$request->order_id)
+                    ->first();
+                    $this->productOrder->updateProductOrder($data, $product_order[$i]);
 
-                    $f = ProductOrders::where('product_id', $list_id[$i])->first();
                     $getProductQty = productExports::selectRaw('sum(product_qty) as total_qty')
                         ->where('product_exports.product_id', $list_id[$i])
                         ->join('exports', 'product_exports.export_id', 'exports.id')
@@ -990,7 +994,9 @@ class AddProductController extends Controller
                         $data['product_total'] = ($request->product_qty[$i] - $getProductQty->total_qty) * $product_price[$i];
                     }
                     $data['product_code'] = $request->product_code;
-                    $this->product->updateProduct($data, $f->product_id);
+                    // $data['product_order'] = "";
+                    $d = $this->product->updateProduct($data, $f->product_id, $product_order[$i]);
+                 
                     //Cập nhật công nợ xuất
                     $productIds = $request->product_id;
                     $exports = Exports::leftJoin('product_exports', 'product_exports.export_id', 'exports.id')

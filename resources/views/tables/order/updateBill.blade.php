@@ -310,6 +310,7 @@
                             <tr>
                                 <td class="STT"></td>
                                 <input type="hidden" name="product_id[]" value="{{ $pro->product_id }}">
+                                <input type="hidden" name="product_order[]" value="{{$pro->id}}">
                                 <td> <input class="form-control name_product"
                                         @if (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin')) readonly @endif required
                                         @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif type="text"

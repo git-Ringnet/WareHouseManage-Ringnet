@@ -10,16 +10,16 @@ class Product extends Model
 {
     use HasFactory;
     protected $table = 'product';
-    
+
     protected $fillable = [
-        'product_name','product_unit','product_qty','product_price','product_tax','product_total','provide_id','product_trade','product_trademark','product_code'
-     ];
-    public function getAllProduct($filters = [],$perPage, $status = [], $products_name = null, $providearr, $unitarr,$taxarr, $keywords = null, $sortByArr = null)
+        'product_name', 'product_unit', 'product_qty', 'product_price', 'product_tax', 'product_total', 'provide_id', 'product_trade', 'product_trademark', 'product_code'
+    ];
+    public function getAllProduct($filters = [], $perPage, $status = [], $products_name = null, $providearr, $unitarr, $taxarr, $keywords = null, $sortByArr = null)
     {
         //lấy tất cả products
         $products = DB::table($this->table)
             ->leftJoin('provides', 'provides.id', '=', 'product.provide_id')
-            ->select('product.*','provides.provide_name as provide','product.product_qty as soluong');
+            ->select('product.*', 'provides.provide_name as provide', 'product.product_qty as soluong');
         $orderBy = 'created_at';
         $orderType = 'desc';
         if (!empty($sortByArr) && is_array($sortByArr)) {
@@ -74,28 +74,48 @@ class Product extends Model
                 $query->orWhere('provides.provide_name', 'like', '%' . $keywords . '%');
             });
         }
-        $products = $products->where('product.product_qty','>',0);
+        $products = $products->where('product.product_qty', '>', 0);
         $products = $products->orderBy('product.created_at', 'asc')->paginate($perPage);
 
         return $products;
     }
     public function getNameProvide()
     {
-        return $this->hasOne(Provides::class,'id','provide_id');
+        return $this->hasOne(Provides::class, 'id', 'provide_id');
     }
-    public function addProduct($data){
-        return DB::table($this->table)->insertGetId($data);
+
+    public function addProduct($data)
+    {
+        $existingProduct = Product::where('product_name', $data['product_name'])
+            ->where('product_unit', $data['product_unit'])
+            ->where('product_price', $data['product_price'])
+            ->where('provide_id', $data['provide_id'])
+            ->where('product_code', $data['product_code'])
+            ->first();
+
+        if ($existingProduct) {
+            $existingProduct->product_qty += $data['product_qty'];
+            $existingProduct->product_total += $existingProduct->product_price * $data['product_qty'];
+            $existingProduct->save();
+            return $existingProduct->id;
+        } else {
+            return DB::table($this->table)->insertGetId($data);
+        }
     }
-    public function allProducts(){
+
+    public function allProducts()
+    {
         $products = DB::table($this->table)->get();
         return $products;
     }
-    public function productsStock(){
+    public function productsStock()
+    {
         $products = DB::table($this->table);
         $products = $products->where('product_qty', '>', 5)->get();
         return $products;
     }
-    public function productsEnd(){
+    public function productsEnd()
+    {
         $products = DB::table($this->table);
         $products = $products->where(function ($query) {
             $query->orWhere('product_qty', '=', null);
@@ -104,17 +124,48 @@ class Product extends Model
         $products = $products->get();
         return $products;
     }
-    public function sumTotalInventory(){
+    public function sumTotalInventory()
+    {
         $totalSum = DB::table($this->table)->sum('product_price');
         return $totalSum;
     }
-    public function productsNearEnd(){
+    public function productsNearEnd()
+    {
         $products = DB::table($this->table);
         $products = $products->whereBetween('product_qty', [1, 5])->get();
         return $products;
     }
-    public function updateProduct($data, $id)
+    public function updateProduct($data, $id, $idProductOrder)
     {
-        return DB::table($this->table)->where('id', $id)->update($data);
+        var_dump($id);
+        $product = Product::find($id);
+        $existingProduct = Product::where('product_name', $data['product_name'])
+            ->where('product_unit', $data['product_unit'])
+            ->where('product_price', $data['product_price'])
+            ->where('provide_id', $data['provide_id'])
+            ->where('product_code', $data['product_code'])
+            ->first();
+        if ($existingProduct) {
+            $existingProduct->product_qty += $data['product_qty'];
+            $existingProduct->product_total =  $existingProduct->product_qty * $existingProduct->product_price;
+            $existingProduct->save();
+      
+            ProductOrders::where('id', $idProductOrder)->update([
+                'product_id' => $existingProduct->id,
+            ]);
+            
+
+            if($product){
+                $product->delete();
+            }
+        } else {
+            $idProduct = DB::table($this->table)->insertGetId($data);
+            $product->product_qty -= $data['product_qty'];
+            $product->product_total = $data['product_total'];
+            $product->save();
+            ProductOrders::where('id', $idProductOrder)->update([
+                'product_id' => $idProduct === null ? $product->id : $idProduct,
+            ]);
+        }
     }
 }
