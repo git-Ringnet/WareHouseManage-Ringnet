@@ -180,11 +180,7 @@
                                 </div>
                                 <div class="ml-2">
                                     <p class="m-0">Tổng tiền xuất</p><b class="m-0" id="export_total">
-                                        @if (fmod($sumExport, 1) > 0)
-                                            {{ number_format($sumExport, 2, '.', ',') }}
-                                        @else
-                                            {{ number_format($sumExport) }}
-                                        @endif
+                                        {{ number_format($sumExport) }}
                                     </b>
                                 </div>
                             </div>
@@ -203,11 +199,7 @@
                                 </div>
                                 <div class="ml-2">
                                     <p class="m-0">Tổng lợi nhuận</p><b class="m-0" id="countProfit">
-                                        @if (fmod($formattedLoinhuan, 1) > 0)
-                                            {{ number_format($formattedLoinhuan, 2, '.', ',') }}
-                                        @else
-                                            {{ number_format($formattedLoinhuan) }}
-                                        @endif
+                                        {{ number_format($formattedLoinhuan) }}
                                     </b>
                                 </div>
                             </div>
@@ -226,11 +218,7 @@
                                 </div>
                                 <div class="ml-2">
                                     <p class="m-0">Tổng công nợ</p><b class="m-0" id="countDebt">
-                                        @if (fmod($CongNo, 1) > 0)
-                                            {{ number_format($CongNo, 2, '.', ',') }}
-                                        @else
-                                            {{ number_format($CongNo) }}
-                                        @endif
+                                        {{ number_format($CongNo) }}
                                     </b>
                                 </div>
                             </div>
@@ -324,7 +312,7 @@ $index = array_search($item['label'], $numberedLabels);
                                         $nhanvien = request()->nhanvien;
                                     } else {
                                         $nhanvien = [];
-                                } @endphp ?>
+                                } @endphp
                                 <div class="filter-admin">
                                     <button class="btn btn-filter btn-light mr-2" id="btn-nhanvien" type="button">
                                         <span>
@@ -830,25 +818,13 @@ $index = array_search($item['label'], $numberedLabels);
                                             <td class="text-right" id="soluong{{ $value->userid }}">
                                                 {{ $value->donxuat }}</td>
                                             <td class="text-right" id="tongxuat{{ $value->userid }}">
-                                                @if (fmod($value->tongtienxuat, 1) > 0)
-                                                    {{ number_format($value->tongtienxuat, 2, '.', ',') }}
-                                                @else
-                                                    {{ number_format($value->tongtienxuat) }}
-                                                @endif
+                                                {{ number_format($value->tongtienxuat) }}
                                             </td>
                                             <td class="text-right" id="loinhuan{{ $value->userid }}">
-                                                @if (fmod($value->tongloinhuan, 1) > 0)
-                                                    {{ number_format($value->tongloinhuan, 2, '.', ',') }}
-                                                @else
-                                                    {{ number_format($value->tongloinhuan) }}
-                                                @endif
+                                                {{ number_format($value->tongloinhuan) }}
                                             </td>
                                             <td class="text-right" id="congno{{ $value->userid }}">
-                                                @if (fmod($value->tongcongno, 1) > 0)
-                                                    {{ number_format($value->tongcongno, 2, '.', ',') }}
-                                                @else
-                                                    {{ number_format($value->tongcongno) }}
-                                                @endif
+                                                {{ number_format($value->tongcongno) }}
                                             </td>
                                         </tr>
                                     @endforeach
@@ -971,35 +947,15 @@ $index = array_search($item['label'], $numberedLabels);
     }
 
     function formatCurrency(value) {
-        // Làm tròn đến 2 chữ số thập phân
-        value = Math.round(value * 100) / 100;
+        // Làm tròn đến số nguyên (bỏ qua phần thập phân)
+        value = Math.round(value);
 
         // Check if the value is negative
         var isNegative = value < 0;
         value = Math.abs(value); // Get the absolute value for formatting
 
         // Xử lý phần nguyên
-        var parts = value.toFixed(2).toString().split(".");
-        var integerPart = parts[0];
-        var formattedValue = "";
-
-        // Định dạng phần nguyên
-        var count = 0;
-        for (var i = integerPart.length - 1; i >= 0; i--) {
-            formattedValue = integerPart.charAt(i) + formattedValue;
-            count++;
-            if (count % 3 === 0 && i !== 0) {
-                formattedValue = "," + formattedValue;
-            }
-        }
-
-        // Nếu có phần thập phân, thêm vào sau phần nguyên
-        if (parts.length > 1) {
-            formattedValue += "." + parts[1];
-        } else {
-            // Always ensure two decimal places
-            formattedValue += ".00";
-        }
+        var formattedValue = value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
         // Nếu là số âm, thêm dấu "-" vào đầu chuỗi
         if (isNegative) {

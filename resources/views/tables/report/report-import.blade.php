@@ -179,11 +179,7 @@
                                 </div>
                                 <div class="ml-2">
                                     <p class="m-0">Tổng tiền nhập (+VAT)</p><b class="m-0" id="import_total">
-                                        @if (fmod($sumTotalOrders, 1) > 0)
-                                            {{ number_format($sumTotalOrders, 2, '.', ',') }}
-                                        @else
-                                            {{ number_format($sumTotalOrders) }}
-                                        @endif
+                                        {{ number_format($sumTotalOrders) }}
                                     </b>
                                 </div>
                             </div>
@@ -202,11 +198,7 @@
                                 </div>
                                 <div class="ml-2">
                                     <p class="m-0">Tổng công nợ (+VAT)</p><b class="m-0" id="countDebtImport">
-                                        @if (fmod($sumDebtImportVAT, 1) > 0)
-                                            {{ number_format($sumDebtImportVAT, 2, '.', ',') }}
-                                        @else
-                                            {{ number_format($sumDebtImportVAT) }}
-                                        @endif
+                                        {{ number_format($sumDebtImportVAT) }}
                                     </b>
                                 </div>
                             </div>
@@ -688,18 +680,10 @@ $index = array_search($item['label'], $numberedLabels);
                                             <td class="text-right" id="soluong{{ $item->userid }}">
                                                 {{ $item->product_qty_count }}</td>
                                             <td class="text-right"id="tongnhap{{ $item->userid }}">
-                                                @if (fmod($item->total_sum, 1) > 0)
-                                                    {{ number_format($item->total_sum, 2, '.', ',') }}
-                                                @else
-                                                    {{ number_format($item->total_sum) }}
-                                                @endif
+                                                {{ number_format($item->total_sum) }}
                                             </td>
                                             <td class="text-right"id="congno{{ $item->userid }}">
-                                                @if (fmod($item->total_debt, 1) > 0)
-                                                    {{ number_format($item->total_debt, 2, '.', ',') }}
-                                                @else
-                                                    {{ number_format($item->total_debt) }}
-                                                @endif
+                                                {{ number_format($item->total_debt) }}
                                             </td>
                                         </tr>
                                     @endforeach
@@ -822,35 +806,15 @@ $index = array_search($item['label'], $numberedLabels);
     }
 
     function formatCurrency(value) {
-        // Làm tròn đến 2 chữ số thập phân
-        value = Math.round(value * 100) / 100;
+        // Làm tròn đến số nguyên (bỏ qua phần thập phân)
+        value = Math.round(value);
 
         // Check if the value is negative
         var isNegative = value < 0;
         value = Math.abs(value); // Get the absolute value for formatting
 
         // Xử lý phần nguyên
-        var parts = value.toFixed(2).toString().split(".");
-        var integerPart = parts[0];
-        var formattedValue = "";
-
-        // Định dạng phần nguyên
-        var count = 0;
-        for (var i = integerPart.length - 1; i >= 0; i--) {
-            formattedValue = integerPart.charAt(i) + formattedValue;
-            count++;
-            if (count % 3 === 0 && i !== 0) {
-                formattedValue = "," + formattedValue;
-            }
-        }
-
-        // Nếu có phần thập phân, thêm vào sau phần nguyên
-        if (parts.length > 1) {
-            formattedValue += "." + parts[1];
-        } else {
-            // Always ensure two decimal places
-            formattedValue += ".00";
-        }
+        var formattedValue = value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
         // Nếu là số âm, thêm dấu "-" vào đầu chuỗi
         if (isNegative) {

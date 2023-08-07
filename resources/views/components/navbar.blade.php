@@ -117,10 +117,7 @@
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
                 <!-- Notifications Dropdown Menu -->
-                <li>
-                    <div class="notification-container"></div>
-                </li>
-                <li class="nav-item dropdown">
+                <li class="nav-item dropdown d-none">
                     <a class="nav-link" data-toggle="dropdown" href="#">
                         <svg width="25" height="24" viewBox="0 0 25 24" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
