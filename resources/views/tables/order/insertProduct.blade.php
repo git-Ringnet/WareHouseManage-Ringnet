@@ -1367,7 +1367,7 @@ $index = array_search($item['label'], $numberedLabels);
                     // Create a temporary <a> element to trigger the file download
                     var link = document.createElement('a');
                     link.href = URL.createObjectURL(blob);
-                    link.download = 'products.xlsx';
+                    link.download = 'nhapHang.xlsx';
                     link.click();
                 } else {
                     console.log(response.msg);

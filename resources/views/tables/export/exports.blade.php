@@ -392,7 +392,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('comparison_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity sum-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -584,12 +584,13 @@ $index = array_search($item['label'], $numberedLabels);
                                         <tr>
                                             <td><input type="checkbox" class="cb-element" name="ids[]"
                                                     value="{{ $value->id }}"></td>
-                                            <td>{{ $value->id }}</td>
-                                            <td>{{ $value->export_code }}</td>
+                                            <td style="width:20%;">{{ $value->id }}</td>
+                                            <td style="width: 13%;">{{ $value->export_code }}</td>
                                             <td>{{ $value->guest_name }}</td>
-                                            <td>{{ date_format(new DateTime($value->created_at), 'd-m-Y') }}</td>
+                                            <td style="width: 10%;">
+                                                {{ date_format(new DateTime($value->created_at), 'd-m-Y') }}</td>
                                             @if (Auth::user()->can('isAdmin'))
-                                                <td>{{ $value->name }}</td>
+                                                <td style="width: 10%;">{{ $value->name }}</td>
                                             @endif
                                             <td class="text-right">
                                                 {{ number_format($value->total) }}
@@ -811,7 +812,6 @@ $index = array_search($item['label'], $numberedLabels);
             var isActive = $(this).hasClass('dropdown-item-active');
             var svgElement = $(this).find('svg');
             var parentElement = $(this).parent().parent();
-            console.log(parentElement);
             if (isActive) {
                 $(this).removeClass('dropdown-item-active');
                 parentElement.css('background', '#E9ECEF');
@@ -1397,7 +1397,7 @@ $index = array_search($item['label'], $numberedLabels);
                     // Create a temporary <a> element to trigger the file download
                     var link = document.createElement('a');
                     link.href = URL.createObjectURL(blob);
-                    link.download = 'exports.xlsx';
+                    link.download = 'xuatHang.xlsx';
                     link.click();
                 } else {
                     console.log(response.msg);
