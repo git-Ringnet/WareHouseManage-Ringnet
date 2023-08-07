@@ -179,8 +179,13 @@
                                     </svg>
                                 </div>
                                 <div class="ml-2">
-                                    <p class="m-0">Tổng tiền xuất</p><b class="m-0"
-                                        id="export_total">{{ number_format($sumExport) }}</b>
+                                    <p class="m-0">Tổng tiền xuất</p><b class="m-0" id="export_total">
+                                        @if (fmod($sumExport, 1) > 0)
+                                            {{ number_format($sumExport, 2, '.', ',') }}
+                                        @else
+                                            {{ number_format($sumExport) }}
+                                        @endif
+                                    </b>
                                 </div>
                             </div>
                         </div>
@@ -197,8 +202,13 @@
                                     </svg>
                                 </div>
                                 <div class="ml-2">
-                                    <p class="m-0">Tổng lợi nhuận</p><b class="m-0"
-                                        id="countProfit">{{ $formattedLoinhuan }}</b>
+                                    <p class="m-0">Tổng lợi nhuận</p><b class="m-0" id="countProfit">
+                                        @if (fmod($formattedLoinhuan, 1) > 0)
+                                            {{ number_format($formattedLoinhuan, 2, '.', ',') }}
+                                        @else
+                                            {{ number_format($formattedLoinhuan) }}
+                                        @endif
+                                    </b>
                                 </div>
                             </div>
                         </div>
@@ -215,8 +225,13 @@
                                     </svg>
                                 </div>
                                 <div class="ml-2">
-                                    <p class="m-0">Tổng công nợ</p><b class="m-0"
-                                        id="countDebt">{{ number_format($CongNo) }}</b>
+                                    <p class="m-0">Tổng công nợ</p><b class="m-0" id="countDebt">
+                                        @if (fmod($CongNo, 1) > 0)
+                                            {{ number_format($CongNo, 2, '.', ',') }}
+                                        @else
+                                            {{ number_format($CongNo) }}
+                                        @endif
+                                    </b>
                                 </div>
                             </div>
                         </div>
@@ -309,7 +324,7 @@ $index = array_search($item['label'], $numberedLabels);
                                         $nhanvien = request()->nhanvien;
                                     } else {
                                         $nhanvien = [];
-                                } @endphp
+                                } @endphp ?>
                                 <div class="filter-admin">
                                     <button class="btn btn-filter btn-light mr-2" id="btn-nhanvien" type="button">
                                         <span>
@@ -591,7 +606,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('sale_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity sale-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -621,7 +636,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('import_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity export-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -651,7 +666,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('difference_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity difference-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -681,7 +696,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('sum_debt_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity sum_debt-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -745,7 +760,8 @@ $index = array_search($item['label'], $numberedLabels);
                         <div class="card-body">
                             <table id="example2" class="table table-hover">
                                 <thead>
-                                    <input type="hidden" id="perPageinput" name="perPageinput" value="{{ request()->perPageinput ?? 10 }}">
+                                    <input type="hidden" id="perPageinput" name="perPageinput"
+                                        value="{{ request()->perPageinput ?? 10 }}">
                                     <input type="hidden" id="sortByInput" name="sort-by" value="">
                                     <input type="hidden" id="sortTypeInput" name="sort-type"
                                         value="{{ $sortType }}">
@@ -811,12 +827,28 @@ $index = array_search($item['label'], $numberedLabels);
                                             <td>{{ $value->nhanvien }}</td>
                                             <td>{{ $value->email }}</td>
                                             <td class="text-center">{{ $value->vaitro }}</td>
-                                            <td class="text-right" id="soluong{{$value->userid}}">{{ $value->donxuat }}</td>
-                                            <td class="text-right" id="tongxuat{{$value->userid}}">{{ number_format($value->tongtienxuat) }}
+                                            <td class="text-right" id="soluong{{ $value->userid }}">
+                                                {{ $value->donxuat }}</td>
+                                            <td class="text-right" id="tongxuat{{ $value->userid }}">
+                                                @if (fmod($value->tongtienxuat, 1) > 0)
+                                                    {{ number_format($value->tongtienxuat, 2, '.', ',') }}
+                                                @else
+                                                    {{ number_format($value->tongtienxuat) }}
+                                                @endif
                                             </td>
-                                            <td class="text-right" id="loinhuan{{$value->userid}}">{{ number_format($value->tongloinhuan) }}
+                                            <td class="text-right" id="loinhuan{{ $value->userid }}">
+                                                @if (fmod($value->tongloinhuan, 1) > 0)
+                                                    {{ number_format($value->tongloinhuan, 2, '.', ',') }}
+                                                @else
+                                                    {{ number_format($value->tongloinhuan) }}
+                                                @endif
                                             </td>
-                                            <td class="text-right" id="congno{{$value->userid}}">{{ number_format($value->tongcongno) }}
+                                            <td class="text-right" id="congno{{ $value->userid }}">
+                                                @if (fmod($value->tongcongno, 1) > 0)
+                                                    {{ number_format($value->tongcongno, 2, '.', ',') }}
+                                                @else
+                                                    {{ number_format($value->tongcongno) }}
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach
@@ -852,7 +884,7 @@ $index = array_search($item['label'], $numberedLabels);
 </div>
 <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
 <script>
-        $('#perPage').on('change', function(e) {
+    $('#perPage').on('change', function(e) {
         e.preventDefault();
         var perPageValue = $(this).val();
         $('#perPageinput').val(perPageValue);

@@ -178,8 +178,13 @@
                                     </svg>
                                 </div>
                                 <div class="ml-2">
-                                    <p class="m-0">Tổng tiền nhập (+VAT)</p><b class="m-0"
-                                        id="import_total">{{ number_format($sumTotalOrders) }}</b>
+                                    <p class="m-0">Tổng tiền nhập (+VAT)</p><b class="m-0" id="import_total">
+                                        @if (fmod($sumTotalOrders, 1) > 0)
+                                            {{ number_format($sumTotalOrders, 2, '.', ',') }}
+                                        @else
+                                            {{ number_format($sumTotalOrders) }}
+                                        @endif
+                                    </b>
                                 </div>
                             </div>
                         </div>
@@ -196,8 +201,13 @@
                                     </svg>
                                 </div>
                                 <div class="ml-2">
-                                    <p class="m-0">Tổng công nợ (+VAT)</p><b class="m-0"
-                                        id="countDebtImport">{{ number_format($sumDebtImportVAT) }}</b>
+                                    <p class="m-0">Tổng công nợ (+VAT)</p><b class="m-0" id="countDebtImport">
+                                        @if (fmod($sumDebtImportVAT, 1) > 0)
+                                            {{ number_format($sumDebtImportVAT, 2, '.', ',') }}
+                                        @else
+                                            {{ number_format($sumDebtImportVAT) }}
+                                        @endif
+                                    </b>
                                 </div>
                             </div>
                         </div>
@@ -287,7 +297,7 @@ $index = array_search($item['label'], $numberedLabels);
                             @endforeach
                             @if (Auth::user()->can('isAdmin'))
                                 @php
-                                $nhanvien = [];
+                                    $nhanvien = [];
                                     if (isset(request()->nhanvien)) {
                                         $nhanvien = request()->nhanvien;
                                     } else {
@@ -677,8 +687,19 @@ $index = array_search($item['label'], $numberedLabels);
                                             <td class="text-center">{{ $item->vaitro }}</td>
                                             <td class="text-right" id="soluong{{ $item->userid }}">
                                                 {{ $item->product_qty_count }}</td>
-                                            <td class="text-right"id="tongnhap{{ $item->userid }}">{{ number_format($item->total_sum) }}</td>
-                                            <td class="text-right"id="congno{{ $item->userid }}">{{ number_format($item->total_debt) }}
+                                            <td class="text-right"id="tongnhap{{ $item->userid }}">
+                                                @if (fmod($item->total_sum, 1) > 0)
+                                                    {{ number_format($item->total_sum, 2, '.', ',') }}
+                                                @else
+                                                    {{ number_format($item->total_sum) }}
+                                                @endif
+                                            </td>
+                                            <td class="text-right"id="congno{{ $item->userid }}">
+                                                @if (fmod($item->total_debt, 1) > 0)
+                                                    {{ number_format($item->total_debt, 2, '.', ',') }}
+                                                @else
+                                                    {{ number_format($item->total_debt) }}
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach

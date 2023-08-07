@@ -38,7 +38,7 @@ class ReportController extends Controller
         $sumExport = $this->exports->tongtienxuat();
         //Tổng lợi nhuận
         $sumLoinhuan = Debt::select(DB::raw('SUM(total_difference) as tongLoiNhuan'))->limit(1)->first();
-        $formattedLoinhuan = number_format($sumLoinhuan->tongLoiNhuan);
+        $formattedLoinhuan = $sumLoinhuan->tongLoiNhuan;
         //Tổng công nợ
         $sumCongNo = Debt::select(DB::raw('SUM(total_sales) as tongCongNo'))
             ->where('debts.debt_status', '!=', 1)->limit(1)->first();
