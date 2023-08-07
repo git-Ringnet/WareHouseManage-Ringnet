@@ -94,9 +94,17 @@ class Orders extends Model
         $minDate = DB::table($this->table)
             ->selectRaw('MIN(DATE(created_at)) AS min_date')
             ->first();
-        return $minDate->min_date;
+    
+        // Check if $minDate is not null before formatting
+        if ($minDate && $minDate->min_date) {
+            // Format the date in dd-mm-yyyy format
+            $formattedDate = date('d-m-Y', strtotime($minDate->min_date));
+            return $formattedDate;
+        }
+    
+        return null; // Return null if there is no minimum date
     }
-
+    
     public function sumTotalOrders()
     {
         $startDate = now()->subDays(30); // Ngày bắt đầu là ngày hiện tại trừ đi 30 ngày

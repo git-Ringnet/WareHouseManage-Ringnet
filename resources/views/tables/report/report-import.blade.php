@@ -23,9 +23,9 @@
                             <div id="all-orders">
                                 <div class="d-flex flex-column all-orders">
                                     <div class="ca d-flex">
-                                        <div class="it0"></div>
-                                        <div class="muiten-all"></div>
-                                        <div class="id0"></div>
+                                        <div class="it0">{{ $mindate }}</div>
+                                        <div class="muiten-all">-></div>
+                                        <div class="id0">{{ date('d-m-Y') }}</div>
                                     </div>
                                     <div class="ca text-left">Tất cả</div>
                                 </div>

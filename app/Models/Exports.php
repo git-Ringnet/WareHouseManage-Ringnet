@@ -83,6 +83,18 @@ class Exports extends Model
             ->get();
         return $exports;
     }
+    public function mindate()
+    {
+        $exports = DB::table($this->table)
+            ->where('export_status', 2)
+            ->get();
+
+        $minDate = $exports->min('created_at');
+
+        $formattedDate = date('d-m-Y', strtotime($minDate));
+
+        return $formattedDate;
+    }
     protected $fillable = [
         'guest_id',
         'user_id',

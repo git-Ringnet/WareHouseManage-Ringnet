@@ -43,6 +43,7 @@ class ReportController extends Controller
         $sumCongNo = Debt::select(DB::raw('SUM(total_sales) as tongCongNo'))
             ->where('debts.debt_status', '!=', 1)->limit(1)->first();
         $CongNo = $sumCongNo->tongCongNo;
+        $mindate = $this->exports->mindate();
 
 
         $filters = [];
@@ -119,7 +120,7 @@ class ReportController extends Controller
         $allRoles = $allRoles->getAll();
         $Tableexports = $this->exports->reportExports($filters, $nhanvien, $roles, $sortBy, $sortType);
         $perPage = $request->input('perPageinput', 10);
-        return view('tables.report.report-export', compact('perPage', 'title', 'debtsSale', 'allRoles', 'string', 'Tableexports', 'sortType', 'exports', 'sumExport', 'formattedLoinhuan', 'CongNo'));
+        return view('tables.report.report-export', compact('perPage','mindate', 'title', 'debtsSale', 'allRoles', 'string', 'Tableexports', 'sortType', 'exports', 'sumExport', 'formattedLoinhuan', 'CongNo'));
     }
 
 
@@ -154,7 +155,7 @@ class ReportController extends Controller
         //Tổng công nợ
         $sumCongNo = Debt::select(DB::raw('SUM(total_sales) as tongCongNo'))->limit(1)->first();
         $CongNo = $sumCongNo->tongCongNo;
-
+        $mindate = $this->orders->getMinDateOrders();
 
         $filters = [];
         //Name
@@ -199,7 +200,7 @@ class ReportController extends Controller
         $allRoles = $allRoles->getAll();
         // dd($tableorders);
         $perPage = $request->input('perPageinput', 10);
-        return view('tables.report.report-import', compact('perPage', 'title', 'allRoles', 'debtsSale', 'string', 'tableorders', 'sortType', 'orders', 'sumTotalOrders', 'sumDebtImportVAT', 'tableorders', 'exports', 'sumExport', 'formattedLoinhuan', 'CongNo'));
+        return view('tables.report.report-import', compact('perPage','mindate', 'title', 'allRoles', 'debtsSale', 'string', 'tableorders', 'sortType', 'orders', 'sumTotalOrders', 'sumDebtImportVAT', 'tableorders', 'exports', 'sumExport', 'formattedLoinhuan', 'CongNo'));
     }
     public function timeImport(Request $request)
     {
