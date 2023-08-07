@@ -17,7 +17,6 @@ class productExportSeeder extends Seeder
     {
         DB::table('product_exports')->insert([
             [
-                'products_id' => '1',
                 'product_id' => '1',
                 'export_id' => '1',
                 'product_name' => 'Cisco Catalyst 9800-CL Wireless Controler for Cloud',
@@ -29,7 +28,6 @@ class productExportSeeder extends Seeder
                 'product_total' => 12000000,
             ],
             [
-                'products_id' => '1',
                 'product_id' => '2',
                 'export_id' => '1',
                 'product_name' => 'Cisco Catalyst 9800-CL Wireless Controler for Cloud',
@@ -41,7 +39,6 @@ class productExportSeeder extends Seeder
                 'product_total' => 12000000,
             ],
             [
-                'products_id' => '1',
                 'product_id' => '1',
                 'export_id' => '3',
                 'product_name' => 'Cisco Catalyst 9800-CL Wireless Controler for Cloud',
@@ -53,7 +50,6 @@ class productExportSeeder extends Seeder
                 'product_total' => 12000000,
             ],
             [
-                'products_id' => '1',
                 'product_id' => '1',
                 'export_id' => '4',
                 'product_name' => 'Cisco Catalyst 9800-CL Wireless Controler for Cloud',
@@ -65,7 +61,6 @@ class productExportSeeder extends Seeder
                 'product_total' => 12000000,
             ],
             [
-                'products_id' => '1',
                 'product_id' => '1',
                 'export_id' => '5',
                 'product_name' => 'Cisco Catalyst 9800-CL Wireless Controler for Cloud',
@@ -77,7 +72,6 @@ class productExportSeeder extends Seeder
                 'product_total' => 12000000,
             ],
             [
-                'products_id' => '1',
                 'product_id' => '1',
                 'export_id' => '6',
                 'product_name' => 'Cisco Catalyst 9800-CL Wireless Controler for Cloud',
@@ -89,7 +83,6 @@ class productExportSeeder extends Seeder
                 'product_total' => 12000000,
             ],
             [
-                'products_id' => '1',
                 'product_id' => '1',
                 'export_id' => '7',
                 'product_name' => 'Cisco Catalyst 9800-CL Wireless Controler for Cloud',
@@ -101,7 +94,6 @@ class productExportSeeder extends Seeder
                 'product_total' => 12000000,
             ],
             [
-                'products_id' => '1',
                 'product_id' => '1',
                 'export_id' => '8',
                 'product_name' => 'Cisco Catalyst 9800-CL Wireless Controler for Cloud',
@@ -113,7 +105,6 @@ class productExportSeeder extends Seeder
                 'product_total' => 12000000,
             ],
             [
-                'products_id' => '1',
                 'product_id' => '1',
                 'export_id' => '9',
                 'product_name' => 'Cisco Catalyst 9800-CL Wireless Controler for Cloud',
@@ -125,7 +116,6 @@ class productExportSeeder extends Seeder
                 'product_total' => 12000000,
             ],
             [
-                'products_id' => '1',
                 'product_id' => '1',
                 'export_id' => '10',
                 'product_name' => 'Cisco Catalyst 9800-CL Wireless Controler for Cloud',
@@ -137,7 +127,6 @@ class productExportSeeder extends Seeder
                 'product_total' => 12000000,
             ],
             [
-                'products_id' => '1',
                 'product_id' => '1',
                 'export_id' => '11',
                 'product_name' => 'Cisco Catalyst 9800-CL Wireless Controler for Cloud',
@@ -149,7 +138,6 @@ class productExportSeeder extends Seeder
                 'product_total' => 12000000,
             ],
             [
-                'products_id' => '1',
                 'product_id' => '1',
                 'export_id' => '12',
                 'product_name' => 'Cisco Catalyst 9800-CL Wireless Controler for Cloud',
@@ -161,7 +149,6 @@ class productExportSeeder extends Seeder
                 'product_total' => 12000000,
             ],
             [
-                'products_id' => '1',
                 'product_id' => '1',
                 'export_id' => '13',
                 'product_name' => 'Cisco Catalyst 9800-CL Wireless Controler for Cloud',
@@ -173,7 +160,6 @@ class productExportSeeder extends Seeder
                 'product_total' => 12000000,
             ],
             [
-                'products_id' => '1',
                 'product_id' => '1',
                 'export_id' => '14',
                 'product_name' => 'Cisco Catalyst 9800-CL Wireless Controler for Cloud',

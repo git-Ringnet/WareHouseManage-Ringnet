@@ -16,12 +16,13 @@ class CreateProvides extends Migration
         Schema::create('provides', function (Blueprint $table) {
             $table->id()->autoIncrement();
             $table->string('provide_name');
-            $table->string('provide_represent');
-            $table->string('provide_phone');
-            $table->string('provide_email');
+            $table->string('provide_represent')->nullable();
+            $table->string('provide_phone')->nullable();
+            $table->string('provide_email')->nullable();
             $table->integer('provide_status');
             $table->string('provide_address');
             $table->string('provide_code');
+            $table->integer('debt')->nullable();
             $table->timestamps();
         });
     }

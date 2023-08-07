@@ -1,6 +1,6 @@
 <x-navbar :title="$title"></x-navbar>
 <!-- Content Wrapper. Contains page content -->
-<div class="content-wrapper">
+<div class="content-wrapper padding-112">
   <div class="breadcrumb">
     <span><a href="{{ route('admin.userslist') }}">Nhân viên</a></span>
     <span class="px-1">/</span>
@@ -29,35 +29,35 @@
               <form action="" method="post">
                 @csrf
                 <div class="mb-3">
-                  <label for="">Họ và tên</label>
+                  <label class="required-label" for="">Họ và tên</label>
                   <input type="text" class="form-control" name="name" placeholder="Nhập họ và tên" value="{{old('name')}}">
                   @error('name')
                   <span style="color:red">{{$message}}</span>
                   @enderror
                 </div>
                 <div class="mb-3">
-                  <label for="">Email</label>
+                  <label class="required-label" for="">Email</label>
                   <input type="text" class="form-control" name="email" placeholder="Nhập email" value="{{old('email')}}">
                   @error('email')
                   <span style="color:red">{{$message}}</span>
                   @enderror
                 </div>
                 <div class="mb-3">
-                  <label for="">Mật khẩu</label>
+                  <label class="required-label" for="">Mật khẩu</label>
                   <input type="password" class="form-control" name="password" placeholder="Nhập mật khẩu">
                   @error('password')
                   <span style="color:red">{{$message}}</span>
                   @enderror
                 </div>
                 <div class="mb-3">
-                  <label for="confirm_password">Xác nhận mật khẩu</label>
+                  <label class="required-label" for="confirm_password">Xác nhận mật khẩu</label>
                   <input type="password" id="confirm_password" class="form-control" name="confirm_password" id="confirm_password" placeholder="Xác nhận mật khẩu">
                   @error('confirm_password')
                       <span style="color: red">{{ $message }}</span>
                   @enderror
               </div>
                 <div class="mb-3">
-                  <label for="">Vai trò</label>
+                  <label class="required-label" for="">Vai trò</label>
                   <select class="form-control" name="role" id="">
                     <option value="0">Chọn chức vụ</option>
                     @foreach($roles as $role)
@@ -75,7 +75,7 @@
                   <span style="color:red">{{$message}}</span>
                   @enderror
                 </div>
-                <div class="form-group">
+                <div class="form-group d-none">
                   <label for="pwd">Trạng thái:</label>
                   <select name="status" class="form-control">
                       <option value="1">Active</option>
