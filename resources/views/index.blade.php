@@ -1273,7 +1273,7 @@
                     $(stId).text(data.start_date)
                     $(edId).text(data.end_date)
                 }
-
+                console.log(data);
             }
         })
     })
@@ -1380,8 +1380,6 @@
             success: function(data) {
                 $('#inventory_id').text(data.countInventory);
                 $('#inventory_total').text(formatCurrency(data.sumInventory));
-
-
             }
         })
     })
@@ -1395,12 +1393,12 @@
                 data: dataid
             },
             success: function(data) {
-                if (data.debt_export > 0) {
+                if (data.debt_export != null) {
                     $('#debt_export').text(formatCurrency(data.debt_export));
                 } else {
                     $('#debt_export').text(0);
                 }
-                if (data.debt_import > 0) {
+                if (data.debt_import != null) {
                     $('#debt_import').text(formatCurrency(data.debt_import));
                 } else {
                     $('#debt_import').text(0);
@@ -1411,14 +1409,15 @@
                     $(stId).text(data.start_date)
                     $(edId).text(data.end_date)
                 }
+                console.log(data);
 
             }
         })
     })
     $(document).on('click', '.success-debt', function() {
         var data = $(this).val();
-        var date_start = $('.date_start_inventory').val();
-        var date_end = $('.date_end_inventory').val();
+        var date_start = $('.date_start_debt').val();
+        var date_end = $('.date_end_debt').val();
         $.ajax({
             url: "{{ route('countDebt') }}",
             type: "get",
@@ -1438,6 +1437,7 @@
                 } else {
                     $('#debt_import').text(0);
                 }
+                console.log(data);
 
             }
         })

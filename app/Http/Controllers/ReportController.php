@@ -231,7 +231,7 @@ class ReportController extends Controller
             $minCreatedAt = Carbon::parse($count->minCreatedAt);
             $filters = [];
             $filters[] = $minCreatedAt;
-            $filters[] = Carbon::today();
+            $filters[] = $today->endOfMonth()->format('Y-m-d');
             $tableorders = $this->orders->dataReportAjax($filters);
             $test1 = [];
             foreach ($tableorders as $item) {
@@ -247,24 +247,21 @@ class ReportController extends Controller
             ];
         } elseif ($data['data'] == 1) {  //Xử lý lấy dữ liệu tháng này
             $today = Carbon::today();
-            $firstDayOfMonth = $today->startOfMonth()->format('d-m-Y'); // Ngày bắt đầu của tháng, đã được định dạng
-            $lastDayOfMonth = Carbon::today()->format('d-m-Y'); // Ngày kết thúc của tháng, đã được định dạng            
-            $count = Orders::selectSub(function ($query) use ($today) {
-                $query->from('Orders')->where('orders.order_status', '=', 1)
-                    ->whereMonth('created_at', $today->month)
-                    ->whereYear('created_at', $today->year)
+            $firstDayOfMonth = $today->startOfMonth()->format('Y-m-d'); // Ngày bắt đầu của tháng, đã được định dạng
+            $lastDayOfMonth = $today->endOfMonth()->format('Y-m-d'); // Ngày kết thúc của tháng, đã được định dạng            
+            $count = Orders::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
+                $query->from('orders')->where('orders.order_status', '=', 1)
+                    ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                     ->selectRaw('COUNT(id)');
             }, 'countID')
-                ->selectSub(function ($query) use ($today) {
-                    $query->from('Orders')->where('orders.order_status', '=', 1)
-                        ->whereMonth('created_at', $today->month)
-                        ->whereYear('created_at', $today->year)
+                ->selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
+                    $query->from('orders')->where('orders.order_status', '=', 1)
+                        ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('SUM(total_tax)');
                 }, 'sumTotal')->first();
-            $countDebtImport = DebtImport::selectSub(function ($query) use ($today) {
+            $countDebtImport = DebtImport::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                 $query->from('debt_import')->where('debt_status', '!=', 1)
-                    ->whereMonth('created_at', $today->month)
-                    ->whereYear('created_at', $today->year)
+                    ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                     ->selectRaw('SUM(total_import)');
             }, 'countDebtImport')->first();
             $filters = [];
@@ -280,31 +277,27 @@ class ReportController extends Controller
                 'countID' => $count->countID,
                 'sumTotal' => $count->sumTotal,
                 'countDebtImport' => $countDebtImport->countDebtImport,
-                'start_date' => $firstDayOfMonth,
-                'end_date' => $lastDayOfMonth
+                'start_date' => $today->startOfMonth()->format('d-m-Y'),
+                'end_date' => $today->endOfMonth()->format('d-m-Y')
             ];
         } elseif ($data['data'] == 2) { //Xử lý lấy dữ liệu tháng trước
             if ($today->month == 1) {
                 $lastMonth = $today->subMonth();
-                $firstDayOfMonth = $lastMonth->startOfMonth()->format('d-m-Y'); // Ngày bắt đầu của tháng, đã được định dạng
-                $lastDayOfMonth = $lastMonth->endOfMonth()->format('d-m-Y');
-                $count = Orders::selectSub(function ($query) use ($lastMonth) {
-                    $query->from('Orders')->where('orders.order_status', '=', 1)
-                        ->whereMonth('created_at', $lastMonth->month)
-                        ->whereYear('created_at', $lastMonth->year)
+                $firstDayOfMonth = $lastMonth->startOfMonth()->format('Y-m-d'); // Ngày bắt đầu của tháng, đã được định dạng
+                $lastDayOfMonth = $lastMonth->endOfMonth()->format('Y-m-d');
+                $count = Orders::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
+                    $query->from('orders')->where('orders.order_status', '=', 1)
+                        ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('COUNT(id)');
                 }, 'countID')
-                    ->selectSub(function ($query) use ($lastMonth) {
-                        $query->from('Orders')->where('orders.order_status', '=', 1)
-                            ->whereMonth('created_at', $lastMonth->month)
-                            ->whereYear('created_at', $lastMonth->year)
+                    ->selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
+                        $query->from('orders')->where('orders.order_status', '=', 1)
+                            ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                             ->selectRaw('SUM(total_tax)');
                     }, 'sumTotal')->first();
-                $countDebtImport = DebtImport::selectSub(function ($query) use ($lastMonth) {
-                    $query->from('debt_import')
-                        ->where('debt_status', '!=', 1)
-                        ->whereMonth('created_at', $lastMonth->month)
-                        ->whereYear('created_at', $lastMonth->year)
+                $countDebtImport = DebtImport::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
+                    $query->from('debt_import')->where('debt_status', '!=', 1)
+                        ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('SUM(total_import)');
                 },  'countDebtImport')->first();
                 $filters = [];
@@ -317,24 +310,21 @@ class ReportController extends Controller
                 }
             } else {
                 $lastMonth = $today->subMonthNoOverflow();
-                $firstDayOfMonth = $today->startOfMonth()->format('d-m-Y');
-                $lastDayOfMonth = $lastMonth->endOfMonth()->format('d-m-Y');
-                $count = Orders::selectSub(function ($query) use ($lastMonth) {
-                    $query->from('Orders')->where('orders.order_status', '=', 1)
-                        ->whereMonth('created_at', $lastMonth->month)
-                        ->whereYear('created_at', $lastMonth->year)
+                $firstDayOfMonth = $today->startOfMonth()->format('Y-m-d');
+                $lastDayOfMonth = $lastMonth->endOfMonth()->format('Y-m-d');
+                $count = Orders::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
+                    $query->from('orders')->where('orders.order_status', '=', 1)
+                        ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('COUNT(id)');
                 }, 'countID')
-                    ->selectSub(function ($query) use ($lastMonth) {
-                        $query->from('Orders')->where('orders.order_status', '=', 1)
-                            ->whereMonth('created_at', $lastMonth->month)
-                            ->whereYear('created_at', $lastMonth->year)
+                    ->selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
+                        $query->from('orders')->where('orders.order_status', '=', 1)
+                            ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                             ->selectRaw('SUM(total_tax)');
                     }, 'sumTotal')->first();
-                $countDebtImport = DebtImport::selectSub(function ($query) use ($lastMonth) {
+                $countDebtImport = DebtImport::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('debt_import')->where('debt_status', '!=', 1)
-                        ->whereMonth('created_at', $lastMonth->month)
-                        ->whereYear('created_at', $lastMonth->year)
+                        ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('SUM(total_import)');
                 },  'countDebtImport')->first();
                 $filters = [];
@@ -351,33 +341,27 @@ class ReportController extends Controller
                 'countID' => $count->countID,
                 'sumTotal' => $count->sumTotal,
                 'countDebtImport' => $countDebtImport->countDebtImport,
-                'start_date' => $firstDayOfMonth,
-                'end_date' => $lastDayOfMonth
+                'start_date' => $today->startOfMonth()->format('d-m-Y'),
+                'end_date' => $lastMonth->endOfMonth()->format('d-m-Y')
             ];
         } elseif ($data['data'] == 3) { // Xử lý lấy dữ liệu 3 tháng trước
             if ($today->month == 1) {
                 $lastMonth = $today->subMonth(3);
-                $firstDayOfMonth = $lastMonth->startOfMonth()->format('d-m-Y');
-                $lastDayOfMonth = $lastMonth->endOfMonth()->addMonths(2)->format('d-m-Y');
-                $count = Orders::selectSub(function ($query) use ($lastMonth) {
-                    $query->from('Orders')->where('orders.order_status', '=', 1)
-                        ->whereMonth('created_at', '>=', $lastMonth->month)
-                        ->whereMonth('created_at', '<=', ($lastMonth->month + 2))
-                        ->whereYear('created_at', $lastMonth->year)
+                $firstDayOfMonth = $lastMonth->startOfMonth()->format('Y-m-d');
+                $lastDayOfMonth = $lastMonth->endOfMonth()->addMonths(2)->format('Y-m-d');
+                $count = Orders::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
+                    $query->from('orders')->where('orders.order_status', '=', 1)
+                        ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('COUNT(id)');
                 }, 'countID')
-                    ->selectSub(function ($query) use ($lastMonth) {
-                        $query->from('Orders')->where('orders.order_status', '=', 1)
-                            ->whereMonth('created_at', '>=', $lastMonth->month)
-                            ->whereMonth('created_at', '<=', ($lastMonth->month + 2))
-                            ->whereYear('created_at', $lastMonth->year)
+                    ->selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
+                        $query->from('orders')->where('orders.order_status', '=', 1)
+                            ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                             ->selectRaw('SUM(total_tax)');
                     }, 'sumTotal')->first();
-                $countDebtImport = DebtImport::selectSub(function ($query) use ($lastMonth) {
+                $countDebtImport = DebtImport::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('debt_import')->where('debt_status', '!=', 1)
-                        ->whereMonth('created_at', '>=', $lastMonth->month)
-                        ->whereMonth('created_at', '<=', ($lastMonth->month + 2))
-                        ->whereYear('created_at', $lastMonth->year)
+                        ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('SUM(total_import)');
                 },  'countDebtImport')->first();
                 $filters = [];
@@ -390,27 +374,21 @@ class ReportController extends Controller
                 }
             } else {
                 $lastMonth = $today->subMonthNoOverflow(3);
-                $firstDayOfMonth = $lastMonth->startOfMonth()->format('d-m-Y');
-                $lastDayOfMonth = $lastMonth->endOfMonth()->addMonths(2)->format('d-m-Y');
-                $count = Orders::selectSub(function ($query) use ($lastMonth) {
-                    $query->from('Orders')->where('orders.order_status', '=', 1)
-                        ->whereMonth('created_at', '>=', $lastMonth->month)
-                        ->whereMonth('created_at', '<=', ($lastMonth->month + 2))
-                        ->whereYear('created_at', $lastMonth->year)
+                $firstDayOfMonth = $lastMonth->startOfMonth()->format('Y-m-d');
+                $lastDayOfMonth = $lastMonth->endOfMonth()->addMonths(2)->format('Y-m-d');
+                $count = Orders::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
+                    $query->from('orders')->where('orders.order_status', '=', 1)
+                        ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('COUNT(id)');
                 }, 'countID')
-                    ->selectSub(function ($query) use ($lastMonth) {
-                        $query->from('Orders')->where('orders.order_status', '=', 1)
-                            ->whereMonth('created_at', '>=', $lastMonth->month)
-                            ->whereMonth('created_at', '<=', ($lastMonth->month + 2))
-                            ->whereYear('created_at', $lastMonth->year)
+                    ->selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
+                        $query->from('orders')->where('orders.order_status', '=', 1)
+                            ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                             ->selectRaw('SUM(total_tax)');
                     }, 'sumTotal')->first();
-                $countDebtImport = DebtImport::selectSub(function ($query) use ($lastMonth) {
+                $countDebtImport = DebtImport::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('debt_import')->where('debt_status', '!=', 1)
-                        ->whereMonth('created_at', '>=', $lastMonth->month)
-                        ->whereMonth('created_at', '<=', ($lastMonth->month + 2))
-                        ->whereYear('created_at', $lastMonth->year)
+                        ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('SUM(total_import)');
                 },  'countDebtImport')->first();
                 $filters = [];
@@ -427,8 +405,8 @@ class ReportController extends Controller
                 'countID' => $count->countID,
                 'sumTotal' => $count->sumTotal,
                 'countDebtImport' => $countDebtImport->countDebtImport,
-                'start_date' => $firstDayOfMonth,
-                'end_date' => $lastDayOfMonth
+                'start_date' => $lastMonth->startOfMonth()->subMonths(5)->format('d-m-Y'),
+                'end_date' => $lastMonth->endOfMonth()->addMonths(2)->format('d-m-Y')
             ];
         } else {
             $date_start = Carbon::parse($data['date_start']);
@@ -483,6 +461,10 @@ class ReportController extends Controller
                     $query->from('exports')->where('exports.export_status', '=', 2)
                         ->selectRaw('MIN(created_at)');
                 }, 'minCreatedAt')
+                ->selectSub(function ($query) {
+                    $query->from('exports')->where('exports.export_status', '=', 2)
+                        ->selectRaw('MAX(created_at)');
+                }, 'maxCreatedAt')
                 ->first();
             $countDebt = Debt::selectSub(function ($query) {
                 $query->from('debts')->where('debt_status', '!=', 1)
@@ -494,9 +476,10 @@ class ReportController extends Controller
             }, 'countProfit')
                 ->first();
             $minCreatedAt = Carbon::parse($count->minCreatedAt);
+            $maxCreatedAt = Carbon::parse($count->maxCreatedAt);
             $filters = [];
             $filters[] = $minCreatedAt;
-            $filters[] = Carbon::today();
+            $filters[] = $today->endOfMonth()->format('Y-m-d');
             $Tableexports = $this->exports->dataReportAjax($filters);
             $test1 = [];
             foreach ($Tableexports as $item) {
@@ -513,31 +496,27 @@ class ReportController extends Controller
             ];
         } elseif ($data['data'] == 1) {  //Xử lý lấy dữ liệu tháng này
             $today = Carbon::today();
-            $firstDayOfMonth = $today->startOfMonth()->format('d-m-Y'); // Ngày bắt đầu của tháng, đã được định dạng
-            $lastDayOfMonth = Carbon::today()->format('d-m-Y');
-            $count = Exports::selectSub(function ($query) use ($today) {
+            $firstDayOfMonth = $today->startOfMonth()->format('Y-m-d'); // Ngày bắt đầu của tháng, đã được định dạng
+            $lastDayOfMonth = $today->endOfMonth()->format('Y-m-d');
+            $count = Exports::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                 $query->from('exports')->where('exports.export_status', '=', 2)
-                    ->whereMonth('created_at', $today->month)
-                    ->whereYear('created_at', $today->year)
+                    ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                     ->selectRaw('COUNT(id)');
             }, 'countExport')
-                ->selectSub(function ($query) use ($today) {
+                ->selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('exports')->where('exports.export_status', '=', 2)
-                        ->whereMonth('created_at', $today->month)
-                        ->whereYear('created_at', $today->year)
+                        ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('SUM(total)');
                 }, 'sumExport')
                 ->first();
-            $countDebt = Debt::selectSub(function ($query) use ($today) {
+            $countDebt = Debt::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                 $query->from('debts')->where('debt_status', '!=', 1)
-                    ->whereMonth('created_at', $today->month)
-                    ->whereYear('created_at', $today->year)
+                    ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                     ->selectRaw('SUM(total_sales)');
             }, 'countDebt')->first();
-            $countProfit = Debt::selectSub(function ($query) use ($today) {
+            $countProfit = Debt::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                 $query->from('debts')
-                    ->whereMonth('created_at', $today->month)
-                    ->whereYear('created_at', $today->year)
+                    ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                     ->selectRaw('sum(total_difference)');
             }, 'countProfit')
                 ->first();
@@ -555,37 +534,33 @@ class ReportController extends Controller
                 'countProfit' => $countProfit->countProfit,
                 'countExport' => $count->countExport,
                 'sumExport' => $count->sumExport,
-                'start_date' => $firstDayOfMonth,
-                'end_date' => $lastDayOfMonth
+                'start_date' =>  $today->startOfMonth()->format('d-m-Y'),
+                'end_date' => $today->endOfMonth()->format('d-m-Y')
             ];
         } elseif ($data['data'] == 2) { //Xử lý lấy dữ liệu tháng trước
             if ($today->month == 1) {
                 $lastMonth = $today->subMonth();
-                $firstDayOfMonth = $lastMonth->startOfMonth()->format('d-m-Y'); // Ngày bắt đầu của tháng, đã được định dạng
-                $lastDayOfMonth = $lastMonth->endOfMonth()->format('d-m-Y');
-                $count = Exports::selectSub(function ($query) use ($lastMonth) {
+                $firstDayOfMonth = $lastMonth->startOfMonth()->format('Y-m-d'); // Ngày bắt đầu của tháng, đã được định dạng
+                $lastDayOfMonth = $lastMonth->endOfMonth()->format('Y-m-d');
+                $count = Exports::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('exports')->where('exports.export_status', '=', 2)
-                        ->whereMonth('created_at', $lastMonth->month)
-                        ->whereYear('created_at', $lastMonth->year)
+                        ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('COUNT(id)');
                 }, 'countExport')
-                    ->selectSub(function ($query) use ($lastMonth) {
+                    ->selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                         $query->from('exports')->where('exports.export_status', '=', 2)
-                            ->whereMonth('created_at', $lastMonth->month)
-                            ->whereYear('created_at', $lastMonth->year)
+                            ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                             ->selectRaw('SUM(total)');
                     }, 'sumExport')
                     ->first();
-                $countDebt = Debt::selectSub(function ($query) use ($lastMonth) {
+                $countDebt = Debt::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('debts')->where('debt_status', '!=', 1)
-                        ->whereMonth('created_at', $lastMonth->month)
-                        ->whereYear('created_at', $lastMonth->year)
+                        ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('SUM(total_sales)');
                 },  'countDebt')->first();
-                $countProfit = Debt::selectSub(function ($query) use ($lastMonth) {
+                $countProfit = Debt::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('debts')
-                        ->whereMonth('created_at', $lastMonth->month)
-                        ->whereYear('created_at', $lastMonth->year)
+                        ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('sum(total_difference)');
                 }, 'countProfit')
                     ->first();
@@ -599,31 +574,27 @@ class ReportController extends Controller
                 }
             } else {
                 $lastMonth = $today->subMonthNoOverflow();
-                $firstDayOfMonth = $today->startOfMonth()->format('d-m-Y');
-                $lastDayOfMonth = $lastMonth->endOfMonth()->format('d-m-Y');
-                $count = Exports::selectSub(function ($query) use ($lastMonth) {
+                $firstDayOfMonth = $today->startOfMonth()->format('Y-m-d');
+                $lastDayOfMonth = $lastMonth->endOfMonth()->format('Y-m-d');
+                $count = Exports::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('exports')->where('exports.export_status', '=', 2)
-                        ->whereMonth('created_at', $lastMonth->month)
-                        ->whereYear('created_at', $lastMonth->year)
+                        ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('COUNT(id)');
                 }, 'countExport')
-                    ->selectSub(function ($query) use ($lastMonth) {
+                    ->selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                         $query->from('exports')->where('exports.export_status', '=', 2)
-                            ->whereMonth('created_at', $lastMonth->month)
-                            ->whereYear('created_at', $lastMonth->year)
+                            ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                             ->selectRaw('SUM(total)');
                     }, 'sumExport')
                     ->first();
-                $countDebt = Debt::selectSub(function ($query) use ($lastMonth) {
+                $countDebt = Debt::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('debts')->where('debt_status', '!=', 1)
-                        ->whereMonth('created_at', $lastMonth->month)
-                        ->whereYear('created_at', $lastMonth->year)
+                        ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('SUM(total_sales)');
                 },  'countDebt')->first();
-                $countProfit = Debt::selectSub(function ($query) use ($lastMonth) {
+                $countProfit = Debt::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('debts')
-                        ->whereMonth('created_at', $lastMonth->month)
-                        ->whereYear('created_at', $lastMonth->year)
+                        ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('sum(total_difference)');
                 }, 'countProfit')
                     ->first();
@@ -642,41 +613,33 @@ class ReportController extends Controller
                 'countProfit' => $countProfit->countProfit,
                 'countExport' => $count->countExport,
                 'sumExport' => $count->sumExport,
-                'start_date' => $firstDayOfMonth,
-                'end_date' => $lastDayOfMonth
+                'start_date' =>  $today->startOfMonth()->format('d-m-Y'),
+                'end_date' => $lastMonth->endOfMonth()->format('d-m-Y')
             ];
         } elseif ($data['data'] == 3) { // Xử lý lấy dữ liệu 3 tháng trước
             if ($today->month == 1) {
                 $lastMonth = $today->subMonth(3);
-                $firstDayOfMonth = $lastMonth->startOfMonth()->format('d-m-Y');
-                $lastDayOfMonth = $lastMonth->endOfMonth()->addMonths(2)->format('d-m-Y');
-                $count = Exports::selectSub(function ($query) use ($lastMonth) {
+                $firstDayOfMonth = $lastMonth->startOfMonth()->format('Y-m-d');
+                $lastDayOfMonth = $lastMonth->endOfMonth()->addMonths(2)->format('Y-m-d');
+                $count = Exports::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('exports')->where('exports.export_status', '=', 2)
-                        ->whereMonth('created_at', '>=', $lastMonth->month)
-                        ->whereMonth('created_at', '<=', ($lastMonth->month + 2))
-                        ->whereYear('created_at', $lastMonth->year)
+                        ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('COUNT(id)');
                 }, 'countExport')
-                    ->selectSub(function ($query) use ($lastMonth) {
+                    ->selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                         $query->from('exports')->where('exports.export_status', '=', 2)
-                            ->whereMonth('created_at', '>=', $lastMonth->month)
-                            ->whereMonth('created_at', '<=', ($lastMonth->month + 2))
-                            ->whereYear('created_at', $lastMonth->year)
+                            ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                             ->selectRaw('SUM(total)');
                     }, 'sumExport')
                     ->first();
-                $countDebt = Debt::selectSub(function ($query) use ($lastMonth) {
+                $countDebt = Debt::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('debts')->where('debt_status', '!=', 1)
-                        ->whereMonth('created_at', '>=', $lastMonth->month)
-                        ->whereMonth('created_at', '<=', ($lastMonth->month + 2))
-                        ->whereYear('created_at', $lastMonth->year)
+                        ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('SUM(total_sales)');
                 },  'countDebt')->first();
-                $countProfit = Debt::selectSub(function ($query) use ($lastMonth) {
+                $countProfit = Debt::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('debts')
-                        ->whereMonth('created_at', '>=', $lastMonth->month)
-                        ->whereMonth('created_at', '<=', ($lastMonth->month + 2))
-                        ->whereYear('created_at', $lastMonth->year)
+                        ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('sum(total_difference)');
                 }, 'countProfit')
                     ->first();
@@ -690,35 +653,27 @@ class ReportController extends Controller
                 }
             } else {
                 $lastMonth = $today->subMonthNoOverflow(3);
-                $firstDayOfMonth = $lastMonth->startOfMonth()->format('d-m-Y');
-                $lastDayOfMonth = $lastMonth->endOfMonth()->addMonths(2)->format('d-m-Y');
-                $count = Exports::selectSub(function ($query) use ($lastMonth) {
+                $firstDayOfMonth = $lastMonth->startOfMonth()->format('Y-m-d');
+                $lastDayOfMonth = $lastMonth->endOfMonth()->addMonths(2)->format('Y-m-d');
+                $count = Exports::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('exports')->where('exports.export_status', '=', 2)
-                        ->whereMonth('created_at', '>=', $lastMonth->month)
-                        ->whereMonth('created_at', '<=', ($lastMonth->month + 2))
-                        ->whereYear('created_at', $lastMonth->year)
+                        ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('COUNT(id)');
                 }, 'countExport')
-                    ->selectSub(function ($query) use ($lastMonth) {
+                    ->selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                         $query->from('exports')->where('exports.export_status', '=', 2)
-                            ->whereMonth('created_at', '>=', $lastMonth->month)
-                            ->whereMonth('created_at', '<=', ($lastMonth->month + 2))
-                            ->whereYear('created_at', $lastMonth->year)
+                            ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                             ->selectRaw('SUM(total)');
                     }, 'sumExport')
                     ->first();
-                $countDebt = Debt::selectSub(function ($query) use ($lastMonth) {
+                $countDebt = Debt::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('debts')->where('debt_status', '!=', 1)
-                        ->whereMonth('created_at', '>=', $lastMonth->month)
-                        ->whereMonth('created_at', '<=', ($lastMonth->month + 2))
-                        ->whereYear('created_at', $lastMonth->year)
+                        ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('SUM(total_sales)');
                 },  'countDebt')->first();
-                $countProfit = Debt::selectSub(function ($query) use ($lastMonth) {
+                $countProfit = Debt::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('debts')
-                        ->whereMonth('created_at', '>=', $lastMonth->month)
-                        ->whereMonth('created_at', '<=', ($lastMonth->month + 2))
-                        ->whereYear('created_at', $lastMonth->year)
+                        ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('sum(total_difference)');
                 }, 'countProfit')->first();
                 $filters = [];
@@ -736,8 +691,8 @@ class ReportController extends Controller
                 'countProfit' => $countProfit->countProfit,
                 'countExport' => $count->countExport,
                 'sumExport' => $count->sumExport,
-                'start_date' => $firstDayOfMonth,
-                'end_date' => $lastDayOfMonth
+                'start_date' =>  $lastMonth->startOfMonth()->subMonths(5)->format('d-m-Y'),
+                'end_date' => $lastMonth->endOfMonth()->addMonths(2)->format('d-m-Y')
             ];
         } else {
             $date_start = Carbon::parse($data['date_start']);
