@@ -89,6 +89,18 @@ class Orders extends Model
             ->get();
         return $orders;
     }
+    public function maxdate()
+    {
+        $exports = DB::table($this->table)
+            ->where('order_status', 1)
+            ->get();
+
+        $maxdate = $exports->MAX('created_at');
+
+        $formattedDate = date('d-m-Y', strtotime($maxdate));
+
+        return $formattedDate;
+    }
     public function getMinDateOrders()
     {
         $minDate = DB::table($this->table)

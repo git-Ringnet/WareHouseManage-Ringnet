@@ -95,6 +95,18 @@ class Exports extends Model
 
         return $formattedDate;
     }
+    public function maxdate()
+    {
+        $exports = DB::table($this->table)
+            ->where('export_status', 2)
+            ->get();
+
+        $maxdate = $exports->MAX('created_at');
+
+        $formattedDate = date('d-m-Y', strtotime($maxdate));
+
+        return $formattedDate;
+    }
     protected $fillable = [
         'guest_id',
         'user_id',

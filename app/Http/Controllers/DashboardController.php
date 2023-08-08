@@ -46,13 +46,18 @@ class DashboardController extends Controller
                 $query->from('Orders')->where('orders.order_status', '=', 1)
                     ->selectRaw('MIN(created_at)');
             }, 'minCreatedAt')
+            ->selectSub(function ($query) {
+                $query->from('Orders')->where('orders.order_status', '=', 1)
+                    ->selectRaw('MAX(created_at)');
+            }, 'maxCreatedAt')
             ->first();
         $minCreatedAt = Carbon::parse($count->minCreatedAt);
+        $maxCreatedAt = Carbon::parse($count->maxCreatedAt);
         $ordersAll = [
             'countID' => $count->countID,
             'sumTotal' => $count->sumTotal,
             'start_date' => $minCreatedAt->format('d-m-Y'), // Định dạng lại ngày bắt đầu
-            'end_date' => $today->format('d-m-Y'), // Định dạng lại ngày hôm nay
+            'end_date' => $maxCreatedAt->format('d-m-Y'), // Định dạng lại ngày hôm nay
         ];
         $countExport = Exports::selectSub(function ($query) {
             $query->from('exports')->where('exports.export_status', '=', 2)
@@ -66,13 +71,18 @@ class DashboardController extends Controller
                 $query->from('exports')->where('exports.export_status', '=', 2)
                     ->selectRaw('MIN(created_at)');
             }, 'minCreatedAt')
+            ->selectSub(function ($query) {
+                $query->from('exports')->where('exports.export_status', '=', 2)
+                    ->selectRaw('MAX(created_at)');
+            }, 'maxCreatedAt')
             ->first();
         $minCreatedAt = Carbon::parse($countExport->minCreatedAt);
+        $maxCreatedAt = Carbon::parse($countExport->maxCreatedAt);
         $exportAll = [
             'countExport' => $countExport->countExport,
             'sumExport' => $countExport->sumExport,
             'start_date' => $minCreatedAt->format('d-m-Y'), // Định dạng lại ngày bắt đầu
-            'end_date' => $today->format('d-m-Y'), // Định dạng lại ngày hôm nay
+            'end_date' => $maxCreatedAt->format('d-m-Y'), // Định dạng lại ngày hôm nay
         ];
         $countInvent = Product::selectSub(function ($query) {
             $query->from('product')->where('product.product_qty', '>', 0)
@@ -86,13 +96,18 @@ class DashboardController extends Controller
                 $query->from('product')->where('product.product_qty', '>', 0)
                     ->selectRaw('MIN(created_at)');
             }, 'minCreatedAt')
+            ->selectSub(function ($query) {
+                $query->from('product')->where('product.product_qty', '>', 0)
+                    ->selectRaw('MAX(created_at)');
+            }, 'maxCreatedAt')
             ->first();
         $minCreatedAt = Carbon::parse($countInvent->minCreatedAt);
+        $maxCreatedAt = Carbon::parse($countInvent->maxCreatedAt);
         $inventAll = [
             'countInventory' => $countInvent->countInventory,
             'sumInventory' => $countInvent->sumInventory,
             'start_date' => $minCreatedAt->format('d-m-Y'), // Định dạng lại ngày bắt đầu
-            'end_date' => $today->format('d-m-Y'), // Định dạng lại ngày hôm nay
+            'end_date' => $maxCreatedAt->format('d-m-Y'), // Định dạng lại ngày hôm nay
         ];
 
         $countDebtExport = Debt::selectSub(function ($query) {
@@ -101,23 +116,34 @@ class DashboardController extends Controller
         }, 'count')->selectSub(function ($query) {
             $query->from('debts')->where('debt_status', '!=', 1)
                 ->selectRaw('MIN(created_at)');
-        }, 'exportCreatedAt')->first();
+        }, 'exportCreatedAt')
+            ->selectSub(function ($query) {
+                $query->from('debts')->where('debt_status', '!=', 1)
+                    ->selectRaw('MAX(created_at)');
+            }, 'maxExportCreatedAt')->first();
         $countDebtImport = DebtImport::selectSub(function ($query) {
             $query->from('debt_import')->where('debt_status', '!=', 1)
                 ->selectRaw('SUM(total_import)');
         }, 'countDebtImport')->selectSub(function ($query) {
             $query->from('debt_import')->where('debt_status', '!=', 1)
                 ->selectRaw('MIN(created_at)');
-        }, 'importCreatedAt')->first();
+        }, 'importCreatedAt')
+            ->selectSub(function ($query) {
+                $query->from('debt_import')->where('debt_status', '!=', 1)
+                    ->selectRaw('MAX(created_at)');
+            }, 'maxImportCreatedAt')->first();
 
         $minCreatedAt = Carbon::parse($countDebtImport->importCreatedAt);
         $minCreatedAt12 = Carbon::parse($countDebtExport->exportCreatedAt);
+        $maxCreatedAt = Carbon::parse($countDebtImport->maxImportCreatedAt);
+        $maxCreatedAt12 = Carbon::parse($countDebtExport->maxExportCreatedAt);
         $smallerDate = $minCreatedAt->min($minCreatedAt12);
+        $MAXDate = $maxCreatedAt->max($maxCreatedAt12);
         $debts = [
             'debt_import' => $countDebtImport->countDebtImport,
             'debt_export' => $countDebtExport->count,
             'start_date' => $smallerDate->format('d-m-Y'),
-            'end_date' => $today->format('d-m-Y'),
+            'end_date' => $MAXDate->format('d-m-Y'),
         ];
         $countProfit = Debt::selectSub(function ($query) {
             $query->from('debts')
@@ -128,13 +154,18 @@ class DashboardController extends Controller
                 $query->from('debts')
                     ->selectRaw('MIN(created_at)');
             }, 'minCreatedAt')
+            ->selectSub(function ($query) {
+                $query->from('debts')
+                    ->selectRaw('MAX(created_at)');
+            }, 'maxCreatedAt')
             ->first();
         $minCreatedAt = Carbon::parse($countProfit->minCreatedAt);
+        $maxCreatedAt = Carbon::parse($countProfit->maxCreatedAt);
 
         $profitAll = [
             'countProfit' => $countProfit->countProfit,
             'start_date' => $minCreatedAt->format('d-m-Y'), // Định dạng lại ngày bắt đầu
-            'end_date' => $today->format('d-m-Y'), // Định dạng lại ngày hôm nay
+            'end_date' => $maxCreatedAt->format('d-m-Y'), // Định dạng lại ngày hôm nay
         ];
 
         return view('index', compact('title', 'orders', 'ordersAll', 'exportAll', 'inventAll', 'debts', 'profitAll', 'getMinDateOrders'));
@@ -159,13 +190,18 @@ class DashboardController extends Controller
                     $query->from('Orders')->where('orders.order_status', '=', 1)
                         ->selectRaw('MIN(created_at)');
                 }, 'minCreatedAt')
+                ->selectSub(function ($query) {
+                    $query->from('Orders')->where('orders.order_status', '=', 1)
+                        ->selectRaw('MAX(created_at)');
+                }, 'maxCreatedAt')
                 ->first();
             $minCreatedAt = Carbon::parse($count->minCreatedAt);
+            $maxCreatedAt = Carbon::parse($count->maxCreatedAt);
             return [
                 'countID' => $count->countID,
                 'sumTotal' => $count->sumTotal,
                 'start_date' => $minCreatedAt->format('d-m-Y'), // Định dạng lại ngày bắt đầu
-                'end_date' => $today->format('d-m-Y'), // Định dạng lại ngày hôm nay
+                'end_date' => $maxCreatedAt->format('d-m-Y'), // Định dạng lại ngày hôm nay
             ];
         } elseif ($data['data'] == 1) {  //Xử lý lấy dữ liệu tháng này
             $today = Carbon::today();
@@ -297,13 +333,19 @@ class DashboardController extends Controller
                     $query->from('exports')->where('exports.export_status', '=', 2)
                         ->selectRaw('MIN(created_at)');
                 }, 'minCreatedAt')
+                ->selectSub(function ($query) {
+                    $query->from('exports')->where('exports.export_status', '=', 2)
+                        ->selectRaw('MAX(created_at)');
+                }, 'maxCreatedAt')
                 ->first();
             $minCreatedAt = Carbon::parse($count->minCreatedAt);
+            $maxCreatedAt = Carbon::parse($count->maxCreatedAt);
+
             return [
                 'countExport' => $count->countExport,
                 'sumExport' => $count->sumExport,
                 'start_date' => $minCreatedAt->format('d-m-Y'), // Định dạng lại ngày bắt đầu
-                'end_date' => $today->format('d-m-Y'), // Định dạng lại ngày hôm nay
+                'end_date' => $maxCreatedAt->format('d-m-Y'), // Định dạng lại ngày hôm nay
             ];
         } elseif ($data['data'] == 1) {  //Xử lý lấy dữ liệu tháng này
             $today = Carbon::today();
@@ -441,13 +483,19 @@ class DashboardController extends Controller
                     $query->from('product')->where('product.product_qty', '>', 0)
                         ->selectRaw('MIN(created_at)');
                 }, 'minCreatedAt')
+                ->selectSub(function ($query) {
+                    $query->from('product')->where('product.product_qty', '>', 0)
+                        ->selectRaw('MAX(created_at)');
+                }, 'maxCreatedAt')
                 ->first();
             $minCreatedAt = Carbon::parse($count->minCreatedAt);
+            $maxCreatedAt = Carbon::parse($count->maxCreatedAt);
+
             return [
                 'countInventory' => $count->countInventory,
                 'sumInventory' => $count->sumInventory,
                 'start_date' => $minCreatedAt->format('d-m-Y'), // Định dạng lại ngày bắt đầu
-                'end_date' => $today->format('d-m-Y'), // Định dạng lại ngày hôm nay
+                'end_date' => $maxCreatedAt->format('d-m-Y'), // Định dạng lại ngày hôm nay
             ];
         } elseif ($data['data'] == 1) {  //Xử lý lấy dữ liệu tháng này
             $today = Carbon::today();
@@ -580,23 +628,33 @@ class DashboardController extends Controller
             }, 'count')->selectSub(function ($query) {
                 $query->from('debts')->where('debt_status', '!=', 1)
                     ->selectRaw('MIN(created_at)');
-            }, 'exportCreatedAt')->first();
+            }, 'exportCreatedAt')
+            ->selectSub(function ($query) {
+                $query->from('debts')->where('debt_status', '!=', 1)
+                    ->selectRaw('MAX(created_at)');
+            }, 'maxExportCreatedAt')->first();
             $countDebtImport = DebtImport::selectSub(function ($query) {
                 $query->from('debt_import')->where('debt_status', '!=', 1)
                     ->selectRaw('SUM(total_import)');
             }, 'countDebtImport')->selectSub(function ($query) {
                 $query->from('debt_import')->where('debt_status', '!=', 1)
                     ->selectRaw('MIN(created_at)');
-            }, 'importCreatedAt')->first();
+            }, 'importCreatedAt')->selectSub(function ($query) {
+                $query->from('debt_import')->where('debt_status', '!=', 1)
+                    ->selectRaw('MAX(created_at)');
+            }, 'maxImportCreatedAt')->first();
 
             $minCreatedAt = Carbon::parse($countDebtImport->importCreatedAt);
             $minCreatedAt12 = Carbon::parse($count->exportCreatedAt);
             $smallerDate = $minCreatedAt->min($minCreatedAt12);
+            $maxCreatedAt = Carbon::parse($countDebtImport->maxImportCreatedAt);
+            $maxCreatedAt12 = Carbon::parse($count->maxExportCreatedAt);
+            $maxDate = $maxCreatedAt->max($maxCreatedAt12);
             return [
                 'debt_import' => $countDebtImport->countDebtImport,
                 'debt_export' => $count->count,
                 'start_date' => $smallerDate->format('d-m-Y'),
-                'end_date' => $today->format('d-m-Y'),
+                'end_date' => $maxDate->format('d-m-Y'),
             ];
         } elseif ($data['data'] == 1) {  //Xử lý lấy dữ liệu tháng này
             $today = Carbon::today();
@@ -728,13 +786,18 @@ class DashboardController extends Controller
                     $query->from('debts')
                         ->selectRaw('MIN(created_at)');
                 }, 'minCreatedAt')
+                ->selectSub(function ($query) {
+                    $query->from('debts')
+                        ->selectRaw('MAX(created_at)');
+                }, 'maxCreatedAt')
                 ->first();
             $minCreatedAt = Carbon::parse($count->minCreatedAt);
+            $maxCreatedAt = Carbon::parse($count->maxCreatedAt);
 
             return [
                 'countProfit' => $count->countProfit,
                 'start_date' => $minCreatedAt->format('d-m-Y'), // Định dạng lại ngày bắt đầu
-                'end_date' => $today->format('d-m-Y'), // Định dạng lại ngày hôm nay
+                'end_date' => $maxCreatedAt->format('d-m-Y'), // Định dạng lại ngày hôm nay
             ];
         } elseif ($data['data'] == 1) {  //Xử lý lấy dữ liệu tháng này
             $today = Carbon::today();

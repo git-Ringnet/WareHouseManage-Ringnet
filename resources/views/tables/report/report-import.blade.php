@@ -25,7 +25,7 @@
                                     <div class="ca d-flex">
                                         <div class="it0">{{ $mindate }}</div>
                                         <div class="muiten-all">-></div>
-                                        <div class="id0">{{ date('t-m-Y', strtotime(date('Y-m-d'))) }}</div>
+                                        <div class="id0">{{ $maxdate }}</div>
                                     </div>
                                     <div class="ca text-left">Tất cả</div>
                                 </div>
