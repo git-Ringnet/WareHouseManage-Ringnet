@@ -384,7 +384,8 @@ class AddProductController extends Controller
                     'product_tax' => $product_tax[$i],
                     'product_total' => $product_total[$i],
                     'provide_id' => $request->provide_id == null ? $newProvide : $request->provide_id,
-                    'product_code' => $request->product_code
+                    'product_code' => $request->product_code,
+                    'created_at' => $request->product_create === null ? Carbon::now() : $request->product_create
                 ];
                 $newP = $this->product->addProduct($dataProduct);
                 $updateP = ProductOrders::where('id', $id_product[$i])->first();
@@ -542,7 +543,8 @@ class AddProductController extends Controller
                     'product_price' => $product_price[$i],
                     'product_total' => $product_total[$i],
                     'provide_id' => $request->provide_id == null ? $new :  $request['provide_id'],
-                    'product_code' => $request->product_code
+                    'product_code' => $request->product_code,
+                    'created_at' => $request->product_create === null ? Carbon::now() : $request->product_create
                 ];
                 $pro = $this->product->addProduct($data1);
                 $updateP = ProductOrders::where('id', $id_product[$i])->first();
