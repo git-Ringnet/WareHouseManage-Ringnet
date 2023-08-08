@@ -664,8 +664,8 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <td><input type="checkbox" name="ids[]" class="cb-element"
                                                         value="{{ $value->id }}"></td>
                                             @endcan
-                                            <td class="text-left">{{ $value->madon }}</td>
-                                            <td class="text-left">
+                                            <td class="text-left" style="width: 15%;">{{ $value->madon }}</td>
+                                            <td class="text-left" style="width: 15%;">
                                                 {{ date_format(new DateTime($value->ngaytao), 'd-m-Y') }}
                                             </td>
                                             <td class="text-left">{{ $value->nhacungcap }}</td>
