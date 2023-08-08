@@ -992,6 +992,7 @@ class AddProductController extends Controller
                         $data['product_total'] = ($request->product_qty[$i] - $getProductQty->total_qty) * $product_price[$i];
                     }
                     $data['product_code'] = $request->product_code;
+                    $data['created_at'] = $request->product_create === null ? Carbon::now() : $request->product_create;
                     $this->product->updateProduct($data, $f->product_id);
                     //Cập nhật công nợ xuất
                     $productIds = $request->product_id;
