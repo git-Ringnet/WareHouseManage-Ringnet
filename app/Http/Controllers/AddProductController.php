@@ -797,9 +797,10 @@ class AddProductController extends Controller
             $list = [];
             foreach ($listOrders as $listOrder) {
                 array_push($list, $listOrder->id);
-                if ($listOrder->order_status == 1) {
-                    // $listOrder->order_status = 2;
-                    // $listOrder->save();
+                if ($listOrder->order_status == 0) {
+                    $listOrder->order_status = 2;
+                    $listOrder->save();
+                } else if ($listOrder->order_status == 1) {
                     $id_product = ProductOrders::where('order_id', $listOrder->id)->get();
                     foreach ($id_product as $va) {
                         $check_PExport = productExports::where('product_id', $va->product_id)->first();
@@ -847,7 +848,7 @@ class AddProductController extends Controller
             } else {
                 session()->flash('msg', 'Hủy đơn hàng thành công !');
             }
-            return response()->json(['success' => true, 'msg' => 'Hủy đơn hàng thành công','data'=> $lisst]);
+            return response()->json(['success' => true, 'msg' => 'Hủy đơn hàng thành công', 'data' => $lisst]);
         }
         return response()->json(['success' => false, 'msg' => 'Not found']);
     }
