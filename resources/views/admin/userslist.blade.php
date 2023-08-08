@@ -353,7 +353,8 @@ $index = array_search($item['label'], $numberedLabels);
                             <table id="example2" class="table table-hover">
                                 <thead class="sticky-head">
                                     <tr>
-                                        <input type="hidden" id="perPageinput" name="perPageinput" value="{{ request()->perPageinput ?? 10 }}">
+                                        <input type="hidden" id="perPageinput" name="perPageinput"
+                                            value="{{ request()->perPageinput ?? 10 }}">
                                         <input type="hidden" id="sortByInput" name="sort-by" value="id">
                                         <input type="hidden" id="sortTypeInput" name="sort-type"
                                             value="{{ $sortType }}">
@@ -413,11 +414,11 @@ $index = array_search($item['label'], $numberedLabels);
                                 </thead>
                                 <tbody>
                                     @foreach ($usersList as $value)
-                                        <tr>
+                                        <tr onclick="handleRowClick('checkbox-{{ $value->id }}', event);">
                                             <td>
                                                 @if ($value->id != Auth::user()->id)
-                                                    <input type="checkbox" class="cb-element" name="ids[]"
-                                                        value="{{ $value->id }}">
+                                                    <input type="checkbox" class="cb-element" name="ids[]" id="checkbox-{{ $value->id }}"
+                                                        value="{{ $value->id }}" onclick="event.stopPropagation();">
                                                 @endif
                                             </td>
                                             <td>{{ $value->id }}</td>
@@ -450,7 +451,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     Active
                                                 @endif
                                             </td>
-                                            <td>
+                                            <td class="editEx">
                                                 <a>
                                                     <form action="{{ route('admin.edit') }}" method="get"
                                                         enctype="multipart/form">
@@ -923,6 +924,38 @@ $index = array_search($item['label'], $numberedLabels);
             $('.count_checkbox').text('Đã chọn ' + $('.cb-element:checked').length);
         } else {
             $('.multiple_action').hide();
+        }
+    }
+
+    function toggleCheckbox(checkboxId) {
+        var checkbox = document.getElementById(checkboxId);
+        if (checkbox) {
+            checkbox.checked = !checkbox.checked; // Đảo ngược trạng thái của checkbox
+        }
+    }
+
+    function triggerChange(checkboxId) {
+        var checkbox = document.getElementById(checkboxId);
+        if (checkbox) {
+            var event = new Event('change', {
+                bubbles: true,
+                cancelable: true,
+            });
+            checkbox.dispatchEvent(event);
+        }
+    }
+
+    function handleRowClick(checkboxId, event) {
+        // Lấy target của sự kiện click
+        var target = event.target;
+
+        // Kiểm tra nếu target không có class "dropdown"
+        if (!target.closest('.dropdown') && !target.closest('.editEx')) {
+            var checkbox = document.getElementById(checkboxId);
+            if (checkbox) {
+                toggleCheckbox(checkboxId); // Thay đổi trạng thái checkbox
+                triggerChange(checkboxId); // Kích hoạt sự kiện change của checkbox
+            }
         }
     }
 </script>
