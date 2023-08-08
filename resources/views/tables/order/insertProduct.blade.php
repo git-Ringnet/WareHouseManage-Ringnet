@@ -568,9 +568,9 @@ $index = array_search($item['label'], $numberedLabels);
                                 <?php $stt = 1; ?>
                                 @foreach ($orders as $va)
                                     <tr class="{{ $va->id }}"
-                                        onclick="handleRowClick('checkbox-{{ $value->id }}', event);">
+                                        onclick="handleRowClick('checkbox-{{ $va->id }}', event);">
                                         <td><input type="checkbox" class="cb-element" name="ids[]"
-                                                id="checkbox-{{ $value->id }}" value="{{ $va->id }}"
+                                                id="checkbox-{{ $va->id }}" value="{{ $va->id }}"
                                                 onclick="event.stopPropagation();"></td>
                                         <td>{{ $va->id }}</td>
                                         <td>{{ $va->product_code }}</td>
