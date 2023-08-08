@@ -324,7 +324,8 @@ $index = array_search($item['label'], $numberedLabels);
                             <table id="example2" class="table table-hover">
                                 <thead class="sticky-head">
                                     <tr>
-                                        <input type="hidden" id="perPageinput" name="perPageinput" value="{{ request()->perPageinput ?? 10 }}">
+                                        <input type="hidden" id="perPageinput" name="perPageinput"
+                                            value="{{ request()->perPageinput ?? 10 }}">
                                         <input type="hidden" id="sortByInput" name="sort-by" value="id">
                                         <input type="hidden" id="sortTypeInput" name="sort-type"
                                             value="{{ $sortType }}">
@@ -384,9 +385,10 @@ $index = array_search($item['label'], $numberedLabels);
                                 </thead>
                                 <tbody>
                                     @foreach ($provides as $item)
-                                        <tr>
+                                        <tr onclick="handleRowClick('checkbox-{{ $item->id }}', event);">
                                             <td><input type="checkbox" class="cb-element" name="ids[]"
-                                                    value="{{ $item->id }}"></td>
+                                                    value="{{ $item->id }}" id="checkbox-{{ $item->id }}"
+                                                    onclick="event.stopPropagation();"></td>
                                             <td>{{ $item->id }}</td>
                                             <td style="width: 300px">{{ $item->provide_name }}</td>
                                             <td>{{ $item->provide_represent }}</td>
@@ -409,7 +411,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     } ?>>Disable</option>
                                                 </select>
                                             </td>
-                                            <td>
+                                            <td class="editEx">
                                                 <a class="btn btn-sm" href="{{ route('provides.edit', $item->id) }}">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="32"
                                                         height="32" viewBox="0 0 32 32" fill="none">
@@ -494,7 +496,7 @@ $index = array_search($item['label'], $numberedLabels);
     <!-- /.content -->
 </div>
 <script>
-        $('#perPage').on('change', function(e) {
+    $('#perPage').on('change', function(e) {
         e.preventDefault();
         var perPageValue = $(this).val();
         $('#perPageinput').val(perPageValue);
@@ -860,6 +862,38 @@ $index = array_search($item['label'], $numberedLabels);
             $('.count_checkbox').text('Đã chọn ' + $('.cb-element:checked').length);
         } else {
             $('.multiple_action').hide();
+        }
+    }
+
+    function toggleCheckbox(checkboxId) {
+        var checkbox = document.getElementById(checkboxId);
+        if (checkbox) {
+            checkbox.checked = !checkbox.checked; // Đảo ngược trạng thái của checkbox
+        }
+    }
+
+    function triggerChange(checkboxId) {
+        var checkbox = document.getElementById(checkboxId);
+        if (checkbox) {
+            var event = new Event('change', {
+                bubbles: true,
+                cancelable: true,
+            });
+            checkbox.dispatchEvent(event);
+        }
+    }
+
+    function handleRowClick(checkboxId, event) {
+        // Lấy target của sự kiện click
+        var target = event.target;
+
+        // Kiểm tra nếu target không có class "dropdown"
+        if (!target.closest('.dropdown') && !target.closest('.editEx')) {
+            var checkbox = document.getElementById(checkboxId);
+            if (checkbox) {
+                toggleCheckbox(checkboxId); // Thay đổi trạng thái checkbox
+                triggerChange(checkboxId); // Kích hoạt sự kiện change của checkbox
+            }
         }
     }
 </script>
