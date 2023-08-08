@@ -349,6 +349,7 @@ class ExportController extends Controller
                                 $debt->total_difference = $totalDifference;
                                 $debt->debt = $guest->debt;
                                 $debt->date_start = $request->export_create;
+                                $debt->created_at = $request->export_create;
                                 $startDate = Carbon::parse($request->export_create); // Chuyển đổi ngày bắt đầu thành đối tượng Carbon
                                 $daysToAdd = $debt->debt; // Số ngày cần thêm
 
@@ -568,7 +569,7 @@ class ExportController extends Controller
                                 $debt->debt_transport_fee = $debtTransportFee;
                                 $debt->total_difference = $totalDifference;
                                 $debt->debt = $guest->debt;
-
+                                $debt->created_at = $request->export_create;
                                 $debt->date_start = $request->export_create;
 
                                 $startDate = Carbon::parse($request->export_create); // Chuyển đổi ngày bắt đầu thành đối tượng Carbon
@@ -774,7 +775,7 @@ class ExportController extends Controller
                                 $debt->debt_transport_fee = $debtTransportFee;
                                 $debt->total_difference = $totalDifference;
                                 $debt->debt = $guest->debt;
-
+                                $debt->created_at = $request->export_create;
                                 $debt->date_start = $request->export_create;
 
                                 $startDate = Carbon::parse($request->export_create); // Chuyển đổi ngày bắt đầu thành đối tượng Carbon
@@ -980,7 +981,7 @@ class ExportController extends Controller
                                 $debt->debt_transport_fee = $debtTransportFee;
                                 $debt->total_difference = $totalDifference;
                                 $debt->debt = $guest->debt;
-
+                                $debt->created_at = $request->export_create;
                                 $debt->date_start = $request->export_create;
 
                                 $startDate = Carbon::parse($request->export_create); // Chuyển đổi ngày bắt đầu thành đối tượng Carbon
@@ -1624,7 +1625,7 @@ class ExportController extends Controller
                         $debt->total_difference = $totalDifference;
                         $debt->debt = $guest->debt;
                         $debt->date_start = $request->export_create;
-
+                        $debt->created_at = $request->export_create;
                         $startDate = Carbon::parse($request->export_create); // Chuyển đổi ngày bắt đầu thành đối tượng Carbon
                         $daysToAdd = $debt->debt; // Số ngày cần thêm
 
@@ -2385,7 +2386,7 @@ class ExportController extends Controller
                         $debt->total_difference = $totalDifference;
                         $debt->debt = $guest->debt;
                         $debt->date_start = $request->export_create;
-
+                        $debt->created_at = $request->export_create;
                         $startDate = Carbon::parse($request->export_create); // Chuyển đổi ngày bắt đầu thành đối tượng Carbon
                         $daysToAdd = $debt->debt; // Số ngày cần thêm
 

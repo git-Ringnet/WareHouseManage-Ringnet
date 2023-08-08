@@ -1471,7 +1471,6 @@ $index = array_search($item['label'], $numberedLabels);
         } else if (isThanhtoan) {
             $('.multiple_action').hide();
         }
-        console.log(isUserAdmin);
     }
 
     $('.product_category').change(function() {
