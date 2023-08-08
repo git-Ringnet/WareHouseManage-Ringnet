@@ -767,10 +767,12 @@ $index = array_search($item['label'], $numberedLabels);
                                 </thead>
                                 <tbody>
                                     @foreach ($products as $value)
-                                        <tr>
+                                        <tr onclick="handleRowClick('checkbox-{{ $value->id }}', event);">
                                             @can('view-guests')
                                                 <td><input type="checkbox" class="cb-element" name="product[]"
-                                                        value="{{ $value->id }}"></td>
+                                                        id="checkbox-{{ $value->id }}"
+                                                        onclick="event.stopPropagation();" value="{{ $value->id }}">
+                                                </td>
                                             @endcan
                                             <td class="text-left">{{ $value->id }}</td>
                                             <td class="text-left">{{ $value->product_name }}</td>
@@ -1438,6 +1440,38 @@ $index = array_search($item['label'], $numberedLabels);
             }
         });
     });
+    //checkbox
+    function toggleCheckbox(checkboxId) {
+        var checkbox = document.getElementById(checkboxId);
+        if (checkbox) {
+            checkbox.checked = !checkbox.checked; // Đảo ngược trạng thái của checkbox
+        }
+    }
+
+    function triggerChange(checkboxId) {
+        var checkbox = document.getElementById(checkboxId);
+        if (checkbox) {
+            var event = new Event('change', {
+                bubbles: true,
+                cancelable: true,
+            });
+            checkbox.dispatchEvent(event);
+        }
+    }
+
+    function handleRowClick(checkboxId, event) {
+        // Lấy target của sự kiện click
+        var target = event.target;
+
+        // Kiểm tra nếu target không có class "dropdown"
+        if (!target.closest('.dropdown') && !target.closest('.editEx')) {
+            var checkbox = document.getElementById(checkboxId);
+            if (checkbox) {
+                toggleCheckbox(checkboxId); // Thay đổi trạng thái checkbox
+                triggerChange(checkboxId); // Kích hoạt sự kiện change của checkbox
+            }
+        }
+    }
 </script>
 </body>
 

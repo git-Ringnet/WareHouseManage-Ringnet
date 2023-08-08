@@ -476,7 +476,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('import_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity import-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -659,10 +659,12 @@ $index = array_search($item['label'], $numberedLabels);
                                 </thead>
                                 <tbody>
                                     @foreach ($debts as $value)
-                                        <tr class="{{ $value->id }}">
+                                        <tr class="{{ $value->id }}"
+                                            onclick="handleRowClick('checkbox-{{ $value->id }}', event);">
                                             @can('view-provides')
                                                 <td><input type="checkbox" name="ids[]" class="cb-element"
-                                                        value="{{ $value->id }}"></td>
+                                                        id="checkbox-{{ $value->id }}" value="{{ $value->id }}"
+                                                        onclick="event.stopPropagation();"></td>
                                             @endcan
                                             <td class="text-left" style="width: 15%;">{{ $value->madon }}</td>
                                             <td class="text-left" style="width: 15%;">
@@ -711,7 +713,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 @endif
                                             </td>
                                             <td class="text-left">{{ $value->debt_note }}</td>
-                                            <td class="text-center">
+                                            <td class="text-center editEx">
                                                 <div class="icon">
                                                     @if (Auth::user()->can('view-provides'))
                                                         <a href="{{ route('debt_import.edit', $value->id) }}">
@@ -760,7 +762,7 @@ $index = array_search($item['label'], $numberedLabels);
 
                                                 </div>
                                             </td>
-                                            <td class="text-center">
+                                            <td class="text-center dropdown">
                                                 <div id="dropdown_item{{ $value->id }}" data-toggle="collapse"
                                                     class="dropdownitem"
                                                     data-target="#product-details-<?php echo $value->id; ?>">
@@ -773,47 +775,47 @@ $index = array_search($item['label'], $numberedLabels);
                                                 </div>
                                                 <?php $stt = 0; ?>
                                                 @foreach ($product as $item)
-                                                @if ($value->import_id == $item->import_id)
+                                                    @if ($value->import_id == $item->import_id)
                                         <tr id="product-details-{{ $value->id }}"
                                             class="collapse product-details">
-                                         
-                                                <td class="text-left"><?php echo $stt += 1; ?>
-                                                </td>
-                                                <td class="text-left w-auto">
-                                                    <p>Tên sản phẩm</p>{{ $item->tensanpham }}
-                                                </td>
-                                                <td class="text-left">
-                                                    <p>ĐVT</p>
-                                                    {{ $item->dvt }}
-                                                </td>
-                                                <td class="text-left">
-                                                    <p>Số lượng</p>{{ $item->soluong }}
-                                                </td>
-                                                <td class="text-left">
-                                                    <p>Giá nhập</p>
-                                                    @if (fmod($item->gianhap, 1) > 0)
-                                                        {{ number_format($item->gianhap, 2, '.', ',') }}
-                                                    @else
-                                                        {{ number_format($item->gianhap) }}
-                                                    @endif
-                                                </td>
-                                                <td class="text-center">
-                                                    <p>Thành tiền</p>
-                                                    {{ number_format($item->gianhap * $item->soluong) }}
-                                                </td>
-                                                <td>
-                                                    <p>Thuế</p>
-                                                    @if ($item->thue == 99)
-                                                        NOVAT
-                                                    @else
-                                                        {{ $item->thue }}%
-                                                    @endif
-                                                </td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                          
+
+                                            <td class="text-left"><?php echo $stt += 1; ?>
+                                            </td>
+                                            <td class="text-left w-auto">
+                                                <p>Tên sản phẩm</p>{{ $item->tensanpham }}
+                                            </td>
+                                            <td class="text-left">
+                                                <p>ĐVT</p>
+                                                {{ $item->dvt }}
+                                            </td>
+                                            <td class="text-left">
+                                                <p>Số lượng</p>{{ $item->soluong }}
+                                            </td>
+                                            <td class="text-left">
+                                                <p>Giá nhập</p>
+                                                @if (fmod($item->gianhap, 1) > 0)
+                                                    {{ number_format($item->gianhap, 2, '.', ',') }}
+                                                @else
+                                                    {{ number_format($item->gianhap) }}
+                                                @endif
+                                            </td>
+                                            <td class="text-center">
+                                                <p>Thành tiền</p>
+                                                {{ number_format($item->gianhap * $item->soluong) }}
+                                            </td>
+                                            <td>
+                                                <p>Thuế</p>
+                                                @if ($item->thue == 99)
+                                                    NOVAT
+                                                @else
+                                                    {{ $item->thue }}%
+                                                @endif
+                                            </td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+
                                         </tr>
                                     @endif
                                     @endforeach
@@ -1416,6 +1418,38 @@ $index = array_search($item['label'], $numberedLabels);
             }
         });
     })
+    //checked checkbox
+    function toggleCheckbox(checkboxId) {
+        var checkbox = document.getElementById(checkboxId);
+        if (checkbox) {
+            checkbox.checked = !checkbox.checked; // Đảo ngược trạng thái của checkbox
+        }
+    }
+
+    function triggerChange(checkboxId) {
+        var checkbox = document.getElementById(checkboxId);
+        if (checkbox) {
+            var event = new Event('change', {
+                bubbles: true,
+                cancelable: true,
+            });
+            checkbox.dispatchEvent(event);
+        }
+    }
+
+    function handleRowClick(checkboxId, event) {
+        // Lấy target của sự kiện click
+        var target = event.target;
+
+        // Kiểm tra nếu target không có class "dropdown"
+        if (!target.closest('.dropdown') && !target.closest('.editEx')) {
+            var checkbox = document.getElementById(checkboxId);
+            if (checkbox) {
+                toggleCheckbox(checkboxId); // Thay đổi trạng thái checkbox
+                triggerChange(checkboxId); // Kích hoạt sự kiện change của checkbox
+            }
+        }
+    }
 </script>
 </body>
 

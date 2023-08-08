@@ -579,11 +579,14 @@ $index = array_search($item['label'], $numberedLabels);
                                     </form>
                                 </thead>
                                 <tbody>
+                                    <input type="hidden" id="isUserAdmin"
+                                        value="{{ Auth::user()->roleid == 1 ? 'true' : 'false' }}">
                                     @foreach ($export as $value)
                                         {{-- @if (Auth::user()->name == $value->name || Auth::user()->can('isAdmin')) --}}
-                                        <tr>
+                                        <tr onclick="handleRowClick('checkbox-{{ $value->id }}', event);">
                                             <td><input type="checkbox" class="cb-element" name="ids[]"
-                                                    value="{{ $value->id }}"></td>
+                                                    id="checkbox-{{ $value->id }}" value="{{ $value->id }}"
+                                                    onclick="event.stopPropagation();"></td>
                                             <td style="width:20%;">{{ $value->id }}</td>
                                             <td style="width: 13%;">{{ $value->export_code }}</td>
                                             <td>{{ $value->guest_name }}</td>
@@ -604,7 +607,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     <span class="p-2 bg-success rounded">Đã chốt</span>
                                                 @endif
                                             </td>
-                                            <td>
+                                            <td class="editEx">
                                                 @if ($value->export_status == 1 && (Auth::user()->name == $value->name || Auth::user()->can('isAdmin')))
                                                     <a href="{{ route('exports.edit', $value->id) }}">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="32"
@@ -650,7 +653,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </a>
                                                 @endif
                                             </td>
-                                            <td class="text-center">
+                                            <td class="text-center dropdown">
                                                 <div id="dropdown_item{{ $value->id }}"
                                                     class="dropdownitem collapsed" data-toggle="collapse"
                                                     data-target="#product-details-<?php echo $value->id; ?>"
@@ -1305,7 +1308,7 @@ $index = array_search($item['label'], $numberedLabels);
         $('#checkall').prop('checked', false);
         updateMultipleActionVisibility()
     })
-
+    var isUserAdmin = document.getElementById('isUserAdmin').value === 'true';
     function updateMultipleActionVisibility() {
         if ($('.cb-element:checked').length > 0) {
             $('.multiple_action').show();
@@ -1313,12 +1316,16 @@ $index = array_search($item['label'], $numberedLabels);
         } else {
             $('.multiple_action').hide();
         }
-
         var selectedStates = []; // Mảng lưu trữ các trạng thái đã chọn
         $('input[name="ids[]"]').each(function() {
             if ($(this).is(':checked')) {
-                var data = $(this).closest('tr').find('td:eq(7)').text().trim();
-                selectedStates.push(data); // Thêm trạng thái vào mảng
+                if (isUserAdmin) {
+                    var data = $(this).closest('tr').find('td:eq(7)').text().trim();
+                    selectedStates.push(data); // Thêm trạng thái vào mảng
+                } else {
+                    var data = $(this).closest('tr').find('td:eq(6)').text().trim();
+                    selectedStates.push(data); // Thêm trạng thái vào mảng
+                }
             }
         });
 
@@ -1414,6 +1421,38 @@ $index = array_search($item['label'], $numberedLabels);
         var view = new Uint8Array(buf);
         for (var i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xff;
         return buf;
+    }
+
+    function toggleCheckbox(checkboxId) {
+        var checkbox = document.getElementById(checkboxId);
+        if (checkbox) {
+            checkbox.checked = !checkbox.checked; // Đảo ngược trạng thái của checkbox
+        }
+    }
+
+    function triggerChange(checkboxId) {
+        var checkbox = document.getElementById(checkboxId);
+        if (checkbox) {
+            var event = new Event('change', {
+                bubbles: true,
+                cancelable: true,
+            });
+            checkbox.dispatchEvent(event);
+        }
+    }
+
+    function handleRowClick(checkboxId, event) {
+        // Lấy target của sự kiện click
+        var target = event.target;
+
+        // Kiểm tra nếu target không có class "dropdown"
+        if (!target.closest('.dropdown') && !target.closest('.editEx')) {
+            var checkbox = document.getElementById(checkboxId);
+            if (checkbox) {
+                toggleCheckbox(checkboxId); // Thay đổi trạng thái checkbox
+                triggerChange(checkboxId); // Kích hoạt sự kiện change của checkbox
+            }
+        }
     }
 </script>
 </body>

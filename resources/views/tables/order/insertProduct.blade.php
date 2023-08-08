@@ -567,9 +567,11 @@ $index = array_search($item['label'], $numberedLabels);
                             <tbody>
                                 <?php $stt = 1; ?>
                                 @foreach ($orders as $va)
-                                    <tr class="{{ $va->id }}">
+                                    <tr class="{{ $va->id }}"
+                                        onclick="handleRowClick('checkbox-{{ $value->id }}', event);">
                                         <td><input type="checkbox" class="cb-element" name="ids[]"
-                                                value="{{ $va->id }}"></td>
+                                                id="checkbox-{{ $value->id }}" value="{{ $va->id }}"
+                                                onclick="event.stopPropagation();"></td>
                                         <td>{{ $va->id }}</td>
                                         <td>{{ $va->product_code }}</td>
                                         <td>{{ $va->provide_name }}</td>
@@ -587,7 +589,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <span class="p-2 bg-danger rounded">Đã hủy</span>
                                             @endif
                                         </td>
-                                        <td class="text-center">
+                                        <td class="text-center editEx">
                                             <div class="edit">
                                                 @if ($va->order_status == 0 && (Auth::user()->name == $va->name || Auth::user()->can('isAdmin')))
                                                     <a href="{{ route('insertProduct.edit', $va->id) }}">
@@ -635,7 +637,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 @endif
                                             </div>
                                         </td>
-                                        <td class="text-center">
+                                        <td class="text-center dropdown">
                                             <div id="dropdown_item{{ $va->id }}" class="dropdownitem"
                                                 data-toggle="collapse"
                                                 data-target="#product-details-<?php echo $va->id; ?>">
@@ -1424,6 +1426,38 @@ $index = array_search($item['label'], $numberedLabels);
         var view = new Uint8Array(buf);
         for (var i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xff;
         return buf;
+    }
+    //checked checkbox
+    function toggleCheckbox(checkboxId) {
+        var checkbox = document.getElementById(checkboxId);
+        if (checkbox) {
+            checkbox.checked = !checkbox.checked; // Đảo ngược trạng thái của checkbox
+        }
+    }
+
+    function triggerChange(checkboxId) {
+        var checkbox = document.getElementById(checkboxId);
+        if (checkbox) {
+            var event = new Event('change', {
+                bubbles: true,
+                cancelable: true,
+            });
+            checkbox.dispatchEvent(event);
+        }
+    }
+
+    function handleRowClick(checkboxId, event) {
+        // Lấy target của sự kiện click
+        var target = event.target;
+
+        // Kiểm tra nếu target không có class "dropdown"
+        if (!target.closest('.dropdown') && !target.closest('.editEx')) {
+            var checkbox = document.getElementById(checkboxId);
+            if (checkbox) {
+                toggleCheckbox(checkboxId); // Thay đổi trạng thái checkbox
+                triggerChange(checkboxId); // Kích hoạt sự kiện change của checkbox
+            }
+        }
     }
 </script>
 </body>
