@@ -25,6 +25,7 @@ class Debt extends Model
         'debt_note',
         'date_end',
         'date_start',
+        'created_at',
     ];
     public function getAllDebts($filter = [],$perPage, $keywords = null, $name = [], $date = [],$guest=[], $datepaid = [], $status = [], $orderBy = null, $orderType = null)
     {

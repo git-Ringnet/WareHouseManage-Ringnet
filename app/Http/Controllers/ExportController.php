@@ -2752,6 +2752,7 @@ class ExportController extends Controller
                 $debt->total_difference = $totalDifference;
                 $debt->debt = $guest->debt;
                 $debt->date_start = $exports->created_at;
+                $debt->created_at = $exports->created_at;
 
                 $startDate = Carbon::parse($exports->created_at); // Chuyển đổi ngày bắt đầu thành đối tượng Carbon
                 $daysToAdd = $debt->debt; // Số ngày cần thêm

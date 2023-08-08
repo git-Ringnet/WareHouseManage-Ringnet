@@ -21,6 +21,7 @@ class DebtImport extends Model
         'date_end',
         'debt_status',
         'debt_note',
+        'created_at'
     ];
     public function getAllDebts($filter = [],$perPage, $keywords = null, $name = [], $date = [], $provide_name = [], $status = [], $orderBy = null, $orderType = null)
     {
