@@ -51,7 +51,7 @@
                         session_start();
                         
                         $fullUrl = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-                        if ($fullUrl === route('data.index')) {
+                        if ($fullUrl === route('ton-kho.index')) {
                             // Xử lý khi route hiện tại bằng route('data.index')
                             unset($_SESSION['labels']); // Xóa session
                         }
@@ -166,7 +166,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             </div>
                                         </div>
                                         @if (!empty($string))
-                                            <a class="btn-delete-filter" href="{{ route('data.index') }}"><span>Tắt bộ
+                                            <a class="btn-delete-filter" href="{{ route('ton-kho.index') }}"><span>Tắt bộ
                                                     lọc</span></a>
                                         @endif
                                     </div>

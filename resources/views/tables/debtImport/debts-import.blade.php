@@ -72,7 +72,7 @@
                         session_start();
                         
                         $fullUrl = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-                        if ($fullUrl === route('exports.index')) {
+                        if ($fullUrl === route('nhap-hang.index')) {
                             // Xử lý khi route hiện tại bằng route('data.index')
                             unset($_SESSION['labels']); // Xóa session
                         }
@@ -243,7 +243,7 @@ $index = array_search($item['label'], $numberedLabels);
                                         </div>
                                         @if (!empty($string))
                                             <a class="btn-delete-filter"
-                                                href="{{ route('debt_import.index') }}"><span>Tắt bộ lọc</span></a>
+                                                href="{{ route('cong-no-nhap.index') }}"><span>Tắt bộ lọc</span></a>
                                         @endif
                                     </div>
                                     <?php $status = [];
@@ -714,7 +714,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             <td class="text-center">
                                                 <div class="icon">
                                                     @if (Auth::user()->can('view-provides'))
-                                                        <a href="{{ route('debt_import.edit', $value->id) }}">
+                                                        <a href="{{ route('cong-no-nhap.edit', $value->id) }}">
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="32"
                                                                 height="32" viewBox="0 0 32 32" fill="none">
                                                                 <path fill-rule="evenodd" clip-rule="evenodd"

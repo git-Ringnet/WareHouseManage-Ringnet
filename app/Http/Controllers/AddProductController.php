@@ -220,7 +220,7 @@ class AddProductController extends Controller
 
             $this->productOrder->addProductOrder($dataProductOrder);
         }
-        return redirect()->route('insertProduct.index')->with('msg', 'Tạo đơn nháp thành công');
+        return redirect()->route('nhap-hang.index')->with('msg', 'Tạo đơn nháp thành công');
     }
 
     /**
@@ -269,7 +269,7 @@ class AddProductController extends Controller
         $updateOrder = Orders::find($id);
         // Kiểm tra tình trạng 
         if ($updateOrder->order_status == 2 || $updateOrder->order_status == 1) {
-            return redirect()->route('insertProduct.index')->with('warning', 'Thao tác không thành công');
+            return redirect()->route('nhap-hang.index')->with('warning', 'Thao tác không thành công');
         }
         $dataProvide = [
             'provide_name' => $request->provide_id == null ? $request->provide_name_new : ($request->options == 2 ? $request->provide_name_new : $request->provide_name),
@@ -436,9 +436,9 @@ class AddProductController extends Controller
 
             $debt->created_at = $updateOrder->created_at;
             $debt->save();
-            return redirect()->route('insertProduct.index')->with('msg', 'Đơn hàng đã được duyệt');
+            return redirect()->route('nhap-hang.index')->with('msg', 'Đơn hàng đã được duyệt');
         } else {
-            return redirect()->route('insertProduct.index')->with('warning', 'Đơn hàng đã được duyệt trước đó');
+            return redirect()->route('nhap-hang.index')->with('warning', 'Đơn hàng đã được duyệt trước đó');
         }
     }
 
@@ -599,9 +599,9 @@ class AddProductController extends Controller
             $debt->created_at = $updateOrder->created_at;
             $debt->save();
         } else {
-            return redirect()->route('insertProduct.index')->with('warning', 'Đơn hàng đã được duyệt trước đó');
+            return redirect()->route('nhap-hang.index')->with('warning', 'Đơn hàng đã được duyệt trước đó');
         }
-        return redirect()->route('insertProduct.index')->with('msg', 'Duyệt nhanh đơn hàng thành công');
+        return redirect()->route('nhap-hang.index')->with('msg', 'Duyệt nhanh đơn hàng thành công');
     }
 
     // update provide AJAX
@@ -626,7 +626,7 @@ class AddProductController extends Controller
         $order = Orders::findOrFail($request->order_id);
         // Kiểm tra tình trạng 
         if ($order->order_status == 2 || $order->order_status == 1) {
-            return redirect()->route('insertProduct.index')->with('warning', 'Thao tác không thành công !');
+            return redirect()->route('nhap-hang.index')->with('warning', 'Thao tác không thành công !');
         }
         $dataProvide = [
             'provide_name' => $request->provide_id == null ? $request->provide_name_new : ($request->options == 2 ? $request->provide_name_new : $request->provide_name),
@@ -717,9 +717,9 @@ class AddProductController extends Controller
                     $item->delete();
                 }
             }
-            return redirect()->route('insertProduct.index')->with('msg', 'Lưu đơn hàng thành công');
+            return redirect()->route('nhap-hang.index')->with('msg', 'Lưu đơn hàng thành công');
         } else {
-            return redirect()->route('insertProduct.index')->with('warning', 'Đơn hàng đã được duyệt không thể chỉnh sưa');
+            return redirect()->route('nhap-hang.index')->with('warning', 'Đơn hàng đã được duyệt không thể chỉnh sưa');
         }
     }
 
@@ -731,7 +731,7 @@ class AddProductController extends Controller
         if ($checkOrder->order_status == 0) {
             $checkOrder->order_status = 2;
             $checkOrder->save();
-            return redirect()->route('insertProduct.index')->with('msg', 'Hủy đơn hàng thành công');
+            return redirect()->route('nhap-hang.index')->with('msg', 'Hủy đơn hàng thành công');
         } else {
             $id_product = ProductOrders::where('order_id', $checkOrder->id)->get();
             foreach ($id_product as $va) {
@@ -745,12 +745,12 @@ class AddProductController extends Controller
                     // Sản phẩm đang báo giá
                     if ($check_Exp && $check_Exp->export_status == 1) {
                         $check = true;
-                        return redirect()->route('insertProduct.index')->with('warning', 'Sản phẩm đã tồn tại trong đơn xuất hàng không thể hủy đơn');
+                        return redirect()->route('nhap-hang.index')->with('warning', 'Sản phẩm đã tồn tại trong đơn xuất hàng không thể hủy đơn');
                     }
                     // Sản phẩm đã bán ra
                     if ($check_Exp && $check_Exp->export_status == 2) {
                         $check = true;
-                        return redirect()->route('insertProduct.index')->with('warning', 'Sản phẩm đã bán không thể hủy đơn');
+                        return redirect()->route('nhap-hang.index')->with('warning', 'Sản phẩm đã bán không thể hủy đơn');
                     }
                 }
             }
@@ -764,7 +764,7 @@ class AddProductController extends Controller
                     $checkOrder->save();
                     $debt->delete();
                     Product::whereIn('id', $request->product_id)->delete();
-                    return redirect()->route('insertProduct.index')->with('msg', 'Hủy đơn hàng thành công');
+                    return redirect()->route('nhap-hang.index')->with('msg', 'Hủy đơn hàng thành công');
                 }
             }
         }
@@ -918,7 +918,7 @@ class AddProductController extends Controller
 
             return view('tables.order.updateBill', compact('debt_import', 'provide', 'order', 'product_order', 'provide_order', 'title'));
         } else {
-            return redirect()->route('insertProduct.index')->with('warning', "Thao tác không được phép");
+            return redirect()->route('nhap-hang.index')->with('warning', "Thao tác không được phép");
         }
     }
 
@@ -928,7 +928,7 @@ class AddProductController extends Controller
         if ($this->orders->checkExist($request->order_id) == 0) {
             $checkStatus = DebtImport::findOrFail($request->debtimport_id)->debt_status;
             if ($checkStatus == 1) {
-                return redirect()->route('insertProduct.index')->with('warning', 'Công nợ đã thanh toán không thể chỉnh sửa');
+                return redirect()->route('nhap-hang.index')->with('warning', 'Công nợ đã thanh toán không thể chỉnh sửa');
             } else {
                 $list_id = $request->product_id;
                 $product_order = $request->product_order;
@@ -1095,10 +1095,10 @@ class AddProductController extends Controller
                         }
                     }
                 }
-                return redirect()->route('insertProduct.index')->with('msg', 'Chỉnh sửa đơn hàng thành công');
+                return redirect()->route('nhap-hang.index')->with('msg', 'Chỉnh sửa đơn hàng thành công');
             }
         } else {
-            return redirect()->route('insertProduct.index')->with('warning', 'Đơn hàng đã hủy không thể chỉnh sửa');
+            return redirect()->route('nhap-hang.index')->with('warning', 'Đơn hàng đã hủy không thể chỉnh sửa');
         }
     }
 
@@ -1138,7 +1138,7 @@ class AddProductController extends Controller
         $check = $this->orders->delBillCamcel($request->idBill);
         if ($check == 0) {
             session()->flash('msg', 'Xóa đơn hàng thành công!');
-            return response()->json(['success' => true, 'redirect_url' => route('insertProduct.index'), 'msg' => 'Xóa đơn hàng thành công']);
+            return response()->json(['success' => true, 'redirect_url' => route('nhap-hang.index'), 'msg' => 'Xóa đơn hàng thành công']);
         } else {
             return response()->json(['success' => false]);
         }
@@ -1150,10 +1150,10 @@ class AddProductController extends Controller
         $da = $this->orders->accessBill($request->list_id);
         if ($da == 0) {
             session()->flash('msg', 'Duyệt đơn hàng thành công !');
-            return response()->json(['success' => true, 'redirect_url' => route('insertProduct.index'), 'msg' => 'Duyệt đơn hàng thành công']);
+            return response()->json(['success' => true, 'redirect_url' => route('nhap-hang.index'), 'msg' => 'Duyệt đơn hàng thành công']);
         } else {
             session()->flash('warning', 'Thao tác không thành công !');
-            return response()->json(['success' => true, 'redirect_url' => route('insertProduct.index'), 'warning' => 'Thao tác không thành công !']);
+            return response()->json(['success' => true, 'redirect_url' => route('nhap-hang.index'), 'warning' => 'Thao tác không thành công !']);
         }
     }
 }

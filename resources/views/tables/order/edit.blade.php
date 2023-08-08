@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-sm-6 breadcrumb">
             @if ($order->order_status == 1 || $order->order_status == 2)
-                <a href="{{ route('insertProduct.index') }}">
+                <a href="{{ route('nhap-hang.index') }}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <path
                             d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
@@ -20,7 +20,7 @@
                         sách</span>
                 </a>
             @else
-                <span><a href="{{ route('insertProduct.index') }}">Nhập hàng</a></span>
+                <span><a href="{{ route('nhap-hang.index') }}">Nhập hàng</a></span>
                 <span class="mx-1"> / </span>
                 <span><b>Chi tiết đơn hàng</b></span>
             @endif
@@ -123,7 +123,7 @@
             </div>
         </div>
     </div>
-    <form action="{{ route('insertProduct.update', $order->id) }}" method="POST" id="form_submit">
+    <form action="{{ route('nhap-hang.update', $order->id) }}" method="POST" id="form_submit">
         <div class="container-fluided">
             <!-- Content Header (Page header) -->
             @if (Session::has('session'))
@@ -418,7 +418,7 @@
                         <a href="javascript:;" class="btn btn-primary addBillEdit">Lưu</a>
                     @endif
                 @endif
-                <a href="{{ route('insertProduct.index') }}" class="btn btn-light">Hủy</a>
+                <a href="{{ route('nhap-hang.index') }}" class="btn btn-light">Hủy</a>
             </div>
         </section>
         <div class="row position-relative footer-total">

@@ -239,7 +239,7 @@
                         session_start();
                         
                         $fullUrl = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-                        if ($fullUrl === route('exports.index')) {
+                        if ($fullUrl === route('xuat-hang.index')) {
                             // Xử lý khi route hiện tại bằng route('data.index')
                             unset($_SESSION['labels']); // Xóa session
                         }

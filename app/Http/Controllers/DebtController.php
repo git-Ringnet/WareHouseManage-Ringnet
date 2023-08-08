@@ -231,7 +231,7 @@ class DebtController extends Controller
                     'export_status' => 1
                 ];
                 $this->history->updateHistoryByExport($data, $debt->export_id);
-                return redirect()->route('debt.index')->with('msg', 'Thanh toán thành công!');
+                return redirect()->route('cong-no-xuat.index')->with('msg', 'Thanh toán thành công!');
             }
             if ($action === 'action2') {
                 // Xử lí status debt
@@ -267,7 +267,7 @@ class DebtController extends Controller
                 ];
                 $debt->update($request->all());
                 $this->history->updateHistoryByExport($data, $debt->export_id);
-                return redirect()->route('debt.index')->with('msg', 'Cập nhật thành công!');
+                return redirect()->route('cong-no-xuat.index')->with('msg', 'Cập nhật thành công!');
             }
         }
     }

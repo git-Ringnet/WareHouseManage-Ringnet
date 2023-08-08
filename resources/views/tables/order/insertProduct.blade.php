@@ -7,7 +7,7 @@
     @endif
     <section class="content-header">
         <div class="row m-0 mb-1">
-            <a href="{{ route('insertProduct.create') }}">
+            <a href="{{ route('nhap-hang.create') }}">
                 <button type="button" class="custom-btn btn btn-primary d-flex align-items-center h-100"
                     style="margin-right:24px">
                     <svg class="mr-1" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -83,7 +83,7 @@
                     session_start();
                     
                     $fullUrl = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-                    if ($fullUrl === route('exports.index')) {
+                    if ($fullUrl === route('nhap-hang.index')) {
                         // Xử lý khi route hiện tại bằng route('data.index')
                         unset($_SESSION['labels']); // Xóa session
                     }
@@ -179,7 +179,7 @@ $index = array_search($item['label'], $numberedLabels);
                                     </div>
                                     @if (!empty($string))
                                         <a class="btn-delete-filter"
-                                            href="{{ route('insertProduct.index') }}"><span>Tắt bộ lọc</span></a>
+                                            href="{{ route('nhap-hang.index') }}"><span>Tắt bộ lọc</span></a>
                                     @endif
                                 </div>
                                 <?php $status = [];
@@ -590,7 +590,7 @@ $index = array_search($item['label'], $numberedLabels);
                                         <td class="text-center">
                                             <div class="edit">
                                                 @if ($va->order_status == 0 && (Auth::user()->name == $va->name || Auth::user()->can('isAdmin')))
-                                                    <a href="{{ route('insertProduct.edit', $va->id) }}">
+                                                    <a href="{{ route('nhap-hang.edit', $va->id) }}">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="32"
                                                             height="32" viewBox="0 0 32 32" fill="none">
                                                             <path fill-rule="evenodd" clip-rule="evenodd"
@@ -599,7 +599,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                         </svg>
                                                     </a>
                                                 @else
-                                                    <a href="{{ route('insertProduct.edit', $va->id) }}">
+                                                    <a href="{{ route('nhap-hang.edit', $va->id) }}">
                                                         <svg width="32" height="32" viewBox="0 0 32 32"
                                                             fill="none" xmlns="http://www.w3.org/2000/svg">
                                                             <path

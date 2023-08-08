@@ -2,12 +2,12 @@
 <x-navbar :title="$title"></x-navbar>
 <div class="content-wrapper padding-112">
     <div class="breadcrumb">
-        <span><a href="{{ route('debt_import.index') }}">Công nợ nhập</a></span>
+        <span><a href="{{ route('cong-no-nhap.index') }}">Công nợ nhập</a></span>
         <span class="px-1">/</span>
         <span><b>Đơn Hàng</b></span>
         <span class="ml-1"><b>{{$debts->madon}}</b></span>
     </div>
-    <form action="{{ route('debt_import.update', $debts->id) }}" method="POST">
+    <form action="{{ route('cong-no-nhap.update', $debts->id) }}" method="POST">
         @csrf
         @method('PUT')
         <section class="content">
@@ -137,7 +137,7 @@
                 <button class="btn btn-primary" type="submit" name="submitBtn" value="action2"
                     onkeydown="return event.key != 'Enter';">Lưu</button>
             @endif
-            <a href="{{ route('debt_import.index') }}"><span class="btn border-secondary ml-1">Hủy</span></a>
+            <a href="{{ route('cong-no-nhap.index') }}"><span class="btn border-secondary ml-1">Hủy</span></a>
         </div>
     </form>
     <script>

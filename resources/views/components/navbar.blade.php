@@ -219,8 +219,8 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('data.index') }}"
-                            class="nav-link {{ App\Helpers\Helper::isActiveRouteGroup(['data.index', 'data.edit', 'editProduct', 'insertProducts']) }}">
+                        <a href="{{ route('ton-kho.index') }}"
+                            class="nav-link {{ App\Helpers\Helper::isActiveRouteGroup(['ton-kho.index', 'data.edit', 'editProduct', 'insertProducts']) }}">
                             <svg class="fill" width="32" height="32" viewBox="0 0 24 24" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" clip-rule="evenodd"
@@ -237,8 +237,8 @@
                     </li>
                     @can('view-orders')
                         <li class="nav-item">
-                            <a href="{{ route('insertProduct.index') }}"
-                                class="nav-link {{ App\Helpers\Helper::isActiveRouteGroup(['insertProduct.index', 'insertProduct.create', 'insertProduct.edit', 'updateBill']) }}">
+                            <a href="{{ route('nhap-hang.index') }}"
+                                class="nav-link {{ App\Helpers\Helper::isActiveRouteGroup(['nhap-hang.index', 'nhap-hang.create', 'nhap-hang.edit', 'updateBill']) }}">
                                 <svg class="stroke" width="32" height="24" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <g clip-path="url(#clip0_6062_36566)">
@@ -286,8 +286,8 @@
                     @endcan
                     @can('view-exports')
                         <li class="nav-item">
-                            <a href="{{ route('exports.index') }}"
-                                class="nav-link {{ App\Helpers\Helper::isActiveRouteGroup('exports.index,exports.create,exports.edit,editEx') }}">
+                            <a href="{{ route('xuat-hang.index') }}"
+                                class="nav-link {{ App\Helpers\Helper::isActiveRouteGroup('xuat-hang.index,xuat-hang.create,xuat-hang.edit,editEx') }}">
                                 <svg class="stroke" width="32" height="24" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <g clip-path="url(#clip0_6062_36566)">
@@ -335,8 +335,8 @@
                     @endcan
                     @can('view-provides')
                         <li class="nav-item">
-                            <a href="{{ route('debt_import.index') }}"
-                                class="nav-link {{ App\Helpers\Helper::isActiveRouteGroup('debt_import.index,debt_import.edit') }}">
+                            <a href="{{ route('cong-no-nhap.index') }}"
+                                class="nav-link {{ App\Helpers\Helper::isActiveRouteGroup('cong-no-nhap.index,cong-no-nhap.edit') }}">
                                 <svg class="fill" width="32" height="24" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <g clip-path="url(#clip0_7479_53634)">
@@ -373,8 +373,8 @@
                     @endcan
                     @can('view-guests')
                         <li class="nav-item">
-                            <a href="{{ route('debt.index') }}"
-                                class="nav-link {{ App\Helpers\Helper::isActiveRouteGroup('debt.index,debt.edit') }}">
+                            <a href="{{ route('cong-no-xuat.index') }}"
+                                class="nav-link {{ App\Helpers\Helper::isActiveRouteGroup('cong-no-xuat.index,cong-no-xuat.edit') }}">
                                 <svg class="fill" width="32" height="24" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <g clip-path="url(#clip0_7479_53634)">

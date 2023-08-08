@@ -2,7 +2,7 @@
 <div class="content-wrapper export-add padding-112">
     <div class="row">
         <div class="col-sm-6 breadcrumb">
-            <span><a href="{{ route('exports.index') }}">Xuất hàng</a></span>
+            <span><a href="{{ route('xuat-hang.index') }}">Xuất hàng</a></span>
             <span class="px-1">/</span>
             <span><b>Đơn hàng mới</b></span>
         </div>
@@ -69,7 +69,7 @@
             </div>
         </div>
     </div>
-    <form action="{{ route('exports.store') }}" method="POST" id="export_form">
+    <form action="{{ route('xuat-hang.store') }}" method="POST" id="export_form">
         @csrf
         <input type="hidden" name="checkguest" value="" id="checkguest">
         <section class="content">
@@ -209,7 +209,7 @@
             <div class="btn-fixed">
                 <button type="submit" name="submitBtn" value="action2" class="btn btn-primary mr-1"
                     onclick="validateAndSubmit(event)" id="luu">Lưu</button>
-                <a href="{{ route('exports.index') }}"><span class="btn border-secondary ml-1">Hủy</span></a>
+                <a href="{{ route('xuat-hang.index') }}"><span class="btn border-secondary ml-1">Hủy</span></a>
             </div>
             {{-- Modal Product --}}
             <div class="modal fade" id="productModal" tabindex="-1" role="dialog"

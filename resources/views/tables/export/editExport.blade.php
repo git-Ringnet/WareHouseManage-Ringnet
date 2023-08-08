@@ -3,7 +3,7 @@
     <div class="row">
         <div class="col-sm-6 breadcrumb">
             @if ($exports->export_status == 2)
-                <a href="{{ route('exports.index') }}">
+                <a href="{{ route('xuat-hang.index') }}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <path
                             d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
@@ -19,7 +19,7 @@
                         sách</span>
                 </a>
             @else
-                <span><a href="{{ route('exports.index') }}">Xuất hàng</a></span>
+                <span><a href="{{ route('xuat-hang.index') }}">Xuất hàng</a></span>
                 <span class="px-1">/</span>
                 <span><b>Chi tiết đơn hàng</b></span>
             @endif
@@ -132,7 +132,7 @@
             </div>
         </div>
     </div>
-    <form action="{{ route('exports.update', $exports->id) }}" method="POST" id="export_form">
+    <form action="{{ route('xuat-hang.update', $exports->id) }}" method="POST" id="export_form">
         @csrf
         @method('PUT')
         <input type="hidden" name="checkguest" value="" id="checkguest">
@@ -557,7 +557,7 @@
                             onclick="validateAndSubmit(event)" id="luu">Lưu</button>
                     @endif
                 @endif
-                <a href="{{ route('exports.index') }}"><span class="btn border-secondary ml-1">Hủy</span></a>
+                <a href="{{ route('xuat-hang.index') }}"><span class="btn border-secondary ml-1">Hủy</span></a>
             </div>
         </section>
     </form>

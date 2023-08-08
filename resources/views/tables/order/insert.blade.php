@@ -4,7 +4,7 @@
     <div class="content-wrapper padding-112">
         <div class="row">
             <div class="col-sm-6 breadcrumb">
-                <span> <a href="{{ route('insertProduct.index') }}"> Nhập hàng</a></span>
+                <span> <a href="{{ route('nhap-hang.index') }}"> Nhập hàng</a></span>
                 <span class="px-1"> / </span>
                 <span><b>Đơn hàng mới</b></span>
             </div>
@@ -73,7 +73,7 @@
             </div>
         </div>
         <!-- Content Header (Page header) -->
-        <form action="{{ route('insertProduct.store') }}" method="POST" id="form_submit">
+        <form action="{{ route('nhap-hang.store') }}" method="POST" id="form_submit">
             <section class="content-header">
                 <div class="d-flex mb-1 action-don">
                     <button class="btn btn-danger text-white" id="add_bill" type="submit" name="action"
@@ -208,7 +208,7 @@
                     <div class="d-flex justify-content-center btn-fixed">
                         <button style="bottom: 0;" type="submit" name="action" class="btn btn-primary mr-2"
                             value="AddProduct">Lưu</button>
-                        <a href="{{ route('insertProduct.index') }}" class="btn btn-light"
+                        <a href="{{ route('nhap-hang.index') }}" class="btn btn-light"
                             onclick="return confirm('Bạn có muốn quay lại ?');">Hủy</a>
                     </div>
 

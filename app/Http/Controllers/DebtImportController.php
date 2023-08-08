@@ -231,7 +231,7 @@ class DebtImportController extends Controller
                 $debt->update($request->all());
                 $this->history->updateHistoryByImport($data, $debt->import_id);
 
-                return redirect()->route('debt_import.index')->with('msg', 'Cập nhật thành công!');
+                return redirect()->route('cong-no-nhap.index')->with('msg', 'Cập nhật thành công!');
             }
         }
     }

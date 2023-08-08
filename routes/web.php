@@ -61,7 +61,7 @@ Route::get('/download/{file?}', [BackUpController::class, 'downloadBackup'])->na
 Route::delete('/deleteBackup/{file}', [BackupController::class, 'deleteBackup'])->name('deleteBackup');
 
 //xuat hang
-Route::resource('exports', ExportController::class)->middleware('permission:admin,sale');
+Route::resource('xuat-hang', ExportController::class)->middleware('permission:admin,sale');
 Route::get('/searchExport', [ExportController::class, 'searchExport'])->name('searchExport');
 //cap nhat thong tin khach hang
 Route::get('/customers', [ExportController::class, 'updateCustomer'])->name('updateCustomer');
@@ -81,11 +81,11 @@ Route::get('getSN3', [ExportController::class, 'getSN3'])->name('getSN3');
 Route::get('/deleteExports', [ExportController::class, 'deleteExports'])->name('deleteExports');
 Route::get('/cancelBillExport', [ExportController::class, 'cancelBillExport'])->name('cancelBillExport');
 //Công nợ
-Route::resource('debt', DebtController::class);
+Route::resource('cong-no-xuat', DebtController::class);
 Route::get('/paymentdebt', [DebtController::class, 'paymentdebt'])->name('paymentdebt');
 
 //Công nợ nhập hàng
-Route::resource('debt_import', DebtImportController::class);
+Route::resource('cong-no-nhap', DebtImportController::class);
 Route::get('/paymentdebtimport', [DebtImportController::class, 'paymentdebtimport'])->name('paymentdebtimport');
 // Lịch sử giao dịch
 Route::resource('history', HistoryController::class);
@@ -108,7 +108,7 @@ Route::POST('/importDatabase',[ReportController::class, 'importDatabase'])->name
 //kiểm tra số lượng trong xuất hàng
 Route::get('checkqty', [ExportController::class, 'checkqty'])->name('checkqty');
 
-Route::resource('data', ProductController::class);
+Route::resource('ton-kho', ProductController::class);
 Route::get('/insertProducts', [ProductsController::class, 'insertProducts'])->name('insertProducts');
 Route::POST('/storeProducts', [ProductsController::class, 'storeProducts'])->name('storeProducts');
 Route::get('/data_edit', [ProductsController::class, 'edit_ajax'])->name('ajax');
@@ -132,7 +132,7 @@ Route::get('/exportHistory',[HistoryController::class, 'exportHistory'])->name('
 
 Route::get('/show_provide', [AddProductController::class, 'show_provide'])->name('show_provide');
 Route::get('/update_provide', [AddProductController::class, 'update_provide'])->name('update_provide');
-Route::resource('insertProduct', AddProductController::class)->middleware('permission:admin,manager');
+Route::resource('nhap-hang', AddProductController::class)->middleware('permission:admin,manager');
 Route::POST('/addBillEdit', [AddProductController::class, 'addBillEdit'])->name('addBillEdit');
 Route::POST('/updateBill', [AddProductController::class, 'updateBill'])->name('updateBill');
 Route::POST('/updateBillEdit', [AddProductController::class, 'updateBillEdit'])->name('updateBillEdit');

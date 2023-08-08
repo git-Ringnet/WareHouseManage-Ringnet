@@ -155,7 +155,7 @@ class ExportController extends Controller
                     $productQtyMap = [];
                     $hasEnoughQty = true;
                     if ($productIDs == null) {
-                        return redirect()->route('exports.index')->with('warning', 'Chưa thêm sản phẩm!');
+                        return redirect()->route('xuat-hang.index')->with('warning', 'Chưa thêm sản phẩm!');
                     } else {
                         for ($i = 0; $i < count($productIDs); $i++) {
                             $productID = $productIDs[$i];
@@ -178,7 +178,7 @@ class ExportController extends Controller
                             }
                         }
                         if (!$hasEnoughQty) {
-                            return redirect()->route('exports.index')->with('warning', 'Vượt quá số lượng tồn kho!');
+                            return redirect()->route('xuat-hang.index')->with('warning', 'Vượt quá số lượng tồn kho!');
                         } else {
                             //thêm khách hàng khi lưu nhanh
                             if ($request->checkguest == 2 && $clickValue == null) {
@@ -1054,7 +1054,7 @@ class ExportController extends Controller
                                         'product_total' => $total
                                     ]);
                             }
-                            return redirect()->route('exports.index')->with('msg', 'Duyệt đơn thành công!');
+                            return redirect()->route('xuat-hang.index')->with('msg', 'Duyệt đơn thành công!');
                         }
                     }
                 }
@@ -1063,7 +1063,7 @@ class ExportController extends Controller
                     $productQtyMap = [];
                     $hasEnoughQty = true;
                     if ($productIDs == null) {
-                        return redirect()->route('exports.index')->with('warning', 'Chưa thêm sản phẩm!');
+                        return redirect()->route('xuat-hang.index')->with('warning', 'Chưa thêm sản phẩm!');
                     } else {
                         for ($i = 0; $i < count($productIDs); $i++) {
                             $productID = $productIDs[$i];
@@ -1086,7 +1086,7 @@ class ExportController extends Controller
                             }
                         }
                         if (!$hasEnoughQty) {
-                            return redirect()->route('exports.index')->with('warning', 'Vượt quá số lượng tồn kho!');
+                            return redirect()->route('xuat-hang.index')->with('warning', 'Vượt quá số lượng tồn kho!');
                         } else {
                             //thêm khách hàng khi lưu nhanh
                             if ($request->checkguest == 2 && $clickValue == null) {
@@ -1275,7 +1275,7 @@ class ExportController extends Controller
                                     $product->save();
                                 }
                             }
-                            return redirect()->route('exports.index')->with('msg', 'Tạo đơn thành công!');
+                            return redirect()->route('xuat-hang.index')->with('msg', 'Tạo đơn thành công!');
                         }
                     }
                 }
@@ -1758,12 +1758,12 @@ class ExportController extends Controller
                             }
                             $exports->save();
                         }
-                        return redirect()->route('exports.index')->with('msg', 'Duyệt đơn thành công!');
+                        return redirect()->route('xuat-hang.index')->with('msg', 'Duyệt đơn thành công!');
                     } else {
-                        return redirect()->route('exports.index')->with('warning', 'Chưa được thêm sản phẩm nào!');
+                        return redirect()->route('xuat-hang.index')->with('warning', 'Chưa được thêm sản phẩm nào!');
                     }
                 } else {
-                    return redirect()->route('exports.index')->with('warning', 'Thao tác không thành công');
+                    return redirect()->route('xuat-hang.index')->with('warning', 'Thao tác không thành công');
                 }
             } elseif ($action === 'action2') {
                 if ($exports->export_status === 1) {
@@ -1850,9 +1850,9 @@ class ExportController extends Controller
                         $exports->created_at = $request->export_create;
                     }
                     $exports->save();
-                    return redirect()->route('exports.index')->with('msg', 'Hủy đơn thành công!');
+                    return redirect()->route('xuat-hang.index')->with('msg', 'Hủy đơn thành công!');
                 } else {
-                    return redirect()->route('exports.index')->with('warning', 'Thao tác không thành công');
+                    return redirect()->route('xuat-hang.index')->with('warning', 'Thao tác không thành công');
                 }
             } elseif ($action === 'action3') {
                 if ($exports->export_status === 1) {
@@ -1974,12 +1974,12 @@ class ExportController extends Controller
                             }
                             $exports->save();
                         }
-                        return redirect()->route('exports.index')->with('msg', 'Cập nhật thành công!');
+                        return redirect()->route('xuat-hang.index')->with('msg', 'Cập nhật thành công!');
                     } else {
-                        return redirect()->route('exports.index')->with('warning', 'Chưa được thêm sản phẩm nào!');
+                        return redirect()->route('xuat-hang.index')->with('warning', 'Chưa được thêm sản phẩm nào!');
                     }
                 } else {
-                    return redirect()->route('exports.index')->with('warning', 'Thao tác không thành công');
+                    return redirect()->route('xuat-hang.index')->with('warning', 'Thao tác không thành công');
                 }
             } elseif ($action === 'action4') {
                 if ($exports->export_status === 2) {
@@ -2041,9 +2041,9 @@ class ExportController extends Controller
                     Debt::where('export_id', $exports->id)->delete();
                     //xóa lịch sử
                     History::where('export_id', $exports->id)->delete();
-                    return redirect()->route('exports.index')->with('msg', 'Hủy đơn thành công!');
+                    return redirect()->route('xuat-hang.index')->with('msg', 'Hủy đơn thành công!');
                 } else {
-                    return redirect()->route('exports.index')->with('warning', 'Thao tác không thành công');
+                    return redirect()->route('xuat-hang.index')->with('warning', 'Thao tác không thành công');
                 }
             }
             //Chỉnh sửa khi chốt đơn 
@@ -2433,21 +2433,21 @@ class ExportController extends Controller
                                 ]);
                             }
                         }
-                        return redirect()->route('exports.index')->with('msg', 'Chỉnh sửa đơn hàng thành công');
+                        return redirect()->route('xuat-hang.index')->with('msg', 'Chỉnh sửa đơn hàng thành công');
                     } else {
-                        return redirect()->route('exports.index')->with('warning', 'Chưa được thêm sản phẩm nào!');
+                        return redirect()->route('xuat-hang.index')->with('warning', 'Chưa được thêm sản phẩm nào!');
                     }
                 } else {
-                    return redirect()->route('exports.index')->with('warning', 'Thao tác không thành công');
+                    return redirect()->route('xuat-hang.index')->with('warning', 'Thao tác không thành công');
                 }
             }
             //Xóa đơn đã hủy
             elseif ($action === 'action6') {
                 if ($exports->export_status === 0) {
                     Exports::where('id', $exports->id)->where('export_status', 0)->delete();
-                    return redirect()->route('exports.index')->with('msg', 'Xóa đơn thành công!');
+                    return redirect()->route('xuat-hang.index')->with('msg', 'Xóa đơn thành công!');
                 } else {
-                    return redirect()->route('exports.index')->with('warning', 'Thao tác không thành công');
+                    return redirect()->route('xuat-hang.index')->with('warning', 'Thao tác không thành công');
                 }
             }
         }

@@ -2,12 +2,12 @@
 <x-navbar :title="$title"></x-navbar>
 <div class="content-wrapper padding-112">
     <div class="breadcrumb">
-        <span><a href="{{ route('debt.index') }}">Công nợ xuất</a></span>
+        <span><a href="{{ route('cong-no-xuat.index') }}">Công nợ xuất</a></span>
         <span class="px-1">/</span>
         <span><b>Đơn Hàng</b></span>
         <span class="ml-1"><b>{{ $debts->hdr }}</b></span>
     </div>
-    <form action="{{ route('debt.update', $debts->id) }}" method="POST">
+    <form action="{{ route('cong-no-xuat.update', $debts->id) }}" method="POST">
         @csrf
         @method('PUT')
         <section class="content">
