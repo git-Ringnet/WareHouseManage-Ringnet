@@ -261,6 +261,7 @@ class Orders extends Model
                         'provide_id' => $order->provide_id,
                         'product_trademark' => $order->product_trademark,
                         'product_code' => $order->getOrderCode === null ? "" : $order->getOrderCode->product_code,
+                        'created_at' => $c->created_at
                     ]);
                     $order->update(['product_id' => $product->id]);
                 }
