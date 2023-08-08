@@ -388,7 +388,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 </option>
                                                 <option value="<="
                                                     {{ request('comparison_operator') === '<=' ? 'selected' : '' }}>
-                                                    <=</option>
+                                                    <=< /option>
                                             </select>
                                             <input class="w-50 input-quantity sum-input" type="number"
                                                 oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -888,35 +888,74 @@ $index = array_search($item['label'], $numberedLabels);
 
         var allDataSame = true;
         var firstData = null;
+        // $('input[name="ids[]"]').each(function() {
+        //     if ($(this).is(':checked')) {
+        //         var data = $(this).closest('tr').find('td:eq(7)').text().trim();
+        //         console.log(data);
+        //         if (firstData === null) {
+        //             firstData = data;
+        //         } else if (firstData !== data) {
+        //             allDataSame = false;
+        //             return false;
+        //         }
+        //     }
+        // });
+        // if (allDataSame == false) {
+        //     $('.multiple_action').hide();
+        // }
+
+        // Apply actions based on the data value
+        // if (allDataSame && firstData === "Đã nhập hàng") {
+        //     $('.btn-xoahang').hide();
+        //     $('.btn-duyet').hide();
+        //     $('.btn-huy').show();
+        // } else if (allDataSame && firstData === "Đã hủy") {
+        //     $('.btn-duyet').hide();
+        //     $('.btn-huy').hide();
+        //     $('.btn-xoahang').show();
+        // } else {
+        //     $('.btn-xoahang').hide();
+        //     $('.btn-huy').hide();
+        //     $('.btn-duyet').show();
+        // }
+
+        var selectedStates = []; // Mảng lưu trữ các trạng thái đã chọn
         $('input[name="ids[]"]').each(function() {
             if ($(this).is(':checked')) {
                 var data = $(this).closest('tr').find('td:eq(7)').text().trim();
-                console.log(data);
-                if (firstData === null) {
-                    firstData = data;
-                } else if (firstData !== data) {
-                    allDataSame = false;
-                    return false;
-                }
+                selectedStates.push(data); // Thêm trạng thái vào mảng
             }
         });
-        if (allDataSame == false) {
-            $('.multiple_action').hide();
-        }
 
-        // Apply actions based on the data value
-        if (allDataSame && firstData === "Đã nhập hàng") {
-            $('.btn-xoahang').hide();
+
+        var isDaBaoGia = selectedStates.includes("Chờ duyệt");
+        var isDaChot = selectedStates.includes("Đã nhập hàng");
+        var isDaHuy = selectedStates.includes("Đã hủy");
+
+        if (isDaBaoGia && isDaChot && isDaHuy) {
+            $('.multiple_action').hide();
+        } else if (isDaBaoGia && isDaChot) {
             $('.btn-duyet').hide();
             $('.btn-huy').show();
-        } else if (allDataSame && firstData === "Đã hủy") {
+            $('.btn-xoahang').hide();
+        } else if (isDaBaoGia && isDaHuy) {
+            $('.multiple_action').hide();
+        } else if (isDaChot && isDaHuy) {
+            $('.multiple_action').hide();
+        } else if (isDaBaoGia) {
+            $('.btn-xoahang').hide();
+            $('.btn-duyet').show();
+            $('.btn-huy').show();
+        } else if (isDaChot) {
+            $('.btn-xoahang').hide();
+            $('.btn-chotdon').hide();
+            $('.btn-huy').show();
+        } else if (isDaHuy) {
+            $('.btn-xoahang').show();
             $('.btn-duyet').hide();
             $('.btn-huy').hide();
-            $('.btn-xoahang').show();
         } else {
-            $('.btn-xoahang').hide();
-            $('.btn-huy').hide();
-            $('.btn-duyet').show();
+            $('.multiple_action').hide();
         }
     }
 
