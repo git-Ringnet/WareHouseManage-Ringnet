@@ -948,7 +948,7 @@ $index = array_search($item['label'], $numberedLabels);
             $('.btn-huy').show();
         } else if (isDaChot) {
             $('.btn-xoahang').hide();
-            $('.btn-chotdon').hide();
+            $('.btn-duyet').hide();
             $('.btn-huy').show();
         } else if (isDaHuy) {
             $('.btn-xoahang').show();
