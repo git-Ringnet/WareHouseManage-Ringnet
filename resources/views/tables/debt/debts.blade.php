@@ -505,7 +505,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('sale_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity sale-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -535,7 +535,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('import_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity import-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -565,7 +565,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('fee_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity fee-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -595,7 +595,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('difference_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity difference-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -797,11 +797,16 @@ $index = array_search($item['label'], $numberedLabels);
                                     </form>
                                 </thead>
                                 <tbody>
+                                    <input type="hidden" id="isUserAdmin"
+                                        value="{{ Auth::user()->roleid == 1 ? 'true' : 'false' }}">
                                     @foreach ($debts as $value)
                                         @if (Auth::user()->id == $value->user_id || Auth::user()->can('isAdmin'))
-                                            <tr class="{{ $value->id }}">
+                                            <tr class="{{ $value->id }}"
+                                                onclick="handleRowClick('checkbox-{{ $value->id }}', event);">
                                                 @can('view-guests')
                                                     <td><input type="checkbox" name="ids[]" class="cb-element"
+                                                            id="checkbox-{{ $value->id }}"
+                                                            onclick="event.stopPropagation();"
                                                             value="{{ $value->id }}"></td>
                                                 @endcan
                                                 <td class="text-left">{{ $value->hdr }}</td>
@@ -856,7 +861,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     @endif
                                                 </td>
                                                 <td class="text-left">{{ $value->debt_note }}</td>
-                                                <td class="text-center">
+                                                <td class="text-center editEx">
                                                     <div class="icon">
                                                         @if (Auth::user()->can('view-guests'))
                                                             <a href="{{ route('debt.edit', $value->id) }}">
@@ -911,7 +916,7 @@ $index = array_search($item['label'], $numberedLabels);
 
                                                     </div>
                                                 </td>
-                                                <td class="text-center">
+                                                <td class="text-center dropdown">
                                                     <div id="dropdown_item{{ $value->id }}" data-toggle="collapse"
                                                         class="dropdownitem"
                                                         data-target="#product-details-<?php echo $value->id; ?>">
@@ -1435,6 +1440,7 @@ $index = array_search($item['label'], $numberedLabels);
     })
 
     // Hiển thị form multiple action
+    var isUserAdmin = document.getElementById('isUserAdmin').value === 'true';
     function updateMultipleActionVisibility() {
         if ($('.cb-element:checked').length > 0) {
             $('.multiple_action').show();
@@ -1442,6 +1448,30 @@ $index = array_search($item['label'], $numberedLabels);
         } else {
             $('.multiple_action').hide();
         }
+        var selectedStates = []; // Mảng lưu trữ các trạng thái đã chọn
+        $('input[name="ids[]"]').each(function() {
+            if ($(this).is(':checked')) {
+                if (isUserAdmin) {
+                    var data = $(this).closest('tr').find('td:eq(9)').text().trim();
+                    selectedStates.push(data); // Thêm trạng thái vào mảng
+                } else {
+                    var data = $(this).closest('tr').find('td:eq(8)').text().trim();
+                    selectedStates.push(data); // Thêm trạng thái vào mảng
+                }
+            }
+        });
+
+        var isThanhtoan = selectedStates.includes("Thanh toán đủ");
+        var isChuaThanhtoan = selectedStates.includes("Chưa thanh toán");
+
+        if (isThanhtoan && isChuaThanhtoan) {
+            $('.multiple_action').hide();
+        } else if (isChuaThanhtoan) {
+            $('.multiple_action').show();
+        } else if (isThanhtoan) {
+            $('.multiple_action').hide();
+        }
+        console.log(isUserAdmin);
     }
 
     $('.product_category').change(function() {
@@ -1704,6 +1734,38 @@ $index = array_search($item['label'], $numberedLabels);
         var view = new Uint8Array(buf);
         for (var i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xff;
         return buf;
+    }
+    //checked checkbox
+    function toggleCheckbox(checkboxId) {
+        var checkbox = document.getElementById(checkboxId);
+        if (checkbox) {
+            checkbox.checked = !checkbox.checked; // Đảo ngược trạng thái của checkbox
+        }
+    }
+
+    function triggerChange(checkboxId) {
+        var checkbox = document.getElementById(checkboxId);
+        if (checkbox) {
+            var event = new Event('change', {
+                bubbles: true,
+                cancelable: true,
+            });
+            checkbox.dispatchEvent(event);
+        }
+    }
+
+    function handleRowClick(checkboxId, event) {
+        // Lấy target của sự kiện click
+        var target = event.target;
+
+        // Kiểm tra nếu target không có class "dropdown"
+        if (!target.closest('.dropdown') && !target.closest('.editEx')) {
+            var checkbox = document.getElementById(checkboxId);
+            if (checkbox) {
+                toggleCheckbox(checkboxId); // Thay đổi trạng thái checkbox
+                triggerChange(checkboxId); // Kích hoạt sự kiện change của checkbox
+            }
+        }
     }
 </script>
 </body>
