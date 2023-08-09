@@ -1283,24 +1283,27 @@ $index = array_search($item['label'], $numberedLabels);
                         </div>
 
                     </div>
-                    <div class="paginator mt-4 d-flex justify-content-start">
-                        <span class="text-perpage">
-                            Số hàng mỗi trang:
-                            <select name="perPage" id="perPage">
-                                <option value="5" {{ $perPage == 5 ? 'selected' : '' }}>5</option>
-                                <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
-                                <option value="25" {{ $perPage == 25 ? 'selected' : '' }}>25</option>
-                                <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
-                            </select>
-                        </span>
+                    <div class="d-flex">
+                        <div class="paginator mt-2 d-flex justify-content-start">
+                            <span class="text-perpage">
+                                Số hàng mỗi trang:
+                                <select name="perPage" id="perPage">
+                                    <option value="5" {{ $perPage == 5 ? 'selected' : '' }}>5</option>
+                                    <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
+                                    <option value="25" {{ $perPage == 25 ? 'selected' : '' }}>25</option>
+                                    <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
+                                </select>
+                            </span>
+                        </div>
+                        <div class="paginator mt-2 d-flex justify-content-end ml-auto">
+                            @if (Auth::user()->can('isAdmin'))
+                                {{ $history->appends(request()->except('page'))->links() }}
+                            @else
+                                {{ $history->appends(request()->except('page'))->links() }}
+                            @endif
+                        </div>
                     </div>
-                    <div class="paginator mt-4 d-flex justify-content-end">
-                        @if (Auth::user()->can('isAdmin'))
-                            {{ $history->appends(request()->except('page'))->links() }}
-                        @else
-                            {{ $history->appends(request()->except('page'))->links() }}
-                        @endif
-                    </div>
+                    
                     {{-- @if ($history->count() > 0)
                         @php
                             $paginationRange = App\Helpers\PaginationHelper::calculatePaginationRange($history->currentPage(), $history->lastPage());

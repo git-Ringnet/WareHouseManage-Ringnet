@@ -517,7 +517,8 @@ $index = array_search($item['label'], $numberedLabels);
                         </div>
                         <!-- /.card-body -->
                     </div>
-                    <div class="paginator mt-4 d-flex justify-content-start">
+                   <div class="d-flex">
+                    <div class="paginator mt-2 d-flex justify-content-start">
                         <span class="text-perpage">
                             Số hàng mỗi trang:
                             <select name="perPage" id="perPage">
@@ -528,13 +529,14 @@ $index = array_search($item['label'], $numberedLabels);
                             </select>
                         </span>
                     </div>
-                    <div class="paginator mt-4 d-flex justify-content-end">
+                    <div class="paginator mt-2 d-flex justify-content-end ml-auto">
                         @if (Auth::user()->can('isAdmin'))
                             {{ $guests->appends(request()->except('page'))->links() }}
                         @else
                             {{ $guestsCreator->appends(request()->except('page'))->links() }}
                         @endif
                     </div>
+                   </div>
                     {{-- @php
                         use App\Helpers\PaginationHelper;
                         

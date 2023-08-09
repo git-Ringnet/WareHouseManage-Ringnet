@@ -385,7 +385,7 @@
                                     </table>
                                 </div>
                             </div>
-                            <div class="paginator mt-4 d-flex justify-content-end">
+                            <div class="paginator mt-2 d-flex justify-content-end ml-auto">
                                 {{ $tableorders->appends(request()->except('page'))->links() }}
                             </div>
                         </div>

@@ -232,7 +232,7 @@
                         <a href="{{ asset('./data') }}" class="btn btn-default">Hủy</a>
                     </div> --}}
                 </div>
-                <div class="paginator mt-4 d-flex justify-content-end">
+                <div class="paginator mt-2 d-flex justify-content-end ml-auto">
                     {{ $listProduct->appends(request()->except('page'))->links() }}
                 </div>
             </div>

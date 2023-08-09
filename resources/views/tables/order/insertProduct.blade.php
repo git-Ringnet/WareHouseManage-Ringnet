@@ -700,20 +700,22 @@ $index = array_search($item['label'], $numberedLabels);
                 </div>
             </div>
         </div>
-        <div class="paginator mt-4 d-flex justify-content-start">
-            <span class="text-perpage">
-                Số hàng mỗi trang:
-                <select name="perPage" id="perPage">
-                    <option value="5" {{ $perPage == 5 ? 'selected' : '' }}>5</option>
-                    <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
-                    <option value="25" {{ $perPage == 25 ? 'selected' : '' }}>25</option>
-                    <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
-                </select>
-            </span>
-        </div>
-        <!-- <button type="submit" name="confirmBill" id="confirmBill" class="btn btn-primary">Duyệt đơn nhanh</button> -->
-        <div class="paginator mt-4 d-flex justify-content-end">
-            {{ $orders->appends(request()->except('page'))->links() }}
+        <div class="d-flex">
+            <div class="paginator mt-2 d-flex justify-content-start">
+                <span class="text-perpage">
+                    Số hàng mỗi trang:
+                    <select name="perPage" id="perPage">
+                        <option value="5" {{ $perPage == 5 ? 'selected' : '' }}>5</option>
+                        <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
+                        <option value="25" {{ $perPage == 25 ? 'selected' : '' }}>25</option>
+                        <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
+                    </select>
+                </span>
+            </div>
+            <!-- <button type="submit" name="confirmBill" id="confirmBill" class="btn btn-primary">Duyệt đơn nhanh</button> -->
+            <div class="paginator mt-2 d-flex justify-content-end ml-auto">
+                {{ $orders->appends(request()->except('page'))->links() }}
+            </div>
         </div>
         {{-- @if ($orders->count() > 0)
             @php

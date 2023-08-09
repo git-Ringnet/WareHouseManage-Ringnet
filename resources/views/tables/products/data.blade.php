@@ -821,7 +821,8 @@ $index = array_search($item['label'], $numberedLabels);
                             </table>
                         </div>
                     </div>
-                    <div class="paginator mt-4 d-flex justify-content-start">
+                   <div class="d-flex">
+                    <div class="paginator mt-2 d-flex justify-content-start">
                         <span class="text-perpage">
                             Số hàng mỗi trang:
                             <select name="perPage" id="perPage">
@@ -832,9 +833,10 @@ $index = array_search($item['label'], $numberedLabels);
                             </select>
                         </span>
                     </div>
-                    <div class="paginator mt-4 d-flex justify-content-end">
+                    <div class="paginator mt-2 d-flex justify-content-end ml-auto">
                         {{ $products->appends(request()->except('page'))->links() }}
                     </div>
+                   </div>
                     {{-- @if ($products->count() > 0)
                         @php
                             $paginationRange = App\Helpers\PaginationHelper::calculatePaginationRange($products->currentPage(), $products->lastPage());

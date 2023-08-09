@@ -10,7 +10,7 @@
             <a href="{{ route('indexExport') }}" class="title mr-2 pt-2 px-1 active">
                 Xuất hàng
             </a>
-            <div class="ml-auto choosetime">
+            <div class="ml-auto choosetime" style="bottom: 0 !important">
                 <div class="col d-flex" style="position: relative; width: 280px">
                     <div class="dropdown w-100">
                         <button class="btn w-100 btn-light border rounded dropdown-toggle" id="orders"
@@ -832,7 +832,8 @@ $index = array_search($item['label'], $numberedLabels);
                             </table>
                         </div>
                     </div>
-                    <div class="paginator mt-4 d-flex justify-content-start">
+                    <div class="d-flex">  
+                        <div class="paginator mt-2 d-flex justify-content-start">
                         <span class="text-perpage">
                             Số hàng mỗi trang:
                             <select name="perPage" id="perPage">
@@ -843,13 +844,13 @@ $index = array_search($item['label'], $numberedLabels);
                             </select>
                         </span>
                     </div>
-                    <div class="paginator mt-4 d-flex justify-content-end">
+                    <div class="paginator mt-2 d-flex justify-content-end ml-auto">
                         @if (Auth::user()->can('isAdmin'))
                             {{-- {{ $debts->appends(request()->except('page'))->links() }} --}}
                         @else
                             {{-- {{ $debtsCreator->appends(request()->except('page'))->links() }} --}}
                         @endif
-                    </div>
+                    </div></div>
                 </div>
             </div>
 
