@@ -1144,6 +1144,17 @@ input[type="checkbox"] {
     border-radius: 4px;
 }
 
+.order_content, #section_products{
+    position: relative;
+}
+
+.multiple_action{
+    position: absolute;
+    width: 100%;
+    z-index: 99;
+    height: auto;
+}
+
 #section_products .multiple_action .count_checkbox,
 .order_content .multiple_action .count_checkbox {
     font-size: 16px;
