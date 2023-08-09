@@ -148,6 +148,7 @@ li {
 
 ::-webkit-scrollbar {
     width: 8px;
+    height: 12px;
     /* chiều rộng của thanh cuộn */
 }
 
