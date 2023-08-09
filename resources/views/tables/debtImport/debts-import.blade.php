@@ -666,7 +666,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                         id="checkbox-{{ $value->id }}" value="{{ $value->id }}"
                                                         onclick="event.stopPropagation();"></td>
                                             @endcan
-                                            <td class="text-left" style="width: 15%;">{{ $value->madon }}</td>
+                                            <td class="text-left">{{ $value->madon }}</td>
                                             <td class="text-left" style="width: 15%;">
                                                 {{ date_format(new DateTime($value->ngaytao), 'd-m-Y') }}
                                             </td>
