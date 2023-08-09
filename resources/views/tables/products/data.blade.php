@@ -821,7 +821,7 @@ $index = array_search($item['label'], $numberedLabels);
                             </table>
                         </div>
                     </div>
-                   <div class="d-flex">
+                   <div class="d-flex row justify-content-between">
                     <div class="paginator mt-2 d-flex justify-content-start">
                         <span class="text-perpage">
                             Số hàng mỗi trang:
@@ -833,7 +833,7 @@ $index = array_search($item['label'], $numberedLabels);
                             </select>
                         </span>
                     </div>
-                    <div class="paginator mt-2 d-flex justify-content-end ml-auto">
+                    <div class="paginator mt-2 d-flex justify-content-end">
                         {{ $products->appends(request()->except('page'))->links() }}
                     </div>
                    </div>
