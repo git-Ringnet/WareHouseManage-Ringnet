@@ -1206,6 +1206,24 @@ $index = array_search($item['label'], $numberedLabels);
         } else {
             $('.multiple_action').hide();
         }
+        var selectedStates = []; // Mảng lưu trữ các trạng thái đã chọn
+        $('input[name="ids[]"]').each(function() {
+            if ($(this).is(':checked')) {
+                var data = $(this).closest('tr').find('td:eq(7)').text().trim();
+                selectedStates.push(data); // Thêm trạng thái vào mảng
+            }
+        });
+
+        var isThanhtoan = selectedStates.includes("Thanh toán đủ");
+        var isChuaThanhtoan = selectedStates.includes("Chưa thanh toán");
+
+        if (isThanhtoan && isChuaThanhtoan) {
+            $('.multiple_action').hide();
+        } else if (isChuaThanhtoan) {
+            $('.multiple_action').show();
+        } else if (isThanhtoan) {
+            $('.multiple_action').hide();
+        }
     }
 
     //Xử lí tìm kiếm bộ lọc tổng
