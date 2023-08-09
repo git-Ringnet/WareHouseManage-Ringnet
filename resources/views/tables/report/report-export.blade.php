@@ -3,7 +3,7 @@
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-        <div class="link-report mb-1 mr-auto d-flex mt-auto row">
+        <div class="link-report mb-1 mr-auto d-flex mt-auto">
             <a href="{{ route('indexImport') }}" class="title mr-2 pt-2 px-1 before" href="">
                 Nhập hàng
             </a>
