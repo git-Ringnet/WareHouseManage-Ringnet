@@ -588,7 +588,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     id="checkbox-{{ $value->id }}" value="{{ $value->id }}"
                                                     onclick="event.stopPropagation();"></td>
                                             <td >{{ $value->id }}</td>
-                                            <td style="width: 13%;">{{ $value->export_code }}</td>
+                                            <td >{{ $value->export_code }}</td>
                                             <td>{{ $value->guest_name }}</td>
                                             <td style="width: 10%;">
                                                 {{ date_format(new DateTime($value->created_at), 'd-m-Y') }}</td>
