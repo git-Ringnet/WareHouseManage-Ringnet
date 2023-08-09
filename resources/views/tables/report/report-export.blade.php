@@ -999,11 +999,12 @@ $index = array_search($item['label'], $numberedLabels);
                     $(edId).text(data.end_date)
                 }
                 data.test.forEach(function(item, index) {
-                    $('#soluong' + (index + 1)).text(formatCurrency(item.donxuat));
-                    $('#tongxuat' + (index + 1)).text(formatCurrency(item.tongtienxuat));
-                    $('#loinhuan' + (index + 1)).text(formatCurrency(item.tongloinhuan));
-                    $('#congno' + (index + 1)).text(formatCurrency(item.tongcongno));
+                    $('#soluong' + (item.userid)).text(formatCurrency(item.donxuat));
+                    $('#tongxuat' + (item.userid)).text(formatCurrency(item.tongtienxuat));
+                    $('#loinhuan' + (item.userid)).text(formatCurrency(item.tongloinhuan));
+                    $('#congno' + (item.userid)).text(formatCurrency(item.tongcongno));
                 });
+                console.log(data);
                 
             }
         })
