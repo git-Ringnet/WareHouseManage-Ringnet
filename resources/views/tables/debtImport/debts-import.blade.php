@@ -993,16 +993,29 @@ $index = array_search($item['label'], $numberedLabels);
 
     // Xử lí filter ngày tháng
     $(document).ready(function() {
-        $('#end').change(function() {
-            var startDate = new Date($('#start').val());
-            var endDate = new Date($(this).val());
+    $('#end').blur(function() {
+        var startValue = $('#start').val();
+        var endValue = $(this).val();
 
-            if (endDate < startDate) {
+        if (startValue && endValue) { // Kiểm tra cả hai trường đã được nhập đầy đủ
+            var startDate = new Date(startValue);
+            var endDate = new Date(endValue);
+
+            // Kiểm tra ngày, tháng và năm trước khi thực hiện so sánh
+            if (
+                endDate.getFullYear() < startDate.getFullYear() ||
+                (endDate.getFullYear() === startDate.getFullYear() &&
+                 endDate.getMonth() < startDate.getMonth()) ||
+                (endDate.getFullYear() === startDate.getFullYear() &&
+                 endDate.getMonth() === startDate.getMonth() &&
+                 endDate.getDate() < startDate.getDate())
+            ) {
                 alert('Ngày kết thúc không được nhỏ hơn ngày bắt đầu!');
                 $(this).val('');
             }
-        });
+        }
     });
+});
     $('.ks-cboxtags-provide_name li').on('click', function(event) {
         if (event.target.tagName !== 'INPUT') {
             var checkbox = $(this).find('input[type="checkbox"]');

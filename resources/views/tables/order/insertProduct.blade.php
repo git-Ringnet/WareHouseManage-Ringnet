@@ -713,7 +713,7 @@ $index = array_search($item['label'], $numberedLabels);
                 </span>
             </div>
             <!-- <button type="submit" name="confirmBill" id="confirmBill" class="btn btn-primary">Duyệt đơn nhanh</button> -->
-            <div class="paginator mt-2 d-flex justify-content-end ml-auto">
+            <div class="paginator mt-4 d-flex justify-content-end ml-auto">
                 {{ $orders->appends(request()->except('page'))->links() }}
             </div>
         </div>
@@ -759,16 +759,30 @@ $index = array_search($item['label'], $numberedLabels);
     });
     // Xử lí filter ngày tháng
     $(document).ready(function() {
-        $('#end').change(function() {
-            var startDate = new Date($('#start').val());
-            var endDate = new Date($(this).val());
+    $('#end').blur(function() {
+        var startValue = $('#start').val();
+        var endValue = $(this).val();
 
-            if (endDate < startDate) {
+        if (startValue && endValue) { // Kiểm tra cả hai trường đã được nhập đầy đủ
+            var startDate = new Date(startValue);
+            var endDate = new Date(endValue);
+
+            // Kiểm tra ngày, tháng và năm trước khi thực hiện so sánh
+            if (
+                endDate.getFullYear() < startDate.getFullYear() ||
+                (endDate.getFullYear() === startDate.getFullYear() &&
+                 endDate.getMonth() < startDate.getMonth()) ||
+                (endDate.getFullYear() === startDate.getFullYear() &&
+                 endDate.getMonth() === startDate.getMonth() &&
+                 endDate.getDate() < startDate.getDate())
+            ) {
                 alert('Ngày kết thúc không được nhỏ hơn ngày bắt đầu!');
                 $(this).val('');
             }
-        });
+        }
     });
+});
+
 
     // AJAX Hủy bill
     $(document).on('click', '#cancelBill', function(e) {
