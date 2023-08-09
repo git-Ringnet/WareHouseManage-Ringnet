@@ -187,7 +187,7 @@ class HistoryController extends Controller
         } else {
             $sortType = 'desc';
         }
-        $perPage = $request->input('perPageinput',10); 
+        $perPage = $request->input('perPageinput',25); 
         $guests = History::leftjoin('guests', 'guests.id', '=', 'history.guest_id')->select('guests.guest_name as guests', 'history.export_unit as unit')->get();
 
         $debtsSale =  History::leftjoin('users', 'history.user_id', '=', 'users.id')->get();

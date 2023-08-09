@@ -893,7 +893,7 @@ $index = array_search($item['label'], $numberedLabels);
         // $('input[name="ids[]"]').each(function() {
         //     if ($(this).is(':checked')) {
         //         var data = $(this).closest('tr').find('td:eq(7)').text().trim();
-        //         console.log(data);
+        //         
         //         if (firstData === null) {
         //             firstData = data;
         //         } else if (firstData !== data) {

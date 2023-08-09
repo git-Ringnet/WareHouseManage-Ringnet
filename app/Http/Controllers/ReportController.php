@@ -120,7 +120,7 @@ class ReportController extends Controller
         $allRoles = new Roles();
         $allRoles = $allRoles->getAll();
         $Tableexports = $this->exports->reportExports($filters, $nhanvien, $roles, $sortBy, $sortType);
-        $perPage = $request->input('perPageinput', 10);
+        $perPage = $request->input('perPageinput', 25);
         return view('tables.report.report-export', compact('perPage', 'mindate', 'maxdate', 'title', 'debtsSale', 'allRoles', 'string', 'Tableexports', 'sortType', 'exports', 'sumExport', 'formattedLoinhuan', 'CongNo'));
     }
 
@@ -201,7 +201,7 @@ class ReportController extends Controller
         $allRoles = new Roles();
         $allRoles = $allRoles->getAll();
         // dd($tableorders);
-        $perPage = $request->input('perPageinput', 10);
+        $perPage = $request->input('perPageinput', 25);
         return view('tables.report.report-import', compact('perPage', 'mindate', 'maxdate', 'title', 'allRoles', 'debtsSale', 'string', 'tableorders', 'sortType', 'orders', 'sumTotalOrders', 'sumDebtImportVAT', 'tableorders', 'exports', 'sumExport', 'formattedLoinhuan', 'CongNo'));
     }
     public function timeImport(Request $request)

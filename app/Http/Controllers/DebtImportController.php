@@ -106,7 +106,7 @@ class DebtImportController extends Controller
             $sortType = 'desc';
         }
 
-        $perPage = $request->input('perPageinput',10); 
+        $perPage = $request->input('perPageinput',25); 
         $debtsSale = DebtImport::leftjoin('users', 'debt_import.user_id', '=', 'users.id')->get();
         $debts = $this->debts->getAllDebts($filters,$perPage, $keywords, $nhanvien, $date, $provide_namearr, $status, $sortBy, $sortType);
         $product = $this->debts->getAllProductsDebts();

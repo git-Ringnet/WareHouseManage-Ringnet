@@ -1003,7 +1003,7 @@ $index = array_search($item['label'], $numberedLabels);
                     $('#loinhuan' + (index + 1)).text(formatCurrency(item.tongloinhuan));
                     $('#congno' + (index + 1)).text(formatCurrency(item.tongcongno));
                 });
-                console.log(data);
+                
             }
         })
     })

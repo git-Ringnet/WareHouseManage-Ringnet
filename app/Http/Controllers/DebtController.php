@@ -145,7 +145,7 @@ class DebtController extends Controller
         }
 
         $guests = Debt::leftjoin('guests', 'guests.id', '=', 'debts.guest_id')->select('guests.guest_name as guests')->get();
-        $perPage = $request->input('perPageinput',10); 
+        $perPage = $request->input('perPageinput',25); 
 
         $debtsSale = Debt::leftjoin('users', 'debts.user_id', '=', 'users.id')->get();
         $debts = $this->debts->getAllDebts($filters,$perPage, $keywords, $nhanvien, $date, $guest, $datepaid, $status, $sortBy, $sortType);

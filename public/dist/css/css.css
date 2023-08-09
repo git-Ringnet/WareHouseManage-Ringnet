@@ -1247,3 +1247,19 @@ input[type="checkbox"] {
     color: #fff;
     border-color: #0095f6;
 } */
+
+/* .paginate-a{
+    border-radius: 10px;
+    width: 48px;
+    text-align: center;
+} */
+.page-link{
+    border: none;
+}
+.page-item.active .page-link{
+    border-radius: 8px;
+    background-color: #0095F6;
+    border-color: #0095F6;
+    width: 48px;
+    text-align: center;
+}

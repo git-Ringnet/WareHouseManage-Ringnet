@@ -856,7 +856,7 @@ $index = array_search($item['label'], $numberedLabels);
                     $('#tongnhap' + (index + 1)).text(formatCurrency(item.total_sum));
                     $('#congno' + (index + 1)).text(formatCurrency(item.total_debt));
                 });
-                console.log(data);
+                
             }
         })
     })
@@ -889,7 +889,7 @@ $index = array_search($item['label'], $numberedLabels);
                     $('#tongnhap' + (index + 1)).text(formatCurrency(item.total_sum));
                     $('#congno' + (index + 1)).text(formatCurrency(item.total_debt));
                 });
-                console.log(data);
+                
             }
         })
     })

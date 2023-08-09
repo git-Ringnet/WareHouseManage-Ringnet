@@ -108,7 +108,7 @@ class ExportController extends Controller
         $exports = Exports::leftjoin('guests', 'exports.guest_id', '=', 'guests.id')
             ->leftjoin('users', 'exports.user_id', '=', 'users.id')->select('guests.guest_name as guests', 'users.name as name')->get();
         $productEx = productExports::all();
-        $perPage = $request->input('perPageinput', 10);
+        $perPage = $request->input('perPageinput', 25);
         $export = $this->exports->getAllExports($filters, $perPage, $status, $name, $guest, $date, $keywords, $sortBy, $sortType);
         $title = 'Xuất hàng';
         $productsCreator = $this->exports->productsCreator();

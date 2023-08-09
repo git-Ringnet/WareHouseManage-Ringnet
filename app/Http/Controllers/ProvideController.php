@@ -81,7 +81,7 @@ class ProvideController extends Controller
 
 
         $keywords = null;
-        $perPage = $request->input('perPageinput',10); 
+        $perPage = $request->input('perPageinput',25); 
         if (!empty($request->keywords)) {
             $keywords = $request->keywords;
         }

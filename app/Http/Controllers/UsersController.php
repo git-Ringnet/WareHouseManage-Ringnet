@@ -89,7 +89,7 @@ class UsersController extends Controller
         } else {
             $sortType = 'desc';
         }
-        $perPage = $request->input('perPageinput',10); 
+        $perPage = $request->input('perPageinput',25); 
         $usersList = $this->users->getAllUsers($filters,$perPage, $name, $phonenumber, $email, $status, $roles, $keywords, $sortBy, $sortType);
         $title = 'Nhân viên';
         return view('admin.userslist', compact('title','perPage', 'usersList', 'sortType', 'allRoles', 'string', 'title'));

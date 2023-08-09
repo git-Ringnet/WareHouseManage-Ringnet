@@ -1273,7 +1273,7 @@
                     $(stId).text(data.start_date)
                     $(edId).text(data.end_date)
                 }
-                console.log(data);
+                
             }
         })
     })
@@ -1409,7 +1409,7 @@
                     $(stId).text(data.start_date)
                     $(edId).text(data.end_date)
                 }
-                console.log(data);
+                
 
             }
         })
@@ -1437,7 +1437,7 @@
                 } else {
                     $('#debt_import').text(0);
                 }
-                console.log(data);
+                
 
             }
         })

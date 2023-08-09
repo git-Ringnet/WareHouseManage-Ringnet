@@ -137,7 +137,7 @@ class AddProductController extends Controller
         foreach ($order as $value) {
             array_push($productIds, $value->id);
         }
-        $perPage = $request->input('perPageinput', 10);
+        $perPage = $request->input('perPageinput', 25);
         $orders = $this->orders->getAllOrders($filters, $perPage, $status, $provide_namearr, $name, $date, $keywords, $sortBy, $sortType);
         $product = ProductOrders::with('getCodeProduct')
             ->join('orders', 'productorders.order_id', '=', 'orders.id')

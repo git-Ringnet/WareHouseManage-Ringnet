@@ -97,7 +97,7 @@ class GuestsController extends Controller
         if (!empty($request->keywords)) {
             $keywords = $request->keywords;
         }
-        $perPage = $request->input('perPageinput',10); 
+        $perPage = $request->input('perPageinput',25); 
         $users = User::whereIn('roleid', [1, 3])->get();
         $guests = $this->guests->getAllguests($filters,$perPage, $users_name, $name, $represent, $phonenumber, $email, $status, $keywords, $sortByArr);
         // dd($guests);

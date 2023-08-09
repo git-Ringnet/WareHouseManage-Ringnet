@@ -569,7 +569,7 @@ $index = array_search($item['label'], $numberedLabels);
                 },
                 success: function(data) {
                     alert('Cập nhật tình trạng thành công!');
-                    console.log(data);
+                    
                 }
 
             });
