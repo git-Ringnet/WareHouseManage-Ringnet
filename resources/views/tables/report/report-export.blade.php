@@ -3,113 +3,119 @@
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-        <div class="link-report mb-1 mr-auto d-flex mt-auto">
-            <a href="{{ route('indexImport') }}" class="title mr-2 pt-2 px-1 before" href="">
-                Nhập hàng
-            </a>
-            <a href="{{ route('indexExport') }}" class="title mr-2 pt-2 px-1 active">
-                Xuất hàng
-            </a>
-            <div class="ml-auto choosetime" style="bottom: 0 !important">
-                <div class="col d-flex" style="position: relative; width: 280px">
-                    <div class="dropdown w-100">
-                        <button class="btn w-100 btn-light border rounded dropdown-toggle" id="orders"
-                            style="display: flex;
-                            justify-content: space-between;
-                            align-items: center;"
-                            type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                            aria-expanded="false">
-                            {{-- All orders --}}
-                            <div id="all-orders">
-                                <div class="d-flex flex-column all-orders">
-                                    <div class="ca d-flex">
-                                        <div class="it0">{{$mindate}}</div>
-                                        <div class="muiten-all">-></div>
-                                        <div class="id0">{{$maxdate }}</div>
+        <div class="row link-report mb-1 mr-auto d-flex mt-auto px-0">
+            <div class="col-12">
+                <div class="ml-auto choosetime" style="bottom: -35px !important">
+                    <div class="col d-flex px-0" style="position: relative; width: auto">
+                        <div class="dropdown w-100">
+                            <button class="btn w-100 btn-light border rounded dropdown-toggle" id="orders"
+                                style="display: flex;
+                                justify-content: space-between;
+                                align-items: center;"
+                                type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">
+                                {{-- All orders --}}
+                                <div id="all-orders">
+                                    <div class="d-flex flex-column all-orders">
+                                        <div class="ca d-flex">
+                                            <div class="it0">{{ $mindate }}</div>
+                                            <div class="muiten-all">-></div>
+                                            <div class="id0">{{ $maxdate }}</div>
+                                        </div>
+                                        <div class="ca text-left">Tất cả</div>
                                     </div>
-                                    <div class="ca text-left">Tất cả</div>
                                 </div>
-                            </div>
-                            {{-- Tháng này Orders --}}
-                            <div id="this-month-orders" style="display: none">
-                                <div class="d-flex flex-column all-orders">
-                                    <div class="ca d-flex">
-                                        <div class="it1"></div>->
-                                        <div class="id1"></div>
+                                {{-- Tháng này Orders --}}
+                                <div id="this-month-orders" style="display: none">
+                                    <div class="d-flex flex-column all-orders">
+                                        <div class="ca d-flex">
+                                            <div class="it1"></div>->
+                                            <div class="id1"></div>
+                                        </div>
+                                        <div class="ca text-left">Tháng này</div>
                                     </div>
-                                    <div class="ca text-left">Tháng này</div>
                                 </div>
-                            </div>
-                            {{-- Tháng trước đây Orders --}}
-                            <div id="last-month-orders" style="display: none">
-                                <div class="d-flex flex-column all-orders">
-                                    <div class="ca d-flex">
-                                        <div class="it2"></div>->
-                                        <div class="id2"></div>
+                                {{-- Tháng trước đây Orders --}}
+                                <div id="last-month-orders" style="display: none">
+                                    <div class="d-flex flex-column all-orders">
+                                        <div class="ca d-flex">
+                                            <div class="it2"></div>->
+                                            <div class="id2"></div>
+                                        </div>
+                                        <div class="ca text-left">Tháng trước</div>
                                     </div>
-                                    <div class="ca text-left">Tháng trước</div>
                                 </div>
-                            </div>
-                            {{-- 3 Tháng trước đây Orders --}}
-                            <div id="3last-month-orders" style="display: none">
-                                <div class="d-flex flex-column all-orders">
-                                    <div class="ca d-flex">
-                                        <div class="it3"></div>->
-                                        <div class="id3"></div>
+                                {{-- 3 Tháng trước đây Orders --}}
+                                <div id="3last-month-orders" style="display: none">
+                                    <div class="d-flex flex-column all-orders">
+                                        <div class="ca d-flex">
+                                            <div class="it3"></div>->
+                                            <div class="id3"></div>
+                                        </div>
+                                        <div class="ca text-left">3 tháng trước</div>
                                     </div>
-                                    <div class="ca text-left">3 tháng trước</div>
                                 </div>
-                            </div>
-                            {{-- Khoảng thời gian Orders --}}
-                            <div id="time-orders" style="display: none">
-                                <div class="d-flex flex-column all-orders">
-                                    <div class="ca d-flex">
-                                        <div class="start_order"></div>
-                                        <div class="muitenorder"></div>
-                                        <div class="end_order"></div>
+                                {{-- Khoảng thời gian Orders --}}
+                                <div id="time-orders" style="display: none">
+                                    <div class="d-flex flex-column all-orders">
+                                        <div class="ca d-flex">
+                                            <div class="start_order"></div>
+                                            <div class="muitenorder"></div>
+                                            <div class="end_order"></div>
+                                        </div>
+                                        <div class="ca text-left">Khoảng thời gian</div>
                                     </div>
-                                    <div class="ca text-left">Khoảng thời gian</div>
                                 </div>
-                            </div>
 
-                        </button>
-                        <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item dropdown-item-orders" id="btn-all-orders" href="#"
-                                data-value="0">Tất cả</a>
-                            <a class="dropdown-item dropdown-item-orders" id="btn-this-month-orders" href="#"
-                                data-value="1">Tháng này</a>
-                            <a class="dropdown-item dropdown-item-orders" id="btn-last-month-orders" href="#"
-                                data-value="2">Tháng trước</a>
-                            <a class="dropdown-item dropdown-item-orders" id="btn-3last-month-orders" href="#"
-                                data-value="3">3 tháng trước</a>
-                            <a class="dropdown-item dropdown-item-orders" id="btn-time-orders" href="#">Khoảng
-                                thời
-                                gian</a>
-                        </div>
-                    </div>
-                    {{-- Chọn khoảng --}}
-                    <div class="block-optionss" id="times-orders-options" style="display:none">
-                        <div class="wrap w-100">
-                            <div class="input-group p-2 justify-content-around">
-                                <div class="start">
-                                    <label for="start">Từ ngày</label>
-                                    <input type="date" name="date_start" class="date_start rounded">
-                                </div>
-                                <div class="end">
-                                    <label for="start">Đến ngày</label>
-                                    <input type="date" name="date_end" class="date_end rounded">
-                                </div>
+                            </button>
+                            <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item dropdown-item-orders" id="btn-all-orders" href="#"
+                                    data-value="0">Tất cả</a>
+                                <a class="dropdown-item dropdown-item-orders" id="btn-this-month-orders" href="#"
+                                    data-value="1">Tháng này</a>
+                                <a class="dropdown-item dropdown-item-orders" id="btn-last-month-orders" href="#"
+                                    data-value="2">Tháng trước</a>
+                                <a class="dropdown-item dropdown-item-orders" id="btn-3last-month-orders" href="#"
+                                    data-value="3">3 tháng trước</a>
+                                <a class="dropdown-item dropdown-item-orders" id="btn-time-orders" href="#">Khoảng
+                                    thời
+                                    gian</a>
                             </div>
                         </div>
-                        <div class="d-flex justify-contents-center align-items-baseline p-2">
-                            <button type="button" class="suscess btn btn-primary btn-block mr-2" value="4">Xác
-                                nhận</button>
-                            <button type="button" id="cancel-times-orders"
-                                class="btn btn-default btn-block">Hủy</button>
+                        {{-- Chọn khoảng --}}
+                        <div class="block-optionss" id="times-orders-options" style="display:none">
+                            <div class="wrap w-100">
+                                <div class="input-group p-2 justify-content-around">
+                                    <div class="start">
+                                        <label for="start">Từ ngày</label>
+                                        <input type="date" name="date_start" class="date_start rounded">
+                                    </div>
+                                    <div class="end">
+                                        <label for="start">Đến ngày</label>
+                                        <input type="date" name="date_end" class="date_end rounded">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                <button type="button" class="suscess btn btn-primary btn-block mr-2" value="4">Xác
+                                    nhận</button>
+                                <button type="button" id="cancel-times-orders"
+                                    class="btn btn-default btn-block">Hủy</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="col-12">
+                <a href="{{ route('indexImport') }}" class="title mr-2 pt-2 px-1 before" href="">
+                    Nhập hàng
+                </a>
+                <a href="{{ route('indexExport') }}" class="title mr-2 pt-2 px-1 active">
+                    Xuất hàng
+                </a>
+            </div>
+
+
         </div>
 
         <hr class="hr">
@@ -308,11 +314,11 @@ $index = array_search($item['label'], $numberedLabels);
                             @endforeach
                             @if (Auth::user()->can('isAdmin'))
                                 @php $nhanvien = [];
-                                    if (isset(request()->nhanvien)) {
-                                        $nhanvien = request()->nhanvien;
-                                    } else {
-                                        $nhanvien = [];
-                                } @endphp
+                                                                        if (isset(request()->nhanvien)) {
+                                                                            $nhanvien = request()->nhanvien;
+                                                                        } else {
+                                                                            $nhanvien = [];
+                                                                } @endphp ?>
                                 <div class="filter-admin">
                                     <button class="btn btn-filter btn-light mr-2" id="btn-nhanvien" type="button">
                                         <span>
@@ -594,7 +600,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('sale_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity sale-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -624,7 +630,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('import_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity export-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -654,7 +660,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('difference_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity difference-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -684,7 +690,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('sum_debt_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity sum_debt-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -832,25 +838,26 @@ $index = array_search($item['label'], $numberedLabels);
                             </table>
                         </div>
                     </div>
-                    <div class="d-flex">  
+                    <div class="d-flex">
                         <div class="paginator mt-2 d-flex justify-content-start">
-                        <span class="text-perpage">
-                            Số hàng mỗi trang:
-                            <select name="perPage" id="perPage">
-                                <option value="5" {{ $perPage == 5 ? 'selected' : '' }}>5</option>
-                                <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
-                                <option value="25" {{ $perPage == 25 ? 'selected' : '' }}>25</option>
-                                <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
-                            </select>
-                        </span>
+                            <span class="text-perpage">
+                                Số hàng mỗi trang:
+                                <select name="perPage" id="perPage">
+                                    <option value="5" {{ $perPage == 5 ? 'selected' : '' }}>5</option>
+                                    <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
+                                    <option value="25" {{ $perPage == 25 ? 'selected' : '' }}>25</option>
+                                    <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
+                                </select>
+                            </span>
+                        </div>
+                        <div class="paginator mt-2 d-flex justify-content-end ml-auto">
+                            @if (Auth::user()->can('isAdmin'))
+                                {{-- {{ $debts->appends(request()->except('page'))->links() }} --}}
+                            @else
+                                {{-- {{ $debtsCreator->appends(request()->except('page'))->links() }} --}}
+                            @endif
+                        </div>
                     </div>
-                    <div class="paginator mt-2 d-flex justify-content-end ml-auto">
-                        @if (Auth::user()->can('isAdmin'))
-                            {{-- {{ $debts->appends(request()->except('page'))->links() }} --}}
-                        @else
-                            {{-- {{ $debtsCreator->appends(request()->except('page'))->links() }} --}}
-                        @endif
-                    </div></div>
                 </div>
             </div>
 
@@ -1004,8 +1011,6 @@ $index = array_search($item['label'], $numberedLabels);
                     $('#loinhuan' + (item.userid)).text(formatCurrency(item.tongloinhuan));
                     $('#congno' + (item.userid)).text(formatCurrency(item.tongcongno));
                 });
-                console.log(data);
-                
             }
         })
     })
