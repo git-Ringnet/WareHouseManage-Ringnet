@@ -74,7 +74,7 @@
                             <thead>
                                 <tr>
                                     <input type="hidden" id="perPageinput" name="perPageinput"
-                                        value="{{ request()->perPageinput ?? 10 }}">
+                                        value="{{ request()->perPageinput ?? 25 }}">
                                     <input type="hidden" id="sortByInput" name="sort-by" value="id">
                                     {{-- <input type="hidden" id="sortTypeInput" name="sort-type"
                                         value="{{ $sortType }}"> --}}

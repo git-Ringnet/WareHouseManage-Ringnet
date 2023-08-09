@@ -749,7 +749,7 @@ $index = array_search($item['label'], $numberedLabels);
                             <table id="example2" class="table table-hover">
                                 <thead>
                                     <input type="hidden" id="perPageinput" name="perPageinput"
-                                        value="{{ request()->perPageinput ?? 10 }}">
+                                        value="{{ request()->perPageinput ?? 25 }}">
                                     <input type="hidden" id="sortByInput" name="sort-by" value="">
                                     <input type="hidden" id="sortTypeInput" name="sort-type"
                                         value="{{ $sortType }}">
