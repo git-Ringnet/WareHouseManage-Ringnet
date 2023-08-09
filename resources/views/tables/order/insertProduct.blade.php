@@ -700,7 +700,7 @@ $index = array_search($item['label'], $numberedLabels);
                 </div>
             </div>
         </div>
-        <div class="d-flex">
+        <div class="d-flex row justify-content-between">
             <div class="paginator mt-2 d-flex justify-content-start">
                 <span class="text-perpage">
                     Số hàng mỗi trang:
@@ -713,7 +713,7 @@ $index = array_search($item['label'], $numberedLabels);
                 </span>
             </div>
             <!-- <button type="submit" name="confirmBill" id="confirmBill" class="btn btn-primary">Duyệt đơn nhanh</button> -->
-            <div class="paginator mt-4 d-flex justify-content-end ml-auto">
+            <div class="paginator mt-2 d-flex justify-content-end">
                 {{ $orders->appends(request()->except('page'))->links() }}
             </div>
         </div>
