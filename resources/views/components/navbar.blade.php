@@ -625,19 +625,19 @@
                 }
             });
         });
-        $(document).ready(function() {
-            const container = document.querySelector('.scroll-custom');
+        // $(document).ready(function() {
+        //     const container = document.querySelector('.scroll-custom');
 
-            function updateHeight() {
-                const windowHeight = window.innerHeight;
-                const minHeight = Math.min(100, Math.max(60, windowHeight / window.screen.height * 100));
-                container.style.maxHeight = `${minHeight}vh`;
-            }
+        //     function updateHeight() {
+        //         const windowHeight = window.innerHeight;
+        //         const minHeight = Math.min(100, Math.max(60, windowHeight / window.screen.height * 100));
+        //         container.style.maxHeight = `${minHeight}vh`;
+        //     }
 
-            // Set initial height
-            updateHeight();
+        //     // Set initial height
+        //     updateHeight();
 
-            // Update height when the window is resized
-            window.addEventListener('resize', updateHeight);
-        });
+        //     // Update height when the window is resized
+        //     window.addEventListener('resize', updateHeight);
+        // });
     </script>
