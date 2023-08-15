@@ -1210,7 +1210,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     <div id="payment" class="payment">Thanh toán tiền mặt</div>
                                                 @elseif($item->import_status == 1)
                                                     Đã thanh toán ngày <br>
-                                                    {{ date_format(new DateTime($item->updated_at), 'd-m-Y') }}
+                                                    {{ date_format(new DateTime($item->thanhtoannhap), 'd-m-Y') }}
                                                 @endif
                                                 @php
                                                     $input_value = request('payment');
@@ -1250,7 +1250,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     <div id="payment" class="payment">Thanh toán tiền mặt</div>
                                                 @elseif($item->export_status == 1)
                                                     Đã thanh toán ngày <br>
-                                                    {{ date_format(new DateTime($item->updated_at), 'd-m-Y') }}
+                                                    {{ date_format(new DateTime($item->thanhtoanxuat), 'd-m-Y') }}
                                                 @endif
                                                 @php
                                                     $input_value = request('payment');

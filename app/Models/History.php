@@ -55,7 +55,10 @@ class History extends Model
         // };
         $history = History::leftJoin('users', 'users.id', 'history.user_id')
             ->leftJoin('provides', 'provides.id', 'history.provide_id')
-            ->leftJoin('guests', 'guests.id', 'history.guest_id');
+            ->leftJoin('guests', 'guests.id', 'history.guest_id')
+            ->leftJoin('debts', 'debts.export_id', 'history.export_id')
+            ->leftJoin('debt_import', 'debt_import.import_id', 'history.import_id')
+            ->select('history.*','guests.*','provides.*','debt_import.updated_at as thanhtoannhap','debts.updated_at as thanhtoanxuat');
 
         if (!empty($filters)) {
             $history = $history->where($filters);
