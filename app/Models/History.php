@@ -58,7 +58,7 @@ class History extends Model
             ->leftJoin('guests', 'guests.id', 'history.guest_id')
             ->leftJoin('debts', 'debts.export_id', 'history.export_id')
             ->leftJoin('debt_import', 'debt_import.import_id', 'history.import_id')
-            ->select('history.*','guests.*','provides.*','debt_import.updated_at as thanhtoannhap','debts.updated_at as thanhtoanxuat');
+            ->select('history.*','guests.*','provides.*','users.*','debt_import.updated_at as thanhtoannhap','debts.updated_at as thanhtoanxuat');
 
         if (!empty($filters)) {
             $history = $history->where($filters);
