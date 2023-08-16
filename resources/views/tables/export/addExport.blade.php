@@ -253,7 +253,8 @@
         width: 90% !important;
         overflow: hidden !important;
         text-overflow: ellipsis !important;
-        white-space: nowrap !important;
+        white-space: normal !important;
+        overflow-wrap: break-word !important;
     }
 </style>
 <script>
