@@ -589,6 +589,16 @@
 </div>
 </section>
 </div>
+<style>
+    .selectize-input>input {
+        width: calc(100% - 30px) !important;
+        max-width: calc(100% - 30px) !important;
+    }
+
+    .selectize-control {
+        white-space: nowrap !important;
+    }
+</style>
 <script>
     // Thay đổi màu nút save note_form
     $(document).ready(function() {
@@ -881,7 +891,6 @@
             });
 
             // Cập nhật lại tất cả các Selectize instance
-            $('.child-select')[0].selectize.updateOptions();
             const selectizeInputs = document.querySelectorAll('.selectize-input');
 
             selectizeInputs.forEach(input => {
@@ -1229,7 +1238,7 @@
         $(document).on('change', '.child-select', function() {
             var selectedID = $(this).val();
             var isInitial = $(this).data('initial') == selectedID;
-            console.log(isInitial);
+            var selectize = $(this)[0].selectize;
             var row = $(this).closest('tr');
             var productNameElement = row.find('.product_name');
             var productUnitElement = $(this).closest('tr').find('.product_unit');
@@ -1271,14 +1280,13 @@
                 });
             }
 
-            if (selectedProductIDs.includes(selectedID)) {
-                var selectize = $(this)[0].selectize;
+            if (isInitial) {
+                productNameElement.prop('disabled', true);
+            } else if (selectedProductIDs.includes(selectedID)) {
                 selectize.clear();
                 selectize.blur();
-                var productNameElement = $(this).closest('tr').find('.product_name');
                 productNameElement.prop('disabled', true);
                 alert('Sản phẩm này đã được thêm trước đó, vui lòng chọn sản phẩm khác');
-
                 // Kiểm tra nếu giá trị data-previous-id là null, thì bỏ qua bước kiểm tra tiếp theo
                 if ($(this).data('previous-id') !== null) {
                     var previousID = $(this).data('previous-id'); // Lấy ID trước đó của tùy chọn
@@ -1299,21 +1307,48 @@
                         selectedProductIDs.splice(index, 1); // Xóa ID trước đó khỏi mảng
                     }
                 }
+
                 // Đặt giá trị data-previous-id thành null để cho phép chọn lại sản phẩm ban đầu
                 $(this).data('previous-id', null);
             } else {
-                var previousID = $(this).data('previous-id'); // Lấy ID trước đó của tùy chọn
+                var previousID = $(this).data('previous-id');
                 if (previousID && previousID !== selectedID) {
                     var index = selectedProductIDs.indexOf(previousID);
                     if (index !== -1) {
-                        selectedProductIDs.splice(index, 1); // Xóa ID trước đó khỏi mảng
+                        selectedProductIDs.splice(index, 1);
                     }
                 }
-                selectedProductIDs.push(selectedID); // Lưu ID sản phẩm đã chọn vào mảng
-                $(this).data('previous-id',
-                    selectedID); // Lưu ID hiện tại vào thuộc tính data của tùy chọn
-                hideSelectedProductNames(row); // Ẩn tên sản phẩm đã chọn từ các tùy chọn khác
+                selectedProductIDs.push(selectedID);
+                $(this).data('previous-id', selectedID);
+                hideSelectedProductNames(row);
             }
+
+            // if (selectedProductIDs.includes(selectedID)) {
+            //     var selectize = $(this)[0].selectize;
+            //     selectize.clear();
+            //     selectize.blur();
+            //     productNameElement.prop('disabled', true);
+            //     alert('Sản phẩm này đã được thêm trước đó, vui lòng chọn sản phẩm khác');
+
+            //     // Xóa sản phẩm khỏi mảng selectedProductIDs
+            //     var index = selectedProductIDs.indexOf(selectedID);
+            //     if (index !== -1) {
+            //         selectedProductIDs.splice(index, 1);
+            //     }
+
+            //     $(this).data('previous-id', null);
+            // } else {
+            //     var previousID = $(this).data('previous-id');
+            //     if (previousID && previousID !== selectedID) {
+            //         var index = selectedProductIDs.indexOf(previousID);
+            //         if (index !== -1) {
+            //             selectedProductIDs.splice(index, 1);
+            //         }
+            //     }
+            //     selectedProductIDs.push(selectedID);
+            //     $(this).data('previous-id', selectedID);
+            //     hideSelectedProductNames(row);
+            // }
         });
 
         // Function to hide selected product names from other child select options

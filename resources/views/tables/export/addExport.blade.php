@@ -238,6 +238,15 @@
 </div>
 </section>
 </div>
+<style>
+    .selectize-input>input {
+        width: calc(100% - 30px) !important;
+        max-width: calc(100% - 30px) !important;
+    }
+    .selectize-control {
+        white-space: nowrap !important;
+    }
+</style>
 <script>
     // Thay đổi màu nút save note_form
     $(document).ready(function() {
