@@ -1,10 +1,15 @@
 <x-navbar :title="$title"></x-navbar>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js"
+    integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css"
+    integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
 <div class="content-wrapper export-add padding-112">
     <div class="row">
         <div class="col-sm-6 breadcrumb">
             @if ($exports->export_status == 2)
                 <a href="{{ route('exports.index') }}">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none">
                         <path
                             d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
                             fill="#555555" />
@@ -394,10 +399,10 @@
                                     @endif
                                     @if ($exports->export_status == 1)
                                         <select class="child-select p-1 form-control productName" name="product_id[]"
-                                            <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                            data-initial="{{ $value_export->product_id }}" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                                 echo 'disabled';
                                             } ?>>
-                                            <option value="{{ $value_export->product_id }}">
+                                            <option value="{{ $value_export->product_id }}" class="initial-option">
                                                 {{ $value_export->product_name }}
                                             </option>
                                             @foreach ($product_code as $value_code)
@@ -639,7 +644,6 @@
                 idProduct: idProduct,
             },
             success: function(response) {
-                console.log(response);
                 var productPrice = parseFloat(response.product_price);
                 var formattedPrice;
                 if (Number.isInteger(productPrice)) {
@@ -744,6 +748,9 @@
     });
     //add sản phẩm
     $(document).ready(function() {
+        $('.child-select').selectize({
+            sortField: 'text',
+        });
         let fieldCounter = 1;
         $("#add-field-btn").click(function() {
             let nextSoTT = $(".soTT").length + 1;
@@ -763,18 +770,18 @@
                 "</select>" +
                 "</td>");
             const dvtInput = $(
-                "<td><input type='text' readonly id='product_unit' class='product_unit form-control text-center' style='width:80px' name='product_unit[]' required></td>"
+                "<td><input type='text' readonly id='product_unit' class='product_unit form-control text-center' style='min-width:80px' name='product_unit[]' required></td>"
             );
             const slInput = $(
                 "<td>" +
                 "<div class='d-flex'>" +
                 "<input type='text' oninput='limitMaxValue(this)' id='product_qty' class='quantity-input form-control text-center' name='product_qty[]' required style='width:50px;'>" +
-                "<input type='text' readonly class='quantity-exist' required style='width:50px;background:#D6D6D6;border:none;'>" +
+                "<input type='text' readonly class='quantity-exist form-control' required style='width:50px;background:#D6D6D6;border:none;'>" +
                 "</div>" +
                 "</td>"
             );
             const giaInput = $(
-                "<td><input type='text' class='product_price form-control text-center' style='width:140px;' id='product_price' name='product_price[]' required></td>"
+                "<td><input type='text' class='product_price form-control text-center' style='min-width:140px;' id='product_price' name='product_price[]' required></td>"
             );
             const thueInput = $("<td>" +
                 "<select disabled name='product_tax[]' class='product_tax p-1 form-control text-center' style='width:100px' id='product_tax' required>" +
@@ -785,7 +792,7 @@
                 "</select>" +
                 "</td>");
             const thanhTienInput = $(
-                "<td><span class='total-amount form-control text-center' style='background:#e9ecef; width:140px'>0</span></td>"
+                "<td><span class='total-amount form-control text-center' style='background:#e9ecef; min-width:140px'>0</span></td>"
             );
             const ghichuInput = $(
                 "<td><input type='text' class='note_product form-control text-left' name='product_note[]'></td>"
@@ -868,6 +875,18 @@
                 giaInput, thueInput, thanhTienInput, ghichuInput, info, deleteBtn, option);
             $("#dynamic-fields").before(newRow);
             fieldCounter++;
+            // Áp dụng Selectize cho phần tử select mới
+            newRow.find('.child-select').selectize({
+                sortField: 'text',
+            });
+
+            // Cập nhật lại tất cả các Selectize instance
+            $('.child-select')[0].selectize.updateOptions();
+            const selectizeInputs = document.querySelectorAll('.selectize-input');
+
+            selectizeInputs.forEach(input => {
+                input.style.width = '100% !important';
+            });
         });
 
         function updateSTT() {
@@ -1201,6 +1220,7 @@
     $(document).ready(function() {
         // Lấy tất cả các phần tử đang được chọn theo class "productName"
         var selectedProducts = document.querySelectorAll(".productName");
+
         // Lặp qua từng phần tử và lấy giá trị của nó
         selectedProducts.forEach(function(product) {
             selectedProductIDs.push(product.value);
@@ -1208,8 +1228,10 @@
 
         $(document).on('change', '.child-select', function() {
             var selectedID = $(this).val();
+            var isInitial = $(this).data('initial') == selectedID;
+            console.log(isInitial);
             var row = $(this).closest('tr');
-            var productNameElement = $(this).closest('tr').find('.product_name');
+            var productNameElement = row.find('.product_name');
             var productUnitElement = $(this).closest('tr').find('.product_unit');
             var qty_exist = $(this).closest('tr').find('.quantity-exist');
             var price_import = $(this).closest('tr').find('.price_import');
@@ -1249,11 +1271,12 @@
                 });
             }
 
-            // Kiểm tra nếu ID sản phẩm đã chọn đã có trong danh sách các sản phẩm đã chọn
             if (selectedProductIDs.includes(selectedID)) {
-                $(this).val(''); // Đặt giá trị của tùy chọn thành trống
+                var selectize = $(this)[0].selectize;
+                selectize.clear();
+                selectize.blur();
                 var productNameElement = $(this).closest('tr').find('.product_name');
-                productNameElement.prop('disabled', true); // Disable ô input chứa tên sản phẩm
+                productNameElement.prop('disabled', true);
                 alert('Sản phẩm này đã được thêm trước đó, vui lòng chọn sản phẩm khác');
 
                 // Kiểm tra nếu giá trị data-previous-id là null, thì bỏ qua bước kiểm tra tiếp theo
@@ -1267,6 +1290,17 @@
 
                 // Đặt giá trị data-previous-id thành null để cho phép chọn lại sản phẩm ban đầu
                 $(this).data('previous-id', null);
+
+                // Kiểm tra nếu giá trị data-previous-id là null, thì bỏ qua bước kiểm tra tiếp theo
+                if ($(this).data('previous-id') !== null) {
+                    var previousID = $(this).data('previous-id'); // Lấy ID trước đó của tùy chọn
+                    var index = selectedProductIDs.indexOf(previousID);
+                    if (index !== -1) {
+                        selectedProductIDs.splice(index, 1); // Xóa ID trước đó khỏi mảng
+                    }
+                }
+                // Đặt giá trị data-previous-id thành null để cho phép chọn lại sản phẩm ban đầu
+                $(this).data('previous-id', null);
             } else {
                 var previousID = $(this).data('previous-id'); // Lấy ID trước đó của tùy chọn
                 if (previousID && previousID !== selectedID) {
@@ -1275,11 +1309,9 @@
                         selectedProductIDs.splice(index, 1); // Xóa ID trước đó khỏi mảng
                     }
                 }
-
                 selectedProductIDs.push(selectedID); // Lưu ID sản phẩm đã chọn vào mảng
                 $(this).data('previous-id',
                     selectedID); // Lưu ID hiện tại vào thuộc tính data của tùy chọn
-
                 hideSelectedProductNames(row); // Ẩn tên sản phẩm đã chọn từ các tùy chọn khác
             }
         });
@@ -1300,6 +1332,19 @@
                     }
                 });
             });
+        }
+    });
+    // Xử lý sự kiện khi nhấn nút Backspace trong ô tìm kiếm
+    $(document).on('keydown', '.selectize-input input', function(event) {
+        if (event.keyCode === 8) { // 8 là mã nút Backspace
+            var inputValue = $(this).val();
+            if (inputValue === '') {
+                var removedID = $(this).closest('.child-select').val();
+                var index = selectedProductIDs.indexOf(removedID);
+                if (index !== -1) {
+                    selectedProductIDs.splice(index, 1); // Xóa ID khỏi mảng khi xóa tùy chọn
+                }
+            }
         }
     });
     //tính thành tiền của sản phẩm
@@ -1430,7 +1475,16 @@
             // Đánh dấu trạng thái đang submit
             isSubmitting = true;
             var restoreAlert = blockAlertInCurrentPage();
-            $('#btn-customer').click();
+
+            // Thực hiện kiểm tra điều kiện bắt buộc ở đây
+            var conditionsMet = true; // Đặt giá trị mặc định là true
+            if (!checkRequiredConditions()) {
+                conditionsMet = false;
+            }
+
+            if (conditionsMet) {
+                $('#form-guest')[0].submit();
+            }
 
             // Đánh dấu trạng thái đã hoàn thành submit
             isSubmitting = false;
@@ -1445,19 +1499,18 @@
         }
     }
 
-    // Hàm kiểm tra khi có alert được gọi
-    function checkAlert() {
-        // Chặn alert nếu đang trong quá trình submit
-        if (isSubmitting) {
-            return true;
-        } else {
-            // Nếu không đang submit, cho phép alert bình thường
+    function checkRequiredConditions() {
+        var inputField = $('#inputField').val();
+        if (inputField === '') {
+            alert('Lỗi: Trường nhập liệu không được để trống!');
             return false;
         }
+        return true;
     }
 
-    // Gán hàm kiểm tra alert vào window.alert
-    window.alert = checkAlert;
+    // Không gán hàm kiểm tra alert vào window.alert
+    // window.alert = checkAlert;
+
 
     //format giá
     var inputElement = document.getElementById('product_price');

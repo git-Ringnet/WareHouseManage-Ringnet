@@ -1,4 +1,8 @@
 <x-navbar :title="$title"></x-navbar>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js"
+    integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css"
+    integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
 <div class="content-wrapper export-add padding-112">
     <div class="row">
         <div class="col-sm-6 breadcrumb">
@@ -110,8 +114,7 @@
                                 @foreach ($customer as $item)
                                     @if (Auth::user()->id == $item->user_id || Auth::user()->can('isAdmin'))
                                         <li class="p-2 search-info" id="{{ $item->id }}" name="search-info">
-                                            <a href="#"
-                                                class="text-dark justify-content-between p-2">
+                                            <a href="#" class="text-dark justify-content-between p-2">
                                                 <span class="w-50">{{ $item->guest_name }}</span>
                                             </a>
                                         </li>
@@ -463,6 +466,18 @@
                     $('#deleteRowTable').css('opacity', 0);
                 }
             }
+            // Áp dụng Selectize cho phần tử select mới
+            newRow.find('.child-select').selectize({
+                sortField: 'text',
+            });
+
+            // Cập nhật lại tất cả các Selectize instance
+            $('.child-select')[0].selectize.updateOptions();
+            const selectizeInputs = document.querySelectorAll('.selectize-input');
+
+            selectizeInputs.forEach(input => {
+                input.style.width = '100% !important';
+            });
         });
 
         //hiện danh sách khách hàng khi click trường tìm kiếm
@@ -812,10 +827,24 @@
 
             // Kiểm tra nếu ID sản phẩm đã chọn đã có trong danh sách các sản phẩm đã chọn
             if (selectedProductIDs.includes(selectedID)) {
-                $(this).val(''); // Đặt giá trị của tùy chọn thành trống
+                var selectize = $(this)[0].selectize;
+                selectize.clear();
+                selectize.blur();
                 var productNameElement = $(this).closest('tr').find('.product_name');
-                productNameElement.prop('disabled', true); // Disable ô input chứa tên sản phẩm
+                productNameElement.prop('disabled', true);
                 alert('Sản phẩm này đã được thêm trước đó, vui lòng chọn sản phẩm khác');
+
+                // Kiểm tra nếu giá trị data-previous-id là null, thì bỏ qua bước kiểm tra tiếp theo
+                if ($(this).data('previous-id') !== null) {
+                    var previousID = $(this).data('previous-id'); // Lấy ID trước đó của tùy chọn
+                    var index = selectedProductIDs.indexOf(previousID);
+                    if (index !== -1) {
+                        selectedProductIDs.splice(index, 1); // Xóa ID trước đó khỏi mảng
+                    }
+                }
+
+                // Đặt giá trị data-previous-id thành null để cho phép chọn lại sản phẩm ban đầu
+                $(this).data('previous-id', null);
 
                 // Kiểm tra nếu giá trị data-previous-id là null, thì bỏ qua bước kiểm tra tiếp theo
                 if ($(this).data('previous-id') !== null) {
@@ -859,6 +888,20 @@
                     }
                 });
             });
+        }
+    });
+
+    // Xử lý sự kiện khi nhấn nút Backspace trong ô tìm kiếm
+    $(document).on('keydown', '.selectize-input input', function(event) {
+        if (event.keyCode === 8) { // 8 là mã nút Backspace
+            var inputValue = $(this).val();
+            if (inputValue === '') {
+                var removedID = $(this).closest('.child-select').val();
+                var index = selectedProductIDs.indexOf(removedID);
+                if (index !== -1) {
+                    selectedProductIDs.splice(index, 1); // Xóa ID khỏi mảng khi xóa tùy chọn
+                }
+            }
         }
     });
 
@@ -1222,6 +1265,10 @@
         $("#dynamic-fields").before(newRow);
         // Tăng giá trị fieldCounter
         fieldCounter++;
+        // Áp dụng Selectize cho phần tử select mới
+        newRow.find('.child-select').selectize({
+            sortField: 'text',
+        });
     }
 
     function updateRowNumbers() {

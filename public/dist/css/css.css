@@ -1267,3 +1267,26 @@ input[type="checkbox"] {
     width: 48px;
     text-align: center;
 }
+
+.selectize-dropdown-content .option .highlight {
+    border: none;
+}
+
+.content .mt-4 {
+    overflow-y: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+/* Ghi đè lên độ rộng của Selectize */
+.selectize-control.single .selectize-input {
+    min-width: 250px;
+    height: auto;
+}
+
+#sourceTable .product_unit{
+    min-width: 80px;
+}
+#sourceTable .product_price{
+    min-width: 140px;
+}
