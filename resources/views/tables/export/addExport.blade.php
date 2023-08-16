@@ -243,7 +243,16 @@
         width: calc(100% - 30px) !important;
         max-width: calc(100% - 30px) !important;
     }
+
     .selectize-control {
+        white-space: nowrap !important;
+    }
+
+    .selectize-input.has-items>.item {
+        display: inline-block !important;
+        width: 90% !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
         white-space: nowrap !important;
     }
 </style>
