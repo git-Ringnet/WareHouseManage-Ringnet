@@ -598,6 +598,13 @@
     .selectize-control {
         white-space: nowrap !important;
     }
+    .selectize-input.has-items>.item {
+        display: inline-block !important;
+        width: 90% !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        white-space: nowrap !important;
+    }
 </style>
 <script>
     // Thay đổi màu nút save note_form
