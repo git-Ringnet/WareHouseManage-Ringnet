@@ -593,11 +593,10 @@
     .selectize-input>input {
         width: calc(100% - 30px) !important;
         max-width: calc(100% - 30px) !important;
+        position: absolute !important;
+        left: 0 !important;
     }
 
-    .selectize-control {
-        white-space: nowrap !important;
-    }
     .selectize-input.has-items>.item {
         display: inline-block !important;
         width: 90% !important;
@@ -608,6 +607,11 @@
     }
 </style>
 <script>
+    $(document).ready(function() {
+        $('.child-select').selectize({
+            sortField: 'text',
+        });
+    });
     // Thay đổi màu nút save note_form
     $(document).ready(function() {
         $('#note_form').on('input', function() {
@@ -766,9 +770,6 @@
     });
     //add sản phẩm
     $(document).ready(function() {
-        $('.child-select').selectize({
-            sortField: 'text',
-        });
         let fieldCounter = 1;
         $("#add-field-btn").click(function() {
             let nextSoTT = $(".soTT").length + 1;

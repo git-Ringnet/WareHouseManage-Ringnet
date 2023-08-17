@@ -1274,12 +1274,10 @@ input[type="checkbox"] {
 
 .content .mt-4 {
     overflow-y: scroll;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
 }
 
 /* Ghi đè lên độ rộng của Selectize */
-.selectize-control.single .selectize-input {
+/* .selectize-control.single .selectize-input {
     min-width: 250px;
     height: auto;
 }
@@ -1289,4 +1287,4 @@ input[type="checkbox"] {
 }
 #sourceTable .product_price{
     min-width: 140px;
-}
+} */

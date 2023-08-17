@@ -522,7 +522,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <div class="icon" id="icon-id"></div>
                                             </span>
                                         </th>
-                                        <th scope="col">
+                                        <th scope="col" style="width: 10%;">
                                             <span class="d-flex">
                                                 <a href="#" class="sort-link" data-sort-by="export_code"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
@@ -674,7 +674,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <tr id="product-details-{{ $value->id }}"
                                                     class="collapse product-details">
                                                     <td><?php echo $count++; ?></td>
-                                                    <td style="text-left w-auto">
+                                                    <td class="text-left w-auto">
                                                         <p>Tên sản phẩm</p>{{ $item->product_name }}
                                                     </td>
                                                     @if (Auth::user()->can('isAdmin'))
