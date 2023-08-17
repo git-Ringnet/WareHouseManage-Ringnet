@@ -490,7 +490,6 @@
             });
 
             // Cập nhật lại tất cả các Selectize instance
-            $('.child-select')[0].selectize.updateOptions();
             const selectizeInputs = document.querySelectorAll('.selectize-input');
 
             selectizeInputs.forEach(input => {

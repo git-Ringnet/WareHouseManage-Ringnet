@@ -1277,6 +1277,13 @@ input[type="checkbox"] {
     overflow: visible !important;
 }
 
+@media screen and (max-width: 1530px) {
+    .content .mt-4 {
+        overflow: auto !important;
+        overflow-x: scroll;
+    }
+}
+
 /* Ghi đè lên độ rộng của Selectize */
 .selectize-control.single .selectize-input {
     min-width: 250px;
