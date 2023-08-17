@@ -242,6 +242,8 @@
     .selectize-input>input {
         width: calc(100% - 30px) !important;
         max-width: calc(100% - 30px) !important;
+        position: absolute !important;
+        left: 0 !important;
     }
     
     .selectize-input.has-items>.item {
@@ -251,10 +253,6 @@
         text-overflow: ellipsis !important;
         white-space: normal !important;
         overflow-wrap: break-word !important;
-    }
-  
-    .selectize-control {
-        white-space: nowrap !important;
     }
 </style>
 <script>
