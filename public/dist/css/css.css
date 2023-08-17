@@ -1291,3 +1291,11 @@ input[type="checkbox"] {
 .selectize-dropdown{
     min-width: 600px !important;
 }
+.selectize-dropdown-content .option{
+    display: inline-block !important;
+    width: 100% !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: normal !important;
+    overflow-wrap: break-word !important;
+}
