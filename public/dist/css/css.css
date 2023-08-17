@@ -1288,3 +1288,6 @@ input[type="checkbox"] {
 #sourceTable .product_price{
     min-width: 140px;
 }
+.selectize-dropdown{
+    min-width: 600px !important;
+}
