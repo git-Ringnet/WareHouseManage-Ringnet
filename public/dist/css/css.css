@@ -1282,16 +1282,19 @@ input[type="checkbox"] {
     height: auto;
 }
 
-#sourceTable .product_unit{
+#sourceTable .product_unit {
     min-width: 80px;
 }
-#sourceTable .product_price{
+
+#sourceTable .product_price {
     min-width: 140px;
 }
-.selectize-dropdown{
+
+.selectize-dropdown {
     min-width: 600px !important;
 }
-.selectize-dropdown-content .option{
+
+.selectize-dropdown-content .option {
     display: inline-block !important;
     width: 100% !important;
     overflow: hidden !important;

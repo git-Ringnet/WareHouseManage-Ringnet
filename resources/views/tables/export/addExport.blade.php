@@ -243,7 +243,7 @@
         width: calc(100% - 30px) !important;
         max-width: calc(100% - 30px) !important;
         position: absolute !important;
-        left: 0 !important;
+        left: 10px !important;
     }
     
     .selectize-input.has-items>.item {
@@ -253,6 +253,7 @@
         text-overflow: ellipsis !important;
         white-space: normal !important;
         overflow-wrap: break-word !important;
+        margin-top: 4px;
     }
 </style>
 <script>
