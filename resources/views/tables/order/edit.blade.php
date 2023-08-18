@@ -25,7 +25,7 @@
                 <span><b>Chi tiết đơn hàng</b></span>
             @endif
         </div>
-        <div class="col-sm-6 position-absolute" style="top:63px;right:2%">
+        <div class="col-sm-6 position-absolute responsive-export" style="top:63px;right:2%">
             <div class="w-50 position-relative" style="float: right;">
                 <div class="justify-content-between d-flex">
                     @if($order->order_status == 2)
@@ -124,7 +124,7 @@
         </div>
     </div>
     <form action="{{ route('insertProduct.update', $order->id) }}" method="POST" id="form_submit">
-        <div class="container-fluided">
+        <div class="container-fluided content">
             <!-- Content Header (Page header) -->
             @if (Session::has('session'))
                 {{ Session::get('session') }}
@@ -372,7 +372,7 @@
                                         value="@if (fmod($pro->product_price, 1) > 0) {{ number_format($pro->product_price, 2, '.', ',') }}@else{{ number_format($pro->product_price) }} @endif"
                                         @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif> </td>
                                 <td>
-                                    <select name="product_tax[]" id="" class="form-control product_tax"
+                                    <select name="product_tax[]" id="" style="width:100px;" class="form-control product_tax"
                                         @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) disabled @endif>>
                                         <option value="0" <?php echo $pro->product_tax == 0 ? 'selected' : ''; ?>>0%</option>
                                         <option value="8" <?php echo $pro->product_tax == 8 ? 'selected' : ''; ?>>8%</option>
@@ -384,7 +384,7 @@
                                 <td> <input class="form-control text-center total-amount" readonly type="text"
                                         name="product_total[]" value="{{ $pro->product_total }}">
                                 </td>
-                                <td> <input class="form-control" @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif
+                                <td> <input class="form-control product_trademark" @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif
                                         type="text" name="product_trademark[]"
                                         value=" {{ $pro->product_trademark }}"
                                         @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif> </td>
