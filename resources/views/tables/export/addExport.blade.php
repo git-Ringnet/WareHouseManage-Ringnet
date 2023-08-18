@@ -10,7 +10,7 @@
             <span class="px-1">/</span>
             <span><b>Đơn hàng mới</b></span>
         </div>
-        <div class="col-sm-6 position-absolute" style="top:63px;right:2%">
+        <div class="col-sm-6 position-absolute responsive-export" style="top:63px;right:2%">
             <div class="w-50 position-relative" style="float: right;">
                 <div class="justify-content-between d-flex">
                     <span style="z-index: 99">

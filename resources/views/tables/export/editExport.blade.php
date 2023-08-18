@@ -29,7 +29,7 @@
                 <span><b>Chi tiết đơn hàng</b></span>
             @endif
         </div>
-        <div class="col-sm-6 position-absolute" style="top:63px;right:2%">
+        <div class="col-sm-6 position-absolute responsive-export" style="top:63px;right:2%">
             <div class="w-50 position-relative" style="float: right;">
                 <div class="justify-content-between d-flex">
                     @if ($exports->export_status == 0)
@@ -472,7 +472,7 @@
                                         style="background:#e9ecef;">0</span>
                                 </td>
                                 <td>
-                                    <input type="text" id="" name="product_note[]" class="form-control"
+                                    <input type="text" class="product_note form-control" name="product_note[]" class="form-control"
                                         <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                             echo 'readonly';
                                         } ?> value="{{ $value_export->product_note }}">
