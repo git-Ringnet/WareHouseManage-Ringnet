@@ -318,7 +318,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                                             $nhanvien = request()->nhanvien;
                                                                         } else {
                                                                             $nhanvien = [];
-                                                                } @endphp ?>
+                                                                } @endphp
                                 <div class="filter-admin">
                                     <button class="btn btn-filter btn-light mr-2" id="btn-nhanvien" type="button">
                                         <span>
