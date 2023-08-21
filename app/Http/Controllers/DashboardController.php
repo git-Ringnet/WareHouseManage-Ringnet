@@ -35,19 +35,19 @@ class DashboardController extends Controller
         $getMinDateOrders = $this->orders->getMinDateOrders();
         $today = Carbon::today();
         $count = Orders::selectSub(function ($query) {
-            $query->from('Orders')->where('orders.order_status', '=', 1)
+            $query->from('orders')->where('orders.order_status', '=', 1)
                 ->selectRaw('count(id)');
         }, 'countID')
             ->selectSub(function ($query) {
-                $query->from('Orders')->where('orders.order_status', '=', 1)
+                $query->from('orders')->where('orders.order_status', '=', 1)
                     ->selectRaw('SUM(total_tax)');
             }, 'sumTotal') // Lấy ngày created_at bé nhất
             ->selectSub(function ($query) {
-                $query->from('Orders')->where('orders.order_status', '=', 1)
+                $query->from('orders')->where('orders.order_status', '=', 1)
                     ->selectRaw('MIN(created_at)');
             }, 'minCreatedAt')
             ->selectSub(function ($query) {
-                $query->from('Orders')->where('orders.order_status', '=', 1)
+                $query->from('orders')->where('orders.order_status', '=', 1)
                     ->selectRaw('MAX(created_at)');
             }, 'maxCreatedAt')
             ->first();

@@ -14,7 +14,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
-use App\Http\Controllers\provideController;
+use App\Http\Controllers\ProvideController;
 use App\Http\Controllers\ReportController;
 use App\Models\DebtImport;
 
