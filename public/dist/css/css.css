@@ -1315,7 +1315,27 @@ input[type="checkbox"] {
     overflow-wrap: break-word !important;
 }
 
+/*Thong bao*/
+.hover-read-at:hover{
+    text-decoration: underline;
+    cursor: pointer;
+}
+.trash-read{
+    position: absolute;
+    right: 8px;
+    top: 25%;
+}
+.dropdown-menu-lg{
+    min-width: 440px !important;
+    max-width: 600px !important;
+    overflow-y: scroll;
+    height: 50vh;
+}
+
 @media (max-width: 600px) {
+    .dropdown-menu-lg{
+        min-width: 200px !important;
+    }
     .responsive-export{
         top: 0 !important;
         right: 0 !important;

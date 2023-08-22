@@ -29,11 +29,10 @@ class Kernel extends ConsoleKernel
                     $m = Message::where('id_debtExport', $d->id)->first();
                     if ($m === null) {
                         $data = new Message();
-                        $data->message = 'Tới hạn thanh toán';
+                        $data->message = 'Tới hạn thanh toán xuất hàng';
                         $data->user_id = $d->user_id;
                         $data->status = 0;
                         $data->id_debtExport = $d->id;
-                        $data->id_debtImport = 0;
                         $data->created_at = Carbon::now();
                         $data->updated_at = Carbon::now();
                         $data->save();
@@ -47,11 +46,10 @@ class Kernel extends ConsoleKernel
                     $m = Message::where('id_debtImport', $d->id)->first();
                     if ($m === null) {
                         $data = new Message();
-                        $data->message = 'Tới hạn thanh toán';
+                        $data->message = 'Tới hạn thanh toán nhập hàng';
                         $data->user_id = $d->user_id;
                         $data->status = 0;
                         $data->id_debtImport = $d->id;
-                        $data->id_debtExport = 0;
                         $data->created_at = Carbon::now();
                         $data->updated_at = Carbon::now();
                         $data->save();

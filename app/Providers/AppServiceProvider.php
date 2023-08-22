@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Message;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\View;
@@ -28,6 +29,7 @@ class AppServiceProvider extends ServiceProvider
         Paginator::useBootstrap();
         // $title = 'Sản phẩm';
         // View::share('title', $title);
-        
+        $message = Message::all();
+        view()->share('message', $message);
     }
 }

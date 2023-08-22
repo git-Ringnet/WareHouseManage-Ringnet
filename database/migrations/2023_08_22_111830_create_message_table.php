@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('message');
             $table->integer('user_id');
             $table->integer('status');
-            $table->integer('id_debtImport');
-            $table->integer('id_debtExport');
+            $table->integer('id_debtImport')->nullable();
+            $table->integer('id_debtExport')->nullable();
             $table->timestamps();
         });
     }
