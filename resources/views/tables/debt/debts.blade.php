@@ -20,7 +20,6 @@
                                     stroke-linejoin="round" />
                             </svg>
                             <span>Xuất Excel</span>
-                            {{ now()->format('d-m-y') }}
                         </button>
                     </div>
                 @endcan
@@ -432,6 +431,12 @@ $index = array_search($item['label'], $numberedLabels);
                                                             {{ in_array(0, $status) ? 'checked' : '' }}
                                                             name="status[]" value="0">
                                                         <label for="">Quá hạn</label>
+                                                    </li>
+                                                    <li>
+                                                        <input type="checkbox" id="status_inactive"
+                                                            {{ in_array(5, $status) ? 'checked' : '' }}
+                                                            name="status[]" value="5">
+                                                        <label for="">Đến hạn</label>
                                                     </li>
                                                 </ul>
                                             </div>
