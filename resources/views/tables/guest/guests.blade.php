@@ -23,22 +23,14 @@
             <div class="row m-auto filter pt-2">
                 <form class="w-100" action="" method="get" id='search-filter'>
                     <div class="row mr-0">
-                        <div class="col-5">
-                            <input type="text" name="keywords" class="form-control h-100"
+                        <div class="col-md-5">
+                            <input type="text" name="keywords" class="form-control searchkeyword"
                                 value="{{ request()->keywords }}" placeholder="Tìm kiếm đơn vị hoặc email">
-                            <span class="search-icon"><i class="fas fa-search"></i></span>
+                            <span id="search-icon" class="search-icon"><i class="fas fa-search"></i></span>
                         </div>
                         <div class="col-2 d-none">
                             <button type="submit" class="btn btn-primary btn-block">Tìm kiếm</button>
                         </div>
-                        <a class="btn ml-auto btn-delete-filter btn-light" href="{{ route('guests.index') }}"><span><svg
-                                    width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M6 5.4643C6 5.34116 6.04863 5.22306 6.13518 5.13599C6.22174 5.04892 6.33913 5 6.46154 5H17.5385C17.6609 5 17.7783 5.04892 17.8648 5.13599C17.9514 5.22306 18 5.34116 18 5.4643V7.32149C18 7.43599 17.9579 7.54645 17.8818 7.63164L13.8462 12.1428V16.6075C13.8461 16.7049 13.8156 16.7998 13.7589 16.8788C13.7022 16.9578 13.6223 17.0168 13.5305 17.0476L10.7612 17.9762C10.6919 17.9994 10.618 18.0058 10.5458 17.9947C10.4735 17.9836 10.4049 17.9554 10.3456 17.9124C10.2863 17.8695 10.238 17.8129 10.2047 17.7475C10.1713 17.682 10.1539 17.6096 10.1538 17.5361V12.1428L6.11815 7.63164C6.0421 7.54645 6.00002 7.43599 6 7.32149V5.4643Z"
-                                        fill="#555555" />
-                                </svg>
-                            </span>Tắt bộ lọc</a>
                     </div>
                     <div class="d-flex justify-contents-center align-items-center mr-auto row-filter my-3 m-0">
                         <div class="icon-filter mr-3">
@@ -145,9 +137,14 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <button class="dropdown-item" id="btn-phonenumber">Số điện
                                                     thoại</button>
                                                 <button class="dropdown-item" id="btn-email">Email</button>
-                                                <button class="dropdown-item d-none" id="btn-status">Trạng thái</button>
+                                                <button class="dropdown-item d-none" id="btn-status">Trạng
+                                                    thái</button>
                                             </div>
                                         </div>
+                                        @if (!empty($string))
+                                            <a class="btn-delete-filter"
+                                                href="{{ route('provides.index') }}"><span>Tắt bộ lọc</span></a>
+                                        @endif
                                     </div>
                                     <?php $status = [];
                                     $roles = [];
@@ -178,26 +175,28 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <a class="cursor select-all mr-auto">Chọn tất cả</a>
                                                 <a class="cursor deselect-all">Hủy chọn</a>
                                             </div>
-                                            <ul class="ks-cboxtags-status p-0 mb-1 px-2">
-                                                <li>
-                                                    <input type="checkbox" id="status_active"
-                                                        {{ in_array(1, $status) ? 'checked' : '' }} name="status[]"
-                                                        value="1">
-                                                    <label for="">Active</label>
-                                                </li>
-                                                <li>
-                                                    <input type="checkbox" id="status_inactive"
-                                                        {{ in_array(0, $status) ? 'checked' : '' }} name="status[]"
-                                                        value="0">
-                                                    <label for="">Disable</label>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="d-flex justify-contents-center align-items-baseline p-2">
-                                            <button type="submit" class="btn btn-primary btn-block mr-2">Xác
-                                                Nhận</button>
-                                            <button type="button" id="cancel-status"
-                                                class="btn btn-default btn-block">Hủy</button>
+                                            <div class="ks-cboxtags-container">
+                                                <ul class="ks-cboxtags ks-cboxtags-status p-0 mb-1 px-2">
+                                                    <li>
+                                                        <input type="checkbox" id="status_active"
+                                                            {{ in_array(1, $status) ? 'checked' : '' }} name="status[]"
+                                                            value="1">
+                                                        <label for="">Active</label>
+                                                    </li>
+                                                    <li>
+                                                        <input type="checkbox" id="status_inactive"
+                                                            {{ in_array(0, $status) ? 'checked' : '' }} name="status[]"
+                                                            value="0">
+                                                        <label for="">Disable</label>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                                <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                                    Nhận</button>
+                                                <button type="button" id="cancel-status"
+                                                    class="btn btn-default btn-block">Hủy</button>
+                                            </div>
                                         </div>
                                     </div>
                                     {{-- Tìm đơn vị --}}
@@ -235,27 +234,31 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <a class="cursor select-all-users_name mr-auto">Chọn tất cả</a>
                                                 <a class="cursor deselect-all-users_name">Hủy chọn</a>
                                             </div>
-                                            <ul class="ks-cboxtags-users_name p-0 mb-1 px-2">
-                                                @if (!empty($users))
-                                                    @php
-                                                        $seenValues = [];
-                                                    @endphp
-                                                    @foreach ($users as $value)
-                                                        @if (!in_array($value->name, $seenValues))
-                                                            <li>
-                                                                <input type="checkbox" id="name_active"
-                                                                    {{ in_array($value->name, $users_name) ? 'checked' : '' }}
-                                                                    name="users_name[]" value="{{ $value->name }}">
-                                                                <label id="users_name"
-                                                                    for="">{{ $value->name }}</label>
-                                                            </li>
-                                                            @php
-                                                                $seenValues[] = $value->name;
-                                                            @endphp
-                                                        @endif
-                                                    @endforeach
-                                                @endif
-                                            </ul>
+                                            <div class="ks-cboxtags-container">
+                                                <ul class="ks-cboxtags ks-cboxtags-users_name p-0 mb-1 px-2">
+                                                    @if (!empty($users))
+                                                        @php
+                                                            $seenValues = [];
+                                                        @endphp
+                                                        @foreach ($users as $value)
+                                                            @if (!in_array($value->name, $seenValues))
+                                                                <li>
+                                                                    <input type="checkbox" id="name_active"
+                                                                        {{ in_array($value->name, $users_name) ? 'checked' : '' }}
+                                                                        name="users_name[]"
+                                                                        value="{{ $value->name }}">
+                                                                    <label id="users_name"
+                                                                        for="">{{ $value->name }}</label>
+                                                                </li>
+                                                                @php
+                                                                    $seenValues[] = $value->name;
+                                                                @endphp
+                                                            @endif
+                                                        @endforeach
+                                                    @endif
+                                                </ul>
+                                            </div>
+
                                             <div class="d-flex justify-contents-center align-items-baseline p-2">
                                                 <button type="submit" class="btn btn-primary btn-block mr-2">Xác
                                                     Nhận</button>
@@ -292,7 +295,8 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <h5>Số điện thoại</h5>
                                             </div>
                                             <div class="input-group p-2">
-                                                <label class="title" for="">Nhập số điện thoại</label>
+                                                <label class="title" for="">Nhập số điện
+                                                    thoại</label>
                                                 <input type="number" name="phonenumber"
                                                     class="form-control phonenumber-input"
                                                     value="{{ request()->phonenumber }}"
@@ -354,11 +358,15 @@ $index = array_search($item['label'], $numberedLabels);
                     <div class="dropdown my-2 ml-4">
                         <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span>Thay đổi trạng thái</span>
+                            <span>Thay đổi người phụ trách</span>
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <button id="activeStatusGuest" class="dropdown-item">Active</button>
-                            <button id="disableStatusGuest" class="dropdown-item">Disable</button>
+                            @if (!empty($users))
+                                @foreach ($users as $item)
+                                    <button id="activeStatusGuest{{ $item->id }}" data-id="{{ $item->id }}"
+                                        class="dropdown-item">{{ $item->name }}</button>
+                                @endforeach
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -378,12 +386,14 @@ $index = array_search($item['label'], $numberedLabels);
         <div class="container-fluided">
             <div class="row">
                 <div class="col-12">
-                    <div class="card">
+                    <div class="card scroll-custom">
                         <!-- /.card-header -->
                         <div class="card-body">
                             <table id="example2" class="table table-hover">
-                                <thead>
+                                <thead class="sticky-head">
                                     <tr>
+                                        <input type="hidden" id="perPageinput" name="perPageinput"
+                                            value="{{ request()->perPageinput ?? 25 }}">
                                         <input type="hidden" id="sortByInput" name="sort-by" value="id">
                                         <input type="hidden" id="sortTypeInput" name="sort-type"
                                             value="{{ $sortType }}">
@@ -445,12 +455,13 @@ $index = array_search($item['label'], $numberedLabels);
                                 <tbody>
                                     @foreach ($guests as $item)
                                         @if (Auth::user()->id == $item->user_id || Auth::user()->can('isAdmin'))
-                                            <tr>
-                                                <td><input type="checkbox" class="cb-element" name="ids[]"
+                                            <tr onclick="handleRowClick('checkbox-{{ $item->id }}', event);">
+                                                <td><input type="checkbox" class="cb-element" name="ids[]" id="checkbox-{{ $item->id }}"
+                                                    onclick="event.stopPropagation();"
                                                         value="{{ $item->id }}"></td>
                                                 <td>{{ $item->id }}</td>
 
-                                                <td>{{ $item->guest_name }}</td>
+                                                <td style="width: 300px">{{ $item->guest_name }}</td>
                                                 @if (Auth::user()->can('isAdmin'))
                                                     <td>{{ $item->users_name }}</td>
                                                 @endif
@@ -473,7 +484,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                         } ?>>Disable</option>
                                                     </select>
                                                 </td>
-                                                <td class="text-center">
+                                                <td class="text-center editEx">
                                                     <a class="btn btn-sm"
                                                         href="{{ route('guests.edit', $item->id) }}">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="32"
@@ -506,14 +517,63 @@ $index = array_search($item['label'], $numberedLabels);
                         </div>
                         <!-- /.card-body -->
                     </div>
-                    <div class="paginator mt-4 d-flex justify-content-end">
+                   <div class="d-flex row justify-content-between">
+                    <div class="paginator mt-2 d-flex justify-content-start">
+                        <span class="text-perpage">
+                            Số hàng mỗi trang:
+                            <select name="perPage" id="perPage">
+                                <option value="5" {{ $perPage == 5 ? 'selected' : '' }}>5</option>
+                                <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
+                                <option value="25" {{ $perPage == 25 ? 'selected' : '' }}>25</option>
+                                <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
+                            </select>
+                        </span>
+                    </div>
+                    <div class="paginator mt-2 d-flex justify-content-end">
                         @if (Auth::user()->can('isAdmin'))
                             {{ $guests->appends(request()->except('page'))->links() }}
                         @else
                             {{ $guestsCreator->appends(request()->except('page'))->links() }}
                         @endif
                     </div>
+                   </div>
+                    {{-- @php
+                        use App\Helpers\PaginationHelper;
+                        
+                        $guestPagination = Auth::user()->can('isAdmin') ? $guests : $guestsCreator;
+                        $paginationRange = PaginationHelper::calculatePaginationRange($guestPagination->currentPage(), $guestPagination->lastPage());
+                        
+                        $showFirstEllipsis = $paginationRange['start'] > 2;
+                        $showLastEllipsis = $paginationRange['end'] < $guestPagination->lastPage() - 1;
+                    @endphp
 
+                    @if ($guestPagination->count() > 0)
+                        <div class="pagination mt-4 d-flex justify-content-end">
+                            <ul>
+                                @if ($paginationRange['start'] > 1)
+                                    <li><a href="{{ $guestPagination->url(1) }}">1</a></li>
+                                    @if ($showFirstEllipsis)
+                                        <li><span>...</span></li>
+                                    @endif
+                                @endif
+
+                                @for ($i = $paginationRange['start']; $i <= $paginationRange['end']; $i++)
+                                    <li class="{{ $i == $guestPagination->currentPage() ? 'active' : '' }}">
+                                        <a href="{{ $guestPagination->url($i) }}">{{ $i }}</a>
+                                    </li>
+                                @endfor
+
+                                @if ($paginationRange['end'] < $guestPagination->lastPage())
+                                    @if ($showLastEllipsis)
+                                        <li><span>...</span></li>
+                                    @endif
+                                    <li><a
+                                            href="{{ $guestPagination->url($guestPagination->lastPage()) }}">{{ $guestPagination->lastPage() }}</a>
+                                    </li>
+                                @endif
+                            </ul>
+                        </div>
+                    @endif --}}
                 </div>
                 <!-- /.col -->
             </div>
@@ -524,6 +584,16 @@ $index = array_search($item['label'], $numberedLabels);
     <!-- /.content -->
 </div>
 <script>
+    $('#perPage').on('change', function(e) {
+        e.preventDefault();
+        var perPageValue = $(this).val();
+        $('#perPageinput').val(perPageValue);
+        $('#search-filter').submit();
+    });
+    $('#search-icon').on('click', function(e) {
+        e.preventDefault();
+        $('#search-filter').submit();
+    });
     $('.ks-cboxtags-users_name li').on('click', function(event) {
         if (event.target.tagName !== 'INPUT') {
             var checkbox = $(this).find('input[type="checkbox"]');
@@ -545,7 +615,7 @@ $index = array_search($item['label'], $numberedLabels);
     $(document).ready(function() {
         // Chọn tất cả các checkbox
         $('.select-all-users_name').click(function() {
-            $('#users_name-options input[type="checkbox"]').prop('checked', true);
+            $('#users_name-options input[type="checkbox"]:visible').prop('checked', true);
         });
 
         // Hủy tất cả các checkbox
@@ -692,7 +762,7 @@ $index = array_search($item['label'], $numberedLabels);
     $(document).ready(function() {
         // Chọn tất cả các checkbox
         $('.select-all').click(function() {
-            $('#status-options input[type="checkbox"]').prop('checked', true);
+            $('#status-options input[type="checkbox"]:visible').prop('checked', true);
         });
 
         // Hủy tất cả các checkbox
@@ -805,30 +875,33 @@ $index = array_search($item['label'], $numberedLabels);
         }
     })
     // AJAX disable user
-    $(document).on('click', '#activeStatusGuest', function(e) {
-            e.preventDefault();
-            if (myFunctionCancel()) {
-                const list_id = [];
-                $('input[name="ids[]"]').each(function() {
-                    if ($(this).is(':checked')) {
-                        var value = $(this).val();
-                        list_id.push(value);
-                    }
-                });
-                $.ajax({
-                    url: '{{ route('activeStatusGuest') }}',
-                    type: "GET",
-                    data: {
-                        list_id: list_id,
-                    },
-                    success: function(data) {
-                        location.reload();
-                    },
-                })
-            }
-        }
+    $(document).on('click', '[id^="activeStatusGuest"]', function(e) {
+        e.preventDefault();
+        if (myFunctionCancel()) {
+            const list_id = [];
+            $('input[name="ids[]"]').each(function() {
+                if ($(this).is(':checked')) {
+                    var value = $(this).val();
+                    list_id.push(value);
+                }
+            });
 
-    )
+            var id = $(this).data('id'); // Lấy giá trị id từ data-id của button
+
+            $.ajax({
+                url: '{{ route('activeStatusGuest') }}',
+                type: "GET",
+                data: {
+                    list_id: list_id,
+                    id: id // Truyền giá trị id vào trong Ajax request
+                },
+                success: function(data) {
+                    location.reload();
+                },
+            });
+        }
+    });
+
 
     function myFunction() {
         let text = "Bạn có muốn xóa khách hàng đã chọn không?";
@@ -841,7 +914,7 @@ $index = array_search($item['label'], $numberedLabels);
     }
 
     function myFunctionCancel() {
-        let text = "Bạn có chắc chắn thay đổi trạng thái đã chọn không?";
+        let text = "Bạn có chắc chắn thay đổi người phụ trách không?";
         if (confirm(text) == true) {
             return true
         } else {
@@ -911,6 +984,37 @@ $index = array_search($item['label'], $numberedLabels);
             $('.count_checkbox').text('Đã chọn ' + $('.cb-element:checked').length);
         } else {
             $('.multiple_action').hide();
+        }
+    }
+    function toggleCheckbox(checkboxId) {
+        var checkbox = document.getElementById(checkboxId);
+        if (checkbox) {
+            checkbox.checked = !checkbox.checked; // Đảo ngược trạng thái của checkbox
+        }
+    }
+
+    function triggerChange(checkboxId) {
+        var checkbox = document.getElementById(checkboxId);
+        if (checkbox) {
+            var event = new Event('change', {
+                bubbles: true,
+                cancelable: true,
+            });
+            checkbox.dispatchEvent(event);
+        }
+    }
+
+    function handleRowClick(checkboxId, event) {
+        // Lấy target của sự kiện click
+        var target = event.target;
+
+        // Kiểm tra nếu target không có class "dropdown"
+        if (!target.closest('.dropdown') && !target.closest('.editEx')) {
+            var checkbox = document.getElementById(checkboxId);
+            if (checkbox) {
+                toggleCheckbox(checkboxId); // Thay đổi trạng thái checkbox
+                triggerChange(checkboxId); // Kích hoạt sự kiện change của checkbox
+            }
         }
     }
 </script>
