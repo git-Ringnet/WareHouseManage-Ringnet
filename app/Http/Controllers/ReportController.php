@@ -9,6 +9,7 @@ use App\Models\Orders;
 use App\Models\Product;
 use App\Models\ProductOrders;
 use App\Models\Roles;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
@@ -55,6 +56,11 @@ class ReportController extends Controller
         if (!empty($request->nhanvien)) {
             $nhanvien = $request->input('nhanvien', []);
             array_push($string, ['label' => 'Nhân viên:', 'values' => $nhanvien, 'class' => 'name']);
+        }
+        $nhanviens = [];
+        if (!empty($request->nhanviens)) {
+            $nhanviens = $request->input('nhanviens', []);
+            array_push($string, ['label' => 'Nhân viên:', 'values' => $nhanviens, 'class' => 'name']);
         }
         if (!empty($request->email)) {
             $email = $request->email;
@@ -168,6 +174,11 @@ class ReportController extends Controller
             $nhanvien = $request->input('nhanvien', []);
             array_push($string, ['label' => 'Nhân viên:', 'values' => $nhanvien, 'class' => 'name']);
         }
+        $nhanviens = [];
+        if (!empty($request->nhanviens)) {
+            $nhanviens = $request->input('nhanviens', []);
+            array_push($string, ['label' => 'Nhân viên:', 'values' => $nhanviens, 'class' => 'name']);
+        }
         if (!empty($request->email)) {
             $email = $request->email;
             array_push($filters, ['email', 'like', '%' . $email . '%']);
@@ -197,7 +208,7 @@ class ReportController extends Controller
         } else {
             $sortType = 'desc';
         }
-        $tableorders = $this->orders->reportOrders($filters, $nhanvien, $roles, $sortBy, $sortType);
+        $tableorders = $this->orders->reportOrders($filters, $nhanvien,$nhanviens, $roles, $sortBy, $sortType);
         $allRoles = new Roles();
         $allRoles = $allRoles->getAll();
         // dd($tableorders);

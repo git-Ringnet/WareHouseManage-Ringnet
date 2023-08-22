@@ -55,7 +55,11 @@ class HistoryController extends Controller
         $nhanvien = [];
         if (!empty($request->nhanvien)) {
             $nhanvien = $request->input('nhanvien', []);
-            array_push($string, ['label' => 'Nhân viên:', 'values' => $nhanvien, 'class' => 'name']);
+            if (!empty($nhanvien)) {
+                $selectedRoles = User::whereIn('id', $nhanvien)->get();
+                $selectedRoleNames = $selectedRoles->pluck('name')->toArray();
+            }
+            array_push($string, ['label' => 'Nhân viên:', 'values' => $selectedRoleNames, 'class' => 'name']);
         }
         // SL xuất
         if (!empty($request->export_qty_operator) && !empty($request->export_qty)) {
@@ -193,7 +197,7 @@ class HistoryController extends Controller
         $debtsSale =  History::leftjoin('users', 'history.user_id', '=', 'users.id')->get();
         $provides = History::leftjoin('provides', 'history.provide_id', '=', 'provides.id')->get();
 
-        $history = $this->history->getAllHistory($filters,$perPage, $keywords, $date, $provide_namearr, $guest, $status, $unitarr, $status_export, $sortBy, $sortType);
+        $history = $this->history->getAllHistory($filters,$perPage, $keywords, $date,$nhanvien, $provide_namearr, $guest, $status, $unitarr, $status_export, $sortBy, $sortType);
 
         return view('tables.history.historyindex', compact('history','perPage', 'title', 'guests', 'debtsSale', 'provides', 'string', 'sortType'));
     }

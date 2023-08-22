@@ -42,7 +42,7 @@ class History extends Model
         'tranport_fee',
         'history_note',
     ];
-    public function getAllHistory($filters = [],$perPage, $keywords = null, $date = [], $provide_namearr = [], $guest = [], $status = [], $unitarr = [], $status_export = [], $orderBy = null, $orderType = null)
+    public function getAllHistory($filters = [],$perPage, $keywords = null, $date = [],$name=[], $provide_namearr = [], $guest = [], $status = [], $unitarr = [], $status_export = [], $orderBy = null, $orderType = null)
     {   
         // $list = [3,1,1];
 
@@ -78,7 +78,7 @@ class History extends Model
             $history = $history->whereIn('guests.guest_name', $guest);
         }
         if (!empty($name)) {
-            $history = $history->whereIn('users.name', $name);
+            $history = $history->whereIn('users.id', $name);
         }
         if (!empty($provide_namearr)) {
             $history = $history->whereIn('provides.id', $provide_namearr);
