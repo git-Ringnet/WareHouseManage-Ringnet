@@ -20,6 +20,7 @@
                                     stroke-linejoin="round" />
                             </svg>
                             <span>Xuất Excel</span>
+                            {{ now()->format('d-m-y') }}
                         </button>
                     </div>
                 @endcan
