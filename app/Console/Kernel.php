@@ -72,7 +72,7 @@ class Kernel extends ConsoleKernel
                 $debt->save();
                 $debt->refresh();
             }
-        })->everyMinute();
+        })->everyThreeHours();
     }
 
     /**
