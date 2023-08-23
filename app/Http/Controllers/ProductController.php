@@ -143,7 +143,7 @@ class ProductController extends Controller
         $products = $products = $this->products->getAllProduct($filters,$perPage, $status, $products_name, $providearr, $unitarr, $taxarr, $keywords, $sortByArr);
 
         // Đơn vị tính
-        $unit = Product::all();
+        $unit = Product::where('product.product_qty','>',0)->get();
 
         $title = 'Tồn kho';
         return view('tables.products.data', compact('products','perPage', 'string', 'provide', 'unit', 'sortType', 'title'));
