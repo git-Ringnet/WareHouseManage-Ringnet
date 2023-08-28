@@ -199,7 +199,7 @@ class Orders extends Model
             ->select('users.name as nhanvien', 'roles.name as vaitro', 'users.email as email', 'users.id as userid')
             ->where('orders.order_status', 1)
             ->selectSub(function ($query) use ($filter) {
-                $query->from('Orders')
+                $query->from('orders')
                     ->where('orders.order_status', 1)
                     ->whereColumn('orders.users_id', 'users.id')
                     ->when(!empty($filter), function ($query) use ($filter) {

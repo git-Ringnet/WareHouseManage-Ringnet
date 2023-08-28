@@ -223,19 +223,19 @@ class ReportController extends Controller
         // Xử lý lấy tất cả hơn nhập
         if ($data['data'] == 0) {
             $count = Orders::selectSub(function ($query) {
-                $query->from('Orders')->where('orders.order_status', '=', 1)
+                $query->from('orders')->where('orders.order_status', '=', 1)
                     ->selectRaw('count(id)');
             }, 'countID')
                 ->selectSub(function ($query) {
-                    $query->from('Orders')->where('orders.order_status', '=', 1)
+                    $query->from('orders')->where('orders.order_status', '=', 1)
                         ->selectRaw('SUM(total_tax)');
                 }, 'sumTotal') // Lấy ngày created_at bé nhất
                 ->selectSub(function ($query) {
-                    $query->from('Orders')->where('orders.order_status', '=', 1)
+                    $query->from('orders')->where('orders.order_status', '=', 1)
                         ->selectRaw('MIN(created_at)');
                 }, 'minCreatedAt')
                 ->selectSub(function ($query) {
-                    $query->from('Orders')->where('orders.order_status', '=', 1)
+                    $query->from('orders')->where('orders.order_status', '=', 1)
                         ->selectRaw('MAX(created_at)');
                 }, 'maxCreatedAt')
                 ->first();
@@ -435,13 +435,13 @@ class ReportController extends Controller
             $date_start = Carbon::parse($data['date_start']);
             $date_end = Carbon::parse($data['date_end']);
             $count = Orders::selectSub(function ($query) use ($date_start, $date_end) {
-                $query->from('Orders')->where('orders.order_status', '=', 1)
+                $query->from('orders')->where('orders.order_status', '=', 1)
                     ->where('created_at', '>=', $date_start)
                     ->where('created_at', '<=', $date_end)
                     ->selectRaw('COUNT(id)');
             }, 'countID')
                 ->selectSub(function ($query) use ($date_start, $date_end) {
-                    $query->from('Orders')->where('orders.order_status', '=', 1)
+                    $query->from('orders')->where('orders.order_status', '=', 1)
                         ->where('created_at', '>=', $date_start)
                         ->where('created_at', '<=', $date_end)
                         ->selectRaw('SUM(total_tax)');
