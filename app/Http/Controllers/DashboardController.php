@@ -179,19 +179,19 @@ class DashboardController extends Controller
         // Xử lý lấy tất cả hơn nhập
         if ($data['data'] == 0) {
             $count = Orders::selectSub(function ($query) {
-                $query->from('Orders')->where('orders.order_status', '=', 1)
+                $query->from('orders')->where('orders.order_status', '=', 1)
                     ->selectRaw('count(id)');
             }, 'countID')
                 ->selectSub(function ($query) {
-                    $query->from('Orders')->where('orders.order_status', '=', 1)
+                    $query->from('orders')->where('orders.order_status', '=', 1)
                         ->selectRaw('SUM(total_tax)');
                 }, 'sumTotal') // Lấy ngày created_at bé nhất
                 ->selectSub(function ($query) {
-                    $query->from('Orders')->where('orders.order_status', '=', 1)
+                    $query->from('orders')->where('orders.order_status', '=', 1)
                         ->selectRaw('MIN(created_at)');
                 }, 'minCreatedAt')
                 ->selectSub(function ($query) {
-                    $query->from('Orders')->where('orders.order_status', '=', 1)
+                    $query->from('orders')->where('orders.order_status', '=', 1)
                         ->selectRaw('MAX(created_at)');
                 }, 'maxCreatedAt')
                 ->first();
@@ -209,12 +209,12 @@ class DashboardController extends Controller
             $lastDayOfMonth = $today->endOfMonth()->format('Y-m-d'); // Ngày kết thúc của tháng, đã được định dạng
 
             $count = Orders::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
-                $query->from('Orders')->where('orders.order_status', '=', 1)
+                $query->from('orders')->where('orders.order_status', '=', 1)
                     ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                     ->selectRaw('COUNT(id)');
             }, 'countID')
                 ->selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
-                    $query->from('Orders')->where('orders.order_status', '=', 1)
+                    $query->from('orders')->where('orders.order_status', '=', 1)
                         ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('SUM(total_tax)');
                 }, 'sumTotal')->first();
@@ -230,12 +230,12 @@ class DashboardController extends Controller
                 $firstDayOfMonth = $lastMonth->startOfMonth()->format('Y-m-d'); // Ngày bắt đầu của tháng, đã được định dạng
                 $lastDayOfMonth = $lastMonth->endOfMonth()->format('Y-m-d');
                 $count = Orders::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
-                    $query->from('Orders')->where('orders.order_status', '=', 1)
+                    $query->from('orders')->where('orders.order_status', '=', 1)
                         ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('COUNT(id)');
                 }, 'countID')
                     ->selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
-                        $query->from('Orders')->where('orders.order_status', '=', 1)
+                        $query->from('orders')->where('orders.order_status', '=', 1)
                             ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                             ->selectRaw('SUM(total_tax)');
                     }, 'sumTotal')->first();
@@ -244,12 +244,12 @@ class DashboardController extends Controller
                 $firstDayOfMonth = $today->startOfMonth()->format('Y-m-d');
                 $lastDayOfMonth = $lastMonth->endOfMonth()->format('Y-m-d');
                 $count = Orders::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
-                    $query->from('Orders')->where('orders.order_status', '=', 1)
+                    $query->from('orders')->where('orders.order_status', '=', 1)
                         ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('COUNT(id)');
                 }, 'countID')
                     ->selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
-                        $query->from('Orders')->where('orders.order_status', '=', 1)
+                        $query->from('orders')->where('orders.order_status', '=', 1)
                             ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                             ->selectRaw('SUM(total_tax)');
                     }, 'sumTotal')->first();
@@ -266,12 +266,12 @@ class DashboardController extends Controller
                 $firstDayOfMonth = $lastMonth->startOfMonth()->format('Y-m-d');
                 $lastDayOfMonth = $lastMonth->endOfMonth()->addMonths(2)->format('Y-m-d');
                 $count = Orders::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
-                    $query->from('Orders')->where('orders.order_status', '=', 1)
+                    $query->from('orders')->where('orders.order_status', '=', 1)
                         ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('COUNT(id)');
                 }, 'countID')
                     ->selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
-                        $query->from('Orders')->where('orders.order_status', '=', 1)
+                        $query->from('orders')->where('orders.order_status', '=', 1)
                             ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                             ->selectRaw('SUM(total_tax)');
                     }, 'sumTotal')->first();
@@ -280,12 +280,12 @@ class DashboardController extends Controller
                 $firstDayOfMonth = $lastMonth->startOfMonth()->format('Y-m-d');
                 $lastDayOfMonth = $lastMonth->endOfMonth()->addMonths(2)->format('Y-m-d');
                 $count = Orders::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
-                    $query->from('Orders')->where('orders.order_status', '=', 1)
+                    $query->from('orders')->where('orders.order_status', '=', 1)
                         ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('COUNT(id)');
                 }, 'countID')
                     ->selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
-                        $query->from('Orders')->where('orders.order_status', '=', 1)
+                        $query->from('orders')->where('orders.order_status', '=', 1)
                             ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                             ->selectRaw('SUM(total_tax)');
                     }, 'sumTotal')->first();
@@ -300,13 +300,13 @@ class DashboardController extends Controller
             $date_start = Carbon::parse($data['date_start']);
             $date_end = Carbon::parse($data['date_end']);
             $count = Orders::selectSub(function ($query) use ($date_start, $date_end) {
-                $query->from('Orders')->where('orders.order_status', '=', 1)
+                $query->from('orders')->where('orders.order_status', '=', 1)
                     ->where('created_at', '>=', $date_start)
                     ->where('created_at', '<=', $date_end)
                     ->selectRaw('COUNT(id)');
             }, 'countID')
                 ->selectSub(function ($query) use ($date_start, $date_end) {
-                    $query->from('Orders')->where('orders.order_status', '=', 1)
+                    $query->from('orders')->where('orders.order_status', '=', 1)
                         ->where('created_at', '>=', $date_start)
                         ->where('created_at', '<=', $date_end)
                         ->selectRaw('SUM(total_tax)');
