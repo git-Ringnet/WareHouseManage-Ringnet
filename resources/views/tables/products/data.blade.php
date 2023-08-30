@@ -491,7 +491,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('comparison_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 quantity-input input-so" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -521,7 +521,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('trade_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 trade-input input-so" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -551,7 +551,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('avg_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 avg-input" type="text" name="avg"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -580,7 +580,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('price_inven_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 price_inven-input input-so" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -699,7 +699,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             </span>
                                         </th>
                                         <th scope="col">
-                                            <span class="d-flex justify-content-end">
+                                            <span class="d-flex justify-content-end align-items-center">
                                                 <a href="#" class="sort-link" data-sort-by="product_qty"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Số
@@ -709,7 +709,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             </span>
                                         </th>
                                         <th scope="col">
-                                            <span class="d-flex justify-content-end">
+                                            <span class="d-flex justify-content-end align-items-center">
                                                 <a href="#" class="sort-link" data-sort-by="product_trade"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Đang
@@ -718,7 +718,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             </span>
                                         </th>
                                         <th scope="col">
-                                            <span class="d-flex justify-content-end">
+                                            <span class="d-flex justify-content-end align-items-center">
                                                 <a href="#" class="sort-link" data-sort-by="product_price"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Đơn giá
@@ -727,7 +727,7 @@ $index = array_search($item['label'], $numberedLabels);
                                             </span>
                                         </th>
                                         <th scope="col">
-                                            <span class="d-flex justify-content-end">
+                                            <span class="d-flex justify-content-end align-items-center">
                                                 <a href="#" class="sort-link" data-sort-by="product_total"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Trị tồn
@@ -745,16 +745,16 @@ $index = array_search($item['label'], $numberedLabels);
                                             </span>
                                         </th>
                                         <th scope="col">
-                                            <span class="d-flex justify-content-center">
-                                                <a href="#" class="sort-link" data-sort-by=""
+                                            <span class="d-flex justify-content-center align-items-center">
+                                                <a href="#" class="sort-link" data-sort-by="product_code"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">HĐ vào
                                                     </button></a>
-                                                <div class="icon" id="icon-product_tax"></div>
+                                                <div class="icon" id="icon-product_code"></div>
                                             </span>
                                         </th>
                                         <th scope="col">
-                                            <span class="d-flex justify-content-center">
+                                            <span class="d-flex justify-content-center align-items-center">
                                                 <a href="#" class="sort-link" data-sort-by="soluong"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Trạng
@@ -821,22 +821,22 @@ $index = array_search($item['label'], $numberedLabels);
                             </table>
                         </div>
                     </div>
-                   <div class="d-flex row justify-content-between">
-                    <div class="paginator mt-2 d-flex justify-content-start">
-                        <span class="text-perpage">
-                            Số hàng mỗi trang:
-                            <select name="perPage" id="perPage">
-                                <option value="5" {{ $perPage == 5 ? 'selected' : '' }}>5</option>
-                                <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
-                                <option value="25" {{ $perPage == 25 ? 'selected' : '' }}>25</option>
-                                <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
-                            </select>
-                        </span>
+                    <div class="d-flex row justify-content-between">
+                        <div class="paginator mt-2 d-flex justify-content-start">
+                            <span class="text-perpage">
+                                Số hàng mỗi trang:
+                                <select name="perPage" id="perPage">
+                                    <option value="5" {{ $perPage == 5 ? 'selected' : '' }}>5</option>
+                                    <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
+                                    <option value="25" {{ $perPage == 25 ? 'selected' : '' }}>25</option>
+                                    <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
+                                </select>
+                            </span>
+                        </div>
+                        <div class="paginator mt-2 d-flex justify-content-end">
+                            {{ $products->appends(request()->except('page'))->links() }}
+                        </div>
                     </div>
-                    <div class="paginator mt-2 d-flex justify-content-end">
-                        {{ $products->appends(request()->except('page'))->links() }}
-                    </div>
-                   </div>
                     {{-- @if ($products->count() > 0)
                         @php
                             $paginationRange = App\Helpers\PaginationHelper::calculatePaginationRange($products->currentPage(), $products->lastPage());
