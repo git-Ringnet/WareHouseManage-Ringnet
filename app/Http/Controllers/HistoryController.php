@@ -114,7 +114,7 @@ class HistoryController extends Controller
         if (!empty($request->total_difference_operator) && !empty($request->total_difference)) {
             $sum = $request->input('total_difference');
             $total_difference_operator = $request->input('total_difference_operator');
-            $filters[] = ['total_difference', $total_difference_operator, $sum];
+            $filters[] = ['history.total_difference', $total_difference_operator, $sum];
             $saleArray = explode(',.@', $sum);
             array_push($string, ['label' => 'Lợi nhuận ' . $total_difference_operator, 'values' => $saleArray, 'class' => 'total_difference']);
         }
@@ -191,15 +191,15 @@ class HistoryController extends Controller
         } else {
             $sortType = 'desc';
         }
-        $perPage = $request->input('perPageinput',25); 
+        $perPage = $request->input('perPageinput', 25);
         $guests = History::leftjoin('guests', 'guests.id', '=', 'history.guest_id')->select('guests.guest_name as guests', 'history.export_unit as unit')->get();
 
         $debtsSale =  History::leftjoin('users', 'history.user_id', '=', 'users.id')->get();
         $provides = History::leftjoin('provides', 'history.provide_id', '=', 'provides.id')->get();
 
-        $history = $this->history->getAllHistory($filters,$perPage, $keywords, $date,$nhanvien, $provide_namearr, $guest, $status, $unitarr, $status_export, $sortBy, $sortType);
+        $history = $this->history->getAllHistory($filters, $perPage, $keywords, $date, $nhanvien, $provide_namearr, $guest, $status, $unitarr, $status_export, $sortBy, $sortType);
 
-        return view('tables.history.historyindex', compact('history','perPage', 'title', 'guests', 'debtsSale', 'provides', 'string', 'sortType'));
+        return view('tables.history.historyindex', compact('history', 'perPage', 'title', 'guests', 'debtsSale', 'provides', 'string', 'sortType'));
     }
 
     /**
@@ -293,9 +293,9 @@ class HistoryController extends Controller
             'tranport_fee',
             'history_note'
         )
-        ->with('getUsers')
-        ->with('getProvides')
-        ->with('getGuests')
+            ->with('getUsers')
+            ->with('getProvides')
+            ->with('getGuests')
             ->get();
 
         foreach ($data as $row) {
