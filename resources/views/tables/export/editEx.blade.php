@@ -170,8 +170,7 @@
                                     @foreach ($customer as $item)
                                         @if (Auth::user()->id == $item->user_id || Auth::user()->can('isAdmin'))
                                             <li class="p-2 search-info" id="{{ $item->id }}" name="search-info">
-                                                <a href="#"
-                                                    class="text-dark justify-content-between p-2">
+                                                <a href="#" class="text-dark justify-content-between p-2">
                                                     <span class="w-50">{{ $item->guest_name }}</span>
                                                 </a>
                                             </li>
@@ -286,7 +285,7 @@
                 </div>
             </div>
             {{-- Bảng thêm sản phẩm --}}
-            <div class="mt-4" style="overflow-x: auto;">
+            <div class="mt-4" style="overflow-x: scroll !important;">
                 <table class="table">
                     <thead class="bg-white border-0 rounded-top">
                         <tr>
@@ -309,7 +308,7 @@
                                 <td class="soTT"><?php echo $stt++; ?></td>
                                 <td>
                                     <select disabled class="child-select p-1 form-control productName"
-                                       name="product_id[]" style="width: 220px;">
+                                        name="product_id[]" style="width: 220px;">
                                         <option value="{{ $value_export->product_id }}">
                                             {{ $value_export->product_name }}
                                         </option>
@@ -797,15 +796,22 @@
 
     //giới hạn số lượng nhập của thêm sản phẩm mới
     function limitMaxValue(input) {
-        var regex = /^[1-9][0-9]*$/;
-        if (!regex.test(input.value)) {
-            input.value = input.value.replace(/[^1-9]*$/g, '');
+        // Làm sạch giá trị đầu vào bằng cách loại bỏ tất cả các ký tự không phải số hoặc "."
+        input.value = input.value.replace(/[^\d.]/g, '');
+
+        // Loại bỏ các dấu "." ngoài dấu "." đầu tiên
+        var parts = input.value.split('.');
+        if (parts.length > 2) {
+            input.value = parts[0] + '.' + parts.slice(1).join('');
         }
-        var value = input.value;
+
+        // Kiểm tra nếu giá trị đầu vào bắt đầu bằng "0" và không phải là "0." thì loại bỏ các số 0 không cần thiết
+        if (input.value.startsWith("0") && input.value !== "0.") {
+            input.value = parseFloat(input.value).toString();
+        }
+
+        var value = parseFloat(input.value);
         var product_id = $(input).closest('tr').find('.productName').val();
-        if (isNaN(value) || value <= 0) {
-            return;
-        }
 
         // Gửi dữ liệu qua AJAX
         $.ajax({
@@ -815,8 +821,9 @@
                 product_id: product_id,
             },
             success: function(response) {
-                var maxLimit = response.qty_exist;
-                if (value > maxLimit) {
+                console.log(response);
+                var maxLimit = parseFloat(response.qty_exist);
+                if (!isNaN(maxLimit) && value > maxLimit) {
                     input.value = maxLimit;
                 }
             }
@@ -824,18 +831,27 @@
     }
     //giới hạn số lượng nhập của edit sản phẩm
     function limitMaxEdit(input) {
-        var regex = /^[1-9][0-9]*$/;
-        if (!regex.test(input.value)) {
-            input.value = input.value.replace(/[^1-9]*$/g, '');
+        input.value = input.value.replace(/[^\d.]/g, '');
+
+        // Loại bỏ các dấu "." ngoài dấu "." đầu tiên
+        var parts = input.value.split('.');
+        if (parts.length > 2) {
+            input.value = parts[0] + '.' + parts.slice(1).join('');
         }
-        var value = input.value;
+
+        // Kiểm tra nếu giá trị đầu vào bắt đầu bằng "0" và không phải là "0." thì loại bỏ các số 0 không cần thiết
+        if (input.value.startsWith("0") && input.value !== "0.") {
+            input.value = parseFloat(input.value).toString();
+        }
+
+        var value = parseFloat(input.value);
         var product_id = $(input).closest('tr').find('.productName').val();
         var qty_exist = $(input).closest('tr').find('.quantity-exist').val();
         qty_exist = qty_exist.replace('/', '');
         if (isNaN(value) || value <= 0) {
             return;
         }
-        var maxLimit = parseInt(qty_exist);
+        var maxLimit = parseFloat(qty_exist);
         if (value > maxLimit) {
             input.value = maxLimit;
         }
