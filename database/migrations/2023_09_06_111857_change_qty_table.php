@@ -22,6 +22,10 @@ return new class extends Migration
         });
         Schema::table('product', function (Blueprint $table) {
             $table->double('product_trade')->change();
+            $table->double('product_qty')->change();
+        });
+        Schema::table('productorders', function (Blueprint $table) {
+            $table->double('product_qty')->change();
         });
     }
 };
