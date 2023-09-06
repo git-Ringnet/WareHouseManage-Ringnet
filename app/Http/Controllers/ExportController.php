@@ -2536,7 +2536,7 @@ class ExportController extends Controller
     {
         $data = $request->all();
         $product = Product::select('product.*')
-            ->selectRaw('COALESCE((product.product_qty - COALESCE(product.product_trade, 0)), 0) as qty_exist')
+            ->selectRaw('COALESCE(ROUND(product.product_qty - COALESCE(product.product_trade, 0), 2), 0) as qty_exist')
             ->where('product.id', $data['idProduct'])
             ->first();
         return response()->json($product);
@@ -2546,7 +2546,7 @@ class ExportController extends Controller
     {
         $data = $request->all();
         $limit_qty = Product::select('product.*')
-            ->selectRaw('COALESCE((product.product_qty - COALESCE(product.product_trade, 0)), 0) as qty_exist')
+            ->selectRaw('COALESCE(ROUND(product.product_qty - COALESCE(product.product_trade, 0), 2), 0) as qty_exist')
             ->where('product.id', $data['product_id'])
             ->first();
         return response()->json($limit_qty);

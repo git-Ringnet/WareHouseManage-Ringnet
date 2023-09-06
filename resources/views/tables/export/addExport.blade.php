@@ -245,7 +245,7 @@
         position: absolute !important;
         left: 10px !important;
     }
-    
+
     .selectize-input.has-items>.item {
         display: inline-block !important;
         width: 90% !important;
@@ -410,7 +410,7 @@
                 "</select>" +
                 "</td>");
             const thanhTienInput = $(
-                "<td><input readonly class='total-amount form-control text-center' value=''></td>"
+                "<td><input readonly class='total-amount form-control text-center' value='' style='min-width:120px;'></td>"
             );
             const info = $(
                 "<td data-toggle='modal' data-target='#productModal'><img src='../dist/img/icon/Group.png'></td>"
@@ -626,15 +626,22 @@
 
     //Giới hạn số lượng
     function limitMaxValue(input) {
-        var regex = /^[1-9][0-9]*$/;
-        if (!regex.test(input.value)) {
-            input.value = input.value.replace(/[^1-9]*$/g, '');
+        // Làm sạch giá trị đầu vào bằng cách loại bỏ tất cả các ký tự không phải số hoặc "."
+        input.value = input.value.replace(/[^\d.]/g, '');
+
+        // Loại bỏ các dấu "." ngoài dấu "." đầu tiên
+        var parts = input.value.split('.');
+        if (parts.length > 2) {
+            input.value = parts[0] + '.' + parts.slice(1).join('');
         }
-        var value = input.value;
+
+        // Kiểm tra nếu giá trị đầu vào bắt đầu bằng "0" và không phải là "0." thì loại bỏ các số 0 không cần thiết
+        if (input.value.startsWith("0") && input.value !== "0.") {
+            input.value = parseFloat(input.value).toString();
+        }
+
+        var value = parseFloat(input.value);
         var product_id = $(input).closest('tr').find('.productName').val();
-        if (isNaN(value) || value <= 0) {
-            return;
-        }
 
         // Gửi dữ liệu qua AJAX
         $.ajax({
@@ -644,8 +651,9 @@
                 product_id: product_id,
             },
             success: function(response) {
-                var maxLimit = response.qty_exist;
-                if (value > maxLimit) {
+                console.log(response);
+                var maxLimit = parseFloat(response.qty_exist);
+                if (!isNaN(maxLimit) && value > maxLimit) {
                     input.value = maxLimit;
                 }
             }
@@ -819,6 +827,7 @@
                         idProduct: selectedID,
                     },
                     success: function(response) {
+                        console.log(response);
                         productNameElement.val(response.product_name);
                         productUnitElement.val(response.product_unit);
                         qty_exist.val("/" + response.qty_exist);
@@ -924,15 +933,14 @@
 
     //tính thành tiền của sản phẩm
     $(document).on('input', '.quantity-input, [name^="product_price"]', function(e) {
-        var productQty = parseInt($(this).closest('tr').find('.quantity-input').val());
+        var productQty = parseFloat($(this).closest('tr').find('.quantity-input').val()) || 0;
         var productPrice = parseFloat($(this).closest('tr').find('input[name^="product_price"]').val().replace(
-            /[^0-9.-]+/g, ""));
+            /[^0-9.-]+/g, "")) || 0;
         updateTaxAmount($(this).closest('tr'));
 
         if (!isNaN(productQty) && !isNaN(productPrice)) {
             var totalAmount = productQty * productPrice;
-            $(this).closest('tr').find('.total-amount').val(formatCurrency(Math.round(totalAmount)));
-
+            $(this).closest('tr').find('.total-amount').val(formatCurrency(totalAmount));
             calculateTotalAmount();
             calculateTotalTax();
         }
@@ -1175,7 +1183,7 @@
             "</select>" +
             "</td>");
         const thanhTienInput = $(
-            "<td><input readonly class='total-amount form-control text-center' value=''></td>"
+            "<td><input readonly class='total-amount form-control text-center' value='' style='min-width:120px;'></td>"
         );
         const info = $(
             "<td data-toggle='modal' data-target='#productModal'><img src='../dist/img/icon/Group.png'></td>"

@@ -472,10 +472,11 @@
                                         style="background:#e9ecef;">0</span>
                                 </td>
                                 <td>
-                                    <input type="text" class="product_note form-control" name="product_note[]" class="form-control"
-                                        <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                    <input type="text" class="product_note form-control" name="product_note[]"
+                                        class="form-control" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                             echo 'readonly';
-                                        } ?> value="{{ $value_export->product_note }}">
+                                        } ?>
+                                        value="{{ $value_export->product_note }}">
                                 </td>
                                 <td data-toggle='modal' data-target='#productModal' class='productMD'><img
                                         src="../../dist/img/icon/Group.png"></td>
@@ -958,15 +959,22 @@
 
     //giới hạn số lượng nhập của thêm sản phẩm mới
     function limitMaxValue(input) {
-        var regex = /^[1-9][0-9]*$/;
-        if (!regex.test(input.value)) {
-            input.value = input.value.replace(/[^1-9]*$/g, '');
+        // Làm sạch giá trị đầu vào bằng cách loại bỏ tất cả các ký tự không phải số hoặc "."
+        input.value = input.value.replace(/[^\d.]/g, '');
+
+        // Loại bỏ các dấu "." ngoài dấu "." đầu tiên
+        var parts = input.value.split('.');
+        if (parts.length > 2) {
+            input.value = parts[0] + '.' + parts.slice(1).join('');
         }
-        var value = input.value;
+
+        // Kiểm tra nếu giá trị đầu vào bắt đầu bằng "0" và không phải là "0." thì loại bỏ các số 0 không cần thiết
+        if (input.value.startsWith("0") && input.value !== "0.") {
+            input.value = parseFloat(input.value).toString();
+        }
+
+        var value = parseFloat(input.value);
         var product_id = $(input).closest('tr').find('.productName').val();
-        if (isNaN(value) || value <= 0) {
-            return;
-        }
 
         // Gửi dữ liệu qua AJAX
         $.ajax({
@@ -976,8 +984,8 @@
                 product_id: product_id,
             },
             success: function(response) {
-                var maxLimit = response.qty_exist;
-                if (value > maxLimit) {
+                var maxLimit = parseFloat(response.qty_exist);
+                if (!isNaN(maxLimit) && value > maxLimit) {
                     input.value = maxLimit;
                 }
             }
@@ -985,18 +993,27 @@
     }
     //giới hạn số lượng nhập của edit sản phẩm
     function limitMaxEdit(input) {
-        var regex = /^[1-9][0-9]*$/;
-        if (!regex.test(input.value)) {
-            input.value = input.value.replace(/[^1-9]*$/g, '');
+        input.value = input.value.replace(/[^\d.]/g, '');
+
+        // Loại bỏ các dấu "." ngoài dấu "." đầu tiên
+        var parts = input.value.split('.');
+        if (parts.length > 2) {
+            input.value = parts[0] + '.' + parts.slice(1).join('');
         }
-        var value = input.value;
+
+        // Kiểm tra nếu giá trị đầu vào bắt đầu bằng "0" và không phải là "0." thì loại bỏ các số 0 không cần thiết
+        if (input.value.startsWith("0") && input.value !== "0.") {
+            input.value = parseFloat(input.value).toString();
+        }
+
+        var value = parseFloat(input.value);
         var product_id = $(input).closest('tr').find('.productName').val();
         var qty_exist = $(input).closest('tr').find('.quantity-exist').val();
         qty_exist = qty_exist.replace('/', '');
         if (isNaN(value) || value <= 0) {
             return;
         }
-        var maxLimit = parseInt(qty_exist);
+        var maxLimit = parseFloat(qty_exist);
         if (value > maxLimit) {
             input.value = maxLimit;
         }
@@ -1409,7 +1426,7 @@
 
         // Lặp qua từng hàng
         $('tr').each(function() {
-            var productQty = parseInt($(this).find('.quantity-input').val());
+            var productQty = parseFloat($(this).find('.quantity-input').val());
             var productPriceElement = $(this).find('[name^="product_price"]');
             var productPrice = 0;
             var taxValue = parseFloat($(this).find('.product_tax option:selected').val());
