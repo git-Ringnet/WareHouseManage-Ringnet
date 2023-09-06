@@ -94,8 +94,7 @@ class DashboardController extends Controller
                 'start_date' => $minCreatedAt->format('d-m-Y'), // Định dạng lại ngày bắt đầu
                 'end_date' => $maxCreatedAt->format('d-m-Y'), // Định dạng lại ngày hôm nay
             ];
-        }
-        else{
+        } else {
             $exportAll = [
                 'countExport' => 0,
                 'sumExport' => 0,
@@ -129,8 +128,7 @@ class DashboardController extends Controller
                 'start_date' => $minCreatedAt->format('d-m-Y'), // Định dạng lại ngày bắt đầu
                 'end_date' => $maxCreatedAt->format('d-m-Y'), // Định dạng lại ngày hôm nay
             ];
-        }
-        else{
+        } else {
             $inventAll = [
                 'countInventory' => 0,
                 'sumInventory' => 0,
@@ -174,8 +172,16 @@ class DashboardController extends Controller
                 'start_date' => $smallerDate->format('d-m-Y'),
                 'end_date' => $MAXDate->format('d-m-Y'),
             ];
-        }
-        else{
+        } else if ($countDebtImport && !$countDebtExport) {
+            $minCreatedAt = Carbon::parse($countDebtImport->importCreatedAt);
+            $maxCreatedAt = Carbon::parse($countDebtImport->maxImportCreatedAt);
+            $debts = [
+                'debt_import' => $countDebtImport->countDebtImport,
+                'debt_export' => 0,
+                'start_date' => $minCreatedAt->format('d-m-Y'),
+                'end_date' => $maxCreatedAt->format('d-m-Y'),
+            ];
+        } else {
             $debts = [
                 'debt_import' => 0,
                 'debt_export' => 0,
@@ -206,8 +212,7 @@ class DashboardController extends Controller
                 'start_date' => $minCreatedAt->format('d-m-Y'), // Định dạng lại ngày bắt đầu
                 'end_date' => $maxCreatedAt->format('d-m-Y'), // Định dạng lại ngày hôm nay
             ];
-        }
-        else{
+        } else {
             $profitAll = [
                 'countProfit' => 0,
                 'start_date' => null, // Định dạng lại ngày bắt đầu
@@ -717,12 +722,21 @@ class DashboardController extends Controller
                     ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                     ->selectRaw('SUM(total_import)');
             }, 'countDebtImport')->first();
-            return [
-                'debt_import' => $countDebtImport->countDebtImport,
-                'debt_export' => $count->count,
-                'start_date' => $today->startOfMonth()->format('d-m-Y'),
-                'end_date' => $today->endOfMonth()->format('d-m-Y')
-            ];
+            if ($count) {
+                return [
+                    'debt_import' => $countDebtImport->countDebtImport,
+                    'debt_export' => $count->count,
+                    'start_date' => $today->startOfMonth()->format('d-m-Y'),
+                    'end_date' => $today->endOfMonth()->format('d-m-Y')
+                ];
+            } else {
+                return [
+                    'debt_import' => $countDebtImport->countDebtImport,
+                    'debt_export' => 0,
+                    'start_date' => $today->startOfMonth()->format('d-m-Y'),
+                    'end_date' => $today->endOfMonth()->format('d-m-Y')
+                ];
+            }
         } elseif ($data['data'] == 2) { //Xử lý lấy dữ liệu tháng trước
             if ($today->month == 1) {
                 $lastMonth = $today->subMonth();
@@ -753,12 +767,21 @@ class DashboardController extends Controller
                         ->selectRaw('SUM(total_import)');
                 },  'countDebtImport')->first();
             }
-            return [
-                'debt_import' => $countDebtImport->countDebtImport,
-                'debt_export' => $count->count,
-                'start_date' => $lastMonth->startOfMonth()->format('d-m-Y'),
-                'end_date' => $lastMonth->endOfMonth()->format('d-m-Y')
-            ];
+            if ($count) {
+                return [
+                    'debt_import' => $countDebtImport->countDebtImport,
+                    'debt_export' => $count->count,
+                    'start_date' => $lastMonth->startOfMonth()->format('d-m-Y'),
+                    'end_date' => $lastMonth->endOfMonth()->format('d-m-Y')
+                ];
+            } else {
+                return [
+                    'debt_import' => $countDebtImport->countDebtImport,
+                    'debt_export' => 0,
+                    'start_date' => $lastMonth->startOfMonth()->format('d-m-Y'),
+                    'end_date' => $lastMonth->endOfMonth()->format('d-m-Y')
+                ];
+            }
         } elseif ($data['data'] == 3) { // Xử lý lấy dữ liệu 3 tháng trước
             if ($today->month == 1) {
                 $lastMonth = $today->subMonth(3);
@@ -789,12 +812,23 @@ class DashboardController extends Controller
                         ->selectRaw('SUM(total_import)');
                 },  'countDebtImport')->first();
             }
-            return [
-                'debt_import' => $countDebtImport->countDebtImport,
-                'debt_export' => $count->count,
-                'start_date' => $lastMonth->startOfMonth()->subMonths(2)->format('d-m-Y'),
-                'end_date' => $lastMonth->endOfMonth()->addMonths(2)->format('d-m-Y')
-            ];
+            if($count)
+            {
+                return [
+                    'debt_import' => $countDebtImport->countDebtImport,
+                    'debt_export' => $count->count,
+                    'start_date' => $lastMonth->startOfMonth()->subMonths(2)->format('d-m-Y'),
+                    'end_date' => $lastMonth->endOfMonth()->addMonths(2)->format('d-m-Y')
+                ];
+            }
+            else{
+                return [
+                    'debt_import' => $countDebtImport->countDebtImport,
+                    'debt_export' => 0,
+                    'start_date' => $lastMonth->startOfMonth()->subMonths(2)->format('d-m-Y'),
+                    'end_date' => $lastMonth->endOfMonth()->addMonths(2)->format('d-m-Y')
+                ];
+            }
         } else {
             $date_start = Carbon::parse($data['date_start'])->format('Y-m-d');
             $date_end = Carbon::parse($data['date_end'])->format('Y-m-d');
@@ -810,10 +844,18 @@ class DashboardController extends Controller
             },  'countDebtImport')->first();
             array_push($data1, $count);
             array_push($data1, $countDebtImport);
-            return [
-                'debt_import' => $countDebtImport->countDebtImport,
-                'debt_export' => $count->count,
-            ];
+            if($count){
+                return [
+                    'debt_import' => $countDebtImport->countDebtImport,
+                    'debt_export' => $count->count,
+                ];
+            }
+            else{
+                return [
+                    'debt_import' => $countDebtImport->countDebtImport,
+                    'debt_export' => 0,
+                ];
+            }
         }
     }
 
