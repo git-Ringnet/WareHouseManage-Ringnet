@@ -184,7 +184,7 @@ function calculateTotals() {
 
     // Lặp qua từng hàng
     $('tr').each(function () {
-        var productQty = parseInt($(this).find('.quantity-input').val());
+        var productQty = $(this).find('.quantity-input').val();
         var productPriceElement = $(this).find('[name^="product_price"]');
         var productPrice = 0;
         var taxValue = parseFloat($(this).find('.product_tax option:selected').val());
@@ -380,6 +380,17 @@ function validatQtyInput(input) {
     }
 }
 
+function validateQtyInput1(input) {
+    var regex = /^[0-9]*\.?[0-9]*$/;
+    if (!regex.test(input.value)) {
+        input.value = input.value.replace(/[^\d.]/g, '');
+        
+        var parts = input.value.split('.');
+        if (parts.length > 2) {
+            input.value = parts[0] + '.' + parts.slice(1).join('');
+        }
+    }
+}
 
 $("#radio1").on("click", function () {
     $('#infor_provide').empty();
@@ -444,7 +455,7 @@ $('.addRow').on('click', function () {
         '<input id="search" type="text" placeholder="Nhập tên sản phẩm" name="product_name[]" class="form-control name_product" onkeyup="filterFunction()"> ' +
         '</td>' +
         '<td><input required type="text" class="form-control text-center unit_product" name="product_unit[]"></td>' +
-        '<td><input required type="text" oninput="validatQtyInput(this)" name="product_qty[]" class="quantity-input form-control text-center"></td>' +
+        '<td><input required type="text" oninput="validateQtyInput1(this)" name="product_qty[]" class="quantity-input form-control text-center"></td>' +
         '<td><input required type="text" class="form-control text-center product_price" name="product_price[]" ></td>' +
         '<td>' +
         '<input type="hidden" class="product_tax1">' +
