@@ -953,7 +953,7 @@
     });
 
     function updateTaxAmount(row) {
-        var productQty = parseInt(row.find('.quantity-input').val());
+        var productQty = parseFloat(row.find('.quantity-input').val());
         var productPrice = parseFloat(row.find('input[name^="product_price"]').val().replace(/[^0-9.-]+/g, ""));
         var taxValue = parseFloat(row.find('.product_tax').val());
         if (taxValue == 99) {

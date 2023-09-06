@@ -1214,7 +1214,7 @@
 
         // Lặp qua từng hàng
         $('tr').each(function() {
-            var productQty = parseInt($(this).find('.quantity-input').val());
+            var productQty = parseFloat($(this).find('.quantity-input').val());
             var productPriceElement = $(this).find('[name^="product_price"]');
             var productPrice = 0;
             var taxValue = parseFloat($(this).find('.product_tax option:selected').val());
