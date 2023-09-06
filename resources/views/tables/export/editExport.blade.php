@@ -352,7 +352,7 @@
                 </div>
             </div>
             {{-- Bảng thêm sản phẩm --}}
-            <div class="mt-4" style="overflow-x: auto;">
+            <div class="mt-4" style="overflow-x: scroll !important;">
                 <table class="table" id="sourceTable">
                     <thead class="bg-white border-0 rounded-top">
                         <tr>
