@@ -40,10 +40,12 @@ return new class extends Migration
         Schema::table('product', function (Blueprint $table) {
             $table->decimal('product_price', 20, 4)->change();
             $table->decimal('product_total', 20, 4)->change();
+            $table->double('product_qty')->change();
         });
         Schema::table('productorders', function (Blueprint $table) {
             $table->decimal('product_price', 20, 4)->change();
             $table->decimal('product_total', 20, 4)->change();
+            $table->double('product_qty')->change();
         });
         Schema::table('product_exports', function (Blueprint $table) {
             $table->decimal('product_price', 20, 4)->change();

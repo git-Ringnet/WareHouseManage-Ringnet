@@ -220,7 +220,7 @@
     <script src="{{ asset('dist/js/productOrder.js') }}"></script>
     <script>
         $(document).on('input', '.quantity-input, [name^="product_price"]', function(e) {
-            var productQty = parseInt($(this).closest('tr').find('.quantity-input').val());
+            var productQty = $(this).closest('tr').find('.quantity-input').val();
             var productPrice = parseFloat($(this).closest('tr').find('input[name^="product_price"]').val().replace(
                 /[^0-9.-]+/g, ""));
             updateTaxAmount($(this).closest('tr'));
@@ -241,7 +241,7 @@
         });
 
         function updateTaxAmount(row) {
-            var productQty = parseInt(row.find('.quantity-input').val());
+            var productQty = row.find('.quantity-input').val();
             var productPrice = parseFloat(row.find('input[name^="product_price"]').val().replace(/[^0-9.-]+/g, ""));
             var taxValue = parseFloat(row.find('.product_tax').val());
             if (taxValue == 99) {
@@ -590,7 +590,7 @@
                             '<td><input required type="text" class="form-control text-center unit_product" name="product_unit[]" value="' +
                             typeValue +
                             '"></td>' +
-                            '<td><input required type="text" oninput="validatQtyInput(this)" name="product_qty[]" class="quantity-input form-control text-center" value="' +
+                            '<td><input required type="text" oninput="validateQtyInput1(this)" name="product_qty[]" class="quantity-input form-control text-center" value="' +
                             numberssValue + '"></td>' +
                             '<td><input required type="text" class="form-control product_price text-center" name="product_price[]" value="' +
                             price + '"></td>' +

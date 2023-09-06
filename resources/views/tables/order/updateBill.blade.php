@@ -319,7 +319,7 @@
                                         @if (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin')) readonly @endif required type="text"
                                         name="product_unit[]" value="{{ $pro->product_unit }}"
                                         @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif> </td>
-                                <td> <input oninput="validatQtyInput(this)"
+                                <td> <input oninput="validateQtyInput1(this)"
                                         class="form-control quantity-input text-center"
                                         oninput="validateNumberInput(this)"
                                         @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif required type="text"

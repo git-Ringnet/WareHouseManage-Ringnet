@@ -360,7 +360,7 @@
                                         @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif required type="text"
                                         name="product_unit[]" value="{{ $pro->product_unit }}"
                                         @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif> </td>
-                                <td> <input oninput="validatQtyInput(this)"
+                                <td> <input oninput="validateQtyInput1(this)"
                                         class="form-control quantity-input text-center"
                                         oninput="validateNumberInput(this)"
                                         @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif required type="text"
@@ -369,7 +369,7 @@
                                 <td> <input class="form-control text-center product_price"
                                         @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif required type="text"
                                         name="product_price[]"
-                                        value="@if (fmod($pro->product_price, 1) > 0) {{ number_format($pro->product_price, 2, '.', ',') }}@else{{ number_format($pro->product_price) }} @endif"
+                                        value="@if (fmod($pro->product_price, 1) > 0) {{ number_format($pro->product_price, 2, '.', ',') }}@else{{ number_format($pro->product_price) }}@endif"
                                         @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif> </td>
                                 <td>
                                     <select name="product_tax[]" id="" style="width:100px;" class="form-control product_tax"
@@ -833,7 +833,7 @@
                         '<td><input required type="text" class="form-control text-center" name="product_unit[]" value="' +
                         typeValue +
                         '"></td>' +
-                        '<td><input required type="text" oninput="validatQtyInput(this)" name="product_qty[]" class="quantity-input form-control text-center" value="' +
+                        '<td><input required type="text" oninput="validateQtyInput1(this)" name="product_qty[]" class="quantity-input form-control text-center" value="' +
                         numberssValue + '"></td>' +
                         '<td><input required type="text" class="form-control product_price text-center" name="product_price[]" value="' +
                         price + '"></td>' +
