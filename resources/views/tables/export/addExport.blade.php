@@ -139,7 +139,7 @@
                 </div>
             </div>
             {{-- Bảng thêm sản phẩm --}}
-            <div class="mt-4" style="overflow-x: auto;">
+            <div class="mt-4" style="overflow-x: scroll !important;">
                 <table class="table table-hover bg-white rounded" id="sourceTable">
                     <thead class="">
                         <tr>
@@ -390,8 +390,8 @@
             const slInput = $(
                 "<td>" +
                 "<div class='d-flex'>" +
-                "<input type='text' oninput='limitMaxValue(this)' id='product_qty' class='quantity-input form-control' name='product_qty[]' required style='width:50px;'>" +
-                "<input type='text' readonly class='quantity-exist form-control' required style='width:50px;background:#D6D6D6;border:none;'>" +
+                "<input type='text' oninput='limitMaxValue(this)' id='product_qty' class='quantity-input form-control' name='product_qty[]' required style='min-width:80px;'>" +
+                "<input type='text' readonly class='quantity-exist form-control' required style='min-width:80px;background:#D6D6D6;border:none;'>" +
                 "</div>" +
                 "</td>"
             );
@@ -1163,8 +1163,8 @@
         const slInput = $(
             "<td>" +
             "<div class='d-flex'>" +
-            "<input type='text' oninput='limitMaxValue(this)' id='product_qty' class='quantity-input form-control' name='product_qty[]' required style='width:50px;'>" +
-            "<input type='text' readonly class='quantity-exist form-control' required style='width:50px;background:#D6D6D6;border:none;'>" +
+            "<input type='text' oninput='limitMaxValue(this)' id='product_qty' class='quantity-input form-control' name='product_qty[]' required style='min-width:80px;'>" +
+            "<input type='text' readonly class='quantity-exist form-control' required style='min-width:80px;background:#D6D6D6;border:none;'>" +
             "</div>" +
             "</td>"
         );

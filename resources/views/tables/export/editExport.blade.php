@@ -430,11 +430,11 @@
                                                 echo 'readonly';
                                             } ?>
                                             value="{{ $value_export->product_qty }}" name="product_qty[]"
-                                            required="" style="width:50px;">
+                                            required="" style="min-width:80px;">
                                         <input type="text" readonly="" class="quantity-exist form-control"
                                             required=""
                                             value="/{{ $value_export->tonkho + $value_export->product_qty }}"
-                                            style="width:50px;background:#D6D6D6;border:none;" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                            style="min-width:80px;background:#D6D6D6;border:none;" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                                 echo 'hidden';
                                             } ?>>
                                     </div>
@@ -796,8 +796,8 @@
             const slInput = $(
                 "<td>" +
                 "<div class='d-flex'>" +
-                "<input type='text' oninput='limitMaxValue(this)' id='product_qty' class='quantity-input form-control text-center' name='product_qty[]' required style='width:50px;'>" +
-                "<input type='text' readonly class='quantity-exist form-control' required style='width:50px;background:#D6D6D6;border:none;'>" +
+                "<input type='text' oninput='limitMaxValue(this)' id='product_qty' class='quantity-input form-control text-center' name='product_qty[]' required style='min-width:80px;'>" +
+                "<input type='text' readonly class='quantity-exist form-control' required style='min-width:80px;background:#D6D6D6;border:none;'>" +
                 "</div>" +
                 "</td>"
             );

@@ -330,12 +330,12 @@
                                 <td>
                                     <div class='d-flex'>
                                         <input type="text" oninput="limitMaxEdit(this)" id="product_qty"
-                                            class="quantity-input form-control text-center" style="width: 50px"
+                                            class="quantity-input form-control text-center" style="min-width: 80px"
                                             value="{{ $value_export->product_qty }}" name="product_qty[]"
                                             required="">
                                         <input type="text" class="quantity-exist form-control" required=""
                                             value="/{{ $value_export->product_qty + $value_export->soluong }}"
-                                            style="width:50px;background:#D6D6D6;border:none;">
+                                            style="min-width:80px;background:#D6D6D6;border:none;">
                                     </div>
                                 </td>
                                 <td>
