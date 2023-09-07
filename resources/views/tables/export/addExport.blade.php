@@ -112,13 +112,13 @@
                             <ul id="myUL" class="bg-white position-absolute rounded shadow p-0 scroll-data"
                                 style="z-index: 99;width:37%;">
                                 @foreach ($customer as $item)
-                                    @if (Auth::user()->id == $item->user_id || Auth::user()->can('isAdmin'))
-                                        <li class="p-2 search-info" id="{{ $item->id }}" name="search-info">
-                                            <a href="#" class="text-dark justify-content-between p-2">
-                                                <span class="w-50">{{ $item->guest_name }}</span>
-                                            </a>
-                                        </li>
-                                    @endif
+                                    {{-- @if (Auth::user()->id == $item->user_id || Auth::user()->can('isAdmin')) --}}
+                                    <li class="p-2 search-info" id="{{ $item->id }}" name="search-info">
+                                        <a href="#" class="text-dark justify-content-between p-2">
+                                            <span class="w-50">{{ $item->guest_name }}</span>
+                                        </a>
+                                    </li>
+                                    {{-- @endif --}}
                                 @endforeach
                             </ul>
                         </div>
