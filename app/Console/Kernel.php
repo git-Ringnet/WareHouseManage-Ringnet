@@ -40,7 +40,7 @@ class Kernel extends ConsoleKernel
                 $data = [
                     'export_status' => $debt->debt_status,
                 ];
-                $history=new History();
+                $history = new History();
                 $history->updateHistoryByExport($data, $debt->export_id);
                 $debt->save();
                 $debt->refresh();
@@ -66,12 +66,14 @@ class Kernel extends ConsoleKernel
                 $data = [
                     'import_status' => $debt->debt_status,
                 ];
-                $history=new History();
+                $history = new History();
                 $history->updateHistoryByImport($data, $debt->import_id);
                 // $debt->flushCache();
                 $debt->save();
                 $debt->refresh();
             }
+            History::where('debt_export_end', '0000-00-00 00:00:00')->update(['debt_export_end' => null]);
+            Debt::where('date_end', '0000-00-00 00:00:00')->update(['date_end' => null]);
         })->everyThreeHours();
     }
 
