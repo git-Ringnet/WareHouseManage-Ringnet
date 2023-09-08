@@ -1003,6 +1003,33 @@ class AddProductController extends Controller
                         ->where('exports.export_status', 2)
                         ->whereIn('product.id', $productIds)
                         ->get();
+                    $productHistory = Product::whereIn('id', $productIds)->get();
+
+                    if ($productHistory !== null) {
+                        foreach ($productHistory as $productHis) {
+                            // Cập nhật xuất hàng
+                            $productExports = productExports::where('product_id', $productHis->id)->get();
+
+                            foreach ($productExports as $productExport) {
+                                $productExport->product_name = $productHis->product_name;
+                                $productExport->product_unit = $productHis->product_unit;
+                                $productExport->product_tax = $productHis->product_tax;
+                                $productExport->save();
+
+                                // Cập nhật lịch sử
+                                $history = History::where('product_id', $productHis->id)->first();
+
+                                if ($history !== null) { // Kiểm tra nếu $history không phải là null
+                                    $total_export = ($productExport->product_qty * $productExport->product_price) + ($productExport->product_qty * $productExport->product_price * $productHis->product_tax) / 100;
+
+                                    $history->export_total = $total_export;
+                                    $history->export_unit = $productHis->product_unit;
+                                    $history->save();
+                                }
+                            }
+                        }
+                    }
+
                     if ($exports !== null) {
                         foreach ($exports as $export) {
                             // Tính toán giá trị total_sales và total_import
@@ -1015,6 +1042,8 @@ class AddProductController extends Controller
                                 // Lấy thông tin product từ product_id
                                 $product = Product::find($productExport->product_id);
                                 $totalImport += $product->product_price * $productExport->product_qty;
+                                //
+                                $total_export = ($productExport->product_qty * $productExport->product_price) + ($productExport->product_qty * $productExport->product_price * $productHis->product_tax) / 100;
                             }
 
                             // Tính toán giá trị total_difference

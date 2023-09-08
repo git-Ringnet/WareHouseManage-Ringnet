@@ -352,7 +352,7 @@
                 </div>
             </div>
             {{-- Bảng thêm sản phẩm --}}
-            <div class="mt-4" style="overflow-x: scroll !important;">
+            <div class="mt-4" style="overflow-x: auto;">
                 <table class="table" id="sourceTable">
                     <thead class="bg-white border-0 rounded-top">
                         <tr>
@@ -430,11 +430,11 @@
                                                 echo 'readonly';
                                             } ?>
                                             value="{{ $value_export->product_qty }}" name="product_qty[]"
-                                            required="" style="min-width:80px;">
+                                            required="" style="min-width:70px;">
                                         <input type="text" readonly="" class="quantity-exist form-control"
                                             required=""
                                             value="/{{ $value_export->tonkho + $value_export->product_qty }}"
-                                            style="min-width:80px;background:#D6D6D6;border:none;" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                            style="min-width:70px;background:#D6D6D6;border:none;" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                                 echo 'hidden';
                                             } ?>>
                                     </div>
@@ -450,8 +450,8 @@
                                         required="">
                                 </td>
                                 <td>
-                                    <select disabled name="product_tax[]" class="product_tax form-control text-center"
-                                        style="width: 100px;" id="product_tax" required <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                    <select disabled name="product_tax[]" class="product_tax form-control"
+                                        style="width: 80px;" id="product_tax" required <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                             echo 'disabled';
                                         } ?>>
                                         <option value="0" <?php if ($value_export->thue == 0) {
@@ -796,8 +796,8 @@
             const slInput = $(
                 "<td>" +
                 "<div class='d-flex'>" +
-                "<input type='text' oninput='limitMaxValue(this)' id='product_qty' class='quantity-input form-control text-center' name='product_qty[]' required style='min-width:80px;'>" +
-                "<input type='text' readonly class='quantity-exist form-control' required style='min-width:80px;background:#D6D6D6;border:none;'>" +
+                "<input type='text' oninput='limitMaxValue(this)' id='product_qty' class='quantity-input form-control text-center' name='product_qty[]' required style='min-width:70px;'>" +
+                "<input type='text' readonly class='quantity-exist form-control' required style='min-width:70px;background:#D6D6D6;border:none;'>" +
                 "</div>" +
                 "</td>"
             );
@@ -816,7 +816,7 @@
                 "<td><span class='total-amount form-control text-center' style='background:#e9ecef; min-width:140px'>0</span></td>"
             );
             const ghichuInput = $(
-                "<td><input type='text' class='note_product form-control text-left' name='product_note[]'></td>"
+                "<td><input type='text' class='note_product form-control text-left' name='product_note[]' style='min-width:120px'></td>"
             );
             const info = $(
                 "<td data-toggle='modal' data-target='#productModal'><img src='../../dist/img/icon/Group.png'></td>"

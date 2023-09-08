@@ -10,6 +10,6 @@ class productExports extends Model
     use HasFactory;
     protected $fillable = [
         'product_id', 'product_name', 'product_unit', 'product_qty', 'product_price', 'product_note',
-        'product_tax', 'product_total'
+        'product_tax', 'product_total','export_id'
     ];
 }

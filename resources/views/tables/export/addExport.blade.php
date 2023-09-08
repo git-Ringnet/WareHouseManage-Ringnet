@@ -139,7 +139,7 @@
                 </div>
             </div>
             {{-- Bảng thêm sản phẩm --}}
-            <div class="mt-4" style="overflow-x: scroll !important;">
+            <div class="mt-4" style="overflow-x: auto;">
                 <table class="table table-hover bg-white rounded" id="sourceTable">
                     <thead class="">
                         <tr>
@@ -390,8 +390,8 @@
             const slInput = $(
                 "<td>" +
                 "<div class='d-flex'>" +
-                "<input type='text' oninput='limitMaxValue(this)' id='product_qty' class='quantity-input form-control' name='product_qty[]' required style='min-width:80px;'>" +
-                "<input type='text' readonly class='quantity-exist form-control' required style='min-width:80px;background:#D6D6D6;border:none;'>" +
+                "<input type='text' oninput='limitMaxValue(this)' id='product_qty' class='quantity-input form-control' name='product_qty[]' required style='min-width:70px;'>" +
+                "<input type='text' readonly class='quantity-exist form-control' required style='min-width:70px;background:#D6D6D6;border:none;'>" +
                 "</div>" +
                 "</td>"
             );
@@ -399,10 +399,10 @@
                 "<td><input type='text' class='product_price form-control text-center' style='min-width:140px' id='product_price' name='product_price[]' required></td>"
             );
             const ghichuInput = $(
-                "<td><input type='text' class='note_product form-control' style='width:140px' name='product_note[]'></td>"
+                "<td><input type='text' class='note_product form-control' style='width:120px' name='product_note[]'></td>"
             );
             const thueInput = $("<td>" +
-                "<select disabled name='product_tax[]' class='product_tax p-1 form-control' style='width:100px' id='product_tax' required>" +
+                "<select disabled name='product_tax[]' class='product_tax p-1 form-control' style='width:80px' id='product_tax' required>" +
                 "<option value='0'>0%</option>" +
                 "<option value='8'>8%</option>" +
                 "<option value='10'>10%</option>" +
@@ -1163,8 +1163,8 @@
         const slInput = $(
             "<td>" +
             "<div class='d-flex'>" +
-            "<input type='text' oninput='limitMaxValue(this)' id='product_qty' class='quantity-input form-control' name='product_qty[]' required style='min-width:80px;'>" +
-            "<input type='text' readonly class='quantity-exist form-control' required style='min-width:80px;background:#D6D6D6;border:none;'>" +
+            "<input type='text' oninput='limitMaxValue(this)' id='product_qty' class='quantity-input form-control' name='product_qty[]' required style='min-width:70px;'>" +
+            "<input type='text' readonly class='quantity-exist form-control' required style='min-width:70px;background:#D6D6D6;border:none;'>" +
             "</div>" +
             "</td>"
         );
@@ -1172,10 +1172,10 @@
             "<td><input type='text' class='product_price form-control text-center' style='min-width:140px' id='product_price' name='product_price[]' required></td>"
         );
         const ghichuInput = $(
-            "<td><input type='text' class='note_product form-control' style='width:140px' name='product_note[]'></td>"
+            "<td><input type='text' class='note_product form-control' style='width:120px' name='product_note[]'></td>"
         );
         const thueInput = $("<td>" +
-            "<select disabled name='product_tax[]' class='product_tax p-1 form-control' style='width:100px' id='product_tax' required>" +
+            "<select disabled name='product_tax[]' class='product_tax p-1 form-control' style='width:80px' id='product_tax' required>" +
             "<option value='0'>0%</option>" +
             "<option value='8'>8%</option>" +
             "<option value='10'>10%</option>" +
