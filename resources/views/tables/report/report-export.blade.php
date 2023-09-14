@@ -608,7 +608,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('sale_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
                                                 <input class="w-50 input-quantity sale-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -638,7 +638,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('import_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
                                                 <input class="w-50 input-quantity export-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -668,7 +668,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('difference_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
                                                 <input class="w-50 input-quantity difference-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -698,7 +698,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('sum_debt_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
                                                 <input class="w-50 input-quantity sum_debt-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -770,10 +770,10 @@ $index = array_search($item['label'], $numberedLabels);
                                     <tr>
                                         <th scope="col">STT</th>
                                         <th scope="col"><span class="d-flex">
-                                                <a href="#" class="sort-link" data-sort-by="exports.user_id"
+                                                <a href="#" class="sort-link" data-sort-by="nhanvien"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Nhân viên</button></a>
-                                                <div class="icon" id="icon-exports.user_id"></div>
+                                                <div class="icon" id="icon-nhanvien"></div>
                                             </span></th>
                                         <th scope="col"><span class="d-flex">
                                                 <a href="#" class="sort-link" data-sort-by="email"
