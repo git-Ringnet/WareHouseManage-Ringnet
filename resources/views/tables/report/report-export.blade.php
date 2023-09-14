@@ -313,19 +313,20 @@ $index = array_search($item['label'], $numberedLabels);
                                 </span>
                             @endforeach
                             @if (Auth::user()->can('isAdmin'))
-                                @php $nhanvien = [];
-                                                                        if (isset(request()->nhanvien)) {
-                                                                            $nhanvien = request()->nhanvien;
-                                                                        } else {
-                                                                            $nhanvien = [];
-                                                                }
-                                                                $nhanviens = [];
-                                                                        if (isset(request()->nhanviens)) {
-                                                                            $nhanviens = request()->nhanviens;
-                                                                        } else {
-                                                                            $nhanviens = [];
-                                                                }
-                                                                @endphp
+                                @php
+                                    $nhanvien = [];
+                                    if (isset(request()->nhanvien)) {
+                                        $nhanvien = request()->nhanvien;
+                                    } else {
+                                        $nhanvien = [];
+                                    }
+                                    $nhanviens = [];
+                                    if (isset(request()->nhanviens)) {
+                                        $nhanviens = request()->nhanviens;
+                                    } else {
+                                        $nhanviens = [];
+                                    }
+                                @endphp
                                 <div class="filter-admin">
                                     <button class="btn btn-filter btn-light mr-2" id="btn-nhanvien" type="button">
                                         <span>
@@ -362,19 +363,19 @@ $index = array_search($item['label'], $numberedLabels);
                                                             $seenValues = [];
                                                         @endphp
                                                         @foreach ($debtsSale as $value)
-                                                        @if (!in_array($value->name, $seenValues))
-                                                        <li>
-                                                            <input type="checkbox" id="name_active"
-                                                                {{ in_array($value->name, $nhanviens) ? 'checked' : '' }}
-                                                                name="nhanviens[]"
-                                                                value="{{ $value->name }}">
-                                                            <label id="nhanviens"
-                                                                for="">{{ $value->name }}</label>
-                                                        </li>
-                                                        @php
-                                                            $seenValues[] = $value->name;
-                                                        @endphp
-                                                    @endif
+                                                            @if (!in_array($value->name, $seenValues))
+                                                                <li>
+                                                                    <input type="checkbox" id="name_active"
+                                                                        {{ in_array($value->name, $nhanviens) ? 'checked' : '' }}
+                                                                        name="nhanviens[]"
+                                                                        value="{{ $value->name }}">
+                                                                    <label id="nhanviens"
+                                                                        for="">{{ $value->name }}</label>
+                                                                </li>
+                                                                @php
+                                                                    $seenValues[] = $value->name;
+                                                                @endphp
+                                                            @endif
                                                         @endforeach
                                                     @endif
                                                 </ul>
@@ -567,19 +568,19 @@ $index = array_search($item['label'], $numberedLabels);
                                                             $seenValues = [];
                                                         @endphp
                                                         @foreach ($debtsSale as $value)
-                                                        @if (!in_array($value->name, $seenValues))
-                                                        <li>
-                                                            <input type="checkbox" id="name_active"
-                                                                {{ in_array($value->name, $nhanvien) ? 'checked' : '' }}
-                                                                name="nhanvien[]"
-                                                                value="{{ $value->name }}">
-                                                            <label id="nhanvien"
-                                                                for="">{{ $value->name }}</label>
-                                                        </li>
-                                                        @php
-                                                            $seenValues[] = $value->name;
-                                                        @endphp
-                                                    @endif
+                                                            @if (!in_array($value->name, $seenValues))
+                                                                <li>
+                                                                    <input type="checkbox" id="name_active"
+                                                                        {{ in_array($value->name, $nhanvien) ? 'checked' : '' }}
+                                                                        name="nhanvien[]"
+                                                                        value="{{ $value->name }}">
+                                                                    <label id="nhanvien"
+                                                                        for="">{{ $value->name }}</label>
+                                                                </li>
+                                                                @php
+                                                                    $seenValues[] = $value->name;
+                                                                @endphp
+                                                            @endif
                                                         @endforeach
                                                     @endif
                                                 </ul>
@@ -607,7 +608,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('sale_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity sale-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -637,7 +638,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('import_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity export-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -667,7 +668,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('difference_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity difference-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -697,7 +698,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('sum_debt_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity sum_debt-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -769,10 +770,10 @@ $index = array_search($item['label'], $numberedLabels);
                                     <tr>
                                         <th scope="col">STT</th>
                                         <th scope="col"><span class="d-flex">
-                                                <a href="#" class="sort-link" data-sort-by="user_id"
+                                                <a href="#" class="sort-link" data-sort-by="exports.user_id"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">Nhân viên</button></a>
-                                                <div class="icon" id="icon-user_id"></div>
+                                                <div class="icon" id="icon-exports.user_id"></div>
                                             </span></th>
                                         <th scope="col"><span class="d-flex">
                                                 <a href="#" class="sort-link" data-sort-by="email"
