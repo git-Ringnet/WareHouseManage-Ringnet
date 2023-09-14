@@ -137,7 +137,8 @@ $index = array_search($item['label'], $numberedLabels);
                                 </span>
                             @endforeach
                             @if (Auth::user()->can('isAdmin'))
-                                @php $nhanvien = [];
+                                @php
+                                    $nhanvien = [];
                                     if (isset(request()->nhanvien)) {
                                         $nhanvien = request()->nhanvien;
                                     } else {
@@ -179,19 +180,18 @@ $index = array_search($item['label'], $numberedLabels);
                                                             $seenValues = [];
                                                         @endphp
                                                         @foreach ($debtsSale as $value)
-                                                        @if (!in_array($value->name, $seenValues))
-                                                        <li>
-                                                            <input type="checkbox" id="name_active"
-                                                                {{ in_array($value->name, $nhanvien) ? 'checked' : '' }}
-                                                                name="nhanvien[]"
-                                                                value="{{ $value->name }}">
-                                                            <label id="nhanvien"
-                                                                for="">{{ $value->name }}</label>
-                                                        </li>
-                                                        @php
-                                                            $seenValues[] = $value->name;
-                                                        @endphp
-                                                    @endif
+                                                            @if (!in_array($value->name, $seenValues))
+                                                                <li>
+                                                                    <input type="checkbox" id="name_active"
+                                                                        {{ in_array($value->name, $nhanvien) ? 'checked' : '' }}
+                                                                        name="nhanvien[]" value="{{ $value->name }}">
+                                                                    <label id="nhanvien"
+                                                                        for="">{{ $value->name }}</label>
+                                                                </li>
+                                                                @php
+                                                                    $seenValues[] = $value->name;
+                                                                @endphp
+                                                            @endif
                                                         @endforeach
                                                     @endif
                                                 </ul>
@@ -472,19 +472,19 @@ $index = array_search($item['label'], $numberedLabels);
                                                             $seenValues = [];
                                                         @endphp
                                                         @foreach ($debtsSale as $value)
-                                                        @if (!in_array($value->name, $seenValues))
-                                                        <li>
-                                                            <input type="checkbox" id="name_active"
-                                                                {{ in_array($value->id, $nhanvien) ? 'checked' : '' }}
-                                                                name="nhanvien[]"
-                                                                value="{{ $value->id }}">
-                                                            <label id="nhanvien"
-                                                                for="">{{ $value->name }}</label>
-                                                        </li>
-                                                        @php
-                                                            $seenValues[] = $value->name;
-                                                        @endphp
-                                                    @endif
+                                                            @if (!in_array($value->name, $seenValues))
+                                                                <li>
+                                                                    <input type="checkbox" id="name_active"
+                                                                        {{ in_array($value->id, $nhanvien) ? 'checked' : '' }}
+                                                                        name="nhanvien[]"
+                                                                        value="{{ $value->id }}">
+                                                                    <label id="nhanvien"
+                                                                        for="">{{ $value->name }}</label>
+                                                                </li>
+                                                                @php
+                                                                    $seenValues[] = $value->name;
+                                                                @endphp
+                                                            @endif
                                                         @endforeach
                                                     @endif
                                                 </ul>
@@ -707,10 +707,10 @@ $index = array_search($item['label'], $numberedLabels);
                                         @endcan
                                         <th scope="col">
                                             <span class="d-flex align-items-center">
-                                                <a href="#" class="sort-link" data-sort-by="id"
+                                                <a href="#" class="sort-link" data-sort-by="hdr"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
                                                         type="submit">HĐ ra</button></a>
-                                                <div class="icon" id="icon-id"></div>
+                                                <div class="icon" id="icon-hdr"></div>
                                             </span>
                                         </th>
                                         <th scope="col">
@@ -1122,29 +1122,29 @@ $index = array_search($item['label'], $numberedLabels);
 
     // Xử lí filter ngày tháng
     $(document).ready(function() {
-    $('#end').blur(function() {
-        var startValue = $('#start').val();
-        var endValue = $(this).val();
+        $('#end').blur(function() {
+            var startValue = $('#start').val();
+            var endValue = $(this).val();
 
-        if (startValue && endValue) { // Kiểm tra cả hai trường đã được nhập đầy đủ
-            var startDate = new Date(startValue);
-            var endDate = new Date(endValue);
+            if (startValue && endValue) { // Kiểm tra cả hai trường đã được nhập đầy đủ
+                var startDate = new Date(startValue);
+                var endDate = new Date(endValue);
 
-            // Kiểm tra ngày, tháng và năm trước khi thực hiện so sánh
-            if (
-                endDate.getFullYear() < startDate.getFullYear() ||
-                (endDate.getFullYear() === startDate.getFullYear() &&
-                 endDate.getMonth() < startDate.getMonth()) ||
-                (endDate.getFullYear() === startDate.getFullYear() &&
-                 endDate.getMonth() === startDate.getMonth() &&
-                 endDate.getDate() < startDate.getDate())
-            ) {
-                alert('Ngày kết thúc không được nhỏ hơn ngày bắt đầu!');
-                $(this).val('');
+                // Kiểm tra ngày, tháng và năm trước khi thực hiện so sánh
+                if (
+                    endDate.getFullYear() < startDate.getFullYear() ||
+                    (endDate.getFullYear() === startDate.getFullYear() &&
+                        endDate.getMonth() < startDate.getMonth()) ||
+                    (endDate.getFullYear() === startDate.getFullYear() &&
+                        endDate.getMonth() === startDate.getMonth() &&
+                        endDate.getDate() < startDate.getDate())
+                ) {
+                    alert('Ngày kết thúc không được nhỏ hơn ngày bắt đầu!');
+                    $(this).val('');
+                }
             }
-        }
+        });
     });
-});
     $('.ks-cboxtags-guest li').on('click', function(event) {
         if (event.target.tagName !== 'INPUT') {
             var checkbox = $(this).find('input[type="checkbox"]');
@@ -1463,6 +1463,7 @@ $index = array_search($item['label'], $numberedLabels);
 
     // Hiển thị form multiple action
     var isUserAdmin = document.getElementById('isUserAdmin').value === 'true';
+
     function updateMultipleActionVisibility() {
         if ($('.cb-element:checked').length > 0) {
             $('.multiple_action').show();
