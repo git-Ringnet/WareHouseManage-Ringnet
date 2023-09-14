@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\Provides;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -146,7 +147,21 @@ class ProductController extends Controller
         $unit = Product::where('product.product_qty','>',0)->get();
 
         $title = 'Tồn kho';
-        return view('tables.products.data', compact('products','perPage', 'string', 'provide', 'unit', 'sortType', 'title'));
+
+        $product_order = Product::all();
+        $productIds = array();
+        foreach ($product_order as $value) {
+            array_push($productIds, $value->id);
+        }
+        $serialnumber =  DB::table('serinumbers')
+        ->join('product', 'serinumbers.product_id', '=', 'product.id')
+        ->whereIn('product.id', $productIds)
+        ->select('serinumbers.*')
+        // ->select('serinumbers.*', 'productorders.id')
+        ->get();
+
+        
+        return view('tables.products.data', compact('serialnumber','products','perPage', 'string', 'provide', 'unit', 'sortType', 'title'));
     }
 
     /**
