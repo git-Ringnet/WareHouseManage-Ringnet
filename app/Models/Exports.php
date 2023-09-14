@@ -192,7 +192,7 @@ class Exports extends Model
             if ($orderBy == 'updated_at') {
                 $orderBy = "exports." . $orderBy;
             };
-            $tableexports = $tableexports->orderBy('exports.id', $orderType);
+            $tableexports = $tableexports->orderBy($orderBy, $orderType);
         }
         $tableexports = $tableexports->get();
         // dd($tableexports);
