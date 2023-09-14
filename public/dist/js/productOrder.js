@@ -378,6 +378,15 @@ function checkdata(e) {
     })
 }
 
+function deletedata(e){
+    var clickedDiv = $(e.target).closest('.modal-dialog');
+    var inputs = clickedDiv.find('.modal-body #table_SNS input[name^="product_SN"]');
+    console.log(inputs);
+    inputs.each(function () {
+        $(this).val("");
+    })
+}
+
 
 // Hàm chỉ cho phép nhập số và ký tự - 
 function validateNumberInput(input) {
@@ -644,7 +653,8 @@ $('.addRow').on('click', function () {
         '<div class="modal-footer">' +
         // '<button type="button" class="btn btn-secondary" onclick="checkData(event)" data-dismiss="modal">Lưu</button>' +
         '<div class="d-flex justify-content-center w-100"> <button type="button" class="btn btn-primary mr-2" data-dismiss="modal" onclick="checkdata(event)">Lưu</button>' +
-        '<button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button> </div>' +
+        // '<button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="deletedata(event)">Hủy</button> 
+        '</div>' +
         '</div>' +
         '</div>' +
         '</div>' +
@@ -747,7 +757,8 @@ $('.addRow1').on('click', function () {
         '<div class="modal-footer">' +
         // '<button type="button" class="btn btn-secondary" onclick="checkData(event)" data-dismiss="modal">Lưu</button>' +
         '<div class="d-flex justify-content-center w-100"> <button type="button" class="btn btn-primary mr-2" data-dismiss="modal" onclick="checkdata(event)">Lưu</button>' +
-        '<button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button> </div>' +
+        // '<button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button> 
+        '</div>' +
         '</div>' +
         '</div>' +
         '</div>' +

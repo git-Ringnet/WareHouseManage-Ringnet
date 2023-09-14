@@ -749,7 +749,7 @@
                             '<p>Thông tin chi tiết về số S/N của mỗi sản phẩm </p>' +
                             '</div>' +
                             '<button type="button" class="close" data-dismiss="modal" aria-label="Close">' +
-                            '<span aria-hidden="true" onclick="checkData(event)">&times;</span>' +
+                            '<span aria-hidden="true" onclick="checkdata(event)">&times;</span>' +
                             '</button>' +
                             '</div>' +
                             '<div class="modal-body">' +
@@ -793,8 +793,9 @@
                             '<div class="AddSN btn btn-secondary" style="border:1px solid gray;" >Thêm dòng</div>' +
                             '</div>' +
                             '<div class="modal-footer">' +
-                            '<div class="d-flex justify-content-center w-100"> <button type="button" class="btn btn-primary mr-2" data-dismiss="modal">Lưu</button>' +
-                            '<button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button> </div>' +
+                            '<div class="d-flex justify-content-center w-100"> <button type="button" class="btn btn-primary mr-2" data-dismiss="modal" onclick="checkdata(event)">Lưu</button>' +
+                            // '<button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="deletedata(event)">Hủy</button> 
+                            '</div>' +
                             '</div>' +
                             '</div>' +
                             '</div>' +

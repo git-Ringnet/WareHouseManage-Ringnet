@@ -496,8 +496,8 @@
                                             <div class="d-flex justify-content-center w-100">
                                                 <button type="button" class="btn btn-primary mr-2"
                                                     onclick="checkdata(event)" data-dismiss="modal">Lưu</button>
-                                                <button type="button" class="btn btn-secondary"
-                                                    onclick="checkdata(event)" data-dismiss="modal">Hủy</button>
+                                                {{-- <button type="button" class="btn btn-secondary"
+                                                    onclick="checkdata(event)" data-dismiss="modal">Hủy</button> --}}
                                             </div>
                                         </div>
                                     @endif

@@ -561,8 +561,8 @@
                                                 <div class="d-flex justify-content-center w-100">
                                                     <button type="button" class="btn btn-primary mr-2"
                                                         onclick="checkdata(event)" data-dismiss="modal">Lưu</button>
-                                                    <button type="button" class="btn btn-secondary"
-                                                        onclick="checkdata(event)" data-dismiss="modal">Hủy</button>
+                                                    {{-- <button type="button" class="btn btn-secondary"
+                                                        onclick="checkdata(event)" data-dismiss="modal">Hủy</button> --}}
                                                 </div>
                                             </div>
                                         @endif
@@ -1132,7 +1132,8 @@
                         '</div>' +
                         '<div class="modal-footer">' +
                         '<div class="d-flex justify-content-center w-100"> <button type="button" class="btn btn-primary mr-2" data-dismiss="modal">Lưu</button>' +
-                        '<button type="button" class="btn btn-secondary" data-dismiss="modal">Lưu</button> </div>' +
+                        // '<button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="deletedata(event)">Hủy</button> 
+                        '</div>' +
                         '</div>' +
                         '</div>' +
                         '</div>' +
