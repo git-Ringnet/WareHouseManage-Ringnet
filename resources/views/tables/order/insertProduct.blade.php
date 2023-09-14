@@ -801,6 +801,7 @@ $index = array_search($item['label'], $numberedLabels);
                 list_id: list_id,
             },
             success: function(data) {
+                console.log(data);
                 location.reload();
             }
         })
@@ -906,36 +907,6 @@ $index = array_search($item['label'], $numberedLabels);
 
         var allDataSame = true;
         var firstData = null;
-        // $('input[name="ids[]"]').each(function() {
-        //     if ($(this).is(':checked')) {
-        //         var data = $(this).closest('tr').find('td:eq(7)').text().trim();
-        //         
-        //         if (firstData === null) {
-        //             firstData = data;
-        //         } else if (firstData !== data) {
-        //             allDataSame = false;
-        //             return false;
-        //         }
-        //     }
-        // });
-        // if (allDataSame == false) {
-        //     $('.multiple_action').hide();
-        // }
-
-        // Apply actions based on the data value
-        // if (allDataSame && firstData === "Đã nhập hàng") {
-        //     $('.btn-xoahang').hide();
-        //     $('.btn-duyet').hide();
-        //     $('.btn-huy').show();
-        // } else if (allDataSame && firstData === "Đã hủy") {
-        //     $('.btn-duyet').hide();
-        //     $('.btn-huy').hide();
-        //     $('.btn-xoahang').show();
-        // } else {
-        //     $('.btn-xoahang').hide();
-        //     $('.btn-huy').hide();
-        //     $('.btn-duyet').show();
-        // }
 
         var selectedStates = []; // Mảng lưu trữ các trạng thái đã chọn
         $('input[name="ids[]"]').each(function() {

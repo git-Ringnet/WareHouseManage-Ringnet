@@ -250,6 +250,7 @@ class Orders extends Model
             ->first();
         if ($check) {
             DB::table($this->table)->where('id', $id)->delete();
+            Serinumbers::where('order_id',$check->id)->delete();
             return $status = 0;
         } else {
             return $status = 1;
@@ -279,6 +280,10 @@ class Orders extends Model
                         'created_at' => $c->created_at
                     ]);
                     $order->update(['product_id' => $product->id]);
+                    Serinumbers::where('product_orderid', $order->id)->update([
+                        'product_id' => $product->id,
+                        'seri_status' => 1
+                    ]);
                 }
                 $NCC = Provides::find($c->provide_id);
 
