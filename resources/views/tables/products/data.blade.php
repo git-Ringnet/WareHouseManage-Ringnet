@@ -762,10 +762,20 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <div class="icon" id="icon-soluong"></div>
                                             </span>
                                         </th>
+                                        <th scope="col">
+                                            <span class="d-flex justify-content-center align-items-center">
+                                                <a href="#" class="sort-link" data-sort-by="soluong"
+                                                    data-sort-type="{{ $sortType }}"><button class="btn-sort"
+                                                        type="submit">SN
+                                                    </button></a>
+                                                <div class="icon" id="icon-soluong"></div>
+                                            </span>
+                                        </th>
                                     </tr>
                                     </form>
                                 </thead>
                                 <tbody>
+                                    <?php $stt = 0; ?>
                                     @foreach ($products as $value)
                                         <tr onclick="handleRowClick('checkbox-{{ $value->id }}', event);">
                                             @can('view-guests')
@@ -775,10 +785,10 @@ $index = array_search($item['label'], $numberedLabels);
                                                 </td>
                                             @endcan
                                             <td class="text-left">{{ $value->id }}</td>
-                                            <td class="text-left">{{ $value->product_name }}</td>
+                                            <td class="text-left product_name">{{ $value->product_name }}</td>
                                             <td class="text-left">{{ $value->provide }}</td>
                                             <td class="text-center">{{ $value->product_unit }}</td>
-                                            <td class="text-right">{{ $value->product_qty }}</td>
+                                            <td class="text-right product_qty">{{ $value->product_qty }}</td>
                                             <td class="text-right">
                                                 {{ $value->product_trade == null ? 0 : $value->product_trade }}
                                             </td>
@@ -815,7 +825,32 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </div>
                                                 @endif
                                             </td>
+                                            <td class="text-center">
+                                                <button class="exampleModal" name="btn_add_SN[]" type="button"
+                                                    class="btn btn-primary" data-toggle="modal"
+                                                    data-target="#exampleModal{{ $stt }}"
+                                                    style="background: transparent; border:none;">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="32"
+                                                        height="32" viewBox="0 0 32 32" fill="none">
+                                                        <rect width="32" height="32" rx="4"
+                                                            fill="white" />
+                                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                                            d="M11.9062 10.643C11.9062 10.2092 12.258 9.85742 12.6919 9.85742H24.2189C24.6528 9.85742 25.0045 10.2092 25.0045 10.643C25.0045 11.0769 24.6528 11.4286 24.2189 11.4286H12.6919C12.258 11.4286 11.9062 11.0769 11.9062 10.643Z"
+                                                            fill="#0095F6" />
+                                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                                            d="M11.9062 16.4707C11.9062 16.0368 12.258 15.6851 12.6919 15.6851H24.2189C24.6528 15.6851 25.0045 16.0368 25.0045 16.4707C25.0045 16.9045 24.6528 17.2563 24.2189 17.2563H12.6919C12.258 17.2563 11.9062 16.9045 11.9062 16.4707Z"
+                                                            fill="#0095F6" />
+                                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                                            d="M11.9062 22.2978C11.9062 21.8639 12.258 21.5122 12.6919 21.5122H24.2189C24.6528 21.5122 25.0045 21.8639 25.0045 22.2978C25.0045 22.7317 24.6528 23.0834 24.2189 23.0834H12.6919C12.258 23.0834 11.9062 22.7317 11.9062 22.2978Z"
+                                                            fill="#0095F6" />
+                                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                                            d="M6.6665 10.6431C6.6665 9.91981 7.25282 9.3335 7.97607 9.3335C8.69932 9.3335 9.28563 9.91981 9.28563 10.6431C9.28563 11.3663 8.69932 11.9526 7.97607 11.9526C7.25282 11.9526 6.6665 11.3663 6.6665 10.6431ZM6.6665 16.4705C6.6665 15.7473 7.25282 15.161 7.97607 15.161C8.69932 15.161 9.28563 15.7473 9.28563 16.4705C9.28563 17.1938 8.69932 17.7801 7.97607 17.7801C7.25282 17.7801 6.6665 17.1938 6.6665 16.4705ZM7.97607 20.9884C7.25282 20.9884 6.6665 21.5747 6.6665 22.298C6.6665 23.0212 7.25282 23.6075 7.97607 23.6075C8.69932 23.6075 9.28563 23.0212 9.28563 22.298C9.28563 21.5747 8.69932 20.9884 7.97607 20.9884Z"
+                                                            fill="#0095F6" />
+                                                    </svg>
+                                                </button>
+                                            </td>
                                         </tr>
+                                        <?php $stt++; ?>
                                     @endforeach
                                 </tbody>
                             </table>
@@ -836,37 +871,75 @@ $index = array_search($item['label'], $numberedLabels);
                         <div class="paginator mt-2 d-flex justify-content-end">
                             {{ $products->appends(request()->except('page'))->links() }}
                         </div>
-                    </div>
-                    {{-- @if ($products->count() > 0)
-                        @php
-                            $paginationRange = App\Helpers\PaginationHelper::calculatePaginationRange($products->currentPage(), $products->lastPage());
-                        @endphp
-                        <div class="pagination mt-4 d-flex justify-content-end">
-                            <ul>
-                                @if ($paginationRange['start'] > 1)
-                                    <li><a href="{{ $products->url(1) }}">1</a></li>
-                                    @if ($paginationRange['start'] > 2)
-                                        <li><span>...</span></li>
-                                    @endif
-                                @endif
-
-                                @for ($i = $paginationRange['start']; $i <= $paginationRange['end']; $i++)
-                                    <li class="{{ $i == $products->currentPage() ? 'active' : '' }}">
-                                        <a href="{{ $products->url($i) }}">{{ $i }}</a>
-                                    </li>
-                                @endfor
-
-                                @if ($paginationRange['end'] < $products->lastPage())
-                                    @if ($paginationRange['end'] < $products->lastPage() - 1)
-                                        <li><span>...</span></li>
-                                    @endif
-                                    <li><a
-                                            href="{{ $products->url($products->lastPage()) }}">{{ $products->lastPage() }}</a>
-                                    </li>
-                                @endif
-                            </ul>
+                        <div id="list_modal">
+                            <?php $stt = 0; ?>
+                            @foreach ($products as $pro)
+                                <div class="modal fade" id="exampleModal{{ $stt }}" tabindex="-1"
+                                    role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
+                                   >
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header align-items-center">
+                                                <div>
+                                                    <h5 class="modal-title" id="exampleModalLabel">Serial Number</h5>
+                                                    <p>Thông tin chi tiết về số S/N của mỗi sản phẩm </p>
+                                                </div>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true" onclick="checkdata(event)">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <table class="table table-hover table_list_order">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Tên sản phẩm</th>
+                                                            <th class="text-right">Số lượng</th>
+                                                            <th class="text-right">Số lượng S/N</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="name_product"></td>
+                                                            <td class="qty_product text-right"></td>
+                                                            <td class="SNCount text-right">1</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <h3>Thông tin Serial Number </h3>
+                                                <div class="div_value{{ $stt }}">
+                                                    <table class="table" id="table_SNS">
+                                                        <thead>
+                                                            <tr>
+                                                                <th style="width:5%;"><span>STT</span></th>
+                                                                <th><span>Serial Number</span></th>
+                                                                <th style="width:3%;"></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <?php $st = 1; ?>
+                                                            @foreach ($serialnumber as $se)
+                                                                @if ($pro->id === $se->product_id)
+                                                                    <tr>
+                                                                        <td><span class="stt_SN"></span></td>
+                                                                        <td>
+                                                                            <span>{{ $se->serinumber }} </span>
+                                                                        </td>
+                                                                    </tr>
+                                                                @endif
+                                                                <?php $st++; ?>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <?php $stt++; ?>
+                            @endforeach
                         </div>
-                    @endif --}}
+                    </div>
                 </div>
             </div>
         </div>
@@ -1012,6 +1085,7 @@ $index = array_search($item['label'], $numberedLabels);
             $('.hdv-input').val('');
             document.getElementById('search-filter').submit();
         });
+        fillDataToModal();
     });
     // Tên sản phẩm
     $('#btn-id').click(function(event) {
@@ -1466,12 +1540,31 @@ $index = array_search($item['label'], $numberedLabels);
         var target = event.target;
 
         // Kiểm tra nếu target không có class "dropdown"
-        if (!target.closest('.dropdown') && !target.closest('.editEx')) {
+        if (!target.closest('.exampleModal') && !target.closest('.editEx')) {
             var checkbox = document.getElementById(checkboxId);
             if (checkbox) {
                 toggleCheckbox(checkboxId); // Thay đổi trạng thái checkbox
                 triggerChange(checkboxId); // Kích hoạt sự kiện change của checkbox
             }
+        }
+    }
+
+
+    function fillDataToModal() {
+        var info = document.querySelectorAll('.exampleModal');
+        for (let k = 0; k < info.length; k++) {
+            info[k].addEventListener('click', function() {
+                var productName = $(this).closest('tr').find('.product_name').text();
+                var productQty = $(this).closest('tr').find('.product_qty').text();
+                var countTR = $('.div_value' + k).find('tbody tr');
+                for (let i = 0; i < countTR.length; i++) {
+                    countTR.closest('table').find('thead tr th').length == 4 ? $(countTR[i]).find('td:eq(1)')
+                        .text(i + 1) : $(countTR[i]).find('td:eq(0)').text(i + 1);
+                }
+                $('.SNCount').text(countTR.length);
+                $('.name_product').text(productName);
+                $('.qty_product').text(productQty);
+            })
         }
     }
 </script>

@@ -106,17 +106,17 @@ class Orders extends Model
         $minDate = DB::table($this->table)
             ->selectRaw('MIN(DATE(created_at)) AS min_date')
             ->first();
-    
+
         // Check if $minDate is not null before formatting
         if ($minDate && $minDate->min_date) {
             // Format the date in dd-mm-yyyy format
             $formattedDate = date('d-m-Y', strtotime($minDate->min_date));
             return $formattedDate;
         }
-    
+
         return null; // Return null if there is no minimum date
     }
-    
+
     public function sumTotalOrders()
     {
         $startDate = now()->subDays(30); // Ngày bắt đầu là ngày hiện tại trừ đi 30 ngày
@@ -146,11 +146,11 @@ class Orders extends Model
     {
         return $this->hasOne(User::class, 'id', 'users_id');
     }
-    public function reportOrders($filter = [], $name = [], $roles = [], $orderBy = null, $orderType = null)
+    public function reportOrders($filter = [], $name = [], $names = [], $roles = [], $orderBy = null, $orderType = null)
     {
         $tableorders = Orders::leftJoin('users', 'users.id', 'orders.users_id')
             ->leftJoin('roles', 'users.roleid', 'roles.id')
-            ->leftJoin('debts', 'debts.export_id', 'orders.id')
+            ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
             ->select('users.name as nhanvien', 'roles.name as vaitro', 'users.email as email', 'users.id as userid')
             ->where('orders.order_status', 1)
             ->selectSub(function ($query) {
@@ -179,6 +179,9 @@ class Orders extends Model
         if (!empty($name)) {
             $tableorders = $tableorders->whereIn('users.name', $name);
         }
+        if (!empty($names)) {
+            $tableorders = $tableorders->whereIn('users.name', $names);
+        }
         if (!empty($roles)) {
             $tableorders = $tableorders->whereIn('users.roleid', $roles);
         }
@@ -186,7 +189,7 @@ class Orders extends Model
             if ($orderBy == 'updated_at') {
                 $orderBy = "orders." . $orderBy;
             };
-            $tableorders = $tableorders->orderBy('orders.id', $orderType);
+            $tableorders = $tableorders->orderBy($orderBy, $orderType);
         }
         $tableorders = $tableorders->get();
         return $tableorders;
@@ -195,7 +198,7 @@ class Orders extends Model
     {
         $tableorders = Orders::leftJoin('users', 'users.id', 'orders.users_id')
             ->leftJoin('roles', 'users.roleid', 'roles.id')
-            ->leftJoin('debts', 'debts.export_id', 'orders.id')
+            ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
             ->select('users.name as nhanvien', 'roles.name as vaitro', 'users.email as email', 'users.id as userid')
             ->where('orders.order_status', 1)
             ->selectSub(function ($query) use ($filter) {
@@ -247,6 +250,7 @@ class Orders extends Model
             ->first();
         if ($check) {
             DB::table($this->table)->where('id', $id)->delete();
+            Serinumbers::where('order_id',$check->id)->delete();
             return $status = 0;
         } else {
             return $status = 1;
@@ -276,6 +280,10 @@ class Orders extends Model
                         'created_at' => $c->created_at
                     ]);
                     $order->update(['product_id' => $product->id]);
+                    Serinumbers::where('product_orderid', $order->id)->update([
+                        'product_id' => $product->id,
+                        'seri_status' => 1
+                    ]);
                 }
                 $NCC = Provides::find($c->provide_id);
 

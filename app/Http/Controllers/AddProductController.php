@@ -33,6 +33,7 @@ class AddProductController extends Controller
     private $product;
     private $debtImport;
     private $history;
+    private $Serinumbers;
     public function __construct()
     {
         $this->orders = new Orders();
@@ -41,6 +42,7 @@ class AddProductController extends Controller
         $this->product = new Product();
         $this->debtImport = new DebtImport();
         $this->history = new History();
+        $this->Serinumbers = new Serinumbers();
     }
     public function index(Request $request)
     {
@@ -218,7 +220,25 @@ class AddProductController extends Controller
                 'provide_id' => $request->provide_id == null ? $new_provide : $request->provide_id
             ];
 
-            $this->productOrder->addProductOrder($dataProductOrder);
+            $product_orderid = $this->productOrder->addProductOrder($dataProductOrder);
+            $product_SN = $request->{'product_SN' . $i};
+            if ($product_SN != null) {
+                for ($y = 0; $y < count($product_SN); $y++) {
+                    if ($product_SN[$y]) {
+                        $dataSN = [
+                            'serinumber' => $product_SN[$y],
+                            'product_orderid' => $product_orderid,
+                            'product_id' => 0,
+                            'seri_status' => 0,
+                            'products_id' => 0,
+                            'order_id' => $order->id,
+                            'check' => 0,
+                            'export_seri' => 0
+                        ];
+                        $this->Serinumbers->addSN($dataSN);
+                    }
+                }
+            }
         }
         return redirect()->route('insertProduct.index')->with('msg', 'Tạo đơn nháp thành công');
     }
@@ -251,10 +271,15 @@ class AddProductController extends Controller
         foreach ($product_order as $value) {
             array_push($productIds, $value->id);
         }
+        $serialnumber =  DB::table('serinumbers')
+            ->join('productorders', 'serinumbers.product_orderid', '=', 'productorders.id')
+            ->whereIn('productorders.id', $productIds)
+            ->select('serinumbers.*')
+            // ->select('serinumbers.*', 'productorders.id')
+            ->get();
 
         $title = 'Chi tiết đơn nhập hàng';
-
-        return view('tables.order.edit', compact('provide', 'order', 'product_order', 'provide_order', 'products', 'title'));
+        return view('tables.order.edit', compact('provide', 'order', 'product_order', 'provide_order', 'products', 'title', 'serialnumber'));
     }
 
     /**
@@ -300,6 +325,7 @@ class AddProductController extends Controller
         $total_import =  str_replace(',', '', $request->total_import);
         $arr_new_product = [];
         $id_product = [];
+        $arr_new_SN = [];
         $updateOrder->total = 0;
         if ($updateOrder->order_status == 0) {
             for ($i = 0; $i < count($product_name); $i++) {
@@ -318,6 +344,25 @@ class AddProductController extends Controller
                 ];
                 if ($check === null) {
                     $newProductOd = $this->productOrder->addProductOrder($dataProduct);
+                    $product_SN = $request->{'product_SN' . $i};
+                    if ($product_SN != null) {
+                        for ($y = 0; $y < count($product_SN); $y++) {
+                            if ($product_SN[$y]) {
+                                $dataSN = [
+                                    'serinumber' => $product_SN[$y],
+                                    'product_orderid' => $newProductOd,
+                                    'product_id' => 0,
+                                    'seri_status' => 0,
+                                    'products_id' => 0,
+                                    'order_id' => $updateOrder->id,
+                                    'check' => 0,
+                                    'export_seri' => 0
+                                ];
+                                $newSN = $this->Serinumbers->addSN($dataSN);
+                                array_push($arr_new_SN, $newSN);
+                            }
+                        }
+                    }
                     array_push($arr_new_product, $newProductOd);
                     array_push($id_product, $newProductOd);
                 } else {
@@ -331,6 +376,52 @@ class AddProductController extends Controller
                     $check->order_id = $request->order_id;
                     $check->provide_id = $request->provide_id == null ? $newProvide : $request->provide_id;
                     $check->save();
+                    $id_SN = $request->{'productSN' . $i};
+                    $product_SN = $request->{'product_SN' . $i};
+                    if ($product_SN != null && $id_SN != null) {
+                        for ($y = 0; $y < count($product_SN); $y++) {
+                            if ($product_SN[$y]) {
+                                $dataSN = [
+                                    'serinumber' => $product_SN[$y],
+                                ];
+                                if (isset($id_SN[$y])) {
+                                    $this->Serinumbers->updateSN($dataSN, $id_SN[$y]);
+                                } else {
+                                    $dataSN = [
+                                        'serinumber' => $product_SN[$y],
+                                        'product_orderid' => $check->id,
+                                        'product_id' => 0,
+                                        'seri_status' => 0,
+                                        'products_id' => 0,
+                                        'order_id' => $updateOrder->id,
+                                        'check' => 0,
+                                        'export_seri' => 0
+                                    ];
+                                    $newSN = $this->Serinumbers->addSN($dataSN);
+                                    array_push($arr_new_SN, $newSN);
+                                }
+                            }
+                        }
+                    } else {
+                        if ($product_SN != null) {
+                            for ($y = 0; $y < count($product_SN); $y++) {
+                                if ($product_SN[$y]) {
+                                    $dataSN = [
+                                        'serinumber' => $product_SN[$y],
+                                        'product_orderid' => $check->id,
+                                        'product_id' => 0,
+                                        'seri_status' => 0,
+                                        'products_id' => 0,
+                                        'order_id' => $updateOrder->id,
+                                        'check' => 0,
+                                        'export_seri' => 0
+                                    ];
+                                    $newSN = $this->Serinumbers->addSN($dataSN);
+                                    array_push($arr_new_SN, $newSN);
+                                }
+                            }
+                        }
+                    }
                     array_push($id_product, $check->id);
                 }
                 $updateOrder->provide_id = $request->provide_id == null ? $newProvide : $request->provide_id;
@@ -339,6 +430,14 @@ class AddProductController extends Controller
                 $updateOrder->created_at = $request->product_create === null ? Carbon::now() : $request->product_create;
                 $updateOrder->total_tax = $total_import;
                 $updateOrder->save();
+            }
+            // Xóa SN Không tồn tại
+            $deleteSN = $this->Serinumbers->deleteSN($product_name, $request, $arr_new_SN, $request->order_id);
+            foreach ($deleteSN as $SN) {
+                $prod = Serinumbers::find($SN);
+                if ($prod) {
+                    $prod->delete();
+                }
             }
 
             // Xóa sản phẩm không tồn tại trong array
@@ -350,7 +449,6 @@ class AddProductController extends Controller
                 $pro_id = $product->id;
                 array_push($product_id_array, $pro_id);
             }
-
 
             // Kiểm tra xóa hết sản phẩm trong đơn nháp
             $deletePro = array_diff($product_id_array, $arr_new_product);
@@ -367,9 +465,11 @@ class AddProductController extends Controller
                 $remaining = array_diff($deletePro, $id_del);
             }
 
+            // Xóa sản phẩm và Serialnumber của sản phẩm
             foreach ($remaining as $valu) {
                 $prod = ProductOrders::where('id', $valu)->get();
                 foreach ($prod as $item) {
+                    Serinumbers::where('product_orderid', $item->id)->delete();
                     $item->delete();
                 }
             }
@@ -391,6 +491,11 @@ class AddProductController extends Controller
                 $updateP = ProductOrders::where('id', $id_product[$i])->first();
                 $updateP->product_id = $newP;
                 $updateP->save();
+                // Thêm id sản phẩm cho SN
+                Serinumbers::where('product_orderid', $id_product[$i])->update([
+                    'product_id' => $newP,
+                    'seri_status' => 1
+                ]);
             }
             $updateOrder->order_status = 1;
             $updateOrder->save();
@@ -498,7 +603,6 @@ class AddProductController extends Controller
                 $request->provide_name_new != null && $request->provide_address_new != null && $request->provide_code_new != null
             ) {
                 $new = $this->provides->checkProvidesCode($request->provide_code_new, $dataProvide);
-                // $new =  $this->provides->addProvides($dataProvide);
             }
         } else {
             $this->provides->updateProvides($dataProvide, $request['provide_id']);
@@ -528,6 +632,24 @@ class AddProductController extends Controller
             ];
             $newProductOrder = $this->productOrder->addProductOrder($data);
             array_push($id_product, $newProductOrder);
+            $product_SN = $request->{'product_SN' . $i};
+            if ($product_SN != null) {
+                for ($j = 0; $j < count($product_SN); $j++) {
+                    if ($product_SN[$j] != null) {
+                        $dataSN = [
+                            'serinumber' => $product_SN[$j],
+                            'product_orderid' => $newProductOrder,
+                            'product_id' => 0,
+                            'seri_status' => 0,
+                            'products_id' => 0,
+                            'order_id' => $order,
+                            'check' => 0,
+                            'export_seri' => 0
+                        ];
+                        $this->Serinumbers->addSN($dataSN);
+                    }
+                }
+            }
         }
 
         // Update Product
@@ -548,8 +670,16 @@ class AddProductController extends Controller
                 ];
                 $pro = $this->product->addProduct($data1);
                 $updateP = ProductOrders::where('id', $id_product[$i])->first();
+                // $updateSN = Serinumbers::whereIn('product_orderid',$id_product[$i]);
+
                 $updateP->product_id = $pro;
                 $updateP->save();
+
+                // Thêm id sản phẩm cho SN
+                Serinumbers::where('product_orderid', $id_product[$i])->update([
+                    'product_id' => $pro,
+                    'seri_status' => 1
+                ]);
             }
 
             $updateOrder->order_status = 1;
@@ -596,7 +726,6 @@ class AddProductController extends Controller
             } else {
                 $debt->debt_status = 3;
             }
-
 
             $debt->created_at = $updateOrder->created_at;
             $debt->save();
@@ -661,6 +790,7 @@ class AddProductController extends Controller
             $product_total = str_replace(',', '', $request->product_total);
             $total_tax = str_replace(',', '', $request->total_import);
             $arr_new_product = [];
+            $arr_new_SN = [];
             for ($i = 0; $i < count($product_name); $i++) {
                 $dataProductOrder = [
                     'product_name' => $product_name[$i],
@@ -676,11 +806,78 @@ class AddProductController extends Controller
 
                 // Kiểm tra sản phẩm đã tồn tại chưa
                 $check = ProductOrders::where('id', isset($product_id[$i]) ? $product_id[$i] : "")->first();
+                $product_SN = $request->{'product_SN' . $i};
                 if ($check === null) {
+                    // Thêm sản phẩm
                     $newProductOd = $this->productOrder->addProductOrder($dataProductOrder);
+                    // Thêm Serialnumber
+                    if ($product_SN) {
+                        for ($y = 0; $y < count($product_SN); $y++) {
+                            if ($product_SN[$y]) {
+                                $dataSN = [
+                                    'serinumber' => $product_SN[$y],
+                                    'product_orderid' => $newProductOd,
+                                    'product_id' => 0,
+                                    'seri_status' => 0,
+                                    'products_id' => 0,
+                                    'order_id' => $order->id,
+                                    'check' => 0,
+                                    'export_seri' => 0
+                                ];
+                                $newSN = $this->Serinumbers->addSN($dataSN);
+                                array_push($arr_new_SN, $newSN);
+                            }
+                        }
+                    }
                     array_push($arr_new_product, $newProductOd);
                 } else {
                     $this->productOrder->updateProductOrder($dataProductOrder, $check->id);
+                    $id_SN = $request->{'productSN' . $i};
+                    $product_SN = $request->{'product_SN' . $i};
+                    if ($product_SN != null && $id_SN != null) {
+                        for ($y = 0; $y < count($product_SN); $y++) {
+                            if ($product_SN[$y]) {
+                                $dataSN = [
+                                    'serinumber' => $product_SN[$y],
+                                ];
+                                if (isset($id_SN[$y])) {
+                                    $this->Serinumbers->updateSN($dataSN, $id_SN[$y]);
+                                } else {
+                                    $dataSN = [
+                                        'serinumber' => $product_SN[$y],
+                                        'product_orderid' => $check->id,
+                                        'product_id' => 0,
+                                        'seri_status' => 0,
+                                        'products_id' => 0,
+                                        'order_id' => $order->id,
+                                        'check' => 0,
+                                        'export_seri' => 0
+                                    ];
+                                    $newSN = $this->Serinumbers->addSN($dataSN);
+                                    array_push($arr_new_SN, $newSN);
+                                }
+                            }
+                        }
+                    } else {
+                        if ($product_SN != null) {
+                            for ($y = 0; $y < count($product_SN); $y++) {
+                                if ($product_SN[$y]) {
+                                    $dataSN = [
+                                        'serinumber' => $product_SN[$y],
+                                        'product_orderid' => $check->id,
+                                        'product_id' => 0,
+                                        'seri_status' => 0,
+                                        'products_id' => 0,
+                                        'order_id' => $order->id,
+                                        'check' => 0,
+                                        'export_seri' => 0
+                                    ];
+                                    $newSN = $this->Serinumbers->addSN($dataSN);
+                                    array_push($arr_new_SN, $newSN);
+                                }
+                            }
+                        }
+                    }
                 }
                 $order->provide_id = $request->provide_id == null ? $new_provide : $request->provide_id;
                 $order->total += $product_total[$i];
@@ -689,10 +886,16 @@ class AddProductController extends Controller
                 $order->total_tax = $total_tax;
                 $order->save();
             }
-
             // Lấy ra tất cả sản phẩm theo id bảng order
             $arrProduct = ProductOrders::where('order_id', $request->order_id)->get();
-            // Lưu danh sách product_id vào mảng
+            $deleteSN = $this->Serinumbers->deleteSN($product_name, $request, $arr_new_SN, $request->order_id);
+            foreach ($deleteSN as $SN) {
+                $prod = Serinumbers::find($SN);
+                if ($prod) {
+                    $prod->delete();
+                }
+            }
+
             $product_id_array = [];
             foreach ($arrProduct as $product) {
                 $pro_id = $product->id;
@@ -716,6 +919,7 @@ class AddProductController extends Controller
             foreach ($remaining as $valu) {
                 $prod = ProductOrders::where('id', $valu)->get();
                 foreach ($prod as $item) {
+                    Serinumbers::where('product_orderid', $item->id)->delete();
                     $item->delete();
                 }
             }
@@ -780,7 +984,11 @@ class AddProductController extends Controller
             $listOrder = Orders::whereIn('id', $list)
                 ->where('order_status', '=', 2)
                 ->get();
-            $listOrder->each->delete();
+            foreach ($listOrder as $or) {
+                Serinumbers::where('order_id', $or->id)->delete();
+                $or->delete();
+            }
+            // $listOrder->each->delete();
             session()->flash('msg', 'Xóa đơn hàng thành công');
             return response()->json(['success' => true, 'msg' => 'Xóa đơn hàng thành công', 'ids' => $list]);
         }
@@ -843,6 +1051,10 @@ class AddProductController extends Controller
             Orders::whereIn('id', $id_order)->update(
                 ['order_status' => 2]
             );
+
+            //Xóa Serialnumber 
+            // Serinumbers::whereIn('order_id', $l)->delete();
+
             if (count($lisst) > 0) {
                 session()->flash('warning', 'Đơn hàng ' . str_replace(['[', ']'], '', json_encode($lisst)) . ' đã tồn tại trong xuất hàng không thể hủy !');
             } else {
@@ -890,18 +1102,9 @@ class AddProductController extends Controller
     // Kiểm tra serial number đã tồn tại chưa
     public function checkSN(Request $request)
     {
-        $listSN = $request->input('listSN');
-        $products_id = $request->input('products_id');
-        $existingSN = [];
-        $check = Serinumbers::whereIn('products_id', $products_id)
-            ->whereIN('serinumber', $listSN)
-            ->first();
-        if (!$check) {
-            return response()->json(['success' => true, 'msg' => 'Thêm sản phẩm thành công!']);
-        } else {
-            $existingSN[] = $check->serinumber;
-            return response()->json(['success' => false, 'msg' => 'Serial number đã tồn tại', 'existingSN' => $existingSN]);
-        }
+        $data = $request->all();
+        $result = $this->Serinumbers->checkSNS($data);
+        return $result;
     }
 
     // Hiển thị UI chỉnh sửa đơn hàng đã duyệt
@@ -918,8 +1121,13 @@ class AddProductController extends Controller
             }
             $debt_import = DebtImport::where('import_id', $order->id)->get();
             $title = 'Chỉnh sửa đơn nhập hàng';
-
-            return view('tables.order.updateBill', compact('debt_import', 'provide', 'order', 'product_order', 'provide_order', 'title'));
+            $serialnumber =  DB::table('serinumbers')
+                ->join('productorders', 'serinumbers.product_orderid', '=', 'productorders.id')
+                ->whereIn('productorders.id', $productIds)
+                ->select('serinumbers.*')
+                // ->select('serinumbers.*', 'productorders.id')
+                ->get();
+            return view('tables.order.updateBill', compact('serialnumber', 'debt_import', 'provide', 'order', 'product_order', 'provide_order', 'title'));
         } else {
             return redirect()->route('insertProduct.index')->with('warning', "Thao tác không được phép");
         }
@@ -953,7 +1161,6 @@ class AddProductController extends Controller
                 // Kiểm tra thông tin nhà cung cấp
                 if ($request->provide_id == null) {
                     $add_newProvide = $this->provides->checkProvidesCode($request->provide_code_new, $dataProvide);
-                    // $add_newProvide = $this->provides->addProvides($dataProvide);
                 } else {
                     $this->provides->updateProvides($dataProvide, $request->provide_id);
                 }
@@ -972,6 +1179,22 @@ class AddProductController extends Controller
 
                 // Chỉnh sửa thông tin sản phẩm 
                 for ($i = 0; $i < count($list_id); $i++) {
+                    // update SN
+                    $id_SN = $request->{'productSN' . $i};
+                    $product_SN = $request->{'product_SN' . $i};
+                    if ($product_SN != null && $id_SN != null) {
+                        for ($y = 0; $y < count($product_SN); $y++) {
+                            if ($product_SN[$y]) {
+                                $dataSN = [
+                                    'serinumber' => $product_SN[$y],
+                                ];
+                                if (isset($id_SN[$y])) {
+                                    $this->Serinumbers->updateSN($dataSN, $id_SN[$y]);
+                                }
+                            }
+                        }
+                    }
+
                     $data = [
                         'product_name' => $request->product_name[$i],
                         'product_unit' => $request->product_unit[$i],
@@ -1042,8 +1265,6 @@ class AddProductController extends Controller
                                 // Lấy thông tin product từ product_id
                                 $product = Product::find($productExport->product_id);
                                 $totalImport += $product->product_price * $productExport->product_qty;
-                                //
-                                $total_export = ($productExport->product_qty * $productExport->product_price) + ($productExport->product_qty * $productExport->product_price * $productHis->product_tax) / 100;
                             }
 
                             // Tính toán giá trị total_difference

@@ -148,7 +148,7 @@ class Exports extends Model
     public function reportExports($filter = [], $name = [], $roles = [], $orderBy = null, $orderType = null)
     {
         //Table xuất hàng
-        $Tableexports = Exports::leftJoin('users', 'users.id', 'exports.user_id')
+        $tableexports = Exports::leftJoin('users', 'users.id', 'exports.user_id')
             ->leftJoin('roles', 'users.roleid', 'roles.id')
             ->leftJoin('debts', 'debts.export_id', 'exports.id')
             ->where('exports.export_status', 2)
@@ -180,28 +180,28 @@ class Exports extends Model
             }, 'tongcongno')
             ->distinct();
         if (!empty($filter)) {
-            $Tableexports = $Tableexports->where($filter);
+            $tableexports = $tableexports->where($filter);
         }
         if (!empty($name)) {
-            $Tableexports = $Tableexports->whereIn('users.name', $name);
+            $tableexports = $tableexports->whereIn('users.name', $name);
         }
         if (!empty($roles)) {
-            $Tableexports = $Tableexports->whereIn('users.roleid', $roles);
+            $tableexports = $tableexports->whereIn('users.roleid', $roles);
         }
         if (!empty($orderBy) && !empty($orderType)) {
             if ($orderBy == 'updated_at') {
                 $orderBy = "exports." . $orderBy;
             };
-            $Tableexports = $Tableexports->orderBy('exports.id', $orderType);
+            $tableexports = $tableexports->orderBy($orderBy, $orderType);
         }
-        $Tableexports = $Tableexports->get();
-        // dd($Tableexports);
+        $tableexports = $tableexports->get();
+        // dd($tableexports);
 
-        return $Tableexports;
+        return $tableexports;
     }
     public function dataReportAjax($filter = [])
     {
-        $Tableexports = Exports::leftJoin('users', 'users.id', 'exports.user_id')
+        $tableexports = Exports::leftJoin('users', 'users.id', 'exports.user_id')
             ->leftJoin('roles', 'users.roleid', 'roles.id')
             ->leftJoin('debts', 'debts.export_id', 'exports.id')
             ->where('exports.export_status', 2)
@@ -252,7 +252,7 @@ class Exports extends Model
                     ->selectRaw('SUM(total_sales)');
             }, 'tongcongno')
             ->distinct();
-        $Tableexports = $Tableexports->get();
-        return $Tableexports;
+        $tableexports = $tableexports->get();
+        return $tableexports;
     }
 }
