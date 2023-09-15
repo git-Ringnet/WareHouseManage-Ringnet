@@ -588,6 +588,10 @@ td p {
     padding: 0 !important;
 }
 
+.content .btn-fixed{
+    z-index: 1000;
+}
+
 .card {
     overflow-x: auto;
     scrollbar-width: thin;
@@ -611,7 +615,7 @@ td p {
 .sticky-head {
     position: sticky;
     top: 0;
-    z-index: 1;
+    z-index: 99;
     background: #ffffff;
     width: 100%;
 }
@@ -1154,7 +1158,7 @@ input[type="checkbox"] {
 .multiple_action {
     position: absolute;
     width: 100%;
-    z-index: 99;
+    z-index: 9999;
     height: auto;
 }
 
@@ -1217,6 +1221,12 @@ input[type="checkbox"] {
 
 .highlight {
     border: 2px solid red;
+}
+
+/*SN*/
+.bg-white-sn tr{
+    background: white !important;
+    width: 100%;
 }
 
 /*Phân trang*/

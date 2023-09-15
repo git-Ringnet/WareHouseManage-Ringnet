@@ -136,6 +136,7 @@
         @csrf
         @method('PUT')
         <input type="hidden" name="checkguest" value="" id="checkguest">
+        <input type="hidden" value="{{ $exports->id }}" id="idExport">
         <section class="content">
             <div class="container-fluided position-relative">
                 <div class="row my-3">
@@ -289,16 +290,17 @@
                 <table class="table">
                     <thead class="bg-white border-0 rounded-top">
                         <tr>
-                            <th>STT</th>
-                            <th>Tên sản phẩm</th>
-                            <th>ĐVT</th>
-                            <th>Số lượng</th>
-                            <th>Giá bán</th>
-                            <th>Thuế</th>
-                            <th>Thành tiền</th>
-                            <th>Ghi chú</th>
-                            <th></th>
-                            <th></th>
+                            <th style="width:3%;">STT</th>
+                            <th style="width:30%;">Tên sản phẩm</th>
+                            <th style="width:8%;">ĐVT</th>
+                            <th style="width:8%">Số lượng</th>
+                            <th style="width:12%;">Giá bán</th>
+                            <th style="width:8%;">Thuế</th>
+                            <th style="width:15%;">Thành tiền</th>
+                            <th style="width:13%;">Ghi chú</th>
+                            <th style="width:10%;">S/N</th>
+                            <th style="width:10%;"></th>
+                            <th style="width:10%;"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -340,12 +342,12 @@
                                 </td>
                                 <td>
                                     <input type="text" id="product_price" name="product_price[]"
-                                        class="form-control text-center product_price" style="width: 140px"
+                                        class="form-control text-center product_price" style="min-width: 140px"
                                         value={{ number_format($value_export->product_price) }} required="">
                                 </td>
                                 <td>
-                                    <select disabled name="product_tax[]" class="product_tax form-control text-center"
-                                        style="width: 100px;" id="product_tax" required>
+                                    <select disabled name="product_tax[]" class="product_tax form-control"
+                                        style="width: 80px;" id="product_tax" required>
                                         <option value="0" <?php if ($value_export->thue == 0) {
                                             echo 'selected';
                                         } ?>>0%</option>
@@ -361,12 +363,14 @@
                                     </select>
                                 </td>
                                 <td><span class="total-amount form-control text-center"
-                                        style="background:#e9ecef; width:140px">0</span>
+                                        style="background:#e9ecef; min-width:120px">0</span>
                                 </td>
                                 <td>
                                     <input type="text" id="" name="product_note[]"
                                         class="form-control w-auto" value="{{ $value_export->product_note }}">
                                 </td>
+                                <td data-toggle='modal' data-target='#snModal' class='sn'><img
+                                        src="../../dist/img/icon/list.png"></td>
                                 <td data-toggle='modal' data-target='#productModal' class='productMD'><img
                                         src="../../dist/img/icon/Group.png"></td>
                                 @if ($exports->export_status == 1)
@@ -446,29 +450,49 @@
                 @endif
                 <a href="{{ route('exports.index') }}"><span class="btn border-secondary ml-1">Hủy</span></a>
             </div>
+            {{-- Modal Product --}}
+            <div class="modal fade" id="productModal" tabindex="-1" role="dialog"
+                aria-labelledby="productModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="productModalLabel">Thông tin sản phẩm</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body" style="word-wrap: break-word">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{-- Modal S/N --}}
+            <div class="modal fade" id="snModal" tabindex="-1" role="dialog"
+                aria-labelledby="productModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document" style="max-width: 85%;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title text-bold" id="productModalLabel">Danh sách Serial Number</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
     </form>
 </div>
 </form>
-{{-- Modal Product --}}
-<div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="productModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="productModalLabel">Thông tin sản phẩm</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body" style="word-wrap: break-word">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-            </div>
-        </div>
-    </div>
-</div>
 </section>
 </div>
 <script>
@@ -504,6 +528,72 @@
             },
             success: function(data) {
                 alert('Lưu biểu mẫu thành công!');
+            }
+        });
+    });
+    //hiển thị S/N khi đã chốt
+    $('.sn').on('click', function() {
+        var qty = $(this).closest('tr').find('.quantity-exist').val();
+        qty = qty.replace('/', '');
+        var idExport = document.getElementById("idExport").value;
+        var qty_enter = $(this).closest('tr').find('.quantity-input').val();
+        var result = qty - qty_enter;
+        var productCode = $(this).closest('tr').find('.productName').val();
+        var productName = $(this).closest('tr').find('.productName option:selected')
+            .text();
+        $.ajax({
+            url: "{{ route('getSN2') }}",
+            method: 'GET',
+            data: {
+                productCode: productCode,
+                idExport: idExport,
+            },
+            success: function(response) {
+                var modalBody = $('#snModal').find('.modal-body');
+                let count = 1;
+                modalBody.empty();
+                var snList = $('<table class="table table-hover">' +
+                    '<thead><tr><th style="width: 20px;"><input type="checkbox" name="all" id="checkall"></th><th>STT</th><th>Serial Number</th></tr></thead>' +
+                    '<tbody class="bg-white-sn">'
+                );
+                var product = $('<table class="table table-hover">' +
+                    '<thead><tr><th>Tên sản phẩm</th><th class="text-right">Số lượng sản phẩm</th><th class="text-right">Số lượng S/N</th></tr></thead>' +
+                    '<tbody><tr>' + '<td>' + productName +
+                    '</td>' + '<td class="text-right">' + result +
+                    '</td>' + '<td class="text-right">' + response
+                    .length +
+                    '</td>' +
+                    '</tr</tbody>' + '</table>' +
+                    '<h3>Thông tin Serial Number </h3>');
+                response.forEach(function(sn) {
+                    var isChecked = sn.export_seri == idExport;
+                    var checkbox = $(
+                        '<td><input type="checkbox" class="check-item" ' + (isChecked ?
+                            'checked' : '') +
+                        ' data-quantity="1" name="export_seri[]" value="' +
+                        sn.id + '"></td>'
+                    );
+                    var countCell = $('<td>').text(count);
+                    var snItemCell = $('<td>').text(sn.serinumber);
+                    var row = $('<tr>').append(checkbox, countCell,
+                        snItemCell);
+                    snList.append(row);
+                    count++;
+                });
+                modalBody.append(product, snList);
+                // $('#snModal').modal('show');
+                //limit checkbox
+                $('.check-item').on('change', function() {
+                    var checkedCheckboxes = $('.check-item:checked').length;
+                    // Check if checked checkboxes exceed qty_enter
+                    if (checkedCheckboxes > qty_enter) {
+                        // Prevent checking more checkboxes than allowed
+                        $(this).prop('checked', false);
+                    }
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
             }
         });
     });
@@ -671,7 +761,7 @@
                 "</select>" +
                 "</td>");
             const thanhTienInput = $(
-                "<td><span class='total-amount form-control text-center' style='background:#e9ecef; width:140px'>0</span></td>"
+                "<td><span class='total-amount form-control text-center' style='background:#e9ecef; min-width:120px'>0</span></td>"
             );
             const ghichuInput = $(
                 "<td><input type='text' class='note_product form-control text-left' name='product_note[]'></td>"

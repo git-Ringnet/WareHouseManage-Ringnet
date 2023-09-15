@@ -141,6 +141,8 @@
         @csrf
         @method('PUT')
         <input type="hidden" name="checkguest" value="" id="checkguest">
+        <input type="hidden" value="{{ $exports->id }}" id="idExport">
+        <div id="selectedSerialNumbersContainer"></div>
         <section class="content">
             <div class="d-flex mb-1 action-don">
                 @if ($exports->export_status == 1)
@@ -203,7 +205,7 @@
                                     </div>
                                     <ul id="myUL"
                                         class="bg-white position-absolute rounded shadow p-0 scroll-data"
-                                        style="z-index: 99;width:37%;">
+                                        style="z-index: 999;width:37%;">
                                         @foreach ($customer as $item)
                                             @if (Auth::user()->id == $item->user_id || Auth::user()->can('isAdmin'))
                                                 <li class="p-2 search-info" id="{{ $item->id }}"
@@ -352,9 +354,9 @@
                 </div>
             </div>
             {{-- Bảng thêm sản phẩm --}}
-            <div class="mt-4" style="overflow-x: auto;">
+            <div class="mt-4" style="overflow-x: scroll !important; height: 45vh !important;">
                 <table class="table" id="sourceTable">
-                    <thead class="bg-white border-0 rounded-top">
+                    <thead class="bg-white border-0 rounded-top sticky-head">
                         <tr>
                             <th style="width:3%;">STT</th>
                             <th style="width:30%;">Tên sản phẩm</th>
@@ -364,6 +366,7 @@
                             <th style="width:8%;">Thuế</th>
                             <th style="width:15%;">Thành tiền</th>
                             <th style="width:13%;">Ghi chú</th>
+                            <th style="width:10%;">S/N</th>
                             <th style="width:10%;"></th>
                             @if ($exports->export_status != 2)
                                 <th style="width:10%;"></th>
@@ -434,7 +437,8 @@
                                         <input type="text" readonly="" class="quantity-exist form-control"
                                             required=""
                                             value="/{{ $value_export->tonkho + $value_export->product_qty }}"
-                                            style="min-width:70px;background:#D6D6D6;border:none;" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                            style="min-width:70px;background:#D6D6D6;border:none;"
+                                            <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                                 echo 'hidden';
                                             } ?>>
                                     </div>
@@ -469,7 +473,7 @@
                                     </select>
                                 </td>
                                 <td><span class="total-amount form-control text-center"
-                                        style="background:#e9ecef;">0</span>
+                                        style="background:#e9ecef;min-width: 120px;">0</span>
                                 </td>
                                 <td>
                                     <input type="text" class="product_note form-control" name="product_note[]"
@@ -478,6 +482,13 @@
                                         } ?>
                                         value="{{ $value_export->product_note }}">
                                 </td>
+                                @if ($exports->export_status == 2)
+                                    <td data-toggle='modal' data-target='#snModal' class='sn'><img
+                                            src="../../dist/img/icon/list.png"></td>
+                                @elseif($exports->export_status == 1)
+                                    <td data-toggle='modal' data-target='#snModal' class='sn1'><img
+                                            src="../../dist/img/icon/list.png"></td>
+                                @endif
                                 <td data-toggle='modal' data-target='#productModal' class='productMD'><img
                                         src="../../dist/img/icon/Group.png"></td>
                                 @if ($exports->export_status == 1)
@@ -565,29 +576,49 @@
                 @endif
                 <a href="{{ route('exports.index') }}"><span class="btn border-secondary ml-1">Hủy</span></a>
             </div>
+            {{-- Modal Product --}}
+            <div class="modal fade" id="productModal" tabindex="-1" role="dialog"
+                aria-labelledby="productModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="productModalLabel">Thông tin sản phẩm</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body" style="word-wrap: break-word">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{-- Modal S/N --}}
+            <div class="modal fade" id="snModal" tabindex="-1" role="dialog"
+                aria-labelledby="productModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document" style="max-width: 85%;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title text-bold" id="productModalLabel">Danh sách Serial Number</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
     </form>
 </div>
 </form>
-{{-- Modal Product --}}
-<div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="productModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="productModalLabel">Thông tin sản phẩm</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body" style="word-wrap: break-word">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-            </div>
-        </div>
-    </div>
-</div>
 </section>
 </div>
 <style>
@@ -649,6 +680,226 @@
             }
         });
     });
+    //hiển thị S/N khi đã chốt
+    $('.sn').on('click', function() {
+        var qty = $(this).closest('tr').find('.quantity-exist').val();
+        qty = qty.replace('/', '');
+        var qty_enter = $(this).closest('tr').find('.quantity-input').val();
+        var result = qty - qty_enter;
+        var idExport = document.getElementById("idExport").value;
+        var productCode = $(this).closest('tr').find('.productName').val();
+        var productName = $(this).closest('tr').find('.productName option:selected')
+            .text();
+        $.ajax({
+            url: "{{ route('getSN1') }}",
+            method: 'GET',
+            data: {
+                productCode: productCode,
+                idExport: idExport,
+            },
+            success: function(response) {
+                var modalBody = $('#snModal').find('.modal-body');
+                let count = 1;
+                modalBody.empty();
+                var snList = $('<table class="table table-hover">' +
+                    '<thead><tr><th>STT</th><th>Serial Number</th></tr></thead>' +
+                    '<tbody class="bg-white-sn">'
+                );
+                var product = $('<table class="table table-hover">' +
+                    '<thead><tr><th>Tên sản phẩm</th><th class="text-right">Số lượng sản phẩm</th><th class="text-right">Số lượng S/N</th></tr></thead>' +
+                    '<tbody><tr>' + '<td>' + productName +
+                    '</td>' + '<td class="text-right">' + result +
+                    '</td>' + '<td class="text-right">' + response
+                    .length +
+                    '</td>' +
+                    '</tr</tbody>' + '</table>' +
+                    '<h3>Thông tin Serial Number </h3>');
+                response.forEach(function(sn) {
+                    var countCell = $('<td>').text(count);
+                    var snItemCell = $('<td>').text(sn.serinumber);
+                    var row = $('<tr>').append(countCell,
+                        snItemCell);
+                    snList.append(row);
+                    count++;
+                });
+                modalBody.append(product, snList);
+                //limit checkbox
+                $('.check-item').on('change', function() {
+                    var checkedCheckboxes = $('.check-item:checked')
+                        .length;
+
+                    // Check if checked checkboxes exceed qty_enter
+                    if (checkedCheckboxes > qty_enter) {
+                        // Prevent checking more checkboxes than allowed
+                        $(this).prop('checked', false);
+                    }
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
+            }
+        });
+    });
+    var selectedSerialNumbers = [];
+    //hiển thị S/N khi đang báo giá
+    $('.sn1').on('click', function() {
+        var qty = $(this).closest('tr').find('.quantity-exist').val();
+        qty = qty.replace('/', '');
+        var idExport = document.getElementById("idExport").value;
+        var qty_enter = $(this).closest('tr').find('.quantity-input').val();
+        var productCode = $(this).closest('tr').find('.productName').val();
+        var productName = $(this).closest('tr').find('.productName option:selected')
+            .text();
+        var productId = $(this).closest('tr').find('.productName').val();
+        var selectedSerialNumbersForProduct = selectedSerialNumbers[productCode] || [];
+        $.ajax({
+            url: "{{ route('getSN3') }}",
+            method: 'GET',
+            data: {
+                productCode: productCode,
+                idExport: idExport,
+            },
+            success: function(response) {
+                var modalBody = $('#snModal').find('.modal-body');
+                let count = 1;
+                modalBody.empty();
+                var snList = $('<table class="table table-hover">' +
+                    '<thead><tr><th style="width: 20px;"><input type="checkbox" name="all" id="checkall"></th><th>STT</th><th>Serial Number</th></tr></thead>' +
+                    '<tbody class="bg-white-sn">'
+                );
+                var product = $('<table class="table table-hover">' +
+                    '<thead><tr><th>Tên sản phẩm</th><th class="text-right">Số lượng sản phẩm</th><th class="text-right">Số lượng S/N</th></tr></thead>' +
+                    '<tbody><tr>' + '<td>' + productName +
+                    '</td>' + '<td class="text-right">' + qty +
+                    '</td>' + '<td class="text-right">' + response
+                    .length +
+                    '</td>' +
+                    '</tr</tbody>' + '</table>' +
+                    '<h3>Thông tin Serial Number </h3>');
+
+                response.forEach(function(sn) {
+                    var snId = parseInt(sn.id);
+
+                    var selectedSerialNumbersForProductInt =
+                        selectedSerialNumbersForProduct.map(
+                            function(value) {
+                                return parseInt(value);
+                            });
+                    if (selectedSerialNumbersForProductInt.includes(
+                            snId)) {
+                        var isChecked = true;
+                    } else {
+                        var isChecked = false;
+                    }
+
+                    var checkbox = $(
+                        '<td><input type="checkbox" class="check-item" ' + (isChecked ?
+                            'checked' : '') +
+                        ' data-quantity="1" name="export_seri[]" value="' +
+                        sn.id + '"></td>'
+                    );
+                    var countCell = $('<td>').text(count);
+                    var snItemCell = $('<td>').text(sn.serinumber);
+                    var row = $('<tr>').append(checkbox, countCell,
+                        snItemCell);
+                    snList.append(row);
+                    count++;
+                });
+
+                modalBody.append(product, snList);
+
+                //limit checkbox
+                $('.check-item').on('change', function() {
+                    var checkedCheckboxes = $('.check-item:checked').length;
+                    var serialNumberId = $(this).val();
+                    // Check if checked checkboxes exceed qty_enter
+                    if (checkedCheckboxes > qty_enter) {
+                        // Prevent checking more checkboxes than allowed
+                        $(this).prop('checked', false);
+                    } else {
+                        if ($(this).prop('checked')) {
+                            // Nếu checkbox được chọn và không vượt quá giới hạn, thêm Serial Number vào danh sách cho sản phẩm
+                            if (!selectedSerialNumbers[productCode]) {
+                                selectedSerialNumbers[productCode] = [];
+                            }
+                            selectedSerialNumbers[productCode].push(serialNumberId);
+
+                            // Tạo một trường input ẩn mới và đặt giá trị
+                            var newInput = $('<input>', {
+                                type: 'hidden',
+                                name: 'selected_serial_numbers[]',
+                                value: serialNumberId,
+                                'data-product-id': productCode,
+                            });
+
+                            // Thêm trường input mới vào container
+                            $('#selectedSerialNumbersContainer').append(newInput);
+                        } else {
+                            if (selectedSerialNumbers[productCode]) {
+                                selectedSerialNumbers[productCode] =
+                                    selectedSerialNumbers[
+                                        productCode]
+                                    .filter(function(item) {
+                                        return item !==
+                                            serialNumberId;
+                                    });
+                                console.log(selectedSerialNumbers);
+                                // Xóa trường input ẩn tương ứng
+                                $('input[name="selected_serial_numbers[]"][value="' +
+                                    serialNumberId + '"]').remove();
+                            }
+                        }
+                    }
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
+            }
+        });
+    });
+    //lấy thông tin S/N
+    $(document).ready(function() {
+        var idExport = document.getElementById("idExport").value;
+        $.ajax({
+            url: "{{ route('getSN4') }}",
+            method: 'GET',
+            data: {
+                idExport: idExport,
+            },
+            success: function(response) {
+                // Duyệt qua từng phần tử trong mảng response
+                response.forEach(function(sn) {
+                    if (sn.export_seri == idExport) {
+                        var serialNumberId = sn.id;
+                        var productCode = sn.product_id;
+
+                        // Kiểm tra productCode tồn tại trong selectedSerialNumbers
+                        if (!selectedSerialNumbers[productCode]) {
+                            selectedSerialNumbers[productCode] = [];
+                        }
+
+                        // Thêm sn.id vào mảng selectedSerialNumbers dựa trên productCode
+                        selectedSerialNumbers[productCode].push(serialNumberId);
+
+                        // Tạo một trường input ẩn mới và đặt giá trị
+                        var newInput = $('<input>', {
+                            type: 'hidden',
+                            name: 'selected_serial_numbers[]',
+                            value: serialNumberId,
+                            'data-product-id': productCode,
+                        });
+
+                        // Thêm trường input mới vào container
+                        $('#selectedSerialNumbersContainer').append(newInput);
+                    }
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
+            }
+        });
+    });
+
     //hiển thị thông tin sản phảm
     $('.productMD').on('click', function() {
         var idProduct = $(this).closest('tr').find('.productName').val();
@@ -805,7 +1056,7 @@
                 "<td><input type='text' class='product_price form-control text-center' style='min-width:140px;' id='product_price' name='product_price[]' required></td>"
             );
             const thueInput = $("<td>" +
-                "<select disabled name='product_tax[]' class='product_tax p-1 form-control text-center' style='width:100px' id='product_tax' required>" +
+                "<select disabled name='product_tax[]' class='product_tax p-1 form-control text-center' style='width:80px' id='product_tax' required>" +
                 "<option value='0'>0%</option>" +
                 "<option value='8'>8%</option>" +
                 "<option value='10'>10%</option>" +
@@ -813,7 +1064,10 @@
                 "</select>" +
                 "</td>");
             const thanhTienInput = $(
-                "<td><span class='total-amount form-control text-center' style='background:#e9ecef; min-width:140px'>0</span></td>"
+                "<td><span class='total-amount form-control text-center' style='background:#e9ecef; min-width:120px'>0</span></td>"
+            );
+            const sn = $(
+                "<td data-toggle='modal' data-target='#snModal' class='sn'><img src='../../dist/img/icon/list.png'></td>"
             );
             const ghichuInput = $(
                 "<td><input type='text' class='note_product form-control text-left' name='product_note[]' style='min-width:120px'></td>"
@@ -852,6 +1106,160 @@
                 if (index !== -1) {
                     selectedProductIDs.splice(index, 1); // Xóa ID sản phẩm khỏi mảng
                 }
+                // Xóa các trường input ẩn selected_serial_numbers[] có data-product-id khớp với sản phẩm đang bị xóa
+                $('input[name="selected_serial_numbers[]"][data-product-id="' + productCode +
+                    '"]').remove();
+            });
+            //xem S/N sản phẩm
+            sn.click(function() {
+                var qty = $(this).closest('tr').find('.quantity-exist').val();
+                qty = qty.replace('/', '');
+                var qty_enter = $(this).closest('tr').find('.quantity-input').val();
+                var productCode = $(this).closest('tr').find('.productName').val();
+                var productName = $(this).closest('tr').find('.productName option:selected')
+                    .text();
+                var productId = $(this).closest('tr').find('.productName').val();
+                var selectedSerialNumbersForProduct = selectedSerialNumbers[productCode] || [];
+                $.ajax({
+                    url: "{{ route('getSN') }}",
+                    method: 'GET',
+                    data: {
+                        productCode: productCode,
+                    },
+                    success: function(response) {
+                        var modalBody = $('#snModal').find('.modal-body');
+                        let count = 1;
+                        modalBody.empty();
+                        var snList = $('<table class="table table-hover">' +
+                            '<thead><tr><th style="width: 20px;"><input type="checkbox" name="all" id="checkall"></th><th>STT</th><th>Serial Number</th></tr></thead>' +
+                            '<tbody class="bg-white-sn">'
+                        );
+                        var product = $('<table class="table table-hover">' +
+                            '<thead><tr><th>Tên sản phẩm</th><th class="text-right">Số lượng sản phẩm</th><th class="text-right">Số lượng S/N</th></tr></thead>' +
+                            '<tbody><tr>' + '<td>' + productName +
+                            '</td>' + '<td class="text-right">' + qty +
+                            '</td>' + '<td class="text-right">' + response
+                            .length +
+                            '</td>' +
+                            '</tr</tbody>' + '</table>' +
+                            '<h3>Thông tin Serial Number </h3>');
+                        response.forEach(function(sn) {
+                            var snId = parseInt(sn.id);
+                            var selectedSerialNumbersForProductInt =
+                                selectedSerialNumbersForProduct.map(
+                                    function(value) {
+                                        return parseInt(value);
+                                    });
+                            if (selectedSerialNumbersForProductInt.includes(
+                                    snId)) {
+                                var isChecked = true;
+                            } else {
+                                var isChecked = false;
+                            }
+                            var checkbox = $(
+                                '<td><input type="checkbox" ' + (
+                                    isChecked ? 'checked' : '') +
+                                ' class="check-item" data-quantity="1" name="export_seri[]" value="' +
+                                sn.id + '"></td>'
+                            );
+                            var countCell = $('<td>').text(count);
+                            var snItemCell = $('<td>').text(sn.serinumber);
+                            var row = $('<tr>').append(checkbox, countCell,
+                                snItemCell);
+                            snList.append(row);
+                            count++;
+                            if (selectedSerialNumbersForProduct.includes(sn
+                                    .id)) {
+                                checkbox.find('input[type="checkbox"]')
+                                    .prop('checked', true);
+                            }
+                        });
+                        modalBody.append(product, snList);
+                        // $('#snModal').modal('show');
+                        //limit checkbox
+                        $('.check-item').on('change', function() {
+                            var checkedCheckboxes = $('.check-item:checked')
+                                .length;
+                            var serialNumberId = $(this).val();
+
+                            // Check if checked checkboxes exceed qty_enter
+                            if (checkedCheckboxes > qty_enter) {
+                                // Prevent checking more checkboxes than allowed
+                                $(this).prop('checked', false);
+                            } else {
+                                if ($(this).is(':checked')) {
+                                    // Nếu checkbox được chọn và không vượt quá giới hạn, thêm Serial Number vào danh sách cho sản phẩm
+                                    if (!selectedSerialNumbers[productId]) {
+                                        selectedSerialNumbers[
+                                            productId] = [];
+                                    }
+                                    selectedSerialNumbers[productId].push(
+                                        serialNumberId);
+
+                                    // Tạo một trường input ẩn mới và đặt giá trị
+                                    var newInput = $('<input>', {
+                                        type: 'hidden',
+                                        name: 'selected_serial_numbers[]',
+                                        value: serialNumberId,
+                                        'data-product-id': productCode,
+                                    });
+
+                                    // Thêm trường input mới vào container
+                                    $('#selectedSerialNumbersContainer')
+                                        .append(newInput);
+                                } else {
+                                    // Nếu checkbox bị bỏ chọn, loại bỏ Serial Number khỏi danh sách cho sản phẩm
+                                    if (selectedSerialNumbers[
+                                            productCode]) {
+                                        selectedSerialNumbers[productCode] =
+                                            selectedSerialNumbers[
+                                                productCode]
+                                            .filter(function(item) {
+                                                return item !==
+                                                    serialNumberId;
+                                            });
+
+                                        // Xóa trường input ẩn tương ứng
+                                        $('input[name="selected_serial_numbers[]"][value="' +
+                                                serialNumberId + '"]')
+                                            .remove();
+                                    }
+                                }
+                            }
+                        });
+                        //thay đổi số lượng nhập
+                        $('.quantity-input').on('change', function() {
+                            var newQty = parseInt($(this).val());
+                            var selectedCheckboxes = $(
+                                '.check-item:checked');
+                            selectedCheckboxes.prop('checked', false);
+                            // Lặp qua tất cả các ô đã chọn và hủy chúng
+                            selectedCheckboxes.each(function() {
+                                $(this).prop('checked', false);
+                                var serialNumberId = $(this).val();
+                                // Loại bỏ Serial Number khỏi danh sách đã chọn cho sản phẩm
+                                if (selectedSerialNumbers[
+                                        productId]) {
+                                    selectedSerialNumbers[
+                                            productId] =
+                                        selectedSerialNumbers[
+                                            productId]
+                                        .filter(function(item) {
+                                            return item !==
+                                                serialNumberId;
+                                        });
+                                    // Xóa trường input ẩn tương ứng
+                                    $('input[name="selected_serial_numbers[]"][value="' +
+                                            serialNumberId + '"]')
+                                        .remove();
+                                }
+                            });
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(error);
+                    }
+                });
             });
             //xem thông tin sản phẩm
             info.click(function() {
@@ -893,7 +1301,7 @@
                 });
             });
             newRow.append(MaInput, ProInput, dvtInput, slInput,
-                giaInput, thueInput, thanhTienInput, ghichuInput, info, deleteBtn, option);
+                giaInput, thueInput, thanhTienInput, ghichuInput, sn, info, deleteBtn, option);
             $("#dynamic-fields").before(newRow);
             fieldCounter++;
             // Áp dụng Selectize cho phần tử select mới
@@ -918,6 +1326,7 @@
         $(document).on("click", ".delete-row-btn", function() {
             var grandTotal = parseFloat($('#grand-total').attr('data-value'));
             var deletedAmount = parseFloat($(this).closest('tr').find('.total-amount').text());
+            var productCode = $(this).closest('tr').find('.productName').val();
             $(this).closest('tr').remove();
             var newGrandTotal = grandTotal - deletedAmount;
             $('#grand-total').text(newGrandTotal.toFixed(2));
@@ -934,6 +1343,9 @@
                 selectedProductIDs.splice(index, 1); // Xóa ID sản phẩm khỏi mảng
             }
             row.remove();
+            // Xóa các trường input ẩn selected_serial_numbers[] có data-product-id khớp với sản phẩm đang bị xóa
+            $('input[name="selected_serial_numbers[]"][data-product-id="' + productCode +
+                '"]').remove();
         });
 
         //hiện danh sách khách hàng khi click trường tìm kiếm
