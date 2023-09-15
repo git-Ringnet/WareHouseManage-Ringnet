@@ -2770,6 +2770,7 @@ class ExportController extends Controller
         $sn = Serinumbers::where('product_id', $data['productCode'])
             ->where(function ($query) use ($data) {
                 $query->where('export_seri', $data['idExport'])
+                    ->orWhere('export_seri', 0)
                     ->orWhereNull('export_seri');
             })
             ->get();
@@ -2780,6 +2781,7 @@ class ExportController extends Controller
         $data = $request->all();
         $sn = Serinumbers::where(function ($query) use ($data) {
             $query->where('export_seri', $data['idExport'])
+                ->orWhere('export_seri', 0)
                 ->orWhereNull('export_seri');
         })->get();
         return response()->json($sn);
