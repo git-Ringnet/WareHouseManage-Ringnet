@@ -818,6 +818,7 @@
                         $(this).prop('checked', false);
                     } else {
                         if ($(this).prop('checked')) {
+                            serialNumberId = parseInt(serialNumberId);
                             // Nếu checkbox được chọn và không vượt quá giới hạn, thêm Serial Number vào danh sách cho sản phẩm
                             if (!selectedSerialNumbers[productCode]) {
                                 selectedSerialNumbers[productCode] = [];
@@ -835,19 +836,21 @@
                             // Thêm trường input mới vào container
                             $('#selectedSerialNumbersContainer').append(newInput);
                         } else {
-                            if (selectedSerialNumbers[productCode]) {
-                                selectedSerialNumbers[productCode] =
-                                    selectedSerialNumbers[
-                                        productCode]
-                                    .filter(function(item) {
-                                        return item !==
-                                            serialNumberId;
-                                    });
-                                console.log(selectedSerialNumbers);
-                                // Xóa trường input ẩn tương ứng
-                                $('input[name="selected_serial_numbers[]"][value="' +
-                                    serialNumberId + '"]').remove();
+                            serialNumberId = parseInt(serialNumberId);
+                            for (var i = 0; i < selectedSerialNumbers.length; i++) {
+                                if (selectedSerialNumbers[i] && typeof serialNumberId !==
+                                    'undefined') {
+                                    var index = selectedSerialNumbers[i].indexOf(
+                                        serialNumberId);
+                                    if (index !== -1) {
+                                        selectedSerialNumbers[i].splice(index, 1);
+                                    }
+                                }
                             }
+
+                            // Xóa trường input ẩn tương ứng
+                            $('input[name="selected_serial_numbers[]"][value="' +
+                                serialNumberId + '"]').remove();
                         }
                     }
                 });
@@ -877,7 +880,7 @@
                         if (!selectedSerialNumbers[productCode]) {
                             selectedSerialNumbers[productCode] = [];
                         }
-
+                        serialNumberId = parseInt(serialNumberId);
                         // Thêm sn.id vào mảng selectedSerialNumbers dựa trên productCode
                         selectedSerialNumbers[productCode].push(serialNumberId);
 
