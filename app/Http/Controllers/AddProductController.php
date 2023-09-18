@@ -180,7 +180,8 @@ class AddProductController extends Controller
             'provide_address' => $request->provide_id == null ? $request->provide_address_new : ($request->input('options') == 2 ? $request->provide_address_new : $request->provide_address),
             'provide_code' => $request->provide_id == null ? $request->provide_code_new : ($request->input('options') == 2 ? $request->provide_code_new : $request->provide_code),
             'provide_status' => 1,
-            'debt' => $request->provide_debt == null ? 0 : $request->provide_debt
+            'debt' => $request->provide_debt == null ? 0 : $request->provide_debt,
+            // 'license_id' => Auth::user()->license_id,
         ];
         if ($request['provide_id'] == null) {
             if (

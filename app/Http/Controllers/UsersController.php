@@ -111,6 +111,7 @@ class UsersController extends Controller
             'roleid' => $request->role,
             'phonenumber' => $request->phonenumber,
             'status' => $request->status,
+            'license_id' => Auth::user()->license_id,
         ];
         $this->users->addUser($data);
 
