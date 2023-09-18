@@ -510,10 +510,14 @@
                 }
             });
         })
-
-
+     
         // Kiểm tra dữ liệu trước khi submit
         $(document).on('submit', '#form_submit', function(e) {
+            if (isFormSubmitting) {
+                e.preventDefault(); // Ngăn chặn sự kiện submit nếu form đang được submit
+                return;
+            }
+
             var data = {};
             $(e.target).find('.btn.btn-primary.mr-2').prop('disabled', true);
             var countDown = 10;
