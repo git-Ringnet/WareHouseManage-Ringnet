@@ -89,10 +89,10 @@ class UsersController extends Controller
         } else {
             $sortType = 'desc';
         }
-
-        $usersList = $this->users->getAllUsers($filters, $name, $phonenumber, $email, $status, $roles, $keywords, $sortBy, $sortType);
+        $perPage = $request->input('perPageinput',25); 
+        $usersList = $this->users->getAllUsers($filters,$perPage, $name, $phonenumber, $email, $status, $roles, $keywords, $sortBy, $sortType);
         $title = 'Nhân viên';
-        return view('admin.userslist', compact('title', 'usersList', 'sortType', 'allRoles', 'string', 'title'));
+        return view('admin.userslist', compact('title','perPage', 'usersList', 'sortType', 'allRoles', 'string', 'title'));
     }
 
 
@@ -152,10 +152,10 @@ class UsersController extends Controller
                 'status' => $request->status,
             ];
         }
-       
+        
         // dd($id);
-
         $this->users->updateUser($data, $id);
+        session()->forget('id');
         return redirect(route('admin.userslist'))->with('msg', 'Sửa người dùng thành công');
     }
     public function deleteUser(Request $request)

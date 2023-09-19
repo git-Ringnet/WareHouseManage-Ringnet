@@ -25,10 +25,11 @@ class Debt extends Model
         'debt_note',
         'date_end',
         'date_start',
+        'created_at',
     ];
-    public function getAllDebts($filter=[],$keywords=null,$name=[],$date=[],$status=[], $orderBy = null, $orderType = null)
+    public function getAllDebts($filter = [],$perPage, $keywords = null, $name = [], $date = [],$guest=[], $datepaid = [], $status = [], $orderBy = null, $orderType = null)
     {
-        $debts = Debt::select('debts.*', 'debts.id as madon', 'guests.guest_name as khachhang', 'users.name as nhanvien','exports.updated_at as debtdate')
+        $debts = Debt::select('debts.*', 'exports.id as madon', 'guests.guest_name as khachhang', 'users.name as nhanvien', 'exports.updated_at as debtdate','exports.export_code as hdr')
             ->leftJoin('guests', 'guests.id', 'debts.guest_id')
             ->leftJoin('users', 'users.id', 'debts.user_id')
             ->leftJoin('exports', 'exports.id', 'debts.export_id');
@@ -37,7 +38,7 @@ class Debt extends Model
         }
         if (!empty($keywords)) {
             $debts = $debts->where(function ($query) use ($keywords) {
-                $query->orWhere('debts.id', 'like', '%' . $keywords . '%');
+                $query->orWhere('exports.export_code', 'like', '%' . $keywords . '%');
                 $query->orWhere('guests.guest_name', 'like', '%' . $keywords . '%');
             });
         }
@@ -45,6 +46,8 @@ class Debt extends Model
         if (!empty($name)) {
             $debts = $debts->whereIn('users.name', $name);
         }
+
+
         // dd($date[0][0]);
         if (!empty($date)) {
             $debts = $debts->where(function ($query) use ($date) {
@@ -52,7 +55,13 @@ class Debt extends Model
                     ->where('debts.date_end', '<=', $date[0][1]);
             });
         }
-              
+        if (!empty($datepaid)) {
+            $debts = $debts->where('debts.debt_status', 1)->wherebetween('debts.updated_at', $datepaid);
+        }
+                
+        if (!empty($guest)) {
+            $debts = $debts->whereIn('guests.guest_name', $guest);
+        }
 
         if (!empty($status)) {
             $debts = $debts->whereIn('debts.debt_status', $status);
@@ -64,28 +73,39 @@ class Debt extends Model
             };
             $debts = $debts->orderBy($orderBy, $orderType);
         }
-        
 
-        $debts = $debts->orderBy('debts.id', 'desc')->paginate(8);
+
+        $debts = $debts->orderBy('debts.id', 'desc')->paginate($perPage);
 
 
         return $debts;
     }
     public function getAllProductsDebts()
-    {
-        $product = Debt::select('debts.*', 'product_exports.id as madon', 'product_exports.product_qty as soluong', 'product_exports.product_price as giaban', 'product.product_price as gianhap')
-            ->leftJoin('guests', 'guests.id', 'debts.guest_id')
-            ->leftJoin('users', 'users.id', 'debts.user_id')
-            ->leftJoin('exports', 'exports.id', 'debts.export_id')
-            ->leftJoin('product_exports', 'exports.id', 'product_exports.export_id')
-            ->leftJoin('product', 'product.id', 'product_exports.product_id')->get();
+    {   
+        $product = Debt::select('debts.*', 'product_exports.id as madon', 'product_exports.product_qty as soluong', 'product_exports.product_price as giaban', 'product.product_price as gianhap','product.product_name as tensanpham' )
+        ->leftJoin('guests', 'guests.id', 'debts.guest_id')
+        ->leftJoin('users', 'users.id', 'debts.user_id')
+        ->leftJoin('exports', 'exports.id', 'debts.export_id')
+        ->leftJoin('product_exports', 'exports.id', 'product_exports.export_id')
+        ->leftJoin('product', 'product.id', 'product_exports.product_id')->get();
         return $product;
     }
-    public function debtsCreator()
+    public function debtsCreator($perPage)
     {
         $userId = Auth::user()->id;
-        $debtsCreator = DB::table($this->table)->where('user_id', $userId)->paginate(8);
+        $debtsCreator = DB::table($this->table)->where('user_id', $userId)->paginate($perPage);
         return $debtsCreator;
     }
-   
+
+    public function getUsers() {
+        return $this->hasOne(User::class,'id','user_id');
+    }
+
+    public function getCode() {
+        return $this->hasOne(Exports::class,'id','export_id');
+    }
+
+    public function getGuests() {
+        return $this->hasOne(Guests::class,'id','guest_id');
+    }
 }

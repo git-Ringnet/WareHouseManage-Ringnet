@@ -188,7 +188,7 @@
                                         </div>
                                         <div class="modal-body">
                                             <h3>Thông tin Serial Number </h3>
-                                            <div class="div_value0">
+                                            <div class="div_value{{$st}}">
                                                 <table class="table">
                                                     <thead>
                                                         <tr>
@@ -204,7 +204,7 @@
                                                         <tr>
                                                             @if($val->seri_status != 3)
                                                             <!-- <td><input type="checkbox" id="checkbox_0"></td> -->
-                                                            <td><span class="stt_SN">{{$sttt}}</span></td>
+                                                            <td><span class="stt_SN"></span></td>
                                                             <td>{{ $val->serinumber}}</td>
                                                             <td></td>
                                                             @endif
@@ -232,7 +232,7 @@
                         <a href="{{ asset('./data') }}" class="btn btn-default">Hủy</a>
                     </div> --}}
                 </div>
-                <div class="paginator mt-4 d-flex justify-content-end">
+                <div class="paginator mt-2 d-flex justify-content-end">
                     {{ $listProduct->appends(request()->except('page'))->links() }}
                 </div>
             </div>
@@ -240,6 +240,22 @@
     </section>
 </div>
 <script>
+    function fillDataToModal() {
+        var info = document.querySelectorAll('.exampleModal');
+        for (let k = 0; k < info.length; k++) {
+            info[k].addEventListener('click', function() {
+                var id_modal = $(info[k]).attr('data-target').match(/\d+/)[0];
+                var div_value = $('.div_value' + id_modal);
+                div_value.closest('.modal-body').find('.SNCount').text(div_value.find('table tbody .stt_SN').length);
+                var setSTT = div_value.closest('.modal-body').find('.stt_SN');
+                for (let i = 0; i < setSTT.length; i++) {
+                    $(setSTT[i]).eq(0).text(i + 1);
+                }
+            })
+        }
+    }
+    fillDataToModal();
+
     function handleExistingImage() {
         if ($('.file-upload-image').attr('src') != $('.url-img').val()) {
             $('.image-upload-wrap').hide();
