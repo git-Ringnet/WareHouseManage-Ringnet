@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class Serinumbers extends Model
@@ -51,18 +52,21 @@ class Serinumbers extends Model
         foreach ($SerialNumbers as $product => $seri) {
             foreach ($seri as $product_name => $SN) {
                 $product_order = ProductOrders::where('product_name', $SN['name'])
-                ->where('product_unit', $SN['dvt'])
-                ->where('product_price',$SN['price'])
-                ->where('product_tax',$SN['tax'])
-                ->get();
+                    ->where('product_unit', $SN['dvt'])
+                    ->where('product_price', $SN['price'])
+                    ->where('product_tax', $SN['tax'])
+                    ->where('license_id', Auth::user()->license_id)
+                    ->get();
                 if ($product_order) {
                     foreach ($product_order as $order) {
                         $getSN = Serinumbers::where('product_orderid', $order->id)->get();
                         if ($getSN) {
                             foreach ($getSN as $seri) {
-                                foreach ($SN['Seri'] as $Seri) {
-                                    if ($seri->serinumber == $Seri) {
-                                        return response()->json(['success' => false, 'msg' => $order->product_name, 'data' => $Seri]);
+                                if (isset($SN['Seri'])) {
+                                    foreach ($SN['Seri'] as $Seri) {
+                                        if ($seri->serinumber == $Seri) {
+                                            return response()->json(['success' => false, 'msg' => $order->product_name, 'data' => $Seri]);
+                                        }
                                     }
                                 }
                             }
@@ -73,16 +77,4 @@ class Serinumbers extends Model
         }
         return response()->json(['success' => true]);
     }
-
-    //     // Nếu tồn tại sản phẩm sẽ kiểm tra SN
-    //     if($checkProduct){
-    //         $SerialNumbers =  DB::table($this->table)->where('product_orderid', $checkProduct->id)->get();
-    //         foreach($SerialNumbers as $seri){
-    //             if($seri == $SN){
-    //                 return 1;
-    //             }
-    //         }
-    //     }
-    //     return 0;
-    // }
 }

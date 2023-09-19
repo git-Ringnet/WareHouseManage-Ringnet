@@ -5,6 +5,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class Orders extends Model
@@ -18,7 +19,9 @@ class Orders extends Model
     public function getAllOrders($filter = [], $perPage, $status = [], $provide_name = [], $name = [], $date = [], $keywords = null, $orderBy = null, $orderType = null)
     {
         $productIds = array();
-        $order = Orders::orderByDesc('id')->get();
+        $order = Orders::orderByDesc('id')
+        ->where('license_id', Auth::user()->license_id)
+        ->get();
         foreach ($order as $value) {
             array_push($productIds, $value->id);
         }
