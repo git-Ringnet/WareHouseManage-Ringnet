@@ -23,23 +23,15 @@
             <div class="row m-auto filter pt-2">
                 <form class="w-100" action="" method="get" id='search-filter'>
                     <div class="row">
-                        <div class="col-5">
-                            <input type="text" name="keywords" class="form-control h-100"
+                        <div class="col-md-5">
+                            <input type="text" name="keywords" class="form-control searchkeyword"
                                 value="{{ request()->keywords }}" placeholder="Tìm kiếm nhân viên">
-                            <span class="search-icon"><i class="fas fa-search"></i></span>
+                            <span id="search-icon" class="search-icon"><i class="fas fa-search"></i></span>
                         </div>
                         <div class="col-2 d-none">
                             <button type="submit" class="btn btn-primary btn-block">Tìm kiếm</button>
 
                         </div>
-                        <a class="btn ml-auto btn-light btn-delete-filter"
-                            href="{{ route('admin.userslist') }}"><span><svg width="24" height="24"
-                                    viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M6 5.4643C6 5.34116 6.04863 5.22306 6.13518 5.13599C6.22174 5.04892 6.33913 5 6.46154 5H17.5385C17.6609 5 17.7783 5.04892 17.8648 5.13599C17.9514 5.22306 18 5.34116 18 5.4643V7.32149C18 7.43599 17.9579 7.54645 17.8818 7.63164L13.8462 12.1428V16.6075C13.8461 16.7049 13.8156 16.7998 13.7589 16.8788C13.7022 16.9578 13.6223 17.0168 13.5305 17.0476L10.7612 17.9762C10.6919 17.9994 10.618 18.0058 10.5458 17.9947C10.4735 17.9836 10.4049 17.9554 10.3456 17.9124C10.2863 17.8695 10.238 17.8129 10.2047 17.7475C10.1713 17.682 10.1539 17.6096 10.1538 17.5361V12.1428L6.11815 7.63164C6.0421 7.54645 6.00002 7.43599 6 7.32149V5.4643Z"
-                                        fill="#555555" />
-                                </svg>
-                            </span>Tắt bộ lọc</a>
                     </div>
                     <div class="d-flex justify-contents-center align-items-center mr-auto row-filter my-3 m-0">
                         <div class="icon-filter mr-3">
@@ -142,9 +134,14 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <button class="dropdown-item" id="btn-phonenumber">Số điện
                                                     thoại</button>
                                                 <button class="dropdown-item" id="btn-email">Email</button>
-                                                <button class="dropdown-item d-none" id="btn-status">Trạng thái</button>
+                                                <button class="dropdown-item d-none" id="btn-status">Trạng
+                                                    thái</button>
                                             </div>
                                         </div>
+                                        @if (!empty($string))
+                                            <a class="btn-delete-filter"
+                                                href="{{ route('admin.userslist') }}"><span>Tắt bộ lọc</span></a>
+                                        @endif
                                     </div>
                                     <?php $status = [];
                                     $roles = [];
@@ -229,20 +226,23 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <a class="cursor select-all mr-auto">Chọn tất cả</a>
                                                 <a class="cursor deselect-all">Hủy chọn</a>
                                             </div>
-                                            <ul class="ks-cboxtags-status p-0 mb-1 px-2">
-                                                <li>
-                                                    <input type="checkbox" id="status_active"
-                                                        {{ in_array(1, $status) ? 'checked' : '' }} name="status[]"
-                                                        value="1">
-                                                    <label for="">Active</label>
-                                                </li>
-                                                <li>
-                                                    <input type="checkbox" id="status_inactive"
-                                                        {{ in_array(0, $status) ? 'checked' : '' }} name="status[]"
-                                                        value="0">
-                                                    <label for="">Disable</label>
-                                                </li>
-                                            </ul>
+
+                                            <div class="ks-cboxtags-container">
+                                                <ul class="ks-cboxtags ks-cboxtags-status p-0 mb-1 px-2">
+                                                    <li>
+                                                        <input type="checkbox" id="status_active"
+                                                            {{ in_array(1, $status) ? 'checked' : '' }}
+                                                            name="status[]" value="1">
+                                                        <label for="">Active</label>
+                                                    </li>
+                                                    <li>
+                                                        <input type="checkbox" id="status_inactive"
+                                                            {{ in_array(0, $status) ? 'checked' : '' }}
+                                                            name="status[]" value="0">
+                                                        <label for="">Disable</label>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </div>
                                         <div class="d-flex justify-contents-center align-items-baseline p-2">
                                             <button type="submit" class="btn btn-primary btn-block mr-2">Xác
@@ -266,18 +266,20 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <a class="cursor select-all-roles mr-auto">Chọn tất cả</a>
                                                 <a class="cursor deselect-all-roles">Hủy chọn</a>
                                             </div>
-                                            <ul class="ks-cboxtags-roles p-0 mb-1 px-2">
-                                                @if (!empty($allRoles))
-                                                    @foreach ($allRoles as $role)
-                                                        <li>
-                                                            <input type="checkbox" id="roles_active"
-                                                                {{ in_array($role->id, $roles) ? 'checked' : '' }}
-                                                                name="roles[]" value="{{ $role->id }}">
-                                                            <label for="">{{ $role->name }}</label>
-                                                        </li>
-                                                    @endforeach
-                                                @endif
-                                            </ul>
+                                            <div class="ks-cboxtags-container">
+                                                <ul class="ks-cboxtags ks-cboxtags-roles p-0 mb-1 px-2">
+                                                    @if (!empty($allRoles))
+                                                        @foreach ($allRoles as $role)
+                                                            <li>
+                                                                <input type="checkbox" id="roles_active"
+                                                                    {{ in_array($role->id, $roles) ? 'checked' : '' }}
+                                                                    name="roles[]" value="{{ $role->id }}">
+                                                                <label for="">{{ $role->name }}</label>
+                                                            </li>
+                                                        @endforeach
+                                                    @endif
+                                                </ul>
+                                            </div>
                                             <div class="d-flex justify-contents-center align-items-baseline p-2">
                                                 <button type="submit" class="btn btn-primary btn-block mr-2">Xác
                                                     Nhận</button>
@@ -309,13 +311,16 @@ $index = array_search($item['label'], $numberedLabels);
                     <div class="btn-nhanvien my-2 ml-3">
                         <button id="deleteListUser" type="button"
                             class="btn btn-group btn-light d-flex align-items-center h-100">
-                            <svg class="mr-1" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" clip-rule="evenodd" d="M10.5454 5C10.2442 5 9.99999 5.24421 9.99999 5.54545C9.99999 5.8467 10.2442 6.09091 10.5454 6.09091H13.4545C13.7558 6.09091 14 5.8467 14 5.54545C14 5.24421 13.7558 5 13.4545 5H10.5454ZM6 7.72726C6 7.42601 6.24421 7.18181 6.54545 7.18181H7.63637H16.3636H17.4545C17.7558 7.18181 18 7.42601 18 7.72726C18 8.02851 17.7558 8.27272 17.4545 8.27272H16.9091V17C16.9091 18.2113 15.9118 19.1818 14.7135 19.1818H9.25891C8.97278 19.1816 8.68906 19.1247 8.42499 19.0145C8.16092 18.9044 7.92126 18.7431 7.71979 18.5399C7.51833 18.3367 7.35905 18.0957 7.25112 17.8307C7.14347 17.5664 7.08903 17.2834 7.09091 16.9981V8.27272H6.54545C6.24421 8.27272 6 8.02851 6 7.72726ZM8.18182 17.0041V8.27272H15.8182V17C15.8182 17.5966 15.3216 18.0909 14.7135 18.0909H9.25938C9.11713 18.0908 8.97632 18.0625 8.84503 18.0077C8.71375 17.953 8.5946 17.8728 8.49444 17.7718C8.39429 17.6707 8.3151 17.5509 8.26144 17.4192C8.20779 17.2874 8.18074 17.1464 8.18182 17.0041ZM13.4545 10.0909C13.7558 10.0909 14 10.3351 14 10.6364V15.7273C14 16.0285 13.7558 16.2727 13.4545 16.2727C13.1533 16.2727 12.9091 16.0285 12.9091 15.7273V10.6364C12.9091 10.3351 13.1533 10.0909 13.4545 10.0909ZM11.0909 10.6364C11.0909 10.3351 10.8467 10.0909 10.5454 10.0909C10.2442 10.0909 9.99999 10.3351 9.99999 10.6364V15.7273C9.99999 16.0285 10.2442 16.2727 10.5454 16.2727C10.8467 16.2727 11.0909 16.0285 11.0909 15.7273V10.6364Z" fill="#555555"/>
-                                </svg> 
+                            <svg class="mr-1" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M10.5454 5C10.2442 5 9.99999 5.24421 9.99999 5.54545C9.99999 5.8467 10.2442 6.09091 10.5454 6.09091H13.4545C13.7558 6.09091 14 5.8467 14 5.54545C14 5.24421 13.7558 5 13.4545 5H10.5454ZM6 7.72726C6 7.42601 6.24421 7.18181 6.54545 7.18181H7.63637H16.3636H17.4545C17.7558 7.18181 18 7.42601 18 7.72726C18 8.02851 17.7558 8.27272 17.4545 8.27272H16.9091V17C16.9091 18.2113 15.9118 19.1818 14.7135 19.1818H9.25891C8.97278 19.1816 8.68906 19.1247 8.42499 19.0145C8.16092 18.9044 7.92126 18.7431 7.71979 18.5399C7.51833 18.3367 7.35905 18.0957 7.25112 17.8307C7.14347 17.5664 7.08903 17.2834 7.09091 16.9981V8.27272H6.54545C6.24421 8.27272 6 8.02851 6 7.72726ZM8.18182 17.0041V8.27272H15.8182V17C15.8182 17.5966 15.3216 18.0909 14.7135 18.0909H9.25938C9.11713 18.0908 8.97632 18.0625 8.84503 18.0077C8.71375 17.953 8.5946 17.8728 8.49444 17.7718C8.39429 17.6707 8.3151 17.5509 8.26144 17.4192C8.20779 17.2874 8.18074 17.1464 8.18182 17.0041ZM13.4545 10.0909C13.7558 10.0909 14 10.3351 14 10.6364V15.7273C14 16.0285 13.7558 16.2727 13.4545 16.2727C13.1533 16.2727 12.9091 16.0285 12.9091 15.7273V10.6364C12.9091 10.3351 13.1533 10.0909 13.4545 10.0909ZM11.0909 10.6364C11.0909 10.3351 10.8467 10.0909 10.5454 10.0909C10.2442 10.0909 9.99999 10.3351 9.99999 10.6364V15.7273C9.99999 16.0285 10.2442 16.2727 10.5454 16.2727C10.8467 16.2727 11.0909 16.0285 11.0909 15.7273V10.6364Z"
+                                    fill="#555555" />
+                            </svg>
                             <span>Xóa nhân viên</span>
                         </button>
                     </div>
-                    <div class="dropdown my-2 ml-4">
+                    {{-- <div class="dropdown my-2 ml-4">
                         <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span> Thay đổi trạng thái</span>
@@ -324,7 +329,7 @@ $index = array_search($item['label'], $numberedLabels);
                             <button id="activeStatusUser" class="dropdown-item">Active</button>
                             <button id="disableStatusUser" class="dropdown-item">Disable</button>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="btn ml-auto cancal_action">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -342,12 +347,14 @@ $index = array_search($item['label'], $numberedLabels);
         <div class="container-fluided">
             <div class="row">
                 <div class="col-12">
-                    <div class="card">
+                    <div class="card scroll-custom">
                         <!-- /.card-header -->
                         <div class="card-body">
                             <table id="example2" class="table table-hover">
-                                <thead>
+                                <thead class="sticky-head">
                                     <tr>
+                                        <input type="hidden" id="perPageinput" name="perPageinput"
+                                            value="{{ request()->perPageinput ?? 25 }}">
                                         <input type="hidden" id="sortByInput" name="sort-by" value="id">
                                         <input type="hidden" id="sortTypeInput" name="sort-type"
                                             value="{{ $sortType }}">
@@ -407,11 +414,11 @@ $index = array_search($item['label'], $numberedLabels);
                                 </thead>
                                 <tbody>
                                     @foreach ($usersList as $value)
-                                        <tr>
+                                        <tr onclick="handleRowClick('checkbox-{{ $value->id }}', event);">
                                             <td>
                                                 @if ($value->id != Auth::user()->id)
-                                                    <input type="checkbox" class="cb-element" name="ids[]"
-                                                        value="{{ $value->id }}">
+                                                    <input type="checkbox" class="cb-element" name="ids[]" id="checkbox-{{ $value->id }}"
+                                                        value="{{ $value->id }}" onclick="event.stopPropagation();">
                                                 @endif
                                             </td>
                                             <td>{{ $value->id }}</td>
@@ -444,7 +451,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     Active
                                                 @endif
                                             </td>
-                                            <td>
+                                            <td class="editEx">
                                                 <a>
                                                     <form action="{{ route('admin.edit') }}" method="get"
                                                         enctype="multipart/form">
@@ -485,9 +492,52 @@ $index = array_search($item['label'], $numberedLabels);
                         </div>
                         <!-- /.card-body -->
                     </div>
-                    <div class="paginator mt-4 d-flex justify-content-end">
-                        {{ $usersList->appends(request()->except('page'))->links() }}
+                    <div class="d-flex row justify-content-between">
+                        <div class="paginator mt-2 d-flex justify-content-start">
+                            <span class="text-perpage">
+                                Số hàng mỗi trang:
+                                <select name="perPage" id="perPage">
+                                    <option value="5" {{ $perPage == 5 ? 'selected' : '' }}>5</option>
+                                    <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
+                                    <option value="25" {{ $perPage == 25 ? 'selected' : '' }}>25</option>
+                                    <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
+                                </select>
+                            </span>
+                        </div>
+                        <div class="paginator mt-2 d-flex justify-content-end">
+                            {{ $usersList->appends(request()->except('page'))->links() }}
+                        </div>
                     </div>
+                    {{-- @if ($usersList->count() > 0)
+                        @php
+                            $paginationRange = App\Helpers\PaginationHelper::calculatePaginationRange($usersList->currentPage(), $usersList->lastPage());
+                        @endphp
+                        <div class="pagination mt-4 d-flex justify-content-end">
+                            <ul>
+                                @if ($paginationRange['start'] > 1)
+                                    <li><a href="{{ $usersList->url(1) }}">1</a></li>
+                                    @if ($paginationRange['start'] > 2)
+                                        <li><span>...</span></li>
+                                    @endif
+                                @endif
+
+                                @for ($i = $paginationRange['start']; $i <= $paginationRange['end']; $i++)
+                                    <li class="{{ $i == $usersList->currentPage() ? 'active' : '' }}">
+                                        <a href="{{ $usersList->url($i) }}">{{ $i }}</a>
+                                    </li>
+                                @endfor
+
+                                @if ($paginationRange['end'] < $usersList->lastPage())
+                                    @if ($paginationRange['end'] < $usersList->lastPage() - 1)
+                                        <li><span>...</span></li>
+                                    @endif
+                                    <li><a
+                                            href="{{ $usersList->url($usersList->lastPage()) }}">{{ $usersList->lastPage() }}</a>
+                                    </li>
+                                @endif
+                            </ul>
+                        </div>
+                    @endif --}}
                 </div>
                 <!-- /.col -->
             </div>
@@ -498,6 +548,16 @@ $index = array_search($item['label'], $numberedLabels);
     <!-- /.content -->
 </div>
 <script>
+    $('#search-icon').on('click', function(e) {
+        e.preventDefault();
+        $('#search-filter').submit();
+    });
+    $('#perPage').on('change', function(e) {
+        e.preventDefault();
+        var perPageValue = $(this).val();
+        $('#perPageinput').val(perPageValue);
+        $('#search-filter').submit();
+    });
     $(document).ready(function() {
         $('.status-select').change(function() {
             var newStatus = $(this).val();
@@ -511,7 +571,7 @@ $index = array_search($item['label'], $numberedLabels);
                 },
                 success: function(data) {
                     alert('Cập nhật tình trạng thành công!');
-                    console.log(data);
+                    
                 }
 
             });
@@ -616,7 +676,7 @@ $index = array_search($item['label'], $numberedLabels);
     $(document).ready(function() {
         // Chọn tất cả các checkbox
         $('.select-all-roles').click(function() {
-            $('#role-options input[type="checkbox"]').prop('checked', true);
+            $('#role-options input[type="checkbox"]:visible').prop('checked', true);
         });
 
         // Hủy tất cả các checkbox
@@ -627,7 +687,7 @@ $index = array_search($item['label'], $numberedLabels);
     $(document).ready(function() {
         // Chọn tất cả các checkbox
         $('.select-all').click(function() {
-            $('#status-options input[type="checkbox"]').prop('checked', true);
+            $('#status-options input[type="checkbox"]:visible').prop('checked', true);
         });
 
         // Hủy tất cả các checkbox
@@ -866,6 +926,38 @@ $index = array_search($item['label'], $numberedLabels);
             $('.count_checkbox').text('Đã chọn ' + $('.cb-element:checked').length);
         } else {
             $('.multiple_action').hide();
+        }
+    }
+
+    function toggleCheckbox(checkboxId) {
+        var checkbox = document.getElementById(checkboxId);
+        if (checkbox) {
+            checkbox.checked = !checkbox.checked; // Đảo ngược trạng thái của checkbox
+        }
+    }
+
+    function triggerChange(checkboxId) {
+        var checkbox = document.getElementById(checkboxId);
+        if (checkbox) {
+            var event = new Event('change', {
+                bubbles: true,
+                cancelable: true,
+            });
+            checkbox.dispatchEvent(event);
+        }
+    }
+
+    function handleRowClick(checkboxId, event) {
+        // Lấy target của sự kiện click
+        var target = event.target;
+
+        // Kiểm tra nếu target không có class "dropdown"
+        if (!target.closest('.dropdown') && !target.closest('.editEx')) {
+            var checkbox = document.getElementById(checkboxId);
+            if (checkbox) {
+                toggleCheckbox(checkboxId); // Thay đổi trạng thái checkbox
+                triggerChange(checkboxId); // Kích hoạt sự kiện change của checkbox
+            }
         }
     }
 </script>

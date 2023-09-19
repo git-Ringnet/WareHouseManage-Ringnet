@@ -13,7 +13,7 @@ class Provides extends Model
         'provide_name', 'provide_represent', 'provide_phone', 'provide_email', 'provide_status', 'provide_address', 'provide_code'
     ];
     protected $table = 'provides';
-    public function getAllProvides($filter = [], $name = null, $represent = null, $phonenumber = null, $email = null, $status = [], $keywords = null, $sortByArr = null)
+    public function getAllProvides($filter = [],$perPage, $name = null, $represent = null, $phonenumber = null, $email = null, $status = [], $keywords = null, $sortByArr = null)
     {
         $provides = DB::table($this->table)
             ->select('provides.*');
@@ -62,7 +62,26 @@ class Provides extends Model
             });
         }
         // dd($provides);
-        $provides = $provides->orderBy('id', 'asc')->paginate(8);
+        $provides = $provides->orderBy('id', 'asc')->paginate($perPage);
         return $provides;
+    }
+
+    public function addProvides($data)
+    {
+        return DB::table($this->table)->insertGetId($data);
+    }
+    public function updateProvides($data, $id)
+    {
+        return DB::table($this->table)->where('id', $id)->update($data);
+    }
+    public function checkProvidesCode($provide_code,$data){
+        $data1 = DB::table($this->table)->where('provide_code', $provide_code)->first();
+        if($data1 === null){
+            $id = DB::table($this->table)->insertGetId($data);
+            return $id;
+        }else{
+            DB::table($this->table)->where('id', $data1->id)->update($data);
+            return $id = $data1->id;
+        }
     }
 }
