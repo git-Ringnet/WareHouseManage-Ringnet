@@ -229,7 +229,6 @@
             if (!isNaN(productQty) && !isNaN(productPrice)) {
                 var totalAmount = productQty * productPrice;
                 $(this).closest('tr').find('.total-amount').val(formatCurrency(Math.round(totalAmount)));
-
                 calculateTotalAmount();
                 calculateTotalTax();
             }
@@ -525,25 +524,6 @@
                 }
             }, 100);
 
-            // $('#inputContainer tbody tr').each(function() {
-            //     var id, SerialNumbers;
-            //     var productName = $(this).find('.name_product').val();
-            //     var product_unit = $(this).find('.unit_product').val();
-            //     var product_price = $(this).find('.product_price').val();
-
-            //     data[productName] = [];
-
-            //     id = $(this).find('.exampleModal').data('target');
-
-            //     SerialNumbers = $(id).find('.modal-body #table_SNS tbody tr td .form-control.w-25').map(
-            //         function() {
-            //             return $(this).val().trim();
-            //         }).get();
-
-            //     if (SerialNumbers !== null) {
-            //         data[productName].push(...SerialNumbers);
-            //     }
-            // });
             $('#inputContainer tbody tr').each(function() {
                 var id, SerialNumbers;
                 var productName = $(this).find('.name_product').val().trim();
@@ -806,6 +786,7 @@
                         deleteDuplicateTr();
                         calculateTotals();
                         setSTT();
+                        fillDataToModal();
                     }
                 };
                 reader.readAsText(file);
