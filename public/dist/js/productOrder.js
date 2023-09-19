@@ -868,7 +868,7 @@ function handlePaste(input) {
       $(input).parent().parent().remove();
     var remainingRows = parentTable.find('tbody tr');
     remainingRows.each(function (index) {
-        $(this).find('td').eq(1).text(index);
+        $(this).find('td').eq(1).text(index + 1);
     });
 }
 
@@ -924,7 +924,7 @@ function handlePaste1(input) {
      $(input).parent().parent().remove();
     var remainingRows = parentTable.find('tbody tr');
     remainingRows.each(function (index) {
-        $(this).find('td').eq(1).text(index);
+        $(this).find('td').eq(1).text(index + 1);
     });
 }
 
