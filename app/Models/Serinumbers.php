@@ -44,7 +44,6 @@ class Serinumbers extends Model
         return $delete_id;
     }
 
-
     public function checkSNS($request)
     {
         $SerialNumbers = $request;
@@ -60,11 +59,14 @@ class Serinumbers extends Model
                         $getSN = Serinumbers::where('product_orderid', $order->id)->get();
                         if ($getSN) {
                             foreach ($getSN as $seri) {
-                                foreach ($SN['Seri'] as $Seri) {
-                                    if ($seri->serinumber == $Seri) {
-                                        return response()->json(['success' => false, 'msg' => $order->product_name, 'data' => $Seri]);
+                                if(isset($SN['Seri'])){
+                                    foreach ($SN['Seri'] as $Seri) {
+                                        if ($seri->serinumber == $Seri) {
+                                            return response()->json(['success' => false, 'msg' => $order->product_name, 'data' => $Seri]);
+                                        }
                                     }
                                 }
+                              
                             }
                         }
                     }
@@ -73,16 +75,4 @@ class Serinumbers extends Model
         }
         return response()->json(['success' => true]);
     }
-
-    //     // Nếu tồn tại sản phẩm sẽ kiểm tra SN
-    //     if($checkProduct){
-    //         $SerialNumbers =  DB::table($this->table)->where('product_orderid', $checkProduct->id)->get();
-    //         foreach($SerialNumbers as $seri){
-    //             if($seri == $SN){
-    //                 return 1;
-    //             }
-    //         }
-    //     }
-    //     return 0;
-    // }
 }

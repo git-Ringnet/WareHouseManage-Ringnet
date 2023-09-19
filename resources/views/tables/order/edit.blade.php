@@ -554,7 +554,7 @@
                                     </div>
                                     @if ($order->order_status == 0)
                                         @if (Auth::user()->id == $order->users_id || Auth::user()->can('isAdmin'))
-                                            <div class="AddSN btn btn-secondary mb-2" style="border:1px solid gray;">
+                                            <div class="AddSN1 btn btn-secondary mb-2" style="border:1px solid gray;">
                                                 Thêm
                                                 dòng</div>
                                             <div class="modal-footer">
@@ -629,6 +629,7 @@
 
     $(document).on('input', '.quantity-input, [name^="product_price"], .product_tax', function() {
         calculateTotals();
+        fillDataToModal();
     });
 
 
@@ -1132,7 +1133,6 @@
                         '</div>' +
                         '<div class="modal-footer">' +
                         '<div class="d-flex justify-content-center w-100"> <button type="button" class="btn btn-primary mr-2" data-dismiss="modal">Lưu</button>' +
-                        // '<button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="deletedata(event)">Hủy</button> 
                         '</div>' +
                         '</div>' +
                         '</div>' +
@@ -1144,6 +1144,7 @@
                     deleteDuplicateTr();
                     calculateTotals();
                     setSTT();
+                    fillDataToModal();
                 }
             };
             reader.readAsText(file);
