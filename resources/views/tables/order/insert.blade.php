@@ -233,6 +233,7 @@
                 calculateTotalAmount();
                 calculateTotalTax();
             }
+            fillDataToModal();
         });
 
         $(document).on('change', '.product_tax', function() {
@@ -288,7 +289,7 @@
 
             var grandTotal = totalAmount + totalTax;
             $('#grand-total').text(formatCurrency(Math.round(grandTotal)));
-
+            
             // Update data-value attribute
             $('#grand-total').attr('data-value', grandTotal);
             $('#total').val(formatCurrency(grandTotal));
@@ -513,11 +514,6 @@
      
         // Kiểm tra dữ liệu trước khi submit
         $(document).on('submit', '#form_submit', function(e) {
-            if (isFormSubmitting) {
-                e.preventDefault(); // Ngăn chặn sự kiện submit nếu form đang được submit
-                return;
-            }
-
             var data = {};
             $(e.target).find('.btn.btn-primary.mr-2').prop('disabled', true);
             var countDown = 10;
@@ -529,25 +525,10 @@
                 }
             }, 100);
 
-            // $('#inputContainer tbody tr').each(function() {
-            //     var id, SerialNumbers;
-            //     var productName = $(this).find('.name_product').val();
-            //     var product_unit = $(this).find('.unit_product').val();
-            //     var product_price = $(this).find('.product_price').val();
+            e.preventDefault();
+            var error = false;
 
-            //     data[productName] = [];
-
-            //     id = $(this).find('.exampleModal').data('target');
-
-            //     SerialNumbers = $(id).find('.modal-body #table_SNS tbody tr td .form-control.w-25').map(
-            //         function() {
-            //             return $(this).val().trim();
-            //         }).get();
-
-            //     if (SerialNumbers !== null) {
-            //         data[productName].push(...SerialNumbers);
-            //     }
-            // });
+         
             $('#inputContainer tbody tr').each(function() {
                 var id, SerialNumbers;
                 var productName = $(this).find('.name_product').val().trim();
@@ -581,9 +562,6 @@
                     data.Product[rowSTT].Seri.push(...SerialNumbers);
                 }
             });
-            e.preventDefault();
-            var error = false;
-
 
             if (checkRow() == false) {
                 alert('Vui lòng nhập ít nhất 1 sản phẩm');
@@ -810,6 +788,7 @@
                         deleteDuplicateTr();
                         calculateTotals();
                         setSTT();
+                        fillDataToModal();
                     }
                 };
                 reader.readAsText(file);

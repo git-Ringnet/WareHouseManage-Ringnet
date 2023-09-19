@@ -211,7 +211,7 @@
                                             class="bg-white position-absolute rounded shadow p-0 scroll-data "
                                             style="z-index: 99; width:37%;">
                                             @foreach ($provide as $value)
-                                                @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin')))
+                                                @if ($order->order_status != 2 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin')))
                                                     <li id="{{ $value->id }}" class="search-info">
                                                         <a href="#"
                                                             class="text-dark d-flex justify-content-between p-2 search-info select_page"
@@ -554,7 +554,7 @@
                                     </div>
                                     @if ($order->order_status == 0)
                                         @if (Auth::user()->id == $order->users_id || Auth::user()->can('isAdmin'))
-                                            <div class="AddSN btn btn-secondary mb-2" style="border:1px solid gray;">
+                                            <div class="AddSN1 btn btn-secondary mb-2" style="border:1px solid gray;">
                                                 Thêm
                                                 dòng</div>
                                             <div class="modal-footer">
@@ -610,6 +610,7 @@
 </div>
 <script src="{{ asset('dist/js/productOrder.js') }}"></script>
 <script>
+    setSTT();
     var isChecked = $('#debtCheckbox').is(':checked');
     // Đặt trạng thái của input dựa trên checkbox
     $('#debtInput').prop('disabled', isChecked);
@@ -629,6 +630,7 @@
 
     $(document).on('input', '.quantity-input, [name^="product_price"], .product_tax', function() {
         calculateTotals();
+        fillDataToModal();
     });
 
 
@@ -680,10 +682,6 @@
 
     })
 
-
-    // Kiểm tra dữ liệu trước khi submit
-    var checkSubmit = false;
-
     // Chuyển hướng form để thêm dữ liệu
     $(document).on('click', '.addBillEdit', function(e) {
         var data = {};
@@ -698,7 +696,6 @@
         }, 100);
 
         e.preventDefault();
-
 
         $('#inputContainer tbody tr').each(function() {
             var id, SerialNumbers;
@@ -797,8 +794,6 @@
         $('input[name="_method"]').remove();
         $('#form_submit')[0].submit();
     })
-
-    setSTT();
 
     // AJAX hiển thị thông tin nhà cung cấp 
     $('.search-info').click(function() {
@@ -962,7 +957,6 @@
         }
     })
 
-
     $('#add_bill').on('click', function(e) {
         this.classList.add('disabled');
         var countDown = 10;
@@ -988,10 +982,7 @@
                     er = true;
                     alert('Sản phẩm đã tồn tại');
                 }
-                // if ($('#product_create').val().trim() == '') {
-                //     er = true;
-                //     alert('Vui lòng nhập ngày hóa đơn');
-                // }
+
                 if (er) {
                     return false;
                 } else {

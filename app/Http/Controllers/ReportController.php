@@ -13,6 +13,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
@@ -795,7 +796,7 @@ class ReportController extends Controller
 
         // Thực hiện mysqldump để tạo file SQL và lưu vào thư mục tạm thời
         $fileName = "backup_$date.sql";
-        $command = "mysqldump -u $dbUsername $passwordOption $dbName > $backupPath$fileName";
+        $command = "mysqldump -u $dbUsername $passwordOption $dbName -e 'SELECT * FROM users WHERE license_id ='". Auth::user()->license_id ." > $backupPath$fileName";
         exec($command);
 
         // Tạo tệp zip và nén tệp SQL vào trong đó
