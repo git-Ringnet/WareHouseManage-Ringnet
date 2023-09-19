@@ -603,31 +603,17 @@
                         });
                         //thay đổi số lượng nhập
                         $('.quantity-input').on('change', function() {
-                            var newQty = parseInt($(this).val());
-                            var selectedCheckboxes = $(
-                                '.check-item:checked');
-                            selectedCheckboxes.prop('checked', false);
-                            // Lặp qua tất cả các ô đã chọn và hủy chúng
-                            selectedCheckboxes.each(function() {
-                                $(this).prop('checked', false);
-                                var serialNumberId = $(this).val();
-                                // Loại bỏ Serial Number khỏi danh sách đã chọn cho sản phẩm
-                                if (selectedSerialNumbers[
-                                        productId]) {
-                                    selectedSerialNumbers[
-                                            productId] =
-                                        selectedSerialNumbers[
-                                            productId]
-                                        .filter(function(item) {
-                                            return item !==
-                                                serialNumberId;
-                                        });
-                                    // Xóa trường input ẩn tương ứng
-                                    $('input[name="selected_serial_numbers[]"][value="' +
-                                            serialNumberId + '"]')
-                                        .remove();
-                                }
-                            });
+                            var row = $(this).closest("tr");
+                            var selectedID = row.find('.child-select')
+                                .val();
+                            // Kiểm tra nếu ID sản phẩm đang bị xóa có trong mảng selectedProductIDs
+                            var index = selectedProductIDs.indexOf(
+                                selectedID);
+                            if (index !== -1) {
+                                selectedProductIDs.splice(index, 1);
+                            }
+                            $('input[name="selected_serial_numbers[]"][data-product-id="' +
+                                productCode + '"]').remove();
                         });
                     },
                     error: function(xhr, status, error) {

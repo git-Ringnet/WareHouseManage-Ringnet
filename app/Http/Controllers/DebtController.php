@@ -9,6 +9,7 @@ use App\Models\User;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class DebtController extends Controller
 {
@@ -93,7 +94,7 @@ class DebtController extends Controller
         //Trạng thái
         $status = [];
         if (!empty($request->status)) {
-            $statusValues = [0 => 'Quá hạn', 1 => 'Thanh toán đủ', 2 => 'Gần đến hạn', 3 => 'Công nợ', 4 => 'Chưa thanh toán',5=>'Đến hạn'];
+            $statusValues = [0 => 'Quá hạn', 1 => 'Thanh toán đủ', 2 => 'Gần đến hạn', 3 => 'Công nợ', 4 => 'Chưa thanh toán', 5 => 'Đến hạn'];
             $status = $request->input('status', []);
             $statusLabels = array_map(function ($value) use ($statusValues) {
                 return $statusValues[$value];
@@ -144,14 +145,20 @@ class DebtController extends Controller
             $sortType = 'desc';
         }
 
-        $guests = Debt::leftjoin('guests', 'guests.id', '=', 'debts.guest_id')->select('guests.guest_name as guests')->get();
-        $perPage = $request->input('perPageinput',25); 
+        $guests = Debt::leftjoin('guests', 'guests.id', '=', 'debts.guest_id')
+            ->where('guests.license_id', Auth::user()->license_id)
+            ->where('debts.license_id', Auth::user()->license_id)
+            ->select('guests.guest_name as guests')->get();
+        $perPage = $request->input('perPageinput', 25);
 
-        $debtsSale = Debt::leftjoin('users', 'debts.user_id', '=', 'users.id')->get();
-        $debts = $this->debts->getAllDebts($filters,$perPage, $keywords, $nhanvien, $date, $guest, $datepaid, $status, $sortBy, $sortType);
+        $debtsSale = Debt::leftjoin('users', 'debts.user_id', '=', 'users.id')
+            ->where('users.license_id', Auth::user()->license_id)
+            ->where('debts.license_id', Auth::user()->license_id)
+            ->get();
+        $debts = $this->debts->getAllDebts($filters, $perPage, $keywords, $nhanvien, $date, $guest, $datepaid, $status, $sortBy, $sortType);
         $product = $this->debts->getAllProductsDebts();
         $debtsCreator = $this->debts->debtsCreator($perPage);
-        return view('tables.debt.debts', compact('title','perPage', 'debts', 'debtsSale', 'guests', 'product', 'string', 'sortType', 'debtsCreator'));
+        return view('tables.debt.debts', compact('title', 'perPage', 'debts', 'debtsSale', 'guests', 'product', 'string', 'sortType', 'debtsCreator'));
     }
 
     /**
@@ -198,13 +205,23 @@ class DebtController extends Controller
             ->join('guests', 'debts.guest_id', '=', 'guests.id')
             ->join('users', 'debts.user_id', '=', 'users.id')
             ->leftJoin('exports', 'exports.id', 'debts.export_id')
+            ->where('guests.license_id', Auth::user()->license_id)
+            ->where('debts.license_id', Auth::user()->license_id)
+            ->where('users.license_id', Auth::user()->license_id)
+            ->where('exports.license_id', Auth::user()->license_id)
             ->findOrFail($id);
         $product = Debt::select('debts.*', 'product_exports.id as madon', 'product_exports.product_qty as soluong', 'product_exports.product_price as giaban', 'product.product_price as gianhap', 'product.product_name as tensanpham')
             ->leftJoin('guests', 'guests.id', 'debts.guest_id')
             ->leftJoin('users', 'users.id', 'debts.user_id')
             ->leftJoin('exports', 'exports.id', 'debts.export_id')
             ->leftJoin('product_exports', 'exports.id', 'product_exports.export_id')
-            ->leftJoin('product', 'product.id', 'product_exports.product_id')->where('debts.id', $id)->get();
+            ->leftJoin('product', 'product.id', 'product_exports.product_id')->where('debts.id', $id)
+            ->where('guests.license_id', Auth::user()->license_id)
+            ->where('debts.license_id', Auth::user()->license_id)
+            ->where('users.license_id', Auth::user()->license_id)
+            ->where('exports.license_id', Auth::user()->license_id)
+            ->where('product_exports.license_id', Auth::user()->license_id)
+            ->where('product.license_id', Auth::user()->license_id)->get();
         $title = "Chi tiết đơn hàng";
         return view('tables.debt.editDebt', compact('debts', 'product', 'title'));
     }
@@ -304,10 +321,11 @@ class DebtController extends Controller
     }
     public function exportDebt()
     {
-        $data = Debt::select('id', 'export_id', 'guest_id', 'user_id', 'total_sales', 'total_import', 'debt_transport_fee', 'total_difference', 'debt', 'debt_status','debt_note')
+        $data = Debt::select('id', 'export_id', 'guest_id', 'user_id', 'total_sales', 'total_import', 'debt_transport_fee', 'total_difference', 'debt', 'debt_status', 'debt_note')
             ->with('getCode')
             ->with('getGuests')
             ->with('getUsers')
+            ->where('debts.license_id', Auth::user()->license_id)
             ->get();
 
         foreach ($data as $row) {

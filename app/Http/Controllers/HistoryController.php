@@ -7,6 +7,7 @@ use App\Models\Provides;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HistoryController extends Controller
 {
@@ -192,10 +193,17 @@ class HistoryController extends Controller
             $sortType = 'desc';
         }
         $perPage = $request->input('perPageinput', 25);
-        $guests = History::leftjoin('guests', 'guests.id', '=', 'history.guest_id')->select('guests.guest_name as guests', 'history.export_unit as unit')->get();
+        $guests = History::leftjoin('guests', 'guests.id', '=', 'history.guest_id')
+            ->select('guests.guest_name as guests', 'history.export_unit as unit')
+            ->where('guests.license_id', Auth::user()->license_id)
+            ->where('history.license_id', Auth::user()->license_id)->get();
 
-        $debtsSale =  History::leftjoin('users', 'history.user_id', '=', 'users.id')->get();
-        $provides = History::leftjoin('provides', 'history.provide_id', '=', 'provides.id')->get();
+        $debtsSale =  History::leftjoin('users', 'history.user_id', '=', 'users.id')
+            ->where('users.license_id', Auth::user()->license_id)
+            ->where('history.license_id', Auth::user()->license_id)->get();
+        $provides = History::leftjoin('provides', 'history.provide_id', '=', 'provides.id')
+            ->where('provides.license_id', Auth::user()->license_id)
+            ->where('history.license_id', Auth::user()->license_id)->get();
 
         $history = $this->history->getAllHistory($filters, $perPage, $keywords, $date, $nhanvien, $provide_namearr, $guest, $status, $unitarr, $status_export, $sortBy, $sortType);
 
@@ -293,6 +301,7 @@ class HistoryController extends Controller
             'tranport_fee',
             'history_note'
         )
+            ->where('history.license_id', Auth::user()->license_id)
             ->with('getUsers')
             ->with('getProvides')
             ->with('getGuests')

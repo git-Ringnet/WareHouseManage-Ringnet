@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class History extends Model
@@ -42,8 +43,8 @@ class History extends Model
         'tranport_fee',
         'history_note',
     ];
-    public function getAllHistory($filters = [],$perPage, $keywords = null, $date = [],$name=[], $provide_namearr = [], $guest = [], $status = [], $unitarr = [], $status_export = [], $orderBy = null, $orderType = null)
-    {   
+    public function getAllHistory($filters = [], $perPage, $keywords = null, $date = [], $name = [], $provide_namearr = [], $guest = [], $status = [], $unitarr = [], $status_export = [], $orderBy = null, $orderType = null)
+    {
         // $list = [3,1,1];
 
         // $history = History::leftJoin('debts','history.export_id','debts.export_id')
@@ -58,7 +59,13 @@ class History extends Model
             ->leftJoin('guests', 'guests.id', 'history.guest_id')
             ->leftJoin('debts', 'debts.export_id', 'history.export_id')
             ->leftJoin('debt_import', 'debt_import.import_id', 'history.import_id')
-            ->select('history.*','guests.*','provides.*','users.*','debt_import.updated_at as thanhtoannhap','debts.updated_at as thanhtoanxuat');
+            ->where('provides.license_id', Auth::user()->license_id)
+            ->where('history.license_id', Auth::user()->license_id)
+            ->where('guests.license_id', Auth::user()->license_id)
+            ->where('users.license_id', Auth::user()->license_id)
+            ->where('debts.license_id', Auth::user()->license_id)
+            ->where('debt_import.license_id', Auth::user()->license_id)
+            ->select('history.*', 'guests.*', 'provides.*', 'users.*', 'debt_import.updated_at as thanhtoannhap', 'debts.updated_at as thanhtoanxuat');
 
         if (!empty($filters)) {
             $history = $history->where($filters);
@@ -119,8 +126,9 @@ class History extends Model
     {
         return DB::table($this->table)->where('product_id', $id)->update($data);
     }
-    public function getNameProduct($id){
-        return DB::table('product')->whereIn('id',$id)->get();
+    public function getNameProduct($id)
+    {
+        return DB::table('product')->whereIn('id', $id)->get();
     }
     public function updateHistoryByImport($data, $id)
     {
@@ -132,16 +140,19 @@ class History extends Model
     }
     public function getProduct()
     {
-        return $this->hasOne(Product::class,'id','product_id');
+        return $this->hasOne(Product::class, 'id', 'product_id');
     }
 
-    public function getUsers() {
-        return $this->hasOne(User::class,'id','user_id');
+    public function getUsers()
+    {
+        return $this->hasOne(User::class, 'id', 'user_id');
     }
-    public function getProvides() {
-        return $this->hasOne(Provides::class,'id','provide_id');
+    public function getProvides()
+    {
+        return $this->hasOne(Provides::class, 'id', 'provide_id');
     }
-    public function getGuests() {
-        return $this->hasOne(Guests::class,'id','guest_id');
+    public function getGuests()
+    {
+        return $this->hasOne(Guests::class, 'id', 'guest_id');
     }
 }

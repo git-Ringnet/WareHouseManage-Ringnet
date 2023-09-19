@@ -27,12 +27,16 @@ class Debt extends Model
         'date_start',
         'created_at',
     ];
-    public function getAllDebts($filter = [],$perPage, $keywords = null, $name = [], $date = [],$guest=[], $datepaid = [], $status = [], $orderBy = null, $orderType = null)
+    public function getAllDebts($filter = [], $perPage, $keywords = null, $name = [], $date = [], $guest = [], $datepaid = [], $status = [], $orderBy = null, $orderType = null)
     {
-        $debts = Debt::select('debts.*', 'exports.id as madon', 'guests.guest_name as khachhang', 'users.name as nhanvien', 'exports.updated_at as debtdate','exports.export_code as hdr')
+        $debts = Debt::select('debts.*', 'exports.id as madon', 'guests.guest_name as khachhang', 'users.name as nhanvien', 'exports.updated_at as debtdate', 'exports.export_code as hdr')
             ->leftJoin('guests', 'guests.id', 'debts.guest_id')
             ->leftJoin('users', 'users.id', 'debts.user_id')
-            ->leftJoin('exports', 'exports.id', 'debts.export_id');
+            ->leftJoin('exports', 'exports.id', 'debts.export_id')
+            ->where('guests.license_id', Auth::user()->license_id)
+            ->where('debts.license_id', Auth::user()->license_id)
+            ->where('users.license_id', Auth::user()->license_id)
+            ->where('exports.license_id', Auth::user()->license_id);
         if (!empty($filter)) {
             $debts = $debts->where($filter);
         }
@@ -58,7 +62,7 @@ class Debt extends Model
         if (!empty($datepaid)) {
             $debts = $debts->where('debts.debt_status', 1)->wherebetween('debts.updated_at', $datepaid);
         }
-                
+
         if (!empty($guest)) {
             $debts = $debts->whereIn('guests.guest_name', $guest);
         }
@@ -81,13 +85,13 @@ class Debt extends Model
         return $debts;
     }
     public function getAllProductsDebts()
-    {   
-        $product = Debt::select('debts.*', 'product_exports.id as madon', 'product_exports.product_qty as soluong', 'product_exports.product_price as giaban', 'product.product_price as gianhap','product.product_name as tensanpham' )
-        ->leftJoin('guests', 'guests.id', 'debts.guest_id')
-        ->leftJoin('users', 'users.id', 'debts.user_id')
-        ->leftJoin('exports', 'exports.id', 'debts.export_id')
-        ->leftJoin('product_exports', 'exports.id', 'product_exports.export_id')
-        ->leftJoin('product', 'product.id', 'product_exports.product_id')->get();
+    {
+        $product = Debt::select('debts.*', 'product_exports.id as madon', 'product_exports.product_qty as soluong', 'product_exports.product_price as giaban', 'product.product_price as gianhap', 'product.product_name as tensanpham')
+            ->leftJoin('guests', 'guests.id', 'debts.guest_id')
+            ->leftJoin('users', 'users.id', 'debts.user_id')
+            ->leftJoin('exports', 'exports.id', 'debts.export_id')
+            ->leftJoin('product_exports', 'exports.id', 'product_exports.export_id')
+            ->leftJoin('product', 'product.id', 'product_exports.product_id')->get();
         return $product;
     }
     public function debtsCreator($perPage)
@@ -97,15 +101,18 @@ class Debt extends Model
         return $debtsCreator;
     }
 
-    public function getUsers() {
-        return $this->hasOne(User::class,'id','user_id');
+    public function getUsers()
+    {
+        return $this->hasOne(User::class, 'id', 'user_id');
     }
 
-    public function getCode() {
-        return $this->hasOne(Exports::class,'id','export_id');
+    public function getCode()
+    {
+        return $this->hasOne(Exports::class, 'id', 'export_id');
     }
 
-    public function getGuests() {
-        return $this->hasOne(Guests::class,'id','guest_id');
+    public function getGuests()
+    {
+        return $this->hasOne(Guests::class, 'id', 'guest_id');
     }
 }
