@@ -1501,6 +1501,10 @@ class ExportController extends Controller
                                 }
                                 $history->history_note = null;
                                 $history->save();
+                                //Cập nhật S/N
+                                DB::statement("UPDATE serinumbers SET export_seri = NULL, seri_status = 1 WHERE export_seri = $exports->id");
+                                //Cập nhật lại S/N
+                                Serinumbers::whereIn('id', $export_seris)->update(['export_seri' => $exports->id, 'seri_status' => 3]);
                             } else {
                                 $proExport = new ProductExports();
                                 $proExport->product_id = $productID;
@@ -1602,6 +1606,10 @@ class ExportController extends Controller
                                 }
                                 $history->history_note = null;
                                 $history->save();
+                                //Cập nhật S/N
+                                DB::statement("UPDATE serinumbers SET export_seri = NULL, seri_status = 1 WHERE export_seri = $exports->id");
+                                //Cập nhật lại S/N
+                                Serinumbers::whereIn('id', $export_seris)->update(['export_seri' => $exports->id, 'seri_status' => 3]);
                             }
 
                             $totalQtyNeeded += $productQty;
@@ -1692,12 +1700,6 @@ class ExportController extends Controller
                                 'export_status' => $debt->debt_status,
                                 'debt_export_end' => $debt->date_end,
                             ]);
-
-                        //Cập nhật S/N
-                        DB::statement("UPDATE serinumbers SET export_seri = NULL, seri_status = 1 WHERE export_seri = $exports->id");
-                        //Cập nhật lại S/N
-                        Serinumbers::whereIn('id', $export_seris)->update(['export_seri' => $exports->id, 'seri_status' => 3]);
-
                         // Xóa các sản phẩm đã bị xóa
                         $productExportsToDelete = ProductExports::where('export_id', $exports->id)
                             ->whereNotIn('product_id', $productIDs)
@@ -1708,6 +1710,8 @@ class ExportController extends Controller
                             $productQty = $productExport->product_qty;
                             Product::where('id', $productID)
                                 ->decrement('product_trade', $productQty);
+                            DB::statement("UPDATE serinumbers SET export_seri = NULL, seri_status = 1 
+                                WHERE export_seri = $exports->id AND product_id = $productID");
                             // Xóa sản phẩm
                             $productExport->delete();
                         }
@@ -1813,6 +1817,8 @@ class ExportController extends Controller
                         $productQty = $productExport->product_qty;
                         Product::where('id', $productID)
                             ->decrement('product_trade', $productQty);
+                        DB::statement("UPDATE serinumbers SET export_seri = NULL, seri_status = 1 
+                            WHERE export_seri = $exports->id AND product_id = $productID");
                         // Xóa sản phẩm
                         $productExport->delete();
                     }
@@ -1925,7 +1931,7 @@ class ExportController extends Controller
                                         'product_trade' => $newTrade,
                                     ]);
                                 //Cập nhật S/N
-                                DB::statement("UPDATE serinumbers SET export_seri = NULL WHERE export_seri = $exports->id");
+                                DB::statement("UPDATE serinumbers SET export_seri = NULL, seri_status = 1 WHERE export_seri = $exports->id");
                                 if ($export_seris !== null) {
                                     //Cập nhật lại S/N
                                     Serinumbers::whereIn('id', $export_seris)->update(['export_seri' => $exports->id, 'seri_status' => 2]);
@@ -1950,7 +1956,7 @@ class ExportController extends Controller
                                         'product_trade' => $newTrade,
                                     ]);
                                 //Cập nhật S/N
-                                DB::statement("UPDATE serinumbers SET export_seri = NULL WHERE export_seri = $exports->id");
+                                DB::statement("UPDATE serinumbers SET export_seri = NULL,seri_status = 1 WHERE export_seri = $exports->id");
                                 if ($export_seris !== null) {
                                     //Cập nhật lại S/N
                                     Serinumbers::whereIn('id', $export_seris)->update(['export_seri' => $exports->id, 'seri_status' => 2]);
@@ -1969,6 +1975,8 @@ class ExportController extends Controller
                             $productQty = $productExport->product_qty;
                             Product::where('id', $productID)
                                 ->decrement('product_trade', $productQty);
+                            DB::statement("UPDATE serinumbers SET export_seri = NULL, seri_status = 1 
+                                WHERE export_seri = $exports->id AND product_id = $productID");
                             // Xóa sản phẩm
                             $productExport->delete();
                         }
