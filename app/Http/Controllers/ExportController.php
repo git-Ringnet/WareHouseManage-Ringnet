@@ -106,8 +106,13 @@ class ExportController extends Controller
             $sortType = 'desc';
         }
         $exports = Exports::leftjoin('guests', 'exports.guest_id', '=', 'guests.id')
-            ->leftjoin('users', 'exports.user_id', '=', 'users.id')->select('guests.guest_name as guests', 'users.name as name')->get();
-        $productEx = productExports::all();
+            ->leftjoin('users', 'exports.user_id', '=', 'users.id')
+            ->select('guests.guest_name as guests', 'users.name as name')
+            ->where('guests.license_id', Auth::user()->license_id)
+            ->where('users.license_id', Auth::user()->license_id)
+            ->where('exports.license_id', Auth::user()->license_id)
+            ->get();
+        $productEx = productExports::where('product_exports.license_id', Auth::user()->license_id)->get();
         $perPage = $request->input('perPageinput', 25);
         $export = $this->exports->getAllExports($filters, $perPage, $status, $name, $guest, $date, $keywords, $sortBy, $sortType);
         $title = 'Xuất hàng';
@@ -126,9 +131,10 @@ class ExportController extends Controller
         $product = Product::select('product.*')
             ->whereRaw('COALESCE((product.product_qty - COALESCE(product.product_trade, 0)), 0) > 0')
             ->selectRaw('COALESCE((product.product_qty - COALESCE(product.product_trade, 0)), 0) as qty_exist')
+            ->where('license_id', Auth::user()->license_id)
             ->get();
-        $customer = Guests::all();
-        $guest_id = DB::table('guests')->select('id')->orderBy('id', 'DESC')->first();
+        $customer = Guests::where('license_id', Auth::user()->license_id)->get();
+        // $guest_id = DB::table('guests')->select('id')->orderBy('id', 'DESC')->first();
         $title = 'Tạo đơn xuất hàng';
         return view('tables.export.addExport', compact('customer', 'product', 'title'));
     }
@@ -172,6 +178,7 @@ class ExportController extends Controller
                             $product = Product::select('product.*')
                                 ->selectRaw('COALESCE((product.product_qty - COALESCE(product.product_trade, 0)), 0) as qty_exist')
                                 ->where('product.id', $productID)
+                                ->where('license_id', Auth::user()->license_id)
                                 ->first();
                             $limit = $product->qty_exist;
                             if ($productQty > $limit) {
@@ -200,6 +207,7 @@ class ExportController extends Controller
                                     $guest->debt = $request->debt;
                                 }
                                 $guest->user_id = Auth::user()->id;
+                                $guest->license_id = Auth::user()->license_id;
                                 $guest->save();
                                 // Tạo đơn xuất hàng
                                 $export = new Exports();
@@ -215,12 +223,15 @@ class ExportController extends Controller
                                 } else {
                                     $export->created_at = $request->export_create;
                                 }
+                                $export->license_id = Auth::user()->license_id;
                                 $export->save();
                                 // Tạo các bản ghi trong bảng product export
                                 for ($i = 0; $i < count($productIDs); $i++) {
                                     $productID = $productIDs[$i];
                                     $productQty = $productQtys[$i];
-                                    $nameProduct = Product::where('id', $productID)->value('product_name');
+                                    $nameProduct = Product::where('id', $productID)
+                                        ->where('license_id', Auth::user()->license_id)
+                                        ->value('product_name');
                                     $proExport = new ProductExports();
                                     $proExport->product_id = $productID;
                                     $proExport->export_id = $export->id;
@@ -231,47 +242,77 @@ class ExportController extends Controller
                                     $proExport->product_note = $request->product_note[$i];
                                     $proExport->product_tax = $request->product_tax[$i];
                                     $proExport->product_total = $request->totalValue;
+                                    $proExport->license_id = Auth::user()->license_id;
                                     $proExport->save();
                                     //lấy thông tin nhà cung cấp
                                     $provide_id = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                         ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                         ->where('product.id', $productID)
+                                        ->where('product.license_id', Auth::user()->license_id)
+                                        ->where('productorders.license_id', Auth::user()->license_id)
+                                        ->where('orders.license_id', Auth::user()->license_id)
                                         ->value('productorders.provide_id');
                                     //lấy hóa đơn vào
                                     $import_code = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                         ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                         ->where('product.id', $productID)
+                                        ->where('product.license_id', Auth::user()->license_id)
+                                        ->where('productorders.license_id', Auth::user()->license_id)
+                                        ->where('orders.license_id', Auth::user()->license_id)
                                         ->value('orders.product_code');
                                     //lấy bảng nhập hàng
                                     $productorders = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                         ->leftJoin('orders', 'productorders.order_id', 'orders.id')
+                                        ->where('product.license_id', Auth::user()->license_id)
+                                        ->where('productorders.license_id', Auth::user()->license_id)
+                                        ->where('orders.license_id', Auth::user()->license_id)
                                         ->where('product.id', $productID)->value('productorders.product_total');
                                     //công nợ nhập
                                     $debt_import = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                         ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                         ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
                                         ->where('product.id', $productID)
+                                        ->where('product.license_id', Auth::user()->license_id)
+                                        ->where('productorders.license_id', Auth::user()->license_id)
+                                        ->where('orders.license_id', Auth::user()->license_id)
+                                        ->where('debt_import.license_id', Auth::user()->license_id)
                                         ->value('debt_import.debt');
                                     //tình trạng nhập hàng
                                     $import_status = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                         ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                         ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
                                         ->where('product.id', $productID)
+                                        ->where('product.license_id', Auth::user()->license_id)
+                                        ->where('productorders.license_id', Auth::user()->license_id)
+                                        ->where('orders.license_id', Auth::user()->license_id)
+                                        ->where('debt_import.license_id', Auth::user()->license_id)
                                         ->value('debt_import.debt_status');
                                     //lấy số lượng nhập
                                     $qty_exist = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                         ->leftJoin('orders', 'productorders.order_id', 'orders.id')
-                                        ->where('product.id', $productID)->value('productorders.product_qty');
+                                        ->where('product.id', $productID)
+                                        ->where('product.license_id', Auth::user()->license_id)
+                                        ->where('productorders.license_id', Auth::user()->license_id)
+                                        ->where('orders.license_id', Auth::user()->license_id)
+                                        ->value('productorders.product_qty');
                                     //lấy id Import
                                     $import_id = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                         ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                         ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
                                         ->where('product.id', $productID)
+                                        ->where('product.license_id', Auth::user()->license_id)
+                                        ->where('productorders.license_id', Auth::user()->license_id)
+                                        ->where('orders.license_id', Auth::user()->license_id)
+                                        ->where('debt_import.license_id', Auth::user()->license_id)
                                         ->value('debt_import.import_id');
                                     //lấy công nợ nhập
                                     $date_import = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                         ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                         ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
+                                        ->where('product.license_id', Auth::user()->license_id)
+                                        ->where('productorders.license_id', Auth::user()->license_id)
+                                        ->where('orders.license_id', Auth::user()->license_id)
+                                        ->where('debt_import.license_id', Auth::user()->license_id)
                                         ->where('product.id', $productID)->first();
                                     //lấy thông tin sản phẩm
                                     $product = Product::find($productID);
@@ -316,6 +357,7 @@ class ExportController extends Controller
                                         $history->tranport_fee = 0;
                                     }
                                     $history->history_note = null;
+                                    $history->license_id = Auth::user()->license_id;
                                     $history->save();
                                 }
                                 // Lấy thông tin từ bảng productExport và Export
@@ -383,6 +425,7 @@ class ExportController extends Controller
                                 } else {
                                     $debt->debt_status = 3;
                                 }
+                                $debt->license_id = Auth::user()->license_id;
                                 $debt->save();
                                 //tình trạng xuất hàng
                                 $export_status = Product::leftJoin('product_exports', 'product_exports.product_id', 'product.id')
@@ -390,6 +433,10 @@ class ExportController extends Controller
                                     ->leftJoin('debts', 'debts.export_id', 'exports.id')
                                     ->where('product.id', $productID)
                                     ->where('exports.id', $export->id)
+                                    ->where('product.license_id', Auth::user()->license_id)
+                                    ->where('product_exports.license_id', Auth::user()->license_id)
+                                    ->where('exports.license_id', Auth::user()->license_id)
+                                    ->where('debts.license_id', Auth::user()->license_id)
                                     ->value('debts.debt_status');
                                 //cập nhật tình trạng xuất hàng cho bảng History
                                 History::where('export_id', $history->export_id)
@@ -398,7 +445,7 @@ class ExportController extends Controller
                                         'debt_export_end' => $debt->date_end,
                                     ]);
                                 // Thêm S/N vào đơn xuất hàng
-                                Serinumbers::whereIn('id', $export_seris)->update(['export_seri' => $export->id, 'seri_status' => 3]);
+                                Serinumbers::whereIn('id', $export_seris)->where('license_id', Auth::user()->license_id)->update(['export_seri' => $export->id, 'seri_status' => 3]);
                             }
                             //cập nhật khách hàng khi lưu nhanh
                             if ($request->checkguest == 1 && $updateClick == null) {
@@ -417,6 +464,7 @@ class ExportController extends Controller
                                 } else {
                                     $guest->debt = $request->debt;
                                 }
+                                $guest->license_id = Auth::user()->license_id;
                                 $guest->save();
                                 // Tạo đơn xuất hàng
                                 $export = new Exports();
@@ -432,12 +480,15 @@ class ExportController extends Controller
                                 } else {
                                     $export->created_at = $request->export_create;
                                 }
+                                $export->license_id = Auth::user()->license_id;
                                 $export->save();
                                 // Tạo các bản ghi trong bảng product export
                                 for ($i = 0; $i < count($productIDs); $i++) {
                                     $productID = $productIDs[$i];
                                     $productQty = $productQtys[$i];
-                                    $nameProduct = Product::where('id', $productID)->value('product_name');
+                                    $nameProduct = Product::where('id', $productID)
+                                        ->where('license_id', Auth::user()->license_id)
+                                        ->value('product_name');
                                     $proExport = new ProductExports();
                                     $proExport->product_id = $productID;
                                     $proExport->export_id = $export->id;
@@ -448,25 +499,40 @@ class ExportController extends Controller
                                     $proExport->product_note = $request->product_note[$i];
                                     $proExport->product_tax = $request->product_tax[$i];
                                     $proExport->product_total = $request->totalValue;
+                                    $proExport->license_id = Auth::user()->license_id;
                                     $proExport->save();
                                     //lấy thông tin nhà cung cấp
                                     $provide_id = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                         ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                         ->where('product.id', $productID)
+                                        ->where('product.license_id', Auth::user()->license_id)
+                                        ->where('productorders.license_id', Auth::user()->license_id)
+                                        ->where('orders.license_id', Auth::user()->license_id)
                                         ->value('productorders.provide_id');
                                     //lấy hóa đơn vào
                                     $import_code = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                         ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                         ->where('product.id', $productID)
+                                        ->where('product.license_id', Auth::user()->license_id)
+                                        ->where('productorders.license_id', Auth::user()->license_id)
+                                        ->where('orders.license_id', Auth::user()->license_id)
                                         ->value('orders.product_code');
                                     //lấy bảng nhập hàng
                                     $productorders = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                         ->leftJoin('orders', 'productorders.order_id', 'orders.id')
-                                        ->where('product.id', $productID)->value('productorders.product_total');
+                                        ->where('product.id', $productID)
+                                        ->where('product.license_id', Auth::user()->license_id)
+                                        ->where('productorders.license_id', Auth::user()->license_id)
+                                        ->where('orders.license_id', Auth::user()->license_id)
+                                        ->value('productorders.product_total');
                                     //công nợ nhập
                                     $debt_import = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                         ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                         ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
+                                        ->where('product.license_id', Auth::user()->license_id)
+                                        ->where('productorders.license_id', Auth::user()->license_id)
+                                        ->where('orders.license_id', Auth::user()->license_id)
+                                        ->where('debt_import.license_id', Auth::user()->license_id)
                                         ->where('product.id', $productID)
                                         ->value('debt_import.debt');
                                     //tình trạng nhập hàng
@@ -474,22 +540,39 @@ class ExportController extends Controller
                                         ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                         ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
                                         ->where('product.id', $productID)
+                                        ->where('product.license_id', Auth::user()->license_id)
+                                        ->where('productorders.license_id', Auth::user()->license_id)
+                                        ->where('orders.license_id', Auth::user()->license_id)
+                                        ->where('debt_import.license_id', Auth::user()->license_id)
                                         ->value('debt_import.debt_status');
                                     //lấy số lượng nhập
                                     $qty_exist = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                         ->leftJoin('orders', 'productorders.order_id', 'orders.id')
-                                        ->where('product.id', $productID)->value('productorders.product_qty');
+                                        ->where('product.id', $productID)
+                                        ->where('product.license_id', Auth::user()->license_id)
+                                        ->where('productorders.license_id', Auth::user()->license_id)
+                                        ->where('orders.license_id', Auth::user()->license_id)
+                                        ->value('productorders.product_qty');
                                     //lấy id Import
                                     $import_id = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                         ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                         ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
                                         ->where('product.id', $productID)
+                                        ->where('product.license_id', Auth::user()->license_id)
+                                        ->where('productorders.license_id', Auth::user()->license_id)
+                                        ->where('orders.license_id', Auth::user()->license_id)
+                                        ->where('debt_import.license_id', Auth::user()->license_id)
                                         ->value('debt_import.import_id');
                                     //lấy công nợ nhập
                                     $date_import = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                         ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                         ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
-                                        ->where('product.id', $productID)->first();
+                                        ->where('product.id', $productID)
+                                        ->where('product.license_id', Auth::user()->license_id)
+                                        ->where('productorders.license_id', Auth::user()->license_id)
+                                        ->where('orders.license_id', Auth::user()->license_id)
+                                        ->where('debt_import.license_id', Auth::user()->license_id)
+                                        ->first();
                                     //lấy thông tin sản phẩm
                                     $product = Product::find($productID);
                                     // Lấy thông tin từ bảng Guests
@@ -533,6 +616,7 @@ class ExportController extends Controller
                                         $history->tranport_fee = 0;
                                     }
                                     $history->history_note = null;
+                                    $history->license_id = Auth::user()->license_id;
                                     $history->save();
                                 }
                                 // Lấy thông tin từ bảng productExport và Export
@@ -607,6 +691,7 @@ class ExportController extends Controller
                                 } else {
                                     $debt->debt_status = 3;
                                 }
+                                $debt->license_id = Auth::user()->license_id;
                                 $debt->save();
                                 //tình trạng xuất hàng
                                 $export_status = Product::leftJoin('product_exports', 'product_exports.product_id', 'product.id')
@@ -614,6 +699,10 @@ class ExportController extends Controller
                                     ->leftJoin('debts', 'debts.export_id', 'exports.id')
                                     ->where('product.id', $productID)
                                     ->where('exports.id', $export->id)
+                                    ->where('product.license_id', Auth::user()->license_id)
+                                    ->where('product_exports.license_id', Auth::user()->license_id)
+                                    ->where('exports.license_id', Auth::user()->license_id)
+                                    ->where('debts.license_id', Auth::user()->license_id)
                                     ->value('debts.debt_status');
                                 //cập nhật tình trạng xuất hàng cho bảng History
                                 History::where('export_id', $history->export_id)
@@ -622,7 +711,7 @@ class ExportController extends Controller
                                         'debt_export_end' => $debt->date_end,
                                     ]);
                                 // Thêm S/N vào đơn xuất hàng
-                                Serinumbers::whereIn('id', $export_seris)->update(['export_seri' => $export->id, 'seri_status' => 3]);
+                                Serinumbers::whereIn('id', $export_seris)->where('license_id', Auth::user()->license_id)->update(['export_seri' => $export->id, 'seri_status' => 3]);
                             }
                             //tạo đơn khi đã nhấn cập nhật
                             if ($request->checkguest == 1 && $updateClick == 1) {
@@ -640,6 +729,7 @@ class ExportController extends Controller
                                 } else {
                                     $export->created_at = $request->export_create;
                                 }
+                                $export->license_id = Auth::user()->license_id;
                                 $export->save();
                                 // Tạo các bản ghi trong bảng product export
                                 for ($i = 0; $i < count($productIDs); $i++) {
@@ -656,48 +746,80 @@ class ExportController extends Controller
                                     $proExport->product_note = $request->product_note[$i];
                                     $proExport->product_tax = $request->product_tax[$i];
                                     $proExport->product_total = $request->totalValue;
+                                    $proExport->license_id = Auth::user()->license_id;
                                     $proExport->save();
                                     //lấy thông tin nhà cung cấp
                                     $provide_id = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                         ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                         ->where('product.id', $productID)
+                                        ->where('product.license_id', Auth::user()->license_id)
+                                        ->where('productorders.license_id', Auth::user()->license_id)
+                                        ->where('orders.license_id', Auth::user()->license_id)
                                         ->value('productorders.provide_id');
                                     //lấy hóa đơn vào
                                     $import_code = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                         ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                         ->where('product.id', $productID)
+                                        ->where('product.license_id', Auth::user()->license_id)
+                                        ->where('productorders.license_id', Auth::user()->license_id)
+                                        ->where('orders.license_id', Auth::user()->license_id)
                                         ->value('orders.product_code');
                                     //lấy bảng nhập hàng
                                     $productorders = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                         ->leftJoin('orders', 'productorders.order_id', 'orders.id')
-                                        ->where('product.id', $productID)->value('productorders.product_total');
+                                        ->where('product.id', $productID)
+                                        ->where('product.license_id', Auth::user()->license_id)
+                                        ->where('productorders.license_id', Auth::user()->license_id)
+                                        ->where('orders.license_id', Auth::user()->license_id)
+                                        ->value('productorders.product_total');
                                     //công nợ nhập
                                     $debt_import = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                         ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                         ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
                                         ->where('product.id', $productID)
+                                        ->where('product.license_id', Auth::user()->license_id)
+                                        ->where('productorders.license_id', Auth::user()->license_id)
+                                        ->where('orders.license_id', Auth::user()->license_id)
+                                        ->where('debt_import.license_id', Auth::user()->license_id)
                                         ->value('debt_import.debt');
                                     //tình trạng nhập hàng
                                     $import_status = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                         ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                         ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
                                         ->where('product.id', $productID)
+                                        ->where('product.license_id', Auth::user()->license_id)
+                                        ->where('productorders.license_id', Auth::user()->license_id)
+                                        ->where('orders.license_id', Auth::user()->license_id)
+                                        ->where('debt_import.license_id', Auth::user()->license_id)
                                         ->value('debt_import.debt_status');
                                     //lấy số lượng nhập
                                     $qty_exist = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                         ->leftJoin('orders', 'productorders.order_id', 'orders.id')
-                                        ->where('product.id', $productID)->value('productorders.product_qty');
+                                        ->where('product.id', $productID)
+                                        ->where('product.license_id', Auth::user()->license_id)
+                                        ->where('productorders.license_id', Auth::user()->license_id)
+                                        ->where('orders.license_id', Auth::user()->license_id)
+                                        ->value('productorders.product_qty');
                                     //lấy id Import
                                     $import_id = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                         ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                         ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
                                         ->where('product.id', $productID)
+                                        ->where('product.license_id', Auth::user()->license_id)
+                                        ->where('productorders.license_id', Auth::user()->license_id)
+                                        ->where('orders.license_id', Auth::user()->license_id)
+                                        ->where('debt_import.license_id', Auth::user()->license_id)
                                         ->value('debt_import.import_id');
                                     //lấy công nợ nhập
                                     $date_import = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                         ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                         ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
-                                        ->where('product.id', $productID)->first();
+                                        ->where('product.id', $productID)
+                                        ->where('product.license_id', Auth::user()->license_id)
+                                        ->where('productorders.license_id', Auth::user()->license_id)
+                                        ->where('orders.license_id', Auth::user()->license_id)
+                                        ->where('debt_import.license_id', Auth::user()->license_id)
+                                        ->first();
                                     //lấy thông tin sản phẩm
                                     $product = Product::find($productID);
                                     // Lấy thông tin từ bảng Guests
@@ -741,6 +863,7 @@ class ExportController extends Controller
                                         $history->tranport_fee = 0;
                                     }
                                     $history->history_note = null;
+                                    $history->license_id = Auth::user()->license_id;
                                     $history->save();
                                 }
                                 // Lấy thông tin từ bảng productExport và Export
@@ -815,6 +938,7 @@ class ExportController extends Controller
                                 } else {
                                     $debt->debt_status = 3;
                                 }
+                                $debt->license_id = Auth::user()->license_id;
                                 $debt->save();
                                 //tình trạng xuất hàng
                                 $export_status = Product::leftJoin('product_exports', 'product_exports.product_id', 'product.id')
@@ -822,6 +946,10 @@ class ExportController extends Controller
                                     ->leftJoin('debts', 'debts.export_id', 'exports.id')
                                     ->where('product.id', $productID)
                                     ->where('exports.id', $export->id)
+                                    ->where('product.license_id', Auth::user()->license_id)
+                                    ->where('product_exports.license_id', Auth::user()->license_id)
+                                    ->where('exports.license_id', Auth::user()->license_id)
+                                    ->where('debts.license_id', Auth::user()->license_id)
                                     ->value('debts.debt_status');
                                 //cập nhật tình trạng xuất hàng cho bảng History
                                 History::where('export_id', $history->export_id)
@@ -830,7 +958,7 @@ class ExportController extends Controller
                                         'debt_export_end' => $debt->date_end,
                                     ]);
                                 // Thêm S/N vào đơn xuất hàng
-                                Serinumbers::whereIn('id', $export_seris)->update(['export_seri' => $export->id, 'seri_status' => 3]);
+                                Serinumbers::whereIn('id', $export_seris)->where('license_id', Auth::user()->license_id)->update(['export_seri' => $export->id, 'seri_status' => 3]);
                             }
                             //tạo đơn khi đã nhấn thêm
                             if ($clickValue == 1 && $request->checkguest == 2) {
@@ -848,12 +976,15 @@ class ExportController extends Controller
                                 } else {
                                     $export->created_at = $request->export_create;
                                 }
+                                $export->license_id = Auth::user()->license_id;
                                 $export->save();
                                 // Tạo các bản ghi trong bảng product export
                                 for ($i = 0; $i < count($productIDs); $i++) {
                                     $productID = $productIDs[$i];
                                     $productQty = $productQtys[$i];
-                                    $nameProduct = Product::where('id', $productID)->value('product_name');
+                                    $nameProduct = Product::where('id', $productID)
+                                        ->where('license_id', Auth::user()->license_id)
+                                        ->value('product_name');
                                     $proExport = new ProductExports();
                                     $proExport->product_id = $productID;
                                     $proExport->export_id = $export->id;
@@ -864,48 +995,80 @@ class ExportController extends Controller
                                     $proExport->product_note = $request->product_note[$i];
                                     $proExport->product_tax = $request->product_tax[$i];
                                     $proExport->product_total = $request->totalValue;
+                                    $proExport->license_id = Auth::user()->license_id;
                                     $proExport->save();
                                     //lấy thông tin nhà cung cấp
                                     $provide_id = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                         ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                         ->where('product.id', $productID)
+                                        ->where('product.license_id', Auth::user()->license_id)
+                                        ->where('productorders.license_id', Auth::user()->license_id)
+                                        ->where('orders.license_id', Auth::user()->license_id)
                                         ->value('productorders.provide_id');
                                     //lấy hóa đơn vào
                                     $import_code = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                         ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                         ->where('product.id', $productID)
+                                        ->where('product.license_id', Auth::user()->license_id)
+                                        ->where('productorders.license_id', Auth::user()->license_id)
+                                        ->where('orders.license_id', Auth::user()->license_id)
                                         ->value('orders.product_code');
                                     //lấy bảng nhập hàng
                                     $productorders = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                         ->leftJoin('orders', 'productorders.order_id', 'orders.id')
-                                        ->where('product.id', $productID)->value('productorders.product_total');
+                                        ->where('product.id', $productID)
+                                        ->where('product.license_id', Auth::user()->license_id)
+                                        ->where('productorders.license_id', Auth::user()->license_id)
+                                        ->where('orders.license_id', Auth::user()->license_id)
+                                        ->value('productorders.product_total');
                                     //công nợ nhập
                                     $debt_import = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                         ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                         ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
                                         ->where('product.id', $productID)
+                                        ->where('product.license_id', Auth::user()->license_id)
+                                        ->where('productorders.license_id', Auth::user()->license_id)
+                                        ->where('orders.license_id', Auth::user()->license_id)
+                                        ->where('debt_import.license_id', Auth::user()->license_id)
                                         ->value('debt_import.debt');
                                     //tình trạng nhập hàng
                                     $import_status = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                         ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                         ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
                                         ->where('product.id', $productID)
+                                        ->where('product.license_id', Auth::user()->license_id)
+                                        ->where('productorders.license_id', Auth::user()->license_id)
+                                        ->where('orders.license_id', Auth::user()->license_id)
+                                        ->where('debt_import.license_id', Auth::user()->license_id)
                                         ->value('debt_import.debt_status');
                                     //lấy số lượng nhập
                                     $qty_exist = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                         ->leftJoin('orders', 'productorders.order_id', 'orders.id')
-                                        ->where('product.id', $productID)->value('productorders.product_qty');
+                                        ->where('product.id', $productID)
+                                        ->where('product.license_id', Auth::user()->license_id)
+                                        ->where('productorders.license_id', Auth::user()->license_id)
+                                        ->where('orders.license_id', Auth::user()->license_id)
+                                        ->value('productorders.product_qty');
                                     //lấy id Import
                                     $import_id = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                         ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                         ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
                                         ->where('product.id', $productID)
+                                        ->where('product.license_id', Auth::user()->license_id)
+                                        ->where('productorders.license_id', Auth::user()->license_id)
+                                        ->where('orders.license_id', Auth::user()->license_id)
+                                        ->where('debt_import.license_id', Auth::user()->license_id)
                                         ->value('debt_import.import_id');
                                     //lấy công nợ nhập
                                     $date_import = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                         ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                         ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
-                                        ->where('product.id', $productID)->first();
+                                        ->where('product.id', $productID)
+                                        ->where('product.license_id', Auth::user()->license_id)
+                                        ->where('productorders.license_id', Auth::user()->license_id)
+                                        ->where('orders.license_id', Auth::user()->license_id)
+                                        ->where('debt_import.license_id', Auth::user()->license_id)
+                                        ->first();
                                     //lấy thông tin sản phẩm
                                     $product = Product::find($productID);
                                     // Lấy thông tin từ bảng Guests
@@ -949,6 +1112,7 @@ class ExportController extends Controller
                                         $history->tranport_fee = 0;
                                     }
                                     $history->history_note = null;
+                                    $history->license_id = Auth::user()->license_id;
                                     $history->save();
                                 }
                                 // Lấy thông tin từ bảng productExport và Export
@@ -1023,6 +1187,7 @@ class ExportController extends Controller
                                 } else {
                                     $debt->debt_status = 3;
                                 }
+                                $debt->license_id = Auth::user()->license_id;
                                 $debt->save();
                                 //tình trạng xuất hàng
                                 $export_status = Product::leftJoin('product_exports', 'product_exports.product_id', 'product.id')
@@ -1030,6 +1195,10 @@ class ExportController extends Controller
                                     ->leftJoin('debts', 'debts.export_id', 'exports.id')
                                     ->where('product.id', $productID)
                                     ->where('exports.id', $export->id)
+                                    ->where('product.license_id', Auth::user()->license_id)
+                                    ->where('exports.license_id', Auth::user()->license_id)
+                                    ->where('product_exports.license_id', Auth::user()->license_id)
+                                    ->where('debts.license_id', Auth::user()->license_id)
                                     ->value('debts.debt_status');
                                 //cập nhật tình trạng xuất hàng cho bảng History
                                 History::where('export_id', $history->export_id)
@@ -1038,7 +1207,7 @@ class ExportController extends Controller
                                         'debt_export_end' => $debt->date_end,
                                     ]);
                                 // Thêm S/N vào đơn xuất hàng
-                                Serinumbers::whereIn('id', $export_seris)->update(['export_seri' => $export->id, 'seri_status' => 3]);
+                                Serinumbers::whereIn('id', $export_seris)->where('license_id', Auth::user()->license_id)->update(['export_seri' => $export->id, 'seri_status' => 3]);
                             }
                             // Giảm số lượng của sản phẩm trong bảng product
                             for ($i = 0; $i < count($productIDs); $i++) {
@@ -1090,6 +1259,7 @@ class ExportController extends Controller
                             $product = Product::select('product.*')
                                 ->selectRaw('COALESCE((product.product_qty - COALESCE(product.product_trade, 0)), 0) as qty_exist')
                                 ->where('product.id', $productID)
+                                ->where('product.license_id', Auth::user()->license_id)
                                 ->first();
                             $limit = $product->qty_exist;
                             if ($productQty > $limit) {
@@ -1119,6 +1289,7 @@ class ExportController extends Controller
                                     $guest->debt = $request->debt;
                                 }
                                 $guest->user_id = Auth::user()->id;
+                                $guest->license_id = Auth::user()->license_id;
                                 $guest->save();
                                 // Tạo đơn xuất hàng
                                 $export = new Exports();
@@ -1134,12 +1305,15 @@ class ExportController extends Controller
                                 } else {
                                     $export->created_at = $request->export_create;
                                 }
+                                $export->license_id = Auth::user()->license_id;
                                 $export->save();
                                 // Tạo các bản ghi trong bảng product export
                                 for ($i = 0; $i < count($productIDs); $i++) {
                                     $productID = $productIDs[$i];
                                     $productQty = $productQtys[$i];
-                                    $nameProduct = Product::where('id', $productID)->value('product_name');
+                                    $nameProduct = Product::where('id', $productID)
+                                        ->where('license_id', Auth::user()->license_id)
+                                        ->value('product_name');
                                     $proExport = new ProductExports();
                                     $proExport->product_id = $productID;
                                     $proExport->export_id = $export->id;
@@ -1150,13 +1324,16 @@ class ExportController extends Controller
                                     $proExport->product_note = $request->product_note[$i];
                                     $proExport->product_tax = $request->product_tax[$i];
                                     $proExport->product_total = $request->totalValue;
+                                    $proExport->license_id = Auth::user()->license_id;
                                     $proExport->save();
                                     $product = Product::findorfail($productID);
                                     $product->product_trade += $productQty;
                                     $product->save();
                                 }
                                 // Thêm S/N vào đơn xuất hàng
-                                Serinumbers::whereIn('id', $export_seris)->update(['export_seri' => $export->id, 'seri_status' => 2]);
+                                Serinumbers::whereIn('id', $export_seris)
+                                    ->where('license_id', Auth::user()->license_id)
+                                    ->update(['export_seri' => $export->id, 'seri_status' => 2]);
                             }
                             //cập nhật khách hàng khi lưu nhanh
                             if ($request->checkguest == 1 && $updateClick == null) {
@@ -1176,6 +1353,7 @@ class ExportController extends Controller
                                 } else {
                                     $guest->debt = $request->debt;
                                 }
+                                $guest->license_id = Auth::user()->license_id;
                                 $guest->save();
                                 // Tạo đơn xuất hàng
                                 $export = new Exports();
@@ -1191,12 +1369,15 @@ class ExportController extends Controller
                                 } else {
                                     $export->created_at = $request->export_create;
                                 }
+                                $export->license_id = Auth::user()->license_id;
                                 $export->save();
                                 // Tạo các bản ghi trong bảng product export
                                 for ($i = 0; $i < count($productIDs); $i++) {
                                     $productID = $productIDs[$i];
                                     $productQty = $productQtys[$i];
-                                    $nameProduct = Product::where('id', $productID)->value('product_name');
+                                    $nameProduct = Product::where('id', $productID)
+                                        ->where('license_id', Auth::user()->license_id)
+                                        ->value('product_name');
                                     $proExport = new ProductExports();
                                     $proExport->product_id = $productID;
                                     $proExport->export_id = $export->id;
@@ -1207,13 +1388,16 @@ class ExportController extends Controller
                                     $proExport->product_note = $request->product_note[$i];
                                     $proExport->product_tax = $request->product_tax[$i];
                                     $proExport->product_total = $request->totalValue;
+                                    $proExport->license_id = Auth::user()->license_id;
                                     $proExport->save();
                                     $product = Product::findorfail($productID);
                                     $product->product_trade += $productQty;
                                     $product->save();
                                 }
                                 // Thêm S/N vào đơn xuất hàng
-                                Serinumbers::whereIn('id', $export_seris)->update(['export_seri' => $export->id, 'seri_status' => 2]);
+                                Serinumbers::whereIn('id', $export_seris)
+                                    ->where('license_id', Auth::user()->license_id)
+                                    ->update(['export_seri' => $export->id, 'seri_status' => 2]);
                             }
                             //tạo đơn khi đã click nút thêm
                             if ($request->checkguest == 2 && $clickValue == 1) {
@@ -1231,12 +1415,15 @@ class ExportController extends Controller
                                 } else {
                                     $export->created_at = $request->export_create;
                                 }
+                                $export->license_id = Auth::user()->license_id;
                                 $export->save();
                                 // Tạo các bản ghi trong bảng product export
                                 for ($i = 0; $i < count($productIDs); $i++) {
                                     $productID = $productIDs[$i];
                                     $productQty = $productQtys[$i];
-                                    $nameProduct = Product::where('id', $productID)->value('product_name');
+                                    $nameProduct = Product::where('id', $productID)
+                                        ->where('license_id', Auth::user()->license_id)
+                                        ->value('product_name');
                                     $proExport = new ProductExports();
                                     $proExport->product_id = $productID;
                                     $proExport->export_id = $export->id;
@@ -1247,13 +1434,16 @@ class ExportController extends Controller
                                     $proExport->product_note = $request->product_note[$i];
                                     $proExport->product_tax = $request->product_tax[$i];
                                     $proExport->product_total = $request->totalValue;
+                                    $proExport->license_id = Auth::user()->license_id;
                                     $proExport->save();
                                     $product = Product::findorfail($productID);
                                     $product->product_trade += $productQty;
                                     $product->save();
                                 }
                                 // Thêm S/N vào đơn xuất hàng
-                                Serinumbers::whereIn('id', $export_seris)->update(['export_seri' => $export->id, 'seri_status' => 2]);
+                                Serinumbers::whereIn('id', $export_seris)
+                                    ->where('license_id', Auth::user()->license_id)
+                                    ->update(['export_seri' => $export->id, 'seri_status' => 2]);
                             }
                             //tạo đơn khi đã click nút cập nhật
                             if ($updateClick == 1 && $request->checkguest == 1) {
@@ -1271,12 +1461,15 @@ class ExportController extends Controller
                                 } else {
                                     $export->created_at = $request->export_create;
                                 }
+                                $export->license_id = Auth::user()->license_id;
                                 $export->save();
                                 // Tạo các bản ghi trong bảng product export
                                 for ($i = 0; $i < count($productIDs); $i++) {
                                     $productID = $productIDs[$i];
                                     $productQty = $productQtys[$i];
-                                    $nameProduct = Product::where('id', $productID)->value('product_name');
+                                    $nameProduct = Product::where('id', $productID)
+                                        ->where('license_id', Auth::user()->license_id)
+                                        ->value('product_name');
                                     $proExport = new ProductExports();
                                     $proExport->product_id = $productID;
                                     $proExport->export_id = $export->id;
@@ -1287,13 +1480,16 @@ class ExportController extends Controller
                                     $proExport->product_note = $request->product_note[$i];
                                     $proExport->product_tax = $request->product_tax[$i];
                                     $proExport->product_total = $request->totalValue;
+                                    $proExport->license_id = Auth::user()->license_id;
                                     $proExport->save();
                                     $product = Product::findorfail($productID);
                                     $product->product_trade += $productQty;
                                     $product->save();
                                 }
                                 // Thêm S/N vào đơn xuất hàng
-                                Serinumbers::whereIn('id', $export_seris)->update(['export_seri' => $export->id, 'seri_status' => 2]);
+                                Serinumbers::whereIn('id', $export_seris)
+                                    ->where('license_id', Auth::user()->license_id)
+                                    ->update(['export_seri' => $export->id, 'seri_status' => 2]);
                             }
                             return redirect()->route('exports.index')->with('msg', 'Tạo đơn thành công!');
                         }
@@ -1332,21 +1528,29 @@ class ExportController extends Controller
     public function edit($id)
     {
         $exports = Exports::where('exports.id', $id)
+            ->where('exports.license_id', Auth::user()->license_id)
             ->first();
         $check = Exports::where('exports.id', $id)
             ->leftJoin('debts', 'debts.export_id', 'exports.id')
+            ->where('exports.license_id', Auth::user()->license_id)
+            ->where('debts.license_id', Auth::user()->license_id)
             ->first();
-        $guest = Guests::find($exports->guest_id);
-        $customer = Guests::all();
+        $guest = Guests::where('id', $exports->guest_id)->where('guests.license_id', Auth::user()->license_id)
+            ->first();
+        $customer = Guests::where('license_id', Auth::user()->license_id)->get();
         $productExport = productExports::select('product_exports.*', 'product.product_tax as thue')
             ->join('exports', 'product_exports.export_id', '=', 'exports.id')
             ->join('product', 'product.id', '=', 'product_exports.product_id')
             ->selectRaw('(product.product_qty - product.product_trade) as tonkho')
             ->where('export_id', $id)
+            ->where('product_exports.license_id', Auth::user()->license_id)
+            ->where('exports.license_id', Auth::user()->license_id)
+            ->where('product.license_id', Auth::user()->license_id)
             ->get();
         $product_code = Product::select('product.*')
             ->whereRaw('COALESCE((product.product_qty - COALESCE(product.product_trade, 0)), 0) > 0')
             ->selectRaw('COALESCE((product.product_qty - COALESCE(product.product_trade, 0)), 0) as qty_exist')
+            ->where('product.license_id', Auth::user()->license_id)
             ->get();
         $title = 'Chi tiết đơn hàng';
         return view('tables.export.editExport', compact('check', 'exports', 'guest', 'productExport', 'product_code', 'customer', 'title'));
@@ -1394,16 +1598,19 @@ class ExportController extends Controller
                             if (in_array($productID, $existingProductIDs)) {
                                 $proExport = ProductExports::where('export_id', $id)
                                     ->where('product_id', $productID)
+                                    ->where('license_id', Auth::user()->license_id)
                                     ->first();
-
                                 $proExport->product_unit = $request->product_unit[$i];
                                 $proExport->product_qty = $productQty;
                                 $proExport->product_price = $request->product_price[$i];
                                 $proExport->product_note = $request->product_note[$i];
                                 $proExport->product_tax = $request->product_tax[$i];
                                 $proExport->product_total = $request->totalValue;
+                                $proExport->license_id = Auth::user()->license_id;
                                 $proExport->save();
-                                $currentTrade = Product::where('id', $productID)->value('product_trade');
+                                $currentTrade = Product::where('id', $productID)
+                                    ->where('license_id', Auth::user()->license_id)
+                                    ->value('product_trade');
                                 $existingQuantity = $existingProductQuantities[$productID] ?? 0;
                                 $newTrade = ($currentTrade - $existingQuantity) + $productQty;
                                 $updateTrade = $newTrade - $productQty;
@@ -1416,43 +1623,74 @@ class ExportController extends Controller
                                 $provide_id = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                     ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                     ->where('product.id', $productID)
+                                    ->where('product.license_id', Auth::user()->license_id)
+                                    ->where('productorders.license_id', Auth::user()->license_id)
+                                    ->where('orders.license_id', Auth::user()->license_id)
                                     ->value('productorders.provide_id');
                                 //lấy hóa đơn vào
                                 $import_code = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                     ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                     ->where('product.id', $productID)
+                                    ->where('product.license_id', Auth::user()->license_id)
+                                    ->where('productorders.license_id', Auth::user()->license_id)
+                                    ->where('orders.license_id', Auth::user()->license_id)
                                     ->value('orders.product_code');
                                 //công nợ nhập
                                 $debt_import = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                     ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                     ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
                                     ->where('product.id', $productID)
+                                    ->where('product.license_id', Auth::user()->license_id)
+                                    ->where('productorders.license_id', Auth::user()->license_id)
+                                    ->where('orders.license_id', Auth::user()->license_id)
+                                    ->where('debt_import.license_id', Auth::user()->license_id)
                                     ->value('debt_import.debt');
                                 //tình trạng nhập hàng
                                 $import_status = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                     ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                     ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
                                     ->where('product.id', $productID)
+                                    ->where('product.license_id', Auth::user()->license_id)
+                                    ->where('productorders.license_id', Auth::user()->license_id)
+                                    ->where('orders.license_id', Auth::user()->license_id)
+                                    ->where('debt_import.license_id', Auth::user()->license_id)
                                     ->value('debt_import.debt_status');
                                 //lấy số lượng nhập
                                 $qty_exist = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                     ->leftJoin('orders', 'productorders.order_id', 'orders.id')
-                                    ->where('product.id', $productID)->value('productorders.product_qty');
+                                    ->where('product.id', $productID)
+                                    ->where('product.license_id', Auth::user()->license_id)
+                                    ->where('productorders.license_id', Auth::user()->license_id)
+                                    ->where('orders.license_id', Auth::user()->license_id)
+                                    ->value('productorders.product_qty');
                                 // lấy id Import
                                 $import_id = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                     ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                     ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
                                     ->where('product.id', $productID)
+                                    ->where('product.license_id', Auth::user()->license_id)
+                                    ->where('productorders.license_id', Auth::user()->license_id)
+                                    ->where('orders.license_id', Auth::user()->license_id)
+                                    ->where('debt_import.license_id', Auth::user()->license_id)
                                     ->value('debt_import.import_id');
                                 //lấy công nợ nhập
                                 $date_import = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                     ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                     ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
-                                    ->where('product.id', $productID)->first();
+                                    ->where('product.id', $productID)
+                                    ->where('product.license_id', Auth::user()->license_id)
+                                    ->where('productorders.license_id', Auth::user()->license_id)
+                                    ->where('orders.license_id', Auth::user()->license_id)
+                                    ->where('debt_import.license_id', Auth::user()->license_id)
+                                    ->first();
                                 //lấy bảng nhập hàng
                                 $productorders = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                     ->leftJoin('orders', 'productorders.order_id', 'orders.id')
-                                    ->where('product.id', $productID)->value('productorders.product_total');
+                                    ->where('product.id', $productID)
+                                    ->where('product.license_id', Auth::user()->license_id)
+                                    ->where('productorders.license_id', Auth::user()->license_id)
+                                    ->where('orders.license_id', Auth::user()->license_id)
+                                    ->value('productorders.product_total');
                                 //lấy thông tin sản phẩm
                                 $product = Product::find($productID);
                                 // Lấy thông tin từ bảng Guests
@@ -1500,11 +1738,17 @@ class ExportController extends Controller
                                     $history->tranport_fee = 0;
                                 }
                                 $history->history_note = null;
+                                $history->license_id = Auth::user()->license_id;
                                 $history->save();
                                 //Cập nhật S/N
-                                DB::statement("UPDATE serinumbers SET export_seri = NULL, seri_status = 1 WHERE export_seri = $exports->id");
-                                //Cập nhật lại S/N
-                                Serinumbers::whereIn('id', $export_seris)->update(['export_seri' => $exports->id, 'seri_status' => 3]);
+                                $authSN = Auth::user()->license_id;
+                                DB::statement("UPDATE serinumbers SET export_seri = NULL, seri_status = 1 WHERE export_seri = $exports->id AND license_id = $authSN");
+                                if ($export_seris !== null) {
+                                    //Cập nhật lại S/N
+                                    Serinumbers::whereIn('id', $export_seris)
+                                        ->where('license_id', Auth::user()->license_id)
+                                        ->update(['export_seri' => $exports->id, 'seri_status' => 3]);
+                                }
                             } else {
                                 $proExport = new ProductExports();
                                 $proExport->product_id = $productID;
@@ -1516,48 +1760,79 @@ class ExportController extends Controller
                                 $proExport->product_note = $request->product_note[$i];
                                 $proExport->product_tax = $request->product_tax[$i];
                                 $proExport->product_total = $request->totalValue;
+                                $proExport->license_id = Auth::user()->license_id;
                                 $proExport->save();
                                 //lấy thông tin nhà cung cấp
                                 $provide_id = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                     ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                     ->where('product.id', $productID)
+                                    ->where('product.license_id', Auth::user()->license_id)
+                                    ->where('productorders.license_id', Auth::user()->license_id)
+                                    ->where('orders.license_id', Auth::user()->license_id)
                                     ->value('productorders.provide_id');
                                 //lấy hóa đơn vào
                                 $import_code = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                     ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                     ->where('product.id', $productID)
+                                    ->where('product.license_id', Auth::user()->license_id)
+                                    ->where('productorders.license_id', Auth::user()->license_id)
+                                    ->where('orders.license_id', Auth::user()->license_id)
                                     ->value('orders.product_code');
                                 //công nợ nhập
                                 $debt_import = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                     ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                     ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
                                     ->where('product.id', $productID)
+                                    ->where('product.license_id', Auth::user()->license_id)
+                                    ->where('productorders.license_id', Auth::user()->license_id)
+                                    ->where('orders.license_id', Auth::user()->license_id)
+                                    ->where('debt_import.license_id', Auth::user()->license_id)
                                     ->value('debt_import.debt');
                                 //tình trạng nhập hàng
                                 $import_status = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                     ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                     ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
                                     ->where('product.id', $productID)
+                                    ->where('product.license_id', Auth::user()->license_id)
+                                    ->where('productorders.license_id', Auth::user()->license_id)
+                                    ->where('orders.license_id', Auth::user()->license_id)
+                                    ->where('debt_import.license_id', Auth::user()->license_id)
                                     ->value('debt_import.debt_status');
                                 //lấy số lượng nhập
                                 $qty_exist = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                     ->leftJoin('orders', 'productorders.order_id', 'orders.id')
-                                    ->where('product.id', $productID)->value('productorders.product_qty');
+                                    ->where('product.id', $productID)
+                                    ->where('product.license_id', Auth::user()->license_id)
+                                    ->where('productorders.license_id', Auth::user()->license_id)
+                                    ->where('orders.license_id', Auth::user()->license_id)
+                                    ->value('productorders.product_qty');
                                 // lấy id Import
                                 $import_id = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                     ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                     ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
                                     ->where('product.id', $productID)
+                                    ->where('product.license_id', Auth::user()->license_id)
+                                    ->where('productorders.license_id', Auth::user()->license_id)
+                                    ->where('orders.license_id', Auth::user()->license_id)
+                                    ->where('debt_import.license_id', Auth::user()->license_id)
                                     ->value('debt_import.import_id');
                                 //lấy công nợ nhập
                                 $date_import = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                     ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                     ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
+                                    ->where('product.license_id', Auth::user()->license_id)
+                                    ->where('productorders.license_id', Auth::user()->license_id)
+                                    ->where('orders.license_id', Auth::user()->license_id)
+                                    ->where('debt_import.license_id', Auth::user()->license_id)
                                     ->where('product.id', $productID)->first();
                                 //lấy bảng nhập hàng
                                 $productorders = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                     ->leftJoin('orders', 'productorders.order_id', 'orders.id')
-                                    ->where('product.id', $productID)->value('productorders.product_total');
+                                    ->where('product.id', $productID)
+                                    ->where('product.license_id', Auth::user()->license_id)
+                                    ->where('productorders.license_id', Auth::user()->license_id)
+                                    ->where('orders.license_id', Auth::user()->license_id)
+                                    ->value('productorders.product_total');
                                 //lấy thông tin sản phẩm
                                 $product = Product::find($productID);
                                 // Lấy thông tin từ bảng Guests
@@ -1605,11 +1880,17 @@ class ExportController extends Controller
                                     $history->tranport_fee = 0;
                                 }
                                 $history->history_note = null;
+                                $history->license_id = Auth::user()->license_id;
                                 $history->save();
                                 //Cập nhật S/N
-                                DB::statement("UPDATE serinumbers SET export_seri = NULL, seri_status = 1 WHERE export_seri = $exports->id");
-                                //Cập nhật lại S/N
-                                Serinumbers::whereIn('id', $export_seris)->update(['export_seri' => $exports->id, 'seri_status' => 3]);
+                                $authSN = Auth::user()->license_id;
+                                DB::statement("UPDATE serinumbers SET export_seri = NULL, seri_status = 1 WHERE export_seri = $exports->id AND license_id = $authSN");
+                                if ($export_seris !== null) {
+                                    //Cập nhật lại S/N
+                                    Serinumbers::whereIn('id', $export_seris)
+                                        ->where('license_id', Auth::user()->license_id)
+                                        ->update(['export_seri' => $exports->id, 'seri_status' => 3]);
+                                }
                             }
 
                             $totalQtyNeeded += $productQty;
@@ -1686,6 +1967,7 @@ class ExportController extends Controller
                         } else {
                             $debt->debt_status = 3;
                         }
+                        $debt->license_id = Auth::user()->license_id;
                         $debt->save();
                         //tình trạng xuất hàng
                         $export_status = Product::leftJoin('product_exports', 'product_exports.product_id', 'product.id')
@@ -1711,7 +1993,7 @@ class ExportController extends Controller
                             Product::where('id', $productID)
                                 ->decrement('product_trade', $productQty);
                             DB::statement("UPDATE serinumbers SET export_seri = NULL, seri_status = 1 
-                                WHERE export_seri = $exports->id AND product_id = $productID");
+                                WHERE export_seri = $exports->id AND license_id = $authSN AND product_id = $productID");
                             // Xóa sản phẩm
                             $productExport->delete();
                         }
@@ -1755,6 +2037,7 @@ class ExportController extends Controller
                             } else {
                                 $exports->created_at = $request->export_create;
                             }
+                            $exports->license_id = Auth::user()->license_id;
                             $exports->save();
                         } else if ($clickValue != 1) {
                             $guest = new Guests();
@@ -1773,6 +2056,7 @@ class ExportController extends Controller
                                 $guest->debt = $request->debt;
                             }
                             $guest->user_id = Auth::user()->id;
+                            $guest->license_id = Auth::user()->license_id;
                             $guest->save();
                             // Tạo đơn xuất hàng
                             $exports->guest_id = $guest->id;
@@ -1787,6 +2071,7 @@ class ExportController extends Controller
                             } else {
                                 $exports->created_at = $request->export_create;
                             }
+                            $exports->license_id = Auth::user()->license_id;
                             $exports->save();
                         }
                         return redirect()->route('exports.index')->with('msg', 'Duyệt đơn thành công!');
@@ -1809,6 +2094,7 @@ class ExportController extends Controller
                     }
                     // Xóa các sản phẩm đã bị xóa
                     $productExportsToDelete = ProductExports::where('export_id', $exports->id)
+                        ->where('license_id', Auth::user()->license_id)
                         ->whereNotIn('product_id', $productIDs)
                         ->get();
                     foreach ($productExportsToDelete as $productExport) {
@@ -1816,9 +2102,8 @@ class ExportController extends Controller
                         $productID = $productExport->product_id;
                         $productQty = $productExport->product_qty;
                         Product::where('id', $productID)
+                            ->where('license_id', Auth::user()->license_id)
                             ->decrement('product_trade', $productQty);
-                        DB::statement("UPDATE serinumbers SET export_seri = NULL, seri_status = 1 
-                            WHERE export_seri = $exports->id AND product_id = $productID");
                         // Xóa sản phẩm
                         $productExport->delete();
                     }
@@ -1827,11 +2112,14 @@ class ExportController extends Controller
                     for ($i = 0; $i < count($productIDs); $i++) {
                         $productID = $productIDs[$i];
                         $productQty = $productQtys[$i];
-                        $nameProduct = Product::where('id', $productID)->value('product_name');
+                        $nameProduct = Product::where('id', $productID)
+                            ->where('license_id', Auth::user()->license_id)
+                            ->value('product_name');
 
                         if (in_array($productID, $existingProductIDs)) {
                             $proExport = ProductExports::where('export_id', $id)
                                 ->where('product_id', $productID)
+                                ->where('license_id', Auth::user()->license_id)
                                 ->first();
 
                             $proExport->product_unit = $request->product_unit[$i];
@@ -1840,8 +2128,11 @@ class ExportController extends Controller
                             $proExport->product_note = $request->product_note[$i];
                             $proExport->product_tax = $request->product_tax[$i];
                             $proExport->product_total = $request->totalValue;
+                            $proExport->license_id = Auth::user()->license_id;
                             $proExport->save();
-                            $currentTrade = Product::where('id', $productID)->value('product_trade');
+                            $currentTrade = Product::where('id', $productID)
+                                ->where('license_id', Auth::user()->license_id)
+                                ->value('product_trade');
                             $existingQuantity = $existingProductQuantities[$productID] ?? 0;
                             $newTrade = ($currentTrade - $existingQuantity) + $productQty;
                             $updateTrade = $newTrade - $productQty;
@@ -1860,8 +2151,11 @@ class ExportController extends Controller
                             $proExport->product_note = $request->product_note[$i];
                             $proExport->product_tax = $request->product_tax[$i];
                             $proExport->product_total = $request->totalValue;
+                            $proExport->license_id = Auth::user()->license_id;
                             $proExport->save();
-                            $currentTrade = Product::where('id', $productID)->value('product_trade');
+                            $currentTrade = Product::where('id', $productID)
+                                ->where('license_id', Auth::user()->license_id)
+                                ->value('product_trade');
                             $newTrade = $currentTrade + $productQty;
 
                             Product::where('id', $productID)
@@ -1884,9 +2178,12 @@ class ExportController extends Controller
                     } else {
                         $exports->created_at = $request->export_create;
                     }
+                    $exports->license_id = Auth::user()->license_id;
                     $exports->save();
                     // Cập nhật SN
-                    Serinumbers::where('export_seri', $exports->id)->update(['export_seri' => null, 'seri_status' => 1]);
+                    Serinumbers::where('export_seri', $exports->id)
+                        ->where('license_id', Auth::user()->license_id)
+                        ->update(['export_seri' => null, 'seri_status' => 1]);
                     return redirect()->route('exports.index')->with('msg', 'Hủy đơn thành công!');
                 } else {
                     return redirect()->route('exports.index')->with('warning', 'Thao tác không thành công');
@@ -1908,11 +2205,14 @@ class ExportController extends Controller
                         for ($i = 0; $i < count($productIDs); $i++) {
                             $productID = $productIDs[$i];
                             $productQty = $productQtys[$i];
-                            $nameProduct = Product::where('id', $productID)->value('product_name');
+                            $nameProduct = Product::where('id', $productID)
+                                ->where('license_id', Auth::user()->license_id)
+                                ->value('product_name');
 
                             if (in_array($productID, $existingProductIDs)) {
                                 $proExport = ProductExports::where('export_id', $id)
                                     ->where('product_id', $productID)
+                                    ->where('license_id', Auth::user()->license_id)
                                     ->first();
 
                                 $proExport->product_unit = $request->product_unit[$i];
@@ -1921,8 +2221,11 @@ class ExportController extends Controller
                                 $proExport->product_note = $request->product_note[$i];
                                 $proExport->product_tax = $request->product_tax[$i];
                                 $proExport->product_total = $request->totalValue;
+                                $proExport->license_id = Auth::user()->license_id;
                                 $proExport->save();
-                                $currentTrade = Product::where('id', $productID)->value('product_trade');
+                                $currentTrade = Product::where('id', $productID)
+                                    ->where('license_id', Auth::user()->license_id)
+                                    ->value('product_trade');
                                 $existingQuantity = $existingProductQuantities[$productID] ?? 0;
                                 $newTrade = ($currentTrade - $existingQuantity) + $productQty;
 
@@ -1931,10 +2234,13 @@ class ExportController extends Controller
                                         'product_trade' => $newTrade,
                                     ]);
                                 //Cập nhật S/N
-                                DB::statement("UPDATE serinumbers SET export_seri = NULL, seri_status = 1 WHERE export_seri = $exports->id");
+                                $authSN = Auth::user()->license_id;
+                                DB::statement("UPDATE serinumbers SET export_seri = NULL, seri_status = 1 WHERE export_seri = $exports->id AND license_id = $authSN");
                                 if ($export_seris !== null) {
                                     //Cập nhật lại S/N
-                                    Serinumbers::whereIn('id', $export_seris)->update(['export_seri' => $exports->id, 'seri_status' => 2]);
+                                    Serinumbers::whereIn('id', $export_seris)
+                                        ->where('license_id', Auth::user()->license_id)
+                                        ->update(['export_seri' => $exports->id, 'seri_status' => 2]);
                                 }
                             } else {
                                 $proExport = new ProductExports();
@@ -1947,8 +2253,11 @@ class ExportController extends Controller
                                 $proExport->product_note = $request->product_note[$i];
                                 $proExport->product_tax = $request->product_tax[$i];
                                 $proExport->product_total = $request->totalValue;
+                                $proExport->license_id = Auth::user()->license_id;
                                 $proExport->save();
-                                $currentTrade = Product::where('id', $productID)->value('product_trade');
+                                $currentTrade = Product::where('id', $productID)
+                                    ->where('license_id', Auth::user()->license_id)
+                                    ->value('product_trade');
                                 $newTrade = $currentTrade + $productQty;
 
                                 Product::where('id', $productID)
@@ -1956,10 +2265,13 @@ class ExportController extends Controller
                                         'product_trade' => $newTrade,
                                     ]);
                                 //Cập nhật S/N
-                                DB::statement("UPDATE serinumbers SET export_seri = NULL,seri_status = 1 WHERE export_seri = $exports->id");
+                                $authSN = Auth::user()->license_id;
+                                DB::statement("UPDATE serinumbers SET export_seri = NULL, seri_status = 1 WHERE export_seri = $exports->id AND license_id = $authSN");
                                 if ($export_seris !== null) {
                                     //Cập nhật lại S/N
-                                    Serinumbers::whereIn('id', $export_seris)->update(['export_seri' => $exports->id, 'seri_status' => 2]);
+                                    Serinumbers::whereIn('id', $export_seris)
+                                        ->where('license_id', Auth::user()->license_id)
+                                        ->update(['export_seri' => $exports->id, 'seri_status' => 2]);
                                 }
                             }
 
@@ -1967,6 +2279,7 @@ class ExportController extends Controller
                         }
                         // Xóa các sản phẩm đã bị xóa
                         $productExportsToDelete = ProductExports::where('export_id', $exports->id)
+                            ->where('license_id', Auth::user()->license_id)
                             ->whereNotIn('product_id', $productIDs)
                             ->get();
                         foreach ($productExportsToDelete as $productExport) {
@@ -1974,9 +2287,10 @@ class ExportController extends Controller
                             $productID = $productExport->product_id;
                             $productQty = $productExport->product_qty;
                             Product::where('id', $productID)
+                                ->where('license_id', Auth::user()->license_id)
                                 ->decrement('product_trade', $productQty);
                             DB::statement("UPDATE serinumbers SET export_seri = NULL, seri_status = 1 
-                                WHERE export_seri = $exports->id AND product_id = $productID");
+                            WHERE export_seri = $exports->id AND license_id = $authSN AND product_id = $productID");
                             // Xóa sản phẩm
                             $productExport->delete();
                         }
@@ -1994,6 +2308,7 @@ class ExportController extends Controller
                             } else {
                                 $exports->created_at = $request->export_create;
                             }
+                            $exports->license_id = Auth::user()->license_id;
                             $exports->save();
                         } else if ($clickValue != 1) {
                             $guest = new Guests();
@@ -2012,6 +2327,7 @@ class ExportController extends Controller
                                 $guest->debt = $request->debt;
                             }
                             $guest->user_id = Auth::user()->id;
+                            $guest->license_id = Auth::user()->license_id;
                             $guest->save();
                             $exports->guest_id = $guest->id;
                             $exports->user_id = Auth::user()->id;
@@ -2025,6 +2341,7 @@ class ExportController extends Controller
                             } else {
                                 $exports->created_at = $request->export_create;
                             }
+                            $exports->license_id = Auth::user()->license_id;
                             $exports->save();
                         }
                         return redirect()->route('exports.index')->with('msg', 'Cập nhật thành công!');
@@ -2049,11 +2366,14 @@ class ExportController extends Controller
                     for ($i = 0; $i < count($productIDs); $i++) {
                         $productID = $productIDs[$i];
                         $productQty = $productQtys[$i];
-                        $nameProduct = Product::where('id', $productID)->value('product_name');
+                        $nameProduct = Product::where('id', $productID)
+                            ->where('license_id', Auth::user()->license_id)
+                            ->value('product_name');
 
                         if (in_array($productID, $existingProductIDs)) {
                             $proExport = ProductExports::where('export_id', $id)
                                 ->where('product_id', $productID)
+                                ->where('license_id', Auth::user()->license_id)
                                 ->first();
 
                             $proExport->product_unit = $request->product_unit[$i];
@@ -2062,13 +2382,18 @@ class ExportController extends Controller
                             $proExport->product_note = $request->product_note[$i];
                             $proExport->product_tax = $request->product_tax[$i];
                             $proExport->product_total = $request->totalValue;
+                            $proExport->license_id = Auth::user()->license_id;
                             $proExport->save();
                             //số lượng hiện tại
-                            $currentQty = Product::where('id', $productID)->value('product_qty');
+                            $currentQty = Product::where('id', $productID)
+                                ->where('license_id', Auth::user()->license_id)
+                                ->value('product_qty');
                             //giá nhập
-                            $currentPrice = Product::where('id', $productID)->value('product_price');
+                            $currentPrice = Product::where('id', $productID)
+                                ->where('license_id', Auth::user()->license_id)->value('product_price');
                             //giá trị tồn kho
-                            $currentTotal = Product::where('id', $productID)->value('product_total');
+                            $currentTotal = Product::where('id', $productID)->where('license_id', Auth::user()->license_id)
+                                ->value('product_total');
                             $newQty = $currentQty + $productQty;
                             $product_total = $productQty * $currentPrice;
                             $total = $product_total + $currentTotal;
@@ -2091,13 +2416,18 @@ class ExportController extends Controller
                     } else {
                         $exports->created_at = $request->export_create;
                     }
+                    $exports->license_id = Auth::user()->license_id;
                     $exports->save();
                     //xóa công nợ
-                    Debt::where('export_id', $exports->id)->delete();
+                    Debt::where('export_id', $exports->id)
+                        ->where('license_id', Auth::user()->license_id)
+                        ->delete();
                     //xóa lịch sử
-                    History::where('export_id', $exports->id)->delete();
+                    History::where('export_id', $exports->id)->where('license_id', Auth::user()->license_id)->delete();
                     // Cập nhật SN
-                    Serinumbers::where('export_seri', $exports->id)->update(['export_seri' => null, 'seri_status' => 1]);
+                    Serinumbers::where('export_seri', $exports->id)
+                        ->where('license_id', Auth::user()->license_id)
+                        ->update(['export_seri' => null, 'seri_status' => 1]);
                     return redirect()->route('exports.index')->with('msg', 'Hủy đơn thành công!');
                 } else {
                     return redirect()->route('exports.index')->with('warning', 'Thao tác không thành công');
@@ -2118,11 +2448,14 @@ class ExportController extends Controller
                         for ($i = 0; $i < count($productIDs); $i++) {
                             $productID = $productIDs[$i];
                             $productQty = $productQtys[$i];
-                            $nameProduct = Product::where('id', $productID)->value('product_name');
+                            $nameProduct = Product::where('id', $productID)
+                                ->where('license_id', Auth::user()->license_id)
+                                ->value('product_name');
 
                             if (in_array($productID, $existingProductIDs)) {
                                 $proExport = ProductExports::where('export_id', $id)
                                     ->where('product_id', $productID)
+                                    ->where('license_id', Auth::user()->license_id)
                                     ->first();
                                 $proExport->product_unit = $request->product_unit[$i];
                                 $proExport->product_qty = $productQty;
@@ -2130,8 +2463,11 @@ class ExportController extends Controller
                                 $proExport->product_note = $request->product_note[$i];
                                 $proExport->product_tax = $request->product_tax[$i];
                                 $proExport->product_total = $request->totalValue;
+                                $proExport->license_id = Auth::user()->license_id;
                                 $proExport->save();
-                                $currentQty = Product::where('id', $productID)->value('product_qty');
+                                $currentQty = Product::where('id', $productID)
+                                    ->where('license_id', Auth::user()->license_id)
+                                    ->value('product_qty');
                                 $existingQuantity = $existingProductQuantities[$productID] ?? 0;
                                 $newQty = ($currentQty + $existingQuantity) - $productQty;
                                 Product::where('id', $productID)
@@ -2142,43 +2478,73 @@ class ExportController extends Controller
                                 $provide_id = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                     ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                     ->where('product.id', $productID)
+                                    ->where('product.license_id', Auth::user()->license_id)
+                                    ->where('productorders.license_id', Auth::user()->license_id)
+                                    ->where('orders.license_id', Auth::user()->license_id)
                                     ->value('productorders.provide_id');
                                 //lấy hóa đơn vào
                                 $import_code = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                     ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                     ->where('product.id', $productID)
+                                    ->where('product.license_id', Auth::user()->license_id)
+                                    ->where('productorders.license_id', Auth::user()->license_id)
+                                    ->where('orders.license_id', Auth::user()->license_id)
                                     ->value('orders.product_code');
                                 //công nợ nhập
                                 $debt_import = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                     ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                     ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
                                     ->where('product.id', $productID)
+                                    ->where('product.license_id', Auth::user()->license_id)
+                                    ->where('productorders.license_id', Auth::user()->license_id)
+                                    ->where('orders.license_id', Auth::user()->license_id)
+                                    ->where('debt_import.license_id', Auth::user()->license_id)
                                     ->value('debt_import.debt');
                                 //tình trạng nhập hàng
                                 $import_status = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                     ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                     ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
                                     ->where('product.id', $productID)
+                                    ->where('product.license_id', Auth::user()->license_id)
+                                    ->where('productorders.license_id', Auth::user()->license_id)
+                                    ->where('orders.license_id', Auth::user()->license_id)
+                                    ->where('debt_import.license_id', Auth::user()->license_id)
                                     ->value('debt_import.debt_status');
                                 //lấy số lượng nhập
                                 $qty_exist = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                     ->leftJoin('orders', 'productorders.order_id', 'orders.id')
-                                    ->where('product.id', $productID)->value('productorders.product_qty');
+                                    ->where('product.id', $productID)
+                                    ->where('product.license_id', Auth::user()->license_id)
+                                    ->where('productorders.license_id', Auth::user()->license_id)
+                                    ->where('orders.license_id', Auth::user()->license_id)
+                                    ->value('productorders.product_qty');
                                 // lấy id Import
                                 $import_id = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                     ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                     ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
                                     ->where('product.id', $productID)
+                                    ->where('product.license_id', Auth::user()->license_id)
+                                    ->where('productorders.license_id', Auth::user()->license_id)
+                                    ->where('orders.license_id', Auth::user()->license_id)
+                                    ->where('debt_import.license_id', Auth::user()->license_id)
                                     ->value('debt_import.import_id');
                                 //lấy công nợ nhập
                                 $date_import = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                     ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                     ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
+                                    ->where('product.license_id', Auth::user()->license_id)
+                                    ->where('productorders.license_id', Auth::user()->license_id)
+                                    ->where('orders.license_id', Auth::user()->license_id)
+                                    ->where('debt_import.license_id', Auth::user()->license_id)
                                     ->where('product.id', $productID)->first();
                                 //lấy bảng nhập hàng
                                 $productorders = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                     ->leftJoin('orders', 'productorders.order_id', 'orders.id')
-                                    ->where('product.id', $productID)->value('productorders.product_total');
+                                    ->where('product.id', $productID)
+                                    ->where('product.license_id', Auth::user()->license_id)
+                                    ->where('productorders.license_id', Auth::user()->license_id)
+                                    ->where('orders.license_id', Auth::user()->license_id)
+                                    ->value('productorders.product_total');
                                 //lấy thông tin sản phẩm
                                 $product = Product::find($productID);
                                 // Lấy thông tin từ bảng Guests
@@ -2186,6 +2552,7 @@ class ExportController extends Controller
                                 //Cập nhật lịch sử
                                 $history = History::where('export_id', $exports->id)
                                     ->where('product_id', $productID)
+                                    ->where('history.license_id', Auth::user()->license_id)
                                     ->first();
                                 if ($history) {
                                     if ($request->export_create == null) {
@@ -2214,6 +2581,7 @@ class ExportController extends Controller
                                     $history->debt_import_end = $date_import->date_end;
                                     $history->tranport_fee = 0;
                                     $history->history_note = null;
+                                    $history->license_id = Auth::user()->license_id;
                                     $history->save();
                                     if ($firstProduct && $history->tranport_fee === null || $firstProduct && $history->tranport_fee === 0) {
                                         $history->total_difference = ($productQty * $request->product_price[$i]) - ($product->product_price * $productQty) - $request->transport_fee;
@@ -2236,8 +2604,11 @@ class ExportController extends Controller
                                 $proExport->product_note = $request->product_note[$i];
                                 $proExport->product_tax = $request->product_tax[$i];
                                 $proExport->product_total = $request->totalValue;
+                                $proExport->license_id = Auth::user()->license_id;
                                 $proExport->save();
-                                $currentQty = Product::where('id', $productID)->value('product_qty');
+                                $currentQty = Product::where('id', $productID)
+                                    ->where('product.license_id', Auth::user()->license_id)
+                                    ->value('product_qty');
                                 $existingQuantity = $existingProductQuantities[$productID] ?? 0;
                                 $newQty = ($currentQty + $existingQuantity) - $productQty;
                                 Product::where('id', $productID)
@@ -2248,31 +2619,53 @@ class ExportController extends Controller
                                 $provide_id = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                     ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                     ->where('product.id', $productID)
+                                    ->where('product.license_id', Auth::user()->license_id)
+                                    ->where('productorders.license_id', Auth::user()->license_id)
+                                    ->where('orders.license_id', Auth::user()->license_id)
                                     ->value('productorders.provide_id');
                                 //lấy hóa đơn vào
                                 $import_code = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                     ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                     ->where('product.id', $productID)
+                                    ->where('product.license_id', Auth::user()->license_id)
+                                    ->where('productorders.license_id', Auth::user()->license_id)
+                                    ->where('orders.license_id', Auth::user()->license_id)
                                     ->value('orders.product_code');
                                 //công nợ nhập
                                 $debt_import = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                     ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                     ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
                                     ->where('product.id', $productID)
+                                    ->where('product.license_id', Auth::user()->license_id)
+                                    ->where('productorders.license_id', Auth::user()->license_id)
+                                    ->where('orders.license_id', Auth::user()->license_id)
+                                    ->where('debt_import.license_id', Auth::user()->license_id)
                                     ->value('debt_import.debt');
                                 //tình trạng nhập hàng
                                 $import_status = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                     ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                     ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
                                     ->where('product.id', $productID)
+                                    ->where('product.license_id', Auth::user()->license_id)
+                                    ->where('productorders.license_id', Auth::user()->license_id)
+                                    ->where('orders.license_id', Auth::user()->license_id)
+                                    ->where('debt_import.license_id', Auth::user()->license_id)
                                     ->value('debt_import.debt_status');
                                 $productorders = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                     ->leftJoin('orders', 'productorders.order_id', 'orders.id')
-                                    ->where('product.id', $productID)->value('productorders.product_total');
+                                    ->where('product.id', $productID)
+                                    ->where('product.license_id', Auth::user()->license_id)
+                                    ->where('productorders.license_id', Auth::user()->license_id)
+                                    ->where('orders.license_id', Auth::user()->license_id)
+                                    ->value('productorders.product_total');
                                 //lấy công nợ nhập
                                 $date_import = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                                     ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                                     ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
+                                    ->where('product.license_id', Auth::user()->license_id)
+                                    ->where('productorders.license_id', Auth::user()->license_id)
+                                    ->where('orders.license_id', Auth::user()->license_id)
+                                    ->where('debt_import.license_id', Auth::user()->license_id)
                                     ->where('product.id', $productID)->first();
                                 //lấy thông tin sản phẩm
                                 $product = Product::find($productID);
@@ -2280,7 +2673,9 @@ class ExportController extends Controller
                                 $guest = Guests::find($exports->guest_id);
                                 //Cập nhật lịch sử
                                 $history = History::where('export_id', $exports->id)
-                                    ->where('product_id', $productID)->first();
+                                    ->where('product_id', $productID)
+                                    ->where('history.license_id', Auth::user()->license_id)
+                                    ->first();
                                 if ($history) {
                                     $history->export_id = $exports->id;
                                     $history->date_time = Carbon::now();
@@ -2323,6 +2718,7 @@ class ExportController extends Controller
                                         $history->tranport_fee = 0;
                                     }
                                     $history->history_note = null;
+                                    $history->license_id = Auth::user()->license_id;
                                     $history->save();
                                 }
                             }
@@ -2330,14 +2726,18 @@ class ExportController extends Controller
                         }
 
                         //Cập nhật S/N
-                        DB::statement("UPDATE serinumbers SET export_seri = NULL, seri_status = 1 WHERE export_seri = $exports->id");
+                        $authSN = Auth::user()->license_id;
+                        DB::statement("UPDATE serinumbers SET export_seri = NULL, seri_status = 1 WHERE export_seri = $exports->id AND license_id = $authSN");
                         if ($export_seris !== null) {
                             //Cập nhật lại S/N
-                            Serinumbers::whereIn('id', $export_seris)->update(['export_seri' => $exports->id, 'seri_status' => 3]);
+                            Serinumbers::whereIn('id', $export_seris)
+                                ->where('license_id', Auth::user()->license_id)
+                                ->update(['export_seri' => $exports->id, 'seri_status' => 3]);
                         }
 
                         // Xóa các sản phẩm đã bị xóa
                         $productExportsToDelete = ProductExports::where('export_id', $exports->id)
+                            ->where('license_id', Auth::user()->license_id)
                             ->whereNotIn('product_id', $productIDs)
                             ->get();
                         foreach ($productExportsToDelete as $productExport) {
@@ -2351,7 +2751,9 @@ class ExportController extends Controller
                             $productQty = $productQtys[$i];
 
                             // Lấy số lượng hiện tại của sản phẩm
-                            $currentQty = Product::where('id', $productID)->value('product_qty');
+                            $currentQty = Product::where('id', $productID)
+                                ->where('license_id', Auth::user()->license_id)
+                                ->value('product_qty');
 
                             // Lấy giá sản phẩm
                             $product = Product::find($productID);
@@ -2380,6 +2782,7 @@ class ExportController extends Controller
                             } else {
                                 $exports->created_at = $request->export_create;
                             }
+                            $exports->license_id = Auth::user()->license_id;
                             $exports->save();
                         } else if ($clickValue != 1) {
                             $guest = new Guests();
@@ -2398,6 +2801,7 @@ class ExportController extends Controller
                                 $guest->debt = $request->debt;
                             }
                             $guest->user_id = Auth::user()->id;
+                            $guest->license_id = Auth::user()->license_id;
                             $guest->save();
                             // Tạo đơn xuất hàng
                             $exports->guest_id = $guest->id;
@@ -2412,6 +2816,7 @@ class ExportController extends Controller
                             } else {
                                 $exports->created_at = $request->export_create;
                             }
+                            $exports->license_id = Auth::user()->license_id;
                             $exports->save();
                         }
 
@@ -2481,12 +2886,14 @@ class ExportController extends Controller
                         } else {
                             $debt->debt_status = 3;
                         }
+                        $debt->license_id = Auth::user()->license_id;
                         $debt->save();
                         //cập nhật tình trạng xuất hàng cho bảng History
                         for ($i = 0; $i < count($productIDs); $i++) {
                             $productID = $productIDs[$i];
                             $productQty = $productQtys[$i];
                             $history = History::where('export_id', $exports->id)
+                                ->where('license_id', Auth::user()->license_id)
                                 ->where('product_id', $productID)->first();
                             if ($history) {
                                 $history->update([
@@ -2508,7 +2915,9 @@ class ExportController extends Controller
             //Xóa đơn đã hủy
             elseif ($action === 'action6') {
                 if ($exports->export_status === 0) {
-                    Exports::where('id', $exports->id)->where('export_status', 0)->delete();
+                    Exports::where('id', $exports->id)
+                        ->where('license_id', Auth::user()->license_id)
+                        ->where('export_status', 0)->delete();
                     return redirect()->route('exports.index')->with('msg', 'Xóa đơn thành công!');
                 } else {
                     return redirect()->route('exports.index')->with('warning', 'Thao tác không thành công');
@@ -2529,14 +2938,14 @@ class ExportController extends Controller
     public function searchExport(Request $request)
     {
         $data = $request->all();
-        $customer = Guests::findOrFail($data['idCustomer']);
+        $customer = Guests::where('id', $data['idCustomer'])->where('license_id', Auth::user()->license_id)->first();
         return $customer;
     }
     public function updateCustomer(Request $request)
     {
         $data = $request->all();
         if ($data['updateClick'] == 1) {
-            $update_guest = Guests::findOrFail($data['id']);
+            $update_guest = Guests::where('id', $data['idCustomer'])->where('license_id', Auth::user()->license_id)->first();
             $update_guest->guest_name = $data['guest_name'];
             $update_guest->guest_address = $data['guest_address'];
             $update_guest->guest_code = $data['guest_code'];
@@ -2551,6 +2960,7 @@ class ExportController extends Controller
             } else {
                 $update_guest->debt = $data['debt'];
             }
+            $update_guest->license_id = Auth::user()->license_id;
             $update_guest->save();
             return response()->json(['message' => 'Lưu thông tin thành công!']);
         }
@@ -2587,6 +2997,7 @@ class ExportController extends Controller
                     $guest->debt = $data['debt'];
                 }
                 $guest->user_id = Auth::user()->id;
+                $guest->license_id = Auth::user()->license_id;
                 $guest->save();
 
                 // Trả về giá trị id của khách hàng vừa lưu
@@ -2601,6 +3012,7 @@ class ExportController extends Controller
         $product = Product::select('product.*')
             ->selectRaw('COALESCE(ROUND(product.product_qty - COALESCE(product.product_trade, 0), 2), 0) as qty_exist')
             ->where('product.id', $data['idProduct'])
+            ->where('license_id', Auth::user()->license_id)
             ->first();
         return response()->json($product);
     }
@@ -2611,6 +3023,7 @@ class ExportController extends Controller
         $limit_qty = Product::select('product.*')
             ->selectRaw('COALESCE(ROUND(product.product_qty - COALESCE(product.product_trade, 0), 2), 0) as qty_exist')
             ->where('product.id', $data['product_id'])
+            ->where('license_id', Auth::user()->license_id)
             ->first();
         return response()->json($limit_qty);
     }
@@ -2623,8 +3036,12 @@ class ExportController extends Controller
             $exports = Exports::whereIn('id', $list)->get();
             foreach ($exports as $item) {
                 if ($item->export_status === 0) {
-                    Exports::whereIn('id', $list)->where('export_status', 0)->delete();
-                    productExports::whereIn('export_id', $list)->delete();
+                    Exports::whereIn('id', $list)->where('export_status', 0)
+                        ->where('license_id', Auth::user()->license_id)
+                        ->delete();
+                    productExports::whereIn('export_id', $list)
+                        ->where('license_id', Auth::user()->license_id)
+                        ->delete();
                 }
             }
             session()->flash('msg', 'Xóa đơn hàng thành công');
@@ -2639,7 +3056,7 @@ class ExportController extends Controller
     {
         if (isset($request->arrId)) {
             $list = $request->arrId;
-            $exports = Exports::whereIn('id', $list)->get();
+            $exports = Exports::whereIn('id', $list)->where('license_id', Auth::user()->license_id)->get();
             return $exports;
         }
     }
@@ -2653,6 +3070,10 @@ class ExportController extends Controller
                 ->leftJoin('debts', 'debts.export_id', 'exports.id')
                 ->select('exports.*', 'product.*', 'product_exports.*', 'product_exports.product_qty as soluongbandau', 'debts.debt_status as tinhtrang')
                 ->whereIn('exports.id', $list)
+                ->where('exports.license_id', Auth::user()->license_id)
+                ->where('product.license_id', Auth::user()->license_id)
+                ->where('debts.license_id', Auth::user()->license_id)
+                ->where('product_exports.license_id', Auth::user()->license_id)
                 ->get();
 
             foreach ($listOrder as $orderItem) {
@@ -2660,9 +3081,9 @@ class ExportController extends Controller
                 // Lấy số lượng từ bảng product_exports
                 $quantityFromExport = $orderItem->soluongbandau;
                 if ($orderItem->export_status == 2) {
-                    $currentQty = Product::where('id', $productId)->value('product_qty');
-                    $currentPrice = Product::where('id', $productId)->value('product_price');
-                    $currentTotal = Product::where('id', $productId)->value('product_total');
+                    $currentQty = Product::where('id', $productId)->where('license_id', Auth::user()->license_id)->value('product_qty');
+                    $currentPrice = Product::where('id', $productId)->where('license_id', Auth::user()->license_id)->value('product_price');
+                    $currentTotal = Product::where('id', $productId)->where('license_id', Auth::user()->license_id)->value('product_total');
 
                     $newQty = $currentQty + $quantityFromExport;
                     $product_total = $quantityFromExport * $currentPrice;
@@ -2680,11 +3101,11 @@ class ExportController extends Controller
                             'export_status' => 0,
                         ]);
                     //xóa công nợ
-                    Debt::where('export_id', $orderItem->export_id)->delete();
+                    Debt::where('export_id', $orderItem->export_id)->where('license_id', Auth::user()->license_id)->delete();
                     //xóa lịch sử
-                    History::where('export_id', $orderItem->export_id)->delete();
+                    History::where('export_id', $orderItem->export_id)->where('license_id', Auth::user()->license_id)->delete();
                     // Cập nhật SN
-                    Serinumbers::where('export_seri', $orderItem->export_id)->update(['export_seri' => null, 'seri_status' => 1]);
+                    Serinumbers::where('export_seri', $orderItem->export_id)->where('license_id', Auth::user()->license_id)->update(['export_seri' => null, 'seri_status' => 1]);
                 } elseif ($orderItem->export_status == 1) {
                     $currentTrade = Product::where('id', $productId)->value('product_trade');
                     $newTrade = ($currentTrade - $quantityFromExport) + $productId;
@@ -2699,7 +3120,7 @@ class ExportController extends Controller
                             'export_status' => 0,
                         ]);
                     // Cập nhật SN
-                    Serinumbers::where('export_seri', $orderItem->export_id)->update(['export_seri' => null, 'seri_status' => 1]);
+                    Serinumbers::where('export_seri', $orderItem->export_id)->where('license_id', Auth::user()->license_id)->update(['export_seri' => null, 'seri_status' => 1]);
                 }
             }
             session()->flash('msg', 'Hủy đơn hàng thành công');
@@ -2745,7 +3166,9 @@ class ExportController extends Controller
     public function getSN(Request $request)
     {
         $data = $request->all();
-        $sn = Serinumbers::where('product_id', $data['productCode'])->where('seri_status', '1')->get();
+        $sn = Serinumbers::where('product_id', $data['productCode'])
+            ->where('license_id', Auth::user()->license_id)
+            ->where('seri_status', '1')->get();
         return response()->json($sn);
     }
 
@@ -2754,7 +3177,8 @@ class ExportController extends Controller
     {
         $data = $request->all();
         $sn = Serinumbers::where('product_id', $data['productCode'])
-            ->where('seri_status', '3')->where('export_seri', $data['idExport'])->get();
+            ->where('seri_status', '3')->where('export_seri', $data['idExport'])
+            ->where('license_id', Auth::user()->license_id)->get();
         return response()->json($sn);
     }
 
@@ -2767,6 +3191,7 @@ class ExportController extends Controller
                 $query->where('export_seri', $data['idExport'])
                     ->orWhereNull('export_seri');
             })
+            ->where('license_id', Auth::user()->license_id)
             ->get();
         return response()->json($sn);
     }
@@ -2781,6 +3206,7 @@ class ExportController extends Controller
                     ->orWhere('export_seri', 0)
                     ->orWhereNull('export_seri');
             })
+            ->where('license_id', Auth::user()->license_id)
             ->get();
         return response()->json($sn);
     }
@@ -2791,7 +3217,7 @@ class ExportController extends Controller
             $query->where('export_seri', $data['idExport'])
                 ->orWhere('export_seri', 0)
                 ->orWhereNull('export_seri');
-        })->get();
+        })->where('license_id', Auth::user()->license_id)->get();
         return response()->json($sn);
     }
 
@@ -2804,11 +3230,14 @@ class ExportController extends Controller
             ->join('exports', 'product_exports.export_id', '=', 'exports.id')
             ->join('product', 'product.id', '=', 'product_exports.product_id')
             ->selectRaw('(product.product_qty - product.product_trade) as tonkho')
+            ->where('product_exports.license_id', Auth::user()->license_id)
+            ->where('product.license_id', Auth::user()->license_id)
             ->where('export_id', $id)
             ->get();
         $product_code = Product::select('product.*')
             ->whereRaw('COALESCE((product.product_qty - COALESCE(product.product_trade, 0)), 0) > 0')
             ->selectRaw('COALESCE((product.product_qty - COALESCE(product.product_trade, 0)), 0) as qty_exist')
+            ->where('license_id', Auth::user()->license_id)
             ->get();
         $title = 'Chi tiết đơn hàng';
         return view('tables.export.editEx', compact('exports', 'guest', 'productExport', 'product_code', 'customer', 'title'));
@@ -2833,6 +3262,10 @@ class ExportController extends Controller
                     'debts.debt_status as tinhtrang'
                 )
                 ->whereIn('exports.id', $list)
+                ->where('product.license_id', Auth::user()->license_id)
+                ->where('product_exports.license_id', Auth::user()->license_id)
+                ->where('debts.license_id', Auth::user()->license_id)
+                ->where('exports.license_id', Auth::user()->license_id)
                 ->orderBy('exports.id') // Sắp xếp theo export_id
                 ->get();
             //Tạo công nợ
@@ -2907,9 +3340,12 @@ class ExportController extends Controller
                 } else {
                     $debt->debt_status = 3;
                 }
+                $debt->license_id = Auth::user()->license_id;
                 $debt->save();
                 // Cập nhật SN
-                Serinumbers::where('export_seri', $exportId)->update(['seri_status' => 3]);
+                Serinumbers::where('export_seri', $exportId)
+                    ->where('license_id', Auth::user()->license_id)
+                    ->update(['seri_status' => 3]);
             }
             foreach ($listOrder as $orderItem) {
                 $exportId = $orderItem->export_id;
@@ -2964,43 +3400,73 @@ class ExportController extends Controller
                     $provide_id = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                         ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                         ->where('product.id', $productId)
+                        ->where('product.license_id', Auth::user()->license_id)
+                        ->where('productorders.license_id', Auth::user()->license_id)
+                        ->where('orders.license_id', Auth::user()->license_id)
                         ->value('productorders.provide_id');
                     //lấy hóa đơn vào
                     $import_code = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                         ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                         ->where('product.id', $productId)
+                        ->where('product.license_id', Auth::user()->license_id)
+                        ->where('productorders.license_id', Auth::user()->license_id)
+                        ->where('orders.license_id', Auth::user()->license_id)
                         ->value('orders.product_code');
                     //công nợ nhập
                     $debt_import = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                         ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                         ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
                         ->where('product.id', $productId)
+                        ->where('product.license_id', Auth::user()->license_id)
+                        ->where('productorders.license_id', Auth::user()->license_id)
+                        ->where('orders.license_id', Auth::user()->license_id)
+                        ->where('debt_import.license_id', Auth::user()->license_id)
                         ->value('debt_import.debt');
                     //tình trạng nhập hàng
                     $import_status = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                         ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                         ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
                         ->where('product.id', $productId)
+                        ->where('product.license_id', Auth::user()->license_id)
+                        ->where('productorders.license_id', Auth::user()->license_id)
+                        ->where('orders.license_id', Auth::user()->license_id)
+                        ->where('debt_import.license_id', Auth::user()->license_id)
                         ->value('debt_import.debt_status');
                     //lấy số lượng nhập
                     $qty_exist = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                         ->leftJoin('orders', 'productorders.order_id', 'orders.id')
-                        ->where('product.id', $productId)->value('productorders.product_qty');
+                        ->where('product.id', $productId)
+                        ->where('product.license_id', Auth::user()->license_id)
+                        ->where('productorders.license_id', Auth::user()->license_id)
+                        ->where('orders.license_id', Auth::user()->license_id)
+                        ->value('productorders.product_qty');
                     // lấy id Import
                     $import_id = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                         ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                         ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
                         ->where('product.id', $productId)
+                        ->where('product.license_id', Auth::user()->license_id)
+                        ->where('productorders.license_id', Auth::user()->license_id)
+                        ->where('orders.license_id', Auth::user()->license_id)
+                        ->where('debt_import.license_id', Auth::user()->license_id)
                         ->value('debt_import.import_id');
                     //lấy công nợ nhập
                     $date_import = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                         ->leftJoin('orders', 'productorders.order_id', 'orders.id')
                         ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
+                        ->where('product.license_id', Auth::user()->license_id)
+                        ->where('productorders.license_id', Auth::user()->license_id)
+                        ->where('orders.license_id', Auth::user()->license_id)
+                        ->where('debt_import.license_id', Auth::user()->license_id)
                         ->where('product.id', $productId)->first();
                     //lấy bảng nhập hàng
                     $productorders = Product::leftJoin('productorders', 'productorders.product_id', 'product.id')
                         ->leftJoin('orders', 'productorders.order_id', 'orders.id')
-                        ->where('product.id', $productId)->value('productorders.product_total');
+                        ->where('product.id', $productId)
+                        ->where('product.license_id', Auth::user()->license_id)
+                        ->where('productorders.license_id', Auth::user()->license_id)
+                        ->where('orders.license_id', Auth::user()->license_id)
+                        ->value('productorders.product_total');
                     //lấy thông tin sản phẩm
                     $product = Product::find($productId);
                     // Lấy thông tin từ bảng Guests
@@ -3048,18 +3514,27 @@ class ExportController extends Controller
                         $history->tranport_fee = 0;
                     }
                     $history->history_note = null;
+                    $history->license_id = Auth::user()->license_id;
                     $history->save();
                     $export_status = Product::leftJoin('product_exports', 'product_exports.product_id', 'product.id')
                         ->leftJoin('exports', 'product_exports.export_id', 'exports.id')
                         ->leftJoin('debts', 'debts.export_id', 'exports.id')
                         ->where('product.id', $productId)
                         ->where('exports.id', $orderItem->export_id)
+                        ->where('product.license_id', Auth::user()->license_id)
+                        ->where('exports.license_id', Auth::user()->license_id)
+                        ->where('product_exports.license_id', Auth::user()->license_id)
+                        ->where('debts.license_id', Auth::user()->license_id)
                         ->value('debts.debt_status');
                     $debt_end = Product::leftJoin('product_exports', 'product_exports.product_id', 'product.id')
                         ->leftJoin('exports', 'product_exports.export_id', 'exports.id')
                         ->leftJoin('debts', 'debts.export_id', 'exports.id')
                         ->where('product.id', $productId)
                         ->where('exports.id', $orderItem->export_id)
+                        ->where('product.license_id', Auth::user()->license_id)
+                        ->where('exports.license_id', Auth::user()->license_id)
+                        ->where('product_exports.license_id', Auth::user()->license_id)
+                        ->where('debts.license_id', Auth::user()->license_id)
                         ->value('debts.date_end');
                     //cập nhật tình trạng xuất hàng cho bảng History
                     History::where('export_id', $history->export_id)
@@ -3079,6 +3554,9 @@ class ExportController extends Controller
     {
         $data = Exports::leftJoin('guests', 'exports.guest_id', '=', 'guests.id')
             ->leftJoin('users', 'exports.user_id', '=', 'users.id')
+            ->where('guests.license_id', Auth::user()->license_id)
+            ->where('exports.license_id', Auth::user()->license_id)
+            ->where('users.license_id', Auth::user()->license_id)
             ->select(
                 'exports.id as id',
                 'exports.export_code as sohoadon',
