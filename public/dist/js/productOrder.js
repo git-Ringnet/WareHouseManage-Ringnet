@@ -864,12 +864,12 @@ function handlePaste(input) {
             parent_div[0].appendChild(newtr);
         }
     }
-    var parentTable = $(input).closest('table')
+    var parentTable = $(input).closest('table');
+      $(input).parent().parent().remove();
     var remainingRows = parentTable.find('tbody tr');
     remainingRows.each(function (index) {
         $(this).find('td').eq(1).text(index);
     });
-    $(input).parent().parent().remove();
 }
 
 function handlePaste1(input) {
@@ -920,12 +920,12 @@ function handlePaste1(input) {
             parent_div[0].appendChild(newtr);
         }
     }
-    var parentTable = $(input).closest('table')
+    var parentTable = $(input).closest('table');
+     $(input).parent().parent().remove();
     var remainingRows = parentTable.find('tbody tr');
     remainingRows.each(function (index) {
         $(this).find('td').eq(1).text(index);
     });
-    $(input).parent().parent().remove();
 }
 
 
