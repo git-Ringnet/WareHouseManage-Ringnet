@@ -511,9 +511,8 @@
                         var product = $('<table class="table table-hover">' +
                             '<thead><tr><th>Tên sản phẩm</th><th class="text-right">Số lượng sản phẩm</th><th class="text-right">Số lượng S/N</th></tr></thead>' +
                             '<tbody><tr>' + '<td>' + productName +
-                            '</td>' + '<td class="text-right">' + qty +
-                            '</td>' + '<td class="text-right">' + response
-                            .length +
+                            '</td>' + '<td class="text-right">' + qty_enter +
+                            '</td>' + '<td class="text-right" id="resultCell">' + 0 +
                             '</td>' +
                             '</tr</tbody>' + '</table>' +
                             '<h3>Thông tin Serial Number </h3>');
@@ -549,8 +548,16 @@
                             }
                         });
                         modalBody.append(product, snList);
+
+                        function countCheckedCheckboxes() {
+                            var numberOfCheckedCheckboxes = $('.check-item:checked')
+                                .length;
+                            $('#resultCell').text(numberOfCheckedCheckboxes);
+                        }
+                        countCheckedCheckboxes();
                         //limit checkbox
                         $('.check-item').on('change', function() {
+                            event.stopPropagation();
                             var checkedCheckboxes = $('.check-item:checked')
                                 .length;
                             var serialNumberId = $(this).val();
@@ -599,6 +606,7 @@
                                             .remove();
                                     }
                                 }
+                                countCheckedCheckboxes();
                             }
                         });
                         //thay đổi số lượng nhập

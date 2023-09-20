@@ -398,7 +398,9 @@ class ExportController extends Controller
                                         'debt_export_end' => $debt->date_end,
                                     ]);
                                 // Thêm S/N vào đơn xuất hàng
-                                Serinumbers::whereIn('id', $export_seris)->update(['export_seri' => $export->id, 'seri_status' => 3]);
+                                if ($export_seris !== null) {
+                                    Serinumbers::whereIn('id', $export_seris)->update(['export_seri' => $export->id, 'seri_status' => 3]);
+                                }
                             }
                             //cập nhật khách hàng khi lưu nhanh
                             if ($request->checkguest == 1 && $updateClick == null) {
@@ -622,7 +624,9 @@ class ExportController extends Controller
                                         'debt_export_end' => $debt->date_end,
                                     ]);
                                 // Thêm S/N vào đơn xuất hàng
-                                Serinumbers::whereIn('id', $export_seris)->update(['export_seri' => $export->id, 'seri_status' => 3]);
+                                if ($export_seris !== null) {
+                                    Serinumbers::whereIn('id', $export_seris)->update(['export_seri' => $export->id, 'seri_status' => 3]);
+                                }
                             }
                             //tạo đơn khi đã nhấn cập nhật
                             if ($request->checkguest == 1 && $updateClick == 1) {
@@ -830,7 +834,9 @@ class ExportController extends Controller
                                         'debt_export_end' => $debt->date_end,
                                     ]);
                                 // Thêm S/N vào đơn xuất hàng
-                                Serinumbers::whereIn('id', $export_seris)->update(['export_seri' => $export->id, 'seri_status' => 3]);
+                                if ($export_seris !== null) {
+                                    Serinumbers::whereIn('id', $export_seris)->update(['export_seri' => $export->id, 'seri_status' => 3]);
+                                }
                             }
                             //tạo đơn khi đã nhấn thêm
                             if ($clickValue == 1 && $request->checkguest == 2) {
@@ -1038,7 +1044,9 @@ class ExportController extends Controller
                                         'debt_export_end' => $debt->date_end,
                                     ]);
                                 // Thêm S/N vào đơn xuất hàng
-                                Serinumbers::whereIn('id', $export_seris)->update(['export_seri' => $export->id, 'seri_status' => 3]);
+                                if ($export_seris !== null) {
+                                    Serinumbers::whereIn('id', $export_seris)->update(['export_seri' => $export->id, 'seri_status' => 3]);
+                                }
                             }
                             // Giảm số lượng của sản phẩm trong bảng product
                             for ($i = 0; $i < count($productIDs); $i++) {
@@ -1156,7 +1164,9 @@ class ExportController extends Controller
                                     $product->save();
                                 }
                                 // Thêm S/N vào đơn xuất hàng
-                                Serinumbers::whereIn('id', $export_seris)->update(['export_seri' => $export->id, 'seri_status' => 2]);
+                                if ($export_seris !== null) {
+                                    Serinumbers::whereIn('id', $export_seris)->update(['export_seri' => $export->id, 'seri_status' => 2]);
+                                }
                             }
                             //cập nhật khách hàng khi lưu nhanh
                             if ($request->checkguest == 1 && $updateClick == null) {
@@ -1213,7 +1223,9 @@ class ExportController extends Controller
                                     $product->save();
                                 }
                                 // Thêm S/N vào đơn xuất hàng
-                                Serinumbers::whereIn('id', $export_seris)->update(['export_seri' => $export->id, 'seri_status' => 2]);
+                                if ($export_seris !== null) {
+                                    Serinumbers::whereIn('id', $export_seris)->update(['export_seri' => $export->id, 'seri_status' => 2]);
+                                }
                             }
                             //tạo đơn khi đã click nút thêm
                             if ($request->checkguest == 2 && $clickValue == 1) {
@@ -1253,7 +1265,9 @@ class ExportController extends Controller
                                     $product->save();
                                 }
                                 // Thêm S/N vào đơn xuất hàng
-                                Serinumbers::whereIn('id', $export_seris)->update(['export_seri' => $export->id, 'seri_status' => 2]);
+                                if ($export_seris !== null) {
+                                    Serinumbers::whereIn('id', $export_seris)->update(['export_seri' => $export->id, 'seri_status' => 2]);
+                                }
                             }
                             //tạo đơn khi đã click nút cập nhật
                             if ($updateClick == 1 && $request->checkguest == 1) {
@@ -1293,7 +1307,9 @@ class ExportController extends Controller
                                     $product->save();
                                 }
                                 // Thêm S/N vào đơn xuất hàng
-                                Serinumbers::whereIn('id', $export_seris)->update(['export_seri' => $export->id, 'seri_status' => 2]);
+                                if ($export_seris !== null) {
+                                    Serinumbers::whereIn('id', $export_seris)->update(['export_seri' => $export->id, 'seri_status' => 2]);
+                                }
                             }
                             return redirect()->route('exports.index')->with('msg', 'Tạo đơn thành công!');
                         }
@@ -1504,7 +1520,9 @@ class ExportController extends Controller
                                 //Cập nhật S/N
                                 DB::statement("UPDATE serinumbers SET export_seri = NULL, seri_status = 1 WHERE export_seri = $exports->id");
                                 //Cập nhật lại S/N
-                                Serinumbers::whereIn('id', $export_seris)->update(['export_seri' => $exports->id, 'seri_status' => 3]);
+                                if ($export_seris !== null) {
+                                    Serinumbers::whereIn('id', $export_seris)->update(['export_seri' => $exports->id, 'seri_status' => 3]);
+                                }
                             } else {
                                 $proExport = new ProductExports();
                                 $proExport->product_id = $productID;
@@ -1609,7 +1627,9 @@ class ExportController extends Controller
                                 //Cập nhật S/N
                                 DB::statement("UPDATE serinumbers SET export_seri = NULL, seri_status = 1 WHERE export_seri = $exports->id");
                                 //Cập nhật lại S/N
-                                Serinumbers::whereIn('id', $export_seris)->update(['export_seri' => $exports->id, 'seri_status' => 3]);
+                                if ($export_seris !== null) {
+                                    Serinumbers::whereIn('id', $export_seris)->update(['export_seri' => $exports->id, 'seri_status' => 3]);
+                                }
                             }
 
                             $totalQtyNeeded += $productQty;

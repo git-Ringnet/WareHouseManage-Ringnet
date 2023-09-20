@@ -366,7 +366,9 @@
                             <th style="width:8%;">Thuế</th>
                             <th style="width:15%;">Thành tiền</th>
                             <th style="width:13%;">Ghi chú</th>
-                            <th style="width:10%;">S/N</th>
+                            @if ($exports->export_status != 0)
+                                <th style="width:10%;">S/N</th>
+                            @endif
                             <th style="width:10%;"></th>
                             @if ($exports->export_status != 2)
                                 <th style="width:10%;"></th>
@@ -708,7 +710,7 @@
                 var product = $('<table class="table table-hover">' +
                     '<thead><tr><th>Tên sản phẩm</th><th class="text-right">Số lượng sản phẩm</th><th class="text-right">Số lượng S/N</th></tr></thead>' +
                     '<tbody><tr>' + '<td>' + productName +
-                    '</td>' + '<td class="text-right">' + result +
+                    '</td>' + '<td class="text-right">' + qty_enter +
                     '</td>' + '<td class="text-right">' + response
                     .length +
                     '</td>' +
@@ -740,6 +742,12 @@
             }
         });
     });
+
+    function countCheckedCheckboxes() {
+        var numberOfCheckedCheckboxes = $('.check-item:checked')
+            .length;
+        $('#resultCell').text(numberOfCheckedCheckboxes);
+    }
     var selectedSerialNumbers = [];
     //hiển thị S/N khi đang báo giá
     $('.sn1').on('click', function() {
@@ -770,9 +778,8 @@
                 var product = $('<table class="table table-hover">' +
                     '<thead><tr><th>Tên sản phẩm</th><th class="text-right">Số lượng sản phẩm</th><th class="text-right">Số lượng S/N</th></tr></thead>' +
                     '<tbody><tr>' + '<td>' + productName +
-                    '</td>' + '<td class="text-right">' + qty +
-                    '</td>' + '<td class="text-right">' + response
-                    .length +
+                    '</td>' + '<td class="text-right">' + qty_enter +
+                    '</td>' + '<td class="text-right" id="resultCell">' + 0 +
                     '</td>' +
                     '</tr</tbody>' + '</table>' +
                     '<h3>Thông tin Serial Number </h3>');
@@ -807,9 +814,11 @@
                 });
 
                 modalBody.append(product, snList);
+                countCheckedCheckboxes();
 
                 //limit checkbox
                 $('.check-item').on('change', function() {
+                    event.stopPropagation();
                     var checkedCheckboxes = $('.check-item:checked').length;
                     var serialNumberId = $(this).val();
                     // Check if checked checkboxes exceed qty_enter
@@ -852,6 +861,7 @@
                             $('input[name="selected_serial_numbers[]"][value="' +
                                 serialNumberId + '"]').remove();
                         }
+                        countCheckedCheckboxes();
                     }
                 });
             },
@@ -1140,9 +1150,9 @@
                         var product = $('<table class="table table-hover">' +
                             '<thead><tr><th>Tên sản phẩm</th><th class="text-right">Số lượng sản phẩm</th><th class="text-right">Số lượng S/N</th></tr></thead>' +
                             '<tbody><tr>' + '<td>' + productName +
-                            '</td>' + '<td class="text-right">' + qty +
-                            '</td>' + '<td class="text-right">' + response
-                            .length +
+                            '</td>' + '<td class="text-right">' + qty_enter +
+                            '</td>' +
+                            '<td class="text-right" id = "resultCell1">' + 0 +
                             '</td>' +
                             '</tr</tbody>' + '</table>' +
                             '<h3>Thông tin Serial Number </h3>');
@@ -1178,6 +1188,13 @@
                             }
                         });
                         modalBody.append(product, snList);
+
+                        function countCheckedCheckboxes1() {
+                            var numberOfCheckedCheckboxes = $('.check-item:checked')
+                                .length;
+                            $('#resultCell1').text(numberOfCheckedCheckboxes);
+                        }
+                        countCheckedCheckboxes1();
                         // $('#snModal').modal('show');
                         //limit checkbox
                         $('.check-item').on('change', function() {
@@ -1228,6 +1245,7 @@
                                             .remove();
                                     }
                                 }
+                                countCheckedCheckboxes1();
                             }
                         });
                         //thay đổi số lượng nhập
