@@ -1126,7 +1126,7 @@
                         '</tbody>' +
                         '</table>' +
                         '</div>' +
-                        '<div class="AddSN btn btn-secondary" style="border:1px solid gray;" >Thêm dòng</div>' +
+                        '<div class="AddSN1 btn btn-secondary" style="border:1px solid gray;" >Thêm dòng</div>' +
                         '</div>' +
                         '<div class="modal-footer">' +
                         '<div class="d-flex justify-content-center w-100"> <button type="button" class="btn btn-primary mr-2" data-dismiss="modal">Lưu</button>' +
