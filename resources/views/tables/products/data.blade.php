@@ -856,6 +856,74 @@ $index = array_search($item['label'], $numberedLabels);
                             </table>
                         </div>
                     </div>
+                    <div id="list_modal">
+                        <?php $stt = 0; ?>
+                        @foreach ($products as $pro)
+                            <div class="modal fade" id="exampleModal{{ $stt }}" tabindex="-1"
+                                role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
+                               >
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header align-items-center">
+                                            <div>
+                                                <h5 class="modal-title" id="exampleModalLabel">Serial Number</h5>
+                                                <p>Thông tin chi tiết về số S/N của mỗi sản phẩm </p>
+                                            </div>
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                aria-label="Close">
+                                                <span aria-hidden="true" onclick="checkdata(event)">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <table class="table table-hover table_list_order">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Tên sản phẩm</th>
+                                                        <th class="text-right">Số lượng</th>
+                                                        <th class="text-right">Số lượng S/N</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="name_product"></td>
+                                                        <td class="qty_product text-right"></td>
+                                                        <td class="SNCount text-right">1</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <h3>Thông tin Serial Number </h3>
+                                            <div class="div_value{{ $stt }}">
+                                                <table class="table" id="table_SNS">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="width:5%;"><span>STT</span></th>
+                                                            <th><span>Serial Number</span></th>
+                                                            <th style="width:3%;"></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <?php $st = 1; ?>
+                                                        @foreach ($serialnumber as $se)
+                                                            @if ($pro->id === $se->product_id)
+                                                                <tr>
+                                                                    <td><span class="stt_SN"></span></td>
+                                                                    <td>
+                                                                        <span>{{ $se->serinumber }} </span>
+                                                                    </td>
+                                                                </tr>
+                                                            @endif
+                                                            <?php $st++; ?>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php $stt++; ?>
+                        @endforeach
+                    </div>
                     <div class="d-flex row justify-content-between">
                         <div class="paginator mt-2 d-flex justify-content-start">
                             <span class="text-perpage">
@@ -870,74 +938,6 @@ $index = array_search($item['label'], $numberedLabels);
                         </div>
                         <div class="paginator mt-2 d-flex justify-content-end">
                             {{ $products->appends(request()->except('page'))->links() }}
-                        </div>
-                        <div id="list_modal">
-                            <?php $stt = 0; ?>
-                            @foreach ($products as $pro)
-                                <div class="modal fade" id="exampleModal{{ $stt }}" tabindex="-1"
-                                    role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
-                                   >
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header align-items-center">
-                                                <div>
-                                                    <h5 class="modal-title" id="exampleModalLabel">Serial Number</h5>
-                                                    <p>Thông tin chi tiết về số S/N của mỗi sản phẩm </p>
-                                                </div>
-                                                <button type="button" class="close" data-dismiss="modal"
-                                                    aria-label="Close">
-                                                    <span aria-hidden="true" onclick="checkdata(event)">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <table class="table table-hover table_list_order">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Tên sản phẩm</th>
-                                                            <th class="text-right">Số lượng</th>
-                                                            <th class="text-right">Số lượng S/N</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td class="name_product"></td>
-                                                            <td class="qty_product text-right"></td>
-                                                            <td class="SNCount text-right">1</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                                <h3>Thông tin Serial Number </h3>
-                                                <div class="div_value{{ $stt }}">
-                                                    <table class="table" id="table_SNS">
-                                                        <thead>
-                                                            <tr>
-                                                                <th style="width:5%;"><span>STT</span></th>
-                                                                <th><span>Serial Number</span></th>
-                                                                <th style="width:3%;"></th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <?php $st = 1; ?>
-                                                            @foreach ($serialnumber as $se)
-                                                                @if ($pro->id === $se->product_id)
-                                                                    <tr>
-                                                                        <td><span class="stt_SN"></span></td>
-                                                                        <td>
-                                                                            <span>{{ $se->serinumber }} </span>
-                                                                        </td>
-                                                                    </tr>
-                                                                @endif
-                                                                <?php $st++; ?>
-                                                            @endforeach
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <?php $stt++; ?>
-                            @endforeach
                         </div>
                     </div>
                 </div>
