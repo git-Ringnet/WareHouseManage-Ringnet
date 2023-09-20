@@ -993,6 +993,7 @@
                 if (er) {
                     return false;
                 } else {
+                    updateProductSN();
                     $('#form_submit')[0].submit();
                 }
                 // Kiểm tra có lỗi hay không
