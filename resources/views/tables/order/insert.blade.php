@@ -609,8 +609,7 @@
                         if (error) {
                             return false;
                         } else {
-
-                            // $('#form_submit')[0].submit();
+                            $('#form_submit')[0].submit();
                         }
                     }
                 }
