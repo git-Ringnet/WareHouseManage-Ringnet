@@ -941,3 +941,80 @@ function getInputName(input, olddata) {
         }
     })
 }
+
+
+
+// Hàm kiểm tra nhập số lượng sản phẩm và số lượng SN
+function checkInputSN(id, countProduct) {
+    var result = {
+        check: false,
+        msg: ""
+    }
+    var isEmpty = false;
+    var SN1 = $(id).find('.modal-body #table_SNS tbody tr td .form-control.w-25');
+    var count = 0;
+    SN1.each(function () {
+        if ($(this).val().trim() !== "") {
+            isEmpty = true;
+            return false;
+        }
+    });
+    if (countProduct == 0) {
+        result.check = true;
+        result.msg = "Vui lòng nhập số lượng sản phẩm";
+    }
+    if (isEmpty) {
+        if (SN1.length != countProduct) {
+            // Kiểm tra số lượng sản phẩm và SN
+            $('#inputContainer tbody tr td .quantity-input').each(function () {
+                var inputValue = parseFloat($(this).val().trim()) || 0;
+                if (inputValue % 1 !== 0) {
+                    count += Math.ceil(inputValue);
+                } else {
+                    count += inputValue;
+                }
+            });
+            if ($('.form-control.w-25').length > count) {
+                result.check = true;
+                result.msg = "Vui lòng kiểm tra lại số lượng sản phẩm và số lượng SN";
+            } else {
+                result.check = true;
+                result.msg = "Vui lòng nhập đủ số lượng SN";
+            }
+        } else {
+            isEmpty = false;
+            check = false;
+        }
+    }
+    return result;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

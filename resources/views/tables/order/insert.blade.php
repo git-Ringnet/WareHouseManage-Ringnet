@@ -319,6 +319,17 @@
                 var product_price = $(this).find('.product_price').val().trim();
                 var product_tax = $(this).find('.product_tax').val().trim();
                 var rowSTT = $(this).find('.STT').text();
+                var countProduct = $(this).find('.quantity-input').val().trim();
+                var error = false;
+
+                id = $(this).find('.exampleModal').data('target');
+                // Kiểm tra nhập số lượng sản phẩm và số lượng SN
+                if (checkInputSN(id, countProduct).check == true) {
+                    alert(checkInputSN(id, countProduct).msg);
+                    error = true;
+                    return false;
+                }
+
                 // Tạo mảng con nếu nó chưa tồn tại
                 if (!data.Product) {
                     data.Product = {};
@@ -333,9 +344,6 @@
                         Seri: []
                     };
                 }
-
-                id = $(this).find('.exampleModal').data('target');
-
                 SerialNumbers = $(id).find('.modal-body #table_SNS tbody tr td .form-control.w-25').map(
                     function() {
                         return $(this).val().trim();
@@ -346,7 +354,6 @@
                 }
             });
             e.preventDefault();
-            var error = false;
             var isDuplicate = false;
 
             if (checkRow() == false) {
@@ -516,6 +523,7 @@
             var data = {};
             $(e.target).find('.btn.btn-primary.mr-2').prop('disabled', true);
             var countDown = 10;
+            var error = false;
             var countdownInterval = setInterval(function() {
                 countDown--;
                 if (countDown <= 0) {
@@ -531,6 +539,16 @@
                 var product_price = $(this).find('.product_price').val().trim();
                 var product_tax = $(this).find('.product_tax').val().trim();
                 var rowSTT = $(this).find('.STT').text();
+                var countProduct = $(this).find('.quantity-input').val().trim();
+
+                id = $(this).find('.exampleModal').data('target');
+                // Kiểm tra nhập số lượng sản phẩm và số lượng SN
+                if (checkInputSN(id, countProduct).check == true) {
+                    alert(checkInputSN(id, countProduct).msg);
+                    error = true;
+                    return false;
+                }
+
                 // Tạo mảng con nếu nó chưa tồn tại
                 if (!data.Product) {
                     data.Product = {};
@@ -545,22 +563,16 @@
                         Seri: []
                     };
                 }
-
-                id = $(this).find('.exampleModal').data('target');
-
                 SerialNumbers = $(id).find('.modal-body #table_SNS tbody tr td .form-control.w-25').map(
                     function() {
                         return $(this).val().trim();
                     }).get();
-
                 if (SerialNumbers !== null) {
                     data.Product[rowSTT].Seri.push(...SerialNumbers);
                 }
             });
+
             e.preventDefault();
-            var error = false;
-
-
             if (checkRow() == false) {
                 alert('Vui lòng nhập ít nhất 1 sản phẩm');
                 error = true;
