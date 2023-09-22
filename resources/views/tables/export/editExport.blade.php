@@ -885,26 +885,38 @@
                 $('.check-seri').on('click', function() {
                     var checkedCheckboxes = $('.check-item:checked')
                         .length;
-                    if (checkedCheckboxes < qty_enter) {
-                        alert(
-                            'Vui lòng chọn đủ serial number theo số lượng xuất!'
-                        );
-                    } else if (checkedCheckboxes == qty_enter) {
-                        // Kiểm tra xem nút được nhấn có class 'check-seri' không
-                        if ($(this).hasClass('check-seri')) {
-                            $(this).attr('data-dismiss', 'modal');
+                    var check_item = $('.check-item');
+                    if (check_item.length > 0) {
+                        if (checkedCheckboxes < qty_enter) {
+                            alert(
+                                'Vui lòng chọn đủ serial number theo số lượng xuất!'
+                            );
+                        } else if (checkedCheckboxes == qty_enter) {
+                            // Kiểm tra xem nút được nhấn có class 'check-seri' không
+                            if ($(this).hasClass('check-seri')) {
+                                $(this).attr('data-dismiss',
+                                    'modal');
+                            }
                         }
+                    } else {
+                        $(this).attr('data-dismiss', 'modal');
                     }
                 });
 
                 $('.btnclose').on('click', function() {
                     var checkedCheckboxes = $('.check-item:checked')
                         .length;
-                    if (checkedCheckboxes < qty_enter) {
-                        alert(
-                            'Vui lòng chọn đủ serial number theo số lượng xuất!'
-                        );
-                    } else if (checkedCheckboxes == qty_enter) {
+                    var check_item = $('.check-item');
+                    if (check_item.length > 0) {
+                        if (checkedCheckboxes < qty_enter) {
+                            alert(
+                                'Vui lòng chọn đủ serial number theo số lượng xuất!'
+                            );
+                        } else if (checkedCheckboxes == qty_enter) {
+                            $('.btnclose').attr('data-dismiss',
+                                'modal');
+                        }
+                    } else {
                         $('.btnclose').attr('data-dismiss',
                             'modal');
                     }
@@ -1337,26 +1349,38 @@
                         $('.check-seri').on('click', function() {
                             var checkedCheckboxes = $('.check-item:checked')
                                 .length;
-                            if (checkedCheckboxes < qty_enter) {
-                                alert(
-                                    'Vui lòng chọn đủ serial number theo số lượng xuất!'
-                                );
-                            } else if (checkedCheckboxes == qty_enter) {
-                                // Kiểm tra xem nút được nhấn có class 'check-seri' không
-                                if ($(this).hasClass('check-seri')) {
-                                    $(this).attr('data-dismiss', 'modal');
+                            var check_item = $('.check-item');
+                            if (check_item.length > 0) {
+                                if (checkedCheckboxes < qty_enter) {
+                                    alert(
+                                        'Vui lòng chọn đủ serial number theo số lượng xuất!'
+                                    );
+                                } else if (checkedCheckboxes == qty_enter) {
+                                    // Kiểm tra xem nút được nhấn có class 'check-seri' không
+                                    if ($(this).hasClass('check-seri')) {
+                                        $(this).attr('data-dismiss',
+                                            'modal');
+                                    }
                                 }
+                            } else {
+                                $(this).attr('data-dismiss', 'modal');
                             }
                         });
 
                         $('.btnclose').on('click', function() {
                             var checkedCheckboxes = $('.check-item:checked')
                                 .length;
-                            if (checkedCheckboxes < qty_enter) {
-                                alert(
-                                    'Vui lòng chọn đủ serial number theo số lượng xuất!'
-                                );
-                            } else if (checkedCheckboxes == qty_enter) {
+                            var check_item = $('.check-item');
+                            if (check_item.length > 0) {
+                                if (checkedCheckboxes < qty_enter) {
+                                    alert(
+                                        'Vui lòng chọn đủ serial number theo số lượng xuất!'
+                                    );
+                                } else if (checkedCheckboxes == qty_enter) {
+                                    $('.btnclose').attr('data-dismiss',
+                                        'modal');
+                                }
+                            } else {
                                 $('.btnclose').attr('data-dismiss',
                                     'modal');
                             }
