@@ -667,7 +667,6 @@
 
     setSTT();
 
-
     // AJAX hiển thị thông tin nhà cung cấp 
     $('.search-info').click(function() {
         var provides_id = $(this).attr('id');

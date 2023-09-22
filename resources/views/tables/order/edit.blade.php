@@ -696,6 +696,8 @@
         }, 100);
 
         e.preventDefault();
+        var er = false;
+        var count = 0;
 
         $('#inputContainer tbody tr').each(function() {
             var id, SerialNumbers;
@@ -704,6 +706,15 @@
             var product_price = $(this).find('.product_price').val().trim();
             var product_tax = $(this).find('.product_tax').val().trim();
             var rowSTT = $(this).find('.STT').text();
+            var countProduct = $(this).find('.quantity-input').val().trim();
+
+            id = $(this).find('.exampleModal').data('target');
+            if (checkInputSN(id, countProduct).check == true) {
+                alert(checkInputSN(id, countProduct).msg);
+                er = true;
+                return false;
+            }
+
             // Tạo mảng con nếu nó chưa tồn tại
             if (!data.Product) {
                 data.Product = {};
@@ -718,8 +729,6 @@
                     Seri: []
                 };
             }
-
-            id = $(this).find('.exampleModal').data('target');
 
             SerialNumbers = $(id).find(
                 '.modal-body #table_SNS tbody tr td input[name^="product_SN_new"]').map(
@@ -745,7 +754,6 @@
                     return false;
                 } else {
                     if ($('#form_submit')[0].checkValidity()) {
-                        var er = false;
                         if (checkRow() == false) {
                             er = true;
                             alert('Vui lòng nhập ít nhất 1 sản phẩm');
@@ -759,6 +767,7 @@
                             er = true;
                             alert('Vui lòng nhập ngày hóa đơn');
                         }
+
                         // Kiểm tra có lỗi hay không
                         var hasErrors = checkRow() === false ||
                             checkDuplicateRows() === true || er === true;
@@ -792,6 +801,7 @@
         }, 100);
         $('#form_submit').attr('action', '{{ route('updateBill') }}');
         $('input[name="_method"]').remove();
+        updateProductSN();
         $('#form_submit')[0].submit();
     })
 
@@ -957,7 +967,10 @@
         }
     })
 
+    // Duyệt nhanh đơn hàng trong khi chỉnh sửa
     $('#add_bill').on('click', function(e) {
+        var data = {};
+        var id, SerialNumbers;
         this.classList.add('disabled');
         var countDown = 10;
         var countdownInterval = setInterval(function() {
@@ -969,32 +982,90 @@
         }, 100);
 
         e.preventDefault();
-        if (myFunction()) {
-            if ($('#form_submit')[0].checkValidity()) {
-                var er = false;
-                if (checkRow() == false) {
-                    er = true;
-                    alert('Vui lòng nhập ít nhất 1 sản phẩm');
-                }
+        var er = false;
+      
+        $('#inputContainer tbody tr').each(function() {
+            var id, SerialNumbers;
+            var productName = $(this).find('.name_product').val().trim();
+            var product_unit = $(this).find('.unit_product').val().trim();
+            var product_price = $(this).find('.product_price').val().trim();
+            var product_tax = $(this).find('.product_tax').val().trim();
+            var rowSTT = $(this).find('.STT').text();
+            var countProduct = $(this).find('.quantity-input').val().trim();
 
-                // Kiểm tra trùng sản phẩm con
-                if (checkDuplicateRows()) {
-                    er = true;
-                    alert('Sản phẩm đã tồn tại');
-                }
+            id = $(this).find('.exampleModal').data('target');
+            if (checkInputSN(id, countProduct).check == true) {
+                alert(checkInputSN(id, countProduct).msg);
+                er = true;
+                return false;
+            }
 
-                if (er) {
+            // Tạo mảng con nếu nó chưa tồn tại
+            if (!data.Product) {
+                data.Product = {};
+            }
+
+            if (!data.Product[rowSTT]) {
+                data.Product[rowSTT] = {
+                    name: productName,
+                    dvt: product_unit,
+                    price: product_price,
+                    tax: product_tax,
+                    Seri: []
+                };
+            }
+
+            SerialNumbers = $(id).find(
+                '.modal-body #table_SNS tbody tr td input[name^="product_SN_new"]').map(
+                function() {
+                    return $(this).val().trim();
+                }).get();
+
+            if (SerialNumbers !== null) {
+                data.Product[rowSTT].Seri.push(...SerialNumbers);
+            }
+        });
+        $.ajax({
+            url: "{{ route('checkSN') }}",
+            type: "get",
+            data: {
+                Serialnumber: data.Product,
+            },
+            success: function(result) {
+                if (result.success == false) {
+                    error = true;
+                    alert('Sản phẩm ' + result.msg + ' đã tồn tại serial ' + result.data);
                     return false;
                 } else {
-                    $('#form_submit')[0].submit();
+                    if (myFunction()) {
+                        if ($('#form_submit')[0].checkValidity()) {
+
+                            if (checkRow() == false) {
+                                er = true;
+                                alert('Vui lòng nhập ít nhất 1 sản phẩm');
+                            }
+                            // Kiểm tra trùng sản phẩm con
+                            if (checkDuplicateRows()) {
+                                er = true;
+                                alert('Sản phẩm đã tồn tại');
+                            }
+                            if (er) {
+                                return false;
+                            } else {
+                                updateProductSN();
+                                $('#form_submit')[0].submit();
+                            }
+                            // Kiểm tra có lỗi hay không
+                            var hasErrors = isDuplicate || listSNOld.length != countQTY ||
+                                checkRow() === false ||
+                                checkDuplicateRows() === true || er === true;
+                        } else {
+                            $('#form_submit')[0].reportValidity();
+                        }
+                    }
                 }
-                // Kiểm tra có lỗi hay không
-                var hasErrors = isDuplicate || listSNOld.length != countQTY || checkRow() === false ||
-                    checkDuplicateRows() === true || er === true;
-            } else {
-                $('#form_submit')[0].reportValidity();
             }
-        }
+        })
     })
 
     // Hàm kiểm tra xác nhận người dùng
@@ -1119,7 +1190,7 @@
                         '</tbody>' +
                         '</table>' +
                         '</div>' +
-                        '<div class="AddSN btn btn-secondary" style="border:1px solid gray;" >Thêm dòng</div>' +
+                        '<div class="AddSN1 btn btn-secondary" style="border:1px solid gray;" >Thêm dòng</div>' +
                         '</div>' +
                         '<div class="modal-footer">' +
                         '<div class="d-flex justify-content-center w-100"> <button type="button" class="btn btn-primary mr-2" data-dismiss="modal">Lưu</button>' +
@@ -1135,6 +1206,7 @@
                     deleteDuplicateTr();
                     calculateTotals();
                     setSTT();
+                    fillDataToModal();
                 }
             };
             reader.readAsText(file);
