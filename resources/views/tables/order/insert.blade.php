@@ -289,7 +289,7 @@
 
             var grandTotal = totalAmount + totalTax;
             $('#grand-total').text(formatCurrency(Math.round(grandTotal)));
-            
+
             // Update data-value attribute
             $('#grand-total').attr('data-value', grandTotal);
             $('#total').val(formatCurrency(grandTotal));
@@ -321,11 +321,21 @@
                 var product_price = $(this).find('.product_price').val().trim();
                 var product_tax = $(this).find('.product_tax').val().trim();
                 var rowSTT = $(this).find('.STT').text();
+                var countProduct = $(this).find('.quantity-input').val().trim();
+                var error = false;
+                var isDuplicate = false;
+                id = $(this).find('.exampleModal').data('target');
+                // Kiểm tra nhập số lượng sản phẩm và số lượng SN
+                if (checkInputSN(id, countProduct).check == true) {
+                    alert(checkInputSN(id, countProduct).msg);
+                    error = true;
+                    return false;
+                }
+
                 // Tạo mảng con nếu nó chưa tồn tại
                 if (!data.Product) {
                     data.Product = {};
                 }
-
                 if (!data.Product[rowSTT]) {
                     data.Product[rowSTT] = {
                         name: productName,
@@ -335,9 +345,6 @@
                         Seri: []
                     };
                 }
-
-                id = $(this).find('.exampleModal').data('target');
-
                 SerialNumbers = $(id).find('.modal-body #table_SNS tbody tr td .form-control.w-25').map(
                     function() {
                         return $(this).val().trim();
@@ -348,8 +355,6 @@
                 }
             });
             e.preventDefault();
-            var error = false;
-            var isDuplicate = false;
 
             if (checkRow() == false) {
                 alert('Vui lòng nhập ít nhất 1 sản phẩm');
@@ -511,7 +516,8 @@
                 }
             });
         })
-     
+
+
         // Kiểm tra dữ liệu trước khi submit
         $(document).on('submit', '#form_submit', function(e) {
             var data = {};
@@ -528,7 +534,6 @@
             e.preventDefault();
             var error = false;
 
-         
             $('#inputContainer tbody tr').each(function() {
                 var id, SerialNumbers;
                 var productName = $(this).find('.name_product').val().trim();
@@ -536,6 +541,18 @@
                 var product_price = $(this).find('.product_price').val().trim();
                 var product_tax = $(this).find('.product_tax').val().trim();
                 var rowSTT = $(this).find('.STT').text();
+                var countProduct = $(this).find('.quantity-input').val().trim();
+
+                id = $(this).find('.exampleModal').data('target');
+                // Kiểm tra nhập số lượng sản phẩm và số lượng SN
+                if (checkInputSN(id, countProduct).check == true) {
+                    alert(checkInputSN(id, countProduct).msg);
+                    error = true;
+                    return false;
+                }
+
+                console.log(checkInputSN(id,countProduct));
+
                 // Tạo mảng con nếu nó chưa tồn tại
                 if (!data.Product) {
                     data.Product = {};
@@ -550,14 +567,10 @@
                         Seri: []
                     };
                 }
-
-                id = $(this).find('.exampleModal').data('target');
-
                 SerialNumbers = $(id).find('.modal-body #table_SNS tbody tr td .form-control.w-25').map(
                     function() {
                         return $(this).val().trim();
                     }).get();
-
                 if (SerialNumbers !== null) {
                     data.Product[rowSTT].Seri.push(...SerialNumbers);
                 }
@@ -596,7 +609,8 @@
                         if (error) {
                             return false;
                         } else {
-                            $('#form_submit')[0].submit();
+
+                            // $('#form_submit')[0].submit();
                         }
                     }
                 }

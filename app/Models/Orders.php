@@ -250,6 +250,7 @@ class Orders extends Model
     {
         $check = DB::table($this->table)->where('id', $id)
             ->where('order_status', 2)
+            ->where('license_id', Auth::user()->license_id)
             ->first();
         if ($check) {
             DB::table($this->table)->where('id', $id)->delete();
@@ -262,7 +263,7 @@ class Orders extends Model
 
     public function accessBill($list_ID)
     {
-        $check = DB::table($this->table)->whereIn('id', $list_ID)->get();
+        $check = DB::table($this->table)->whereIn('id', $list_ID)->where('license_id',Auth::user()->license_id)->get();
         $status = 1;
         foreach ($check as $c) {
             if ($c->order_status == 0) {
@@ -341,6 +342,7 @@ class Orders extends Model
     {
         $check = DB::table($this->table)->where('id', $id)
             ->where('order_status', 1)
+            ->where('license_id', Auth::user()->license_id)
             ->first();
         if ($check) {
             return $status = 0;

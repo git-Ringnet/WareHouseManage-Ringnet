@@ -238,6 +238,7 @@ class AddProductController extends Controller
                             'order_id' => $order->id,
                             'check' => 0,
                             'export_seri' => 0,
+                            'created_at' => Carbon::now(),
                             'license_id' => Auth::user()->license_id,
                         ];
                         $this->Serinumbers->addSN($dataSN);
@@ -304,6 +305,7 @@ class AddProductController extends Controller
      */
     public function update(Request $request, $id)
     {
+       
         // $updateOrder = Orders::find($id);
         $updateOrder = Orders::where('id', $id)->where('license_id', Auth::user()->license_id)->first();
         if ($updateOrder === null) {
@@ -376,6 +378,7 @@ class AddProductController extends Controller
                                         'order_id' => $updateOrder->id,
                                         'check' => 0,
                                         'export_seri' => 0,
+                                        'created_at' => Carbon::now(),
                                         'license_id' => Auth::user()->license_id,
                                     ];
                                     $newSN = $this->Serinumbers->addSN($dataSN);
@@ -416,6 +419,7 @@ class AddProductController extends Controller
                                             'order_id' => $updateOrder->id,
                                             'check' => 0,
                                             'export_seri' => 0,
+                                            'created_at' => Carbon::now(),
                                             'license_id' => Auth::user()->license_id,
                                         ];
                                         $newSN = $this->Serinumbers->addSN($dataSN);
@@ -436,6 +440,7 @@ class AddProductController extends Controller
                                             'order_id' => $updateOrder->id,
                                             'check' => 0,
                                             'export_seri' => 0,
+                                            'created_at' => Carbon::now(),
                                             'license_id' => Auth::user()->license_id,
                                         ];
                                         $newSN = $this->Serinumbers->addSN($dataSN);
@@ -676,6 +681,7 @@ class AddProductController extends Controller
                             'order_id' => $order,
                             'check' => 0,
                             'export_seri' => 0,
+                            'created_at' => Carbon::now(),
                             'license_id' => Auth::user()->license_id,
                         ];
                         $this->Serinumbers->addSN($dataSN);
@@ -788,8 +794,15 @@ class AddProductController extends Controller
     // Thêm hàng mới vào Order
     public function addBillEdit(Request $request)
     {
-        $order = Orders::findOrFail($request->order_id);
-        // Kiểm tra tình trạng 
+        // $order = Orders::findOrFail($request->order_id);
+        $order = Orders::where('id',$request->order_id)
+        ->where('license_id', Auth::user()->license_id)
+        ->first();
+        // Kiểm tra đơn hàng hợp lệ không
+        if($order === null){
+            return redirect()->route('insertProduct.index')->with('warning', 'Trang không tồn tại');
+        }else{
+               // Kiểm tra tình trạng 
         if ($order->order_status == 2 || $order->order_status == 1) {
             return redirect()->route('insertProduct.index')->with('warning', 'Thao tác không thành công !');
         }
@@ -859,6 +872,7 @@ class AddProductController extends Controller
                                     'order_id' => $order->id,
                                     'check' => 0,
                                     'export_seri' => 0,
+                                    'created_at' => Carbon::now(),
                                     'license_id' => Auth::user()->license_id,
                                 ];
                                 $newSN = $this->Serinumbers->addSN($dataSN);
@@ -889,6 +903,7 @@ class AddProductController extends Controller
                                         'order_id' => $order->id,
                                         'check' => 0,
                                         'export_seri' => 0,
+                                        'created_at' => Carbon::now(),
                                         'license_id' => Auth::user()->license_id,
                                     ];
                                     $newSN = $this->Serinumbers->addSN($dataSN);
@@ -909,6 +924,7 @@ class AddProductController extends Controller
                                         'order_id' => $order->id,
                                         'check' => 0,
                                         'export_seri' => 0,
+                                        'created_at' => Carbon::now(),
                                         'license_id' => Auth::user()->license_id,
                                     ];
                                     $newSN = $this->Serinumbers->addSN($dataSN);
@@ -966,50 +982,59 @@ class AddProductController extends Controller
         } else {
             return redirect()->route('insertProduct.index')->with('warning', 'Đơn hàng đã được duyệt không thể chỉnh sưa');
         }
+        }
+     
     }
 
     // Hủy đơn trong edit
     public function deleteBill(Request $request)
     {
         $check = false;
-        $checkOrder = Orders::findOrFail($request->order_id);
-        if ($checkOrder->order_status == 0) {
-            $checkOrder->order_status = 2;
-            $checkOrder->save();
-            return redirect()->route('insertProduct.index')->with('msg', 'Hủy đơn hàng thành công');
+        // $checkOrder = Orders::findOrFail($request->order_id);
+        $checkOrder = Orders::where('id', $request->order_id)
+            ->where('license_id', Auth::user()->license_id)
+            ->first();
+        if ($checkOrder === null) {
+            return redirect()->route('insertProduct.index')->with('warning', 'Trang không tồn tại');
         } else {
-            $id_product = ProductOrders::where('order_id', $checkOrder->id)->get();
-            foreach ($id_product as $va) {
-                // Kiểm tra sản phẩm đã tạo đơn chưa
+            if ($checkOrder->order_status == 0) {
+                $checkOrder->order_status = 2;
+                $checkOrder->save();
+                return redirect()->route('insertProduct.index')->with('msg', 'Hủy đơn hàng thành công');
+            } else {
+                $id_product = ProductOrders::where('order_id', $checkOrder->id)->get();
+                foreach ($id_product as $va) {
+                    // Kiểm tra sản phẩm đã tạo đơn chưa
 
-                $check_PExport = productExports::where('product_id', $va->product_id)->first();
+                    $check_PExport = productExports::where('product_id', $va->product_id)->first();
 
-                if ($check_PExport) {
-                    // Kiểm tra sản phẩm đã bán ra chưa
-                    $check_Exp = Exports::where('id', $check_PExport->export_id)->first();
-                    // Sản phẩm đang báo giá
-                    if ($check_Exp && $check_Exp->export_status == 1) {
-                        $check = true;
-                        return redirect()->route('insertProduct.index')->with('warning', 'Sản phẩm đã tồn tại trong đơn xuất hàng không thể hủy đơn');
-                    }
-                    // Sản phẩm đã bán ra
-                    if ($check_Exp && $check_Exp->export_status == 2) {
-                        $check = true;
-                        return redirect()->route('insertProduct.index')->with('warning', 'Sản phẩm đã bán không thể hủy đơn');
+                    if ($check_PExport) {
+                        // Kiểm tra sản phẩm đã bán ra chưa
+                        $check_Exp = Exports::where('id', $check_PExport->export_id)->first();
+                        // Sản phẩm đang báo giá
+                        if ($check_Exp && $check_Exp->export_status == 1) {
+                            $check = true;
+                            return redirect()->route('insertProduct.index')->with('warning', 'Sản phẩm đã tồn tại trong đơn xuất hàng không thể hủy đơn');
+                        }
+                        // Sản phẩm đã bán ra
+                        if ($check_Exp && $check_Exp->export_status == 2) {
+                            $check = true;
+                            return redirect()->route('insertProduct.index')->with('warning', 'Sản phẩm đã bán không thể hủy đơn');
+                        }
                     }
                 }
-            }
 
-            // Hủy đơn
-            if ($check === false) {
-                $debt = DebtImport::where('import_id', $checkOrder->id)
-                    ->first();
-                if ($debt) {
-                    $checkOrder->order_status = 2;
-                    $checkOrder->save();
-                    $debt->delete();
-                    Product::whereIn('id', $request->product_id)->delete();
-                    return redirect()->route('insertProduct.index')->with('msg', 'Hủy đơn hàng thành công');
+                // Hủy đơn
+                if ($check === false) {
+                    $debt = DebtImport::where('import_id', $checkOrder->id)
+                        ->first();
+                    if ($debt) {
+                        $checkOrder->order_status = 2;
+                        $checkOrder->save();
+                        $debt->delete();
+                        Product::whereIn('id', $request->product_id)->delete();
+                        return redirect()->route('insertProduct.index')->with('msg', 'Hủy đơn hàng thành công');
+                    }
                 }
             }
         }
@@ -1022,6 +1047,7 @@ class AddProductController extends Controller
             $list = $request->list_id;
             $listOrder = Orders::whereIn('id', $list)
                 ->where('order_status', '=', 2)
+                ->where('license_id', Auth::user()->license_id)
                 ->get();
             foreach ($listOrder as $or) {
                 Serinumbers::where('order_id', $or->id)->delete();
@@ -1039,7 +1065,9 @@ class AddProductController extends Controller
     {
         if (isset($request->list_id)) {
             $list = $request->list_id;
-            $listOrders = Orders::whereIn('id', $list)->get();
+            $listOrders = Orders::whereIn('id', $list)
+            ->where('license_id', Auth::user()->license_id)
+            ->get();
             $lisst = [];
             $list = [];
             foreach ($listOrders as $listOrder) {
@@ -1150,27 +1178,34 @@ class AddProductController extends Controller
     // Hiển thị UI chỉnh sửa đơn hàng đã duyệt
     public function updateBill(Request $request)
     {
-        $order = Orders::findOrFail($request->order_id);
-        if ($order->order_status == 1) {
-            $provide_order = Provides::where('id', $order->provide_id)->get();
-            // $provide = Provides::all();
-            $provide = Provides::where('license_id', Auth::user()->license_id)->get();
-            $product_order = ProductOrders::with('getCodeProduct')->where('order_id', $order->id)->get();
-            $productIds = array();
-            foreach ($product_order as $value) {
-                array_push($productIds, $value->id);
-            }
-            $debt_import = DebtImport::where('import_id', $order->id)->get();
-            $title = 'Chỉnh sửa đơn nhập hàng';
-            $serialnumber = DB::table('serinumbers')
-                ->join('productorders', 'serinumbers.product_orderid', '=', 'productorders.id')
-                ->whereIn('productorders.id', $productIds)
-                ->select('serinumbers.*')
-                // ->select('serinumbers.*', 'productorders.id')
-                ->get();
-            return view('tables.order.updateBill', compact('serialnumber', 'debt_import', 'provide', 'order', 'product_order', 'provide_order', 'title'));
+        // $order = Orders::findOrFail($request->order_id);
+        $order = Orders::where('id', $request->order_id)
+            ->where('license_id', Auth::user()->license_id)
+            ->first();
+        if ($order === null) {
+            return redirect()->route('insertProduct.index')->with('warning', 'Trang không tồn tại');
         } else {
-            return redirect()->route('insertProduct.index')->with('warning', "Thao tác không được phép");
+            if ($order->order_status == 1) {
+                $provide_order = Provides::where('id', $order->provide_id)->get();
+                // $provide = Provides::all();
+                $provide = Provides::where('license_id', Auth::user()->license_id)->get();
+                $product_order = ProductOrders::with('getCodeProduct')->where('order_id', $order->id)->get();
+                $productIds = array();
+                foreach ($product_order as $value) {
+                    array_push($productIds, $value->id);
+                }
+                $debt_import = DebtImport::where('import_id', $order->id)->get();
+                $title = 'Chỉnh sửa đơn nhập hàng';
+                $serialnumber = DB::table('serinumbers')
+                    ->join('productorders', 'serinumbers.product_orderid', '=', 'productorders.id')
+                    ->whereIn('productorders.id', $productIds)
+                    ->select('serinumbers.*')
+                    // ->select('serinumbers.*', 'productorders.id')
+                    ->get();
+                return view('tables.order.updateBill', compact('serialnumber', 'debt_import', 'provide', 'order', 'product_order', 'provide_order', 'title'));
+            } else {
+                return redirect()->route('insertProduct.index')->with('warning', "Thao tác không được phép");
+            }
         }
     }
 
