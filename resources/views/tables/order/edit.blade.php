@@ -1037,7 +1037,7 @@
                     alert('Sản phẩm ' + result.msg + ' đã tồn tại serial ' + result.data);
                     return false;
                 } else {
-                    if (myFunction()) {
+                    if (!alertShow && myFunction()) {
                         if ($('#form_submit')[0].checkValidity()) {
                             if (!alertShow && checkRow() == false) {
                                 er = true;
