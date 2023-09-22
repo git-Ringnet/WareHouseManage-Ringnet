@@ -550,19 +550,19 @@ $index = array_search($item['label'], $numberedLabels);
                                                             $seenValues = [];
                                                         @endphp
                                                         @foreach ($debtsSale as $value)
-                                                        @if (!in_array($value->name, $seenValues))
-                                                        <li>
-                                                            <input type="checkbox" id="name_active"
-                                                                {{ in_array($value->id, $nhanvien) ? 'checked' : '' }}
-                                                                name="nhanvien[]"
-                                                                value="{{ $value->id }}">
-                                                            <label id="nhanvien"
-                                                                for="">{{ $value->name }}</label>
-                                                        </li>
-                                                        @php
-                                                            $seenValues[] = $value->name;
-                                                        @endphp
-                                                    @endif
+                                                            @if (!in_array($value->name, $seenValues))
+                                                                <li>
+                                                                    <input type="checkbox" id="name_active"
+                                                                        {{ in_array($value->id, $nhanvien) ? 'checked' : '' }}
+                                                                        name="nhanvien[]"
+                                                                        value="{{ $value->id }}">
+                                                                    <label id="nhanvien"
+                                                                        for="">{{ $value->name }}</label>
+                                                                </li>
+                                                                @php
+                                                                    $seenValues[] = $value->name;
+                                                                @endphp
+                                                            @endif
                                                         @endforeach
                                                     @endif
                                                 </ul>
@@ -590,7 +590,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('product_qty_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity product_qty-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -620,7 +620,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('export_qty_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity export_qty-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -699,7 +699,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('price_import_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity price_import-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -729,7 +729,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('import_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity import-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -759,7 +759,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('sale_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity sale-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -789,7 +789,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('total_sale_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity total-sale-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -819,7 +819,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('total_difference_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity total_difference-input"
                                                     type="text"
@@ -850,7 +850,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('tranport_fee_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity tranport_fee-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -1178,7 +1178,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <div class="icon" id="icon-history_note"></div>
                                             </span>
                                         </th>
-                                        <th scope="col"></th>
+                                        <th scope="col">S/N</th>
                                         <th></th>
                                     </tr>
                                     </form>
@@ -1191,7 +1191,11 @@ $index = array_search($item['label'], $numberedLabels);
                                             <td>{{ $item->name }}</td>
                                             <td>{{ date_format(new DateTime($item->date_time), 'd-m-Y') }}</td>
                                             <td>{{ $item->provide_name }}</td>
-                                            <td>{{ $item->product_name }}</td>
+                                            <td class="hidden"><input type="hidden" class="product_id"
+                                                    value="{{ $item->product_id }}"></td>
+                                            <td class="hidden"><input type="hidden" class="idExport"
+                                                    value="{{ $item->export_id }}"></td>
+                                            <td class="productName">{{ $item->product_name }}</td>
                                             <td class="text-right">{{ $item->product_qty }}</td>
                                             <td class="text-right">{{ number_format($item->price_import) }}</td>
                                             <td class="text-right"> {{ number_format($item->product_total) }}</td>
@@ -1232,7 +1236,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 @endif
                                             </td>
                                             <td>{{ $item->guest_name }}</td>
-                                            <td class="text-right">{{ $item->export_qty }}</td>
+                                            <td class="text-right quantity-input">{{ $item->export_qty }}</td>
                                             <td>{{ $item->export_unit }}</td>
                                             <td class="text-right">{{ number_format($item->price_export) }}</td>
                                             <td class="text-right">{{ number_format($item->export_total) }}</td>
@@ -1274,14 +1278,35 @@ $index = array_search($item['label'], $numberedLabels);
                                             <td class="text-right">{{ number_format($item->total_difference) }}</td>
                                             <td class="text-right">{{ number_format($item->tranport_fee) }}</td>
                                             <td class="text-left">{{ $item->history_note }}</td>
-                                            <td></td>
+                                            <td data-toggle="modal" data-target="#snModal" class="sn"><img
+                                                    src="../../dist/img/icon/list.png"></td>
                                             <td></td>
                                         </tr>
+                                        <div class="modal fade" id="snModal" tabindex="-1" role="dialog"
+                                            aria-labelledby="productModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document" style="max-width: 85%;">
+                                                <div class="modal-content">
+                                                    <div class="modal-header align-items-center">
+                                                        <div>
+                                                            <h5 class="modal-title" id="exampleModalLabel">Serial
+                                                                Number</h5>
+                                                            <p>Thông tin chi tiết về số S/N của mỗi sản phẩm </p>
+                                                        </div>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     @endforeach
                                 </tbody>
                             </table>
                         </div>
-
                     </div>
                     <div class="d-flex row justify-content-between">
                         <div class="paginator mt-2 d-flex justify-content-start">
@@ -1303,7 +1328,7 @@ $index = array_search($item['label'], $numberedLabels);
                             @endif
                         </div>
                     </div>
-                    
+
                     {{-- @if ($history->count() > 0)
                         @php
                             $paginationRange = App\Helpers\PaginationHelper::calculatePaginationRange($history->currentPage(), $history->lastPage());
@@ -1349,6 +1374,64 @@ $index = array_search($item['label'], $numberedLabels);
         $('#perPageinput').val(perPageValue);
         $('#search-filter').submit();
     });
+    $(document).ready(function() {
+        //hiển thị S/N khi đang báo giá
+        $('.sn').on('click', function() {
+            var qty_enter = $(this).closest('tr').find('.quantity-input').text();
+            var idExport = $(this).closest('tr').find('.idExport').val();
+            var productCode = $(this).closest('tr').find('.product_id').val();
+            var productName = $(this).closest('tr').find('.productName').text();
+            $.ajax({
+                url: "{{ route('getSN1') }}",
+                method: 'GET',
+                data: {
+                    productCode: productCode,
+                    idExport: idExport,
+                },
+                success: function(response) {
+                    var modalBody = $('#snModal').find('.modal-body');
+                    let count = 1;
+                    modalBody.empty();
+                    var snList = $('<table class="table table-hover">' +
+                        '<thead><tr><th>STT</th><th>Serial Number</th></tr></thead>' +
+                        '<tbody class="bg-white-sn">'
+                    );
+                    var product = $('<table class="table table-hover">' +
+                        '<thead><tr><th>Tên sản phẩm</th><th class="text-right">Số lượng sản phẩm</th><th class="text-right">Số lượng S/N</th></tr></thead>' +
+                        '<tbody><tr>' + '<td>' + productName +
+                        '</td>' + '<td class="text-right">' + qty_enter +
+                        '</td>' + '<td class="text-right">' + response
+                        .length +
+                        '</td>' +
+                        '</tr</tbody>' + '</table>' +
+                        '<h3>Thông tin Serial Number </h3>');
+                    response.forEach(function(sn) {
+                        var countCell = $('<td>').text(count);
+                        var snItemCell = $('<td>').text(sn.serinumber);
+                        var row = $('<tr>').append(countCell,
+                            snItemCell);
+                        snList.append(row);
+                        count++;
+                    });
+                    modalBody.append(product, snList);
+                    //limit checkbox
+                    $('.check-item').on('change', function() {
+                        var checkedCheckboxes = $('.check-item:checked')
+                            .length;
+
+                        // Check if checked checkboxes exceed qty_enter
+                        if (checkedCheckboxes > qty_enter) {
+                            // Prevent checking more checkboxes than allowed
+                            $(this).prop('checked', false);
+                        }
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });
+    });
     // AJAX Thanh toán Payment
     $(document).on('click', '#paymentdebtimport', function(e) {
         e.preventDefault();
@@ -1380,29 +1463,29 @@ $index = array_search($item['label'], $numberedLabels);
 
     // Xử lí filter ngày tháng
     $(document).ready(function() {
-    $('#end').blur(function() {
-        var startValue = $('#start').val();
-        var endValue = $(this).val();
+        $('#end').blur(function() {
+            var startValue = $('#start').val();
+            var endValue = $(this).val();
 
-        if (startValue && endValue) { // Kiểm tra cả hai trường đã được nhập đầy đủ
-            var startDate = new Date(startValue);
-            var endDate = new Date(endValue);
+            if (startValue && endValue) { // Kiểm tra cả hai trường đã được nhập đầy đủ
+                var startDate = new Date(startValue);
+                var endDate = new Date(endValue);
 
-            // Kiểm tra ngày, tháng và năm trước khi thực hiện so sánh
-            if (
-                endDate.getFullYear() < startDate.getFullYear() ||
-                (endDate.getFullYear() === startDate.getFullYear() &&
-                 endDate.getMonth() < startDate.getMonth()) ||
-                (endDate.getFullYear() === startDate.getFullYear() &&
-                 endDate.getMonth() === startDate.getMonth() &&
-                 endDate.getDate() < startDate.getDate())
-            ) {
-                alert('Ngày kết thúc không được nhỏ hơn ngày bắt đầu!');
-                $(this).val('');
+                // Kiểm tra ngày, tháng và năm trước khi thực hiện so sánh
+                if (
+                    endDate.getFullYear() < startDate.getFullYear() ||
+                    (endDate.getFullYear() === startDate.getFullYear() &&
+                        endDate.getMonth() < startDate.getMonth()) ||
+                    (endDate.getFullYear() === startDate.getFullYear() &&
+                        endDate.getMonth() === startDate.getMonth() &&
+                        endDate.getDate() < startDate.getDate())
+                ) {
+                    alert('Ngày kết thúc không được nhỏ hơn ngày bắt đầu!');
+                    $(this).val('');
+                }
             }
-        }
+        });
     });
-});
     $('.ks-cboxtags-provide_name li').on('click', function(event) {
         if (event.target.tagName !== 'INPUT') {
             var checkbox = $(this).find('input[type="checkbox"]');

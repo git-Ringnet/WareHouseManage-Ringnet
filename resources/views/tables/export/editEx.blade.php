@@ -472,20 +472,20 @@
             </div>
             {{-- Modal S/N --}}
             <div class="modal fade" id="snModal" tabindex="-1" role="dialog"
-                aria-labelledby="productModalLabel" aria-hidden="true">
+                aria-labelledby="productModalLabel" aria-hidden="true" data-backdrop="static">
                 <div class="modal-dialog" role="document" style="max-width: 85%;">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title text-bold" id="productModalLabel">Danh sách Serial Number</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                            <div class="close">
+
+                            </div>
                         </div>
                         <div class="modal-body">
 
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                        <div class="modal-footer text-center d-block">
+
                         </div>
                     </div>
                 </div>
@@ -532,6 +532,12 @@
             }
         });
     });
+
+    function countCheckedCheckboxes() {
+        var numberOfCheckedCheckboxes = $('.check-item:checked')
+            .length;
+        $('#resultCell').text(numberOfCheckedCheckboxes);
+    }
     var selectedSerialNumbers = [];
     //hiển thị S/N khi đã chốt
     $('.sn').on('click', function() {
@@ -553,8 +559,12 @@
             },
             success: function(response) {
                 var modalBody = $('#snModal').find('.modal-body');
+                var modalFooter = $('#snModal').find('.modal-footer');
+                var closeBtn = $('#snModal').find('.close');
                 let count = 1;
                 modalBody.empty();
+                modalFooter.empty();
+                closeBtn.empty();
                 var snList = $('<table class="table table-hover">' +
                     '<thead><tr><th style="width: 20px;"><input type="checkbox" name="all" id="checkall"></th><th>STT</th><th>Serial Number</th></tr></thead>' +
                     '<tbody class="bg-white-sn">'
@@ -562,9 +572,8 @@
                 var product = $('<table class="table table-hover">' +
                     '<thead><tr><th>Tên sản phẩm</th><th class="text-right">Số lượng sản phẩm</th><th class="text-right">Số lượng S/N</th></tr></thead>' +
                     '<tbody><tr>' + '<td>' + productName +
-                    '</td>' + '<td class="text-right">' + qty +
-                    '</td>' + '<td class="text-right">' + response
-                    .length +
+                    '</td>' + '<td class="text-right">' + qty_enter +
+                    '</td>' + '<td class="text-right" id="resultCell">' + 0 +
                     '</td>' +
                     '</tr</tbody>' + '</table>' +
                     '<h3>Thông tin Serial Number </h3>');
@@ -597,11 +606,20 @@
                     snList.append(row);
                     count++;
                 });
-
+                var footer = $(
+                    '<a class="btn btn-primary mr-1 check-seri" data-dismiss="">Lưu</a>'
+                );
+                var btnClose = $(
+                    '<div class="btnclose cursor-pointer" data-dismiss=""><span aria-hidden="true">&times;</span></div>'
+                );
+                modalFooter.append(footer);
+                closeBtn.append(btnClose);
                 modalBody.append(product, snList);
+                countCheckedCheckboxes();
 
                 //limit checkbox
                 $('.check-item').on('change', function() {
+                    event.stopPropagation();
                     var checkedCheckboxes = $('.check-item:checked').length;
                     var serialNumberId = $(this).val();
                     // Check if checked checkboxes exceed qty_enter
@@ -644,6 +662,35 @@
                             $('input[name="selected_serial_numbers[]"][value="' +
                                 serialNumberId + '"]').remove();
                         }
+                        countCheckedCheckboxes();
+                    }
+                });
+                //kiểm tra số lượng seri
+                $('.check-seri').on('click', function() {
+                    var checkedCheckboxes = $('.check-item:checked')
+                        .length;
+                    if (checkedCheckboxes < qty_enter) {
+                        alert(
+                            'Vui lòng chọn đủ serial number theo số lượng xuất!'
+                        );
+                    } else if (checkedCheckboxes == qty_enter) {
+                        // Kiểm tra xem nút được nhấn có class 'check-seri' không
+                        if ($(this).hasClass('check-seri')) {
+                            $(this).attr('data-dismiss', 'modal');
+                        }
+                    }
+                });
+
+                $('.btnclose').on('click', function() {
+                    var checkedCheckboxes = $('.check-item:checked')
+                        .length;
+                    if (checkedCheckboxes < qty_enter) {
+                        alert(
+                            'Vui lòng chọn đủ serial number theo số lượng xuất!'
+                        );
+                    } else if (checkedCheckboxes == qty_enter) {
+                        $('.btnclose').attr('data-dismiss',
+                            'modal');
                     }
                 });
             },
