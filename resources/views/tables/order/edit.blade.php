@@ -974,6 +974,7 @@
         this.classList.add('disabled');
         var countDown = 10;
         var alertShow = false;
+        var er = false;
         var countdownInterval = setInterval(function() {
             countDown--;
             if (countDown <= 0) {
@@ -991,7 +992,6 @@
             var product_tax = $(this).find('.product_tax').val().trim();
             var rowSTT = $(this).find('.STT').text();
             var countProduct = $(this).find('.quantity-input').val().trim();
-            var er = false;
 
             id = $(this).find('.exampleModal').data('target');
             // Kiểm tra nhập số lượng sản phẩm và số lượng SN
