@@ -690,6 +690,7 @@
         var data = {};
         this.classList.add('disabled');
         var countDown = 10;
+        var alertShow = false;
         var countdownInterval = setInterval(function() {
             countDown--;
             if (countDown <= 0) {
@@ -716,6 +717,7 @@
             if (checkInputSN(id, countProduct).check == true) {
                 alert(checkInputSN(id, countProduct).msg);
                 er = true;
+                alertShow = true;
                 return false;
             }
             // Tạo mảng con nếu nó chưa tồn tại
@@ -761,13 +763,10 @@
                         }
 
                         // Kiểm tra trùng sản phẩm con
-                        if (checkDuplicateRows()) {
+                        if (!alertShow && checkDuplicateRows()) {
                             alert('Sản phẩm đã tồn tại');
                         }
-                        if ($('#product_create').val().trim() == '') {
-                            er = true;
-                            alert('Vui lòng nhập ngày hóa đơn');
-                        }
+
                         // Kiểm tra có lỗi hay không
                         var hasErrors = checkRow() === false ||
                             checkDuplicateRows() === true || er === true;
@@ -973,6 +972,7 @@
         var data = {}
         this.classList.add('disabled');
         var countDown = 10;
+        var alertShow = false;
         var countdownInterval = setInterval(function() {
             countDown--;
             if (countDown <= 0) {
@@ -997,6 +997,7 @@
             if (checkInputSN(id, countProduct).check == true) {
                 alert(checkInputSN(id, countProduct).msg);
                 er = true;
+                alertShow = true;
                 return false;
             }
             // Tạo mảng con nếu nó chưa tồn tại
@@ -1037,13 +1038,13 @@
                 } else {
                     if (myFunction()) {
                         if ($('#form_submit')[0].checkValidity()) {
-                            if (checkRow() == false) {
+                            if (!alertShow && checkRow() == false) {
                                 er = true;
                                 alert('Vui lòng nhập ít nhất 1 sản phẩm');
                             }
 
                             // Kiểm tra trùng sản phẩm con
-                            if (checkDuplicateRows()) {
+                            if (!alertShow && checkDuplicateRows()) {
                                 er = true;
                                 alert('Sản phẩm đã tồn tại');
                             }

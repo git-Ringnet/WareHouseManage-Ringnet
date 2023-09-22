@@ -301,6 +301,7 @@
             var data = {};
             this.classList.add('disabled');
             var countDown = 10;
+            var alertShow = false;
             var countdownInterval = setInterval(function() {
                 countDown--;
                 if (countDown <= 0) {
@@ -327,6 +328,7 @@
                 if (checkInputSN(id, countProduct).check == true) {
                     alert(checkInputSN(id, countProduct).msg);
                     error = true;
+                    alertShow = true;
                     return false;
                 }
 
@@ -356,13 +358,13 @@
             e.preventDefault();
             var isDuplicate = false;
 
-            if (checkRow() == false) {
+            if (!alertShow && checkRow() == false) {
                 alert('Vui lòng nhập ít nhất 1 sản phẩm');
                 error = true;
                 return false;
             }
 
-            if ($('#provide_id').val().trim() == '' && $('#radio1').prop('checked') == true) {
+            if (!alertShow && $('#provide_id').val().trim() == '' && $('#radio1').prop('checked') == true) {
                 isDuplicate = true;
                 alert('Vui lòng chọn nhà cung cấp');
                 return false;
@@ -524,6 +526,7 @@
             $(e.target).find('.btn.btn-primary.mr-2').prop('disabled', true);
             var countDown = 10;
             var error = false;
+            var alertShow = false;
             var countdownInterval = setInterval(function() {
                 countDown--;
                 if (countDown <= 0) {
@@ -546,6 +549,7 @@
                 if (checkInputSN(id, countProduct).check == true) {
                     alert(checkInputSN(id, countProduct).msg);
                     error = true;
+                    alertShow = true;
                     return false;
                 }
 
@@ -573,19 +577,19 @@
             });
 
             e.preventDefault();
-            if (checkRow() == false) {
+            if (!alertShow && checkRow() == false) {
                 alert('Vui lòng nhập ít nhất 1 sản phẩm');
                 error = true;
                 return false;
             }
 
-            if ($('#provide_id').val().trim() == '' && $('#radio1').prop('checked') == true) {
+            if (!alertShow && $('#provide_id').val().trim() == '' && $('#radio1').prop('checked') == true) {
                 error = true;
                 alert('Vui lòng chọn nhà cung cấp');
                 return false;
             }
 
-            if (checkDuplicateRows()) {
+            if (!alertShow && checkDuplicateRows()) {
                 alert('Sản phẩm đã tồn tại');
                 error = true;
                 return false;
