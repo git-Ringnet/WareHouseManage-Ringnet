@@ -633,7 +633,7 @@ $('.addRow').on('click', function () {
         '<p>Thông tin chi tiết về số S/N của mỗi sản phẩm </p>' +
         '</div>' +
         '<button type="button" class="close" data-dismiss="modal" aria-label="Close">' +
-        '<span aria-hidden="true" onclick="checkData(event)">&times;</span>' +
+        '<span aria-hidden="true" onclick="checkdata(event)">&times;</span>' +
         '</button>' +
         '</div>' +
         '<div class="modal-body">' +
@@ -737,7 +737,7 @@ $('.addRow1').on('click', function () {
         '<p>Thông tin chi tiết về số S/N của mỗi sản phẩm </p>' +
         '</div>' +
         '<button type="button" class="close" data-dismiss="modal" aria-label="Close">' +
-        '<span aria-hidden="true" onclick="checkData(event)">&times;</span>' +
+        '<span aria-hidden="true" onclick="checkdata(event)">&times;</span>' +
         '</button>' +
         '</div>' +
         '<div class="modal-body">' +

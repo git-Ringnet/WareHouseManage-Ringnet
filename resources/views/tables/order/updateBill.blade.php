@@ -402,7 +402,7 @@
             <div id="list_modal">
                 <?php $stt = 0; ?>
                 @foreach ($product_order as $pro)
-                    <div class="modal fade" id="exampleModal{{ $stt }}" tabindex="-1" role="dialog"
+                    <div class="modal fade" data-backdrop="static" id="exampleModal{{ $stt }}" tabindex="-1" role="dialog"
                         aria-labelledby="exampleModalLabel" aria-hidden="true"
                         @if ($order->order_status == 0) data-backdrop="static" @endif>'
                         <div class="modal-dialog" role="document">
