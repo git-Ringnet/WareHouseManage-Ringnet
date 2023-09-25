@@ -953,6 +953,7 @@ function checkInputSN(id, countProduct) {
     var isEmpty = false;
     var SN1 = $(id).find('.modal-body #table_SNS tbody tr td .form-control.w-25');
     var count = 0;
+    var countSN = 0;
     SN1.each(function () {
         if ($(this).val().trim() !== "") {
             isEmpty = true;
