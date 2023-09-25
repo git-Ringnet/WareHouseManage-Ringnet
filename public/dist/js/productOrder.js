@@ -964,6 +964,15 @@ function checkInputSN(id, countProduct) {
         result.msg = "Vui lòng nhập số lượng sản phẩm";
     }
     if (isEmpty) {
+         SN1.each(function () {
+            if ($(this).val().trim() !== "") {
+                countSN++;
+            }
+        });
+        if (countSN < SN1.length) {
+            result.check = true;
+            result.msg = "Vui lòng nhập đủ số lượng SN";
+        }
         if (SN1.length != countProduct) {
             // Kiểm tra số lượng sản phẩm và SN
             $('#inputContainer tbody tr td .quantity-input').each(function () {
