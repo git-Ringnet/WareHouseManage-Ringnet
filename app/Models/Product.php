@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class Product extends Model
@@ -12,7 +13,7 @@ class Product extends Model
     protected $table = 'product';
     
     protected $fillable = [
-        'product_name','product_unit','product_qty','product_price','product_tax','product_total','provide_id','product_trade','product_trademark','product_code','created_at'
+        'product_name','product_unit','product_qty','product_price','product_tax','product_total','provide_id','product_trade','product_trademark','product_code','created_at','license_id'
      ];
     public function getAllProduct($filters = [],$perPage, $status = [], $products_name = null, $providearr, $unitarr,$taxarr, $keywords = null, $sortByArr = null)
     {
@@ -75,6 +76,7 @@ class Product extends Model
             });
         }
         $products = $products->where('product.product_qty','>',0);
+        $products = $products->where('product.license_id',Auth::user()->license_id);
         $products = $products->orderBy('product.created_at', 'asc')->paginate($perPage);
 
         return $products;

@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\Provides;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
@@ -235,6 +236,7 @@ class ProductController extends Controller
     {
         $products = Product::select('id', 'product_name', 'provide_id','product_unit', 'product_qty', 'product_trade','product_price', 'product_total', 'product_tax','product_code','product_trademark' )
             ->where('product_qty', '>', 0)
+            ->where('license_id', Auth::user()->license_id)
             ->with('getNameProvide')
             ->get();
         foreach ($products as $product) {

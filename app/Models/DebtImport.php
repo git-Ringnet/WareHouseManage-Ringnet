@@ -21,7 +21,8 @@ class DebtImport extends Model
         'date_end',
         'debt_status',
         'debt_note',
-        'created_at'
+        'created_at',
+        'license_id'
     ];
     public function getAllDebts($filter = [],$perPage, $keywords = null, $name = [], $date = [], $provide_name = [], $status = [], $orderBy = null, $orderType = null)
     {
@@ -60,7 +61,7 @@ class DebtImport extends Model
             $debt_import = $debt_import->orderBy($orderBy, $orderType);
         }
 
-
+        $debt_import = $debt_import->where('debt_import.license_id',Auth::user()->license_id);
         $debt_import = $debt_import->orderBy('debt_import.id', 'desc')->paginate($perPage);
 
 
