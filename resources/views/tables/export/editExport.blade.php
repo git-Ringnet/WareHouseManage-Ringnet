@@ -708,7 +708,7 @@
                 var product = $('<table class="table table-hover">' +
                     '<thead><tr><th>Tên sản phẩm</th><th class="text-right">Số lượng sản phẩm</th><th class="text-right">Số lượng S/N</th></tr></thead>' +
                     '<tbody><tr>' + '<td>' + productName +
-                    '</td>' + '<td class="text-right">' + result +
+                    '</td>' + '<td class="text-right">' + qty_enter +
                     '</td>' + '<td class="text-right">' + response
                     .length +
                     '</td>' +

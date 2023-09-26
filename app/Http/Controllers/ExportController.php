@@ -2988,11 +2988,12 @@ class ExportController extends Controller
             // Kiểm tra xem dữ liệu đã tồn tại trong cơ sở dữ liệu hay chưa
             $existingCustomer = Guests::orwhere('guest_code', $request->guest_code)
                 ->orwhere('guest_name', $request->guest_name)
+                ->where('license_id', Auth::user()->license_idF)
                 ->first();
 
             if ($existingCustomer) {
                 // Dữ liệu đã tồn tại, trả về thông báo
-                session()->flash('msg', 'Xóa đơn hàng thành công');
+                session()->flash('msg', 'Thông tin khách hàng đã có trong hệ thống');
                 return response()->json(['message' => 'Thông tin khách hàng đã có trong hệ thống']);
             } else {
                 // Tạo mới bản ghi khách hàng
