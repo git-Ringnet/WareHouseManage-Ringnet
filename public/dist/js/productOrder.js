@@ -624,7 +624,7 @@ $('.addRow').on('click', function () {
 
 
     var modal = '<div class="modal fade" id="exampleModal' + rowCount +
-        '" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">' +
+        '" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">' +
         '<div class="modal-dialog" role="document">' +
         '<div class="modal-content">' +
         '<div class="modal-header align-items-center">' +
@@ -820,7 +820,10 @@ function handlePaste(input) {
     var clipboardData = event.clipboardData || window.clipboardData;
     var pastedData = clipboardData.getData('Text');
     var rows = pastedData.trim().split('\n');
-    var parent_div = $('.div_value' + rowCount + ' table tbody');
+    // var parent_div = $('.div_value' + rowCount + ' table tbody');
+
+    var table = document.querySelector('.div_value' + rowCount).querySelector('table');
+    var currentInput = 2;
     for (var i = 0; i < rows.length; i++) {
         var rowData = rows[i].trim();
         var SLTR = $(input).closest('.modal-dialog').find('#table_SNS tbody tr').length;
@@ -828,38 +831,42 @@ function handlePaste(input) {
             continue;
         }
         if (SLTR <= SLProduct) {
-            // Tạo trường dữ liệu
-            var newtr = document.createElement('tr');
-            var newtd1 = document.createElement('td');
-            var newtd2 = document.createElement('td');
-            var newtd3 = document.createElement('td');
-            var newtd4 = document.createElement('td');
-            var newDiv = document.createElement('input');
+            var newRow = table.insertRow($(input).closest('tr').index() + currentInput);
+            var cell1 = newRow.insertCell(0);
+            var cell2 = newRow.insertCell(1);
+            var cell3 = newRow.insertCell(2);
+            var cell4 = newRow.insertCell(3);
+
+            // Tạo checkbox
             var checkbox = document.createElement("input");
-            var stt = document.createElement("span");
             checkbox.setAttribute("type", "checkbox");
-            newtd1.append(checkbox);
+            var checkboxes = document.querySelectorAll('.div_value' + rowCount +
+                ' table tbody input[type="checkbox"]');
+            var checkboxCount = checkboxes.length;
+            checkbox.setAttribute("id", "checkbox_" + checkboxCount);
+
+            // Tạo span stt
+            var stt = document.createElement("span");
+            stt.innerHTML = checkboxCount;
+
+            // Tạo input
+            var newDiv = document.createElement('input');
             newDiv.setAttribute("type", "text");
             newDiv.setAttribute("class", "form-control w-25");
             newDiv.setAttribute("name", "product_SN" + rowCount + "[]");
             newDiv.setAttribute("onpaste", "handlePaste(this)");
-            newtd3.append(newDiv);
-            newtd4.setAttribute('class', 'deleteRow1');
-            newtd4.innerHTML =
-                '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.0606 6.66675C13.6589 6.66675 13.3333 6.99236 13.3333 7.39402C13.3333 7.79568 13.6589 8.12129 14.0606 8.12129H17.9394C18.341 8.12129 18.6667 7.79568 18.6667 7.39402C18.6667 6.99236 18.341 6.66675 17.9394 6.66675H14.0606ZM8 10.3031C8 9.90143 8.32561 9.57582 8.72727 9.57582H10.1818H21.8182H23.2727C23.6744 9.57582 24 9.90143 24 10.3031C24 10.7048 23.6744 11.0304 23.2727 11.0304H22.5455V22.6667C22.5455 24.2819 21.2158 25.5758 19.6179 25.5758H12.3452C11.9637 25.5755 11.5854 25.4997 11.2333 25.3528C10.8812 25.2059 10.5617 24.9908 10.2931 24.7199C10.0244 24.449 9.81206 24.1276 9.66816 23.7743C9.52463 23.4219 9.45204 23.0447 9.45455 22.6642V11.0304H8.72727C8.32561 11.0304 8 10.7048 8 10.3031ZM10.9091 22.6723V11.0304H21.0909V22.6667C21.0909 23.4623 20.4288 24.1213 19.6179 24.1213H12.3458C12.1562 24.1211 11.9684 24.0834 11.7934 24.0104C11.6183 23.9374 11.4595 23.8304 11.3259 23.6958C11.1924 23.5611 11.0868 23.4013 11.0153 23.2257C10.9437 23.05 10.9076 22.8619 10.9091 22.6723ZM17.9394 13.4546C18.3411 13.4546 18.6667 13.7802 18.6667 14.1819V20.9698C18.6667 21.3714 18.3411 21.6971 17.9394 21.6971C17.5377 21.6971 17.2121 21.3714 17.2121 20.9698V14.1819C17.2121 13.7802 17.5377 13.4546 17.9394 13.4546ZM14.7879 14.1819C14.7879 13.7802 14.4623 13.4546 14.0606 13.4546C13.6589 13.4546 13.3333 13.7802 13.3333 14.1819V20.9698C13.3333 21.3714 13.6589 21.6971 14.0606 21.6971C14.4623 21.6971 14.7879 21.3714 14.7879 20.9698V14.1819Z" fill="#555555"/></svg>';
-            newtd2.appendChild(stt);
-            newtr.append(newtd1);
-            newtr.append(newtd2);
-            newtr.append(newtd3);
-            newtr.append(newtd4);
-            var checkboxes = document.querySelectorAll('.div_value' + rowCount +
-                ' table tbody input[type="checkbox"]');
-            var checkboxCount = checkboxes.length;
-            stt.innerHTML = checkboxCount;
-            checkbox.setAttribute("id", "checkbox_" + checkboxCount);
-            $('.SNCount').text(checkboxCount);
             newDiv.value = rows[i].trim();
-            parent_div[0].appendChild(newtr);
+
+            // Tạo svg delete
+            cell4.setAttribute('class', 'deleteRow1');
+            cell4.innerHTML =
+                '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.0606 6.66675C13.6589 6.66675 13.3333 6.99236 13.3333 7.39402C13.3333 7.79568 13.6589 8.12129 14.0606 8.12129H17.9394C18.341 8.12129 18.6667 7.79568 18.6667 7.39402C18.6667 6.99236 18.341 6.66675 17.9394 6.66675H14.0606ZM8 10.3031C8 9.90143 8.32561 9.57582 8.72727 9.57582H10.1818H21.8182H23.2727C23.6744 9.57582 24 9.90143 24 10.3031C24 10.7048 23.6744 11.0304 23.2727 11.0304H22.5455V22.6667C22.5455 24.2819 21.2158 25.5758 19.6179 25.5758H12.3452C11.9637 25.5755 11.5854 25.4997 11.2333 25.3528C10.8812 25.2059 10.5617 24.9908 10.2931 24.7199C10.0244 24.449 9.81206 24.1276 9.66816 23.7743C9.52463 23.4219 9.45204 23.0447 9.45455 22.6642V11.0304H8.72727C8.32561 11.0304 8 10.7048 8 10.3031ZM10.9091 22.6723V11.0304H21.0909V22.6667C21.0909 23.4623 20.4288 24.1213 19.6179 24.1213H12.3458C12.1562 24.1211 11.9684 24.0834 11.7934 24.0104C11.6183 23.9374 11.4595 23.8304 11.3259 23.6958C11.1924 23.5611 11.0868 23.4013 11.0153 23.2257C10.9437 23.05 10.9076 22.8619 10.9091 22.6723ZM17.9394 13.4546C18.3411 13.4546 18.6667 13.7802 18.6667 14.1819V20.9698C18.6667 21.3714 18.3411 21.6971 17.9394 21.6971C17.5377 21.6971 17.2121 21.3714 17.2121 20.9698V14.1819C17.2121 13.7802 17.5377 13.4546 17.9394 13.4546ZM14.7879 14.1819C14.7879 13.7802 14.4623 13.4546 14.0606 13.4546C13.6589 13.4546 13.3333 13.7802 13.3333 14.1819V20.9698C13.3333 21.3714 13.6589 21.6971 14.0606 21.6971C14.4623 21.6971 14.7879 21.3714 14.7879 20.9698V14.1819Z" fill="#555555"/></svg>';
+
+            // Thêm các đối tượng vào table
+            cell1.append(checkbox);
+            cell2.appendChild(stt);
+            cell3.append(newDiv);
+            currentInput++;
         }
     }
 
@@ -879,6 +886,8 @@ function handlePaste1(input) {
     var rows = pastedData.trim().split('\n');
     var parent_div = $('.div_value' + rowCount + ' table tbody');
 
+    var table = document.querySelector('.div_value' + rowCount).querySelector('table');
+    var currentInput = 2;
     for (var i = 0; i < rows.length; i++) {
         var rowData = rows[i].trim();
         if (rowData === '') {
@@ -886,37 +895,43 @@ function handlePaste1(input) {
         }
         var SLTR = $(input).closest('.modal-dialog').find('#table_SNS tbody tr').length;
         if (SLTR <= SLProduct) {
-            var newtr = document.createElement('tr');
-            var newtd1 = document.createElement('td');
-            var newtd2 = document.createElement('td');
-            var newtd3 = document.createElement('td');
-            var newtd4 = document.createElement('td');
-            var newDiv = document.createElement('input');
+            var newRow = table.insertRow($(input).closest('tr').index() + currentInput);
+            var cell1 = newRow.insertCell(0);
+            var cell2 = newRow.insertCell(1);
+            var cell3 = newRow.insertCell(2);
+            var cell4 = newRow.insertCell(3);
+
+            // Tạo checkbox
             var checkbox = document.createElement("input");
-            var stt = document.createElement("span");
             checkbox.setAttribute("type", "checkbox");
-            newtd1.append(checkbox);
+            var checkboxes = document.querySelectorAll('.div_value' + rowCount +
+                ' table tbody input[type="checkbox"]');
+            var checkboxCount = checkboxes.length;
+            checkbox.setAttribute("id", "checkbox_" + checkboxCount);
+
+            // Tạo span stt
+            var stt = document.createElement("span");
+            stt.innerHTML = checkboxCount;
+
+            // Tạo input
+            var newDiv = document.createElement('input');
             newDiv.setAttribute("type", "text");
             newDiv.setAttribute("class", "form-control w-25");
             newDiv.setAttribute("name", "product_SN_new" + rowCount + "[]");
             newDiv.setAttribute("onpaste", "handlePaste(this)");
-            newtd3.append(newDiv);
-            newtd4.setAttribute('class', 'deleteRow1');
-            newtd4.innerHTML =
-                '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.0606 6.66675C13.6589 6.66675 13.3333 6.99236 13.3333 7.39402C13.3333 7.79568 13.6589 8.12129 14.0606 8.12129H17.9394C18.341 8.12129 18.6667 7.79568 18.6667 7.39402C18.6667 6.99236 18.341 6.66675 17.9394 6.66675H14.0606ZM8 10.3031C8 9.90143 8.32561 9.57582 8.72727 9.57582H10.1818H21.8182H23.2727C23.6744 9.57582 24 9.90143 24 10.3031C24 10.7048 23.6744 11.0304 23.2727 11.0304H22.5455V22.6667C22.5455 24.2819 21.2158 25.5758 19.6179 25.5758H12.3452C11.9637 25.5755 11.5854 25.4997 11.2333 25.3528C10.8812 25.2059 10.5617 24.9908 10.2931 24.7199C10.0244 24.449 9.81206 24.1276 9.66816 23.7743C9.52463 23.4219 9.45204 23.0447 9.45455 22.6642V11.0304H8.72727C8.32561 11.0304 8 10.7048 8 10.3031ZM10.9091 22.6723V11.0304H21.0909V22.6667C21.0909 23.4623 20.4288 24.1213 19.6179 24.1213H12.3458C12.1562 24.1211 11.9684 24.0834 11.7934 24.0104C11.6183 23.9374 11.4595 23.8304 11.3259 23.6958C11.1924 23.5611 11.0868 23.4013 11.0153 23.2257C10.9437 23.05 10.9076 22.8619 10.9091 22.6723ZM17.9394 13.4546C18.3411 13.4546 18.6667 13.7802 18.6667 14.1819V20.9698C18.6667 21.3714 18.3411 21.6971 17.9394 21.6971C17.5377 21.6971 17.2121 21.3714 17.2121 20.9698V14.1819C17.2121 13.7802 17.5377 13.4546 17.9394 13.4546ZM14.7879 14.1819C14.7879 13.7802 14.4623 13.4546 14.0606 13.4546C13.6589 13.4546 13.3333 13.7802 13.3333 14.1819V20.9698C13.3333 21.3714 13.6589 21.6971 14.0606 21.6971C14.4623 21.6971 14.7879 21.3714 14.7879 20.9698V14.1819Z" fill="#555555"/></svg>';
-            newtd2.appendChild(stt);
-            newtr.append(newtd1);
-            newtr.append(newtd2);
-            newtr.append(newtd3);
-            newtr.append(newtd4);
-            var checkboxes = document.querySelectorAll('.div_value' + rowCount +
-                ' table tbody input[type="checkbox"]');
-            var checkboxCount = checkboxes.length;
-            stt.innerHTML = checkboxCount;
-            checkbox.setAttribute("id", "checkbox_" + checkboxCount);
-            $('.SNCount').text(checkboxCount);
             newDiv.value = rows[i].trim();
-            parent_div[0].appendChild(newtr);
+
+            // Tạo svg delete
+
+            cell4.setAttribute('class', 'deleteRow1');
+            cell4.innerHTML =
+                '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.0606 6.66675C13.6589 6.66675 13.3333 6.99236 13.3333 7.39402C13.3333 7.79568 13.6589 8.12129 14.0606 8.12129H17.9394C18.341 8.12129 18.6667 7.79568 18.6667 7.39402C18.6667 6.99236 18.341 6.66675 17.9394 6.66675H14.0606ZM8 10.3031C8 9.90143 8.32561 9.57582 8.72727 9.57582H10.1818H21.8182H23.2727C23.6744 9.57582 24 9.90143 24 10.3031C24 10.7048 23.6744 11.0304 23.2727 11.0304H22.5455V22.6667C22.5455 24.2819 21.2158 25.5758 19.6179 25.5758H12.3452C11.9637 25.5755 11.5854 25.4997 11.2333 25.3528C10.8812 25.2059 10.5617 24.9908 10.2931 24.7199C10.0244 24.449 9.81206 24.1276 9.66816 23.7743C9.52463 23.4219 9.45204 23.0447 9.45455 22.6642V11.0304H8.72727C8.32561 11.0304 8 10.7048 8 10.3031ZM10.9091 22.6723V11.0304H21.0909V22.6667C21.0909 23.4623 20.4288 24.1213 19.6179 24.1213H12.3458C12.1562 24.1211 11.9684 24.0834 11.7934 24.0104C11.6183 23.9374 11.4595 23.8304 11.3259 23.6958C11.1924 23.5611 11.0868 23.4013 11.0153 23.2257C10.9437 23.05 10.9076 22.8619 10.9091 22.6723ZM17.9394 13.4546C18.3411 13.4546 18.6667 13.7802 18.6667 14.1819V20.9698C18.6667 21.3714 18.3411 21.6971 17.9394 21.6971C17.5377 21.6971 17.2121 21.3714 17.2121 20.9698V14.1819C17.2121 13.7802 17.5377 13.4546 17.9394 13.4546ZM14.7879 14.1819C14.7879 13.7802 14.4623 13.4546 14.0606 13.4546C13.6589 13.4546 13.3333 13.7802 13.3333 14.1819V20.9698C13.3333 21.3714 13.6589 21.6971 14.0606 21.6971C14.4623 21.6971 14.7879 21.3714 14.7879 20.9698V14.1819Z" fill="#555555"/></svg>';
+
+            // Thêm các đối tượng vào table
+            cell1.append(checkbox);
+            cell2.appendChild(stt);
+            cell3.append(newDiv);
+            currentInput++;
         }
     }
     var parentTable = $(input).closest('table');
@@ -925,7 +940,6 @@ function handlePaste1(input) {
     remainingRows.each(function (index) {
         $(this).find('td').eq(1).text(index + 1);
     });
-
 }
 
 
@@ -1029,16 +1043,6 @@ function getInputName(input, olddata) {
 
 
 
-
-
-
-
-
-
-
-
-
-
 // Hàm kiểm tra nhập số lượng sản phẩm và số lượng SN
 function checkInputSN(id, countProduct) {
     var result = {
@@ -1048,6 +1052,7 @@ function checkInputSN(id, countProduct) {
     var isEmpty = false;
     var SN1 = $(id).find('.modal-body #table_SNS tbody tr td .form-control.w-25');
     var count = 0;
+    var countSN = 0;
     SN1.each(function () {
         if ($(this).val().trim() !== "") {
             isEmpty = true;
@@ -1059,6 +1064,15 @@ function checkInputSN(id, countProduct) {
         result.msg = "Vui lòng nhập số lượng sản phẩm";
     }
     if (isEmpty) {
+        SN1.each(function () {
+            if ($(this).val().trim() !== "") {
+                countSN++;
+            }
+        });
+        if (countSN < SN1.length) {
+            result.check = true;
+            result.msg = "Vui lòng nhập đủ số lượng SN";
+        }
         if (SN1.length != countProduct) {
             // Kiểm tra số lượng sản phẩm và SN
             $('#inputContainer tbody tr td .quantity-input').each(function () {
@@ -1066,9 +1080,7 @@ function checkInputSN(id, countProduct) {
                 if (inputValue % 1 !== 0) {
                     count += Math.ceil(inputValue);
                 } else {
-                    return inputValue;
                     count += inputValue;
-                    console.log(inputValue);
                 }
             });
             if ($('.form-control.w-25').length > count) {
@@ -1085,7 +1097,5 @@ function checkInputSN(id, countProduct) {
     }
     return result;
 }
-
-
 
 
