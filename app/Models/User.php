@@ -12,7 +12,7 @@ use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\DB;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens;
     use HasFactory;
@@ -34,7 +34,7 @@ class User extends Authenticatable
         'password',
         'roleid',
         'status',
-        'license_id'
+        'license_id', 'email_verified_at'
     ];
 
 

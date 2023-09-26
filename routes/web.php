@@ -176,6 +176,7 @@ Route::get('/countInventory', [DashboardController::class, 'countInventory'])->n
 Route::get('/countDebt', [DashboardController::class, 'countDebt'])->name('countDebt');
 Route::get('/countProfit', [DashboardController::class, 'countProfit'])->name('countProfit');
 
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
