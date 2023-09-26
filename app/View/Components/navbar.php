@@ -52,6 +52,7 @@ class navbar extends Component
                 $flag == true;
             };
         }
+        // dd($managerLicense);
 
         return view('components.navbar', compact('flag'));
     }
