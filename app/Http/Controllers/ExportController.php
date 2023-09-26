@@ -444,8 +444,10 @@ class ExportController extends Controller
                                         'export_status' => $export_status,
                                         'debt_export_end' => $debt->date_end,
                                     ]);
-                                // Thêm S/N vào đơn xuất hàng
-                                Serinumbers::whereIn('id', $export_seris)->where('license_id', Auth::user()->license_id)->update(['export_seri' => $export->id, 'seri_status' => 3]);
+                                if ($export_seris !== null) {
+                                    // Thêm S/N vào đơn xuất hàng
+                                    Serinumbers::whereIn('id', $export_seris)->where('license_id', Auth::user()->license_id)->update(['export_seri' => $export->id, 'seri_status' => 3]);
+                                }
                             }
                             //cập nhật khách hàng khi lưu nhanh
                             if ($request->checkguest == 1 && $updateClick == null) {
@@ -710,8 +712,10 @@ class ExportController extends Controller
                                         'export_status' => $export_status,
                                         'debt_export_end' => $debt->date_end,
                                     ]);
-                                // Thêm S/N vào đơn xuất hàng
-                                Serinumbers::whereIn('id', $export_seris)->where('license_id', Auth::user()->license_id)->update(['export_seri' => $export->id, 'seri_status' => 3]);
+                                if ($export_seris !== null) {
+                                    // Thêm S/N vào đơn xuất hàng
+                                    Serinumbers::whereIn('id', $export_seris)->where('license_id', Auth::user()->license_id)->update(['export_seri' => $export->id, 'seri_status' => 3]);
+                                }
                             }
                             //tạo đơn khi đã nhấn cập nhật
                             if ($request->checkguest == 1 && $updateClick == 1) {
@@ -957,8 +961,10 @@ class ExportController extends Controller
                                         'export_status' => $export_status,
                                         'debt_export_end' => $debt->date_end,
                                     ]);
-                                // Thêm S/N vào đơn xuất hàng
-                                Serinumbers::whereIn('id', $export_seris)->where('license_id', Auth::user()->license_id)->update(['export_seri' => $export->id, 'seri_status' => 3]);
+                                if ($export_seris !== null) {
+                                    // Thêm S/N vào đơn xuất hàng
+                                    Serinumbers::whereIn('id', $export_seris)->where('license_id', Auth::user()->license_id)->update(['export_seri' => $export->id, 'seri_status' => 3]);
+                                }
                             }
                             //tạo đơn khi đã nhấn thêm
                             if ($clickValue == 1 && $request->checkguest == 2) {
@@ -1206,8 +1212,10 @@ class ExportController extends Controller
                                         'export_status' => $export_status,
                                         'debt_export_end' => $debt->date_end,
                                     ]);
-                                // Thêm S/N vào đơn xuất hàng
-                                Serinumbers::whereIn('id', $export_seris)->where('license_id', Auth::user()->license_id)->update(['export_seri' => $export->id, 'seri_status' => 3]);
+                                if ($export_seris !== null) {
+                                    // Thêm S/N vào đơn xuất hàng
+                                    Serinumbers::whereIn('id', $export_seris)->where('license_id', Auth::user()->license_id)->update(['export_seri' => $export->id, 'seri_status' => 3]);
+                                }
                             }
                             // Giảm số lượng của sản phẩm trong bảng product
                             for ($i = 0; $i < count($productIDs); $i++) {
@@ -1330,10 +1338,12 @@ class ExportController extends Controller
                                     $product->product_trade += $productQty;
                                     $product->save();
                                 }
-                                // Thêm S/N vào đơn xuất hàng
-                                Serinumbers::whereIn('id', $export_seris)
-                                    ->where('license_id', Auth::user()->license_id)
-                                    ->update(['export_seri' => $export->id, 'seri_status' => 2]);
+                                if ($export_seris !== null) {
+                                    // Thêm S/N vào đơn xuất hàng
+                                    Serinumbers::whereIn('id', $export_seris)
+                                        ->where('license_id', Auth::user()->license_id)
+                                        ->update(['export_seri' => $export->id, 'seri_status' => 2]);
+                                }
                             }
                             //cập nhật khách hàng khi lưu nhanh
                             if ($request->checkguest == 1 && $updateClick == null) {
@@ -1394,10 +1404,12 @@ class ExportController extends Controller
                                     $product->product_trade += $productQty;
                                     $product->save();
                                 }
-                                // Thêm S/N vào đơn xuất hàng
-                                Serinumbers::whereIn('id', $export_seris)
-                                    ->where('license_id', Auth::user()->license_id)
-                                    ->update(['export_seri' => $export->id, 'seri_status' => 2]);
+                                if ($export_seris !== null) {
+                                    // Thêm S/N vào đơn xuất hàng
+                                    Serinumbers::whereIn('id', $export_seris)
+                                        ->where('license_id', Auth::user()->license_id)
+                                        ->update(['export_seri' => $export->id, 'seri_status' => 2]);
+                                }
                             }
                             //tạo đơn khi đã click nút thêm
                             if ($request->checkguest == 2 && $clickValue == 1) {
@@ -1440,10 +1452,12 @@ class ExportController extends Controller
                                     $product->product_trade += $productQty;
                                     $product->save();
                                 }
-                                // Thêm S/N vào đơn xuất hàng
-                                Serinumbers::whereIn('id', $export_seris)
-                                    ->where('license_id', Auth::user()->license_id)
-                                    ->update(['export_seri' => $export->id, 'seri_status' => 2]);
+                                if ($export_seris !== null) {
+                                    // Thêm S/N vào đơn xuất hàng
+                                    Serinumbers::whereIn('id', $export_seris)
+                                        ->where('license_id', Auth::user()->license_id)
+                                        ->update(['export_seri' => $export->id, 'seri_status' => 2]);
+                                }
                             }
                             //tạo đơn khi đã click nút cập nhật
                             if ($updateClick == 1 && $request->checkguest == 1) {
@@ -1486,10 +1500,12 @@ class ExportController extends Controller
                                     $product->product_trade += $productQty;
                                     $product->save();
                                 }
-                                // Thêm S/N vào đơn xuất hàng
-                                Serinumbers::whereIn('id', $export_seris)
-                                    ->where('license_id', Auth::user()->license_id)
-                                    ->update(['export_seri' => $export->id, 'seri_status' => 2]);
+                                if ($export_seris !== null) {
+                                    // Thêm S/N vào đơn xuất hàng
+                                    Serinumbers::whereIn('id', $export_seris)
+                                        ->where('license_id', Auth::user()->license_id)
+                                        ->update(['export_seri' => $export->id, 'seri_status' => 2]);
+                                }
                             }
                             return redirect()->route('exports.index')->with('msg', 'Tạo đơn thành công!');
                         }
@@ -3072,7 +3088,6 @@ class ExportController extends Controller
                 ->whereIn('exports.id', $list)
                 ->where('exports.license_id', Auth::user()->license_id)
                 ->where('product.license_id', Auth::user()->license_id)
-                ->where('debts.license_id', Auth::user()->license_id)
                 ->where('product_exports.license_id', Auth::user()->license_id)
                 ->get();
 
@@ -3264,7 +3279,6 @@ class ExportController extends Controller
                 ->whereIn('exports.id', $list)
                 ->where('product.license_id', Auth::user()->license_id)
                 ->where('product_exports.license_id', Auth::user()->license_id)
-                ->where('debts.license_id', Auth::user()->license_id)
                 ->where('exports.license_id', Auth::user()->license_id)
                 ->orderBy('exports.id') // Sắp xếp theo export_id
                 ->get();

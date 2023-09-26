@@ -9,6 +9,7 @@ use App\Models\User;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class DebtController extends Controller
 {
@@ -93,7 +94,7 @@ class DebtController extends Controller
         //Trạng thái
         $status = [];
         if (!empty($request->status)) {
-            $statusValues = [0 => 'Quá hạn', 1 => 'Thanh toán đủ', 2 => 'Gần đến hạn', 3 => 'Công nợ', 4 => 'Chưa thanh toán',5=>'Đến hạn'];
+            $statusValues = [0 => 'Quá hạn', 1 => 'Thanh toán đủ', 2 => 'Gần đến hạn', 3 => 'Công nợ', 4 => 'Chưa thanh toán', 5 => 'Đến hạn'];
             $status = $request->input('status', []);
             $statusLabels = array_map(function ($value) use ($statusValues) {
                 return $statusValues[$value];
@@ -145,13 +146,13 @@ class DebtController extends Controller
         }
 
         $guests = Debt::leftjoin('guests', 'guests.id', '=', 'debts.guest_id')->select('guests.guest_name as guests')->get();
-        $perPage = $request->input('perPageinput',25); 
+        $perPage = $request->input('perPageinput', 25);
 
         $debtsSale = Debt::leftjoin('users', 'debts.user_id', '=', 'users.id')->get();
-        $debts = $this->debts->getAllDebts($filters,$perPage, $keywords, $nhanvien, $date, $guest, $datepaid, $status, $sortBy, $sortType);
+        $debts = $this->debts->getAllDebts($filters, $perPage, $keywords, $nhanvien, $date, $guest, $datepaid, $status, $sortBy, $sortType);
         $product = $this->debts->getAllProductsDebts();
         $debtsCreator = $this->debts->debtsCreator($perPage);
-        return view('tables.debt.debts', compact('title','perPage', 'debts', 'debtsSale', 'guests', 'product', 'string', 'sortType', 'debtsCreator'));
+        return view('tables.debt.debts', compact('title', 'perPage', 'debts', 'debtsSale', 'guests', 'product', 'string', 'sortType', 'debtsCreator'));
     }
 
     /**
@@ -304,7 +305,8 @@ class DebtController extends Controller
     }
     public function exportDebt()
     {
-        $data = Debt::select('id', 'export_id', 'guest_id', 'user_id', 'total_sales', 'total_import', 'debt_transport_fee', 'total_difference', 'debt', 'debt_status','debt_note')
+        $data = Debt::select('id', 'export_id', 'guest_id', 'user_id', 'total_sales', 'total_import', 'debt_transport_fee', 'total_difference', 'debt', 'debt_status', 'debt_note')
+            ->where('license_id', Auth::user()->license_id)
             ->with('getCode')
             ->with('getGuests')
             ->with('getUsers')
