@@ -871,11 +871,13 @@ function handlePaste(input) {
     }
 
     var parentTable = $(input).closest('table');
+    $(input).closest('.modal-dialog').find('.SNCount').text(SLTR);
     $(input).parent().parent().remove();
     var remainingRows = parentTable.find('tbody tr');
     remainingRows.each(function (index) {
         $(this).find('td').eq(1).text(index + 1);
     });
+   
 }
 
 function handlePaste1(input) {
@@ -935,6 +937,7 @@ function handlePaste1(input) {
         }
     }
     var parentTable = $(input).closest('table');
+    $(input).closest('.modal-dialog').find('.SNCount').text(SLTR);
     $(input).parent().parent().remove();
     var remainingRows = parentTable.find('tbody tr');
     remainingRows.each(function (index) {
@@ -1020,12 +1023,13 @@ function getInputName(input, olddata) {
 //     $(input).parent().parent().remove();
 // }
 
-// function checkTarget(modal) {
-//     $(modal).modal({
-//         backdrop: 'static',
-//         keyboard: false
-//     });
-// }
+function checkTarget(event) {
+    if (!$(event.target).closest('.bg-white').length) {
+       alert("Nothing")
+    }else{
+        alert('target')
+    }
+}
 
 
 // function checkTarget(event) {
@@ -1098,4 +1102,14 @@ function checkInputSN(id, countProduct) {
     return result;
 }
 
+
+function checkSNNull(){
+    var check = false;
+    $('.form-control.w-25').each(function(){
+        if($(this).val() == ''){
+            check = true;
+        }
+    })
+    return check;
+}
 

@@ -645,6 +645,11 @@
                             alert('Sản phẩm đã tồn tại');
                         }
 
+                        if(checkSNNull() == true){
+                            er = true;
+                            alert('Vui lòng nhập SN');
+                        }
+
                         // Kiểm tra có lỗi hay không
                         var hasErrors = checkRow() === false ||
                             checkDuplicateRows() === true || er === true;
