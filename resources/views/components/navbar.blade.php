@@ -641,7 +641,7 @@
         <div class="warning" style="position: absolute;top: 0px;">
             @if (Session::has('days_remaining'))
                 <div id="notification-license" class="alert alert-warning alert-dismissible fade show" role="alert"
-                    style="z-index: 999999; position: fixed;left:45%">
+                    style="z-index: 999999; position: fixed;left:42%">
                     <div class="icon d-none">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
