@@ -168,7 +168,6 @@ class UsersController extends Controller
         $perPage = $request->input('perPageinput', 25);
 
         $usersList = $this->users->managerUsers($filters, $perPage, $name, $phonenumber, $email, $status, $roles, $keywords, $sortBy, $sortType);
-        $title = 'Nhân viên';
 
         $licenses = new License();
         $licenses = $licenses->getAllLicense();

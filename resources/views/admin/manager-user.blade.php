@@ -6,7 +6,7 @@
         <div class="container-fluided">
             <div class="row mb-1 m-0">
                 <a href="{{ route('admin.add') }}">
-                    <button type="button" class="custom-btn btn btn-primary d-flex align-items-center">
+                    {{-- <button type="button" class="custom-btn btn btn-primary d-flex align-items-center">
                         <svg class="mr-1" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" clip-rule="evenodd"
@@ -17,7 +17,7 @@
                                 fill="#ffff" />
                         </svg>
                         <span>Thêm người dùng</span>
-                    </button>
+                    </button> --}}
                 </a>
             </div>
             <div class="row m-auto filter pt-2">
@@ -25,7 +25,7 @@
                     <div class="row">
                         <div class="col-md-5">
                             <input type="text" name="keywords" class="form-control searchkeyword"
-                                value="{{ request()->keywords }}" placeholder="Tìm kiếm nhân viên">
+                                value="{{ request()->keywords }}" placeholder="Tìm kiếm người dùng">
                             <span id="search-icon" class="search-icon"><i class="fas fa-search"></i></span>
                         </div>
                         <div class="col-2 d-none">
