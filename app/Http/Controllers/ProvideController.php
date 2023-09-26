@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Provides;
 use App\Models\Orders;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProvideController extends Controller
 {
@@ -81,13 +82,13 @@ class ProvideController extends Controller
 
 
         $keywords = null;
-        $perPage = $request->input('perPageinput',25); 
+        $perPage = $request->input('perPageinput', 25);
         if (!empty($request->keywords)) {
             $keywords = $request->keywords;
         }
-        $provides = $this->provides->getAllProvides($filters, $perPage,$name, $represent, $phonenumber, $email, $status, $keywords, $sortByArr);
+        $provides = $this->provides->getAllProvides($filters, $perPage, $name, $represent, $phonenumber, $email, $status, $keywords, $sortByArr);
         $title = 'Nhà cung cấp';
-        return view('tables.provide.provides', compact('provides', 'perPage','sortType', 'string', 'title'));
+        return view('tables.provide.provides', compact('provides', 'perPage', 'sortType', 'string', 'title'));
     }
 
     /**
@@ -125,7 +126,8 @@ class ProvideController extends Controller
                 'provide_address' => $request->provide_address,
                 'provide_code' => $request->provide_code,
                 'provide_status' => $request->provide_status,
-                'debt' => $request->debt == null ? 0 : $request->debt
+                'debt' => $request->debt == null ? 0 : $request->debt,
+                'license_id' => Auth::user()->license_id,
             ]);
             return redirect()->route('provides.index')->with('msg', 'Thêm nhà cung cấp thành công!');
         }

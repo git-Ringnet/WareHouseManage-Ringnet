@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
@@ -33,6 +34,7 @@ class User extends Authenticatable
         'password',
         'roleid',
         'status',
+        'license_id'
     ];
 
 
@@ -67,7 +69,7 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
-    public function getAllUsers($filter = [],$perPage, $name = null, $phonenumber = null, $email = null, $status = [], $roles = [], $keywords = null, $orderBy = null, $orderType = null)
+    public function getAllUsers($filter = [], $perPage, $name = null, $phonenumber = null, $email = null, $status = [], $roles = [], $keywords = null, $orderBy = null, $orderType = null)
     {
         // $users = DB::select('SELECT * FROM users');
         $users = DB::table($this->table)
@@ -75,7 +77,9 @@ class User extends Authenticatable
             ->join('roles', 'users.roleid', '=', 'roles.id');
 
         // Các điều kiện tìm kiếm và lọc dữ liệu ở đây
-
+        if (Auth::user()->roleid != 0) {
+            $users = $users->where('users.license_id', Auth::user()->license_id);
+        }
         if (!empty($filter)) {
             $users = $users->where($filter);
         }
@@ -117,6 +121,64 @@ class User extends Authenticatable
         $users = $users->paginate($perPage);
         return $users;
     }
+
+    public function managerUsers($filter = [], $perPage, $name = null, $phonenumber = null, $email = null, $status = [], $roles = [], $keywords = null, $orderBy = null, $orderType = null)
+    {
+        // $users = DB::select('SELECT * FROM users');
+        $users = DB::table($this->table)
+            ->select(
+                'users.*',
+                'roles.name as role_name',
+                'licenses.license_name as namelicense',
+                'manager_license.user_id as userlc',
+                'manager_license.updated_at as ngayhoatdong',
+                'manager_license.date_end as date_end',
+                'manager_license.date_start as date_start'
+            )
+            ->join('roles', 'users.roleid', '=', 'roles.id')
+            ->leftJoin('manager_license', 'manager_license.user_id', '=', 'users.id')
+            ->leftJoin('licenses', 'manager_license.license_id', '=', 'licenses.id')
+            ->where('users.roleid', 1);
+
+        if (!empty($filter)) {
+            $users = $users->where($filter);
+        }
+
+        if (!empty($name)) {
+            $users = $users->where('users.name', 'like', '%' . $name . '%');
+        }
+
+        if (!empty($phonenumber)) {
+            $users = $users->where('users.phonenumber', 'like', '%' . $phonenumber . '%');
+        }
+
+        if (!empty($email)) {
+            $users = $users->where('users.email', 'like', '%' . $email . '%');
+        }
+
+        if (!empty($status)) {
+            $users = $users->whereIn('users.status', $status);
+        }
+
+        if (!empty($roles)) {
+            $users = $users->whereIn('users.roleid', $roles);
+        }
+
+        if (!empty($keywords)) {
+            $users = $users->where(function ($query) use ($keywords) {
+                $query->orWhere('users.name', 'like', '%' . $keywords . '%');
+                $query->orWhere('users.email', 'like', '%' . $keywords . '%');
+            });
+        }
+
+        if (!empty($orderBy) && !empty($orderType)) {
+            $users = $users->orderBy($orderBy, $orderType);
+        }
+
+        $users = $users->distinct()->paginate($perPage);
+        // dd($users);
+        return $users;
+    }
     public function addUser($data)
     {
         return DB::table($this->table)->insert($data);
@@ -137,5 +199,4 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Roles::class, 'user_role', 'user_id', 'role_id');
     }
-
 }

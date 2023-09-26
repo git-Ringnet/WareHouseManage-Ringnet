@@ -13,14 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('user_role', function (Blueprint $table) {
+        Schema::create('manager_license', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('role_id'); // Sử dụng unsignedBigInteger ở đây
+            $table->unsignedBigInteger('license_id');
+            $table->dateTime('date_start')->nullable();
+            $table->dateTime('date_end')->nullable();
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
+            // Sửa ràng buộc khóa ngoại
+            $table->foreign('license_id')->references('id')->on('licenses')->onDelete('cascade');
         });
     }
 
@@ -31,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_role');
+        Schema::dropIfExists('manager_license');
     }
 };

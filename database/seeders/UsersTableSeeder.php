@@ -18,32 +18,41 @@ class UsersTableSeeder extends Seeder
     {
         DB::table('users')->insert([
             [
-                'name' => 'Admin',
-                'email' => 'admin@ringnet.com',
+                'name' => 'SuperAdmin',
+                'email' => 'spadmin@ringnet.vn',
                 'password' => bcrypt('Ringnet@123'),
-                'roleid' => 1,
-                'status' =>1,
+                'roleid' => 0,
+                'status' => 1,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            [
-                'name' => 'Manager',
-                'email' => 'manager@ringnet.vn',
-                'password' => bcrypt('Ringnet@123'),
-                'roleid' => 2,
-                'status' =>1,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'Sale',
-                'email' => 'sale@ringnet.vn',
-                'password' => bcrypt('Ringnet@123'),
-                'roleid' => 3,
-                'status' =>1,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
+            // [
+            //     'name' => 'Admin',
+            //     'email' => 'admin@ringnet.vn',
+            //     'password' => bcrypt('Ringnet@123'),
+            //     'roleid' => 1,
+            //     'status' => 1,
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
+            // [
+            //     'name' => 'Manager',
+            //     'email' => 'manager@ringnet.vn',
+            //     'password' => bcrypt('Ringnet@123'),
+            //     'roleid' => 2,
+            //     'status' => 1,
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
+            // [
+            //     'name' => 'Sale',
+            //     'email' => 'sale@ringnet.vn',
+            //     'password' => bcrypt('Ringnet@123'),
+            //     'roleid' => 3,
+            //     'status' => 1,
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
         ]);
     }
 }

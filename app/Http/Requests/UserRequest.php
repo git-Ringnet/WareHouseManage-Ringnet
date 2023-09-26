@@ -25,23 +25,23 @@ class UserRequest extends FormRequest
     public function rules()
     {
         $uniqueEmail = 'unique:users';
-        $required='required|min:8';
+        $required = 'required|min:8';
         if (session('id')) {
             $id = session('id');
             $uniqueEmail = Rule::unique('users', 'email')->ignore($id);
-            $required='nullable|min:8';
+            $required = 'nullable|min:8';
         }
         return [
             'name' => 'required|max:255',
             'email' => 'required|email|' . $uniqueEmail . '|max:255',
             'password' => $required,
-            'confirm_password' => $required.'|same:password', 
+            'confirm_password' => $required . '|same:password',
             'role' => ['required', 'integer', function ($attribute, $value, $fail) {
                 if ($value == 0) {
                     $fail('Bắt buộc phải chọn chức vụ');
                 }
             }],
-            'phonenumber' => ['nullable','numeric', 'digits_between:1,11']
+            'phonenumber' => ['nullable', 'numeric', 'digits_between:1,11']
         ];
     }
 

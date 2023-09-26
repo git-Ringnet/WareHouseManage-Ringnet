@@ -23,10 +23,11 @@ class Guests extends Model
         'guest_email_personal',
         'guest_note',
         'user_id',
-        'debt'
+        'debt',
+        'license_id'
     ];
     protected $table = 'guests';
-    public function getAllGuests($filter = [],$perPage,$users_name=[],$name = null,$represent = null,$phonenumber = null,$email = null, $status = [], $keywords = null, $sortByArr = null)
+    public function getAllGuests($filter = [], $perPage, $users_name = [], $name = null, $represent = null, $phonenumber = null, $email = null, $status = [], $keywords = null, $sortByArr = null)
     {
         $guests = DB::table($this->table)
             ->leftJoin('users', 'guests.user_id', '=', 'users.id')
@@ -42,7 +43,9 @@ class Guests extends Model
             }
         }
         $guests = $guests->orderBy($orderBy, $orderType);
-
+        if (Auth::user()->roleid != 0) {
+            $guests = $guests->where('guests.license_id', Auth::user()->license_id);
+        }
         if (!empty($filter)) {
             $guests = $guests->where($filter);
         }

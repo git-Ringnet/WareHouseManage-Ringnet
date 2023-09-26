@@ -14,13 +14,12 @@ class Roles extends Model
     public function getAll()
     {
         $roles = DB::table($this->table)
-        ->orderBy('name', 'DESC')
-        ->get();
+            ->orderBy('name', 'DESC')
+            ->get();
         return $roles;
     }
     public function users()
-{
-    return $this->belongsToMany(User::class, 'user_role', 'role_id', 'user_id');
-}
-
+    {
+        return $this->belongsToMany(User::class, 'user_role', 'role_id', 'user_id');
+    }
 }

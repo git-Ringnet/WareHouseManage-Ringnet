@@ -1158,6 +1158,7 @@ class AddProductController extends Controller
                 'debt' => $data['provide_debt'],
                 'license_id' => Auth::user()->license_id,
             ];
+            // dd($data);
             $add_newProvide = $this->provides->addProvides($data);
             session()->flash('msg', 'Thêm mới nhà cung cấp thành công!');
             return response()->json(['success' => true, 'msg' => 'Thêm mới nhà cung cấp thành công !', 'data' => $add_newProvide]);

@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Models\Products;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
@@ -220,7 +221,11 @@ class DashboardController extends Controller
             ];
         }
 
-        return view('index', compact('title', 'orders', 'ordersAll', 'exportAll', 'inventAll', 'debts', 'profitAll', 'getMinDateOrders'));
+        if (Auth::user()->roleid == 0) {
+            return redirect()->route('admin.manageruser');
+        } else {
+            return view('index', compact('title', 'orders', 'ordersAll', 'exportAll', 'inventAll', 'debts', 'profitAll', 'getMinDateOrders'));
+        }
     }
 
     // Nhập hàng
@@ -812,16 +817,14 @@ class DashboardController extends Controller
                         ->selectRaw('SUM(total_import)');
                 },  'countDebtImport')->first();
             }
-            if($count)
-            {
+            if ($count) {
                 return [
                     'debt_import' => $countDebtImport->countDebtImport,
                     'debt_export' => $count->count,
                     'start_date' => $lastMonth->startOfMonth()->subMonths(2)->format('d-m-Y'),
                     'end_date' => $lastMonth->endOfMonth()->addMonths(2)->format('d-m-Y')
                 ];
-            }
-            else{
+            } else {
                 return [
                     'debt_import' => $countDebtImport->countDebtImport,
                     'debt_export' => 0,
@@ -844,13 +847,12 @@ class DashboardController extends Controller
             },  'countDebtImport')->first();
             array_push($data1, $count);
             array_push($data1, $countDebtImport);
-            if($count){
+            if ($count) {
                 return [
                     'debt_import' => $countDebtImport->countDebtImport,
                     'debt_export' => $count->count,
                 ];
-            }
-            else{
+            } else {
                 return [
                     'debt_import' => $countDebtImport->countDebtImport,
                     'debt_export' => 0,

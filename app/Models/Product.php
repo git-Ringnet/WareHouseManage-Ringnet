@@ -4,22 +4,23 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class Product extends Model
 {
     use HasFactory;
     protected $table = 'product';
-    
+
     protected $fillable = [
-        'product_name','product_unit','product_qty','product_price','product_tax','product_total','provide_id','product_trade','product_trademark','product_code','created_at'
-     ];
-    public function getAllProduct($filters = [],$perPage, $status = [], $products_name = null, $providearr, $unitarr,$taxarr, $keywords = null, $sortByArr = null)
+        'product_name', 'product_unit', 'product_qty', 'product_price', 'product_tax', 'product_total', 'provide_id', 'product_trade', 'product_trademark', 'product_code', 'created_at'
+    ];
+    public function getAllProduct($filters = [], $perPage, $status = [], $products_name = null, $providearr, $unitarr, $taxarr, $keywords = null, $sortByArr = null)
     {
         //lấy tất cả products
         $products = DB::table($this->table)
             ->leftJoin('provides', 'provides.id', '=', 'product.provide_id')
-            ->select('product.*','provides.provide_name as provide','product.product_qty as soluong');
+            ->select('product.*', 'provides.provide_name as provide', 'product.product_qty as soluong');
         $orderBy = 'created_at';
         $orderType = 'desc';
         if (!empty($sortByArr) && is_array($sortByArr)) {
@@ -28,7 +29,7 @@ class Product extends Model
                 $orderType = trim($sortByArr['sortType']);
             }
         }
-
+        // dd(Auth::user()->roleid);
         if (!empty($status)) {
             $products = $products->where(function ($query) use ($status) {
                 if (in_array("0", $status)) {
@@ -74,28 +75,32 @@ class Product extends Model
                 $query->orWhere('provides.provide_name', 'like', '%' . $keywords . '%');
             });
         }
-        $products = $products->where('product.product_qty','>',0);
+        $products = $products->where('product.product_qty', '>', 0);
         $products = $products->orderBy('product.created_at', 'asc')->paginate($perPage);
 
         return $products;
     }
     public function getNameProvide()
     {
-        return $this->hasOne(Provides::class,'id','provide_id');
+        return $this->hasOne(Provides::class, 'id', 'provide_id');
     }
-    public function addProduct($data){
+    public function addProduct($data)
+    {
         return DB::table($this->table)->insertGetId($data);
     }
-    public function allProducts(){
+    public function allProducts()
+    {
         $products = DB::table($this->table)->get();
         return $products;
     }
-    public function productsStock(){
+    public function productsStock()
+    {
         $products = DB::table($this->table);
         $products = $products->where('product_qty', '>', 5)->get();
         return $products;
     }
-    public function productsEnd(){
+    public function productsEnd()
+    {
         $products = DB::table($this->table);
         $products = $products->where(function ($query) {
             $query->orWhere('product_qty', '=', null);
@@ -104,11 +109,13 @@ class Product extends Model
         $products = $products->get();
         return $products;
     }
-    public function sumTotalInventory(){
+    public function sumTotalInventory()
+    {
         $totalSum = DB::table($this->table)->sum('product_price');
         return $totalSum;
     }
-    public function productsNearEnd(){
+    public function productsNearEnd()
+    {
         $products = DB::table($this->table);
         $products = $products->whereBetween('product_qty', [1, 5])->get();
         return $products;

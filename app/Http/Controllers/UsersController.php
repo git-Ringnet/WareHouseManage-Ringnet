@@ -8,6 +8,8 @@ use App\Models\Roles;
 use \Illuminate\Support\Facades\DB;
 use App\Http\Requests\UserRequest;
 use App\Models\Exports;
+use App\Models\License;
+use App\Models\ManagerLicense;
 use App\Models\Orders;
 use Illuminate\Support\Facades\Auth;
 
@@ -89,18 +91,97 @@ class UsersController extends Controller
         } else {
             $sortType = 'desc';
         }
-        $perPage = $request->input('perPageinput',25); 
-        $usersList = $this->users->getAllUsers($filters,$perPage, $name, $phonenumber, $email, $status, $roles, $keywords, $sortBy, $sortType);
+        $perPage = $request->input('perPageinput', 25);
+        $usersList = $this->users->getAllUsers($filters, $perPage, $name, $phonenumber, $email, $status, $roles, $keywords, $sortBy, $sortType);
         $title = 'Nhân viên';
-        return view('admin.userslist', compact('title','perPage', 'usersList', 'sortType', 'allRoles', 'string', 'title'));
+        return view('admin.userslist', compact('title', 'perPage', 'usersList', 'sortType', 'allRoles', 'string', 'title'));
+    }
+    public function show1(Request $request)
+    {
+        $title = "Danh sách người dùng";
+        $allRoles = new Roles;
+        $allRoles = $allRoles->getAll();
+
+        $filters = [];
+        $status = [];
+        $roles = [];
+        $string = array();
+        $class = '';
+        $name = '';
+        if (!empty($request->name)) {
+            $name = $request->name;
+            $nameArr = explode(',.@', $name);
+            array_push($string, ['label' => 'Tên người dùng:', 'values' => $nameArr, 'class' => 'name']);
+        }
+        $phonenumber = '';
+        if (!empty($request->phonenumber)) {
+            $phonenumber = $request->phonenumber;
+            $nameArr = explode(',.@', $phonenumber);
+            array_push($string, ['label' => 'Số điện thoại:', 'values' => $nameArr, 'class' => 'phonenumber']);
+        }
+        $email = '';
+        if (!empty($request->email)) {
+            $email = $request->email;
+            $nameArr = explode(',.@', $email);
+            array_push($string, ['label' => 'Email:', 'values' => $nameArr, 'class' => 'email']);
+        }
+
+        if (!empty($request->status)) {
+            $statusValues = [1 => 'Active', 0 => 'Disable'];
+            $status = $request->input('status', []);
+            $statusLabels = array_map(function ($value) use ($statusValues) {
+                return $statusValues[$value];
+            }, $status);
+            array_push($string, ['label' => 'Trạng thái:', 'values' => $statusLabels, 'class' => 'status']);
+        }
+
+        if (!empty($request->roles)) {
+            $roles = $request->input('roles', []);
+            if (!empty($roles)) {
+                $selectedRoles = Roles::whereIn('id', $roles)->get();
+                $selectedRoleNames = $selectedRoles->pluck('name')->toArray();
+            }
+            array_push($string, ['label' => 'Vai trò:', 'values' => $selectedRoleNames, 'class' => 'roles']);
+        }
+
+        $keywords = null;
+
+        if (!empty($request->keywords)) {
+            $keywords = $request->keywords;
+        }
+        //Xử lí sắp xếp 
+        $sortType = $request->input('sort-type');
+
+        $sortBy = $request->input('sort-by');
+
+        $allowSort = ['asc', 'desc'];
+
+        if (!empty($sortType) && in_array($sortType, $allowSort)) {
+            if ($sortType == 'desc') {
+                $sortType = 'asc';
+            } else {
+                $sortType = 'desc';
+            }
+        } else {
+            $sortType = 'desc';
+        }
+        $perPage = $request->input('perPageinput', 25);
+
+        $usersList = $this->users->managerUsers($filters, $perPage, $name, $phonenumber, $email, $status, $roles, $keywords, $sortBy, $sortType);
+        $title = 'Nhân viên';
+
+        $licenses = new License();
+        $licenses = $licenses->getAllLicense();
+        return view('admin.manager-user', compact('title', 'perPage', 'usersList', 'sortType', 'allRoles', 'string', 'title', 'licenses'));
     }
 
 
     public function add()
     {
         $roles = new Roles;
+        $roles = Roles::whereNotIn('id', [0, 1])->get();
         $title = 'Thêm nhân viên';
-        return view('admin/adduser', compact('title'))->with('roles', $roles->getAll());
+        return view('admin/adduser', compact('title', 'roles'));
     }
     public function addUser(UserRequest $request)
     {
@@ -126,16 +207,17 @@ class UsersController extends Controller
         // $userDetail = $userDetail[0];
         $userDetail = User::find($id);
         $roles = new Roles;
+        $roles = Roles::whereNotIn('id', [0, 1])->get();
         // dd($id);
         $title = 'Chỉnh sửa nhân viên';
-        return view('admin/edituser', ['useredit' => $user], compact('userDetail', 'title'))->with('roles', $roles->getAll());
+        return view('admin/edituser', ['useredit' => $user], compact('userDetail', 'title', 'roles'));
     }
     public function editUser(UserRequest $request)
     {
         $id = session('id');
         // dd($request);
         $password = bcrypt($request->password);
-        if(!empty($request->password)){
+        if (!empty($request->password)) {
             $data = [
                 'name' => $request->name,
                 'email' => $request->email,
@@ -144,7 +226,7 @@ class UsersController extends Controller
                 'phonenumber' => $request->phonenumber,
                 'status' => $request->status,
             ];
-        }else{
+        } else {
             $data = [
                 'name' => $request->name,
                 'email' => $request->email,
@@ -153,7 +235,7 @@ class UsersController extends Controller
                 'status' => $request->status,
             ];
         }
-        
+
         // dd($id);
         $this->users->updateUser($data, $id);
         session()->forget('id');
@@ -185,8 +267,7 @@ class UsersController extends Controller
                 User::whereIn('id', $list)->delete();
                 session()->flash('msg', 'Xóa nhân viên thành công');
                 return response()->json(['success' => true, 'msg' => 'Xóa người dùng thành công', 'ids' => $list]);
-            }
-            else{
+            } else {
                 session()->flash('warning', 'Xóa nhân viên thất bại, nhân viên còn đơn hàng');
                 return response()->json(['success' => false, 'msg' => 'Xóa người dùng thất bại']);
             }

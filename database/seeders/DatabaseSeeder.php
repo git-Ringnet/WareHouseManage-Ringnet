@@ -28,17 +28,18 @@ class DatabaseSeeder extends Seeder
             // GuestsSeeder::class,
             // // ProductSeeder::class,
             // // productsSeeder::class,
-            ProvidesSeeder::class,
+            // ProvidesSeeder::class,
             // // // SerinumbersSeeder::class,
             UsersTableSeeder::class,
             RolesTableSeeder::class,
+            LicenseSeeder::class,
+            ManagerLicenseSeeder::class,
             // DebtSeeder::class,
             // OrdersSeeder::class,
             // ProductOrderSeeder::class,
-			// ExportSeeder::class,
+            // ExportSeeder::class,
             // productExportSeeder::class,
             // HistorySeeder::class
         ]);
-        
     }
 }
