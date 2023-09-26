@@ -24,6 +24,7 @@ class UsersTableSeeder extends Seeder
                 'roleid' => 0,
                 'status' => 1,
                 'created_at' => now(),
+                'email_verified_at' => now(),
                 'updated_at' => now(),
             ],
             // [
