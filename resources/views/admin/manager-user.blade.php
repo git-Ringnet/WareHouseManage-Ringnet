@@ -520,8 +520,8 @@ $index = array_search($item['label'], $numberedLabels);
                                                     
                                                 echo $daysDifference . ' ngày'; @endphp
                                             </td>
-                                            <td class="text-center">
-                                                {{ date_format(new DateTime($value->ngayhoatdong), 'd-m-Y') }}
+                                            <td class="text-center">{{ $value->ngayhoatdong }}
+                                                {{-- {{ date_format(new DateTime($value->ngayhoatdong), 'd-m-Y') }} --}}
                                             </td>
                                             <td class="editEx">
 
