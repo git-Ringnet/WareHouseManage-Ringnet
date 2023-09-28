@@ -2,11 +2,14 @@
 
 namespace App\Console;
 
+use App\Console\Commands\StatusUser;
 use App\Models\Debt;
 use App\Models\DebtImport;
 use App\Models\History;
+use App\Models\User;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\DB;
 
 class Kernel extends ConsoleKernel
 {
@@ -75,6 +78,15 @@ class Kernel extends ConsoleKernel
             History::where('debt_export_end', '0000-00-00 00:00:00')->update(['debt_export_end' => null]);
             Debt::where('date_end', '0000-00-00 00:00:00')->update(['date_end' => null]);
         })->everyThreeHours();
+        $schedule->call(function () {
+            //Scheduler chạy update status user license
+            $now = now();
+            $disableUser = DB::table('manager_license')->where('date_end', '<', $now)->get();
+            foreach ($disableUser as $user) {
+                User::where('id', $user->user_id)->update(['status' => 0]);
+            }
+        })->daily();
+        // $schedule->command(StatusUser::class)->everyMinute();
     }
 
     /**

@@ -35,7 +35,10 @@
                                         <div id="all-orders">
                                             <div class="d-flex flex-column all-orders">
                                                 <div class="ca d-flex">
-                                                    <div id="it0">{{ $ordersAll['start_date'] }}</div>->
+                                                    <div id="it0">{{ $ordersAll['start_date'] }}</div>
+                                                    @if ($ordersAll['start_date'])
+                                                        ->
+                                                    @endif
                                                     <div id="id0">{{ $ordersAll['end_date'] }}</div>
                                                 </div>
                                                 <div class="ca text-left">Tất cả</div>
@@ -84,19 +87,21 @@
                                         </div>
 
                                     </button>
-                                    <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item dropdown-item-orders" id="btn-all-orders" href="#"
-                                            data-value="0">Tất cả</a>
-                                        <a class="dropdown-item dropdown-item-orders" id="btn-this-month-orders"
-                                            href="#" data-value="1">Tháng này</a>
-                                        <a class="dropdown-item dropdown-item-orders" id="btn-last-month-orders"
-                                            href="#" data-value="2">Tháng trước</a>
-                                        <a class="dropdown-item dropdown-item-orders" id="btn-3last-month-orders"
-                                            href="#" data-value="3">3 tháng trước</a>
-                                        <a class="dropdown-item dropdown-item-orders" id="btn-time-orders"
-                                            href="#">Khoảng thời
-                                            gian</a>
-                                    </div>
+                                    @if ($ordersAll['start_date'])
+                                        <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
+                                            <a class="dropdown-item dropdown-item-orders" id="btn-all-orders"
+                                                href="#" data-value="0">Tất cả</a>
+                                            <a class="dropdown-item dropdown-item-orders" id="btn-this-month-orders"
+                                                href="#" data-value="1">Tháng này</a>
+                                            <a class="dropdown-item dropdown-item-orders" id="btn-last-month-orders"
+                                                href="#" data-value="2">Tháng trước</a>
+                                            <a class="dropdown-item dropdown-item-orders" id="btn-3last-month-orders"
+                                                href="#" data-value="3">3 tháng trước</a>
+                                            <a class="dropdown-item dropdown-item-orders" id="btn-time-orders"
+                                                href="#">Khoảng thời
+                                                gian</a>
+                                        </div>
+                                    @endif
                                 </div>
                                 {{-- Chọn khoảng --}}
                                 <div class="block-optionss" id="times-orders-options" style="display:none">
@@ -221,7 +226,10 @@
                                         <div id="all-exports">
                                             <div class="d-flex flex-column all-exports">
                                                 <div class="ca d-flex">
-                                                    <div id="et0">{{ $exportAll['start_date'] }}</div>->
+                                                    <div id="et0">{{ $exportAll['start_date'] }}</div>
+                                                    @if ($exportAll['start_date'])
+                                                        ->
+                                                    @endif
                                                     <div id="ed0">{{ $exportAll['end_date'] }}</div>
                                                 </div>
                                                 <div class="ca text-left">Tất cả</div>
@@ -270,19 +278,21 @@
                                         </div>
 
                                     </button>
-                                    <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item dropdown-item-export " id="btn-all-exports"
-                                            href="#" data-value="0">Tất cả</a>
-                                        <a class="dropdown-item dropdown-item-export" id="btn-this-month-exports"
-                                            href="#" data-value="1">Tháng này</a>
-                                        <a class="dropdown-item dropdown-item-export" id="btn-last-month-exports"
-                                            href="#" data-value="2">Tháng trước</a>
-                                        <a class="dropdown-item dropdown-item-export" id="btn-3last-month-exports"
-                                            href="#" data-value="3">3 tháng trước</a>
-                                        <a class="dropdown-item dropdown-item-export" id="btn-time-exports"
-                                            href="#">Khoảng thời
-                                            gian</a>
-                                    </div>
+                                    @if ($exportAll['start_date'])
+                                        <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
+                                            <a class="dropdown-item dropdown-item-export " id="btn-all-exports"
+                                                href="#" data-value="0">Tất cả</a>
+                                            <a class="dropdown-item dropdown-item-export" id="btn-this-month-exports"
+                                                href="#" data-value="1">Tháng này</a>
+                                            <a class="dropdown-item dropdown-item-export" id="btn-last-month-exports"
+                                                href="#" data-value="2">Tháng trước</a>
+                                            <a class="dropdown-item dropdown-item-export" id="btn-3last-month-exports"
+                                                href="#" data-value="3">3 tháng trước</a>
+                                            <a class="dropdown-item dropdown-item-export" id="btn-time-exports"
+                                                href="#">Khoảng thời
+                                                gian</a>
+                                        </div>
+                                    @endif
                                 </div>
                                 {{-- Chọn khoảng --}}
                                 <div class="block-optionss" id="times-exports-options" style="display:none">
@@ -412,7 +422,10 @@
                                         <div id="all-inventory">
                                             <div class="d-flex flex-column all-inventory">
                                                 <div class="ca d-flex">
-                                                    <div id="ivent0">{{ $inventAll['start_date'] }}</div>->
+                                                    <div id="ivent0">{{ $inventAll['start_date'] }}</div>
+                                                    @if ($inventAll['start_date'])
+                                                        ->
+                                                    @endif
                                                     <div id="ivend0">{{ $inventAll['end_date'] }}</div>
                                                 </div>
                                                 <div class="ca text-left">Tất cả</div>
@@ -461,20 +474,24 @@
                                         </div>
 
                                     </button>
-                                    <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item dropdown-item-inventory " id="btn-all-inventory"
-                                            href="#" data-value="0">Tất cả</a>
-                                        <a class="dropdown-item dropdown-item-inventory" id="btn-this-month-inventory"
-                                            href="#" data-value="1">Tháng này</a>
-                                        <a class="dropdown-item dropdown-item-inventory" id="btn-last-month-inventory"
-                                            href="#" data-value="2">Tháng trước</a>
-                                        <a class="dropdown-item dropdown-item-inventory"
-                                            id="btn-3last-month-inventory" href="#" data-value="3">3 tháng
-                                            trước</a>
-                                        <a class="dropdown-item dropdown-item-inventory" id="btn-time-inventory"
-                                            href="#">Khoảng thời
-                                            gian</a>
-                                    </div>
+                                    @if ($inventAll['start_date'])
+                                        <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
+                                            <a class="dropdown-item dropdown-item-inventory " id="btn-all-inventory"
+                                                href="#" data-value="0">Tất cả</a>
+                                            <a class="dropdown-item dropdown-item-inventory"
+                                                id="btn-this-month-inventory" href="#" data-value="1">Tháng
+                                                này</a>
+                                            <a class="dropdown-item dropdown-item-inventory"
+                                                id="btn-last-month-inventory" href="#" data-value="2">Tháng
+                                                trước</a>
+                                            <a class="dropdown-item dropdown-item-inventory"
+                                                id="btn-3last-month-inventory" href="#" data-value="3">3 tháng
+                                                trước</a>
+                                            <a class="dropdown-item dropdown-item-inventory" id="btn-time-inventory"
+                                                href="#">Khoảng thời
+                                                gian</a>
+                                        </div>
+                                    @endif
                                 </div>
                                 {{-- Chọn khoảng --}}
                                 <div class="block-optionss" id="times-inventory-options" style="display:none">
@@ -570,7 +587,10 @@
                                         <div id="all-debt">
                                             <div class="d-flex flex-column all-debt">
                                                 <div class="ca d-flex">
-                                                    <div id="debtt0">{{ $debts['start_date'] }}</div>->
+                                                    <div id="debtt0">{{ $debts['start_date'] }}</div>
+                                                    @if ($debts['start_date'])
+                                                        ->
+                                                    @endif
                                                     <div id="debtd0">{{ $debts['end_date'] }}</div>
                                                 </div>
                                                 <div class="ca text-left">Tất cả</div>
@@ -619,19 +639,21 @@
                                         </div>
 
                                     </button>
-                                    <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item dropdown-item-debt " id="btn-all-debt" href="#"
-                                            data-value="0">Tất cả</a>
-                                        <a class="dropdown-item dropdown-item-debt" id="btn-this-month-debt"
-                                            href="#" data-value="1">Tháng này</a>
-                                        <a class="dropdown-item dropdown-item-debt" id="btn-last-month-debt"
-                                            href="#" data-value="2">Tháng trước</a>
-                                        <a class="dropdown-item dropdown-item-debt" id="btn-3last-month-debt"
-                                            href="#" data-value="3">3 tháng trước</a>
-                                        <a class="dropdown-item dropdown-item-debt" id="btn-time-debt"
-                                            href="#">Khoảng thời
-                                            gian</a>
-                                    </div>
+                                    @if ($debts['start_date'])
+                                        <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
+                                            <a class="dropdown-item dropdown-item-debt " id="btn-all-debt"
+                                                href="#" data-value="0">Tất cả</a>
+                                            <a class="dropdown-item dropdown-item-debt" id="btn-this-month-debt"
+                                                href="#" data-value="1">Tháng này</a>
+                                            <a class="dropdown-item dropdown-item-debt" id="btn-last-month-debt"
+                                                href="#" data-value="2">Tháng trước</a>
+                                            <a class="dropdown-item dropdown-item-debt" id="btn-3last-month-debt"
+                                                href="#" data-value="3">3 tháng trước</a>
+                                            <a class="dropdown-item dropdown-item-debt" id="btn-time-debt"
+                                                href="#">Khoảng thời
+                                                gian</a>
+                                        </div>
+                                    @endif
                                 </div>
                                 {{-- Chọn khoảng --}}
                                 <div class="block-optionss" id="times-debt-options" style="display:none">
@@ -773,7 +795,10 @@
                                         <div id="all-profit">
                                             <div class="d-flex flex-column all-profit">
                                                 <div class="ca d-flex">
-                                                    <div id="prot0">{{ $profitAll['start_date'] }}</div>->
+                                                    <div id="prot0">{{ $profitAll['start_date'] }}</div>
+                                                    @if ($profitAll['start_date'])
+                                                        ->
+                                                    @endif
                                                     <div id="prod0">{{ $profitAll['end_date'] }}</div>
                                                 </div>
                                                 <div class="ca text-left">Tất cả</div>
@@ -822,19 +847,21 @@
                                         </div>
 
                                     </button>
-                                    <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item dropdown-item-profit " id="btn-all-profit"
-                                            href="#" data-value="0">Tất cả</a>
-                                        <a class="dropdown-item dropdown-item-profit" id="btn-this-month-profit"
-                                            href="#" data-value="1">Tháng này</a>
-                                        <a class="dropdown-item dropdown-item-profit" id="btn-last-month-profit"
-                                            href="#" data-value="2">Tháng trước</a>
-                                        <a class="dropdown-item dropdown-item-profit" id="btn-3last-month-profit"
-                                            href="#" data-value="3">3 tháng trước</a>
-                                        <a class="dropdown-item dropdown-item-profit" id="btn-time-profit"
-                                            href="#">Khoảng thời
-                                            gian</a>
-                                    </div>
+                                    @if ($profitAll['start_date'])
+                                        <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
+                                            <a class="dropdown-item dropdown-item-profit " id="btn-all-profit"
+                                                href="#" data-value="0">Tất cả</a>
+                                            <a class="dropdown-item dropdown-item-profit" id="btn-this-month-profit"
+                                                href="#" data-value="1">Tháng này</a>
+                                            <a class="dropdown-item dropdown-item-profit" id="btn-last-month-profit"
+                                                href="#" data-value="2">Tháng trước</a>
+                                            <a class="dropdown-item dropdown-item-profit" id="btn-3last-month-profit"
+                                                href="#" data-value="3">3 tháng trước</a>
+                                            <a class="dropdown-item dropdown-item-profit" id="btn-time-profit"
+                                                href="#">Khoảng thời
+                                                gian</a>
+                                        </div>
+                                    @endif
                                 </div>
                                 {{-- Chọn khoảng --}}
                                 <div class="block-optionss" id="times-profit-options" style="display:none">
@@ -1273,7 +1300,7 @@
                     $(stId).text(data.start_date)
                     $(edId).text(data.end_date)
                 }
-                
+
             }
         })
     })
@@ -1409,7 +1436,7 @@
                     $(stId).text(data.start_date)
                     $(edId).text(data.end_date)
                 }
-                
+
 
             }
         })
@@ -1437,7 +1464,7 @@
                 } else {
                     $('#debt_import').text(0);
                 }
-                
+
 
             }
         })

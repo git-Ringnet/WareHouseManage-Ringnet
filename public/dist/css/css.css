@@ -802,7 +802,7 @@ input[type="number"] {
     margin: 0;
 }
 
-#notification .icon {
+#notification .icon,#notification-license .icon {
     position: absolute;
     left: 5px;
     top: 10px;
@@ -814,7 +814,7 @@ input[type="number"] {
     opacity: 1;
 }
 
-#notification .message {
+#notification .message,#notification-license .message {
     font-weight: 600;
     color: #ffff;
     font-size: 16px;

@@ -2,18 +2,20 @@
 
 namespace App\Models;
 
+use Illuminate\Auth\Access\Gate;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class Provides extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'provide_name', 'provide_represent', 'provide_phone', 'provide_email', 'provide_status', 'provide_address', 'provide_code'
+        'provide_name', 'provide_represent', 'provide_phone', 'provide_email', 'provide_status', 'provide_address', 'provide_code', 'license_id'
     ];
     protected $table = 'provides';
-    public function getAllProvides($filter = [],$perPage, $name = null, $represent = null, $phonenumber = null, $email = null, $status = [], $keywords = null, $sortByArr = null)
+    public function getAllProvides($filter = [], $perPage, $name = null, $represent = null, $phonenumber = null, $email = null, $status = [], $keywords = null, $sortByArr = null)
     {
         $provides = DB::table($this->table)
             ->select('provides.*');
@@ -27,6 +29,9 @@ class Provides extends Model
             }
         }
         $provides = $provides->orderBy($orderBy, $orderType);
+        if (Auth::user()->roleid != 0) {
+            $provides = $provides->where('provides.license_id', Auth::user()->license_id);
+        }
 
         if (!empty($filter)) {
             $provides = $provides->where($filter);
@@ -74,12 +79,13 @@ class Provides extends Model
     {
         return DB::table($this->table)->where('id', $id)->update($data);
     }
-    public function checkProvidesCode($provide_code,$data){
+    public function checkProvidesCode($provide_code, $data)
+    {
         $data1 = DB::table($this->table)->where('provide_code', $provide_code)->first();
-        if($data1 === null){
+        if ($data1 === null) {
             $id = DB::table($this->table)->insertGetId($data);
             return $id;
-        }else{
+        } else {
             DB::table($this->table)->where('id', $data1->id)->update($data);
             return $id = $data1->id;
         }

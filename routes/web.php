@@ -10,6 +10,7 @@ use App\Http\Controllers\ExportController;
 use App\Http\Controllers\GuestsController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\InsertProductController;
+use App\Http\Controllers\LicenseController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductsController;
 use Illuminate\Support\Facades\Route;
@@ -28,7 +29,8 @@ use App\Models\DebtImport;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::prefix('admin')->name('admin.')->middleware('permission:admin')->group(function () {
+
+Route::prefix('admin')->name('admin.')->middleware('permission:admin,sitemanager,spadmin')->group(function () {
     Route::get('userlist', [UsersController::class, 'show'])->name('userslist');
     Route::get('adduser', [UsersController::class, 'add'])->name('add');
     Route::post('adduser', [UsersController::class, 'addUser'])->name('adduser');
@@ -39,18 +41,22 @@ Route::prefix('admin')->name('admin.')->middleware('permission:admin')->group(fu
     Route::get('/deleteListUser', [UsersController::class, 'deleteListUser'])->name('deleteListUser');
     Route::get('/activeStatusUser', [UsersController::class, 'activeStatusUser'])->name('activeStatusUser');
     Route::get('/disableStatusUser', [UsersController::class, 'disableStatusUser'])->name('disableStatusUser');
+    // SUPERADMIN
+    Route::get('manageruser', [UsersController::class, 'show1'])->name('manageruser')->middleware('permission:spadmin');
 });
 Route::get('addNoteFormSale', [UsersController::class, 'addNoteFormSale'])->name('addNoteFormSale');
+Route::get('updateLicense', [LicenseController::class, 'updateLicense'])->name('updateLicense');
+
 
 //nha cung cap
-Route::resource('provides', provideController::class)->middleware('permission:admin,manager');
+Route::resource('provides', provideController::class)->middleware('permission:admin,manager,spadmin,sitemanager');
 Route::get('/deleteListProvides', [provideController::class, 'deleteListProvides'])->name('deleteListProvides');
 Route::get('/activeStatusProvide', [provideController::class, 'activeStatusProvide'])->name('activeStatusProvide');
 Route::get('/disableStatusProvide', [provideController::class, 'disableStatusProvide'])->name('disableStatusProvide');
 Route::get('/update-status', [provideController::class, 'updateStatus'])->name('update');
 
 //khach hang
-Route::resource('guests', GuestsController::class)->middleware('permission:admin,sale');
+Route::resource('guests', GuestsController::class)->middleware('permission:spadmin,admin,sale,sitemanager');
 Route::get('/deleteListGuest', [GuestsController::class, 'deleteListGuest'])->name('deleteListGuest');
 Route::get('/activeStatusGuest', [GuestsController::class, 'activeStatusGuest'])->name('activeStatusGuest');
 Route::get('/disableStatusGuest', [GuestsController::class, 'disableStatusGuest'])->name('disableStatusGuest');
@@ -61,7 +67,7 @@ Route::get('/download/{file?}', [BackUpController::class, 'downloadBackup'])->na
 Route::delete('/deleteBackup/{file}', [BackupController::class, 'deleteBackup'])->name('deleteBackup');
 
 //xuat hang
-Route::resource('exports', ExportController::class)->middleware('permission:admin,sale');
+Route::resource('exports', ExportController::class)->middleware('permission:spadmin,admin,sale,sitemanager');
 Route::get('/searchExport', [ExportController::class, 'searchExport'])->name('searchExport');
 //cap nhat thong tin khach hang
 Route::get('/customers', [ExportController::class, 'updateCustomer'])->name('updateCustomer');
@@ -96,14 +102,14 @@ Route::get('/editEx/{id}', [ExportController::class, 'editEx'])->name('editEx');
 //Báo cáo
 Route::get('/indexExport', [ReportController::class, 'indexExport'])->name('indexExport');
 Route::get('/indexImport', [ReportController::class, 'indexImport'])->name('indexImport');
-Route::get('/timeImport',[ReportController::class, 'timeImport'])->name('timeImport');
-Route::get('/timeExport',[ReportController::class, 'timeExport'])->name('timeExport');
+Route::get('/timeImport', [ReportController::class, 'timeImport'])->name('timeImport');
+Route::get('/timeExport', [ReportController::class, 'timeExport'])->name('timeExport');
 
 
 
 // Export DATABASE
-Route::get('/export_database',[ReportController::class, 'exportDatabase'])->name('exportDatabase');
-Route::POST('/importDatabase',[ReportController::class, 'importDatabase'])->name('importDatabase');
+Route::get('/export_database', [ReportController::class, 'exportDatabase'])->name('exportDatabase');
+Route::POST('/importDatabase', [ReportController::class, 'importDatabase'])->name('importDatabase');
 
 
 //kiểm tra số lượng trong xuất hàng
@@ -127,13 +133,13 @@ Route::PUT('/updateProduct/{id}', [ProductsController::class, 'updateProduct'])-
 // EXPORT
 Route::get('/export_product', [ProductController::class, 'export'])->name('export');
 Route::get('/export_order', [AddProductController::class, 'export_order'])->name('export_order');
-Route::get('/export_import',[DebtImportController::class,'export_import'])->name('export_import');
-Route::get('/exportDebt',[DebtController::class, 'exportDebt'])->name('exportDebt');
-Route::get('/exportHistory',[HistoryController::class, 'exportHistory'])->name('exportHistory');
+Route::get('/export_import', [DebtImportController::class, 'export_import'])->name('export_import');
+Route::get('/exportDebt', [DebtController::class, 'exportDebt'])->name('exportDebt');
+Route::get('/exportHistory', [HistoryController::class, 'exportHistory'])->name('exportHistory');
 
 Route::get('/show_provide', [AddProductController::class, 'show_provide'])->name('show_provide');
 Route::get('/update_provide', [AddProductController::class, 'update_provide'])->name('update_provide');
-Route::resource('insertProduct', AddProductController::class)->middleware('permission:admin,manager');
+Route::resource('insertProduct', AddProductController::class)->middleware('permission:spadmin,admin,manager,sitemanager');
 Route::POST('/addBillEdit', [AddProductController::class, 'addBillEdit'])->name('addBillEdit');
 Route::POST('/updateBill', [AddProductController::class, 'updateBill'])->name('updateBill');
 Route::POST('/updateBillEdit', [AddProductController::class, 'updateBillEdit'])->name('updateBillEdit');
@@ -146,7 +152,7 @@ Route::get('/showProduct', [AddProductController::class, 'showProduct'])->name('
 Route::get('/add_newProvide', [AddProductController::class, 'add_newProvide'])->name('add_newProvide');
 
 // Xóa đơn đã hủy
-Route::get('/delBillCancel',[AddProductController::class,'delBillCancel'])->name('delBillCancel');
+Route::get('/delBillCancel', [AddProductController::class, 'delBillCancel'])->name('delBillCancel');
 
 // Kiểm tra serial number tồn tại chưa
 Route::get('/checkSN', [AddProductController::class, 'checkSN'])->name('checkSN');
@@ -164,11 +170,12 @@ Route::get('/simple', function () {
     return view('tables.simple');
 });
 Route::get('index', [DashboardController::class, 'index']);
-Route::get('/count',[DashboardController::class, 'count'])->name('count');
-Route::get('/countExport',[DashboardController::class, 'countExport'])->name('countExport');
-Route::get('/countInventory',[DashboardController::class, 'countInventory'])->name('countInventory');
-Route::get('/countDebt',[DashboardController::class, 'countDebt'])->name('countDebt');
-Route::get('/countProfit',[DashboardController::class, 'countProfit'])->name('countProfit');
+Route::get('/count', [DashboardController::class, 'count'])->name('count');
+Route::get('/countExport', [DashboardController::class, 'countExport'])->name('countExport');
+Route::get('/countInventory', [DashboardController::class, 'countInventory'])->name('countInventory');
+Route::get('/countDebt', [DashboardController::class, 'countDebt'])->name('countDebt');
+Route::get('/countProfit', [DashboardController::class, 'countProfit'])->name('countProfit');
+
 
 Route::middleware([
     'auth:sanctum',

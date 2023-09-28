@@ -130,7 +130,7 @@ class GuestsController extends Controller
             ->first();
 
         if ($existingCustomer) {
-            return redirect()->route('guests.index')->with('warning', 'Thêm thất bại,do thông tin khách hàng đã có trong hệ thống!');
+            return redirect()->route('guests.index')->with('warning', 'Thêm thất bại, do thông tin khách hàng đã có trong hệ thống!');
         } else {
             $guest = new Guests();
             $guest->guest_name = $request->guest_name;
@@ -144,6 +144,8 @@ class GuestsController extends Controller
             $guest->guest_email_personal = $request->guest_email_personal;
             $guest->guest_note = $request->guest_note;
             $guest->user_id =  $request->user_id;
+            $guest->user_id =  $request->user_id;
+            $guest->license_id = Auth::user()->license_id;
             if ($request->debt == null) {
                 $guest->debt = 0;
             } else {
