@@ -65,7 +65,7 @@ class Orders extends Model
             };
             $orders = $orders->orderBy($orderBy, $orderType);
         }
-
+        $order = $orders->where('orders.license_id', Auth::user()->license_id);
         $orders = $orders->orderBy('orders.id', 'desc')->paginate($perPage);
         return $orders;
     }
@@ -289,7 +289,8 @@ class Orders extends Model
                         'provide_id' => $order->provide_id,
                         'product_trademark' => $order->product_trademark,
                         'product_code' => $order->getOrderCode === null ? "" : $order->getOrderCode->product_code,
-                        'created_at' => $c->created_at
+                        'created_at' => $c->created_at,
+                        'license_id' => Auth::user()->license_id
                     ]);
                     $order->update(['product_id' => $product->id]);
                     Serinumbers::where('product_orderid', $order->id)->update([
@@ -339,7 +340,8 @@ class Orders extends Model
                     'date_start' => $c->created_at,
                     'date_end' => $endDateFormatted,
                     'debt_status' => $debt_status,
-                    'created_at' => $c->created_at
+                    'created_at' => $c->created_at,
+                    'license_id' => Auth::user()->license_id
                 ]);
             }
         }

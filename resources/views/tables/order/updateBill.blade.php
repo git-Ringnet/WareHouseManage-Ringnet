@@ -412,8 +412,8 @@
                                         <h5 class="modal-title" id="exampleModalLabel">Serial Number</h5>
                                         <p>Thông tin chi tiết về số S/N của mỗi sản phẩm </p>
                                     </div>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true" onclick="checkdata(event)">&times;</span>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="checkdata(event)">
+                                        <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
                                 <div class="modal-body">
@@ -643,6 +643,11 @@
                         // Kiểm tra trùng sản phẩm con
                         if (checkDuplicateRows()) {
                             alert('Sản phẩm đã tồn tại');
+                        }
+
+                        if(checkSNNull() == true){
+                            er = true;
+                            alert('Vui lòng nhập SN');
                         }
 
                         // Kiểm tra có lỗi hay không

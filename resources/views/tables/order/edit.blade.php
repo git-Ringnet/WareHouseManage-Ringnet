@@ -472,8 +472,8 @@
                                         <h5 class="modal-title" id="exampleModalLabel">Serial Number</h5>
                                         <p>Thông tin chi tiết về số S/N của mỗi sản phẩm </p>
                                     </div>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true" onclick="checkdata(event)">&times;</span>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="checkdata(event)">
+                                        <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
                                 <div class="modal-body">
@@ -973,6 +973,7 @@
         var id, SerialNumbers;
         this.classList.add('disabled');
         var countDown = 10;
+        var alertShow = false;
         var countdownInterval = setInterval(function() {
             countDown--;
             if (countDown <= 0) {
@@ -997,6 +998,7 @@
             if (checkInputSN(id, countProduct).check == true) {
                 alert(checkInputSN(id, countProduct).msg);
                 er = true;
+                alertShow = true;
                 return false;
             }
 
@@ -1037,7 +1039,7 @@
                     alert('Sản phẩm ' + result.msg + ' đã tồn tại serial ' + result.data);
                     return false;
                 } else {
-                    if (myFunction()) {
+                    if (!alertShow && myFunction()) {
                         if ($('#form_submit')[0].checkValidity()) {
 
                             if (checkRow() == false) {

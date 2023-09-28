@@ -9,6 +9,7 @@ use App\Models\User;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class DebtImportController extends Controller
 {
@@ -277,6 +278,7 @@ class DebtImportController extends Controller
             ->with('getProvide')
             ->with('getUsers')
             ->with('getCode')
+            ->where('license_id',Auth::user()->license_id)
             ->get();
         foreach ($data as $va) {
             if ($va->getProvide && $va->getUsers && $va->getCode) {

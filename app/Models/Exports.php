@@ -58,7 +58,7 @@ class Exports extends Model
             };
             $exports = $exports->orderBy($orderBy, $orderType);
         }
-        $exports = $exports->orderBy('exports.id', 'desc')->paginate($perPage);
+        $exports = $exports->orderBy('exports.id', 'desc')->where('exports.license_id', Auth::user()->license_id)->paginate($perPage);
         return $exports;
     }
     public function productExports()

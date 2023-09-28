@@ -75,7 +75,7 @@ class Debt extends Model
         }
 
 
-        $debts = $debts->orderBy('debts.id', 'desc')->paginate($perPage);
+        $debts = $debts->orderBy('debts.id', 'desc')->where('debts.license_id', Auth::user()->license_id)->paginate($perPage);
 
 
         return $debts;

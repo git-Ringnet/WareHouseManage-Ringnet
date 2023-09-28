@@ -1331,6 +1331,10 @@ input[type="checkbox"] {
     overflow-wrap: break-word !important;
 }
 
+#list_modal .modal{
+    z-index: 9999;
+}
+
 @media (max-width: 600px) {
     .responsive-export{
         top: 0 !important;

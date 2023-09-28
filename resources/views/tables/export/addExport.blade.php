@@ -482,6 +482,11 @@
                     '"]').remove();
             });
 
+            function countCheckedCheckboxes() {
+                var numberOfCheckedCheckboxes = $('.check-item:checked').length;
+                $('#resultCell').text(numberOfCheckedCheckboxes);
+            }
+            countCheckedCheckboxes();
             //xem S/N sản phẩm
             sn.click(function() {
                 var qty = $(this).closest('tr').find('.quantity-exist').val();
@@ -494,6 +499,7 @@
                     .text();
                 var productId = $(this).closest('tr').find('.productName').val();
                 var selectedSerialNumbersForProduct = selectedSerialNumbers[productCode] || [];
+                countCheckedCheckboxes();
                 $.ajax({
                     url: "{{ route('getSN') }}",
                     method: 'GET',
@@ -511,9 +517,9 @@
                         var product = $('<table class="table table-hover">' +
                             '<thead><tr><th>Tên sản phẩm</th><th class="text-right">Số lượng sản phẩm</th><th class="text-right">Số lượng S/N</th></tr></thead>' +
                             '<tbody><tr>' + '<td>' + productName +
-                            '</td>' + '<td class="text-right">' + qty +
-                            '</td>' + '<td class="text-right">' + response
-                            .length +
+                            '</td>' + '<td class="text-right">' + qty_enter +
+                            '</td>' +
+                            '<td class="text-right" id="resultCell">' + 0 +
                             '</td>' +
                             '</tr</tbody>' + '</table>' +
                             '<h3>Thông tin Serial Number </h3>');
@@ -551,6 +557,7 @@
                         modalBody.append(product, snList);
                         //limit checkbox
                         $('.check-item').on('change', function() {
+                            event.stopPropagation();
                             var checkedCheckboxes = $('.check-item:checked')
                                 .length;
                             var serialNumberId = $(this).val();
@@ -561,6 +568,7 @@
                                 $(this).prop('checked', false);
                             } else {
                                 if ($(this).is(':checked')) {
+                                    countCheckedCheckboxes();
                                     // Nếu checkbox được chọn và không vượt quá giới hạn, thêm Serial Number vào danh sách cho sản phẩm
                                     if (!selectedSerialNumbers[
                                             productCode]) {
