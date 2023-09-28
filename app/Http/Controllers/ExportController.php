@@ -1360,12 +1360,16 @@ class ExportController extends Controller
             ->selectRaw('(product.product_qty - product.product_trade) as tonkho')
             ->where('export_id', $id)
             ->get();
+        $productCancel = productExports::select('product_exports.*')
+            ->join('exports', 'product_exports.export_id', '=', 'exports.id')
+            ->where('export_id', $id)
+            ->get();
         $product_code = Product::select('product.*')
             ->whereRaw('COALESCE((product.product_qty - COALESCE(product.product_trade, 0)), 0) > 0')
             ->selectRaw('COALESCE((product.product_qty - COALESCE(product.product_trade, 0)), 0) as qty_exist')
             ->get();
         $title = 'Chi tiết đơn hàng';
-        return view('tables.export.editExport', compact('check', 'exports', 'guest', 'productExport', 'product_code', 'customer', 'title'));
+        return view('tables.export.editExport', compact('productCancel', 'check', 'exports', 'guest', 'productExport', 'product_code', 'customer', 'title'));
     }
 
     /**
@@ -2813,6 +2817,13 @@ class ExportController extends Controller
                 ->orWhereNull('export_seri');
         })->get();
         return response()->json($sn);
+    }
+
+    public function getAllSN(Request $request)
+    {
+        $data = $request->all();
+        $allSN = Serinumbers::whereIn('product_id', $data['selectedProductIDs'])->get();
+        return response()->json($allSN);
     }
 
     public function editEx($id)

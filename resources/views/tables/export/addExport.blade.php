@@ -1,8 +1,6 @@
 <x-navbar :title="$title"></x-navbar>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js"
-    integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css"
-    integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 <div class="content-wrapper export-add padding-112">
     <div class="row">
         <div class="col-sm-6 breadcrumb">
@@ -734,16 +732,11 @@
                     $('#deleteRowTable').css('opacity', 0);
                 }
             }
-            // Áp dụng Selectize cho phần tử select mới
-            newRow.find('.child-select').selectize({
-                sortField: 'text',
-            });
-
-            // Cập nhật lại tất cả các Selectize instance
-            const selectizeInputs = document.querySelectorAll('.selectize-input');
-
-            selectizeInputs.forEach(input => {
-                input.style.width = '100% !important';
+            $(document).ready(function() {
+                $('.child-select').select2({
+                    tags: true,
+                    tokenSeparators: [','],
+                });
             });
         });
 
@@ -1279,6 +1272,16 @@
         return formattedValue;
     }
 
+    function checkRequiredConditions() {
+        var inputQty = $('.quantity-input').val();
+        var inputPrice = $('.product_price').val();
+        if (inputQty === '' || inputPrice === '') {
+            alert('Lỗi: Trường nhập liệu không được để trống!');
+            return false;
+        }
+        return true;
+    }
+
     //hàm kiểm tra
     function validateAndSubmit(event) {
         var formGuest = $('#form-guest');
@@ -1287,6 +1290,88 @@
             $('.quantity-input, [name^="product_price"], #transport_fee').each(function() {
                 var newValue = $(this).val().replace(/,/g, '');
                 $(this).val(newValue);
+            });
+            //kiểm tra các trường có rỗng
+            if (checkRequiredConditions()) {
+                var selects = document.getElementsByTagName("select");
+
+                for (var j = 0; j < selects.length; j++) {
+                    selects[j].removeAttribute("disabled");
+                }
+            }
+            const productRows = document.querySelectorAll('tr');
+            //mảng chứa tên sản phẩm có số lượng = 0
+            let mismatchedProducts = [];
+            //kiểm tra số lượng lớn hơn 0
+            for (let i = 0; i < productRows.length; i++) {
+                const qtyInput = productRows[i].querySelector('.quantity-input');
+                const productNameSelect = productRows[i].querySelector('.productName');
+
+                if (qtyInput !== null && productNameSelect !== null) {
+                    const selectedOption = productNameSelect.options[productNameSelect
+                        .selectedIndex];
+
+                    if (parseFloat(qtyInput.value) == 0) {
+                        const productName = selectedOption.textContent;
+                        mismatchedProducts.push(productName);
+                    }
+                }
+            }
+
+            // Tạo thông báo
+            let alertMessage = "Các sản phẩm sau đây phải lớn hơn 0:\n";
+            if (mismatchedProducts.length > 0) {
+                alertMessage += mismatchedProducts.join('\n');
+            }
+
+            // Hiển thị thông báo
+            if (mismatchedProducts.length > 0) {
+                alert(alertMessage);
+                event.preventDefault();
+            }
+
+            // lấy thông tin S/N của sản phẩm
+            $.ajax({
+                url: "{{ route('getAllSN') }}",
+                method: 'GET',
+                data: {
+                    selectedProductIDs: selectedProductIDs,
+                },
+                success: function(response) {
+                    response.forEach(function(sn) {
+                        // console.log(sn);
+                    })
+                    const productsRows = document.querySelectorAll('tr');
+                    let missProducts = [];
+                    // Lặp qua từng thẻ <tr>
+                    for (let i = 0; i < productRows.length; i++) {
+                        // Lấy số lượng sản phẩm hiện tại
+                        const qtyInput = productRows[i].querySelector('.quantity-input');
+                        const productNameElement = productRows[i].querySelector('.productName');
+
+                        // Kiểm tra xem phần tử .quantity-input có tồn tại không
+                        if (qtyInput !== null) {
+                            const idProduct = productNameElement.value;
+                            const numberOfInputs = $(
+                                    `input[name="selected_serial_numbers[]"][data-product-id="${idProduct}"]`
+                                    )
+                                .length;
+
+                            // So sánh số lượng với số lượng input
+                            if (parseInt(qtyInput.value) !== numberOfInputs) {
+                                // Số lượng không khớp, thực hiện xử lý tại đây
+                                console.log(`Số lượng không khớp cho sản phẩm có ID ${idProduct}`);
+                            } else {
+                                // Số lượng khớp
+                                console.log(`Số lượng khớp cho sản phẩm có ID ${idProduct}`);
+                            }
+                        }
+                    }
+                    console.log(missProducts);
+                },
+                error: function(xhr, status, error) {
+                    console.error(error);
+                }
             });
         } else {
             if (formGuest.length === 0) {
@@ -1301,11 +1386,6 @@
     //ngăn chặn click
     $(document).ready(function() {
         $('#chot_don').on('click', function(event) {
-            var selects = document.getElementsByTagName("select");
-
-            for (var j = 0; j < selects.length; j++) {
-                selects[j].removeAttribute("disabled");
-            }
             var $button = $(this);
 
             if (!$button.hasClass('disabled')) {
@@ -1317,11 +1397,6 @@
         });
 
         $('#luu').on('click', function() {
-            var selects = document.getElementsByTagName("select");
-
-            for (var j = 0; j < selects.length; j++) {
-                selects[j].removeAttribute("disabled");
-            }
             var $button = $(this);
 
             if (!$button.hasClass('disabled')) {

@@ -1546,6 +1546,27 @@
         return formattedValue;
     }
 
+    var isSubmitting = false;
+
+    // Hàm chặn alert trong phạm vi trang hiện tại
+    function blockAlertInCurrentPage() {
+        var backupAlert = window.alert;
+        window.alert = function() {
+            return true;
+        };
+        return backupAlert;
+    }
+
+    function checkRequiredConditions() {
+        var inputQty = $('.quantity-input').val();
+        var inputPrice = $('.product_price').val();
+        if (inputQty === '' || inputPrice === '') {
+            alert('Lỗi: Trường nhập liệu không được để trống!');
+            return false;
+        }
+        return true;
+    }
+
     //hàm kiểm tra submit
     function validateAndSubmit(event) {
         var formGuest = $('#form-guest');
@@ -1557,11 +1578,65 @@
                 var newValue = $(this).val().replace(/,/g, '');
                 $(this).val(newValue);
             });
-            $('#btn-customer').click();
-            window.backupAlert = window.alert;
-            window.alert = function() {
-                return true
-            };
+
+            if (checkRequiredConditions()) {
+                var selects = document.getElementsByTagName("select");
+
+                for (var j = 0; j < selects.length; j++) {
+                    selects[j].removeAttribute("disabled");
+                }
+
+            }
+            const productRows = document.querySelectorAll('tr');
+            let mismatchedProducts = [];
+            let hasZeroQuantity = false;
+
+            for (let i = 0; i < productRows.length; i++) {
+                const qtyInput = productRows[i].querySelector('.quantity-input');
+                const productNameSelect = productRows[i].querySelector('.productName');
+
+                if (qtyInput !== null && productNameSelect !== null) {
+                    const selectedOption = productNameSelect.options[productNameSelect.selectedIndex];
+
+                    if (parseFloat(qtyInput.value) === 0) {
+                        hasZeroQuantity = true;
+                        const productName = selectedOption.textContent;
+                        mismatchedProducts.push(productName);
+                    }
+                }
+            }
+
+            // Tạo thông báo
+            let alertMessage = "Các sản phẩm sau đây phải lớn hơn 0:\n";
+            if (mismatchedProducts.length > 0) {
+                alertMessage += mismatchedProducts.join('');
+            }
+            if (!hasZeroQuantity) {
+                $('#btn-customer').click();
+                // Đánh dấu trạng thái đang submit
+                isSubmitting = true;
+                var restoreAlert = blockAlertInCurrentPage();
+
+                // Thực hiện kiểm tra điều kiện bắt buộc ở đây
+                var conditionsMet = true; // Đặt giá trị mặc định là true
+                if (!checkRequiredConditions()) {
+                    conditionsMet = false;
+                }
+
+                if (conditionsMet) {
+                    $('#form-guest')[0].submit();
+                }
+
+                // Đánh dấu trạng thái đã hoàn thành submit
+                isSubmitting = false;
+                window.alert = restoreAlert;
+            } else {
+                // Hiển thị thông báo
+                if (mismatchedProducts.length > 0) {
+                    alert(alertMessage);
+                    event.preventDefault();
+                }
+            }
         } else {
             if (formGuest.length === 0) {
                 alert('Lỗi: Chưa nhập thông tin khách hàng!');

@@ -588,7 +588,7 @@ td p {
     padding: 0 !important;
 }
 
-.content .btn-fixed{
+.content .btn-fixed {
     z-index: 1000;
 }
 
@@ -1061,12 +1061,14 @@ input[type="checkbox"] {
 }
 
 @media (max-width: 768px) {
-    #table_SNS tbody input{
+    #table_SNS tbody input {
         width: 100% !important;
     }
-    #list_modal .modal-dialog{
+
+    #list_modal .modal-dialog {
         max-width: 95% !important;
     }
+
     .index-dashboard .col-6 {
         width: 100%;
         max-width: 100%;
@@ -1230,7 +1232,7 @@ input[type="checkbox"] {
 }
 
 /*SN*/
-.bg-white-sn tr{
+.bg-white-sn tr {
     background: white !important;
     width: 100%;
 }
@@ -1322,6 +1324,20 @@ input[type="checkbox"] {
     min-width: 600px !important;
 }
 
+.select2-container--default .select2-selection--single{
+    height: auto !important;
+}
+
+.select2-container {
+    width: 200px !important;
+}
+
+
+.select2-selection__rendered {
+    white-space: normal !important;
+    overflow-x: hidden !important;
+}
+
 .selectize-dropdown-content .option {
     display: inline-block !important;
     width: 100% !important;
@@ -1332,7 +1348,7 @@ input[type="checkbox"] {
 }
 
 @media (max-width: 600px) {
-    .responsive-export{
+    .responsive-export {
         top: 0 !important;
         right: 0 !important;
         position: relative !important;
@@ -1367,22 +1383,26 @@ input[type="checkbox"] {
         width: 30% !important;
         padding: 0px !important;
     }
-    .d-flex.justify-content-between.align-items-center.my-2{
-        display:  block !important;
+
+    .d-flex.justify-content-between.align-items-center.my-2 {
+        display: block !important;
     }
-    #inputContainer tbody .name_product{
-        min-width: 200px ;
+
+    #inputContainer tbody .name_product {
+        min-width: 200px;
     }
+
     #inputContainer tbody .unit_product,
-    #inputContainer tbody .quantity-input{
+    #inputContainer tbody .quantity-input {
         min-width: 50px;
     }
+
     #inputContainer tbody .product_price,
     #inputContainer tbody .total-amount,
-    #inputContainer tbody .product_trademark
-    {
+    #inputContainer tbody .product_trademark {
         min-width: 100px;
     }
+
     #debtInput {
         width: 30% !important;
     }

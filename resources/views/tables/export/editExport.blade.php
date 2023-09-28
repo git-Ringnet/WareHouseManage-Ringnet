@@ -1,8 +1,6 @@
 <x-navbar :title="$title"></x-navbar>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js"
-    integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css"
-    integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 <div class="content-wrapper export-add padding-112">
     <div class="row">
         <div class="col-sm-6 breadcrumb">
@@ -377,133 +375,276 @@
                     </thead>
                     <tbody>
                         <?php $stt = 1; ?>
-                        @foreach ($productExport as $index => $value_export)
-                            <tr>
-                                <td class="soTT"><?php echo $stt++; ?></td>
-                                <td>
-                                    @if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin')))
-                                        <input type="text" title="{{ $value_export->product_name }}"
-                                            class="form-control" readonly value="{{ $value_export->product_name }}">
-                                        <select class="child-select p-1 form-control productName <?php if ($exports->export_status != 1) {
-                                            echo 'd-none';
-                                        } ?>"
-                                            name="product_id[]" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                                echo 'disabled';
-                                            } ?>>
-                                            <option value="{{ $value_export->product_id }}">
-                                                {{ $value_export->product_name }}
-                                            </option>
-                                            @foreach ($product_code as $value_code)
-                                                <option value="{{ $value_code->id }}" class="<?php if ($value_code->id === $value_export->product_id) {
+                        @if ($exports->export_status != 0)
+                            @foreach ($productExport as $index => $value_export)
+                                <tr>
+                                    <td class="soTT"><?php echo $stt++; ?></td>
+                                    <td>
+                                        @if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin')))
+                                            <input type="text" title="{{ $value_export->product_name }}"
+                                                class="form-control" readonly
+                                                value="{{ $value_export->product_name }}">
+                                            <select
+                                                class="child-select p-1 form-control productName <?php if ($exports->export_status != 1) {
                                                     echo 'd-none';
-                                                } ?>">
-                                                    {{ $value_code->product_name }}
+                                                } ?>"
+                                                name="product_id[]" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                                    echo 'disabled';
+                                                } ?>>
+                                                <option value="{{ $value_export->product_id }}">
+                                                    {{ $value_export->product_name }}
                                                 </option>
-                                            @endforeach
-                                        </select>
-                                    @endif
-                                    @if ($exports->export_status == 1)
-                                        <select class="child-select p-1 form-control productName" name="product_id[]"
-                                            data-initial="{{ $value_export->product_id }}" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                                echo 'disabled';
-                                            } ?>>
-                                            <option value="{{ $value_export->product_id }}" class="initial-option">
-                                                {{ $value_export->product_name }}
-                                            </option>
-                                            @foreach ($product_code as $value_code)
-                                                <option value="{{ $value_code->id }}" class="<?php if ($value_code->id === $value_export->product_id) {
-                                                    echo 'd-none';
-                                                } ?>">
-                                                    {{ $value_code->product_name }}
+                                                @foreach ($product_code as $value_code)
+                                                    <option value="{{ $value_code->id }}"
+                                                        class="<?php if ($value_code->id === $value_export->product_id) {
+                                                            echo 'd-none';
+                                                        } ?>">
+                                                        {{ $value_code->product_name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        @endif
+                                        @if ($exports->export_status == 1)
+                                            <select class="child-select p-1 form-control productName"
+                                                name="product_id[]" data-initial="{{ $value_export->product_id }}"
+                                                <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                                    echo 'disabled';
+                                                } ?>>
+                                                <option value="{{ $value_export->product_id }}"
+                                                    class="initial-option">
+                                                    {{ $value_export->product_name }}
                                                 </option>
-                                            @endforeach
-                                        </select>
-                                    @endif
-                                </td>
-                                <td>
-                                    <input type="text" id="product_unit" readonly
-                                        class="product_unit form-control text-center" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                            echo 'readonly';
-                                        } ?>
-                                        value="{{ $value_export->product_unit }}" name="product_unit[]"
-                                        required="">
-                                </td>
-                                <td>
-                                    <div class='d-flex'>
-                                        <input type="text" oninput="limitMaxEdit(this)" id="product_qty"
-                                            class="quantity-input form-control text-center" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                                @foreach ($product_code as $value_code)
+                                                    <option value="{{ $value_code->id }}"
+                                                        class="<?php if ($value_code->id === $value_export->product_id) {
+                                                            echo 'd-none';
+                                                        } ?>">
+                                                        {{ $value_code->product_name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <input type="text" id="product_unit" readonly
+                                            class="product_unit form-control text-center" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                                 echo 'readonly';
                                             } ?>
-                                            value="{{ $value_export->product_qty }}" name="product_qty[]"
-                                            required="" style="min-width:70px;">
-                                        <input type="text" readonly="" class="quantity-exist form-control"
-                                            required=""
-                                            value="/{{ $value_export->tonkho + $value_export->product_qty }}"
-                                            style="min-width:70px;background:#D6D6D6;border:none;"
-                                            <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                                echo 'hidden';
-                                            } ?>>
-                                    </div>
-                                </td>
-                                <td>
-                                    <input type="text" id="product_price" name="product_price[]"
-                                        class="form-control text-center product_price" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                            echo 'readonly';
-                                        } ?>
-                                        value=@if (fmod($value_export->product_price, 1) == 0) {{ number_format($value_export->product_price, 0, '.', ',') }}
+                                            value="{{ $value_export->product_unit }}" name="product_unit[]"
+                                            required="">
+                                    </td>
+                                    <td>
+                                        <div class='d-flex'>
+                                            <input type="text" oninput="limitMaxEdit(this)" id="product_qty"
+                                                class="quantity-input form-control text-center" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                                    echo 'readonly';
+                                                } ?>
+                                                value="{{ $value_export->product_qty }}" name="product_qty[]"
+                                                required="" style="min-width:70px;">
+                                            <input type="text" readonly="" class="quantity-exist form-control"
+                                                required=""
+                                                value="/{{ $value_export->tonkho + $value_export->product_qty }}"
+                                                style="min-width:70px;background:#D6D6D6;border:none;"
+                                                <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                                    echo 'hidden';
+                                                } ?>>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input type="text" id="product_price" name="product_price[]"
+                                            class="form-control text-center product_price" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                                echo 'readonly';
+                                            } ?>
+                                            value=@if (fmod($value_export->product_price, 1) == 0) {{ number_format($value_export->product_price, 0, '.', ',') }}
                                         @else
                                         {{ number_format($value_export->product_price, 2, '.', ',') }} @endif
-                                        required="">
-                                </td>
-                                <td>
-                                    <select disabled name="product_tax[]" class="product_tax form-control"
-                                        style="width: 80px;" id="product_tax" required <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                            echo 'disabled';
-                                        } ?>>
-                                        <option value="0" <?php if ($value_export->thue == 0) {
-                                            echo 'selected';
-                                        } ?>>0%</option>
-                                        <option value="8" <?php if ($value_export->thue == 8) {
-                                            echo 'selected';
-                                        } ?>>8%</option>
-                                        <option value="10" <?php if ($value_export->thue == 10) {
-                                            echo 'selected';
-                                        } ?>>10%</option>
-                                        <option value="99" <?php if ($value_export->thue == 99) {
-                                            echo 'selected';
-                                        } ?>>NOVAT</option>
-                                    </select>
-                                </td>
-                                <td><span class="total-amount form-control text-center"
-                                        style="background:#e9ecef;min-width: 120px;">0</span>
-                                </td>
-                                <td>
-                                    <input type="text" class="product_note form-control" name="product_note[]"
-                                        class="form-control" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                            echo 'readonly';
-                                        } ?>
-                                        value="{{ $value_export->product_note }}">
-                                </td>
-                                @if ($exports->export_status == 2)
-                                    <td data-toggle='modal' data-target='#snModal' class='sn'><img
-                                            src="../../dist/img/icon/list.png"></td>
-                                @elseif($exports->export_status == 1)
-                                    <td data-toggle='modal' data-target='#snModal' class='sn1'><img
-                                            src="../../dist/img/icon/list.png"></td>
-                                @endif
-                                <td data-toggle='modal' data-target='#productModal' class='productMD'><img
-                                        src="../../dist/img/icon/Group.png"></td>
-                                @if ($exports->export_status == 1)
-                                    @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
-                                        <td @if ($exports->export_status != 2) class="delete-row-btn" @endif>
-                                            <img src="../../dist/img/icon/vector.png">
-                                        </td>
+                                            required="">
+                                    </td>
+                                    <td>
+                                        <select disabled name="product_tax[]" class="product_tax form-control"
+                                            style="width: 80px;" id="product_tax" required <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                                echo 'disabled';
+                                            } ?>>
+                                            <option value="0" <?php if ($value_export->thue == 0) {
+                                                echo 'selected';
+                                            } ?>>0%</option>
+                                            <option value="8" <?php if ($value_export->thue == 8) {
+                                                echo 'selected';
+                                            } ?>>8%</option>
+                                            <option value="10" <?php if ($value_export->thue == 10) {
+                                                echo 'selected';
+                                            } ?>>10%</option>
+                                            <option value="99" <?php if ($value_export->thue == 99) {
+                                                echo 'selected';
+                                            } ?>>NOVAT</option>
+                                        </select>
+                                    </td>
+                                    <td><span class="total-amount form-control text-center"
+                                            style="background:#e9ecef;min-width: 120px;">0</span>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="product_note form-control" name="product_note[]"
+                                            class="form-control" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                                echo 'readonly';
+                                            } ?>
+                                            value="{{ $value_export->product_note }}">
+                                    </td>
+                                    @if ($exports->export_status == 2)
+                                        <td data-toggle='modal' data-target='#snModal' class='sn'><img
+                                                src="../../dist/img/icon/list.png"></td>
+                                    @elseif($exports->export_status == 1)
+                                        <td data-toggle='modal' data-target='#snModal' class='sn1'><img
+                                                src="../../dist/img/icon/list.png"></td>
                                     @endif
-                                @endif
-                            </tr>
-                        @endforeach
-                        @if ($exports->export_status != 2)
-                            <tr id="dynamic-fields"></tr>
+                                    <td data-toggle='modal' data-target='#productModal' class='productMD'><img
+                                            src="../../dist/img/icon/Group.png"></td>
+                                    @if ($exports->export_status == 1)
+                                        @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
+                                            <td @if ($exports->export_status != 2) class="delete-row-btn" @endif>
+                                                <img src="../../dist/img/icon/vector.png">
+                                            </td>
+                                        @endif
+                                    @endif
+                                </tr>
+                            @endforeach
+                            @if ($exports->export_status != 2)
+                                <tr id="dynamic-fields"></tr>
+                            @endif
+                        @elseif($exports->export_status == 0)
+                            @foreach ($productCancel as $value_export1)
+                                <tr>
+                                    <td class="soTT"><?php echo $stt++; ?></td>
+                                    <td>
+                                        @if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin')))
+                                            <input type="text" title="{{ $value_export1->product_name }}"
+                                                class="form-control" readonly
+                                                value="{{ $value_export1->product_name }}">
+                                            <select
+                                                class="child-select p-1 form-control productName <?php if ($exports->export_status != 1) {
+                                                    echo 'd-none';
+                                                } ?>"
+                                                name="product_id[]" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                                    echo 'disabled';
+                                                } ?>>
+                                                <option value="{{ $value_export1->product_id }}">
+                                                    {{ $value_export1->product_name }}
+                                                </option>
+                                                @foreach ($product_code as $value_code)
+                                                    <option value="{{ $value_code->id }}"
+                                                        class="<?php if ($value_code->id === $value_export1->product_id) {
+                                                            echo 'd-none';
+                                                        } ?>">
+                                                        {{ $value_code->product_name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        @endif
+                                        @if ($exports->export_status == 1)
+                                            <select class="child-select p-1 form-control productName"
+                                                name="product_id[]" data-initial="{{ $value_export->product_id }}"
+                                                <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                                    echo 'disabled';
+                                                } ?>>
+                                                <option value="{{ $value_export->product_id }}"
+                                                    class="initial-option">
+                                                    {{ $value_export->product_name }}
+                                                </option>
+                                                @foreach ($product_code as $value_code)
+                                                    <option value="{{ $value_code->id }}"
+                                                        class="<?php if ($value_code->id === $value_export->product_id) {
+                                                            echo 'd-none';
+                                                        } ?>">
+                                                        {{ $value_code->product_name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <input type="text" id="product_unit" readonly
+                                            class="product_unit form-control text-center" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                                echo 'readonly';
+                                            } ?>
+                                            value="{{ $value_export1->product_unit }}" name="product_unit[]"
+                                            required="">
+                                    </td>
+                                    <td>
+                                        <div class='d-flex'>
+                                            <input type="text" oninput="limitMaxEdit(this)" id="product_qty"
+                                                class="quantity-input form-control text-center" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                                    echo 'readonly';
+                                                } ?>
+                                                value="{{ $value_export1->product_qty }}" name="product_qty[]"
+                                                required="" style="min-width:70px;">
+                                            <input type="text" readonly="" class="quantity-exist form-control"
+                                                required=""
+                                                value="/{{ $value_export1->tonkho + $value_export1->product_qty }}"
+                                                style="min-width:70px;background:#D6D6D6;border:none;"
+                                                <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                                    echo 'hidden';
+                                                } ?>>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input type="text" id="product_price" name="product_price[]"
+                                            class="form-control text-center product_price" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                                echo 'readonly';
+                                            } ?>
+                                            value=@if (fmod($value_export1->product_price, 1) == 0) {{ number_format($value_export1->product_price, 0, '.', ',') }}
+                                        @else
+                                        {{ number_format($value_export1->product_price, 2, '.', ',') }} @endif
+                                            required="">
+                                    </td>
+                                    <td>
+                                        <select disabled name="product_tax[]" class="product_tax form-control"
+                                            style="width: 80px;" id="product_tax" required <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                                echo 'disabled';
+                                            } ?>>
+                                            <option value="0" <?php if ($value_export1->thue == 0) {
+                                                echo 'selected';
+                                            } ?>>0%</option>
+                                            <option value="8" <?php if ($value_export1->thue == 8) {
+                                                echo 'selected';
+                                            } ?>>8%</option>
+                                            <option value="10" <?php if ($value_export1->thue == 10) {
+                                                echo 'selected';
+                                            } ?>>10%</option>
+                                            <option value="99" <?php if ($value_export1->thue == 99) {
+                                                echo 'selected';
+                                            } ?>>NOVAT</option>
+                                        </select>
+                                    </td>
+                                    <td><span class="total-amount form-control text-center"
+                                            style="background:#e9ecef;min-width: 120px;">0</span>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="product_note form-control" name="product_note[]"
+                                            class="form-control" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                                echo 'readonly';
+                                            } ?>
+                                            value="{{ $value_export1->product_note }}">
+                                    </td>
+                                    @if ($exports->export_status == 2)
+                                        <td data-toggle='modal' data-target='#snModal' class='sn'><img
+                                                src="../../dist/img/icon/list.png"></td>
+                                    @elseif($exports->export_status == 1)
+                                        <td data-toggle='modal' data-target='#snModal' class='sn1'><img
+                                                src="../../dist/img/icon/list.png"></td>
+                                    @endif
+                                    <td data-toggle='modal' data-target='#productModal' class='productMD'><img
+                                            src="../../dist/img/icon/Group.png"></td>
+                                    @if ($exports->export_status == 1)
+                                        @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
+                                            <td @if ($exports->export_status != 2) class="delete-row-btn" @endif>
+                                                <img src="../../dist/img/icon/vector.png">
+                                            </td>
+                                        @endif
+                                    @endif
+                                </tr>
+                            @endforeach
+                            @if ($exports->export_status != 2)
+                                <tr id="dynamic-fields"></tr>
+                            @endif
                         @endif
                     </tbody>
                 </table>
@@ -1091,6 +1232,12 @@
         });
         $('#form-edit').remove();
     });
+    $(document).ready(function() {
+        $('.child-select').select2({
+            tags: true, // Cho phép tạo giá trị mới
+            tokenSeparators: [','],
+        });
+    });
     //add sản phẩm
     $(document).ready(function() {
         let fieldCounter = 1;
@@ -1434,16 +1581,11 @@
                 giaInput, thueInput, thanhTienInput, ghichuInput, sn, info, deleteBtn, option);
             $("#dynamic-fields").before(newRow);
             fieldCounter++;
-            // Áp dụng Selectize cho phần tử select mới
-            newRow.find('.child-select').selectize({
-                sortField: 'text',
-            });
-
-            // Cập nhật lại tất cả các Selectize instance
-            const selectizeInputs = document.querySelectorAll('.selectize-input');
-
-            selectizeInputs.forEach(input => {
-                input.style.width = '100% !important';
+            $(document).ready(function() {
+                $('.child-select').select2({
+                    tags: true, // Cho phép tạo giá trị mới
+                    tokenSeparators: [','],
+                });
             });
         });
 
@@ -2065,6 +2207,16 @@
         return backupAlert;
     }
 
+    function checkRequiredConditions() {
+        var inputQty = $('.quantity-input').val();
+        var inputPrice = $('.product_price').val();
+        if (inputQty === '' || inputPrice === '') {
+            alert('Lỗi: Trường nhập liệu không được để trống!');
+            return false;
+        }
+        return true;
+    }
+
     function validateAndSubmit(event) {
         var formGuest = $('#form-guest');
         var productList = $('.productName');
@@ -2076,23 +2228,64 @@
                 $(this).val(newValue);
             });
 
-            // Đánh dấu trạng thái đang submit
-            isSubmitting = true;
-            var restoreAlert = blockAlertInCurrentPage();
+            if (checkRequiredConditions()) {
+                var selects = document.getElementsByTagName("select");
 
-            // Thực hiện kiểm tra điều kiện bắt buộc ở đây
-            var conditionsMet = true; // Đặt giá trị mặc định là true
-            if (!checkRequiredConditions()) {
-                conditionsMet = false;
+                for (var j = 0; j < selects.length; j++) {
+                    selects[j].removeAttribute("disabled");
+                }
+
+            }
+            const productRows = document.querySelectorAll('tr');
+            let mismatchedProducts = [];
+            let hasZeroQuantity = false;
+
+            for (let i = 0; i < productRows.length; i++) {
+                const qtyInput = productRows[i].querySelector('.quantity-input');
+                const productNameSelect = productRows[i].querySelector('.productName');
+
+                if (qtyInput !== null && productNameSelect !== null) {
+                    const selectedOption = productNameSelect.options[productNameSelect.selectedIndex];
+
+                    if (parseFloat(qtyInput.value) === 0) {
+                        hasZeroQuantity = true;
+                        const productName = selectedOption.textContent;
+                        mismatchedProducts.push(productName);
+                    }
+                }
             }
 
-            if (conditionsMet) {
-                $('#form-guest')[0].submit();
+            // Tạo thông báo
+            let alertMessage = "Các sản phẩm sau đây phải lớn hơn 0:\n";
+            if (mismatchedProducts.length > 0) {
+                alertMessage += mismatchedProducts.join('\n');
             }
+            if (!hasZeroQuantity) {
+                $('#btn-customer').click();
+                // Đánh dấu trạng thái đang submit
+                isSubmitting = true;
+                var restoreAlert = blockAlertInCurrentPage();
 
-            // Đánh dấu trạng thái đã hoàn thành submit
-            isSubmitting = false;
-            window.alert = restoreAlert;
+                // Thực hiện kiểm tra điều kiện bắt buộc ở đây
+                var conditionsMet = true; // Đặt giá trị mặc định là true
+                if (!checkRequiredConditions()) {
+                    conditionsMet = false;
+                }
+
+                if (conditionsMet) {
+                    $('#form-guest')[0].submit();
+                }
+
+                // Đánh dấu trạng thái đã hoàn thành submit
+                isSubmitting = false;
+                window.alert = restoreAlert;
+            } else {
+                // Hiển thị thông báo
+                if (mismatchedProducts.length > 0) {
+                    alert(alertMessage);
+                    event.preventDefault();
+                }
+            }
         } else {
             if (formGuest.length === 0) {
                 alert('Lỗi: Chưa nhập thông tin khách hàng!');
@@ -2102,19 +2295,6 @@
             event.preventDefault();
         }
     }
-
-    function checkRequiredConditions() {
-        var inputField = $('#inputField').val();
-        if (inputField === '') {
-            alert('Lỗi: Trường nhập liệu không được để trống!');
-            return false;
-        }
-        return true;
-    }
-
-    // Không gán hàm kiểm tra alert vào window.alert
-    // window.alert = checkAlert;
-
 
     //format giá
     var inputElement = document.getElementById('product_price');
@@ -2150,11 +2330,6 @@
     //ngăn chặn click
     $(document).ready(function() {
         $('#chot_don').on('click', function() {
-            var selects = document.getElementsByTagName("select");
-
-            for (var j = 0; j < selects.length; j++) {
-                selects[j].removeAttribute("disabled");
-            }
             var $button = $(this);
 
             if (!$button.hasClass('disabled')) {
@@ -2167,11 +2342,6 @@
             }
         });
         $('#luu').on('click', function() {
-            var selects = document.getElementsByTagName("select");
-
-            for (var j = 0; j < selects.length; j++) {
-                selects[j].removeAttribute("disabled");
-            }
             var $button = $(this);
 
             if (!$button.hasClass('disabled')) {
@@ -2184,11 +2354,6 @@
             }
         });
         $('#huy').on('click', function() {
-            var selects = document.getElementsByTagName("select");
-
-            for (var j = 0; j < selects.length; j++) {
-                selects[j].removeAttribute("disabled");
-            }
             var $button = $(this);
 
             if (!$button.hasClass('disabled')) {
@@ -2201,11 +2366,6 @@
             }
         });
         $('#huydon').on('click', function() {
-            var selects = document.getElementsByTagName("select");
-
-            for (var j = 0; j < selects.length; j++) {
-                selects[j].removeAttribute("disabled");
-            }
             var $button = $(this);
 
             if (!$button.hasClass('disabled')) {
