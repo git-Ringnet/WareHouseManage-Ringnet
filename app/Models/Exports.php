@@ -79,6 +79,7 @@ class Exports extends Model
     public function alldonxuat()
     {
         $exports = DB::table($this->table)
+            ->where('exports.license_id', Auth::user()->license_id)
             ->where('export_status', 2)
             ->get();
         return $exports;
@@ -131,6 +132,7 @@ class Exports extends Model
     public function tongtienxuat()
     {
         $totalSum = DB::table($this->table)
+            ->where('exports.license_id', Auth::user()->license_id)
             ->where('export_status', 2)
             ->sum('total');
 
@@ -152,28 +154,33 @@ class Exports extends Model
             ->leftJoin('roles', 'users.roleid', 'roles.id')
             ->leftJoin('debts', 'debts.export_id', 'exports.id')
             ->where('exports.export_status', 2)
+            ->where('exports.license_id', Auth::user()->license_id)
             ->select('users.name as nhanvien', 'roles.name as vaitro', 'users.email as email', 'users.id as userid')
             ->selectSub(function ($query) {
                 $query->from('exports')
                     ->where('exports.export_status', 2)
+                    ->where('exports.license_id', Auth::user()->license_id)
                     ->whereColumn('exports.user_id', 'users.id')
                     ->selectRaw('COUNT(exports.id)');
             }, 'donxuat')
             ->selectSub(function ($query) {
                 $query->from('exports')
                     ->where('exports.export_status', 2)
+                    ->where('exports.license_id', Auth::user()->license_id)
                     ->whereColumn('exports.user_id', 'users.id')
                     ->selectRaw('SUM(total)');
             }, 'tongtienxuat')
             ->selectSub(function ($query) {
                 $query->from('debts')
                     ->where('exports.export_status', 2)
+                    ->where('debts.license_id', Auth::user()->license_id)
                     ->whereColumn('debts.user_id', 'users.id')
                     ->selectRaw('SUM(debts.total_difference)');
             }, 'tongloinhuan')
             ->selectSub(function ($query) {
                 $query->from('debts')
                     ->where('exports.export_status', 2)
+                    ->where('debts.license_id', Auth::user()->license_id)
                     ->where('debts.debt_status', '!=', 1)
                     ->whereColumn('debts.user_id', 'users.id')
                     ->selectRaw('SUM(total_sales)');
@@ -209,6 +216,7 @@ class Exports extends Model
             ->selectSub(function ($query) use ($filter) {
                 $query->from('exports')
                     ->where('exports.export_status', 2)
+                    ->where('exports.license_id', Auth::user()->license_id)
                     ->whereColumn('exports.user_id', 'users.id')
                     ->when(!empty($filter), function ($query) use ($filter) {
                         $startDate = $filter[0];
@@ -220,6 +228,7 @@ class Exports extends Model
             ->selectSub(function ($query) use ($filter) {
                 $query->from('exports')
                     ->where('exports.export_status', 2)
+                    ->where('exports.license_id', Auth::user()->license_id)
                     ->whereColumn('exports.user_id', 'users.id')
                     ->when(!empty($filter), function ($query) use ($filter) {
                         $startDate = $filter[0];
@@ -231,6 +240,7 @@ class Exports extends Model
             ->selectSub(function ($query) use ($filter) {
                 $query->from('debts')
                     ->where('exports.export_status', 2)
+                    ->where('exports.license_id', Auth::user()->license_id)
                     ->whereColumn('debts.user_id', 'users.id')
                     ->when(!empty($filter), function ($query) use ($filter) {
                         $startDate = $filter[0];
@@ -242,6 +252,7 @@ class Exports extends Model
             ->selectSub(function ($query) use ($filter) {
                 $query->from('debts')
                     ->where('exports.export_status', 2)
+                    ->where('debts.license_id', Auth::user()->license_id)
                     ->where('debts.debt_status', '!=', 1)
                     ->whereColumn('debts.user_id', 'users.id')
                     ->when(!empty($filter), function ($query) use ($filter) {

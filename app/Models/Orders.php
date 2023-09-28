@@ -20,8 +20,8 @@ class Orders extends Model
     {
         $productIds = array();
         $order = Orders::orderByDesc('id')
-        ->where('license_id', Auth::user()->license_id)
-        ->get();
+            ->where('license_id', Auth::user()->license_id)
+            ->get();
         foreach ($order as $value) {
             array_push($productIds, $value->id);
         }
@@ -88,6 +88,7 @@ class Orders extends Model
     public function allNhaphang()
     {
         $orders = DB::table($this->table)
+            ->where('orders.license_id', Auth::user()->license_id)
             ->where('orders.order_status', '=', 1)
             ->get();
         return $orders;
@@ -156,15 +157,18 @@ class Orders extends Model
             ->leftJoin('debt_import', 'debt_import.import_id', 'orders.id')
             ->select('users.name as nhanvien', 'roles.name as vaitro', 'users.email as email', 'users.id as userid')
             ->where('orders.order_status', 1)
+            ->where('orders.license_id', Auth::user()->license_id)
             ->selectSub(function ($query) {
                 $query->from('orders')
                     ->where('orders.order_status', 1)
+                    ->where('orders.license_id', Auth::user()->license_id)
                     ->whereColumn('orders.users_id', 'users.id')
                     ->selectRaw('COUNT(id)');
             }, 'product_qty_count')
 
             ->selectSub(function ($query) {
                 $query->from('orders')
+                    ->where('orders.license_id', Auth::user()->license_id)
                     ->whereColumn('orders.users_id', 'users.id')
                     ->selectRaw('SUM(orders.total_tax)')
                     ->where('orders.order_status', 1);
@@ -172,6 +176,7 @@ class Orders extends Model
 
             ->selectSub(function ($query) {
                 $query->from('debt_import')
+                    ->where('debt_import.license_id', Auth::user()->license_id)
                     ->whereColumn('debt_import.user_id', 'users.id')
                     ->where('debt_import.debt_status', '!=', 1)
                     ->selectRaw('SUM(total_import)');
@@ -207,6 +212,7 @@ class Orders extends Model
             ->selectSub(function ($query) use ($filter) {
                 $query->from('orders')
                     ->where('orders.order_status', 1)
+                    ->where('orders.license_id', Auth::user()->license_id)
                     ->whereColumn('orders.users_id', 'users.id')
                     ->when(!empty($filter), function ($query) use ($filter) {
                         $startDate = $filter[0];
@@ -217,6 +223,7 @@ class Orders extends Model
             }, 'product_qty_count')
             ->selectSub(function ($query) use ($filter) {
                 $query->from('orders')
+                    ->where('orders.license_id', Auth::user()->license_id)
                     ->whereColumn('orders.users_id', 'users.id')
                     ->when(!empty($filter), function ($query) use ($filter) {
                         $startDate = $filter[0];
@@ -228,6 +235,7 @@ class Orders extends Model
             }, 'total_sum')
             ->selectSub(function ($query) use ($filter) {
                 $query->from('debt_import')
+                    ->where('orders.license_id', Auth::user()->license_id)
                     ->whereColumn('debt_import.user_id', 'users.id')
                     ->where('debt_import.debt_status', '!=', 1)
                     ->when(!empty($filter), function ($query) use ($filter) {
@@ -254,7 +262,7 @@ class Orders extends Model
             ->first();
         if ($check) {
             DB::table($this->table)->where('id', $id)->delete();
-            Serinumbers::where('order_id',$check->id)->delete();
+            Serinumbers::where('order_id', $check->id)->delete();
             return $status = 0;
         } else {
             return $status = 1;
@@ -263,7 +271,7 @@ class Orders extends Model
 
     public function accessBill($list_ID)
     {
-        $check = DB::table($this->table)->whereIn('id', $list_ID)->where('license_id',Auth::user()->license_id)->get();
+        $check = DB::table($this->table)->whereIn('id', $list_ID)->where('license_id', Auth::user()->license_id)->get();
         $status = 1;
         foreach ($check as $c) {
             if ($c->order_status == 0) {

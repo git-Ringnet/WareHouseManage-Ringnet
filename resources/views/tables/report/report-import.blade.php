@@ -7,7 +7,7 @@
             <div class="col-12">
                 <div class="ml-auto choosetime" style="bottom: -35px !important">
                     <div class="col d-flex px-0" style="position: relative; width: auto">
-                        <div class="dropdown w-100">
+                        <div class="dropdown w-100" style="z-index:999">
                             <button class="btn w-100 btn-light border rounded dropdown-toggle" id="orders"
                                 style="display: flex;
                         justify-content: space-between;
@@ -114,7 +114,7 @@
                     Xuất hàng
                 </a>
             </div>
-          
+
         </div>
         <hr class="hr">
         <div class="container-fluided">
@@ -299,13 +299,13 @@ $index = array_search($item['label'], $numberedLabels);
                                         $nhanvien = request()->nhanvien;
                                     } else {
                                         $nhanvien = [];
-                                }
-                                $nhanviens = [];
-                                                                        if (isset(request()->nhanviens)) {
-                                                                            $nhanviens = request()->nhanviens;
-                                                                        } else {
-                                                                            $nhanviens = [];
-                                                                }
+                                    }
+                                    $nhanviens = [];
+                                    if (isset(request()->nhanviens)) {
+                                        $nhanviens = request()->nhanviens;
+                                    } else {
+                                        $nhanviens = [];
+                                    }
                                 @endphp
                                 <div class="filter-admin">
                                     <button class="btn btn-filter btn-light mr-2" id="btn-nhanvien" type="button">
@@ -343,19 +343,19 @@ $index = array_search($item['label'], $numberedLabels);
                                                             $seenValues = [];
                                                         @endphp
                                                         @foreach ($debtsSale as $value)
-                                                        @if (!in_array($value->name, $seenValues))
-                                                        <li>
-                                                            <input type="checkbox" id="name_active"
-                                                                {{ in_array($value->name, $nhanviens) ? 'checked' : '' }}
-                                                                name="nhanviens[]"
-                                                                value="{{ $value->name }}">
-                                                            <label id="nhanviens"
-                                                                for="">{{ $value->name }}</label>
-                                                        </li>
-                                                        @php
-                                                            $seenValues[] = $value->name;
-                                                        @endphp
-                                                    @endif
+                                                            @if (!in_array($value->name, $seenValues))
+                                                                <li>
+                                                                    <input type="checkbox" id="name_active"
+                                                                        {{ in_array($value->name, $nhanviens) ? 'checked' : '' }}
+                                                                        name="nhanviens[]"
+                                                                        value="{{ $value->name }}">
+                                                                    <label id="nhanviens"
+                                                                        for="">{{ $value->name }}</label>
+                                                                </li>
+                                                                @php
+                                                                    $seenValues[] = $value->name;
+                                                                @endphp
+                                                            @endif
                                                         @endforeach
                                                     @endif
                                                 </ul>
@@ -517,19 +517,19 @@ $index = array_search($item['label'], $numberedLabels);
                                                             $seenValues = [];
                                                         @endphp
                                                         @foreach ($debtsSale as $value)
-                                                        @if (!in_array($value->name, $seenValues))
-                                                        <li>
-                                                            <input type="checkbox" id="name_active"
-                                                                {{ in_array($value->name, $nhanvien) ? 'checked' : '' }}
-                                                                name="nhanvien[]"
-                                                                value="{{ $value->name }}">
-                                                            <label id="nhanvien"
-                                                                for="">{{ $value->name }}</label>
-                                                        </li>
-                                                        @php
-                                                            $seenValues[] = $value->name;
-                                                        @endphp
-                                                    @endif
+                                                            @if (!in_array($value->name, $seenValues))
+                                                                <li>
+                                                                    <input type="checkbox" id="name_active"
+                                                                        {{ in_array($value->name, $nhanvien) ? 'checked' : '' }}
+                                                                        name="nhanvien[]"
+                                                                        value="{{ $value->name }}">
+                                                                    <label id="nhanvien"
+                                                                        for="">{{ $value->name }}</label>
+                                                                </li>
+                                                                @php
+                                                                    $seenValues[] = $value->name;
+                                                                @endphp
+                                                            @endif
                                                         @endforeach
                                                     @endif
                                                 </ul>

@@ -44,7 +44,7 @@ class UpdateUserLicense
             $current_date = new DateTime();
             $interval = $current_date->diff($date_end);
             $days_remaining = $interval->days;
-            $days_remaining = 'Bạn còn ' . $days_remaining . ' ngày còn lại';
+            $days_remaining = 'Thời gian thử nghiệm còn lại ' . $days_remaining . ' ngày';
             session()->put('days_remaining', $days_remaining);
 
             // Kiểm tra date_end và thực hiện các hành động khác nếu cần

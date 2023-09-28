@@ -39,10 +39,13 @@ class ReportController extends Controller
         //Tổng tiền xuất
         $sumExport = $this->exports->tongtienxuat();
         //Tổng lợi nhuận
-        $sumLoinhuan = Debt::select(DB::raw('SUM(total_difference) as tongLoiNhuan'))->limit(1)->first();
+        $sumLoinhuan = Debt::select(DB::raw('SUM(total_difference) as tongLoiNhuan'))
+            ->where('debts.license_id', Auth::user()->license_id)
+            ->limit(1)->first();
         $formattedLoinhuan = $sumLoinhuan->tongLoiNhuan;
         //Tổng công nợ
         $sumCongNo = Debt::select(DB::raw('SUM(total_sales) as tongCongNo'))
+            ->where('debts.license_id', Auth::user()->license_id)
             ->where('debts.debt_status', '!=', 1)->limit(1)->first();
         $CongNo = $sumCongNo->tongCongNo;
         $mindate = $this->exports->mindate();
@@ -141,12 +144,14 @@ class ReportController extends Controller
         $orders = count($orders);
         //Tổng tiền đơn nhập + vat
         $totalSum = Orders::select(DB::raw('SUM(orders.total_tax) as total_sum'))
+            ->where('orders.license_id', Auth::user()->license_id)
             ->where('orders.order_status', 1)
             ->limit(1)
             ->first();
         $sumTotalOrders = $totalSum->total_sum;
         //Tổng công nợ + vat
         $sumDebtImport = DebtImport::select(DB::raw('SUM(total_import) as total_import'))
+            ->where('debt_import.license_id', Auth::user()->license_id)
             ->where('debt_import.debt_status', '!=', 1)->limit(1)
             ->first();
         $sumDebtImportVAT = $sumDebtImport->total_import;
@@ -209,7 +214,7 @@ class ReportController extends Controller
         } else {
             $sortType = 'desc';
         }
-        $tableorders = $this->orders->reportOrders($filters, $nhanvien,$nhanviens, $roles, $sortBy, $sortType);
+        $tableorders = $this->orders->reportOrders($filters, $nhanvien, $nhanviens, $roles, $sortBy, $sortType);
         $allRoles = new Roles();
         $allRoles = $allRoles->getAll();
         // dd($tableorders);
@@ -225,23 +230,28 @@ class ReportController extends Controller
         if ($data['data'] == 0) {
             $count = Orders::selectSub(function ($query) {
                 $query->from('orders')->where('orders.order_status', '=', 1)
+                    ->where('orders.license_id', Auth::user()->license_id)
                     ->selectRaw('count(id)');
             }, 'countID')
                 ->selectSub(function ($query) {
                     $query->from('orders')->where('orders.order_status', '=', 1)
+                        ->where('orders.license_id', Auth::user()->license_id)
                         ->selectRaw('SUM(total_tax)');
                 }, 'sumTotal') // Lấy ngày created_at bé nhất
                 ->selectSub(function ($query) {
                     $query->from('orders')->where('orders.order_status', '=', 1)
+                        ->where('orders.license_id', Auth::user()->license_id)
                         ->selectRaw('MIN(created_at)');
                 }, 'minCreatedAt')
                 ->selectSub(function ($query) {
                     $query->from('orders')->where('orders.order_status', '=', 1)
+                        ->where('orders.license_id', Auth::user()->license_id)
                         ->selectRaw('MAX(created_at)');
                 }, 'maxCreatedAt')
                 ->first();
             $countDebtImport = DebtImport::selectSub(function ($query) use ($today) {
                 $query->from('debt_import')->where('debt_status', '!=', 1)
+                    ->where('orders.license_id', Auth::user()->license_id)
                     ->selectRaw('SUM(total_import)');
             }, 'countDebtImport')->first();
             $minCreatedAt = Carbon::parse($count->minCreatedAt);
@@ -268,16 +278,19 @@ class ReportController extends Controller
             $lastDayOfMonth = $today->endOfMonth()->format('Y-m-d'); // Ngày kết thúc của tháng, đã được định dạng            
             $count = Orders::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                 $query->from('orders')->where('orders.order_status', '=', 1)
+                    ->where('orders.license_id', Auth::user()->license_id)
                     ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                     ->selectRaw('COUNT(id)');
             }, 'countID')
                 ->selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('orders')->where('orders.order_status', '=', 1)
+                        ->where('orders.license_id', Auth::user()->license_id)
                         ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('SUM(total_tax)');
                 }, 'sumTotal')->first();
             $countDebtImport = DebtImport::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                 $query->from('debt_import')->where('debt_status', '!=', 1)
+                    ->where('debt_import.license_id', Auth::user()->license_id)
                     ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                     ->selectRaw('SUM(total_import)');
             }, 'countDebtImport')->first();
@@ -304,16 +317,19 @@ class ReportController extends Controller
                 $lastDayOfMonth = $lastMonth->endOfMonth()->format('Y-m-d');
                 $count = Orders::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('orders')->where('orders.order_status', '=', 1)
+                        ->where('orders.license_id', Auth::user()->license_id)
                         ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('COUNT(id)');
                 }, 'countID')
                     ->selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                         $query->from('orders')->where('orders.order_status', '=', 1)
+                            ->where('orders.license_id', Auth::user()->license_id)
                             ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                             ->selectRaw('SUM(total_tax)');
                     }, 'sumTotal')->first();
                 $countDebtImport = DebtImport::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('debt_import')->where('debt_status', '!=', 1)
+                        ->where('debt_import.license_id', Auth::user()->license_id)
                         ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('SUM(total_import)');
                 },  'countDebtImport')->first();
@@ -331,16 +347,19 @@ class ReportController extends Controller
                 $lastDayOfMonth = $lastMonth->endOfMonth()->format('Y-m-d');
                 $count = Orders::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('orders')->where('orders.order_status', '=', 1)
+                        ->where('orders.license_id', Auth::user()->license_id)
                         ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('COUNT(id)');
                 }, 'countID')
                     ->selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                         $query->from('orders')->where('orders.order_status', '=', 1)
+                            ->where('orders.license_id', Auth::user()->license_id)
                             ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                             ->selectRaw('SUM(total_tax)');
                     }, 'sumTotal')->first();
                 $countDebtImport = DebtImport::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('debt_import')->where('debt_status', '!=', 1)
+                        ->where('debt_import.license_id', Auth::user()->license_id)
                         ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('SUM(total_import)');
                 },  'countDebtImport')->first();
@@ -371,16 +390,19 @@ class ReportController extends Controller
                 $lastDayOfMonth1 = $lastMonth1->endOfMonth()->addMonths(2)->format('Y-m-d');
                 $count = Orders::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('orders')->where('orders.order_status', '=', 1)
+                        ->where('orders.license_id', Auth::user()->license_id)
                         ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('COUNT(id)');
                 }, 'countID')
                     ->selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                         $query->from('orders')->where('orders.order_status', '=', 1)
+                            ->where('orders.license_id', Auth::user()->license_id)
                             ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                             ->selectRaw('SUM(total_tax)');
                     }, 'sumTotal')->first();
                 $countDebtImport = DebtImport::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('debt_import')->where('debt_status', '!=', 1)
+                        ->where('debt_import.license_id', Auth::user()->license_id)
                         ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('SUM(total_import)');
                 },  'countDebtImport')->first();
@@ -401,16 +423,19 @@ class ReportController extends Controller
                 $lastDayOfMonth1 = $lastMonth1->endOfMonth()->addMonths(2)->format('Y-m-d');
                 $count = Orders::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('orders')->where('orders.order_status', '=', 1)
+                        ->where('orders.license_id', Auth::user()->license_id)
                         ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('COUNT(id)');
                 }, 'countID')
                     ->selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                         $query->from('orders')->where('orders.order_status', '=', 1)
+                            ->where('orders.license_id', Auth::user()->license_id)
                             ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                             ->selectRaw('SUM(total_tax)');
                     }, 'sumTotal')->first();
                 $countDebtImport = DebtImport::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('debt_import')->where('debt_status', '!=', 1)
+                        ->where('debt_import.license_id', Auth::user()->license_id)
                         ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('SUM(total_import)');
                 },  'countDebtImport')->first();
@@ -437,18 +462,21 @@ class ReportController extends Controller
             $date_end = Carbon::parse($data['date_end']);
             $count = Orders::selectSub(function ($query) use ($date_start, $date_end) {
                 $query->from('orders')->where('orders.order_status', '=', 1)
+                    ->where('orders.license_id', Auth::user()->license_id)
                     ->where('created_at', '>=', $date_start)
                     ->where('created_at', '<=', $date_end)
                     ->selectRaw('COUNT(id)');
             }, 'countID')
                 ->selectSub(function ($query) use ($date_start, $date_end) {
                     $query->from('orders')->where('orders.order_status', '=', 1)
+                        ->where('orders.license_id', Auth::user()->license_id)
                         ->where('created_at', '>=', $date_start)
                         ->where('created_at', '<=', $date_end)
                         ->selectRaw('SUM(total_tax)');
                 }, 'sumTotal')->first();
             $countDebtImport = DebtImport::selectSub(function ($query) use ($date_start, $date_end) {
                 $query->from('debt_import')->where('debt_status', '!=', 1)
+                    ->where('debt_import.license_id', Auth::user()->license_id)
                     ->where('created_at', '>=', $date_start)
                     ->where('created_at', '<=', $date_end)
                     ->selectRaw('SUM(total_import)');
@@ -475,31 +503,38 @@ class ReportController extends Controller
         if ($data['data'] == 0) {
             $count = Exports::selectSub(function ($query) {
                 $query->from('exports')->where('exports.export_status', '=', 2)
+                    ->where('exports.license_id', Auth::user()->license_id)
                     ->selectRaw('count(id)');
             }, 'countExport')
                 ->selectSub(function ($query) {
                     $query->from('exports')->where('exports.export_status', '=', 2)
+                        ->where('exports.license_id', Auth::user()->license_id)
                         ->selectRaw('SUM(total)');
                 }, 'sumExport') // Lấy ngày created_at bé nhất
                 ->selectSub(function ($query) {
                     $query->from('exports')->where('exports.export_status', '=', 2)
+                        ->where('exports.license_id', Auth::user()->license_id)
                         ->selectRaw('MIN(created_at)');
                 }, 'minCreatedAt')
                 ->selectSub(function ($query) {
                     $query->from('exports')->where('exports.export_status', '=', 2)
+                        ->where('exports.license_id', Auth::user()->license_id)
                         ->selectRaw('MAX(created_at)');
                 }, 'maxCreatedAt')
                 ->first();
             $countDebt = Debt::selectSub(function ($query) {
                 $query->from('debts')->where('debt_status', '!=', 1)
+                    ->where('debts.license_id', Auth::user()->license_id)
                     ->selectRaw('SUM(total_sales)');
             }, 'countDebt')->selectSub(function ($query) {
                 $query->from('exports')->where('exports.export_status', '=', 2)
+                    ->where('exports.license_id', Auth::user()->license_id)
                     ->selectRaw('MAX(created_at)');
             }, 'maxCreatedAt')
                 ->first();
             $countProfit = Debt::selectSub(function ($query) {
                 $query->from('debts')
+                    ->where('debts.license_id', Auth::user()->license_id)
                     ->selectRaw('sum(total_difference)');
             }, 'countProfit')
                 ->first();
@@ -528,22 +563,26 @@ class ReportController extends Controller
             $lastDayOfMonth = $today->endOfMonth()->format('Y-m-d');
             $count = Exports::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                 $query->from('exports')->where('exports.export_status', '=', 2)
+                    ->where('exports.license_id', Auth::user()->license_id)
                     ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                     ->selectRaw('COUNT(id)');
             }, 'countExport')
                 ->selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('exports')->where('exports.export_status', '=', 2)
+                        ->where('exports.license_id', Auth::user()->license_id)
                         ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('SUM(total)');
                 }, 'sumExport')
                 ->first();
             $countDebt = Debt::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                 $query->from('debts')->where('debt_status', '!=', 1)
+                    ->where('debts.license_id', Auth::user()->license_id)
                     ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                     ->selectRaw('SUM(total_sales)');
             }, 'countDebt')->first();
             $countProfit = Debt::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                 $query->from('debts')
+                    ->where('debts.license_id', Auth::user()->license_id)
                     ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                     ->selectRaw('sum(total_difference)');
             }, 'countProfit')
@@ -572,22 +611,26 @@ class ReportController extends Controller
                 $lastDayOfMonth = $lastMonth->endOfMonth()->format('Y-m-d');
                 $count = Exports::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('exports')->where('exports.export_status', '=', 2)
+                        ->where('exports.license_id', Auth::user()->license_id)
                         ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('COUNT(id)');
                 }, 'countExport')
                     ->selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                         $query->from('exports')->where('exports.export_status', '=', 2)
+                            ->where('exports.license_id', Auth::user()->license_id)
                             ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                             ->selectRaw('SUM(total)');
                     }, 'sumExport')
                     ->first();
                 $countDebt = Debt::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('debts')->where('debt_status', '!=', 1)
+                        ->where('debts.license_id', Auth::user()->license_id)
                         ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('SUM(total_sales)');
                 },  'countDebt')->first();
                 $countProfit = Debt::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('debts')
+                        ->where('debts.license_id', Auth::user()->license_id)
                         ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('sum(total_difference)');
                 }, 'countProfit')
@@ -606,22 +649,26 @@ class ReportController extends Controller
                 $lastDayOfMonth = $lastMonth->endOfMonth()->format('Y-m-d');
                 $count = Exports::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('exports')->where('exports.export_status', '=', 2)
+                        ->where('exports.license_id', Auth::user()->license_id)
                         ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('COUNT(id)');
                 }, 'countExport')
                     ->selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                         $query->from('exports')->where('exports.export_status', '=', 2)
+                            ->where('exports.license_id', Auth::user()->license_id)
                             ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                             ->selectRaw('SUM(total)');
                     }, 'sumExport')
                     ->first();
                 $countDebt = Debt::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('debts')->where('debt_status', '!=', 1)
+                        ->where('debts.license_id', Auth::user()->license_id)
                         ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('SUM(total_sales)');
                 },  'countDebt')->first();
                 $countProfit = Debt::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('debts')
+                        ->where('debts.license_id', Auth::user()->license_id)
                         ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('sum(total_difference)');
                 }, 'countProfit')
@@ -654,22 +701,26 @@ class ReportController extends Controller
                 $lastDayOfMonth1 = $lastMonth1->endOfMonth()->addMonths(2)->format('Y-m-d');
                 $count = Exports::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('exports')->where('exports.export_status', '=', 2)
+                        ->where('exports.license_id', Auth::user()->license_id)
                         ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('COUNT(id)');
                 }, 'countExport')
                     ->selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                         $query->from('exports')->where('exports.export_status', '=', 2)
+                            ->where('exports.license_id', Auth::user()->license_id)
                             ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                             ->selectRaw('SUM(total)');
                     }, 'sumExport')
                     ->first();
                 $countDebt = Debt::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('debts')->where('debt_status', '!=', 1)
+                        ->where('debts.license_id', Auth::user()->license_id)
                         ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('SUM(total_sales)');
                 },  'countDebt')->first();
                 $countProfit = Debt::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('debts')
+                        ->where('debts.license_id', Auth::user()->license_id)
                         ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('sum(total_difference)');
                 }, 'countProfit')
@@ -691,22 +742,26 @@ class ReportController extends Controller
                 $lastDayOfMonth1 = $lastMonth1->endOfMonth()->addMonths(2)->format('Y-m-d');
                 $count = Exports::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('exports')->where('exports.export_status', '=', 2)
+                        ->where('exports.license_id', Auth::user()->license_id)
                         ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('COUNT(id)');
                 }, 'countExport')
                     ->selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                         $query->from('exports')->where('exports.export_status', '=', 2)
+                            ->where('exports.license_id', Auth::user()->license_id)
                             ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                             ->selectRaw('SUM(total)');
                     }, 'sumExport')
                     ->first();
                 $countDebt = Debt::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('debts')->where('debt_status', '!=', 1)
+                        ->where('debts.license_id', Auth::user()->license_id)
                         ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('SUM(total_sales)');
                 },  'countDebt')->first();
                 $countProfit = Debt::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('debts')
+                        ->where('debts.license_id', Auth::user()->license_id)
                         ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
                         ->selectRaw('sum(total_difference)');
                 }, 'countProfit')->first();
@@ -733,12 +788,14 @@ class ReportController extends Controller
             $date_end = Carbon::parse($data['date_end']);
             $count = Exports::selectSub(function ($query) use ($date_start, $date_end) {
                 $query->from('exports')->where('exports.export_status', '=', 2)
+                    ->where('exports.license_id', Auth::user()->license_id)
                     ->where('created_at', '>=', $date_start)
                     ->where('created_at', '<=', $date_end)
                     ->selectRaw('COUNT(id)');
             }, 'countExport')
                 ->selectSub(function ($query) use ($date_start, $date_end) {
                     $query->from('exports')->where('exports.export_status', '=', 2)
+                        ->where('exports.license_id', Auth::user()->license_id)
                         ->where('created_at', '>=', $date_start)
                         ->where('created_at', '<=', $date_end)
                         ->selectRaw('SUM(total)');
@@ -746,6 +803,7 @@ class ReportController extends Controller
                 ->first();
             $countProfit = Debt::selectSub(function ($query) use ($date_start, $date_end) {
                 $query->from('debts')
+                    ->where('debts.license_id', Auth::user()->license_id)
                     ->where('created_at', '>=', $date_start)
                     ->where('created_at', '<=', $date_end)
                     ->selectRaw('sum(total_difference)');
@@ -753,6 +811,7 @@ class ReportController extends Controller
                 ->first();
             $countDebt = Debt::selectSub(function ($query) use ($date_start, $date_end) {
                 $query->from('debts')->where('debt_status', '!=', 1)
+                    ->where('debts.license_id', Auth::user()->license_id)
                     ->where('created_at', '>=', $date_start)
                     ->where('created_at', '<=', $date_end)
                     ->selectRaw('SUM(total_sales)');
@@ -796,7 +855,7 @@ class ReportController extends Controller
 
         // Thực hiện mysqldump để tạo file SQL và lưu vào thư mục tạm thời
         $fileName = "backup_$date.sql";
-        $command = "mysqldump -u $dbUsername $passwordOption $dbName -e 'SELECT * FROM users WHERE license_id ='". Auth::user()->license_id ." > $backupPath$fileName";
+        $command = "mysqldump -u $dbUsername $passwordOption $dbName -e 'SELECT * FROM users WHERE license_id ='" . Auth::user()->license_id . " > $backupPath$fileName";
         exec($command);
 
         // Tạo tệp zip và nén tệp SQL vào trong đó
