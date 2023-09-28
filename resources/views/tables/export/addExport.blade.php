@@ -262,24 +262,6 @@
 </div>
 </section>
 </div>
-<style>
-    .selectize-input>input {
-        width: calc(100% - 30px) !important;
-        max-width: calc(100% - 30px) !important;
-        position: absolute !important;
-        left: 10px !important;
-    }
-
-    .selectize-input.has-items>.item {
-        display: inline-block !important;
-        width: 90% !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
-        white-space: normal !important;
-        overflow-wrap: break-word !important;
-        margin-top: 4px;
-    }
-</style>
 <script>
     // Thay đổi màu nút save note_form
     $(document).ready(function() {
@@ -1094,47 +1076,40 @@
 
             // Kiểm tra nếu ID sản phẩm đã chọn đã có trong danh sách các sản phẩm đã chọn
             if (selectedProductIDs.includes(selectedID)) {
-                var selectize = $(this)[0].selectize;
-                selectize.clear();
-                selectize.blur();
+                // Xóa lựa chọn hiện tại và vô hiệu hóa tên sản phẩm
+                $(this).val(null).trigger('change');
                 var productNameElement = $(this).closest('tr').find('.product_name');
                 productNameElement.prop('disabled', true);
+
+                // Thông báo cho người dùng rằng sản phẩm đã được thêm trước đó
                 alert('Sản phẩm này đã được thêm trước đó, vui lòng chọn sản phẩm khác');
 
-                // Kiểm tra nếu giá trị data-previous-id là null, thì bỏ qua bước kiểm tra tiếp theo
-                if ($(this).data('previous-id') !== null) {
-                    var previousID = $(this).data('previous-id'); // Lấy ID trước đó của tùy chọn
+                // Kiểm tra nếu giá trị data-previous-id không null, thì xóa sản phẩm trước đó khỏi mảng
+                var previousID = $(this).data('previous-id');
+                if (previousID !== null) {
                     var index = selectedProductIDs.indexOf(previousID);
                     if (index !== -1) {
-                        selectedProductIDs.splice(index, 1); // Xóa ID trước đó khỏi mảng
-                    }
-                }
-
-                // Đặt giá trị data-previous-id thành null để cho phép chọn lại sản phẩm ban đầu
-                $(this).data('previous-id', null);
-
-                // Kiểm tra nếu giá trị data-previous-id là null, thì bỏ qua bước kiểm tra tiếp theo
-                if ($(this).data('previous-id') !== null) {
-                    var previousID = $(this).data('previous-id'); // Lấy ID trước đó của tùy chọn
-                    var index = selectedProductIDs.indexOf(previousID);
-                    if (index !== -1) {
-                        selectedProductIDs.splice(index, 1); // Xóa ID trước đó khỏi mảng
+                        selectedProductIDs.splice(index, 1);
                     }
                 }
 
                 // Đặt giá trị data-previous-id thành null để cho phép chọn lại sản phẩm ban đầu
                 $(this).data('previous-id', null);
             } else {
+                // Nếu sản phẩm chưa được chọn trước đó, thực hiện các bước sau
                 var previousID = $(this).data('previous-id'); // Lấy ID trước đó của tùy chọn
+
                 if (previousID && previousID !== selectedID) {
                     var index = selectedProductIDs.indexOf(previousID);
                     if (index !== -1) {
                         selectedProductIDs.splice(index, 1); // Xóa ID trước đó khỏi mảng
                     }
                 }
+
                 selectedProductIDs.push(selectedID); // Lưu ID sản phẩm đã chọn vào mảng
                 $(this).data('previous-id',
                     selectedID); // Lưu ID hiện tại vào thuộc tính data của tùy chọn
+
                 hideSelectedProductNames(row); // Ẩn tên sản phẩm đã chọn từ các tùy chọn khác
             }
         });
@@ -1338,36 +1313,35 @@
                     selectedProductIDs: selectedProductIDs,
                 },
                 success: function(response) {
-                    response.forEach(function(sn) {
-                        // console.log(sn);
-                    })
-                    const productsRows = document.querySelectorAll('tr');
                     let missProducts = [];
-                    // Lặp qua từng thẻ <tr>
-                    for (let i = 0; i < productRows.length; i++) {
-                        // Lấy số lượng sản phẩm hiện tại
-                        const qtyInput = productRows[i].querySelector('.quantity-input');
-                        const productNameElement = productRows[i].querySelector('.productName');
+                    response.forEach(function(sn) {
+                        // Kiểm tra xem product_id của sản phẩm có trong selectedProductIDs không
+                        if (selectedProductIDs.includes(sn.product_id)) {
+                            // Lặp qua từng thẻ <tr>
+                            const productsRows = document.querySelectorAll('tr');
+                            for (let j = 0; j < productsRows.length; j++) {
+                                // Lấy số lượng sản phẩm hiện tại
+                                const qty = productsRows[j].querySelector('.quantity-input');
+                                const productNameElement = productsRows[j].querySelector(
+                                    '.productName');
 
-                        // Kiểm tra xem phần tử .quantity-input có tồn tại không
-                        if (qtyInput !== null) {
-                            const idProduct = productNameElement.value;
-                            const numberOfInputs = $(
-                                    `input[name="selected_serial_numbers[]"][data-product-id="${idProduct}"]`
-                                    )
-                                .length;
-
-                            // So sánh số lượng với số lượng input
-                            if (parseInt(qtyInput.value) !== numberOfInputs) {
-                                // Số lượng không khớp, thực hiện xử lý tại đây
-                                console.log(`Số lượng không khớp cho sản phẩm có ID ${idProduct}`);
-                            } else {
-                                // Số lượng khớp
-                                console.log(`Số lượng khớp cho sản phẩm có ID ${idProduct}`);
+                                // Kiểm tra xem phần tử .quantity-input có tồn tại không
+                                if (qty !== null) {
+                                    const idProduct = productNameElement.value;
+                                    const numberOfInputs = $(
+                                        `input[name="selected_serial_numbers[]"][data-product-id="${idProduct}"]`
+                                    ).length;
+                                    // So sánh số lượng với số lượng input
+                                    if (parseInt(qty.value) !== numberOfInputs) {
+                                        // Số lượng không khớp, thực hiện xử lý tại đây
+                                        console.log(
+                                            `Số lượng không khớp cho sản phẩm có ID ${idProduct}`
+                                        );
+                                    }
+                                }
                             }
                         }
-                    }
-                    console.log(missProducts);
+                    });
                 },
                 error: function(xhr, status, error) {
                     console.error(error);
