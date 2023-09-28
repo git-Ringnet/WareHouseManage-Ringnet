@@ -13,10 +13,9 @@ class Product extends Model
     protected $table = 'product';
 
     protected $fillable = [
-develop_ringnet
-        'product_name','product_unit','product_qty','product_price','product_tax','product_total','provide_id','product_trade','product_trademark','product_code','created_at','license_id'
-     ];
-    public function getAllProduct($filters = [],$perPage, $status = [], $products_name = null, $providearr, $unitarr,$taxarr, $keywords = null, $sortByArr = null)
+        'product_name', 'product_unit', 'product_qty', 'product_price', 'product_tax', 'product_total', 'provide_id', 'product_trade', 'product_trademark', 'product_code', 'created_at', 'license_id'
+    ];
+    public function getAllProduct($filters = [], $perPage, $status = [], $products_name = null, $providearr, $unitarr, $taxarr, $keywords = null, $sortByArr = null)
     {
         //lấy tất cả products
         $products = DB::table($this->table)
@@ -76,8 +75,8 @@ develop_ringnet
                 $query->orWhere('provides.provide_name', 'like', '%' . $keywords . '%');
             });
         }
-        $products = $products->where('product.product_qty','>',0);
-        $products = $products->where('product.license_id',Auth::user()->license_id);
+        $products = $products->where('product.product_qty', '>', 0);
+        $products = $products->where('product.license_id', Auth::user()->license_id);
         $products = $products->orderBy('product.created_at', 'asc')->paginate($perPage);
 
         return $products;
