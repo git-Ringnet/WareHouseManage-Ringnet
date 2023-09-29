@@ -88,11 +88,16 @@ class Exports extends Model
     {
         $exports = DB::table($this->table)
             ->where('export_status', 2)
+            ->where('license_id', Auth::user()->license_id)
             ->get();
 
         $minDate = $exports->min('created_at');
 
-        $formattedDate = date('d-m-Y', strtotime($minDate));
+        if ($minDate !== null) {
+            $formattedDate = date('d-m-Y', strtotime($minDate));
+        } else {
+            $formattedDate = null;
+        }
 
         return $formattedDate;
     }
@@ -100,11 +105,16 @@ class Exports extends Model
     {
         $exports = DB::table($this->table)
             ->where('export_status', 2)
+            ->where('license_id', Auth::user()->license_id)
             ->get();
 
         $maxdate = $exports->MAX('created_at');
 
-        $formattedDate = date('d-m-Y', strtotime($maxdate));
+        if ($maxdate !== null) {
+            $formattedDate = date('d-m-Y', strtotime($maxdate));
+        } else {
+            $formattedDate = null;
+        }
 
         return $formattedDate;
     }
