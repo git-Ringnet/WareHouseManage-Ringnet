@@ -20,7 +20,9 @@ class Product extends Model
         //lấy tất cả products
         $products = DB::table($this->table)
             ->leftJoin('provides', 'provides.id', '=', 'product.provide_id')
-            ->select('product.*', 'provides.provide_name as provide', 'product.product_qty as soluong');
+            ->leftJoin('serinumbers', 'serinumbers.product_id', '=', 'product.id')
+            ->select('product.*', 'provides.provide_name as provide', 'product.product_qty as soluong', 'serinumbers.serinumber as serinumber');
+
         $orderBy = 'created_at';
         $orderType = 'desc';
         if (!empty($sortByArr) && is_array($sortByArr)) {
@@ -73,6 +75,7 @@ class Product extends Model
             $products = $products->where(function ($query) use ($keywords) {
                 $query->orWhere('product_name', 'like', '%' . $keywords . '%');
                 $query->orWhere('provides.provide_name', 'like', '%' . $keywords . '%');
+                $query->orWhere('serinumbers.serinumber', 'like', '%' . $keywords . '%');
             });
         }
         $products = $products->where('product.product_qty', '>', 0);
