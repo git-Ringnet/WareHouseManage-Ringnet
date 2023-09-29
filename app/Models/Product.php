@@ -13,15 +13,16 @@ class Product extends Model
     protected $table = 'product';
 
     protected $fillable = [
-develop_ringnet
-        'product_name','product_unit','product_qty','product_price','product_tax','product_total','provide_id','product_trade','product_trademark','product_code','created_at','license_id'
-     ];
-    public function getAllProduct($filters = [],$perPage, $status = [], $products_name = null, $providearr, $unitarr,$taxarr, $keywords = null, $sortByArr = null)
+        'product_name', 'product_unit', 'product_qty', 'product_price', 'product_tax', 'product_total', 'provide_id', 'product_trade', 'product_trademark', 'product_code', 'created_at', 'license_id'
+    ];
+    public function getAllProduct($filters = [], $perPage, $status = [], $products_name = null, $providearr, $unitarr, $taxarr, $keywords = null, $sortByArr = null)
     {
         //lấy tất cả products
         $products = DB::table($this->table)
             ->leftJoin('provides', 'provides.id', '=', 'product.provide_id')
-            ->select('product.*', 'provides.provide_name as provide', 'product.product_qty as soluong');
+            ->leftJoin('serinumbers', 'serinumbers.product_id', '=', 'product.id')
+            ->select('product.*', 'provides.provide_name as provide', 'product.product_qty as soluong', 'serinumbers.serinumber as serinumber');
+
         $orderBy = 'created_at';
         $orderType = 'desc';
         if (!empty($sortByArr) && is_array($sortByArr)) {
@@ -74,10 +75,11 @@ develop_ringnet
             $products = $products->where(function ($query) use ($keywords) {
                 $query->orWhere('product_name', 'like', '%' . $keywords . '%');
                 $query->orWhere('provides.provide_name', 'like', '%' . $keywords . '%');
+                $query->orWhere('serinumbers.serinumber', 'like', '%' . $keywords . '%');
             });
         }
-        $products = $products->where('product.product_qty','>',0);
-        $products = $products->where('product.license_id',Auth::user()->license_id);
+        $products = $products->where('product.product_qty', '>', 0);
+        $products = $products->where('product.license_id', Auth::user()->license_id);
         $products = $products->orderBy('product.created_at', 'asc')->paginate($perPage);
 
         return $products;
