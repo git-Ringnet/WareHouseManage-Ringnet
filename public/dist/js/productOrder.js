@@ -624,7 +624,7 @@ $('.addRow').on('click', function () {
 
 
     var modal = '<div class="modal fade" id="exampleModal' + rowCount +
-        '" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">' +
+        '" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">' +
         '<div class="modal-dialog" role="document">' +
         '<div class="modal-content">' +
         '<div class="modal-header align-items-center">' +
@@ -728,7 +728,7 @@ $('.addRow1').on('click', function () {
 
 
     var modal = '<div class="modal fade" id="exampleModal' + rowCount +
-        '" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">' +
+        '" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">' +
         '<div class="modal-dialog" role="document">' +
         '<div class="modal-content">' +
         '<div class="modal-header align-items-center">' +
