@@ -7,7 +7,6 @@ use App\Models\Provides;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class HistoryController extends Controller
 {
@@ -174,6 +173,16 @@ class HistoryController extends Controller
             array_push($string, $datearr);
         }
 
+        // Tên Serial NUMBER
+        if (!empty($request->sn)) {
+            $sn = $request->sn;
+            array_push($filters, ['serinumber', 'like', '%' . $sn . '%']);
+            $nameArr = explode(',.@', $sn);
+            array_push($string, [
+                'label' => 'Serial number:', 'values' => $nameArr, 'class' => 'sn'
+            ]);
+        }
+
         //Search
         $keywords = null;
         if (!empty($request->keywords)) {
@@ -297,7 +306,6 @@ class HistoryController extends Controller
             ->with('getUsers')
             ->with('getProvides')
             ->with('getGuests')
-            ->where('license_id', Auth::user()->license_id)
             ->get();
 
         foreach ($data as $row) {

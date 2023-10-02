@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class History extends Model
@@ -59,7 +58,17 @@ class History extends Model
             ->leftJoin('guests', 'guests.id', 'history.guest_id')
             ->leftJoin('debts', 'debts.export_id', 'history.export_id')
             ->leftJoin('debt_import', 'debt_import.import_id', 'history.import_id')
-            ->select('history.*', 'guests.*', 'provides.*', 'users.*', 'debt_import.updated_at as thanhtoannhap', 'debts.updated_at as thanhtoanxuat');
+            ->leftJoin('serinumbers', 'serinumbers.product_id', '=', 'history.product_id')
+            ->select(
+                'history.*',
+                'guests.*',
+                'provides.*',
+                'users.*',
+                'debt_import.updated_at as thanhtoannhap',
+                'debts.updated_at as thanhtoanxuat',
+                'serinumbers.serinumber as serinumber'
+            );
+        // dd($history);
 
         if (!empty($filters)) {
             $history = $history->where($filters);
@@ -73,6 +82,7 @@ class History extends Model
                 $query->orWhere('import_code', 'like', '%' . $keywords . '%');
                 $query->orWhere('guest_name', 'like', '%' . $keywords . '%');
                 $query->orWhere('export_code', 'like', '%' . $keywords . '%');
+                $query->orWhere('serinumbers.serinumber', 'like', '%' . $keywords . '%');
             });
         }
         if (!empty($guest)) {
@@ -106,9 +116,7 @@ class History extends Model
         }
 
 
-        $history = $history->orderBy('history.id', 'desc')
-            ->where('history.license_id', Auth::user()->license_id)
-            ->paginate($perPage);
+        $history = $history->orderBy('history.id', 'desc')->paginate($perPage);
 
 
         return $history;
