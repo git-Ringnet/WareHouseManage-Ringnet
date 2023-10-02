@@ -1337,6 +1337,9 @@ input[type="checkbox"] {
     margin-top: 3px !important;
 }
 
+.bg-white-sn tr:hover {
+    background-color: #dee2e6 !important;
+}
 
 .select2-selection__rendered {
     white-space: normal !important;
