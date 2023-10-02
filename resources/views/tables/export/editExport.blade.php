@@ -972,7 +972,14 @@
                 modalFooter.append(footer);
                 closeBtn.append(btnClose);
                 countCheckedCheckboxes();
-
+                $('tr').click(function(event) {
+                    var checkedCheckboxesInRow = $(this).find(
+                        '.check-item:checked').length;
+                    var checkbox = $(this).find('input:checkbox');
+                    checkbox.prop('checked', !checkbox.prop(
+                        'checked'));
+                    checkbox.change();
+                });
                 //limit checkbox
                 $('.check-item').on('change', function() {
                     event.stopPropagation();
@@ -1406,7 +1413,14 @@
                             $('#resultCell1').text(numberOfCheckedCheckboxes);
                         }
                         countCheckedCheckboxes1();
-                        // $('#snModal').modal('show');
+                        $('tr').click(function(event) {
+                            var checkedCheckboxesInRow = $(this).find(
+                                '.check-item:checked').length;
+                            var checkbox = $(this).find('input:checkbox');
+                            checkbox.prop('checked', !checkbox.prop(
+                                'checked'));
+                            checkbox.change();
+                        });
                         //limit checkbox
                         $('.check-item').on('change', function() {
                             var checkedCheckboxes = $('.check-item:checked')
@@ -1574,7 +1588,7 @@
             });
             newRow.append(MaInput, ProInput, dvtInput, slInput,
                 giaInput, thueInput, thanhTienInput, ghichuInput, sn, info, deleteBtn, option, snPro
-                );
+            );
             $("#dynamic-fields").before(newRow);
             fieldCounter++;
             $(document).ready(function() {
@@ -1956,7 +1970,7 @@
             var dangGD = $(this).closest('tr').find('.dangGD');
             var thue = $(this).closest('tr').find('.product_tax');
             var ulElement = $(this).closest('tr').find(".seri_pro");
-            
+
             $(this).closest('tr').find('.quantity-input').val(null);
             if (selectedID) {
                 $.ajax({

@@ -524,7 +524,8 @@
                             );
                             var countCell = $('<td>').text(count);
                             var snItemCell = $('<td>').text(sn.serinumber);
-                            var row = $('<tr>').append(checkbox, countCell,
+                            var row = $('<tr>').append(checkbox,
+                                countCell,
                                 snItemCell);
                             snList.append(row);
                             count++;
@@ -550,6 +551,15 @@
                             $('#resultCell').text(numberOfCheckedCheckboxes);
                         }
                         countCheckedCheckboxes();
+                        $('tr').click(function(event) {
+                            var checkedCheckboxesInRow = $(this).find(
+                                '.check-item:checked').length;
+                            var checkbox = $(this).find('input:checkbox');
+                            checkbox.prop('checked', !checkbox.prop(
+                                'checked'));
+                            checkbox.change();
+                        });
+
                         //limit checkbox
                         $('.check-item').on('change', function() {
                             event.stopPropagation();
@@ -557,13 +567,10 @@
                                 .length;
                             var serialNumberId = $(this).val();
 
-                            // Check if checked checkboxes exceed qty_enter
                             if (checkedCheckboxes > qty_enter) {
-                                // Prevent checking more checkboxes than allowed
                                 $(this).prop('checked', false);
                             } else {
                                 if ($(this).is(':checked')) {
-                                    // Nếu checkbox được chọn và không vượt quá giới hạn, thêm Serial Number vào danh sách cho sản phẩm
                                     if (!selectedSerialNumbers[
                                             productCode]) {
                                         selectedSerialNumbers[
@@ -604,6 +611,10 @@
                                 countCheckedCheckboxes();
                             }
                         });
+                        $('tr input:checkbox').click(function(event) {
+                            event.stopPropagation();
+                        });
+
                         //thay đổi số lượng nhập
                         $('.quantity-input').on('change', function() {
                             var newQty = parseInt($(this).val());
@@ -632,6 +643,7 @@
                                 }
                             });
                         });
+
                         //kiểm tra số lượng seri
                         $('.check-seri').on('click', function() {
                             var checkedCheckboxes = $('.check-item:checked')
@@ -677,6 +689,38 @@
                         console.error(error);
                     }
                 });
+
+                function toggleCheckbox(checkboxId) {
+                    var checkbox = document.getElementById(checkboxId);
+                    if (checkbox) {
+                        checkbox.checked = !checkbox.checked;
+                    }
+                }
+
+                function triggerChange(checkboxId) {
+                    var checkbox = document.getElementById(checkboxId);
+                    if (checkbox) {
+                        var event = new Event('change', {
+                            bubbles: true,
+                            cancelable: true,
+                        });
+                        checkbox.dispatchEvent(event);
+                    }
+                }
+
+                function handleRowClick(checkboxId, event) {
+                    // Lấy target của sự kiện click
+                    var target = event.target;
+
+                    // Kiểm tra nếu target không có class "dropdown"
+                    if (!target.closest('.dropdown') && !target.closest('.editEx')) {
+                        var checkbox = document.getElementById(checkboxId);
+                        if (checkbox) {
+                            toggleCheckbox(checkboxId);
+                            triggerChange(checkboxId);
+                        }
+                    }
+                }
             });
 
             //xem thông tin sản phẩm

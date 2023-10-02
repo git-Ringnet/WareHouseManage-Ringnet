@@ -622,7 +622,14 @@
                 closeBtn.append(btnClose);
                 modalBody.append(product, snList);
                 countCheckedCheckboxes();
-
+                $('tr').click(function(event) {
+                    var checkedCheckboxesInRow = $(this).find(
+                        '.check-item:checked').length;
+                    var checkbox = $(this).find('input:checkbox');
+                    checkbox.prop('checked', !checkbox.prop(
+                        'checked'));
+                    checkbox.change();
+                });
                 //limit checkbox
                 $('.check-item').on('change', function() {
                     event.stopPropagation();
