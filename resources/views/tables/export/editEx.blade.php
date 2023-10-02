@@ -1,10 +1,13 @@
 <x-navbar :title="$title"></x-navbar>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 <div class="content-wrapper export-add padding-112">
     <div class="row">
         <div class="col-sm-6 breadcrumb">
             @if ($exports->export_status == 2)
                 <a href="{{ route('exports.index') }}">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none">
                         <path
                             d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
                             fill="#555555" />
@@ -497,6 +500,9 @@
 </section>
 </div>
 <script>
+    $(document).ready(function() {
+        $('.child-select').select2();
+    });
     // Thay đổi màu nút save note_form
     $(document).ready(function() {
         $('#note_form').on('input', function() {

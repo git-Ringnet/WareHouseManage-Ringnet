@@ -2822,7 +2822,7 @@ class ExportController extends Controller
     public function getAllSN(Request $request)
     {
         $data = $request->all();
-        $allSN = Serinumbers::whereIn('product_id', $data['selectedProductIDs'])->get();
+        $allSN = Serinumbers::where('product_id', $data['idProduct'])->get();
         return response()->json($allSN);
     }
 

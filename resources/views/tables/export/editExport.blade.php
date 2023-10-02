@@ -381,9 +381,9 @@
                                     <td class="soTT"><?php echo $stt++; ?></td>
                                     <td>
                                         @if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin')))
-                                            <input type="text" title="{{ $value_export->product_name }}"
+                                            {{-- <input type="text" title="{{ $value_export->product_name }}"
                                                 class="form-control" readonly
-                                                value="{{ $value_export->product_name }}">
+                                                value="{{ $value_export->product_name }}"> --}}
                                             <select
                                                 class="child-select p-1 form-control productName <?php if ($exports->export_status != 1) {
                                                     echo 'd-none';
@@ -516,9 +516,9 @@
                                     <td class="soTT"><?php echo $stt++; ?></td>
                                     <td>
                                         @if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin')))
-                                            <input type="text" title="{{ $value_export1->product_name }}"
+                                            {{-- <input type="text" title="{{ $value_export1->product_name }}"
                                                 class="form-control" readonly
-                                                value="{{ $value_export1->product_name }}">
+                                                value="{{ $value_export1->product_name }}"> --}}
                                             <select
                                                 class="child-select p-1 form-control productName <?php if ($exports->export_status != 1) {
                                                     echo 'd-none';
@@ -1296,6 +1296,7 @@
                 "<td style='display:none;'><input type='text' class='dangGD'></td>" +
                 "<td style='display:none;'><input type='text' class='product_tax1'></td>"
             );
+            const snPro = $("<td style='display:none;'><ul class ='seri_pro'></ul></td>");
             deleteBtn.click(function() {
                 var row = $(this).closest("tr");
                 var selectedID = row.find('.child-select').val();
@@ -1572,7 +1573,8 @@
                 });
             });
             newRow.append(MaInput, ProInput, dvtInput, slInput,
-                giaInput, thueInput, thanhTienInput, ghichuInput, sn, info, deleteBtn, option);
+                giaInput, thueInput, thanhTienInput, ghichuInput, sn, info, deleteBtn, option, snPro
+                );
             $("#dynamic-fields").before(newRow);
             fieldCounter++;
             $(document).ready(function() {
@@ -1953,6 +1955,8 @@
             var loaihang = $(this).closest('tr').find('.loaihang');
             var dangGD = $(this).closest('tr').find('.dangGD');
             var thue = $(this).closest('tr').find('.product_tax');
+            var ulElement = $(this).closest('tr').find(".seri_pro");
+            
             $(this).closest('tr').find('.quantity-input').val(null);
             if (selectedID) {
                 $.ajax({
@@ -1981,6 +1985,21 @@
                         thue.val(response.product_tax);
                         calculateGrandTotal();
                         calculateGrandTotalWithTransportFee();
+                        $.ajax({
+                            url: "{{ route('getAllSN') }}",
+                            method: 'GET',
+                            data: {
+                                idProduct: selectedID,
+                            },
+                            success: function(response2) {
+                                response2.forEach(function(sn) {
+                                    var product_id = sn.product_id;
+                                    var liElement = $("<li>").text(
+                                        product_id.toString());
+                                    ulElement.append(liElement);
+                                });
+                            },
+                        });
                     },
                 });
             }
@@ -2221,11 +2240,51 @@
                 }
             }
 
+            let missProducts = [];
+            const productsRows = document.querySelectorAll('tbody tr');
+
+            for (let j = 0; j < productsRows.length; j++) {
+                const ulElement = productsRows[j].querySelector(".seri_pro");
+                const numberOfLiElements = ulElement ? ulElement.querySelectorAll('li').length : 0;
+
+                if (numberOfLiElements > 0) {
+                    // Chỉ push vào mảng khi có ít nhất một phần tử <li> trong <ul>
+                    const qty = productsRows[j].querySelector('.quantity-input');
+                    const productNameElement = productsRows[j].querySelector('.productName');
+
+                    if (qty !== null) {
+                        const idProduct = productNameElement.value;
+                        const numberOfInputs = $(
+                            `input[name="selected_serial_numbers[]"][data-product-id="${idProduct}"]`
+                        ).length;
+
+                        if (parseInt(qty.value) !== numberOfInputs) {
+                            const selectedOption1 = productNameElement.options[
+                                productNameElement.selectedIndex
+                            ];
+                            const productName1 = selectedOption1.textContent;
+
+                            if (!missProducts.includes(productName1)) {
+                                missProducts.push(productName1);
+                            }
+                        }
+                    }
+                }
+            }
+            // Tạo thông báo
+            let alertMessage1 = "Số lượng xuất chưa trùng với số lượng S/N:\n";
+            if (missProducts.length > 0) {
+                alertMessage1 += missProducts.join('\n');
+                alert(alertMessage1);
+                event.preventDefault();
+            }
+
             // Tạo thông báo
             let alertMessage = "Các sản phẩm sau đây phải lớn hơn 0:\n";
             if (mismatchedProducts.length > 0) {
                 alertMessage += mismatchedProducts.join('\n');
             }
+
             if (!hasZeroQuantity) {
                 $('#btn-customer').click();
                 // Đánh dấu trạng thái đang submit
