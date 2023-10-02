@@ -173,6 +173,16 @@ class HistoryController extends Controller
             array_push($string, $datearr);
         }
 
+        // Tên Serial NUMBER
+        if (!empty($request->sn)) {
+            $sn = $request->sn;
+            array_push($filters, ['serinumber', 'like', '%' . $sn . '%']);
+            $nameArr = explode(',.@', $sn);
+            array_push($string, [
+                'label' => 'Serial number:', 'values' => $nameArr, 'class' => 'sn'
+            ]);
+        }
+
         //Search
         $keywords = null;
         if (!empty($request->keywords)) {

@@ -164,6 +164,8 @@ $index = array_search($item['label'], $numberedLabels);
                                                     nhuận</button>
                                                 <button class="dropdown-item" id="btn-tranport_fee">Chi phí vận
                                                     chuyển</button>
+                                                <button class="dropdown-item" id="btn-sn">Serial number</button>
+
                                             </div>
                                         </div>
                                         @if (!empty($string))
@@ -835,6 +837,25 @@ $index = array_search($item['label'], $numberedLabels);
                                                 class="btn btn-default btn-block">Hủy</button>
                                         </div>
                                     </div>
+                                    {{-- Tìm Serial number --}}
+                                    <div class="block-options" id="sn-options" style="display:none">
+                                        <div class="wrap w-100">
+                                            <div class="heading-title title-wrap">
+                                                <h5>Serial number</h5>
+                                            </div>
+                                            <div class="input-group p-2">
+                                                <label class="title" for="">Chứa kí tự</label>
+                                                <input type="search" name="sn" class="form-control  sn-input"
+                                                    value="{{ request()->sn }}" placeholder="Nhập thông tin..">
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                            <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                                Nhận</button>
+                                            <button type="button" id="cancel-sn"
+                                                class="btn btn-default btn-block">Hủy</button>
+                                        </div>
+                                    </div>
                                     {{-- Chi phí vận chuyển --}}
                                     <div class="block-options" id="tranport_fee-options" style="display:none">
                                         <div class="wrap w-100">
@@ -1185,124 +1206,134 @@ $index = array_search($item['label'], $numberedLabels);
                                 </thead>
                                 <tbody>
                                     <?php $stt = 1; ?>
+                                    @php
+                                        $seenIds = [];
+                                    @endphp
                                     @foreach ($history as $item)
-                                        <tr>
-                                            <td><?php echo $stt++; ?></td>
-                                            <td>{{ $item->name }}</td>
-                                            <td>{{ date_format(new DateTime($item->date_time), 'd-m-Y') }}</td>
-                                            <td>{{ $item->provide_name }}</td>
-                                            <td class="hidden"><input type="hidden" class="product_id"
-                                                    value="{{ $item->product_id }}"></td>
-                                            <td class="hidden"><input type="hidden" class="idExport"
-                                                    value="{{ $item->export_id }}"></td>
-                                            <td class="productName">{{ $item->product_name }}</td>
-                                            <td class="text-right">{{ $item->product_qty }}</td>
-                                            <td class="text-right">{{ number_format($item->price_import) }}</td>
-                                            <td class="text-right"> {{ number_format($item->product_total) }}</td>
-                                            <td class="text-center">{{ $item->import_code }}</td>
-                                            <td class="text-left" style="width: 125px">
-                                                @if ($item->debt_import != 0 && $item->import_status != 1)
-                                                    {{ $item->debt_import . ' ' }}ngày
-                                                    <span>
-                                                        <br>
-                                                        {{ date_format(new DateTime($item->debt_import_start), 'd-m-Y') }}
-                                                        <br>
+                                        @if (!in_array($item->product_id, $seenIds))
+                                            <tr>
+                                                <td><?php echo $stt++; ?></td>
+                                                <td>{{ $item->name }}</td>
+                                                <td>{{ date_format(new DateTime($item->date_time), 'd-m-Y') }}</td>
+                                                <td>{{ $item->provide_name }}</td>
+                                                <td class="hidden"><input type="hidden" class="product_id"
+                                                        value="{{ $item->product_id }}"></td>
+                                                <td class="hidden"><input type="hidden" class="idExport"
+                                                        value="{{ $item->export_id }}"></td>
+                                                <td class="productName">{{ $item->product_name }}</td>
+                                                <td class="text-right">{{ $item->product_qty }}</td>
+                                                <td class="text-right">{{ number_format($item->price_import) }}</td>
+                                                <td class="text-right"> {{ number_format($item->product_total) }}</td>
+                                                <td class="text-center">{{ $item->import_code }}</td>
+                                                <td class="text-left" style="width: 125px">
+                                                    @if ($item->debt_import != 0 && $item->import_status != 1)
+                                                        {{ $item->debt_import . ' ' }}ngày
+                                                        <span>
+                                                            <br>
+                                                            {{ date_format(new DateTime($item->debt_import_start), 'd-m-Y') }}
+                                                            <br>
 
-                                                        {{ date_format(new DateTime($item->debt_import_end), 'd-m-Y') }}
-                                                    </span>
-                                                @elseif($item->import_status == 4)
-                                                    <div id="payment" class="payment">Thanh toán tiền mặt</div>
-                                                @elseif($item->import_status == 1)
-                                                    Đã thanh toán ngày <br>
-                                                    {{ date_format(new DateTime($item->thanhtoannhap), 'd-m-Y') }}
-                                                @endif
-                                                @php
-                                                    $input_value = request('payment');
-                                                @endphp
-                                            </td>
-                                            <td class="text-center" style="width:135px;">
-                                                @if ($item->import_status == 1)
-                                                    <span class="p-2 bg-success rounded">Thanh toán đủ</span>
-                                                @elseif ($item->import_status == 2)
-                                                    <span class="p-2 bg-warning rounded">Gần đến hạn</span>
-                                                @elseif ($item->import_status == 3)
-                                                    <span class="p-2 bg-secondary rounded">Công nợ</span>
-                                                @elseif($item->import_status == 0)
-                                                    <span class="p-2 bg-danger rounded">Quá hạn</span>
-                                                @elseif($item->import_status == 4)
-                                                    <span class="p-2 bg-danger rounded">Chưa thanh toán</span>
-                                                @elseif($item->import_status == 5)
-                                                    <span class="p-2 bg-warning rounded">Đến hạn</span>
-                                                @endif
-                                            </td>
-                                            <td>{{ $item->guest_name }}</td>
-                                            <td class="text-right quantity-input">{{ $item->export_qty }}</td>
-                                            <td>{{ $item->export_unit }}</td>
-                                            <td class="text-right">{{ number_format($item->price_export) }}</td>
-                                            <td class="text-right">{{ number_format($item->export_total) }}</td>
-                                            <td class="text-center">{{ $item->export_code }}</td>
-                                            <td class="text-left" style="width: 125px">
-                                                @if ($item->debt_export != 0 && $item->export_status != 1)
-                                                    {{ $item->debt_export . ' ' }}ngày
-                                                    <span>
-                                                        <br>
-                                                        {{ date_format(new DateTime($item->debt_export_start), 'd-m-Y') }}
-                                                        <br>
-                                                        {{ date_format(new DateTime($item->debt_export_end), 'd-m-Y') }}
-                                                    </span>
-                                                @elseif($item->export_status == 4)
-                                                    <div id="payment" class="payment">Thanh toán tiền mặt</div>
-                                                @elseif($item->export_status == 1)
-                                                    Đã thanh toán ngày <br>
-                                                    {{ date_format(new DateTime($item->thanhtoanxuat), 'd-m-Y') }}
-                                                @endif
-                                                @php
-                                                    $input_value = request('payment');
-                                                @endphp
-                                            </td>
-                                            <td class="text-center" style="width:125px">
-                                                @if ($item->export_status == 1)
-                                                    <span class="p-2 bg-success rounded">Thanh toán đủ</span>
-                                                @elseif ($item->export_status == 2)
-                                                    <span class="p-2 bg-warning rounded">Gần đến hạn</span>
-                                                @elseif ($item->export_status == 3)
-                                                    <span class="p-2 bg-secondary rounded">Công nợ</span>
-                                                @elseif($item->export_status == 0)
-                                                    <span class="p-2 bg-danger rounded">Quá hạn</span>
-                                                @elseif($item->export_status == 4)
-                                                    <span class="p-2 bg-danger rounded">Chưa thanh toán</span>
-                                                @elseif($item->export_status == 5)
-                                                    <span class="p-2 bg-warning rounded">Đến hạn</span>
-                                                @endif
-                                            </td>
-                                            <td class="text-right">{{ number_format($item->total_difference) }}</td>
-                                            <td class="text-right">{{ number_format($item->tranport_fee) }}</td>
-                                            <td class="text-left">{{ $item->history_note }}</td>
-                                            <td data-toggle="modal" data-target="#snModal" class="sn"><img
-                                                    src="../../dist/img/icon/list.png"></td>
-                                            <td></td>
-                                        </tr>
-                                        <div class="modal fade" id="snModal" tabindex="-1" role="dialog"
-                                            aria-labelledby="productModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog" role="document" style="max-width: 85%;">
-                                                <div class="modal-content">
-                                                    <div class="modal-header align-items-center">
-                                                        <div>
-                                                            <h5 class="modal-title" id="exampleModalLabel">Serial
-                                                                Number</h5>
-                                                            <p>Thông tin chi tiết về số S/N của mỗi sản phẩm </p>
+                                                            {{ date_format(new DateTime($item->debt_import_end), 'd-m-Y') }}
+                                                        </span>
+                                                    @elseif($item->import_status == 4)
+                                                        <div id="payment" class="payment">Thanh toán tiền mặt</div>
+                                                    @elseif($item->import_status == 1)
+                                                        Đã thanh toán ngày <br>
+                                                        {{ date_format(new DateTime($item->thanhtoannhap), 'd-m-Y') }}
+                                                    @endif
+                                                    @php
+                                                        $input_value = request('payment');
+                                                    @endphp
+                                                </td>
+                                                <td class="text-center" style="width:135px;">
+                                                    @if ($item->import_status == 1)
+                                                        <span class="p-2 bg-success rounded">Thanh toán đủ</span>
+                                                    @elseif ($item->import_status == 2)
+                                                        <span class="p-2 bg-warning rounded">Gần đến hạn</span>
+                                                    @elseif ($item->import_status == 3)
+                                                        <span class="p-2 bg-secondary rounded">Công nợ</span>
+                                                    @elseif($item->import_status == 0)
+                                                        <span class="p-2 bg-danger rounded">Quá hạn</span>
+                                                    @elseif($item->import_status == 4)
+                                                        <span class="p-2 bg-danger rounded">Chưa thanh toán</span>
+                                                    @elseif($item->import_status == 5)
+                                                        <span class="p-2 bg-warning rounded">Đến hạn</span>
+                                                    @endif
+                                                </td>
+                                                <td>{{ $item->guest_name }}</td>
+                                                <td class="text-right quantity-input">{{ $item->export_qty }}</td>
+                                                <td>{{ $item->export_unit }}</td>
+                                                <td class="text-right">{{ number_format($item->price_export) }}</td>
+                                                <td class="text-right">{{ number_format($item->export_total) }}</td>
+                                                <td class="text-center">{{ $item->export_code }}</td>
+                                                <td class="text-left" style="width: 125px">
+                                                    @if ($item->debt_export != 0 && $item->export_status != 1)
+                                                        {{ $item->debt_export . ' ' }}ngày
+                                                        <span>
+                                                            <br>
+                                                            {{ date_format(new DateTime($item->debt_export_start), 'd-m-Y') }}
+                                                            <br>
+                                                            {{ date_format(new DateTime($item->debt_export_end), 'd-m-Y') }}
+                                                        </span>
+                                                    @elseif($item->export_status == 4)
+                                                        <div id="payment" class="payment">Thanh toán tiền mặt</div>
+                                                    @elseif($item->export_status == 1)
+                                                        Đã thanh toán ngày <br>
+                                                        {{ date_format(new DateTime($item->thanhtoanxuat), 'd-m-Y') }}
+                                                    @endif
+                                                    @php
+                                                        $input_value = request('payment');
+                                                    @endphp
+                                                </td>
+                                                <td class="text-center" style="width:125px">
+                                                    @if ($item->export_status == 1)
+                                                        <span class="p-2 bg-success rounded">Thanh toán đủ</span>
+                                                    @elseif ($item->export_status == 2)
+                                                        <span class="p-2 bg-warning rounded">Gần đến hạn</span>
+                                                    @elseif ($item->export_status == 3)
+                                                        <span class="p-2 bg-secondary rounded">Công nợ</span>
+                                                    @elseif($item->export_status == 0)
+                                                        <span class="p-2 bg-danger rounded">Quá hạn</span>
+                                                    @elseif($item->export_status == 4)
+                                                        <span class="p-2 bg-danger rounded">Chưa thanh toán</span>
+                                                    @elseif($item->export_status == 5)
+                                                        <span class="p-2 bg-warning rounded">Đến hạn</span>
+                                                    @endif
+                                                </td>
+                                                <td class="text-right">{{ number_format($item->total_difference) }}
+                                                </td>
+                                                <td class="text-right">{{ number_format($item->tranport_fee) }}</td>
+                                                <td class="text-left">{{ $item->history_note }}</td>
+                                                <td data-toggle="modal" data-target="#snModal" class="sn"><img
+                                                        src="../../dist/img/icon/list.png"></td>
+                                                <td></td>
+                                            </tr>
+                                            <div class="modal fade" id="snModal" tabindex="-1" role="dialog"
+                                                aria-labelledby="productModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog" role="document" style="max-width: 85%;">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header align-items-center">
+                                                            <div>
+                                                                <h5 class="modal-title" id="exampleModalLabel">
+                                                                    Serial
+                                                                    Number</h5>
+                                                                <p>Thông tin chi tiết về số S/N của mỗi sản phẩm </p>
+                                                            </div>
+                                                            <button type="button" class="close"
+                                                                data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
                                                         </div>
-                                                        <button type="button" class="close" data-dismiss="modal"
-                                                            aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="modal-body">
+                                                        <div class="modal-body">
 
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                            @php
+                                                $seenIds[] = $item->product_id;
+                                            @endphp
+                                        @endif
                                     @endforeach
                                 </tbody>
                             </table>
@@ -1930,6 +1961,25 @@ $index = array_search($item['label'], $numberedLabels);
     $(document).ready(function() {
         $('.filter-results').on('click', '.delete-btn-tranport_fee', function() {
             $('.tranport_fee-input').val('');
+            document.getElementById('search-filter').submit();
+        });
+    });
+
+    // SN
+    $('#btn-sn').click(function(event) {
+        event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
+        $('#sn-options').toggle();
+    });
+    $('#cancel-sn').click(function(event) {
+        event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
+        $('.sn-input').val('');
+        $('#id-options').hide();
+    });
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-sn', function() {
+            $('.sn-input').val('');
             document.getElementById('search-filter').submit();
         });
     });

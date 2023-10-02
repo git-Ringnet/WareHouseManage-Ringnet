@@ -880,7 +880,6 @@ $index = array_search($item['label'], $numberedLabels);
                                                 $seenIds[] = $value->id;
                                             @endphp
                                         @endif
-                                        <?php $stt++; ?>
                                     @endforeach
                                 </tbody>
                             </table>
