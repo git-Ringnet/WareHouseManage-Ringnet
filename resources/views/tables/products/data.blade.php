@@ -163,6 +163,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <button class="dropdown-item" id="btn-tax">Thuế</button>
                                                 <button class="dropdown-item" id="btn-hdv">Hóa đơn vào</button>
                                                 <button class="dropdown-item" id="btn-status">Trạng thái</button>
+                                                <button class="dropdown-item" id="btn-sn">Serial number</button>
                                             </div>
                                         </div>
                                         @if (!empty($string))
@@ -420,6 +421,25 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <button type="button" id="cancel-trademark"
                                                     class="btn btn-default btn-block">Hủy</button>
                                             </div>
+                                        </div>
+                                    </div>
+                                    {{-- Tìm Serial number --}}
+                                    <div class="block-options" id="sn-options" style="display:none">
+                                        <div class="wrap w-100">
+                                            <div class="heading-title title-wrap">
+                                                <h5>Serial number</h5>
+                                            </div>
+                                            <div class="input-group p-2">
+                                                <label class="title" for="">Chứa kí tự</label>
+                                                <input type="search" name="sn" class="form-control  sn-input"
+                                                    value="{{ request()->sn }}" placeholder="Nhập thông tin..">
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                            <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                                Nhận</button>
+                                            <button type="button" id="cancel-sn"
+                                                class="btn btn-default btn-block">Hủy</button>
                                         </div>
                                     </div>
                                     {{-- filter Thuế --}}
@@ -776,80 +796,90 @@ $index = array_search($item['label'], $numberedLabels);
                                 </thead>
                                 <tbody>
                                     <?php $stt = 0; ?>
+                                    @php
+                                        $seenIds = [];
+                                    @endphp
                                     @foreach ($products as $value)
-                                        <tr onclick="handleRowClick('checkbox-{{ $value->id }}', event);">
-                                            @can('view-guests')
-                                                <td><input type="checkbox" class="cb-element" name="product[]"
-                                                        id="checkbox-{{ $value->id }}"
-                                                        onclick="event.stopPropagation();" value="{{ $value->id }}">
+                                        @if (!in_array($value->id, $seenIds))
+                                            <tr onclick="handleRowClick('checkbox-{{ $value->id }}', event);">
+                                                @can('view-guests')
+                                                    <td><input type="checkbox" class="cb-element" name="product[]"
+                                                            id="checkbox-{{ $value->id }}"
+                                                            onclick="event.stopPropagation();"
+                                                            value="{{ $value->id }}">
+                                                    </td>
+                                                @endcan
+                                                <td class="text-left">{{ $value->id }}</td>
+                                                <td class="text-left product_name">{{ $value->product_name }}</td>
+                                                <td class="text-left">{{ $value->provide }}</td>
+                                                <td class="text-center">{{ $value->product_unit }}</td>
+                                                <td class="text-right product_qty">{{ $value->product_qty }}</td>
+                                                <td class="text-right">
+                                                    {{ $value->product_trade == null ? 0 : $value->product_trade }}
                                                 </td>
-                                            @endcan
-                                            <td class="text-left">{{ $value->id }}</td>
-                                            <td class="text-left product_name">{{ $value->product_name }}</td>
-                                            <td class="text-left">{{ $value->provide }}</td>
-                                            <td class="text-center">{{ $value->product_unit }}</td>
-                                            <td class="text-right product_qty">{{ $value->product_qty }}</td>
-                                            <td class="text-right">
-                                                {{ $value->product_trade == null ? 0 : $value->product_trade }}
-                                            </td>
-                                            <td class="text-right">
-                                                @if (fmod($value->product_price, 1) > 0)
-                                                    {{ number_format($value->product_price, 2, '.', ',') }}
-                                                @else
-                                                    {{ number_format($value->product_price) }}
-                                                @endif
-                                            </td>
-                                            <td class="text-right">{{ number_format($value->product_total) }}</td>
-                                            <td class="text-center">
-                                                @if ($value->product_tax === 99 || $value->product_tax === null)
-                                                    NOVAT
-                                                @else
-                                                    {{ $value->product_tax }}%
-                                                @endif
-                                            </td>
-                                            <td class="text-center">
-                                                {{ $value->product_code }}
-                                            </td>
-                                            <td class="text-center">
-                                                @if ($value->product_qty == 0)
-                                                    <div class="py-1 rounded pb-1 bg-danger">
-                                                        <span class="text-light">Hết hàng</span>
-                                                    </div>
-                                                @elseif($value->product_qty < 6)
-                                                    <div class="py-1 rounded pb-1 bg-warning">
-                                                        <span class="text-light">Gần hết</span>
-                                                    </div>
-                                                @else
-                                                    <div class="py-1 rounded pb-1 bg-success">
-                                                        <span class="text-light">Sẵn hàng</span>
-                                                    </div>
-                                                @endif
-                                            </td>
-                                            <td class="text-center">
-                                                <button class="exampleModal" name="btn_add_SN[]" type="button"
-                                                    class="btn btn-primary" data-toggle="modal"
-                                                    data-target="#exampleModal{{ $stt }}"
-                                                    style="background: transparent; border:none;">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="32"
-                                                        height="32" viewBox="0 0 32 32" fill="none">
-                                                        <rect width="32" height="32" rx="4"
-                                                            fill="white" />
-                                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                                            d="M11.9062 10.643C11.9062 10.2092 12.258 9.85742 12.6919 9.85742H24.2189C24.6528 9.85742 25.0045 10.2092 25.0045 10.643C25.0045 11.0769 24.6528 11.4286 24.2189 11.4286H12.6919C12.258 11.4286 11.9062 11.0769 11.9062 10.643Z"
-                                                            fill="#0095F6" />
-                                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                                            d="M11.9062 16.4707C11.9062 16.0368 12.258 15.6851 12.6919 15.6851H24.2189C24.6528 15.6851 25.0045 16.0368 25.0045 16.4707C25.0045 16.9045 24.6528 17.2563 24.2189 17.2563H12.6919C12.258 17.2563 11.9062 16.9045 11.9062 16.4707Z"
-                                                            fill="#0095F6" />
-                                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                                            d="M11.9062 22.2978C11.9062 21.8639 12.258 21.5122 12.6919 21.5122H24.2189C24.6528 21.5122 25.0045 21.8639 25.0045 22.2978C25.0045 22.7317 24.6528 23.0834 24.2189 23.0834H12.6919C12.258 23.0834 11.9062 22.7317 11.9062 22.2978Z"
-                                                            fill="#0095F6" />
-                                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                                            d="M6.6665 10.6431C6.6665 9.91981 7.25282 9.3335 7.97607 9.3335C8.69932 9.3335 9.28563 9.91981 9.28563 10.6431C9.28563 11.3663 8.69932 11.9526 7.97607 11.9526C7.25282 11.9526 6.6665 11.3663 6.6665 10.6431ZM6.6665 16.4705C6.6665 15.7473 7.25282 15.161 7.97607 15.161C8.69932 15.161 9.28563 15.7473 9.28563 16.4705C9.28563 17.1938 8.69932 17.7801 7.97607 17.7801C7.25282 17.7801 6.6665 17.1938 6.6665 16.4705ZM7.97607 20.9884C7.25282 20.9884 6.6665 21.5747 6.6665 22.298C6.6665 23.0212 7.25282 23.6075 7.97607 23.6075C8.69932 23.6075 9.28563 23.0212 9.28563 22.298C9.28563 21.5747 8.69932 20.9884 7.97607 20.9884Z"
-                                                            fill="#0095F6" />
-                                                    </svg>
-                                                </button>
-                                            </td>
-                                        </tr>
+                                                <td class="text-right">
+                                                    @if (fmod($value->product_price, 1) > 0)
+                                                        {{ number_format($value->product_price, 2, '.', ',') }}
+                                                    @else
+                                                        {{ number_format($value->product_price) }}
+                                                    @endif
+                                                </td>
+                                                <td class="text-right">{{ number_format($value->product_total) }}</td>
+                                                <td class="text-center">
+                                                    @if ($value->product_tax === 99 || $value->product_tax === null)
+                                                        NOVAT
+                                                    @else
+                                                        {{ $value->product_tax }}%
+                                                    @endif
+                                                </td>
+                                                <td class="text-center">
+                                                    {{ $value->product_code }}
+                                                </td>
+                                                <td class="text-center">
+                                                    @if ($value->product_qty == 0)
+                                                        <div class="py-1 rounded pb-1 bg-danger">
+                                                            <span class="text-light">Hết hàng</span>
+                                                        </div>
+                                                    @elseif($value->product_qty < 6)
+                                                        <div class="py-1 rounded pb-1 bg-warning">
+                                                            <span class="text-light">Gần hết</span>
+                                                        </div>
+                                                    @else
+                                                        <div class="py-1 rounded pb-1 bg-success">
+                                                            <span class="text-light">Sẵn hàng</span>
+                                                        </div>
+                                                    @endif
+                                                </td>
+                                                <td class="text-center">
+                                                    <button class="exampleModal" name="btn_add_SN[]" type="button"
+                                                        class="btn btn-primary" data-toggle="modal"
+                                                        data-target="#exampleModal{{ $stt }}"
+                                                        style="background: transparent; border:none;">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="32"
+                                                            height="32" viewBox="0 0 32 32" fill="none">
+                                                            <rect width="32" height="32" rx="4"
+                                                                fill="white" />
+                                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                d="M11.9062 10.643C11.9062 10.2092 12.258 9.85742 12.6919 9.85742H24.2189C24.6528 9.85742 25.0045 10.2092 25.0045 10.643C25.0045 11.0769 24.6528 11.4286 24.2189 11.4286H12.6919C12.258 11.4286 11.9062 11.0769 11.9062 10.643Z"
+                                                                fill="#0095F6" />
+                                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                d="M11.9062 16.4707C11.9062 16.0368 12.258 15.6851 12.6919 15.6851H24.2189C24.6528 15.6851 25.0045 16.0368 25.0045 16.4707C25.0045 16.9045 24.6528 17.2563 24.2189 17.2563H12.6919C12.258 17.2563 11.9062 16.9045 11.9062 16.4707Z"
+                                                                fill="#0095F6" />
+                                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                d="M11.9062 22.2978C11.9062 21.8639 12.258 21.5122 12.6919 21.5122H24.2189C24.6528 21.5122 25.0045 21.8639 25.0045 22.2978C25.0045 22.7317 24.6528 23.0834 24.2189 23.0834H12.6919C12.258 23.0834 11.9062 22.7317 11.9062 22.2978Z"
+                                                                fill="#0095F6" />
+                                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                d="M6.6665 10.6431C6.6665 9.91981 7.25282 9.3335 7.97607 9.3335C8.69932 9.3335 9.28563 9.91981 9.28563 10.6431C9.28563 11.3663 8.69932 11.9526 7.97607 11.9526C7.25282 11.9526 6.6665 11.3663 6.6665 10.6431ZM6.6665 16.4705C6.6665 15.7473 7.25282 15.161 7.97607 15.161C8.69932 15.161 9.28563 15.7473 9.28563 16.4705C9.28563 17.1938 8.69932 17.7801 7.97607 17.7801C7.25282 17.7801 6.6665 17.1938 6.6665 16.4705ZM7.97607 20.9884C7.25282 20.9884 6.6665 21.5747 6.6665 22.298C6.6665 23.0212 7.25282 23.6075 7.97607 23.6075C8.69932 23.6075 9.28563 23.0212 9.28563 22.298C9.28563 21.5747 8.69932 20.9884 7.97607 20.9884Z"
+                                                                fill="#0095F6" />
+                                                        </svg>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <?php $stt++; ?>
+                                            @php
+                                                $seenIds[] = $value->id;
+                                            @endphp
+                                        @endif
                                         <?php $stt++; ?>
                                     @endforeach
                                 </tbody>
@@ -860,8 +890,7 @@ $index = array_search($item['label'], $numberedLabels);
                         <?php $stt = 0; ?>
                         @foreach ($products as $pro)
                             <div class="modal fade" id="exampleModal{{ $stt }}" tabindex="-1"
-                                role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
-                               >
+                                role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header align-items-center">
@@ -1099,7 +1128,18 @@ $index = array_search($item['label'], $numberedLabels);
         $('.id-input').val('');
         $('#id-options').hide();
     });
-
+    // SN
+    $('#btn-sn').click(function(event) {
+        event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
+        $('#sn-options').toggle();
+    });
+    $('#cancel-sn').click(function(event) {
+        event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
+        $('.sn-input').val('');
+        $('#id-options').hide();
+    });
     $('#btn-status').click(function(event) {
         event.preventDefault();
         $('.btn-filter').prop('disabled', true);
@@ -1423,6 +1463,12 @@ $index = array_search($item['label'], $numberedLabels);
     $(document).ready(function() {
         $('.filter-results').on('click', '.delete-btn-products_name', function() {
             $('.products_name-input').val('');
+            document.getElementById('search-filter').submit();
+        });
+    });
+    $(document).ready(function() {
+        $('.filter-results').on('click', '.delete-btn-sn', function() {
+            $('.sn-input').val('');
             document.getElementById('search-filter').submit();
         });
     });

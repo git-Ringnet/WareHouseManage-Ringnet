@@ -69,6 +69,16 @@ class ProductController extends Controller
             array_push($string, ['label' => 'Tên sản phẩm:', 'values' => $products_namearr, 'class' => 'products_name']);
         }
 
+        // Tên Serial NUMBER
+        if (!empty($request->sn)) {
+            $sn = $request->sn;
+            array_push($filters, ['serinumber', 'like', '%' . $sn . '%']);
+            $nameArr = explode(',.@', $sn);
+            array_push($string, [
+                'label' => 'Serial number:', 'values' => $nameArr, 'class' => 'sn'
+            ]);
+        }
+
         // // Số lượng
         if (!empty($request->comparison_operator) && !empty($request->quantity)) {
             $quantity = $request->input('quantity');
@@ -137,14 +147,14 @@ class ProductController extends Controller
         if (!empty($request->taxarr)) {
             $taxarr = $request->input('taxarr', []);
             array_push($string, ['label' => 'Thuế:', 'values' => $taxarr, 'class' => 'tax']);
-        }   
-        $perPage = $request->input('perPageinput',25); 
-        $provide = Product::leftJoin('provides', 'provides.id', '=', 'product.provide_id')->where('product.product_qty','>',0)->get();
+        }
+        $perPage = $request->input('perPageinput', 25);
+        $provide = Product::leftJoin('provides', 'provides.id', '=', 'product.provide_id')->where('product.product_qty', '>', 0)->get();
         //lấy tất cả products
-        $products = $products = $this->products->getAllProduct($filters,$perPage, $status, $products_name, $providearr, $unitarr, $taxarr, $keywords, $sortByArr);
+        $products = $products = $this->products->getAllProduct($filters, $perPage, $status, $products_name, $providearr, $unitarr, $taxarr, $keywords, $sortByArr);
 
         // Đơn vị tính
-        $unit = Product::where('product.product_qty','>',0)->get();
+        $unit = Product::where('product.product_qty', '>', 0)->get();
 
         $title = 'Tồn kho';
 
@@ -154,15 +164,15 @@ class ProductController extends Controller
             array_push($productIds, $value->id);
         }
         $serialnumber =  DB::table('serinumbers')
-        ->join('product', 'serinumbers.product_id', '=', 'product.id')
-        ->whereIn('product.id', $productIds)
-        ->where('seri_status', 1)
-        ->select('serinumbers.*')
-        // ->select('serinumbers.*', 'productorders.id')
-        ->get();
+            ->join('product', 'serinumbers.product_id', '=', 'product.id')
+            ->whereIn('product.id', $productIds)
+            ->where('seri_status', 1)
+            ->select('serinumbers.*')
+            // ->select('serinumbers.*', 'productorders.id')
+            ->get();
 
-        
-        return view('tables.products.data', compact('serialnumber','products','perPage', 'string', 'provide', 'unit', 'sortType', 'title'));
+
+        return view('tables.products.data', compact('serialnumber', 'products', 'perPage', 'string', 'provide', 'unit', 'sortType', 'title'));
     }
 
     /**
@@ -233,7 +243,7 @@ class ProductController extends Controller
 
     public function export()
     {
-        $products = Product::select('id', 'product_name', 'provide_id','product_unit', 'product_qty', 'product_trade','product_price', 'product_total', 'product_tax','product_code','product_trademark' )
+        $products = Product::select('id', 'product_name', 'provide_id', 'product_unit', 'product_qty', 'product_trade', 'product_price', 'product_total', 'product_tax', 'product_code', 'product_trademark')
             ->where('product_qty', '>', 0)
             ->with('getNameProvide')
             ->get();
@@ -241,11 +251,11 @@ class ProductController extends Controller
             if ($product->getNameProvide) {
                 $product->provide_id = $product->getNameProvide->provide_name;
                 $product->product_trade = $product->product_trade == null ? 0 : $product->product_trade;
-                $product->product_price = fmod($product->product_price, 2) > 0 ? number_format($product->product_price,2,'.',',') : number_format($product->product_price);
+                $product->product_price = fmod($product->product_price, 2) > 0 ? number_format($product->product_price, 2, '.', ',') : number_format($product->product_price);
                 $product->product_total = number_format($product->product_total);
-                if($product->product_qty < 6){
+                if ($product->product_qty < 6) {
                     $product->product_trademark = "Gần hết";
-                }else{
+                } else {
                     $product->product_trademark = "Sẵn hàng";
                 }
             }
