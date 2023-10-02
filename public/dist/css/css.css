@@ -1346,6 +1346,10 @@ input[type="checkbox"] {
     overflow-x: hidden !important;
 }
 
+#export_form .content .modal-body{
+    padding: 0 !important;
+}
+
 .selectize-dropdown-content .option {
     display: inline-block !important;
     width: 100% !important;
