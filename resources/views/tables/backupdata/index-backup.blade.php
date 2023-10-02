@@ -143,10 +143,10 @@
 </section>
 </div>
 <script>
-        $(document).on('change','#file_restore',function(e){
-            e.preventDefault();
-            $('#restore_data')[0].submit();
-        })
+    $(document).on('change', '#file_restore', function(e) {
+        e.preventDefault();
+        $('#restore_data')[0].submit();
+    })
 </script>
 </body>
 

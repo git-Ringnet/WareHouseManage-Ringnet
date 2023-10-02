@@ -97,17 +97,24 @@ class Orders extends Model
     {
         $exports = DB::table($this->table)
             ->where('order_status', 1)
+            ->where('license_id', Auth::user()->license_id)
             ->get();
 
         $maxdate = $exports->MAX('created_at');
 
-        $formattedDate = date('d-m-Y', strtotime($maxdate));
+        if ($maxdate !== null) {
+            $formattedDate = date('d-m-Y', strtotime($maxdate));
+        } else {
+            $formattedDate = null;
+        }
 
         return $formattedDate;
     }
+
     public function getMinDateOrders()
     {
         $minDate = DB::table($this->table)
+            ->where('license_id', Auth::user()->license_id)
             ->selectRaw('MIN(DATE(created_at)) AS min_date')
             ->first();
 

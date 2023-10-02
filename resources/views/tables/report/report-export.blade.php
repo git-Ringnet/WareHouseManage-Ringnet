@@ -19,7 +19,9 @@
                                     <div class="d-flex flex-column all-orders">
                                         <div class="ca d-flex">
                                             <div class="it0">{{ $mindate }}</div>
-                                            <div class="muiten-all">-></div>
+                                            @if ($mindate)
+                                                <div class="muiten-all">-></div>
+                                            @endif
                                             <div class="id0">{{ $maxdate }}</div>
                                         </div>
                                         <div class="ca text-left">Tất cả</div>
@@ -68,19 +70,22 @@
                                 </div>
 
                             </button>
-                            <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item dropdown-item-orders" id="btn-all-orders" href="#"
-                                    data-value="0">Tất cả</a>
-                                <a class="dropdown-item dropdown-item-orders" id="btn-this-month-orders" href="#"
-                                    data-value="1">Tháng này</a>
-                                <a class="dropdown-item dropdown-item-orders" id="btn-last-month-orders" href="#"
-                                    data-value="2">Tháng trước</a>
-                                <a class="dropdown-item dropdown-item-orders" id="btn-3last-month-orders" href="#"
-                                    data-value="3">3 tháng trước</a>
-                                <a class="dropdown-item dropdown-item-orders" id="btn-time-orders" href="#">Khoảng
-                                    thời
-                                    gian</a>
-                            </div>
+                            @if ($mindate)
+                                <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item dropdown-item-orders" id="btn-all-orders" href="#"
+                                        data-value="0">Tất cả</a>
+                                    <a class="dropdown-item dropdown-item-orders" id="btn-this-month-orders"
+                                        href="#" data-value="1">Tháng này</a>
+                                    <a class="dropdown-item dropdown-item-orders" id="btn-last-month-orders"
+                                        href="#" data-value="2">Tháng trước</a>
+                                    <a class="dropdown-item dropdown-item-orders" id="btn-3last-month-orders"
+                                        href="#" data-value="3">3 tháng trước</a>
+                                    <a class="dropdown-item dropdown-item-orders" id="btn-time-orders"
+                                        href="#">Khoảng
+                                        thời
+                                        gian</a>
+                                </div>
+                            @endif
                         </div>
                         {{-- Chọn khoảng --}}
                         <div class="block-optionss" id="times-orders-options" style="display:none">
@@ -608,7 +613,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('sale_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
                                                 <input class="w-50 input-quantity sale-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -638,7 +643,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('import_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
                                                 <input class="w-50 input-quantity export-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -668,7 +673,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('difference_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
                                                 <input class="w-50 input-quantity difference-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -698,7 +703,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('sum_debt_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
                                                 <input class="w-50 input-quantity sum_debt-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
