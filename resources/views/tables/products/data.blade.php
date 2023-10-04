@@ -875,20 +875,21 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </button>
                                                 </td>
                                             </tr>
-                                            <?php $stt++; ?>
+                                            
                                             @php
                                                 $seenIds[] = $value->id;
                                             @endphp
                                         @endif
+                                        <?php $stt++; ?>
                                     @endforeach
                                 </tbody>
                             </table>
                         </div>
                     </div>
                     <div id="list_modal">
-                        <?php $stt = 0; ?>
+                        <?php $st = 0; ?>
                         @foreach ($products as $pro)
-                            <div class="modal fade" id="exampleModal{{ $stt }}" tabindex="-1"
+                            <div class="modal fade" id="exampleModal{{ $st }}" tabindex="-1"
                                 role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
@@ -920,7 +921,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 </tbody>
                                             </table>
                                             <h3>Thông tin Serial Number </h3>
-                                            <div class="div_value{{ $stt }}">
+                                            <div class="div_value{{ $st }}">
                                                 <table class="table" id="table_SNS">
                                                     <thead>
                                                         <tr>
@@ -930,9 +931,8 @@ $index = array_search($item['label'], $numberedLabels);
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <?php $st = 1; ?>
                                                         @foreach ($serialnumber as $se)
-                                                            @if ($pro->id === $se->product_id)
+                                                            @if ($pro->id == $se->product_id)
                                                                 <tr>
                                                                     <td><span class="stt_SN"></span></td>
                                                                     <td>
@@ -940,7 +940,6 @@ $index = array_search($item['label'], $numberedLabels);
                                                                     </td>
                                                                 </tr>
                                                             @endif
-                                                            <?php $st++; ?>
                                                         @endforeach
                                                     </tbody>
                                                 </table>
@@ -949,7 +948,7 @@ $index = array_search($item['label'], $numberedLabels);
                                     </div>
                                 </div>
                             </div>
-                            <?php $stt++; ?>
+                            <?php $st++; ?>
                         @endforeach
                     </div>
                     <div class="d-flex row justify-content-between">
@@ -1598,13 +1597,14 @@ $index = array_search($item['label'], $numberedLabels);
     function fillDataToModal() {
         var info = document.querySelectorAll('.exampleModal');
         for (let k = 0; k < info.length; k++) {
+            
             info[k].addEventListener('click', function() {
+                console.log(k);
                 var productName = $(this).closest('tr').find('.product_name').text();
                 var productQty = $(this).closest('tr').find('.product_qty').text();
-                var countTR = $('.div_value' + k).find('tbody tr');
+                var countTR = $($(this).data('target')).find('#table_SNS tbody tr');
                 for (let i = 0; i < countTR.length; i++) {
-                    countTR.closest('table').find('thead tr th').length == 4 ? $(countTR[i]).find('td:eq(1)')
-                        .text(i + 1) : $(countTR[i]).find('td:eq(0)').text(i + 1);
+                    $(countTR[i]).find('td:eq(0)').text(i + 1);
                 }
                 $('.SNCount').text(countTR.length);
                 $('.name_product').text(productName);
