@@ -740,7 +740,7 @@
             </div>
             {{-- Modal S/N --}}
             <div class="modal fade" id="snModal" tabindex="-1" role="dialog"
-                aria-labelledby="productModalLabel" aria-hidden="true" data-backdrop="static">
+                aria-labelledby="productModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
                 <div class="modal-dialog" role="document" style="max-width: 85%;">
                     <div class="modal-content">
                         <div class="modal-header">
