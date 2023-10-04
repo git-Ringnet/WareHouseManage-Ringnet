@@ -1563,13 +1563,14 @@ class ExportController extends Controller
             ->where('exports.license_id', Auth::user()->license_id)
             ->where('product.license_id', Auth::user()->license_id)
             ->get();
+        $SnProduct = Serinumbers::where('license_id', Auth::user()->license_id)->get();
         $product_code = Product::select('product.*')
             ->whereRaw('COALESCE((product.product_qty - COALESCE(product.product_trade, 0)), 0) > 0')
             ->selectRaw('COALESCE((product.product_qty - COALESCE(product.product_trade, 0)), 0) as qty_exist')
             ->where('product.license_id', Auth::user()->license_id)
             ->get();
         $title = 'Chi tiết đơn hàng';
-        return view('tables.export.editExport', compact('check', 'exports', 'guest', 'productExport', 'product_code', 'customer', 'title'));
+        return view('tables.export.editExport', compact('SnProduct', 'check', 'exports', 'guest', 'productExport', 'product_code', 'customer', 'title'));
     }
 
     /**
@@ -3237,6 +3238,15 @@ class ExportController extends Controller
         return response()->json($sn);
     }
 
+    public function getAllSN(Request $request)
+    {
+        $data = $request->all();
+        $allSN = Serinumbers::where('product_id', $data['idProduct'])
+            ->where('license_id', Auth::user()->license_id)
+            ->get();
+        return response()->json($allSN);
+    }
+
     public function editEx($id)
     {
         $exports = Exports::find($id);
@@ -3250,13 +3260,14 @@ class ExportController extends Controller
             ->where('product.license_id', Auth::user()->license_id)
             ->where('export_id', $id)
             ->get();
+        $SnProduct = Serinumbers::where('license_id', Auth::user()->license_id)->get();
         $product_code = Product::select('product.*')
             ->whereRaw('COALESCE((product.product_qty - COALESCE(product.product_trade, 0)), 0) > 0')
             ->selectRaw('COALESCE((product.product_qty - COALESCE(product.product_trade, 0)), 0) as qty_exist')
             ->where('license_id', Auth::user()->license_id)
             ->get();
         $title = 'Chi tiết đơn hàng';
-        return view('tables.export.editEx', compact('exports', 'guest', 'productExport', 'product_code', 'customer', 'title'));
+        return view('tables.export.editEx', compact('SnProduct', 'exports', 'guest', 'productExport', 'product_code', 'customer', 'title'));
     }
     //Chốt đơn checkbox
     public function chotDonCheckBox(Request $request)

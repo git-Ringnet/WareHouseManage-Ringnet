@@ -85,6 +85,7 @@ Route::get('getSN1', [ExportController::class, 'getSN1'])->name('getSN1');
 Route::get('getSN2', [ExportController::class, 'getSN2'])->name('getSN2');
 Route::get('getSN3', [ExportController::class, 'getSN3'])->name('getSN3');
 Route::get('getSN4', [ExportController::class, 'getSN4'])->name('getSN4');
+Route::get('getAllSN', [ExportController::class, 'getAllSN'])->name('getAllSN');
 Route::get('/deleteExports', [ExportController::class, 'deleteExports'])->name('deleteExports');
 Route::get('/cancelBillExport', [ExportController::class, 'cancelBillExport'])->name('cancelBillExport');
 //Công nợ

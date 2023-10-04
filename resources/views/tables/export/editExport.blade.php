@@ -1,8 +1,6 @@
 <x-navbar :title="$title"></x-navbar>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js"
-    integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css"
-    integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 <div class="content-wrapper export-add padding-112">
     <div class="row">
         <div class="col-sm-6 breadcrumb">
@@ -366,7 +364,9 @@
                             <th style="width:8%;">Thuế</th>
                             <th style="width:15%;">Thành tiền</th>
                             <th style="width:13%;">Ghi chú</th>
-                            <th style="width:10%;">S/N</th>
+                            @if ($exports->export_status != 0)
+                                <th style="width:10%;">S/N</th>
+                            @endif
                             <th style="width:10%;"></th>
                             @if ($exports->export_status != 2)
                                 <th style="width:10%;"></th>
@@ -375,133 +375,285 @@
                     </thead>
                     <tbody>
                         <?php $stt = 1; ?>
-                        @foreach ($productExport as $index => $value_export)
-                            <tr>
-                                <td class="soTT"><?php echo $stt++; ?></td>
-                                <td>
-                                    @if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin')))
-                                        <input type="text" title="{{ $value_export->product_name }}"
-                                            class="form-control" readonly value="{{ $value_export->product_name }}">
-                                        <select class="child-select p-1 form-control productName <?php if ($exports->export_status != 1) {
-                                            echo 'd-none';
-                                        } ?>"
-                                            name="product_id[]" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                                echo 'disabled';
-                                            } ?>>
-                                            <option value="{{ $value_export->product_id }}">
-                                                {{ $value_export->product_name }}
-                                            </option>
-                                            @foreach ($product_code as $value_code)
-                                                <option value="{{ $value_code->id }}" class="<?php if ($value_code->id === $value_export->product_id) {
+                        @if ($exports->export_status != 0)
+                            @foreach ($productExport as $index => $value_export)
+                                <tr>
+                                    <td class="soTT"><?php echo $stt++; ?></td>
+                                    <td>
+                                        @if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin')))
+                                            {{-- <input type="text" title="{{ $value_export->product_name }}"
+                                                class="form-control" readonly
+                                                value="{{ $value_export->product_name }}"> --}}
+                                            <select
+                                                class="child-select p-1 form-control productName <?php if ($exports->export_status != 1) {
                                                     echo 'd-none';
-                                                } ?>">
-                                                    {{ $value_code->product_name }}
+                                                } ?>"
+                                                name="product_id[]" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                                    echo 'disabled';
+                                                } ?>>
+                                                <option value="{{ $value_export->product_id }}">
+                                                    {{ $value_export->product_name }}
                                                 </option>
-                                            @endforeach
-                                        </select>
-                                    @endif
-                                    @if ($exports->export_status == 1)
-                                        <select class="child-select p-1 form-control productName" name="product_id[]"
-                                            data-initial="{{ $value_export->product_id }}" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                                echo 'disabled';
-                                            } ?>>
-                                            <option value="{{ $value_export->product_id }}" class="initial-option">
-                                                {{ $value_export->product_name }}
-                                            </option>
-                                            @foreach ($product_code as $value_code)
-                                                <option value="{{ $value_code->id }}" class="<?php if ($value_code->id === $value_export->product_id) {
-                                                    echo 'd-none';
-                                                } ?>">
-                                                    {{ $value_code->product_name }}
+                                                @foreach ($product_code as $value_code)
+                                                    <option value="{{ $value_code->id }}"
+                                                        class="<?php if ($value_code->id === $value_export->product_id) {
+                                                            echo 'd-none';
+                                                        } ?>">
+                                                        {{ $value_code->product_name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        @endif
+                                        @if ($exports->export_status == 1)
+                                            <select class="child-select p-1 form-control productName"
+                                                name="product_id[]" data-initial="{{ $value_export->product_id }}"
+                                                <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                                    echo 'disabled';
+                                                } ?>>
+                                                <option value="{{ $value_export->product_id }}"
+                                                    class="initial-option">
+                                                    {{ $value_export->product_name }}
                                                 </option>
-                                            @endforeach
-                                        </select>
-                                    @endif
-                                </td>
-                                <td>
-                                    <input type="text" id="product_unit" readonly
-                                        class="product_unit form-control text-center" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                            echo 'readonly';
-                                        } ?>
-                                        value="{{ $value_export->product_unit }}" name="product_unit[]"
-                                        required="">
-                                </td>
-                                <td>
-                                    <div class='d-flex'>
-                                        <input type="text" oninput="limitMaxEdit(this)" id="product_qty"
-                                            class="quantity-input form-control text-center" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                                @foreach ($product_code as $value_code)
+                                                    <option value="{{ $value_code->id }}"
+                                                        class="<?php if ($value_code->id === $value_export->product_id) {
+                                                            echo 'd-none';
+                                                        } ?>">
+                                                        {{ $value_code->product_name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <input type="text" id="product_unit" readonly
+                                            class="product_unit form-control text-center" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                                 echo 'readonly';
                                             } ?>
-                                            value="{{ $value_export->product_qty }}" name="product_qty[]"
-                                            required="" style="min-width:70px;">
-                                        <input type="text" readonly="" class="quantity-exist form-control"
-                                            required=""
-                                            value="/{{ $value_export->tonkho + $value_export->product_qty }}"
-                                            style="min-width:70px;background:#D6D6D6;border:none;"
-                                            <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                                echo 'hidden';
-                                            } ?>>
-                                    </div>
-                                </td>
-                                <td>
-                                    <input type="text" id="product_price" name="product_price[]"
-                                        class="form-control text-center product_price" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                            echo 'readonly';
-                                        } ?>
-                                        value=@if (fmod($value_export->product_price, 1) == 0) {{ number_format($value_export->product_price, 0, '.', ',') }}
+                                            value="{{ $value_export->product_unit }}" name="product_unit[]"
+                                            required="">
+                                    </td>
+                                    <td>
+                                        <div class='d-flex'>
+                                            <input type="text" oninput="limitMaxEdit(this)" id="product_qty"
+                                                class="quantity-input form-control text-center" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                                    echo 'readonly';
+                                                } ?>
+                                                value="{{ $value_export->product_qty }}" name="product_qty[]"
+                                                required="" style="min-width:70px;">
+                                            <input type="text" readonly="" class="quantity-exist form-control"
+                                                required=""
+                                                value="/{{ $value_export->tonkho + $value_export->product_qty }}"
+                                                style="min-width:70px;background:#D6D6D6;border:none;"
+                                                <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                                    echo 'hidden';
+                                                } ?>>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input type="text" id="product_price" name="product_price[]"
+                                            class="form-control text-center product_price" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                                echo 'readonly';
+                                            } ?>
+                                            value=@if (fmod($value_export->product_price, 1) == 0) {{ number_format($value_export->product_price, 0, '.', ',') }}
                                         @else
                                         {{ number_format($value_export->product_price, 2, '.', ',') }} @endif
-                                        required="">
-                                </td>
-                                <td>
-                                    <select disabled name="product_tax[]" class="product_tax form-control"
-                                        style="width: 80px;" id="product_tax" required <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                            echo 'disabled';
-                                        } ?>>
-                                        <option value="0" <?php if ($value_export->thue == 0) {
-                                            echo 'selected';
-                                        } ?>>0%</option>
-                                        <option value="8" <?php if ($value_export->thue == 8) {
-                                            echo 'selected';
-                                        } ?>>8%</option>
-                                        <option value="10" <?php if ($value_export->thue == 10) {
-                                            echo 'selected';
-                                        } ?>>10%</option>
-                                        <option value="99" <?php if ($value_export->thue == 99) {
-                                            echo 'selected';
-                                        } ?>>NOVAT</option>
-                                    </select>
-                                </td>
-                                <td><span class="total-amount form-control text-center"
-                                        style="background:#e9ecef;min-width: 120px;">0</span>
-                                </td>
-                                <td>
-                                    <input type="text" class="product_note form-control" name="product_note[]"
-                                        class="form-control" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                            echo 'readonly';
-                                        } ?>
-                                        value="{{ $value_export->product_note }}">
-                                </td>
-                                @if ($exports->export_status == 2)
-                                    <td data-toggle='modal' data-target='#snModal' class='sn'><img
-                                            src="../../dist/img/icon/list.png"></td>
-                                @elseif($exports->export_status == 1)
-                                    <td data-toggle='modal' data-target='#snModal' class='sn1'><img
-                                            src="../../dist/img/icon/list.png"></td>
-                                @endif
-                                <td data-toggle='modal' data-target='#productModal' class='productMD'><img
-                                        src="../../dist/img/icon/Group.png"></td>
-                                @if ($exports->export_status == 1)
-                                    @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
-                                        <td @if ($exports->export_status != 2) class="delete-row-btn" @endif>
-                                            <img src="../../dist/img/icon/vector.png">
-                                        </td>
+                                            required="">
+                                    </td>
+                                    <td>
+                                        <select disabled name="product_tax[]" class="product_tax form-control"
+                                            style="width: 80px;" id="product_tax" required <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                                echo 'disabled';
+                                            } ?>>
+                                            <option value="0" <?php if ($value_export->thue == 0) {
+                                                echo 'selected';
+                                            } ?>>0%</option>
+                                            <option value="8" <?php if ($value_export->thue == 8) {
+                                                echo 'selected';
+                                            } ?>>8%</option>
+                                            <option value="10" <?php if ($value_export->thue == 10) {
+                                                echo 'selected';
+                                            } ?>>10%</option>
+                                            <option value="99" <?php if ($value_export->thue == 99) {
+                                                echo 'selected';
+                                            } ?>>NOVAT</option>
+                                        </select>
+                                    </td>
+                                    <td><span class="total-amount form-control text-center"
+                                            style="background:#e9ecef;min-width: 120px;">0</span>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="product_note form-control" name="product_note[]"
+                                            class="form-control" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                                echo 'readonly';
+                                            } ?>
+                                            value="{{ $value_export->product_note }}">
+                                    </td>
+                                    @if ($exports->export_status == 2)
+                                        <td data-toggle='modal' data-target='#snModal' class='sn'><img
+                                                src="../../dist/img/icon/list.png"></td>
+                                    @elseif($exports->export_status == 1)
+                                        <td data-toggle='modal' data-target='#snModal' class='sn1'><img
+                                                src="../../dist/img/icon/list.png"></td>
                                     @endif
-                                @endif
-                            </tr>
-                        @endforeach
-                        @if ($exports->export_status != 2)
-                            <tr id="dynamic-fields"></tr>
+                                    <td data-toggle='modal' data-target='#productModal' class='productMD'><img
+                                            src="../../dist/img/icon/Group.png"></td>
+                                    @if ($exports->export_status == 1)
+                                        @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
+                                            <td @if ($exports->export_status != 2) class="delete-row-btn" @endif>
+                                                <img src="../../dist/img/icon/vector.png">
+                                            </td>
+                                        @endif
+                                    @endif
+                                    <td style='display:none;'>
+                                        <ul class='seri_pro'>
+                                            @foreach ($SnProduct as $valueSN)
+                                                @if ($valueSN->product_id == $value_export->product_id)
+                                                    <li>{{ $valueSN->product_id }}</li>
+                                                @endif
+                                            @endforeach
+                                        </ul>
+                                    </td>
+                                </tr>
+                            @endforeach
+                            @if ($exports->export_status != 2)
+                                <tr id="dynamic-fields"></tr>
+                            @endif
+                        @elseif($exports->export_status == 0)
+                            @foreach ($productCancel as $value_export1)
+                                <tr>
+                                    <td class="soTT"><?php echo $stt++; ?></td>
+                                    <td>
+                                        @if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin')))
+                                            {{-- <input type="text" title="{{ $value_export1->product_name }}"
+                                                class="form-control" readonly
+                                                value="{{ $value_export1->product_name }}"> --}}
+                                            <select
+                                                class="child-select p-1 form-control productName <?php if ($exports->export_status != 1) {
+                                                    echo 'd-none';
+                                                } ?>"
+                                                name="product_id[]" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                                    echo 'disabled';
+                                                } ?>>
+                                                <option value="{{ $value_export1->product_id }}">
+                                                    {{ $value_export1->product_name }}
+                                                </option>
+                                                @foreach ($product_code as $value_code)
+                                                    <option value="{{ $value_code->id }}"
+                                                        class="<?php if ($value_code->id === $value_export1->product_id) {
+                                                            echo 'd-none';
+                                                        } ?>">
+                                                        {{ $value_code->product_name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        @endif
+                                        @if ($exports->export_status == 1)
+                                            <select class="child-select p-1 form-control productName"
+                                                name="product_id[]" data-initial="{{ $value_export->product_id }}"
+                                                <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                                    echo 'disabled';
+                                                } ?>>
+                                                <option value="{{ $value_export->product_id }}"
+                                                    class="initial-option">
+                                                    {{ $value_export->product_name }}
+                                                </option>
+                                                @foreach ($product_code as $value_code)
+                                                    <option value="{{ $value_code->id }}"
+                                                        class="<?php if ($value_code->id === $value_export->product_id) {
+                                                            echo 'd-none';
+                                                        } ?>">
+                                                        {{ $value_code->product_name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <input type="text" id="product_unit" readonly
+                                            class="product_unit form-control text-center" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                                echo 'readonly';
+                                            } ?>
+                                            value="{{ $value_export1->product_unit }}" name="product_unit[]"
+                                            required="">
+                                    </td>
+                                    <td>
+                                        <div class='d-flex'>
+                                            <input type="text" oninput="limitMaxEdit(this)" id="product_qty"
+                                                class="quantity-input form-control text-center" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                                    echo 'readonly';
+                                                } ?>
+                                                value="{{ $value_export1->product_qty }}" name="product_qty[]"
+                                                required="" style="min-width:70px;">
+                                            <input type="text" readonly="" class="quantity-exist form-control"
+                                                required=""
+                                                value="/{{ $value_export1->tonkho + $value_export1->product_qty }}"
+                                                style="min-width:70px;background:#D6D6D6;border:none;"
+                                                <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                                    echo 'hidden';
+                                                } ?>>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input type="text" id="product_price" name="product_price[]"
+                                            class="form-control text-center product_price" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                                echo 'readonly';
+                                            } ?>
+                                            value=@if (fmod($value_export1->product_price, 1) == 0) {{ number_format($value_export1->product_price, 0, '.', ',') }}
+                                        @else
+                                        {{ number_format($value_export1->product_price, 2, '.', ',') }} @endif
+                                            required="">
+                                    </td>
+                                    <td>
+                                        <select disabled name="product_tax[]" class="product_tax form-control"
+                                            style="width: 80px;" id="product_tax" required <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                                echo 'disabled';
+                                            } ?>>
+                                            <option value="0" <?php if ($value_export1->thue == 0) {
+                                                echo 'selected';
+                                            } ?>>0%</option>
+                                            <option value="8" <?php if ($value_export1->thue == 8) {
+                                                echo 'selected';
+                                            } ?>>8%</option>
+                                            <option value="10" <?php if ($value_export1->thue == 10) {
+                                                echo 'selected';
+                                            } ?>>10%</option>
+                                            <option value="99" <?php if ($value_export1->thue == 99) {
+                                                echo 'selected';
+                                            } ?>>NOVAT</option>
+                                        </select>
+                                    </td>
+                                    <td><span class="total-amount form-control text-center"
+                                            style="background:#e9ecef;min-width: 120px;">0</span>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="product_note form-control" name="product_note[]"
+                                            class="form-control" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                                echo 'readonly';
+                                            } ?>
+                                            value="{{ $value_export1->product_note }}">
+                                    </td>
+                                    @if ($exports->export_status == 2)
+                                        <td data-toggle='modal' data-target='#snModal' class='sn'><img
+                                                src="../../dist/img/icon/list.png"></td>
+                                    @elseif($exports->export_status == 1)
+                                        <td data-toggle='modal' data-target='#snModal' class='sn1'><img
+                                                src="../../dist/img/icon/list.png"></td>
+                                    @endif
+                                    <td data-toggle='modal' data-target='#productModal' class='productMD'><img
+                                            src="../../dist/img/icon/Group.png"></td>
+                                    @if ($exports->export_status == 1)
+                                        @if (Auth::user()->id == $exports->user_id || Auth::user()->can('isAdmin'))
+                                            <td @if ($exports->export_status != 2) class="delete-row-btn" @endif>
+                                                <img src="../../dist/img/icon/vector.png">
+                                            </td>
+                                        @endif
+                                    @endif
+                                </tr>
+                            @endforeach
+                            @if ($exports->export_status != 2)
+                                <tr id="dynamic-fields"></tr>
+                            @endif
                         @endif
                     </tbody>
                 </table>
@@ -597,20 +749,20 @@
             </div>
             {{-- Modal S/N --}}
             <div class="modal fade" id="snModal" tabindex="-1" role="dialog"
-                aria-labelledby="productModalLabel" aria-hidden="true">
+                aria-labelledby="productModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
                 <div class="modal-dialog" role="document" style="max-width: 85%;">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title text-bold" id="productModalLabel">Danh sách Serial Number</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                            <div class="close">
+
+                            </div>
                         </div>
                         <div class="modal-body">
 
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                        <div class="modal-footer text-center d-block">
+
                         </div>
                     </div>
                 </div>
@@ -640,10 +792,9 @@
     }
 </style>
 <script>
+    // Chờ cho Select2 được khởi tạo hoàn toàn
     $(document).ready(function() {
-        $('.child-select').selectize({
-            sortField: 'text',
-        });
+        $('.child-select').select2();
     });
     // Thay đổi màu nút save note_form
     $(document).ready(function() {
@@ -699,8 +850,10 @@
             },
             success: function(response) {
                 var modalBody = $('#snModal').find('.modal-body');
+                var closeBtn = $('#snModal').find('.close');
                 let count = 1;
                 modalBody.empty();
+                closeBtn.empty();
                 var snList = $('<table class="table table-hover">' +
                     '<thead><tr><th>STT</th><th>Serial Number</th></tr></thead>' +
                     '<tbody class="bg-white-sn">'
@@ -723,6 +876,10 @@
                     count++;
                 });
                 modalBody.append(product, snList);
+                var btnClose = $(
+                    '<div class="btnclose cursor-pointer" data-dismiss="modal"><span aria-hidden="true">&times;</span></div>'
+                );
+                closeBtn.append(btnClose);
                 //limit checkbox
                 $('.check-item').on('change', function() {
                     var checkedCheckboxes = $('.check-item:checked')
@@ -740,6 +897,12 @@
             }
         });
     });
+
+    function countCheckedCheckboxes() {
+        var numberOfCheckedCheckboxes = $('.check-item:checked')
+            .length;
+        $('#resultCell').text(numberOfCheckedCheckboxes);
+    }
     var selectedSerialNumbers = [];
     //hiển thị S/N khi đang báo giá
     $('.sn1').on('click', function() {
@@ -761,8 +924,12 @@
             },
             success: function(response) {
                 var modalBody = $('#snModal').find('.modal-body');
+                var modalFooter = $('#snModal').find('.modal-footer');
+                var closeBtn = $('#snModal').find('.close');
                 let count = 1;
                 modalBody.empty();
+                modalFooter.empty();
+                closeBtn.empty();
                 var snList = $('<table class="table table-hover">' +
                     '<thead><tr><th style="width: 20px;"><input type="checkbox" name="all" id="checkall"></th><th>STT</th><th>Serial Number</th></tr></thead>' +
                     '<tbody class="bg-white-sn">'
@@ -770,9 +937,8 @@
                 var product = $('<table class="table table-hover">' +
                     '<thead><tr><th>Tên sản phẩm</th><th class="text-right">Số lượng sản phẩm</th><th class="text-right">Số lượng S/N</th></tr></thead>' +
                     '<tbody><tr>' + '<td>' + productName +
-                    '</td>' + '<td class="text-right">' + qty +
-                    '</td>' + '<td class="text-right">' + response
-                    .length +
+                    '</td>' + '<td class="text-right">' + qty_enter +
+                    '</td>' + '<td class="text-right" id="resultCell">' + 0 +
                     '</td>' +
                     '</tr</tbody>' + '</table>' +
                     '<h3>Thông tin Serial Number </h3>');
@@ -805,11 +971,27 @@
                     snList.append(row);
                     count++;
                 });
-
+                var footer = $(
+                    '<a class="btn btn-primary mr-1 check-seri" data-dismiss="">Lưu</a>'
+                );
+                var btnClose = $(
+                    '<div class="btnclose cursor-pointer" data-dismiss=""><span aria-hidden="true">&times;</span></div>'
+                );
                 modalBody.append(product, snList);
-
+                modalFooter.append(footer);
+                closeBtn.append(btnClose);
+                countCheckedCheckboxes();
+                $('tr').click(function(event) {
+                    var checkedCheckboxesInRow = $(this).find(
+                        '.check-item:checked').length;
+                    var checkbox = $(this).find('input:checkbox');
+                    checkbox.prop('checked', !checkbox.prop(
+                        'checked'));
+                    checkbox.change();
+                });
                 //limit checkbox
                 $('.check-item').on('change', function() {
+                    event.stopPropagation();
                     var checkedCheckboxes = $('.check-item:checked').length;
                     var serialNumberId = $(this).val();
                     // Check if checked checkboxes exceed qty_enter
@@ -852,6 +1034,47 @@
                             $('input[name="selected_serial_numbers[]"][value="' +
                                 serialNumberId + '"]').remove();
                         }
+                        countCheckedCheckboxes();
+                    }
+                });
+                //kiểm tra số lượng seri
+                $('.check-seri').on('click', function() {
+                    var checkedCheckboxes = $('.check-item:checked')
+                        .length;
+                    var check_item = $('.check-item');
+                    if (check_item.length > 0) {
+                        if (checkedCheckboxes < qty_enter) {
+                            alert(
+                                'Vui lòng chọn đủ serial number theo số lượng xuất!'
+                            );
+                        } else if (checkedCheckboxes == qty_enter) {
+                            // Kiểm tra xem nút được nhấn có class 'check-seri' không
+                            if ($(this).hasClass('check-seri')) {
+                                $(this).attr('data-dismiss',
+                                    'modal');
+                            }
+                        }
+                    } else {
+                        $(this).attr('data-dismiss', 'modal');
+                    }
+                });
+
+                $('.btnclose').on('click', function() {
+                    var checkedCheckboxes = $('.check-item:checked')
+                        .length;
+                    var check_item = $('.check-item');
+                    if (check_item.length > 0) {
+                        if (checkedCheckboxes < qty_enter) {
+                            alert(
+                                'Vui lòng chọn đủ serial number theo số lượng xuất!'
+                            );
+                        } else if (checkedCheckboxes == qty_enter) {
+                            $('.btnclose').attr('data-dismiss',
+                                'modal');
+                        }
+                    } else {
+                        $('.btnclose').attr('data-dismiss',
+                            'modal');
                     }
                 });
             },
@@ -1024,6 +1247,7 @@
         });
         $('#form-edit').remove();
     });
+
     //add sản phẩm
     $(document).ready(function() {
         let fieldCounter = 1;
@@ -1088,6 +1312,7 @@
                 "<td style='display:none;'><input type='text' class='dangGD'></td>" +
                 "<td style='display:none;'><input type='text' class='product_tax1'></td>"
             );
+            const snPro = $("<td style='display:none;'><ul class ='seri_pro'></ul></td>");
             deleteBtn.click(function() {
                 var row = $(this).closest("tr");
                 var selectedID = row.find('.child-select').val();
@@ -1131,8 +1356,12 @@
                     },
                     success: function(response) {
                         var modalBody = $('#snModal').find('.modal-body');
+                        var modalFooter = $('#snModal').find('.modal-footer');
+                        var closeBtn = $('#snModal').find('.close');
                         let count = 1;
                         modalBody.empty();
+                        modalFooter.empty();
+                        closeBtn.empty();
                         var snList = $('<table class="table table-hover">' +
                             '<thead><tr><th style="width: 20px;"><input type="checkbox" name="all" id="checkall"></th><th>STT</th><th>Serial Number</th></tr></thead>' +
                             '<tbody class="bg-white-sn">'
@@ -1140,9 +1369,9 @@
                         var product = $('<table class="table table-hover">' +
                             '<thead><tr><th>Tên sản phẩm</th><th class="text-right">Số lượng sản phẩm</th><th class="text-right">Số lượng S/N</th></tr></thead>' +
                             '<tbody><tr>' + '<td>' + productName +
-                            '</td>' + '<td class="text-right">' + qty +
-                            '</td>' + '<td class="text-right">' + response
-                            .length +
+                            '</td>' + '<td class="text-right">' + qty_enter +
+                            '</td>' +
+                            '<td class="text-right" id = "resultCell1">' + 0 +
                             '</td>' +
                             '</tr</tbody>' + '</table>' +
                             '<h3>Thông tin Serial Number </h3>');
@@ -1178,7 +1407,29 @@
                             }
                         });
                         modalBody.append(product, snList);
-                        // $('#snModal').modal('show');
+                        var footer = $(
+                            '<a class="btn btn-primary mr-1 check-seri" data-dismiss="">Lưu</a>'
+                        );
+                        var btnClose = $(
+                            '<div class="btnclose cursor-pointer" data-dismiss=""><span aria-hidden="true">&times;</span></div>'
+                        );
+                        modalFooter.append(footer);
+                        closeBtn.append(btnClose);
+
+                        function countCheckedCheckboxes1() {
+                            var numberOfCheckedCheckboxes = $('.check-item:checked')
+                                .length;
+                            $('#resultCell1').text(numberOfCheckedCheckboxes);
+                        }
+                        countCheckedCheckboxes1();
+                        $('tr').click(function(event) {
+                            var checkedCheckboxesInRow = $(this).find(
+                                '.check-item:checked').length;
+                            var checkbox = $(this).find('input:checkbox');
+                            checkbox.prop('checked', !checkbox.prop(
+                                'checked'));
+                            checkbox.change();
+                        });
                         //limit checkbox
                         $('.check-item').on('change', function() {
                             var checkedCheckboxes = $('.check-item:checked')
@@ -1228,6 +1479,7 @@
                                             .remove();
                                     }
                                 }
+                                countCheckedCheckboxes1();
                             }
                         });
                         //thay đổi số lượng nhập
@@ -1257,6 +1509,46 @@
                                         .remove();
                                 }
                             });
+                        });
+                        //kiểm tra số lượng seri
+                        $('.check-seri').on('click', function() {
+                            var checkedCheckboxes = $('.check-item:checked')
+                                .length;
+                            var check_item = $('.check-item');
+                            if (check_item.length > 0) {
+                                if (checkedCheckboxes < qty_enter) {
+                                    alert(
+                                        'Vui lòng chọn đủ serial number theo số lượng xuất!'
+                                    );
+                                } else if (checkedCheckboxes == qty_enter) {
+                                    // Kiểm tra xem nút được nhấn có class 'check-seri' không
+                                    if ($(this).hasClass('check-seri')) {
+                                        $(this).attr('data-dismiss',
+                                            'modal');
+                                    }
+                                }
+                            } else {
+                                $(this).attr('data-dismiss', 'modal');
+                            }
+                        });
+
+                        $('.btnclose').on('click', function() {
+                            var checkedCheckboxes = $('.check-item:checked')
+                                .length;
+                            var check_item = $('.check-item');
+                            if (check_item.length > 0) {
+                                if (checkedCheckboxes < qty_enter) {
+                                    alert(
+                                        'Vui lòng chọn đủ serial number theo số lượng xuất!'
+                                    );
+                                } else if (checkedCheckboxes == qty_enter) {
+                                    $('.btnclose').attr('data-dismiss',
+                                        'modal');
+                                }
+                            } else {
+                                $('.btnclose').attr('data-dismiss',
+                                    'modal');
+                            }
                         });
                     },
                     error: function(xhr, status, error) {
@@ -1304,19 +1596,12 @@
                 });
             });
             newRow.append(MaInput, ProInput, dvtInput, slInput,
-                giaInput, thueInput, thanhTienInput, ghichuInput, sn, info, deleteBtn, option);
+                giaInput, thueInput, thanhTienInput, ghichuInput, sn, info, deleteBtn, option, snPro
+            );
             $("#dynamic-fields").before(newRow);
             fieldCounter++;
-            // Áp dụng Selectize cho phần tử select mới
-            newRow.find('.child-select').selectize({
-                sortField: 'text',
-            });
-
-            // Cập nhật lại tất cả các Selectize instance
-            const selectizeInputs = document.querySelectorAll('.selectize-input');
-
-            selectizeInputs.forEach(input => {
-                input.style.width = '100% !important';
+            $(document).ready(function() {
+                $('.child-select').select2();
             });
         });
 
@@ -1391,20 +1676,18 @@
         var value = parseFloat(input.value);
         var product_id = $(input).closest('tr').find('.productName').val();
 
-        // Gửi dữ liệu qua AJAX
-        $.ajax({
-            url: "{{ route('limit_qty') }}",
-            type: 'GET',
-            data: {
-                product_id: product_id,
-            },
-            success: function(response) {
-                var maxLimit = parseFloat(response.qty_exist);
-                if (!isNaN(maxLimit) && value > maxLimit) {
-                    input.value = maxLimit;
-                }
-            }
-        });
+        var inputExist = $(input).closest('tr').find(".quantity-exist").val();
+
+        // Sử dụng phương thức replace để loại bỏ ký tự /
+        var valueWithoutSlash = inputExist.replace('/', '');
+
+        var maxLimit = parseFloat(valueWithoutSlash);
+        if (!isNaN(maxLimit) && value > maxLimit) {
+            input.value = maxLimit;
+            calculateTotalTax();
+            calculateGrandTotal();
+            calculateTotalAmount();
+        }
     }
     //giới hạn số lượng nhập của edit sản phẩm
     function limitMaxEdit(input) {
@@ -1690,6 +1973,8 @@
             var loaihang = $(this).closest('tr').find('.loaihang');
             var dangGD = $(this).closest('tr').find('.dangGD');
             var thue = $(this).closest('tr').find('.product_tax');
+            var ulElement = $(this).closest('tr').find(".seri_pro");
+
             $(this).closest('tr').find('.quantity-input').val(null);
             if (selectedID) {
                 $.ajax({
@@ -1718,16 +2003,32 @@
                         thue.val(response.product_tax);
                         calculateGrandTotal();
                         calculateGrandTotalWithTransportFee();
+                        $.ajax({
+                            url: "{{ route('getAllSN') }}",
+                            method: 'GET',
+                            data: {
+                                idProduct: selectedID,
+                            },
+                            success: function(response2) {
+                                response2.forEach(function(sn) {
+                                    var product_id = sn.product_id;
+                                    var liElement = $("<li>").text(
+                                        product_id.toString());
+                                    ulElement.append(liElement);
+                                });
+                            },
+                        });
                     },
                 });
+                $('input[name="selected_serial_numbers[]"][data-product-id="' + selectedID + '"]')
+                    .remove();
             }
 
             if (isInitial) {
                 productNameElement.prop('disabled', true);
             } else if (selectedProductIDs.includes(selectedID)) {
-                selectize.clear();
-                selectize.blur();
                 productNameElement.prop('disabled', true);
+                $(this).val('Nội dung mới').trigger('change');
                 alert('Sản phẩm này đã được thêm trước đó, vui lòng chọn sản phẩm khác');
                 // Kiểm tra nếu giá trị data-previous-id là null, thì bỏ qua bước kiểm tra tiếp theo
                 if ($(this).data('previous-id') !== null) {
@@ -1735,18 +2036,8 @@
                     var index = selectedProductIDs.indexOf(previousID);
                     if (index !== -1) {
                         selectedProductIDs.splice(index, 1); // Xóa ID trước đó khỏi mảng
-                    }
-                }
-
-                // Đặt giá trị data-previous-id thành null để cho phép chọn lại sản phẩm ban đầu
-                $(this).data('previous-id', null);
-
-                // Kiểm tra nếu giá trị data-previous-id là null, thì bỏ qua bước kiểm tra tiếp theo
-                if ($(this).data('previous-id') !== null) {
-                    var previousID = $(this).data('previous-id'); // Lấy ID trước đó của tùy chọn
-                    var index = selectedProductIDs.indexOf(previousID);
-                    if (index !== -1) {
-                        selectedProductIDs.splice(index, 1); // Xóa ID trước đó khỏi mảng
+                        $('input[name="selected_serial_numbers[]"][data-product-id="' + previousID +
+                            '"]').remove();
                     }
                 }
 
@@ -1758,39 +2049,14 @@
                     var index = selectedProductIDs.indexOf(previousID);
                     if (index !== -1) {
                         selectedProductIDs.splice(index, 1);
+                        $('input[name="selected_serial_numbers[]"][data-product-id="' + previousID +
+                            '"]').remove();
                     }
                 }
                 selectedProductIDs.push(selectedID);
                 $(this).data('previous-id', selectedID);
                 hideSelectedProductNames(row);
             }
-
-            // if (selectedProductIDs.includes(selectedID)) {
-            //     var selectize = $(this)[0].selectize;
-            //     selectize.clear();
-            //     selectize.blur();
-            //     productNameElement.prop('disabled', true);
-            //     alert('Sản phẩm này đã được thêm trước đó, vui lòng chọn sản phẩm khác');
-
-            //     // Xóa sản phẩm khỏi mảng selectedProductIDs
-            //     var index = selectedProductIDs.indexOf(selectedID);
-            //     if (index !== -1) {
-            //         selectedProductIDs.splice(index, 1);
-            //     }
-
-            //     $(this).data('previous-id', null);
-            // } else {
-            //     var previousID = $(this).data('previous-id');
-            //     if (previousID && previousID !== selectedID) {
-            //         var index = selectedProductIDs.indexOf(previousID);
-            //         if (index !== -1) {
-            //             selectedProductIDs.splice(index, 1);
-            //         }
-            //     }
-            //     selectedProductIDs.push(selectedID);
-            //     $(this).data('previous-id', selectedID);
-            //     hideSelectedProductNames(row);
-            // }
         });
 
         // Function to hide selected product names from other child select options
@@ -1938,6 +2204,16 @@
         return backupAlert;
     }
 
+    function checkRequiredConditions() {
+        var inputQty = $('.quantity-input').val();
+        var inputPrice = $('.product_price').val();
+        if (inputQty === '' || inputPrice === '') {
+            alert('Lỗi: Trường nhập liệu không được để trống!');
+            return false;
+        }
+        return true;
+    }
+
     function validateAndSubmit(event) {
         var formGuest = $('#form-guest');
         var productList = $('.productName');
@@ -1949,23 +2225,104 @@
                 $(this).val(newValue);
             });
 
-            // Đánh dấu trạng thái đang submit
-            isSubmitting = true;
-            var restoreAlert = blockAlertInCurrentPage();
+            if (checkRequiredConditions()) {
+                var selects = document.getElementsByTagName("select");
 
-            // Thực hiện kiểm tra điều kiện bắt buộc ở đây
-            var conditionsMet = true; // Đặt giá trị mặc định là true
-            if (!checkRequiredConditions()) {
-                conditionsMet = false;
+                for (var j = 0; j < selects.length; j++) {
+                    selects[j].removeAttribute("disabled");
+                }
+
+            }
+            const productRows = document.querySelectorAll('tr');
+            let mismatchedProducts = [];
+            let hasZeroQuantity = false;
+
+            for (let i = 0; i < productRows.length; i++) {
+                const qtyInput = productRows[i].querySelector('.quantity-input');
+                const productNameSelect = productRows[i].querySelector('.productName');
+
+                if (qtyInput !== null && productNameSelect !== null) {
+                    const selectedOption = productNameSelect.options[productNameSelect.selectedIndex];
+
+                    if (parseFloat(qtyInput.value) === 0) {
+                        hasZeroQuantity = true;
+                        const productName = selectedOption.textContent;
+                        mismatchedProducts.push(productName);
+                    }
+                }
             }
 
-            if (conditionsMet) {
-                $('#form-guest')[0].submit();
+            let missProducts = [];
+            const productsRows = document.querySelectorAll('tbody tr');
+
+            for (let j = 0; j < productsRows.length; j++) {
+                const ulElement = productsRows[j].querySelector(".seri_pro");
+                const numberOfLiElements = ulElement ? ulElement.querySelectorAll('li').length : 0;
+
+                if (numberOfLiElements > 0) {
+                    // Chỉ push vào mảng khi có ít nhất một phần tử <li> trong <ul>
+                    const qty = productsRows[j].querySelector('.quantity-input');
+                    const productNameElement = productsRows[j].querySelector('.productName');
+
+                    if (qty !== null) {
+                        const idProduct = productNameElement.value;
+                        const numberOfInputs = $(
+                            `input[name="selected_serial_numbers[]"][data-product-id="${idProduct}"]`
+                        ).length;
+
+                        if (parseInt(qty.value) !== numberOfInputs) {
+                            const selectedOption1 = productNameElement.options[
+                                productNameElement.selectedIndex
+                            ];
+                            const productName1 = selectedOption1.textContent;
+
+                            if (!missProducts.includes(productName1)) {
+                                missProducts.push(productName1);
+                            }
+                        }
+                    }
+                }
+            }
+            // Tạo thông báo
+            let alertMessage1 = "Số lượng xuất chưa trùng với số lượng S/N:\n";
+            if (missProducts.length > 0) {
+                alertMessage1 += missProducts.join('\n');
+                alert(alertMessage1);
+                event.preventDefault();
             }
 
-            // Đánh dấu trạng thái đã hoàn thành submit
-            isSubmitting = false;
-            window.alert = restoreAlert;
+            // Tạo thông báo
+            let alertMessage = "Các sản phẩm sau đây phải lớn hơn 0:\n";
+            if (mismatchedProducts.length > 0) {
+                alertMessage += mismatchedProducts.join('\n');
+            }
+
+            if (!hasZeroQuantity) {
+                $('#btn-customer').click();
+                // Đánh dấu trạng thái đang submit
+                isSubmitting = true;
+                var restoreAlert = blockAlertInCurrentPage();
+
+                // Thực hiện kiểm tra điều kiện bắt buộc ở đây
+                var conditionsMet = true; // Đặt giá trị mặc định là true
+                if (!checkRequiredConditions()) {
+                    conditionsMet = false;
+                }
+
+                if (conditionsMet) {
+                    $('#form-guest')[0].submit();
+                }
+
+                // Đánh dấu trạng thái đã hoàn thành submit
+                isSubmitting = false;
+                window.alert = restoreAlert;
+            } else {
+                // Hiển thị thông báo
+                if (mismatchedProducts.length > 0) {
+                    alert(alertMessage);
+                    event.preventDefault();
+                }
+            }
         } else {
             if (formGuest.length === 0) {
                 alert('Lỗi: Chưa nhập thông tin khách hàng!');
@@ -1975,19 +2332,6 @@
             event.preventDefault();
         }
     }
-
-    function checkRequiredConditions() {
-        var inputField = $('#inputField').val();
-        if (inputField === '') {
-            alert('Lỗi: Trường nhập liệu không được để trống!');
-            return false;
-        }
-        return true;
-    }
-
-    // Không gán hàm kiểm tra alert vào window.alert
-    // window.alert = checkAlert;
-
 
     //format giá
     var inputElement = document.getElementById('product_price');
@@ -2023,11 +2367,6 @@
     //ngăn chặn click
     $(document).ready(function() {
         $('#chot_don').on('click', function() {
-            var selects = document.getElementsByTagName("select");
-
-            for (var j = 0; j < selects.length; j++) {
-                selects[j].removeAttribute("disabled");
-            }
             var $button = $(this);
 
             if (!$button.hasClass('disabled')) {
@@ -2040,11 +2379,6 @@
             }
         });
         $('#luu').on('click', function() {
-            var selects = document.getElementsByTagName("select");
-
-            for (var j = 0; j < selects.length; j++) {
-                selects[j].removeAttribute("disabled");
-            }
             var $button = $(this);
 
             if (!$button.hasClass('disabled')) {
@@ -2057,11 +2391,6 @@
             }
         });
         $('#huy').on('click', function() {
-            var selects = document.getElementsByTagName("select");
-
-            for (var j = 0; j < selects.length; j++) {
-                selects[j].removeAttribute("disabled");
-            }
             var $button = $(this);
 
             if (!$button.hasClass('disabled')) {
@@ -2074,11 +2403,6 @@
             }
         });
         $('#huydon').on('click', function() {
-            var selects = document.getElementsByTagName("select");
-
-            for (var j = 0; j < selects.length; j++) {
-                selects[j].removeAttribute("disabled");
-            }
             var $button = $(this);
 
             if (!$button.hasClass('disabled')) {

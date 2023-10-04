@@ -1,8 +1,6 @@
 <x-navbar :title="$title"></x-navbar>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js"
-    integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css"
-    integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 <div class="content-wrapper export-add padding-112">
     <div class="row">
         <div class="col-sm-6 breadcrumb">
@@ -237,7 +235,7 @@
             </div>
             {{-- Modal S/N --}}
             <div class="modal fade" id="snModal" tabindex="-1" role="dialog"
-                aria-labelledby="productModalLabel" aria-hidden="true">
+                aria-labelledby="productModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
                 <div class="modal-dialog" role="document" style="max-width: 85%;">
                     <div class="modal-content">
                         <div class="modal-header align-items-center">
@@ -245,15 +243,16 @@
                                 <h5 class="modal-title" id="exampleModalLabel">Serial Number</h5>
                                 <p>Thông tin chi tiết về số S/N của mỗi sản phẩm </p>
                             </div>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+
+                            <div class="close">
+
+                            </div>
                         </div>
                         <div class="modal-body">
 
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                        <div class="modal-footer text-center d-block">
+
                         </div>
                     </div>
                 </div>
@@ -263,24 +262,6 @@
 </div>
 </section>
 </div>
-<style>
-    .selectize-input>input {
-        width: calc(100% - 30px) !important;
-        max-width: calc(100% - 30px) !important;
-        position: absolute !important;
-        left: 10px !important;
-    }
-
-    .selectize-input.has-items>.item {
-        display: inline-block !important;
-        width: 90% !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
-        white-space: normal !important;
-        overflow-wrap: break-word !important;
-        margin-top: 4px;
-    }
-</style>
 <script>
     // Thay đổi màu nút save note_form
     $(document).ready(function() {
@@ -403,7 +384,7 @@
                 "text": nextSoTT
             });
             const ProInput = $("<td>" +
-                "<select class='child-select p-1 productName form-control' required name='product_id[]'>" +
+                "<select class='child-select p-1 productName form-control js-stools-field-filter' required name='product_id[]'>" +
                 "<option value=''>Lựa chọn sản phẩm</option>" +
                 '@foreach ($product as $value)' +
                 "<option value='{{ $value->id }}'>{{ $value->product_name }}</option>" +
@@ -454,6 +435,7 @@
                 "<td style='display:none;'><input type='text' class='dangGD'></td>" +
                 "<td style='display:none;'><input type='text' class='product_tax1'></td>"
             );
+            const snPro = $("<td style='display:none;'><ul class ='seri_pro'></ul></td>");
 
             //Xóa sản phẩm
             deleteBtn.click(function() {
@@ -482,11 +464,6 @@
                     '"]').remove();
             });
 
-            function countCheckedCheckboxes() {
-                var numberOfCheckedCheckboxes = $('.check-item:checked').length;
-                $('#resultCell').text(numberOfCheckedCheckboxes);
-            }
-            countCheckedCheckboxes();
             //xem S/N sản phẩm
             sn.click(function() {
                 var qty = $(this).closest('tr').find('.quantity-exist').val();
@@ -499,7 +476,6 @@
                     .text();
                 var productId = $(this).closest('tr').find('.productName').val();
                 var selectedSerialNumbersForProduct = selectedSerialNumbers[productCode] || [];
-                countCheckedCheckboxes();
                 $.ajax({
                     url: "{{ route('getSN') }}",
                     method: 'GET',
@@ -508,8 +484,12 @@
                     },
                     success: function(response) {
                         var modalBody = $('#snModal').find('.modal-body');
+                        var modalFooter = $('#snModal').find('.modal-footer');
+                        var closeBtn = $('#snModal').find('.close');
                         let count = 1;
                         modalBody.empty();
+                        modalFooter.empty();
+                        closeBtn.empty();
                         var snList = $('<table class="table table-hover">' +
                             '<thead><tr><th style="width: 20px;"><input type="checkbox" name="all" id="checkall"></th><th>STT</th><th>Serial Number</th></tr></thead>' +
                             '<tbody class="bg-white-sn">'
@@ -544,7 +524,8 @@
                             );
                             var countCell = $('<td>').text(count);
                             var snItemCell = $('<td>').text(sn.serinumber);
-                            var row = $('<tr>').append(checkbox, countCell,
+                            var row = $('<tr>').append(checkbox,
+                                countCell,
                                 snItemCell);
                             snList.append(row);
                             count++;
@@ -555,6 +536,30 @@
                             }
                         });
                         modalBody.append(product, snList);
+                        var footer = $(
+                            '<a class="btn btn-primary mr-1 check-seri" data-dismiss="">Lưu</a>'
+                        );
+                        var btnClose = $(
+                            '<div class="btnclose cursor-pointer" data-dismiss=""><span aria-hidden="true">&times;</span></div>'
+                        );
+                        modalFooter.append(footer);
+                        closeBtn.append(btnClose);
+
+                        function countCheckedCheckboxes() {
+                            var numberOfCheckedCheckboxes = $('.check-item:checked')
+                                .length;
+                            $('#resultCell').text(numberOfCheckedCheckboxes);
+                        }
+                        countCheckedCheckboxes();
+                        $('tr').click(function(event) {
+                            var checkedCheckboxesInRow = $(this).find(
+                                '.check-item:checked').length;
+                            var checkbox = $(this).find('input:checkbox');
+                            checkbox.prop('checked', !checkbox.prop(
+                                'checked'));
+                            checkbox.change();
+                        });
+
                         //limit checkbox
                         $('.check-item').on('change', function() {
                             event.stopPropagation();
@@ -562,14 +567,10 @@
                                 .length;
                             var serialNumberId = $(this).val();
 
-                            // Check if checked checkboxes exceed qty_enter
                             if (checkedCheckboxes > qty_enter) {
-                                // Prevent checking more checkboxes than allowed
                                 $(this).prop('checked', false);
                             } else {
                                 if ($(this).is(':checked')) {
-                                    countCheckedCheckboxes();
-                                    // Nếu checkbox được chọn và không vượt quá giới hạn, thêm Serial Number vào danh sách cho sản phẩm
                                     if (!selectedSerialNumbers[
                                             productCode]) {
                                         selectedSerialNumbers[
@@ -607,35 +608,52 @@
                                             .remove();
                                     }
                                 }
+                                countCheckedCheckboxes();
                             }
                         });
-                        //thay đổi số lượng nhập
-                        $('.quantity-input').on('change', function() {
-                            var newQty = parseInt($(this).val());
-                            var selectedCheckboxes = $(
-                                '.check-item:checked');
-                            selectedCheckboxes.prop('checked', false);
-                            // Lặp qua tất cả các ô đã chọn và hủy chúng
-                            selectedCheckboxes.each(function() {
-                                $(this).prop('checked', false);
-                                var serialNumberId = $(this).val();
-                                // Loại bỏ Serial Number khỏi danh sách đã chọn cho sản phẩm
-                                if (selectedSerialNumbers[
-                                        productId]) {
-                                    selectedSerialNumbers[
-                                            productId] =
-                                        selectedSerialNumbers[
-                                            productId]
-                                        .filter(function(item) {
-                                            return item !==
-                                                serialNumberId;
-                                        });
-                                    // Xóa trường input ẩn tương ứng
-                                    $('input[name="selected_serial_numbers[]"][value="' +
-                                            serialNumberId + '"]')
-                                        .remove();
+                        $('tr input:checkbox').click(function(event) {
+                            event.stopPropagation();
+                        });
+
+                        //kiểm tra số lượng seri
+                        $('.check-seri').on('click', function() {
+                            var checkedCheckboxes = $('.check-item:checked')
+                                .length;
+                            var check_item = $('.check-item');
+                            if (check_item.length > 0) {
+                                if (checkedCheckboxes < qty_enter) {
+                                    alert(
+                                        'Vui lòng chọn đủ serial number theo số lượng xuất!'
+                                    );
+                                } else if (checkedCheckboxes == qty_enter) {
+                                    // Kiểm tra xem nút được nhấn có class 'check-seri' không
+                                    if ($(this).hasClass('check-seri')) {
+                                        $(this).attr('data-dismiss',
+                                            'modal');
+                                    }
                                 }
-                            });
+                            } else {
+                                $(this).attr('data-dismiss', 'modal');
+                            }
+                        });
+
+                        $('.btnclose').on('click', function() {
+                            var checkedCheckboxes = $('.check-item:checked')
+                                .length;
+                            var check_item = $('.check-item');
+                            if (check_item.length > 0) {
+                                if (checkedCheckboxes < qty_enter) {
+                                    alert(
+                                        'Vui lòng chọn đủ serial number theo số lượng xuất!'
+                                    );
+                                } else if (checkedCheckboxes == qty_enter) {
+                                    $('.btnclose').attr('data-dismiss',
+                                        'modal');
+                                }
+                            } else {
+                                $('.btnclose').attr('data-dismiss',
+                                    'modal');
+                            }
                         });
                     },
                     error: function(xhr, status, error) {
@@ -668,7 +686,8 @@
             });
             // Gắn các phần tử vào hàng mới
             newRow.append(MaInput, ProInput, dvtInput, slInput,
-                giaInput, thueInput, thanhTienInput, ghichuInput, sn, info, deleteBtn, option);
+                giaInput, thueInput, thanhTienInput, ghichuInput, sn, info, deleteBtn, option, snPro
+            );
             $("#dynamic-fields").before(newRow);
             // Tăng giá trị fieldCounter
             fieldCounter++;
@@ -680,16 +699,8 @@
                     $('#deleteRowTable').css('opacity', 0);
                 }
             }
-            // Áp dụng Selectize cho phần tử select mới
-            newRow.find('.child-select').selectize({
-                sortField: 'text',
-            });
-
-            // Cập nhật lại tất cả các Selectize instance
-            const selectizeInputs = document.querySelectorAll('.selectize-input');
-
-            selectizeInputs.forEach(input => {
-                input.style.width = '100% !important';
+            $(document).ready(function() {
+                $('.child-select').select2();
             });
         });
 
@@ -839,20 +850,18 @@
         var value = parseFloat(input.value);
         var product_id = $(input).closest('tr').find('.productName').val();
 
-        // Gửi dữ liệu qua AJAX
-        $.ajax({
-            url: "{{ route('limit_qty') }}",
-            type: 'GET',
-            data: {
-                product_id: product_id,
-            },
-            success: function(response) {
-                var maxLimit = parseFloat(response.qty_exist);
-                if (!isNaN(maxLimit) && value > maxLimit) {
-                    input.value = maxLimit;
-                }
-            }
-        });
+        var inputExist = $(input).closest('tr').find(".quantity-exist").val();
+
+        // Sử dụng phương thức replace để loại bỏ ký tự /
+        var valueWithoutSlash = inputExist.replace('/', '');
+
+        var maxLimit = parseFloat(valueWithoutSlash);
+        if (!isNaN(maxLimit) && value > maxLimit) {
+            input.value = maxLimit;
+            calculateTotalTax();
+            calculateGrandTotal();
+            calculateTotalAmount();
+        }
     }
 
     //cập nhật thông tin khách hàng
@@ -1013,8 +1022,10 @@
             var loaihang = $(this).closest('tr').find('.loaihang');
             var dangGD = $(this).closest('tr').find('.dangGD');
             var thue = $(this).closest('tr').find('.product_tax');
+            var ulElement = $(this).closest('tr').find(".seri_pro");
+
             $(this).closest('tr').find('.quantity-input').val(null);
-            if (selectedID) {
+            if (!isNaN(selectedID)) {
                 $.ajax({
                     url: "{{ route('getProduct') }}",
                     type: "get",
@@ -1022,72 +1033,90 @@
                         idProduct: selectedID,
                     },
                     success: function(response) {
-                        productNameElement.val(response.product_name);
-                        productUnitElement.val(response.product_unit);
-                        qty_exist.val("/" + response.qty_exist);
-                        var productPrice = parseFloat(response.product_price);
-                        var formattedPrice;
-                        if (Number.isInteger(productPrice)) {
-                            formattedPrice = numeral(productPrice).format('0,0');
-                        } else {
-                            formattedPrice = numeral(productPrice).format('0,0.00');
+                        if (response) {
+                            productNameElement.val(response.product_name);
+                            productUnitElement.val(response.product_unit);
+                            qty_exist.val("/" + response.qty_exist);
+                            var productPrice = parseFloat(response.product_price);
+                            var formattedPrice;
+                            if (Number.isInteger(productPrice)) {
+                                formattedPrice = numeral(productPrice).format('0,0');
+                            } else {
+                                formattedPrice = numeral(productPrice).format('0,0.00');
+                            }
+                            price_import.val(formattedPrice);
+                            tonkho.val(response.product_qty);
+                            loaihang.val(response.product_category);
+                            dangGD.val(response.product_trade == null ? 0 : response
+                                .product_trade);
+                            thue.val(response.product_tax == null ? 99 : response
+                                .product_tax);
+                            // Tính lại tổng số tiền và tổng số thuế
+                            calculateTotalTax();
+                            calculateGrandTotal();
+                            $.ajax({
+                                url: "{{ route('getAllSN') }}",
+                                method: 'GET',
+                                data: {
+                                    idProduct: selectedID,
+                                },
+                                success: function(response2) {
+                                    response2.forEach(function(sn) {
+                                        var product_id = sn.product_id;
+                                        var liElement = $("<li>").text(
+                                            product_id.toString());
+                                        ulElement.append(liElement);
+                                    });
+                                },
+                            });
                         }
-                        price_import.val(formattedPrice);
-                        tonkho.val(response.product_qty);
-                        loaihang.val(response.product_category);
-                        dangGD.val(response.product_trade == null ? 0 : response
-                            .product_trade);
-                        thue.val(response.product_tax == null ? 99 : response.product_tax);
-                        // Tính lại tổng số tiền và tổng số thuế
-                        calculateTotalTax();
-                        calculateGrandTotal();
                     },
                 });
+            } else {
+                $(this).val(null).trigger('change');
+                var productNameElement = $(this).closest('tr').find('.product_name');
+                productNameElement.prop('disabled', true);
+                $(this).data('previous-id', null);
             }
 
             // Kiểm tra nếu ID sản phẩm đã chọn đã có trong danh sách các sản phẩm đã chọn
             if (selectedProductIDs.includes(selectedID)) {
-                var selectize = $(this)[0].selectize;
-                selectize.clear();
-                selectize.blur();
+                // Xóa lựa chọn hiện tại và vô hiệu hóa tên sản phẩm
+                $(this).val(null).trigger('change');
                 var productNameElement = $(this).closest('tr').find('.product_name');
                 productNameElement.prop('disabled', true);
+
+                // Thông báo cho người dùng rằng sản phẩm đã được thêm trước đó
                 alert('Sản phẩm này đã được thêm trước đó, vui lòng chọn sản phẩm khác');
 
-                // Kiểm tra nếu giá trị data-previous-id là null, thì bỏ qua bước kiểm tra tiếp theo
-                if ($(this).data('previous-id') !== null) {
-                    var previousID = $(this).data('previous-id'); // Lấy ID trước đó của tùy chọn
+                // Kiểm tra nếu giá trị data-previous-id không null, thì xóa sản phẩm trước đó khỏi mảng
+                var previousID = $(this).data('previous-id');
+                if (previousID !== null) {
                     var index = selectedProductIDs.indexOf(previousID);
                     if (index !== -1) {
-                        selectedProductIDs.splice(index, 1); // Xóa ID trước đó khỏi mảng
-                    }
-                }
-
-                // Đặt giá trị data-previous-id thành null để cho phép chọn lại sản phẩm ban đầu
-                $(this).data('previous-id', null);
-
-                // Kiểm tra nếu giá trị data-previous-id là null, thì bỏ qua bước kiểm tra tiếp theo
-                if ($(this).data('previous-id') !== null) {
-                    var previousID = $(this).data('previous-id'); // Lấy ID trước đó của tùy chọn
-                    var index = selectedProductIDs.indexOf(previousID);
-                    if (index !== -1) {
-                        selectedProductIDs.splice(index, 1); // Xóa ID trước đó khỏi mảng
+                        selectedProductIDs.splice(index, 1);
                     }
                 }
 
                 // Đặt giá trị data-previous-id thành null để cho phép chọn lại sản phẩm ban đầu
                 $(this).data('previous-id', null);
             } else {
-                var previousID = $(this).data('previous-id'); // Lấy ID trước đó của tùy chọn
+                // Nếu sản phẩm chưa được chọn trước đó, thực hiện các bước sau
+                var previousID = $(this).data('previous-id');
+
                 if (previousID && previousID !== selectedID) {
                     var index = selectedProductIDs.indexOf(previousID);
                     if (index !== -1) {
-                        selectedProductIDs.splice(index, 1); // Xóa ID trước đó khỏi mảng
+                        selectedProductIDs.splice(index, 1);
+                        $('input[name="selected_serial_numbers[]"][data-product-id="' + previousID +
+                            '"]').remove();
                     }
                 }
+
                 selectedProductIDs.push(selectedID); // Lưu ID sản phẩm đã chọn vào mảng
                 $(this).data('previous-id',
                     selectedID); // Lưu ID hiện tại vào thuộc tính data của tùy chọn
+
                 hideSelectedProductNames(row); // Ẩn tên sản phẩm đã chọn từ các tùy chọn khác
             }
         });
@@ -1225,33 +1254,113 @@
         return formattedValue;
     }
 
-    //hàm kiểm tra
+    let canSubmitForm = true;
+
+    function checkRequiredConditions() {
+        var inputQty = $('.quantity-input').val();
+        var inputPrice = $('.product_price').val();
+        if (inputQty === '' || inputPrice === '') {
+            alert('Lỗi: Trường nhập liệu không được để trống!');
+            return false;
+        }
+        return true;
+    }
+
+    // Hàm kiểm tra và submit form
     function validateAndSubmit(event) {
         var formGuest = $('#form-guest');
         var productList = $('.productName');
+
         if (formGuest.length && productList.length > 0) {
             $('.quantity-input, [name^="product_price"], #transport_fee').each(function() {
                 var newValue = $(this).val().replace(/,/g, '');
                 $(this).val(newValue);
             });
+            // Kiểm tra các trường có rỗng
+            if (checkRequiredConditions()) {
+                var selects = document.getElementsByTagName("select");
+                for (var j = 0; j < selects.length; j++) {
+                    selects[j].removeAttribute("disabled");
+                }
+            }
+
+            const productRows = document.querySelectorAll('tr');
+            // Mảng chứa tên sản phẩm có số lượng = 0
+            let mismatchedProducts = [];
+            // Kiểm tra số lượng lớn hơn 0
+            for (let i = 0; i < productRows.length; i++) {
+                const qtyInput = productRows[i].querySelector('.quantity-input');
+                const productNameSelect = productRows[i].querySelector('.productName');
+
+                if (qtyInput !== null && productNameSelect !== null) {
+                    const selectedOption = productNameSelect.options[productNameSelect.selectedIndex];
+
+                    if (parseFloat(qtyInput.value) == 0) {
+                        const productName = selectedOption.textContent;
+                        mismatchedProducts.push(productName);
+                    }
+                }
+            }
+
+            // Tạo thông báo
+            let alertMessage = "Các sản phẩm sau đây phải lớn hơn 0:\n";
+            if (mismatchedProducts.length > 0) {
+                alertMessage += mismatchedProducts.join('\n');
+                alert(alertMessage);
+                event.preventDefault();
+            }
+
+            let missProducts = [];
+            const productsRows = document.querySelectorAll('tbody tr');
+
+            for (let j = 0; j < productsRows.length; j++) {
+                const ulElement = productsRows[j].querySelector(".seri_pro");
+                const numberOfLiElements = ulElement ? ulElement.querySelectorAll('li').length : 0;
+
+                if (numberOfLiElements > 0) {
+                    // Chỉ push vào mảng khi có ít nhất một phần tử <li> trong <ul>
+                    const qty = productsRows[j].querySelector('.quantity-input');
+                    const productNameElement = productsRows[j].querySelector('.productName');
+
+                    if (qty !== null) {
+                        const idProduct = productNameElement.value;
+                        const numberOfInputs = $(
+                            `input[name="selected_serial_numbers[]"][data-product-id="${idProduct}"]`
+                        ).length;
+
+                        if (parseInt(qty.value) !== numberOfInputs) {
+                            const selectedOption1 = productNameElement.options[
+                                productNameElement.selectedIndex
+                            ];
+                            const productName1 = selectedOption1.textContent;
+
+                            if (!missProducts.includes(productName1)) {
+                                missProducts.push(productName1);
+                            }
+                        }
+                    }
+                }
+            }
+            // Tạo thông báo
+            let alertMessage1 = "Số lượng xuất chưa trùng với số lượng S/N:\n";
+            if (missProducts.length > 0) {
+                alertMessage1 += missProducts.join('\n');
+                alert(alertMessage1);
+                event.preventDefault();
+            }
         } else {
             if (formGuest.length === 0) {
                 alert('Lỗi: Chưa nhập thông tin khách hàng!');
             } else if (productList.length === 0) {
                 alert('Lỗi: Chưa thêm sản phẩm!');
             }
-            event.preventDefault(); // Ngăn chặn việc submit form
+            event.preventDefault();
         }
     }
 
     //ngăn chặn click
     $(document).ready(function() {
         $('#chot_don').on('click', function(event) {
-            var selects = document.getElementsByTagName("select");
-
-            for (var j = 0; j < selects.length; j++) {
-                selects[j].removeAttribute("disabled");
-            }
             var $button = $(this);
 
             if (!$button.hasClass('disabled')) {
@@ -1263,11 +1372,6 @@
         });
 
         $('#luu').on('click', function() {
-            var selects = document.getElementsByTagName("select");
-
-            for (var j = 0; j < selects.length; j++) {
-                selects[j].removeAttribute("disabled");
-            }
             var $button = $(this);
 
             if (!$button.hasClass('disabled')) {
@@ -1455,6 +1559,7 @@
             var productName = $(this).closest('tr').find('.productName option:selected')
                 .text();
             var productId = $(this).closest('tr').find('.productName').val();
+            var selectedSerialNumbersForProduct = selectedSerialNumbers[productCode] || [];
             $.ajax({
                 url: "{{ route('getSN') }}",
                 method: 'GET',
@@ -1463,8 +1568,12 @@
                 },
                 success: function(response) {
                     var modalBody = $('#snModal').find('.modal-body');
+                    var modalFooter = $('#snModal').find('.modal-footer');
+                    var closeBtn = $('#snModal').find('.close');
                     let count = 1;
                     modalBody.empty();
+                    modalFooter.empty();
+                    closeBtn.empty();
                     var snList = $('<table class="table table-hover">' +
                         '<thead><tr><th style="width: 20px;"><input type="checkbox" name="all" id="checkall"></th><th>STT</th><th>Serial Number</th></tr></thead>' +
                         '<tbody class="bg-white-sn">'
@@ -1472,15 +1581,29 @@
                     var product = $('<table class="table table-hover">' +
                         '<thead><tr><th>Tên sản phẩm</th><th class="text-right">Số lượng sản phẩm</th><th class="text-right">Số lượng S/N</th></tr></thead>' +
                         '<tbody><tr>' + '<td>' + productName +
-                        '</td>' + '<td class="text-right">' + qty +
-                        '</td>' + '<td class="text-right">' + response
-                        .length +
+                        '</td>' + '<td class="text-right">' + qty_enter +
+                        '</td>' +
+                        '<td class="text-right" id="resultCell">' + 0 +
                         '</td>' +
                         '</tr</tbody>' + '</table>' +
                         '<h3>Thông tin Serial Number </h3>');
                     response.forEach(function(sn) {
+                        var snId = parseInt(sn.id);
+                        var selectedSerialNumbersForProductInt =
+                            selectedSerialNumbersForProduct.map(
+                                function(value) {
+                                    return parseInt(value);
+                                });
+                        if (selectedSerialNumbersForProductInt.includes(
+                                snId)) {
+                            var isChecked = true;
+                        } else {
+                            var isChecked = false;
+                        }
                         var checkbox = $(
-                            '<td><input type="checkbox" class="check-item" data-quantity="1" name="export_seri[]" value="' +
+                            '<td><input type="checkbox" ' + (
+                                isChecked ? 'checked' : '') +
+                            ' class="check-item" data-quantity="1" name="export_seri[]" value="' +
                             sn.id + '"></td>'
                         );
                         var countCell = $('<td>').text(count);
@@ -1489,27 +1612,31 @@
                             snItemCell);
                         snList.append(row);
                         count++;
-                        if (selectedSerialNumbers.hasOwnProperty(sn
+                        if (selectedSerialNumbersForProduct.includes(sn
                                 .id)) {
-                            if (selectedSerialNumbers[productId]
-                                .includes(sn.id)) {
-                                // sn.id được chọn cho sản phẩm này, nên kiểm tra checkbox
-                                checkbox.find('input[type="checkbox"]')
-                                    .prop('checked', true);
-                            }
+                            checkbox.find('input[type="checkbox"]')
+                                .prop('checked', true);
                         }
                     });
                     modalBody.append(product, snList);
+                    var footer = $(
+                        '<a class="btn btn-primary mr-1 check-seri" data-dismiss="">Lưu</a>'
+                    );
+                    var btnClose = $(
+                        '<div class="btnclose cursor-pointer" data-dismiss=""><span aria-hidden="true">&times;</span></div>'
+                    );
+                    modalFooter.append(footer);
+                    closeBtn.append(btnClose);
+
+                    function countCheckedCheckboxes() {
+                        var numberOfCheckedCheckboxes = $('.check-item:checked')
+                            .length;
+                        $('#resultCell').text(numberOfCheckedCheckboxes);
+                    }
+                    countCheckedCheckboxes();
                     //limit checkbox
                     $('.check-item').on('change', function() {
-                        // Lấy productId của sản phẩm hiện tại
-                        var productId = $(this).closest('tr').find(
-                            '.product_id').val();
-
-                        // Lấy danh sách serial number được chọn cho sản phẩm này
-                        var selectedSerialNumbers1 =
-                            selectedSerialNumbers[productId] || [];
-
+                        event.stopPropagation();
                         var checkedCheckboxes = $('.check-item:checked')
                             .length;
                         var serialNumberId = $(this).val();
@@ -1521,11 +1648,12 @@
                         } else {
                             if ($(this).is(':checked')) {
                                 // Nếu checkbox được chọn và không vượt quá giới hạn, thêm Serial Number vào danh sách cho sản phẩm
-                                if (!selectedSerialNumbers[productId]) {
+                                if (!selectedSerialNumbers[
+                                        productCode]) {
                                     selectedSerialNumbers[
-                                        productId] = [];
+                                        productCode] = [];
                                 }
-                                selectedSerialNumbers[productId].push(
+                                selectedSerialNumbers[productCode].push(
                                     serialNumberId);
 
                                 // Tạo một trường input ẩn mới và đặt giá trị
@@ -1533,7 +1661,7 @@
                                     type: 'hidden',
                                     name: 'selected_serial_numbers[]',
                                     value: serialNumberId,
-                                    'data-product-id': productId,
+                                    'data-product-id': productCode,
                                 });
 
                                 // Thêm trường input mới vào container
@@ -1541,9 +1669,11 @@
                                     .append(newInput);
                             } else {
                                 // Nếu checkbox bị bỏ chọn, loại bỏ Serial Number khỏi danh sách cho sản phẩm
-                                if (selectedSerialNumbers[productId]) {
-                                    selectedSerialNumbers[productId] =
-                                        selectedSerialNumbers[productId]
+                                if (selectedSerialNumbers[
+                                        productCode]) {
+                                    selectedSerialNumbers[productCode] =
+                                        selectedSerialNumbers[
+                                            productCode]
                                         .filter(function(item) {
                                             return item !==
                                                 serialNumberId;
@@ -1555,6 +1685,75 @@
                                         .remove();
                                 }
                             }
+                            countCheckedCheckboxes();
+                        }
+                    });
+                    //thay đổi số lượng nhập
+                    $('.quantity-input').on('change', function() {
+                        var newQty = parseInt($(this).val());
+                        var selectedCheckboxes = $(
+                            '.check-item:checked');
+                        selectedCheckboxes.prop('checked', false);
+                        // Lặp qua tất cả các ô đã chọn và hủy chúng
+                        selectedCheckboxes.each(function() {
+                            $(this).prop('checked', false);
+                            var serialNumberId = $(this).val();
+                            // Loại bỏ Serial Number khỏi danh sách đã chọn cho sản phẩm
+                            if (selectedSerialNumbers[
+                                    productId]) {
+                                selectedSerialNumbers[
+                                        productId] =
+                                    selectedSerialNumbers[
+                                        productId]
+                                    .filter(function(item) {
+                                        return item !==
+                                            serialNumberId;
+                                    });
+                                // Xóa trường input ẩn tương ứng
+                                $('input[name="selected_serial_numbers[]"][value="' +
+                                        serialNumberId + '"]')
+                                    .remove();
+                            }
+                        });
+                    });
+                    //kiểm tra số lượng seri
+                    $('.check-seri').on('click', function() {
+                        var checkedCheckboxes = $('.check-item:checked')
+                            .length;
+                        var check_item = $('.check-item');
+                        if (check_item.length > 0) {
+                            if (checkedCheckboxes < qty_enter) {
+                                alert(
+                                    'Vui lòng chọn đủ serial number theo số lượng xuất!'
+                                );
+                            } else if (checkedCheckboxes == qty_enter) {
+                                // Kiểm tra xem nút được nhấn có class 'check-seri' không
+                                if ($(this).hasClass('check-seri')) {
+                                    $(this).attr('data-dismiss',
+                                        'modal');
+                                }
+                            }
+                        } else {
+                            $(this).attr('data-dismiss', 'modal');
+                        }
+                    });
+
+                    $('.btnclose').on('click', function() {
+                        var checkedCheckboxes = $('.check-item:checked')
+                            .length;
+                        var check_item = $('.check-item');
+                        if (check_item.length > 0) {
+                            if (checkedCheckboxes < qty_enter) {
+                                alert(
+                                    'Vui lòng chọn đủ serial number theo số lượng xuất!'
+                                );
+                            } else if (checkedCheckboxes == qty_enter) {
+                                $('.btnclose').attr('data-dismiss',
+                                    'modal');
+                            }
+                        } else {
+                            $('.btnclose').attr('data-dismiss',
+                                'modal');
                         }
                     });
                 },
