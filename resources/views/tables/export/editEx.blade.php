@@ -384,6 +384,15 @@
                                         </td>
                                     @endif
                                 @endif
+                                <td style='display:none;'>
+                                    <ul class='seri_pro'>
+                                        @foreach ($SnProduct as $valueSN)
+                                            @if ($valueSN->product_id == $value_export->product_id)
+                                                <li>{{ $valueSN->product_id }}</li>
+                                            @endif
+                                        @endforeach
+                                    </ul>
+                                </td>
                             </tr>
                         @endforeach
                         @if ($exports->export_status != 2)
@@ -1617,6 +1626,45 @@
                         mismatchedProducts.push(productName);
                     }
                 }
+            }
+
+            let missProducts = [];
+            const productsRows = document.querySelectorAll('tbody tr');
+
+            for (let j = 0; j < productsRows.length; j++) {
+                const ulElement = productsRows[j].querySelector(".seri_pro");
+                const numberOfLiElements = ulElement ? ulElement.querySelectorAll('li').length : 0;
+
+                if (numberOfLiElements > 0) {
+                    // Chỉ push vào mảng khi có ít nhất một phần tử <li> trong <ul>
+                    const qty = productsRows[j].querySelector('.quantity-input');
+                    const productNameElement = productsRows[j].querySelector('.productName');
+
+                    if (qty !== null) {
+                        const idProduct = productNameElement.value;
+                        const numberOfInputs = $(
+                            `input[name="selected_serial_numbers[]"][data-product-id="${idProduct}"]`
+                        ).length;
+
+                        if (parseInt(qty.value) !== numberOfInputs) {
+                            const selectedOption1 = productNameElement.options[
+                                productNameElement.selectedIndex
+                            ];
+                            const productName1 = selectedOption1.textContent;
+
+                            if (!missProducts.includes(productName1)) {
+                                missProducts.push(productName1);
+                            }
+                        }
+                    }
+                }
+            }
+            // Tạo thông báo
+            let alertMessage1 = "Số lượng xuất chưa trùng với số lượng S/N:\n";
+            if (missProducts.length > 0) {
+                alertMessage1 += missProducts.join('\n');
+                alert(alertMessage1);
+                event.preventDefault();
             }
 
             // Tạo thông báo

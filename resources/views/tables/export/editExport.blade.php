@@ -505,6 +505,15 @@
                                             </td>
                                         @endif
                                     @endif
+                                    <td style='display:none;'>
+                                        <ul class='seri_pro'>
+                                            @foreach ($SnProduct as $valueSN)
+                                                @if ($valueSN->product_id == $value_export->product_id)
+                                                    <li>{{ $valueSN->product_id }}</li>
+                                                @endif
+                                            @endforeach
+                                        </ul>
+                                    </td>
                                 </tr>
                             @endforeach
                             @if ($exports->export_status != 2)
@@ -1592,10 +1601,7 @@
             $("#dynamic-fields").before(newRow);
             fieldCounter++;
             $(document).ready(function() {
-                $('.child-select').select2({
-                    tags: true, // Cho phép tạo giá trị mới
-                    tokenSeparators: [','],
-                });
+                $('.child-select').select2();
             });
         });
 
@@ -2016,6 +2022,8 @@
                         });
                     },
                 });
+                $('input[name="selected_serial_numbers[]"][data-product-id="' + selectedID + '"]')
+                    .remove();
             }
 
             if (isInitial) {
@@ -2030,18 +2038,8 @@
                     var index = selectedProductIDs.indexOf(previousID);
                     if (index !== -1) {
                         selectedProductIDs.splice(index, 1); // Xóa ID trước đó khỏi mảng
-                    }
-                }
-
-                // Đặt giá trị data-previous-id thành null để cho phép chọn lại sản phẩm ban đầu
-                $(this).data('previous-id', null);
-
-                // Kiểm tra nếu giá trị data-previous-id là null, thì bỏ qua bước kiểm tra tiếp theo
-                if ($(this).data('previous-id') !== null) {
-                    var previousID = $(this).data('previous-id'); // Lấy ID trước đó của tùy chọn
-                    var index = selectedProductIDs.indexOf(previousID);
-                    if (index !== -1) {
-                        selectedProductIDs.splice(index, 1); // Xóa ID trước đó khỏi mảng
+                        $('input[name="selected_serial_numbers[]"][data-product-id="' + previousID +
+                            '"]').remove();
                     }
                 }
 
@@ -2053,6 +2051,8 @@
                     var index = selectedProductIDs.indexOf(previousID);
                     if (index !== -1) {
                         selectedProductIDs.splice(index, 1);
+                        $('input[name="selected_serial_numbers[]"][data-product-id="' + previousID +
+                            '"]').remove();
                     }
                 }
                 selectedProductIDs.push(selectedID);

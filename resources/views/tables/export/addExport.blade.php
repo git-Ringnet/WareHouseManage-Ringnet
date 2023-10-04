@@ -384,7 +384,7 @@
                 "text": nextSoTT
             });
             const ProInput = $("<td>" +
-                "<select class='child-select p-1 productName form-control' required name='product_id[]'>" +
+                "<select class='child-select p-1 productName form-control js-stools-field-filter' required name='product_id[]'>" +
                 "<option value=''>Lựa chọn sản phẩm</option>" +
                 '@foreach ($product as $value)' +
                 "<option value='{{ $value->id }}'>{{ $value->product_name }}</option>" +
@@ -615,35 +615,6 @@
                             event.stopPropagation();
                         });
 
-                        //thay đổi số lượng nhập
-                        $('.quantity-input').on('change', function() {
-                            var newQty = parseInt($(this).val());
-                            var selectedCheckboxes = $(
-                                '.check-item:checked');
-                            selectedCheckboxes.prop('checked', false);
-                            // Lặp qua tất cả các ô đã chọn và hủy chúng
-                            selectedCheckboxes.each(function() {
-                                $(this).prop('checked', false);
-                                var serialNumberId = $(this).val();
-                                // Loại bỏ Serial Number khỏi danh sách đã chọn cho sản phẩm
-                                if (selectedSerialNumbers[
-                                        productId]) {
-                                    selectedSerialNumbers[
-                                            productId] =
-                                        selectedSerialNumbers[
-                                            productId]
-                                        .filter(function(item) {
-                                            return item !==
-                                                serialNumberId;
-                                        });
-                                    // Xóa trường input ẩn tương ứng
-                                    $('input[name="selected_serial_numbers[]"][value="' +
-                                            serialNumberId + '"]')
-                                        .remove();
-                                }
-                            });
-                        });
-
                         //kiểm tra số lượng seri
                         $('.check-seri').on('click', function() {
                             var checkedCheckboxes = $('.check-item:checked')
@@ -689,38 +660,6 @@
                         console.error(error);
                     }
                 });
-
-                function toggleCheckbox(checkboxId) {
-                    var checkbox = document.getElementById(checkboxId);
-                    if (checkbox) {
-                        checkbox.checked = !checkbox.checked;
-                    }
-                }
-
-                function triggerChange(checkboxId) {
-                    var checkbox = document.getElementById(checkboxId);
-                    if (checkbox) {
-                        var event = new Event('change', {
-                            bubbles: true,
-                            cancelable: true,
-                        });
-                        checkbox.dispatchEvent(event);
-                    }
-                }
-
-                function handleRowClick(checkboxId, event) {
-                    // Lấy target của sự kiện click
-                    var target = event.target;
-
-                    // Kiểm tra nếu target không có class "dropdown"
-                    if (!target.closest('.dropdown') && !target.closest('.editEx')) {
-                        var checkbox = document.getElementById(checkboxId);
-                        if (checkbox) {
-                            toggleCheckbox(checkboxId);
-                            triggerChange(checkboxId);
-                        }
-                    }
-                }
             });
 
             //xem thông tin sản phẩm
@@ -761,10 +700,7 @@
                 }
             }
             $(document).ready(function() {
-                $('.child-select').select2({
-                    tags: true,
-                    tokenSeparators: [','],
-                });
+                $('.child-select').select2();
             });
         });
 
@@ -1091,7 +1027,7 @@
             var ulElement = $(this).closest('tr').find(".seri_pro");
 
             $(this).closest('tr').find('.quantity-input').val(null);
-            if (selectedID) {
+            if (!isNaN(selectedID)) {
                 $.ajax({
                     url: "{{ route('getProduct') }}",
                     type: "get",
@@ -1099,42 +1035,50 @@
                         idProduct: selectedID,
                     },
                     success: function(response) {
-                        productNameElement.val(response.product_name);
-                        productUnitElement.val(response.product_unit);
-                        qty_exist.val("/" + response.qty_exist);
-                        var productPrice = parseFloat(response.product_price);
-                        var formattedPrice;
-                        if (Number.isInteger(productPrice)) {
-                            formattedPrice = numeral(productPrice).format('0,0');
-                        } else {
-                            formattedPrice = numeral(productPrice).format('0,0.00');
+                        if (response) {
+                            productNameElement.val(response.product_name);
+                            productUnitElement.val(response.product_unit);
+                            qty_exist.val("/" + response.qty_exist);
+                            var productPrice = parseFloat(response.product_price);
+                            var formattedPrice;
+                            if (Number.isInteger(productPrice)) {
+                                formattedPrice = numeral(productPrice).format('0,0');
+                            } else {
+                                formattedPrice = numeral(productPrice).format('0,0.00');
+                            }
+                            price_import.val(formattedPrice);
+                            tonkho.val(response.product_qty);
+                            loaihang.val(response.product_category);
+                            dangGD.val(response.product_trade == null ? 0 : response
+                                .product_trade);
+                            thue.val(response.product_tax == null ? 99 : response
+                                .product_tax);
+                            // Tính lại tổng số tiền và tổng số thuế
+                            calculateTotalTax();
+                            calculateGrandTotal();
+                            $.ajax({
+                                url: "{{ route('getAllSN') }}",
+                                method: 'GET',
+                                data: {
+                                    idProduct: selectedID,
+                                },
+                                success: function(response2) {
+                                    response2.forEach(function(sn) {
+                                        var product_id = sn.product_id;
+                                        var liElement = $("<li>").text(
+                                            product_id.toString());
+                                        ulElement.append(liElement);
+                                    });
+                                },
+                            });
                         }
-                        price_import.val(formattedPrice);
-                        tonkho.val(response.product_qty);
-                        loaihang.val(response.product_category);
-                        dangGD.val(response.product_trade == null ? 0 : response
-                            .product_trade);
-                        thue.val(response.product_tax == null ? 99 : response.product_tax);
-                        // Tính lại tổng số tiền và tổng số thuế
-                        calculateTotalTax();
-                        calculateGrandTotal();
-                        $.ajax({
-                            url: "{{ route('getAllSN') }}",
-                            method: 'GET',
-                            data: {
-                                idProduct: selectedID,
-                            },
-                            success: function(response2) {
-                                response2.forEach(function(sn) {
-                                    var product_id = sn.product_id;
-                                    var liElement = $("<li>").text(
-                                        product_id.toString());
-                                    ulElement.append(liElement);
-                                });
-                            },
-                        });
                     },
                 });
+            } else {
+                $(this).val(null).trigger('change');
+                var productNameElement = $(this).closest('tr').find('.product_name');
+                productNameElement.prop('disabled', true);
+                $(this).data('previous-id', null);
             }
 
             // Kiểm tra nếu ID sản phẩm đã chọn đã có trong danh sách các sản phẩm đã chọn
@@ -1160,12 +1104,14 @@
                 $(this).data('previous-id', null);
             } else {
                 // Nếu sản phẩm chưa được chọn trước đó, thực hiện các bước sau
-                var previousID = $(this).data('previous-id'); // Lấy ID trước đó của tùy chọn
+                var previousID = $(this).data('previous-id');
 
                 if (previousID && previousID !== selectedID) {
                     var index = selectedProductIDs.indexOf(previousID);
                     if (index !== -1) {
-                        selectedProductIDs.splice(index, 1); // Xóa ID trước đó khỏi mảng
+                        selectedProductIDs.splice(index, 1);
+                        $('input[name="selected_serial_numbers[]"][data-product-id="' + previousID +
+                            '"]').remove();
                     }
                 }
 
