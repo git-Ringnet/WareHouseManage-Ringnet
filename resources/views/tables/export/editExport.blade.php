@@ -1676,20 +1676,16 @@
         var value = parseFloat(input.value);
         var product_id = $(input).closest('tr').find('.productName').val();
 
-        // Gửi dữ liệu qua AJAX
-        $.ajax({
-            url: "{{ route('limit_qty') }}",
-            type: 'GET',
-            data: {
-                product_id: product_id,
-            },
-            success: function(response) {
-                var maxLimit = parseFloat(response.qty_exist);
-                if (!isNaN(maxLimit) && value > maxLimit) {
-                    input.value = maxLimit;
-                }
-            }
-        });
+        var inputExist = $(input).closest('tr').find(".quantity-exist").val();
+
+        // Sử dụng phương thức replace để loại bỏ ký tự /
+        var valueWithoutSlash = inputExist.replace('/', '');
+
+        var maxLimit = parseFloat(valueWithoutSlash);
+        if (!isNaN(maxLimit) && value > maxLimit) {
+            input.value = maxLimit;
+            calculateGrandTotal();
+        }
     }
     //giới hạn số lượng nhập của edit sản phẩm
     function limitMaxEdit(input) {
