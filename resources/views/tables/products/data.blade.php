@@ -814,7 +814,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <td class="text-left">{{ $value->provide }}</td>
                                                 <td class="text-center">{{ $value->product_unit }}</td>
                                                 <td class="text-right product_qty">{{ $value->product_qty }}</td>
-                                                <td class="text-right">
+                                                <td class="text-right product_trade">
                                                     {{ $value->product_trade == null ? 0 : $value->product_trade }}
                                                 </td>
                                                 <td class="text-right">
@@ -1057,9 +1057,23 @@ $index = array_search($item['label'], $numberedLabels);
 
     // Hiển thị form multiple action
     function updateMultipleActionVisibility() {
+        var check = false;
         if ($('.cb-element:checked').length > 0) {
-            $('.multiple_action').show();
-            $('.count_checkbox').text('Đã chọn ' + $('.cb-element:checked').length);
+            var checkedCheckboxes = $('.cb-element:checked');
+            checkedCheckboxes.each(function() {
+                var productQty = $(this).closest('tr').find('.product_qty').text().trim();
+                var productTrada = $(this).closest('tr').find('.product_trade').text().trim();
+                if (productQty == productTrada) {
+                    check = true
+                    return false
+                }
+            })
+            if (check) {
+                $('.multiple_action').hide();
+            } else {
+                $('.multiple_action').show();
+                $('.count_checkbox').text('Đã chọn ' + $('.cb-element:checked').length);
+            }
         } else {
             $('.multiple_action').hide();
         }
