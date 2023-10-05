@@ -166,7 +166,7 @@ class ProductController extends Controller
         $serialnumber =  DB::table('serinumbers')
             ->join('product', 'serinumbers.product_id', '=', 'product.id')
             ->whereIn('product.id', $productIds)
-            ->where('seri_status', 1)
+            ->where('seri_status','!=' , 3)
             ->select('serinumbers.*')
             // ->select('serinumbers.*', 'productorders.id')
             ->get();

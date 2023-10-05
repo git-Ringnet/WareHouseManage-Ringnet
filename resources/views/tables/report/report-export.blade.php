@@ -319,14 +319,7 @@ $index = array_search($item['label'], $numberedLabels);
                                         $nhanvien = request()->nhanvien;
                                     } else {
                                         $nhanvien = [];
-                                    }
-                                    $nhanviens = [];
-                                    if (isset(request()->nhanviens)) {
-                                        $nhanviens = request()->nhanviens;
-                                    } else {
-                                        $nhanviens = [];
-                                    }
-                                @endphp
+                                } @endphp
                                 <div class="filter-admin">
                                     <button class="btn btn-filter btn-light mr-2" id="btn-nhanvien" type="button">
                                         <span>
@@ -366,10 +359,10 @@ $index = array_search($item['label'], $numberedLabels);
                                                             @if (!in_array($value->name, $seenValues))
                                                                 <li>
                                                                     <input type="checkbox" id="name_active"
-                                                                        {{ in_array($value->name, $nhanviens) ? 'checked' : '' }}
-                                                                        name="nhanviens[]"
+                                                                        {{ in_array($value->name, $nhanvien) ? 'checked' : '' }}
+                                                                        name="nhanvien[]"
                                                                         value="{{ $value->name }}">
-                                                                    <label id="nhanviens"
+                                                                    <label id="nhanvien"
                                                                         for="">{{ $value->name }}</label>
                                                                 </li>
                                                                 @php
@@ -546,53 +539,55 @@ $index = array_search($item['label'], $numberedLabels);
                                         </div>
                                     </div>
                                     {{-- Creator --}}
-                                    <div class="block-options" id="creator-options" style="display:none">
-                                        <div class="wrap w-100">
-                                            <div class="heading-title title-wrap">
-                                                <h5>Nhân viên</h5>
-                                            </div>
-                                            <div class="search-container px-2 mt-2">
-                                                <input type="text" placeholder="Tìm kiếm" id="myInput-creator"
-                                                    class="pr-4 w-100 input-search" onkeyup="filterCreator()">
-                                                <span class="search-icon"><i class="fas fa-search"></i></span>
-                                            </div>
-                                            <div
-                                                class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
-                                                <a class="cursor select-all-creator mr-auto">Chọn tất cả</a>
-                                                <a class="cursor deselect-all-creator">Hủy chọn</a>
-                                            </div>
-                                            <div class="ks-cboxtags-container">
-                                                <ul class="ks-cboxtags ks-cboxtags-creator p-0 mb-1 px-2">
-                                                    @if (!empty($debtsSale))
-                                                        @php
-                                                            $seenValues = [];
-                                                        @endphp
-                                                        @foreach ($debtsSale as $value)
-                                                            @if (!in_array($value->name, $seenValues))
-                                                                <li>
-                                                                    <input type="checkbox" id="name_active"
-                                                                        {{ in_array($value->name, $nhanvien) ? 'checked' : '' }}
-                                                                        name="nhanvien[]"
-                                                                        value="{{ $value->name }}">
-                                                                    <label id="nhanvien"
-                                                                        for="">{{ $value->name }}</label>
-                                                                </li>
-                                                                @php
-                                                                    $seenValues[] = $value->name;
-                                                                @endphp
-                                                            @endif
-                                                        @endforeach
-                                                    @endif
-                                                </ul>
-                                            </div>
-                                            <div class="d-flex justify-contents-center align-items-baseline p-2">
-                                                <button type="submit" class="btn btn-primary btn-block mr-2">Xác
-                                                    Nhận</button>
-                                                <button type="button" id="cancel-creator"
-                                                    class="btn btn-default btn-block">Hủy</button>
+                                    @cannot('isAdmin')
+                                        <div class="block-options" id="creator-options" style="display:none">
+                                            <div class="wrap w-100">
+                                                <div class="heading-title title-wrap">
+                                                    <h5>Nhân viên</h5>
+                                                </div>
+                                                <div class="search-container px-2 mt-2">
+                                                    <input type="text" placeholder="Tìm kiếm" id="myInput-creator"
+                                                        class="pr-4 w-100 input-search" onkeyup="filterCreator()">
+                                                    <span class="search-icon"><i class="fas fa-search"></i></span>
+                                                </div>
+                                                <div
+                                                    class="select-checkbox d-flex justify-contents-center align-items-baseline pb-2 px-2">
+                                                    <a class="cursor select-all-creator mr-auto">Chọn tất cả</a>
+                                                    <a class="cursor deselect-all-creator">Hủy chọn</a>
+                                                </div>
+                                                <div class="ks-cboxtags-container">
+                                                    <ul class="ks-cboxtags ks-cboxtags-creator p-0 mb-1 px-2">
+                                                        @if (!empty($debtsSale))
+                                                            @php
+                                                                $seenValues = [];
+                                                            @endphp
+                                                            @foreach ($debtsSale as $value)
+                                                                @if (!in_array($value->name, $seenValues))
+                                                                    <li>
+                                                                        <input type="checkbox" id="name_active"
+                                                                            {{ in_array($value->name, $nhanvien) ? 'checked' : '' }}
+                                                                            name="nhanvien[]"
+                                                                            value="{{ $value->name }}">
+                                                                        <label id="nhanvien"
+                                                                            for="">{{ $value->name }}</label>
+                                                                    </li>
+                                                                    @php
+                                                                        $seenValues[] = $value->name;
+                                                                    @endphp
+                                                                @endif
+                                                            @endforeach
+                                                        @endif
+                                                    </ul>
+                                                </div>
+                                                <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                                    <button type="submit" class="btn btn-primary btn-block mr-2">Xác
+                                                        Nhận</button>
+                                                    <button type="button" id="cancel-creator"
+                                                        class="btn btn-default btn-block">Hủy</button>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    @endcan
                                     {{-- Tổng tiền xuất --}}
                                     <div class="block-options" id="sale-options" style="display:none">
                                         <div class="wrap w-100">
