@@ -7,7 +7,7 @@
             <div class="col-12">
                 <div class="ml-auto choosetime" style="bottom: -35px !important">
                     <div class="col d-flex px-0" style="position: relative; width: auto">
-                        <div class="dropdown w-100" style="z-index:999">
+                        <div class="dropdown w-100">
                             <button class="btn w-100 btn-light border rounded dropdown-toggle" id="orders"
                                 style="display: flex;
                         justify-content: space-between;
@@ -19,9 +19,7 @@
                                     <div class="d-flex flex-column all-orders">
                                         <div class="ca d-flex">
                                             <div class="it0">{{ $mindate }}</div>
-                                            @if ($mindate)
-                                                <div class="muiten-all">-></div>
-                                            @endif
+                                            <div class="muiten-all">-></div>
                                             <div class="id0">{{ $maxdate }}</div>
                                         </div>
                                         <div class="ca text-left">Tất cả</div>
@@ -70,22 +68,19 @@
                                 </div>
 
                             </button>
-                            @if ($mindate)
-                                <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
-                                    <a class="dropdown-item dropdown-item-orders" id="btn-all-orders" href="#"
-                                        data-value="0">Tất cả</a>
-                                    <a class="dropdown-item dropdown-item-orders" id="btn-this-month-orders"
-                                        href="#" data-value="1">Tháng này</a>
-                                    <a class="dropdown-item dropdown-item-orders" id="btn-last-month-orders"
-                                        href="#" data-value="2">Tháng trước</a>
-                                    <a class="dropdown-item dropdown-item-orders" id="btn-3last-month-orders"
-                                        href="#" data-value="3">3 tháng trước</a>
-                                    <a class="dropdown-item dropdown-item-orders" id="btn-time-orders"
-                                        href="#">Khoảng
-                                        thời
-                                        gian</a>
-                                </div>
-                            @endif
+                            <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item dropdown-item-orders" id="btn-all-orders" href="#"
+                                    data-value="0">Tất cả</a>
+                                <a class="dropdown-item dropdown-item-orders" id="btn-this-month-orders" href="#"
+                                    data-value="1">Tháng này</a>
+                                <a class="dropdown-item dropdown-item-orders" id="btn-last-month-orders" href="#"
+                                    data-value="2">Tháng trước</a>
+                                <a class="dropdown-item dropdown-item-orders" id="btn-3last-month-orders" href="#"
+                                    data-value="3">3 tháng trước</a>
+                                <a class="dropdown-item dropdown-item-orders" id="btn-time-orders" href="#">Khoảng
+                                    thời
+                                    gian</a>
+                            </div>
                         </div>
                         {{-- Chọn khoảng --}}
                         <div class="block-optionss" id="times-orders-options" style="display:none">
@@ -304,14 +299,7 @@ $index = array_search($item['label'], $numberedLabels);
                                         $nhanvien = request()->nhanvien;
                                     } else {
                                         $nhanvien = [];
-                                    }
-                                    $nhanviens = [];
-                                    if (isset(request()->nhanviens)) {
-                                        $nhanviens = request()->nhanviens;
-                                    } else {
-                                        $nhanviens = [];
-                                    }
-                                @endphp
+                                } @endphp
                                 <div class="filter-admin">
                                     <button class="btn btn-filter btn-light mr-2" id="btn-nhanvien" type="button">
                                         <span>
@@ -351,10 +339,10 @@ $index = array_search($item['label'], $numberedLabels);
                                                             @if (!in_array($value->name, $seenValues))
                                                                 <li>
                                                                     <input type="checkbox" id="name_active"
-                                                                        {{ in_array($value->name, $nhanviens) ? 'checked' : '' }}
-                                                                        name="nhanviens[]"
+                                                                        {{ in_array($value->name, $nhanvien) ? 'checked' : '' }}
+                                                                        name="nhanvien[]"
                                                                         value="{{ $value->name }}">
-                                                                    <label id="nhanviens"
+                                                                    <label id="nhanvien"
                                                                         for="">{{ $value->name }}</label>
                                                                 </li>
                                                                 @php
