@@ -560,6 +560,10 @@
                             checkbox.change();
                         });
 
+                        $('tr input:checkbox').click(function(event) {
+                            event.stopPropagation();
+                        });
+
                         //limit checkbox
                         $('.check-item').on('change', function() {
                             event.stopPropagation();
@@ -610,9 +614,6 @@
                                 }
                                 countCheckedCheckboxes();
                             }
-                        });
-                        $('tr input:checkbox').click(function(event) {
-                            event.stopPropagation();
                         });
 
                         //kiểm tra số lượng seri
@@ -1438,6 +1439,10 @@
         return parts.join('.');
     }
 
+    $(document).ready(function() {
+        $('.child-select').select2();
+    });
+
     for (let j = 0; j < products.length; j++) {
         // Tạo các phần tử HTML mới
         const newRow = $("<tr>", {
@@ -1499,6 +1504,9 @@
             "<td style='display:none;'><input type='text' class='dangGD'></td>" +
             "<td style='display:none;'><input type='text' class='product_tax1'></td>"
         );
+
+        const snPro = $("<td style='display:none;'><ul class='seri_pro'></ul></td>");
+
         for (let i = 0; i < productList.length; i++) {
             let option = $("<option>", {
                 "value": productList[i].id,
@@ -1523,6 +1531,23 @@
                 dvtInput.find('input').replaceWith(dvt);
                 slInput.find('.quantity-exist').val("/" + productList[i].qty_exist);
                 thueInput.find('select').val(thue);
+            }
+            if (productList[i].id == products[j]) {
+                $.ajax({
+                    url: "{{ route('getAllSN') }}",
+                    method: 'GET',
+                    data: {
+                        idProduct: products[j],
+                    },
+                    success: function(response2) {
+                        var ulElement = newRow.find(".seri_pro");   
+                        response2.forEach(function(sn) {
+                            var product_id = sn.product_id;
+                            var liElement = $("<li>").text(product_id.toString());
+                            ulElement.append(liElement);
+                        });
+                    },
+                });
             }
         }
 
@@ -1634,9 +1659,20 @@
                         $('#resultCell').text(numberOfCheckedCheckboxes);
                     }
                     countCheckedCheckboxes();
+                    $('tr').click(function(event) {
+                        var checkedCheckboxesInRow = $(this).find(
+                            '.check-item:checked').length;
+                        var checkbox = $(this).find('input:checkbox');
+                        checkbox.prop('checked', !checkbox.prop(
+                            'checked'));
+                        checkbox.change();
+                    });
+
+                    $('tr input:checkbox').click(function(event) {
+                        event.stopPropagation();
+                    });
                     //limit checkbox
                     $('.check-item').on('change', function() {
-                        event.stopPropagation();
                         var checkedCheckboxes = $('.check-item:checked')
                             .length;
                         var serialNumberId = $(this).val();
@@ -1803,14 +1839,10 @@
         });
         // Gắn các phần tử vào hàng mới
         newRow.append(MaInput, ProInput, dvtInput, slInput,
-            giaInput, thueInput, thanhTienInput, ghichuInput, sn, info, deleteBtn, option);
+            giaInput, thueInput, thanhTienInput, ghichuInput, sn, info, deleteBtn, option, snPro);
         $("#dynamic-fields").before(newRow);
         // Tăng giá trị fieldCounter
         fieldCounter++;
-        // Áp dụng Selectize cho phần tử select mới
-        newRow.find('.child-select').selectize({
-            sortField: 'text',
-        });
     }
 
     function updateRowNumbers() {
