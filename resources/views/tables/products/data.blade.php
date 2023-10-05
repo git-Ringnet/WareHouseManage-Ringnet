@@ -28,8 +28,8 @@
                 <form class="w-100" action="" method="get" id='search-filter'>
                     <div class="row mr-0">
                         <div class="col-md-5">
-                            <input type="text" placeholder="Tìm kiếm tên sản phẩm, nhà cung cấp, serial number" name="keywords"
-                                class="pr-4 input-search w-100 form-control searchkeyword"
+                            <input type="text" placeholder="Tìm kiếm tên sản phẩm, nhà cung cấp, serial number"
+                                name="keywords" class="pr-4 input-search w-100 form-control searchkeyword"
                                 value="{{ request()->keywords }}">
                             <span id="search-icon" class="search-icon"><i class="fas fa-search"></i></span>
                         </div>
@@ -511,7 +511,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('comparison_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
                                                 <input class="w-50 quantity-input input-so" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -541,7 +541,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('trade_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
                                                 <input class="w-50 trade-input input-so" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -571,7 +571,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('avg_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
                                                 <input class="w-50 avg-input" type="text" name="avg"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -600,7 +600,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('price_inven_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
                                                 <input class="w-50 price_inven-input input-so" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -875,7 +875,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </button>
                                                 </td>
                                             </tr>
-                                            
+
                                             @php
                                                 $seenIds[] = $value->id;
                                             @endphp
@@ -1597,7 +1597,7 @@ $index = array_search($item['label'], $numberedLabels);
     function fillDataToModal() {
         var info = document.querySelectorAll('.exampleModal');
         for (let k = 0; k < info.length; k++) {
-            
+
             info[k].addEventListener('click', function() {
                 console.log(k);
                 var productName = $(this).closest('tr').find('.product_name').text();

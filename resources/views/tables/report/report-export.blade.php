@@ -319,14 +319,7 @@ $index = array_search($item['label'], $numberedLabels);
                                         $nhanvien = request()->nhanvien;
                                     } else {
                                         $nhanvien = [];
-                                    }
-                                    $nhanviens = [];
-                                    if (isset(request()->nhanviens)) {
-                                        $nhanviens = request()->nhanviens;
-                                    } else {
-                                        $nhanviens = [];
-                                    }
-                                @endphp
+                                } @endphp
                                 <div class="filter-admin">
                                     <button class="btn btn-filter btn-light mr-2" id="btn-nhanvien" type="button">
                                         <span>
@@ -366,10 +359,10 @@ $index = array_search($item['label'], $numberedLabels);
                                                             @if (!in_array($value->name, $seenValues))
                                                                 <li>
                                                                     <input type="checkbox" id="name_active"
-                                                                        {{ in_array($value->name, $nhanviens) ? 'checked' : '' }}
-                                                                        name="nhanviens[]"
+                                                                        {{ in_array($value->name, $nhanvien) ? 'checked' : '' }}
+                                                                        name="nhanvien[]"
                                                                         value="{{ $value->name }}">
-                                                                    <label id="nhanviens"
+                                                                    <label id="nhanvien"
                                                                         for="">{{ $value->name }}</label>
                                                                 </li>
                                                                 @php
