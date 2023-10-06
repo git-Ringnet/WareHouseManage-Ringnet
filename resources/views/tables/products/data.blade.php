@@ -28,8 +28,8 @@
                 <form class="w-100" action="" method="get" id='search-filter'>
                     <div class="row mr-0">
                         <div class="col-md-5">
-                            <input type="text" placeholder="Tìm kiếm tên sản phẩm, nhà cung cấp, serial number" name="keywords"
-                                class="pr-4 input-search w-100 form-control searchkeyword"
+                            <input type="text" placeholder="Tìm kiếm tên sản phẩm, nhà cung cấp, serial number"
+                                name="keywords" class="pr-4 input-search w-100 form-control searchkeyword"
                                 value="{{ request()->keywords }}">
                             <span id="search-icon" class="search-icon"><i class="fas fa-search"></i></span>
                         </div>
