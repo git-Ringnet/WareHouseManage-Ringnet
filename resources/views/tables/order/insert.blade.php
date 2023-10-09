@@ -132,14 +132,19 @@
                 <div class="d-flex justify-content-between align-items-center my-2">
                     <div class="d-flex">
                         <div style="width:42%;">
+                            <label style="padding: 0 0.75rem;">Số PO</label>
+                            <input type="text" name="product_po"
+                                placeholder="Số PO" class="form-control">
+                        </div>
+                        <div style="width:42%;" class="ml-2">
                             <label style="padding: 0 0.75rem;">Số hóa đơn</label>
                             <input oninput="validateBillInput(this)" type="text" name="product_code"
                                 placeholder="Số hóa đơn" class="form-control">
                         </div>
-                        <div>
-                            <label class="ml-4">Ngày hóa đơn</label>
+                        <div class="ml-2">
+                            <label class="ml-3">Ngày hóa đơn</label>
                             <input type="date" name="product_create" placeholder="Ngày nhập hóa đơn"
-                                class="form-control ml-2" id="product_create">
+                                class="form-control" id="product_create">
                         </div>
                     </div>
                     <div class="d-flex">

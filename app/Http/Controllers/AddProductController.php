@@ -207,6 +207,7 @@ class AddProductController extends Controller
             $order->created_at =  $request->product_create == null ? Carbon::now() : $request->product_create;
             $order->total += $product_total[$i];
             $order->total_tax = $request->total_import;
+            $order->product_po = $request->product_po;
             $order->save();
 
             $dataProductOrder = [
