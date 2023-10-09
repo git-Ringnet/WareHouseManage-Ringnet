@@ -232,8 +232,9 @@ class AddProductController extends Controller
                             'seri_status' => 0,
                             'products_id' => 0,
                             'order_id' => $order->id,
-                            'check' => 0,
-                            'export_seri' => 0
+                            'provide_id' => $request->provide_id == null ? $new_provide : $request->provide_id,
+                            'export_seri' => 0,
+                            'created_at' => Carbon::now(),
                         ];
                         $this->Serinumbers->addSN($dataSN);
                     }
@@ -277,7 +278,6 @@ class AddProductController extends Controller
             ->select('serinumbers.*')
             // ->select('serinumbers.*', 'productorders.id')
             ->get();
-
         $title = 'Chi tiết đơn nhập hàng';
         return view('tables.order.edit', compact('provide', 'order', 'product_order', 'provide_order', 'products', 'title', 'serialnumber'));
     }
@@ -355,8 +355,9 @@ class AddProductController extends Controller
                                     'seri_status' => 0,
                                     'products_id' => 0,
                                     'order_id' => $updateOrder->id,
-                                    'check' => 0,
-                                    'export_seri' => 0
+                                    'provide_id' => $request->provide_id == null ? $newProvide : $request->provide_id,
+                                    'export_seri' => 0,
+                                    'created_at' => Carbon::now(),
                                 ];
                                 $newSN = $this->Serinumbers->addSN($dataSN);
                                 array_push($arr_new_SN, $newSN);
@@ -383,6 +384,7 @@ class AddProductController extends Controller
                             if ($product_SN[$y]) {
                                 $dataSN = [
                                     'serinumber' => $product_SN[$y],
+                                    'provide_id' => $request->provide_id == null ? $newProvide : $request->provide_id,
                                 ];
                                 if (isset($id_SN[$y])) {
                                     $this->Serinumbers->updateSN($dataSN, $id_SN[$y]);
@@ -394,8 +396,9 @@ class AddProductController extends Controller
                                         'seri_status' => 0,
                                         'products_id' => 0,
                                         'order_id' => $updateOrder->id,
-                                        'check' => 0,
-                                        'export_seri' => 0
+                                        'provide_id' => $request->provide_id == null ? $newProvide : $request->provide_id,
+                                        'export_seri' => 0,
+                                        'created_at' => Carbon::now(),
                                     ];
                                     $newSN = $this->Serinumbers->addSN($dataSN);
                                     array_push($arr_new_SN, $newSN);
@@ -413,8 +416,9 @@ class AddProductController extends Controller
                                         'seri_status' => 0,
                                         'products_id' => 0,
                                         'order_id' => $updateOrder->id,
-                                        'check' => 0,
-                                        'export_seri' => 0
+                                        'provide_id' => $request->provide_id == null ? $newProvide : $request->provide_id,
+                                        'export_seri' => 0,
+                                        'created_at' => Carbon::now(),
                                     ];
                                     $newSN = $this->Serinumbers->addSN($dataSN);
                                     array_push($arr_new_SN, $newSN);
@@ -643,8 +647,9 @@ class AddProductController extends Controller
                             'seri_status' => 0,
                             'products_id' => 0,
                             'order_id' => $order,
-                            'check' => 0,
-                            'export_seri' => 0
+                            'provide_id' => $request->provide_id == null ? $new :  $request['provide_id'],
+                            'export_seri' => 0,
+                            'created_at' => Carbon::now(),
                         ];
                         $this->Serinumbers->addSN($dataSN);
                     }
@@ -670,7 +675,6 @@ class AddProductController extends Controller
                 ];
                 $pro = $this->product->addProduct($data1);
                 $updateP = ProductOrders::where('id', $id_product[$i])->first();
-                // $updateSN = Serinumbers::whereIn('product_orderid',$id_product[$i]);
 
                 $updateP->product_id = $pro;
                 $updateP->save();
@@ -800,7 +804,7 @@ class AddProductController extends Controller
                     'product_tax' => $product_tax[$i],
                     'product_price' => $product_price[$i],
                     'product_total' => $product_total[$i],
-                    'provide_id' => $order->provide_id,
+                    'provide_id' =>$request->provide_id == null ? $new_provide : $request->provide_id,
                     'order_id' => $request->order_id
                 ];
 
@@ -821,8 +825,9 @@ class AddProductController extends Controller
                                     'seri_status' => 0,
                                     'products_id' => 0,
                                     'order_id' => $order->id,
-                                    'check' => 0,
-                                    'export_seri' => 0
+                                    'provide_id' =>$request->provide_id == null ? $new_provide : $request->provide_id,
+                                    'export_seri' => 0,
+                                    'created_at' => Carbon::now(),
                                 ];
                                 $newSN = $this->Serinumbers->addSN($dataSN);
                                 array_push($arr_new_SN, $newSN);
@@ -839,6 +844,7 @@ class AddProductController extends Controller
                             if ($product_SN[$y]) {
                                 $dataSN = [
                                     'serinumber' => $product_SN[$y],
+                                    'provide_id' =>$request->provide_id == null ? $new_provide : $request->provide_id
                                 ];
                                 if (isset($id_SN[$y])) {
                                     $this->Serinumbers->updateSN($dataSN, $id_SN[$y]);
@@ -850,8 +856,9 @@ class AddProductController extends Controller
                                         'seri_status' => 0,
                                         'products_id' => 0,
                                         'order_id' => $order->id,
-                                        'check' => 0,
-                                        'export_seri' => 0
+                                        'provide_id' =>$request->provide_id == null ? $new_provide : $request->provide_id,
+                                        'export_seri' => 0,
+                                        'created_at' => Carbon::now(),
                                     ];
                                     $newSN = $this->Serinumbers->addSN($dataSN);
                                     array_push($arr_new_SN, $newSN);
@@ -869,8 +876,9 @@ class AddProductController extends Controller
                                         'seri_status' => 0,
                                         'products_id' => 0,
                                         'order_id' => $order->id,
-                                        'check' => 0,
-                                        'export_seri' => 0
+                                        'provide_id' =>$request->provide_id == null ? $new_provide : $request->provide_id,
+                                        'export_seri' => 0,
+                                        'created_at' => Carbon::now(),
                                     ];
                                     $newSN = $this->Serinumbers->addSN($dataSN);
                                     array_push($arr_new_SN, $newSN);
@@ -1187,6 +1195,7 @@ class AddProductController extends Controller
                             if ($product_SN[$y]) {
                                 $dataSN = [
                                     'serinumber' => $product_SN[$y],
+                                    'provide_id' => $request->provide_id == null ? $add_newProvide : $request->provide_id
                                 ];
                                 if (isset($id_SN[$y])) {
                                     $this->Serinumbers->updateSN($dataSN, $id_SN[$y]);

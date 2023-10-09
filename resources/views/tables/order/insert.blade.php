@@ -302,6 +302,7 @@
             this.classList.add('disabled');
             var countDown = 10;
             var alertShow = false;
+            var provide_id = $('#provide_id').val() == "" ? 0 : $('#provide_id').val();
             var countdownInterval = setInterval(function() {
                 countDown--;
                 if (countDown <= 0) {
@@ -342,6 +343,7 @@
                         dvt: product_unit,
                         price: product_price,
                         tax: product_tax,
+                        provide_id: provide_id,
                         Seri: []
                     };
                 }
@@ -526,6 +528,7 @@
             var countDown = 10;
             var error = false;
             var alertShow = false;
+            var provide_id = $('#provide_id').val() == "" ? 0 : $('#provide_id').val();
             var countdownInterval = setInterval(function() {
                 countDown--;
                 if (countDown <= 0) {
@@ -533,7 +536,6 @@
                     $(e.target).find('.btn.btn-primary.mr-2').prop('disabled', false);
                 }
             }, 100);
-
             $('#inputContainer tbody tr').each(function() {
                 var id, SerialNumbers;
                 var productName = $(this).find('.name_product').val().trim();
@@ -563,6 +565,7 @@
                         dvt: product_unit,
                         price: product_price,
                         tax: product_tax,
+                        provide_id: provide_id,
                         Seri: []
                     };
                 }

@@ -381,7 +381,6 @@ function checkdata(e) {
 function deletedata(e) {
     var clickedDiv = $(e.target).closest('.modal-dialog');
     var inputs = clickedDiv.find('.modal-body #table_SNS input[name^="product_SN"]');
-    console.log(inputs);
     inputs.each(function () {
         $(this).val("");
     })

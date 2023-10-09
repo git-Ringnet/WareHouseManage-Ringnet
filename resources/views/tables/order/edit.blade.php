@@ -211,7 +211,7 @@
                                             class="bg-white position-absolute rounded shadow p-0 scroll-data "
                                             style="z-index: 99; width:37%;">
                                             @foreach ($provide as $value)
-                                                @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin')))
+                                                @if ($order->order_status != 2 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin')))
                                                     <li id="{{ $value->id }}" class="search-info">
                                                         <a href="#"
                                                             class="text-dark d-flex justify-content-between p-2 search-info select_page"
@@ -611,6 +611,7 @@
 <script src="{{ asset('dist/js/productOrder.js') }}"></script>
 <script>
     var isChecked = $('#debtCheckbox').is(':checked');
+    var oldID = $('#provide_id').val();
     // Đặt trạng thái của input dựa trên checkbox
     $('#debtInput').prop('disabled', isChecked);
     // Xử lý sự kiện khi checkbox thay đổi
@@ -679,12 +680,11 @@
             }
         })
 
-    })
+    });
 
 
     // Kiểm tra dữ liệu trước khi submit
     var checkSubmit = false;
-
     // Chuyển hướng form để thêm dữ liệu
     $(document).on('click', '.addBillEdit', function(e) {
         var data = {};
@@ -692,6 +692,7 @@
         var countDown = 10;
         var er = false;
         var alertShow = false;
+        var provide_id = $('#provide_id').val() == "" ? 0 : $('#provide_id').val();
         var countdownInterval = setInterval(function() {
             countDown--;
             if (countDown <= 0) {
@@ -711,7 +712,7 @@
             var product_tax = $(this).find('.product_tax').val().trim();
             var rowSTT = $(this).find('.STT').text();
             var countProduct = $(this).find('.quantity-input').val().trim();
-          
+
 
             id = $(this).find('.exampleModal').data('target');
             // Kiểm tra nhập số lượng sản phẩm và số lượng SN
@@ -732,14 +733,24 @@
                     dvt: product_unit,
                     price: product_price,
                     tax: product_tax,
+                    provide_id: provide_id,
                     Seri: []
                 };
             }
-            SerialNumbers = $(id).find(
-                '.modal-body #table_SNS tbody tr td input[name^="product_SN_new"]').map(
-                function() {
-                    return $(this).val().trim();
-                }).get();
+            if (oldID == provide_id) {
+                SerialNumbers = $(id).find(
+                    '.modal-body #table_SNS tbody tr td input[name^="product_SN_new"]').map(
+                    function() {
+                        return $(this).val().trim();
+                    }).get();
+            } else {
+                SerialNumbers = $(id).find(
+                    '.modal-body #table_SNS tbody tr td input[name^="product_SN"]').map(
+                    function() {
+                        return $(this).val().trim();
+                    }).get();
+            }
+
             if (SerialNumbers !== null) {
                 data.Product[rowSTT].Seri.push(...SerialNumbers);
             }
@@ -975,6 +986,7 @@
         var countDown = 10;
         var alertShow = false;
         var er = false;
+        var provide_id = $('#provide_id').val() == "" ? 0 : $('#provide_id').val();
         var countdownInterval = setInterval(function() {
             countDown--;
             if (countDown <= 0) {
@@ -1012,14 +1024,24 @@
                     dvt: product_unit,
                     price: product_price,
                     tax: product_tax,
+                    provide_id: provide_id,
                     Seri: []
                 };
             }
-            SerialNumbers = $(id).find(
-                '.modal-body #table_SNS tbody tr td input[name^="product_SN_new"]').map(
-                function() {
-                    return $(this).val().trim();
-                }).get();
+            if (oldID == provide_id) {
+                SerialNumbers = $(id).find(
+                    '.modal-body #table_SNS tbody tr td input[name^="product_SN_new"]').map(
+                    function() {
+                        return $(this).val().trim();
+                    }).get();
+            } else {
+                SerialNumbers = $(id).find(
+                    '.modal-body #table_SNS tbody tr td input[name^="product_SN"]').map(
+                    function() {
+                        return $(this).val().trim();
+                    }).get();
+            }
+
             if (SerialNumbers !== null) {
                 data.Product[rowSTT].Seri.push(...SerialNumbers);
             }

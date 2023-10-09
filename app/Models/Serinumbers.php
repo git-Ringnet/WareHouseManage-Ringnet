@@ -62,7 +62,7 @@ class Serinumbers extends Model
                             foreach ($getSN as $seri) {
                                 if (isset($SN['Seri'])) {
                                     foreach ($SN['Seri'] as $Seri) {
-                                        if ($seri->serinumber == $Seri) {
+                                        if ($seri->serinumber == $Seri && $seri->provide_id == $SN['provide_id']) {
                                             return response()->json(['success' => false, 'msg' => $order->product_name, 'data' => $Seri]);
                                         }
                                     }

@@ -402,9 +402,9 @@
             <div id="list_modal">
                 <?php $stt = 0; ?>
                 @foreach ($product_order as $pro)
-                    <div class="modal fade" data-backdrop="static" id="exampleModal{{ $stt }}" tabindex="-1" role="dialog"
-                        aria-labelledby="exampleModalLabel" aria-hidden="true" data-keyboard="false"
-                        @if ($order->order_status == 0) data-backdrop="static" @endif>'
+                    <div class="modal fade" data-backdrop="static" id="exampleModal{{ $stt }}"
+                        tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
+                        data-keyboard="false" @if ($order->order_status == 0) data-backdrop="static" @endif>'
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header align-items-center">
@@ -412,7 +412,8 @@
                                         <h5 class="modal-title" id="exampleModalLabel">Serial Number</h5>
                                         <p>Thông tin chi tiết về số S/N của mỗi sản phẩm </p>
                                     </div>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="checkdata(event)">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                                        onclick="checkdata(event)">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
@@ -544,6 +545,7 @@
 <script src="{{ asset('dist/js/productOrder.js') }}"></script>
 <script>
     var isChecked = $('#debtCheckbox').is(':checked');
+    var oldID = $('#provide_id').val();
     // Đặt trạng thái của input dựa trên checkbox
     $('#debtInput').prop('disabled', isChecked);
     // Xử lý sự kiện khi checkbox thay đổi
@@ -578,6 +580,7 @@
         var data = {};
         this.classList.add('disabled');
         var countDown = 10;
+        var provide_id = $('#provide_id').val() == "" ? 0 : $('#provide_id').val();
         var countdownInterval = setInterval(function() {
             countDown--;
             if (countDown <= 0) {
@@ -605,16 +608,26 @@
                     dvt: product_unit,
                     price: product_price,
                     tax: product_tax,
+                    provide_id: provide_id,
                     Seri: []
                 };
             }
 
             id = $(this).find('.exampleModal').data('target');
+            if (oldID == provide_id) {
+                SerialNumbers = $(id).find(
+                    '.modal-body #table_SNS tbody tr td input[name^="product_SN_new"]').map(
+                    function() {
+                        return $(this).val().trim();
+                    }).get();
+            } else {
+                SerialNumbers = $(id).find(
+                    '.modal-body #table_SNS tbody tr td input[name^="product_SN"]').map(
+                    function() {
+                        return $(this).val().trim();
+                    }).get();
+            }
 
-            SerialNumbers = $(id).find('.modal-body #table_SNS tbody tr td input[name^="product_SN_new"]').map(
-                function() {
-                    return $(this).val().trim();
-                }).get();
 
             if (SerialNumbers !== null) {
                 data.Product[rowSTT].Seri.push(...SerialNumbers);
@@ -645,7 +658,7 @@
                             alert('Sản phẩm đã tồn tại');
                         }
 
-                        if(checkSNNull() == true){
+                        if (checkSNNull() == true) {
                             er = true;
                             alert('Vui lòng nhập đủ số lượng SN');
                         }
