@@ -16,6 +16,9 @@ return new class extends Migration
         Schema::table('orders', function (Blueprint $table) {
             $table->string('product_po')->nullable()->after('total_tax');
         });
+        Schema::table('product', function (Blueprint $table) {
+            $table->string('product_po')->nullable()->after('product_trademark');
+        });
         Schema::table('exports', function (Blueprint $table) {
             $table->string('export_po')->nullable()->after('export_code');
         });
