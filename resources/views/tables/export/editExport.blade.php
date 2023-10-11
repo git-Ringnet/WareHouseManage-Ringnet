@@ -258,10 +258,11 @@
                             </div>
                             <div class="form-group">
                                 <label for="email" class="required-label">Mã số thuế:</label>
-                                <input type="text" class="form-control" id="guest_code" required <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                    echo 'readonly';
-                                } ?>
-                                    placeholder="Nhập thông tin" name="guest_code" value="{{ $guest->guest_code }}">
+                                <input type="text" class="form-control" id="guest_code" required
+                                    <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                        echo 'readonly';
+                                    } ?> placeholder="Nhập thông tin" name="guest_code"
+                                    value="{{ $guest->guest_code }}">
                             </div>
                             <div class="form-group">
                                 <label for="email">Email:</label>
@@ -795,6 +796,9 @@
     // Chờ cho Select2 được khởi tạo hoàn toàn
     $(document).ready(function() {
         $('.child-select').select2();
+        $(document).on('select2:open', () => {
+            document.querySelector('.select2-search__field').focus();
+        });
     });
     // Thay đổi màu nút save note_form
     $(document).ready(function() {
@@ -1603,6 +1607,9 @@
             fieldCounter++;
             $(document).ready(function() {
                 $('.child-select').select2();
+                $(document).on('select2:open', () => {
+                    document.querySelector('.select2-search__field').focus();
+                });
             });
         });
 

@@ -702,6 +702,9 @@
             }
             $(document).ready(function() {
                 $('.child-select').select2();
+                $(document).on('select2:open', () => {
+                    document.querySelector('.select2-search__field').focus();
+                });
             });
         });
 
@@ -1005,13 +1008,16 @@
 
     //lấy thông tin sản phẩm con từ tên sản phẩm con
     var selectedProductIDs = [];
-    $(document).ready(function() {
-        // Lấy tất cả các phần tử đang được chọn theo class "productName"
+
+    function updateOption() {
+        selectedProductIDs = [];
         var selectedProducts = document.querySelectorAll(".productName");
-        // Lặp qua từng phần tử và lấy giá trị của nó
         selectedProducts.forEach(function(product) {
             selectedProductIDs.push(product.value);
         });
+    }
+    $(document).ready(function() {
+        updateOption();
         $(document).on('change', '.child-select', function() {
             var selectedID = $(this).val();
             var row = $(this).closest('tr');
@@ -1115,6 +1121,7 @@
                 }
 
                 selectedProductIDs.push(selectedID); // Lưu ID sản phẩm đã chọn vào mảng
+                updateOption();
                 $(this).data('previous-id',
                     selectedID); // Lưu ID hiện tại vào thuộc tính data của tùy chọn
 
@@ -1441,6 +1448,9 @@
 
     $(document).ready(function() {
         $('.child-select').select2();
+        $(document).on('select2:open', () => {
+            document.querySelector('.select2-search__field').focus();
+        });
     });
 
     for (let j = 0; j < products.length; j++) {
