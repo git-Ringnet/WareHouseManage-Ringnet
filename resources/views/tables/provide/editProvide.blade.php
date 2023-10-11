@@ -75,7 +75,7 @@
                                     <div class="d-flex align-items-center">
                                         <input type="text" oninput="validateNumberInput(this)" class="form-control"
                                             id="debtInput" value="{{ $provides->debt }}" name="debt"
-                                            style="width:15%;" disabled="">
+                                            style="width:15%;" >
                                         <span class="ml-2" id="data-debt">ngày</span>
                                         <input type="checkbox" id="debtCheckbox" value="0" name="debt"
                                             class="ml-3" <?php if ($provides->debt == 0) {
@@ -112,9 +112,12 @@
         }
     }
     var isChecked = $('#debtCheckbox').is(':checked');
-    // Đặt trạng thái của input dựa trên checkbox
-    $('#debtInput').prop('disabled', isChecked);
-    $('#debtInput').val(0);
+    if (isChecked) {
+        // Đặt trạng thái của input dựa trên checkbox
+        $('#debtInput').prop('disabled', isChecked);
+        $('#debtInput').val(0);
+    }
+
     // Xử lý sự kiện khi checkbox thay đổi
     $(document).on('change', '#debtCheckbox', function() {
         var isChecked = $(this).is(':checked');
