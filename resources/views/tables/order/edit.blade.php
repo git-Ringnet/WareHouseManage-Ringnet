@@ -301,7 +301,7 @@
                                 @if ($order->order_status != 0 || (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin'))) readonly @endif>
                             <span class="ml-2" id="data-debt" style="color: rgb(29, 28, 32);">ngày</span>
                             <input type="checkbox" id="debtCheckbox" value="0" <?php echo $provide_order[0]->debt == 0 ? 'checked' : ''; ?>
-                                style="margin-left:10%;">
+                                style="margin-left:10%;" {{ $order->order_status == 0 ? '' : 'disabled' }}>
                             <span class="ml-2">Thanh toán tiền mặt</span>
                         </div>
                     </div>
@@ -837,15 +837,15 @@
                     '<div class="row p-3">' +
                     '<div class="col-sm-6">' +
                     '<div class="form-group">' +
-                    '<label for="congty">Công ty:</label>' +
+                    '<label for="congty" class="required-label">Công ty:</label>' +
                     '<input required type="text" class="form-control" id="provide_name" placeholder="Nhập thông tin" name="provide_name" value="' +
                     data.provide_name + '">' +
                     '</div>' + '<div class="form-group">' +
-                    '<label>Địa chỉ xuất hóa đơn:</label>' +
+                    '<label class="required-label">Địa chỉ xuất hóa đơn:</label>' +
                     '<input required type="text" class="form-control" id="provide_address" placeholder="Nhập thông tin" name="provide_address" value="' +
                     data.provide_address + '">' +
                     '</div>' + '<div class="form-group">' +
-                    '<label for="email">Mã số thuế:</label>' +
+                    '<label for="email" class="required-label">Mã số thuế:</label>' +
                     '<input required type="text" class="form-control" id="provide_code" placeholder="Nhập thông tin" name="provide_code" value="' +
                     data.provide_code + '">' +
                     '</div>' + '<div class="form-group">' +
