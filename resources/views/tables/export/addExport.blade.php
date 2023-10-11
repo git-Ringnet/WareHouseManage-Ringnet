@@ -451,12 +451,12 @@
                 row.remove();
                 fieldCounter--;
                 calculateTotalAmount();
-                calculateTotalTax();
                 calculateGrandTotal();
                 updateRowNumbers();
-                var taxAmount = parseFloat(row.find('.product_tax1').text());
-                var totalTax = parseFloat($('#product-tax').text());
-                totalTax -= taxAmount;
+                var productTaxText = $('#product-tax').text();
+                var productTaxValue = parseFloat(productTaxText.replace(/,/g, ''));
+                var taxAmount = parseFloat(('.product_tax1').text());
+                var totalTax = productTaxValue - taxAmount;
                 $('#product-tax').text(totalTax);
 
                 // Xóa các trường input ẩn selected_serial_numbers[] có data-product-id khớp với sản phẩm đang bị xóa
@@ -1540,7 +1540,7 @@
                         idProduct: products[j],
                     },
                     success: function(response2) {
-                        var ulElement = newRow.find(".seri_pro");   
+                        var ulElement = newRow.find(".seri_pro");
                         response2.forEach(function(sn) {
                             var product_id = sn.product_id;
                             var liElement = $("<li>").text(product_id.toString());
@@ -1555,6 +1555,7 @@
         deleteBtn.click(function() {
             var row = $(this).closest("tr");
             var selectedID = row.find('.child-select').val();
+            var productCode = $(this).closest('tr').find('.productName').val();
 
             // Kiểm tra nếu ID sản phẩm đang bị xóa có trong mảng selectedProductIDs
             var index = selectedProductIDs.indexOf(selectedID);
@@ -1564,13 +1565,17 @@
             row.remove();
             fieldCounter--;
             calculateTotalAmount();
-            calculateTotalTax();
             calculateGrandTotal();
             updateRowNumbers();
-            var taxAmount = parseFloat(row.find('.product_tax1').text());
-            var totalTax = parseFloat($('#product-tax').text());
-            totalTax -= taxAmount;
+            var productTaxText = $('#product-tax').text();
+            var productTaxValue = parseFloat(productTaxText.replace(/,/g, ''));
+            var taxAmount = parseFloat(('.product_tax1').text());
+            var totalTax = productTaxValue - taxAmount;
             $('#product-tax').text(totalTax);
+
+            // Xóa các trường input ẩn selected_serial_numbers[] có data-product-id khớp với sản phẩm đang bị xóa
+            $('input[name="selected_serial_numbers[]"][data-product-id="' + productCode +
+                '"]').remove();
         });
 
         //xem S/N sản phẩm
