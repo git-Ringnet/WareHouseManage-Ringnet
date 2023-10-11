@@ -128,6 +128,11 @@
             <section id="data-container" class="container-fluided bg-white rounded"></section>
             <div class="d-flex align-items-center my-2">
                 <div class="">
+                    <p class="m-0" style="padding: 0.375rem 0.75rem;"><b>Số PO</b></p>
+                    <input type="number" value="" name="export_po" class="form-control"
+                        placeholder="Nhập thông tin">
+                </div>
+                <div class="pl-3">
                     <p class="m-0" style="padding: 0.375rem 0.75rem;"><b>Số hóa đơn</b></p>
                     <input type="number" value="" name="export_code" class="form-control"
                         placeholder="Nhập thông tin">
@@ -1002,16 +1007,19 @@
             }
         });
     });
-
     //lấy thông tin sản phẩm con từ tên sản phẩm con
     var selectedProductIDs = [];
-    $(document).ready(function() {
-        // Lấy tất cả các phần tử đang được chọn theo class "productName"
+
+    function updateOption() {
+        selectedProductIDs = [];
         var selectedProducts = document.querySelectorAll(".productName");
-        // Lặp qua từng phần tử và lấy giá trị của nó
         selectedProducts.forEach(function(product) {
             selectedProductIDs.push(product.value);
         });
+    }
+    $(document).ready(function() {
+        updateOption();
+        console.log(selectedProductIDs);
         $(document).on('change', '.child-select', function() {
             var selectedID = $(this).val();
             var row = $(this).closest('tr');
@@ -1024,9 +1032,10 @@
             var dangGD = $(this).closest('tr').find('.dangGD');
             var thue = $(this).closest('tr').find('.product_tax');
             var ulElement = $(this).closest('tr').find(".seri_pro");
-
             $(this).closest('tr').find('.quantity-input').val(null);
-            if (!isNaN(selectedID)) {
+
+            if (selectedID) {
+                console.log(selectedProductIDs);
                 $.ajax({
                     url: "{{ route('getProduct') }}",
                     type: "get",
@@ -1073,11 +1082,6 @@
                         }
                     },
                 });
-            } else {
-                $(this).val(null).trigger('change');
-                var productNameElement = $(this).closest('tr').find('.product_name');
-                productNameElement.prop('disabled', true);
-                $(this).data('previous-id', null);
             }
 
             // Kiểm tra nếu ID sản phẩm đã chọn đã có trong danh sách các sản phẩm đã chọn
@@ -1114,11 +1118,11 @@
                     }
                 }
 
-                selectedProductIDs.push(selectedID); // Lưu ID sản phẩm đã chọn vào mảng
-                $(this).data('previous-id',
-                    selectedID); // Lưu ID hiện tại vào thuộc tính data của tùy chọn
+                selectedProductIDs.push(selectedID);
+                updateOption();
+                $(this).data('previous-id', selectedID);
 
-                hideSelectedProductNames(row); // Ẩn tên sản phẩm đã chọn từ các tùy chọn khác
+                hideSelectedProductNames(row);
             }
         });
 
@@ -1138,20 +1142,6 @@
                     }
                 });
             });
-        }
-    });
-
-    // Xử lý sự kiện khi nhấn nút Backspace trong ô tìm kiếm
-    $(document).on('keydown', '.selectize-input input', function(event) {
-        if (event.keyCode === 8) { // 8 là mã nút Backspace
-            var inputValue = $(this).val();
-            if (inputValue === '') {
-                var removedID = $(this).closest('.child-select').val();
-                var index = selectedProductIDs.indexOf(removedID);
-                if (index !== -1) {
-                    selectedProductIDs.splice(index, 1); // Xóa ID khỏi mảng khi xóa tùy chọn
-                }
-            }
         }
     });
 
@@ -1506,12 +1496,18 @@
         );
 
         const snPro = $("<td style='display:none;'><ul class='seri_pro'></ul></td>");
-
+        var defaultOption = $("<option>", {
+            "value": "",
+            "text": "Lựa chọn sản phẩm",
+        });
+        ProInput.find('select').prepend(defaultOption);
         for (let i = 0; i < productList.length; i++) {
-            let option = $("<option>", {
-                "value": productList[i].id,
-                "text": productList[i].product_name,
-            });
+            let option = $(
+                "<option>", {
+                    "value": productList[i].id,
+                    "text": productList[i].product_name,
+                }
+            );
 
             let dvt = $("<input>", {
                 "value": productList[i].product_unit,
@@ -1540,7 +1536,7 @@
                         idProduct: products[j],
                     },
                     success: function(response2) {
-                        var ulElement = newRow.find(".seri_pro");   
+                        var ulElement = newRow.find(".seri_pro");
                         response2.forEach(function(sn) {
                             var product_id = sn.product_id;
                             var liElement = $("<li>").text(product_id.toString());

@@ -210,6 +210,7 @@ class ExportController extends Controller
                                 $export->note_form = $request->note_form;
                                 $export->transport_fee = $request->transport_fee;
                                 $export->export_code = $request->export_code;
+                                $export->export_po = $request->export_po;
                                 if ($request->export_create == null) {
                                     $export->created_at = Carbon::now();
                                 } else {
@@ -299,6 +300,8 @@ class ExportController extends Controller
                                     $history->price_export = $request->product_price[$i];
                                     $history->export_total = $productQty * $request->product_price[$i];
                                     $history->export_code = $export->export_code;
+                                    $history->export_po = $export->export_po;
+                                    $history->product_po = $date_import->product_po;
                                     $history->debt_export = $guest->debt;
                                     if ($request->export_create == null) {
                                         $history->debt_export_start = Carbon::now();
@@ -429,6 +432,7 @@ class ExportController extends Controller
                                 $export->note_form = $request->note_form;
                                 $export->transport_fee = $request->transport_fee;
                                 $export->export_code = $request->export_code;
+                                $export->export_po = $request->export_po;
                                 if ($request->export_create == null) {
                                     $export->created_at = Carbon::now();
                                 } else {
@@ -518,6 +522,8 @@ class ExportController extends Controller
                                     $history->price_export = $request->product_price[$i];
                                     $history->export_total = $productQty * $request->product_price[$i];
                                     $history->export_code = $export->export_code;
+                                    $history->export_po = $export->export_po;
+                                    $history->product_po = $date_import->product_po;
                                     $history->debt_export = $guest->debt;
                                     if ($request->export_create == null) {
                                         $history->debt_export_start = Carbon::now();
@@ -639,6 +645,7 @@ class ExportController extends Controller
                                 $export->note_form = $request->note_form;
                                 $export->transport_fee = $request->transport_fee;
                                 $export->export_code = $request->export_code;
+                                $export->export_po = $request->export_po;
                                 if ($request->export_create == null) {
                                     $export->created_at = Carbon::now();
                                 } else {
@@ -728,6 +735,8 @@ class ExportController extends Controller
                                     $history->price_export = $request->product_price[$i];
                                     $history->export_total = $productQty * $request->product_price[$i];
                                     $history->export_code = $export->export_code;
+                                    $history->export_po = $export->export_po;
+                                    $history->product_po = $date_import->product_po;
                                     $history->debt_export = $guest->debt;
                                     if ($request->export_create == null) {
                                         $history->debt_export_start = Carbon::now();
@@ -849,6 +858,7 @@ class ExportController extends Controller
                                 $export->note_form = $request->note_form;
                                 $export->transport_fee = $request->transport_fee;
                                 $export->export_code = $request->export_code;
+                                $export->export_po = $request->export_po;
                                 if ($request->export_create == null) {
                                     $export->created_at = Carbon::now();
                                 } else {
@@ -938,6 +948,8 @@ class ExportController extends Controller
                                     $history->price_export = $request->product_price[$i];
                                     $history->export_total = $productQty * $request->product_price[$i];
                                     $history->export_code = $export->export_code;
+                                    $history->export_po = $export->export_po;
+                                    $history->product_po = $date_import->product_po;
                                     $history->debt_export = $guest->debt;
                                     if ($request->export_create == null) {
                                         $history->debt_export_start = Carbon::now();
@@ -1137,6 +1149,7 @@ class ExportController extends Controller
                                 $export->note_form = $request->note_form;
                                 $export->transport_fee = $request->transport_fee;
                                 $export->export_code = $request->export_code;
+                                $export->export_po = $request->export_po;
                                 if ($request->export_create == null) {
                                     $export->created_at = Carbon::now();
                                 } else {
@@ -1196,6 +1209,7 @@ class ExportController extends Controller
                                 $export->note_form = $request->note_form;
                                 $export->transport_fee = $request->transport_fee;
                                 $export->export_code = $request->export_code;
+                                $export->export_po = $request->export_po;
                                 if ($request->export_create == null) {
                                     $export->created_at = Carbon::now();
                                 } else {
@@ -1238,6 +1252,7 @@ class ExportController extends Controller
                                 $export->note_form = $request->note_form;
                                 $export->transport_fee = $request->transport_fee;
                                 $export->export_code = $request->export_code;
+                                $export->export_po = $request->export_po;
                                 if ($request->export_create == null) {
                                     $export->created_at = Carbon::now();
                                 } else {
@@ -1280,6 +1295,7 @@ class ExportController extends Controller
                                 $export->note_form = $request->note_form;
                                 $export->transport_fee = $request->transport_fee;
                                 $export->export_code = $request->export_code;
+                                $export->export_po = $request->export_po;
                                 if ($request->export_create == null) {
                                     $export->created_at = Carbon::now();
                                 } else {
@@ -1503,7 +1519,9 @@ class ExportController extends Controller
                                 $history->export_unit = $request->product_unit[$i];
                                 $history->price_export = $request->product_price[$i];
                                 $history->export_total = $productQty * $request->product_price[$i];
-                                $history->export_code = $exports->export_code;
+                                $history->export_code = $request->export_code;
+                                $history->export_po = $request->export_po;
+                                $history->product_po = $date_import->product_po;
                                 $history->debt_export = $guest->debt;
                                 if ($request->export_create == null) {
                                     $history->debt_export_start = Carbon::now();
@@ -1610,7 +1628,9 @@ class ExportController extends Controller
                                 $history->export_unit = $request->product_unit[$i];
                                 $history->price_export = $request->product_price[$i];
                                 $history->export_total = $productQty * $request->product_price[$i];
-                                $history->export_code = $exports->export_code;
+                                $history->export_code = $request->export_code;
+                                $history->export_po = $request->export_po;
+                                $history->product_po = $date_import->product_po;
                                 $history->debt_export = $guest->debt;
                                 if ($request->export_create == null) {
                                     $history->debt_export_start = Carbon::now();
@@ -1775,6 +1795,7 @@ class ExportController extends Controller
                             $exports->note_form = $request->note_form;
                             $exports->transport_fee = $request->transport_fee;
                             $exports->export_code = $request->export_code;
+                            $exports->export_po = $request->export_po;
                             if ($request->export_create == null) {
                                 $exports->created_at = Carbon::now();
                             } else {
@@ -1807,6 +1828,7 @@ class ExportController extends Controller
                             $exports->note_form = $request->note_form;
                             $exports->transport_fee = $request->transport_fee;
                             $exports->export_code = $request->export_code;
+                            $exports->export_po = $request->export_po;
                             if ($request->export_create == null) {
                                 $exports->created_at = Carbon::now();
                             } else {
@@ -1904,6 +1926,7 @@ class ExportController extends Controller
                     $exports->note_form = $request->note_form;
                     $exports->transport_fee = $request->transport_fee;
                     $exports->export_code = $request->export_code;
+                    $exports->export_po = $request->export_po;
                     if ($request->export_create == null) {
                         $exports->created_at = Carbon::now();
                     } else {
@@ -2014,6 +2037,7 @@ class ExportController extends Controller
                             $exports->note_form = $request->note_form;
                             $exports->transport_fee = $request->transport_fee;
                             $exports->export_code = $request->export_code;
+                            $exports->export_po = $request->export_po;
                             if ($request->export_create == null) {
                                 $exports->created_at = Carbon::now();
                             } else {
@@ -2045,6 +2069,7 @@ class ExportController extends Controller
                             $exports->note_form = $request->note_form;
                             $exports->transport_fee = $request->transport_fee;
                             $exports->export_code = $request->export_code;
+                            $exports->export_po = $request->export_po;
                             if ($request->export_create == null) {
                                 $exports->created_at = Carbon::now();
                             } else {
@@ -2111,6 +2136,7 @@ class ExportController extends Controller
                     $exports->note_form = $request->note_form;
                     $exports->transport_fee = $request->transport_fee;
                     $exports->export_code = $request->export_code;
+                    $exports->export_po = $request->export_po;
                     if ($request->export_create == null) {
                         $exports->created_at = Carbon::now();
                     } else {
@@ -2229,6 +2255,8 @@ class ExportController extends Controller
                                     $history->price_export = $request->product_price[$i];
                                     $history->export_total = $productQty * $request->product_price[$i];
                                     $history->export_code = $request->export_code;
+                                    $history->export_po = $request->export_po;
+                                    $history->product_po = $date_import->product_po;
                                     $history->debt_export = $guest->debt;
                                     if ($request->export_create == null) {
                                         $history->debt_export_start = Carbon::now();
@@ -2331,6 +2359,8 @@ class ExportController extends Controller
                                     $history->price_export = $request->product_price[$i];
                                     $history->export_total = $productQty * $request->product_price[$i];
                                     $history->export_code = $exports->export_code;
+                                    $history->export_po = $exports->export_po;
+                                    $history->product_po = $date_import->product_po;
                                     $history->debt_export = $guest->debt;
                                     if ($request->export_create == null) {
                                         $history->debt_export_start = Carbon::now();
@@ -2400,6 +2430,7 @@ class ExportController extends Controller
                             $exports->note_form = $request->note_form;
                             $exports->transport_fee = $request->transport_fee;
                             $exports->export_code = $request->export_code;
+                            $exports->export_po = $request->export_po;
                             if ($request->export_create == null) {
                                 $exports->created_at = Carbon::now();
                             } else {
@@ -2432,6 +2463,7 @@ class ExportController extends Controller
                             $exports->note_form = $request->note_form;
                             $exports->transport_fee = $request->transport_fee;
                             $exports->export_code = $request->export_code;
+                            $exports->export_po = $request->export_po;
                             if ($request->export_create == null) {
                                 $exports->created_at = Carbon::now();
                             } else {
@@ -2584,39 +2616,28 @@ class ExportController extends Controller
     {
         $data = $request->all();
         if ($data['click'] == 1) {
-            // Kiểm tra xem dữ liệu đã tồn tại trong cơ sở dữ liệu hay chưa
-            $existingCustomer = Guests::orwhere('guest_code', $request->guest_code)
-                ->orwhere('guest_name', $request->guest_name)
-                ->first();
-
-            if ($existingCustomer) {
-                // Dữ liệu đã tồn tại, trả về thông báo
-                session()->flash('msg', 'Xóa đơn hàng thành công');
-                return response()->json(['message' => 'Thông tin khách hàng đã có trong hệ thống']);
+            // Tạo mới bản ghi khách hàng
+            $guest = new Guests();
+            $guest->guest_name = $data['guest_name'];
+            $guest->guest_address = $data['guest_address'];
+            $guest->guest_code = $data['guest_code'];
+            $guest->guest_receiver = $data['guest_receiver'];
+            $guest->guest_phoneReceiver = $data['guest_phoneReceiver'];
+            $guest->guest_email = $data['guest_email'];
+            $guest->guest_status = 1;
+            $guest->guest_phone = $data['guest_phone'];
+            $guest->guest_email_personal = $data['guest_email_personal'];
+            $guest->guest_note = $data['guest_note'];
+            if ($data['debt'] === null) {
+                $guest->debt = 0;
             } else {
-                // Tạo mới bản ghi khách hàng
-                $guest = new Guests();
-                $guest->guest_name = $data['guest_name'];
-                $guest->guest_address = $data['guest_address'];
-                $guest->guest_code = $data['guest_code'];
-                $guest->guest_receiver = $data['guest_receiver'];
-                $guest->guest_phoneReceiver = $data['guest_phoneReceiver'];
-                $guest->guest_email = $data['guest_email'];
-                $guest->guest_status = 1;
-                $guest->guest_phone = $data['guest_phone'];
-                $guest->guest_email_personal = $data['guest_email_personal'];
-                $guest->guest_note = $data['guest_note'];
-                if ($data['debt'] === null) {
-                    $guest->debt = 0;
-                } else {
-                    $guest->debt = $data['debt'];
-                }
-                $guest->user_id = Auth::user()->id;
-                $guest->save();
-
-                // Trả về giá trị id của khách hàng vừa lưu
-                return response()->json(['id' => $guest->id]);
+                $guest->debt = $data['debt'];
             }
+            $guest->user_id = Auth::user()->id;
+            $guest->save();
+
+            // Trả về giá trị id của khách hàng vừa lưu
+            return response()->json(['id' => $guest->id]);
         }
     }
 
@@ -3065,6 +3086,8 @@ class ExportController extends Controller
                     $history->price_export = $gia;
                     $history->export_total = $quantityFromExport * $gia;
                     $history->export_code = $exports->export_code;
+                    $history->export_po = $exports->export_po;
+                    $history->product_po = $product->product_po;
                     $history->debt_export = $guest->debt;
                     if ($exports->created_at == null) {
                         $history->debt_export_start = Carbon::now();

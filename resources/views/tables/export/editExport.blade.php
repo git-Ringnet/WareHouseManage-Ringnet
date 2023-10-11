@@ -337,6 +337,13 @@
             </section>
             <div class="d-flex align-items-center my-2">
                 <div class="">
+                    <p class="m-0"><b>Số PO</b></p>
+                    <input type="number" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                        echo 'readonly';
+                    } ?> value="{{ $exports->export_po }}"
+                        name="export_po" class="form-control" placeholder="Nhập thông tin">
+                </div>
+                <div class="pl-3">
                     <p class="m-0"><b>Số hóa đơn</b></p>
                     <input type="number" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                         echo 'readonly';
