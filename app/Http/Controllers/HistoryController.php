@@ -174,9 +174,9 @@ class HistoryController extends Controller
         }
 
         // Tên Serial NUMBER
+        $sn = null;
         if (!empty($request->sn)) {
             $sn = $request->sn;
-            array_push($filters, ['serinumber', 'like', '%' . $sn . '%']);
             $nameArr = explode(',.@', $sn);
             array_push($string, [
                 'label' => 'Serial number:', 'values' => $nameArr, 'class' => 'sn'
@@ -207,7 +207,7 @@ class HistoryController extends Controller
         $debtsSale =  History::leftjoin('users', 'history.user_id', '=', 'users.id')->get();
         $provides = History::leftjoin('provides', 'history.provide_id', '=', 'provides.id')->get();
 
-        $history = $this->history->getAllHistory($filters, $perPage, $keywords, $date, $nhanvien, $provide_namearr, $guest, $status, $unitarr, $status_export, $sortBy, $sortType);
+        $history = $this->history->getAllHistory($filters, $perPage, $keywords, $sn, $date, $nhanvien, $provide_namearr, $guest, $status, $unitarr, $status_export, $sortBy, $sortType);
 
         return view('tables.history.historyindex', compact('history', 'perPage', 'title', 'guests', 'debtsSale', 'provides', 'string', 'sortType'));
     }

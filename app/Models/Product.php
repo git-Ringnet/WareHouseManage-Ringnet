@@ -14,14 +14,13 @@ class Product extends Model
     protected $fillable = [
         'product_name', 'product_unit', 'product_qty', 'product_price', 'product_tax', 'product_total', 'provide_id', 'product_trade', 'product_trademark', 'product_code', 'created_at'
     ];
-    public function getAllProduct($filters = [], $perPage, $status = [], $products_name = null, $providearr, $unitarr, $taxarr, $keywords = null, $sortByArr = null)
+    public function getAllProduct($filters = [], $perPage, $status = [], $products_name = null, $sn = null, $providearr, $unitarr, $taxarr, $keywords = null, $sortByArr = null)
     {
         //lấy tất cả products
         $products = DB::table($this->table)
             ->leftJoin('provides', 'provides.id', '=', 'product.provide_id')
-            ->leftJoin('serinumbers', 'serinumbers.product_id', '=', 'product.id')
-            ->select('product.*', 'provides.provide_name as provide', 'product.product_qty as soluong', 'serinumbers.serinumber as serinumber');
-        $orderBy = 'created_at';
+            ->select('product.*', 'provides.provide_name as provide', 'product.product_qty as soluong');
+        $orderBy = 'id';
         $orderType = 'desc';
         if (!empty($sortByArr) && is_array($sortByArr)) {
             if (!empty($sortByArr['sortBy']) && !empty($sortByArr['sortType'])) {
@@ -69,11 +68,24 @@ class Product extends Model
             $products = $products->whereIn('product.product_tax', $taxarr);
         }
 
+        // Serial
+        if (!empty($sn)) {
+            $seri = new Serinumbers();
+            $product_id = array();
+            $product_id = $seri->getProductIdsByKeywords($sn);
+            $products = $products->where(function ($query) use ($product_id) {
+                $query->orWhereIn('product.id', $product_id);
+            });
+        }
+
         if (!empty($keywords)) {
-            $products = $products->where(function ($query) use ($keywords) {
+            $seri = new Serinumbers();
+            $product_id = array();
+            $product_id = $seri->getProductIdsByKeywords($keywords);
+            $products = $products->where(function ($query) use ($keywords, $product_id) {
                 $query->orWhere('product_name', 'like', '%' . $keywords . '%');
                 $query->orWhere('provides.provide_name', 'like', '%' . $keywords . '%');
-                $query->orWhere('serinumbers.serinumber', 'like', '%' . $keywords . '%');
+                $query->orWhereIn('product.id', $product_id);
             });
         }
         $products = $products->where('product.product_qty', '>', 0);

@@ -70,9 +70,9 @@ class ProductController extends Controller
         }
 
         // Tên Serial NUMBER
+        $sn = null;
         if (!empty($request->sn)) {
             $sn = $request->sn;
-            array_push($filters, ['serinumber', 'like', '%' . $sn . '%']);
             $nameArr = explode(',.@', $sn);
             array_push($string, [
                 'label' => 'Serial number:', 'values' => $nameArr, 'class' => 'sn'
@@ -151,7 +151,7 @@ class ProductController extends Controller
         $perPage = $request->input('perPageinput', 25);
         $provide = Product::leftJoin('provides', 'provides.id', '=', 'product.provide_id')->where('product.product_qty', '>', 0)->get();
         //lấy tất cả products
-        $products = $products = $this->products->getAllProduct($filters, $perPage, $status, $products_name, $providearr, $unitarr, $taxarr, $keywords, $sortByArr);
+        $products = $products = $this->products->getAllProduct($filters, $perPage, $status, $products_name, $sn, $providearr, $unitarr, $taxarr, $keywords, $sortByArr);
 
         // Đơn vị tính
         $unit = Product::where('product.product_qty', '>', 0)->get();
@@ -166,7 +166,7 @@ class ProductController extends Controller
         $serialnumber =  DB::table('serinumbers')
             ->join('product', 'serinumbers.product_id', '=', 'product.id')
             ->whereIn('product.id', $productIds)
-            ->where('seri_status','!=' , 3)
+            ->where('seri_status', '!=', 3)
             ->select('serinumbers.*')
             // ->select('serinumbers.*', 'productorders.id')
             ->get();

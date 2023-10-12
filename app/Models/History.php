@@ -42,47 +42,48 @@ class History extends Model
         'tranport_fee',
         'history_note',
     ];
-    public function getAllHistory($filters = [], $perPage, $keywords = null, $date = [], $name = [], $provide_namearr = [], $guest = [], $status = [], $unitarr = [], $status_export = [], $orderBy = null, $orderType = null)
+    public function getAllHistory($filters = [], $perPage, $keywords = null, $sn = null, $date = [], $name = [], $provide_namearr = [], $guest = [], $status = [], $unitarr = [], $status_export = [], $orderBy = null, $orderType = null)
     {
-        // $list = [3,1,1];
-
-        // $history = History::leftJoin('debts','history.export_id','debts.export_id')
-        //     ->whereIn('debts.id', $list)->get();
-        //     dd($history);
-        //     foreach ($history as $value) {
-        //         $value->export_status = 1;
-        //         $value->save();
-        // };
         $history = History::leftJoin('users', 'users.id', 'history.user_id')
             ->leftJoin('provides', 'provides.id', 'history.provide_id')
             ->leftJoin('guests', 'guests.id', 'history.guest_id')
             ->leftJoin('debts', 'debts.export_id', 'history.export_id')
             ->leftJoin('debt_import', 'debt_import.import_id', 'history.import_id')
-            ->leftJoin('serinumbers', 'serinumbers.product_id', '=', 'history.product_id')
             ->select(
                 'history.*',
                 'guests.*',
                 'provides.*',
                 'users.*',
                 'debt_import.updated_at as thanhtoannhap',
-                'debts.updated_at as thanhtoanxuat',
-                'serinumbers.serinumber as serinumber'
+                'debts.updated_at as thanhtoanxuat'
             );
-        // dd($history);
 
         if (!empty($filters)) {
             $history = $history->where($filters);
         }
+        // Serial
+        if (!empty($sn)) {
+            $seri = new Serinumbers();
+            $product_id = array();
+            $product_id = $seri->getProductIdsHistory($sn);
+            $history = $history->where(function ($query) use ($product_id) {
+                $query->orWhereIn('history.product_id', $product_id);
+            });
+        }
 
         if (!empty($keywords)) {
-            $history = $history->where(function ($query) use ($keywords) {
+            $seri = new Serinumbers();
+            $product_id = array();
+            $product_id = $seri->getProductIdsHistory($keywords);
+
+            $history = $history->where(function ($query) use ($keywords, $product_id) {
                 $query->orWhere('product_name', 'like', '%' . $keywords . '%');
                 $query->orWhere('provide_name', 'like', '%' . $keywords . '%');
                 $query->orWhere('name', 'like', '%' . $keywords . '%');
                 $query->orWhere('import_code', 'like', '%' . $keywords . '%');
                 $query->orWhere('guest_name', 'like', '%' . $keywords . '%');
                 $query->orWhere('export_code', 'like', '%' . $keywords . '%');
-                $query->orWhere('serinumbers.serinumber', 'like', '%' . $keywords . '%');
+                $query->orWhereIn('history.product_id', $product_id);
             });
         }
         if (!empty($guest)) {
