@@ -389,7 +389,7 @@
                                                 class="child-select p-1 form-control productName <?php if ($exports->export_status != 1) {
                                                     echo 'd-none';
                                                 } ?>"
-                                                name="product_id[]" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                                required name="product_id[]" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                                     echo 'disabled';
                                                 } ?>>
                                                 <option value="{{ $value_export->product_id }}">
@@ -406,7 +406,7 @@
                                             </select>
                                         @endif
                                         @if ($exports->export_status == 1)
-                                            <select class="child-select p-1 form-control productName"
+                                            <select class="child-select p-1 form-control productName" required
                                                 name="product_id[]" data-initial="{{ $value_export->product_id }}"
                                                 <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                                     echo 'disabled';
@@ -774,24 +774,6 @@
 </form>
 </section>
 </div>
-<style>
-    .selectize-input>input {
-        width: calc(100% - 30px) !important;
-        max-width: calc(100% - 30px) !important;
-        position: absolute !important;
-        left: 10px !important;
-    }
-
-    .selectize-input.has-items>.item {
-        display: inline-block !important;
-        width: 90% !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
-        white-space: normal !important;
-        overflow-wrap: break-word !important;
-        margin-top: 4px;
-    }
-</style>
 <script>
     // Chờ cho Select2 được khởi tạo hoàn toàn
     $(document).ready(function() {
@@ -1958,19 +1940,17 @@
     //lấy thông tin sản phẩm
     var selectedProductIDs = [];
 
-    function updateOption() {
-        selectedProductIDs = [];
+    $(document).ready(function() {
+        // Lấy tất cả các phần tử đang được chọn theo class "productName"
         var selectedProducts = document.querySelectorAll(".productName");
+
+        // Lặp qua từng phần tử và lấy giá trị của nó
         selectedProducts.forEach(function(product) {
             selectedProductIDs.push(product.value);
         });
-    }
-    $(document).ready(function() {
-        updateOption();
         $(document).on('change', '.child-select', function() {
             var selectedID = $(this).val();
             var isInitial = $(this).data('initial') == selectedID;
-            var selectize = $(this)[0].selectize;
             var row = $(this).closest('tr');
             var productNameElement = row.find('.product_name');
             var productUnitElement = $(this).closest('tr').find('.product_unit');
@@ -2032,13 +2012,10 @@
             }
 
             if (isInitial) {
-                productNameElement.prop('disabled', true);
-                $(this).val(null).trigger('change');
                 $(this).data('previous-id', null);
             } else if (selectedProductIDs.includes(selectedID)) {
-                $(this).val(null).trigger('change');
-                var productNameElement = $(this).closest('tr').find('.product_name');
-                productNameElement.prop('disabled', true);
+                var productNameElement = $(this).closest('tr').find('.productName');
+                productNameElement.val(null).trigger('change');
 
                 alert('Sản phẩm này đã được thêm trước đó, vui lòng chọn sản phẩm khác');
                 // Kiểm tra nếu giá trị data-previous-id là null, thì bỏ qua bước kiểm tra tiếp theo
@@ -2065,7 +2042,6 @@
                     }
                 }
                 selectedProductIDs.push(selectedID);
-                updateOption();
                 $(this).data('previous-id', selectedID);
                 hideSelectedProductNames(row);
             }

@@ -656,7 +656,7 @@ td p {
     max-width: 85% !important;
 }
 
-#list_modal .modal.fade.show{
+#list_modal .modal.fade.show {
     z-index: 9999;
 }
 
