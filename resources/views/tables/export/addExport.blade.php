@@ -363,11 +363,18 @@
 
     //nhập số
     function validateNumberInput(input) {
-        var regex = /^[0-9]*$/;
+        var regex = /^[0-9][0-9-]*$/;
         if (!regex.test(input.value)) {
             input.value = input.value.replace(/[^0-9]/g, '');
         }
     }
+
+    // function validateNumberInput(input) {
+    //     var regex = /^[0-9]*$/;
+    //     if (!regex.test(input.value)) {
+    //         input.value = input.value.replace(/[^0-9]/g, '');
+    //     }
+    // }
 
     //add sản phẩm
     let fieldCounter = 1;
