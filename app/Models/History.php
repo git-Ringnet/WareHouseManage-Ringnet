@@ -81,14 +81,13 @@ class History extends Model
             $product_id = array();
             $product_id = $seri->getProductIdsHistory($keywords);
 
-            // dd($product_id);
             $history = $history->where(function ($query) use ($keywords, $product_id) {
-                // $query->orWhere('product_name', 'like', '%' . $keywords . '%');
-                // $query->orWhere('provide_name', 'like', '%' . $keywords . '%');
-                // $query->orWhere('name', 'like', '%' . $keywords . '%');
-                // $query->orWhere('import_code', 'like', '%' . $keywords . '%');
-                // $query->orWhere('guest_name', 'like', '%' . $keywords . '%');
-                // $query->orWhere('export_code', 'like', '%' . $keywords . '%');
+                $query->orWhere('product_name', 'like', '%' . $keywords . '%');
+                $query->orWhere('provide_name', 'like', '%' . $keywords . '%');
+                $query->orWhere('name', 'like', '%' . $keywords . '%');
+                $query->orWhere('import_code', 'like', '%' . $keywords . '%');
+                $query->orWhere('guest_name', 'like', '%' . $keywords . '%');
+                $query->orWhere('export_code', 'like', '%' . $keywords . '%');
                 $query->orWhereIn('history.product_id', $product_id);
             });
         }
