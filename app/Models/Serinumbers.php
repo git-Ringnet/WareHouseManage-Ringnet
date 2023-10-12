@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class Serinumbers extends Model
@@ -45,6 +44,69 @@ class Serinumbers extends Model
         return $delete_id;
     }
 
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id', 'id');
+    }
+    function getProductIdsByKeywords($keywords)
+    {
+        $productIds = [];
+
+        if (!empty($keywords)) {
+            $product_order = Product::all();
+
+            foreach ($product_order as $value) {
+                array_push($productIds, $value->id);
+            }
+
+            $serialnumber = DB::table('serinumbers')
+                ->join('product', 'serinumbers.product_id', '=', 'product.id')
+                ->whereIn('product.id', $productIds)
+                ->where('seri_status', '!=', 3)
+                ->where('serinumber', 'like', '%' . $keywords . '%')
+                ->select('serinumbers.product_id')
+                ->get();
+
+            $product_id = [];
+
+            foreach ($serialnumber as $value) {
+                array_push($product_id, $value->product_id);
+            }
+        }
+
+        return $product_id;
+    }
+
+    function getProductIdsHistory($keywords)
+    {
+        $productIds = [];
+
+        if (!empty($keywords)) {
+            $product_order = Product::all();
+
+            foreach ($product_order as $value) {
+                array_push($productIds, $value->id);
+            }
+
+            $serialnumber = DB::table('serinumbers')
+                ->join('product', 'serinumbers.product_id', '=', 'product.id')
+                ->whereIn('product.id', $productIds)
+                ->where('seri_status', '=', 3)
+                ->where('export_seri', '!=', 0)
+                ->where('serinumber', 'like', '%' . $keywords . '%')
+                ->select('serinumbers.product_id')
+                ->get();
+
+            $product_id = [];
+
+            foreach ($serialnumber as $value) {
+                array_push($product_id, $value->product_id);
+            }
+        }
+
+        return $product_id;
+    }
+
 
     public function checkSNS($request)
     {
@@ -55,7 +117,6 @@ class Serinumbers extends Model
                     ->where('product_unit', $SN['dvt'])
                     ->where('product_price', $SN['price'])
                     ->where('product_tax', $SN['tax'])
-                    ->where('license_id', Auth::user()->license_id)
                     ->get();
                 if ($product_order) {
                     foreach ($product_order as $order) {
@@ -64,7 +125,7 @@ class Serinumbers extends Model
                             foreach ($getSN as $seri) {
                                 if (isset($SN['Seri'])) {
                                     foreach ($SN['Seri'] as $Seri) {
-                                        if ($seri->serinumber == $Seri) {
+                                        if ($seri->serinumber == $Seri && $seri->provide_id == $SN['provide_id']) {
                                             return response()->json(['success' => false, 'msg' => $order->product_name, 'data' => $Seri]);
                                         }
                                     }
