@@ -208,7 +208,7 @@ class ReportController extends Controller
         } else {
             $sortType = 'desc';
         }
-        $tableorders = $this->orders->reportOrders($filters, $nhanvien,$nhanviens, $roles, $sortBy, $sortType);
+        $tableorders = $this->orders->reportOrders($filters, $nhanvien, $nhanviens, $roles, $sortBy, $sortType);
         $allRoles = new Roles();
         $allRoles = $allRoles->getAll();
         // dd($tableorders);
