@@ -929,6 +929,7 @@ $index = array_search($item['label'], $numberedLabels);
     $('.suscess').click(function(event) {
         event.preventDefault();
         $('#times-orders-options').hide();
+        $('#orders').prop('disabled', false);
     });
     $(document).on('change', '.date_start', function(e) {
         e.preventDefault();
