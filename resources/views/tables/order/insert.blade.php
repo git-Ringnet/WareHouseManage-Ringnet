@@ -76,9 +76,9 @@
         <form action="{{ route('insertProduct.store') }}" method="POST" id="form_submit">
             <section class="content-header content">
                 <div class="d-flex mb-1 action-don">
-                    <button class="btn btn-danger text-white" id="add_bill" type="submit" name="action"
-                        value="1">Duyệt đơn</button>
-                    {{-- <a href="#" class="btn btn-danger text-white" id="add_bill">Duyệt đơn</a> --}}
+                    {{-- <button class="btn btn-danger text-white" id="add_bill" type="submit" name="action"
+                        value="1">Duyệt đơn</button> --}}
+                    <a href="#" class="btn btn-danger text-white" id="add_bill">Duyệt đơn</a>
                 </div>
                 <div class="container-fluided">
                     <div class="row my-3">
@@ -295,10 +295,10 @@
             $('.total_price').val(formatCurrency(totalAmount));
             $('.total_import').val(Math.round(grandTotal));
         }
-
-        // Xử lý duyệt đơn nhanh
         var add_bill = document.getElementById('add_bill');
+        // Xử lý duyệt đơn nhanh
         if (checkS == 1) {
+            var add_bill = document.getElementById('add_bill');
             add_bill.addEventListener('click', function(e) {
                 checkS = 2;
                 var data = {};
