@@ -362,7 +362,10 @@
                             <th style="width:8%;">Thuế</th>
                             <th style="width:15%;">Thành tiền</th>
                             <th style="width:13%;">Ghi chú</th>
-                            <th style="width:10%;"></th>
+                            <th style="width:10%;">SN</th>
+                            @if ($order->order_status != 1 && $order->order_status != 2)
+                                <th style="width:10%;"></th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -433,8 +436,8 @@
                                         </svg>
                                     </button>
                                 </td>
-                                <td>
-                                    @if ($order->order_status != 1 && $order->order_status != 2)
+                                @if ($order->order_status != 1 && $order->order_status != 2)
+                                    <td>
                                         <a href="javascript:;" class="deleteRow">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
                                                 viewBox="0 0 32 32" fill="none">
@@ -443,8 +446,8 @@
                                                     fill="#555555" />
                                             </svg>
                                         </a>
-                                    @endif
-                                </td>
+                                    </td>
+                                @endif
                             </tr>
                             <?php $stt++; ?>
                         @endforeach
@@ -802,8 +805,6 @@
             })
         });
     }
-
-
 
     // Chỉnh sửa đơn hàng đã duyệt
     $(document).on('click', '#updateBill', function(e) {
