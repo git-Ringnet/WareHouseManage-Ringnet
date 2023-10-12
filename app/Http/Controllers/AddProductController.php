@@ -195,6 +195,7 @@ class AddProductController extends Controller
         $product_unit = $request->product_unit;
         $product_qty = $request->product_qty;
         $product_tax = $request->product_tax;
+        $product_trademark = $request->product_trademark;
         $product_price = str_replace(',', '', $request->product_price);
         $product_total = str_replace(',', '', $request->product_total);
 
@@ -216,6 +217,7 @@ class AddProductController extends Controller
                 'product_tax' => $product_tax[$i],
                 'product_price' => $product_price[$i],
                 'product_total' => $product_total[$i],
+                'product_trademark' => $product_trademark[$i],
                 'order_id' => $order->id,
                 'provide_id' => $request->provide_id == null ? $new_provide : $request->provide_id
             ];
