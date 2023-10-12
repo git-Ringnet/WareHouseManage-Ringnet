@@ -4,7 +4,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <div class="row link-report mb-1 mr-auto d-flex mt-auto px-0">
-            <div class="col-12">
+            <div class="col-12 pr-0">
                 <div class="ml-auto choosetime" style="bottom: -35px !important">
                     <div class="col d-flex px-0" style="position: relative; width: auto">
                         <div class="dropdown w-100" style="z-index:999">
@@ -83,7 +83,7 @@
                             </div>
                         </div>
                         {{-- Chọn khoảng --}}
-                        <div class="block-optionss" id="times-orders-options" style="display:none">
+                        <div class="block-optionss w-md-100" id="times-orders-options" style="display:none">
                             <div class="wrap w-100">
                                 <div class="input-group p-2 justify-content-around">
                                     <div class="start">
@@ -597,7 +597,8 @@ $index = array_search($item['label'], $numberedLabels);
                                             <div class="input-group p-2 justify-content-around">
                                                 <select class="sale_operator input-so" name="sale_operator"
                                                     style="width: 40%">
-                                                    <option value=">="
+                                                    <option
+                                                        value=">="
                                                         {{ request('sale_operator') === '>=' ? 'selected' : '' }}>
                                                         >=
                                                     </option>
@@ -657,7 +658,8 @@ $index = array_search($item['label'], $numberedLabels);
                                             <div class="input-group p-2 justify-content-around">
                                                 <select class="difference_operator input-so"
                                                     name="difference_operator" style="width: 40%">
-                                                    <option value=">="
+                                                    <option
+                                                        value=">="
                                                         {{ request('difference_operator') === '>=' ? 'selected' : '' }}>
                                                         >=
                                                     </option>
@@ -917,10 +919,12 @@ $index = array_search($item['label'], $numberedLabels);
         $("#this-month-orders").hide();
         $("#last-month-orders").hide();
         $("#3last-month-orders").hide();
+        $('#orders').prop('disabled', true);
     });
     $('#cancel-times-orders').click(function(event) {
         event.preventDefault();
         $('#times-orders-options').hide();
+        $('#orders').prop('disabled', false);
     });
     $('.suscess').click(function(event) {
         event.preventDefault();
