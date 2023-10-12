@@ -2,9 +2,9 @@
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-    @if (Session::has('section'))
+    {{-- @if (Session::has('section'))
         {{ Session::get('section') }}
-    @endif
+    @endif --}}
     <section class="content-header">
         <div class="row m-0 mb-1">
             <a href="{{ route('insertProduct.create') }}">

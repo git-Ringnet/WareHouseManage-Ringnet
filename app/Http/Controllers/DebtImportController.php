@@ -155,7 +155,7 @@ class DebtImportController extends Controller
      */
     public function edit($id)
     {
-        $debts = DebtImport::select('debt_import.*',  'productorders.product_tax as thue', 'orders.product_code as madon', 'provides.provide_name as nhacungcap', 'users.name as nhanvien', 'productorders.product_qty as soluong', 'productorders.product_price as gianhap')
+        $debts = DebtImport::select('debt_import.*',  'productorders.product_tax as thue', 'orders.product_code as madon', 'provides.provide_name as nhacungcap', 'users.name as nhanvien', 'productorders.product_qty as soluong', 'productorders.product_price as gianhap','orders.product_po as po')
             ->leftJoin('provides', 'provides.id', 'debt_import.provide_id')
             ->leftJoin('users', 'users.id', 'debt_import.user_id')
             ->leftJoin('orders', 'orders.id', 'debt_import.import_id')

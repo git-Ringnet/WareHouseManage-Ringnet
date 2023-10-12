@@ -253,9 +253,15 @@
             <div class="d-flex justify-content-between align-items-center my-2">
                 <div class="d-flex">
                     <div style="width:42%;">
+                        <label for="" style="padding: 0 0.75rem;">Số PO</label>
+                        <input type="text" name="product_po" placeholder="Số PO / Hợp đồng" class="form-control"
+                            value="{{ $order->product_po }}" @if (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin')) readonly @endif
+                            @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif>
+                    </div>
+                    <div style="width:42%;" class="ml-2">
                         <label for="" style="padding: 0 0.75rem;">Số hóa đơn</label>
                         <input oninput="validateBillInput(this)" type="text" name="product_code"
-                            class="form-control" value="{{ $order->product_code }}"
+                            placeholder="Số hóa đơn" class="form-control" value="{{ $order->product_code }}"
                             @if (Auth::user()->id != $order->users_id && !Auth::user()->can('isAdmin')) readonly @endif
                             @if (Auth::user()->id != $order->users_id && Auth::user()->roleid != 1) <?php echo 'readonly'; ?> @endif>
                     </div>
@@ -301,8 +307,8 @@
                             <th style="width:12%;">Giá nhập</th>
                             <th style="width:8%;">Thuế</th>
                             <th style="width:15%;">Thành tiền</th>
-                            <th style="width:13%;">Ghi chú</th>
-                            <th style="width:0%;">S/N</th>
+                            <th style="width:13%;">Bảo hành</th>
+                            <th style="width:0%;">SN</th>
                             <th style="width:0%;"></th>
                         </tr>
                     </thead>
@@ -544,6 +550,7 @@
 </div>
 <script src="{{ asset('dist/js/productOrder.js') }}"></script>
 <script>
+    var checkS = 1;
     var isChecked = $('#debtCheckbox').is(':checked');
     var oldID = $('#provide_id').val();
     // Đặt trạng thái của input dựa trên checkbox
@@ -574,116 +581,117 @@
 
     // Kiểm tra dữ liệu trước khi submit
     var checkSubmit = false;
+    if (checkS == 1) {
+        // Chuyển hướng form để thêm dữ liệu
+        $(document).on('click', '.updateBillEdit', function(e) {
+            checkS = 2;
+            var data = {};
+            this.classList.add('disabled');
+            var countDown = 10;
+            var provide_id = $('#provide_id').val() == "" ? 0 : $('#provide_id').val();
+            var countdownInterval = setInterval(function() {
+                countDown--;
+                if (countDown <= 0) {
+                    clearInterval(countdownInterval);
+                    $('.updateBillEdit').removeClass('disabled');
+                }
+            }, 100);
 
-    // Chuyển hướng form để thêm dữ liệu
-    $(document).on('click', '.updateBillEdit', function(e) {
-        var data = {};
-        this.classList.add('disabled');
-        var countDown = 10;
-        var provide_id = $('#provide_id').val() == "" ? 0 : $('#provide_id').val();
-        var countdownInterval = setInterval(function() {
-            countDown--;
-            if (countDown <= 0) {
-                clearInterval(countdownInterval);
-                $('.updateBillEdit').removeClass('disabled');
-            }
-        }, 100);
+            e.preventDefault();
+            $('#inputContainer tbody tr').each(function() {
+                var id, SerialNumbers;
+                var productName = $(this).find('.name_product').val().trim();
+                var product_unit = $(this).find('.unit_product').val().trim();
+                var product_price = $(this).find('.product_price').val().trim();
+                var product_tax = $(this).find('.product_tax').val().trim();
+                var rowSTT = $(this).find('.STT').text();
+                // Tạo mảng con nếu nó chưa tồn tại
+                if (!data.Product) {
+                    data.Product = {};
+                }
 
-        e.preventDefault();
-        $('#inputContainer tbody tr').each(function() {
-            var id, SerialNumbers;
-            var productName = $(this).find('.name_product').val().trim();
-            var product_unit = $(this).find('.unit_product').val().trim();
-            var product_price = $(this).find('.product_price').val().trim();
-            var product_tax = $(this).find('.product_tax').val().trim();
-            var rowSTT = $(this).find('.STT').text();
-            // Tạo mảng con nếu nó chưa tồn tại
-            if (!data.Product) {
-                data.Product = {};
-            }
+                if (!data.Product[rowSTT]) {
+                    data.Product[rowSTT] = {
+                        name: productName,
+                        dvt: product_unit,
+                        price: product_price,
+                        tax: product_tax,
+                        provide_id: provide_id,
+                        Seri: []
+                    };
+                }
 
-            if (!data.Product[rowSTT]) {
-                data.Product[rowSTT] = {
-                    name: productName,
-                    dvt: product_unit,
-                    price: product_price,
-                    tax: product_tax,
-                    provide_id: provide_id,
-                    Seri: []
-                };
-            }
-
-            id = $(this).find('.exampleModal').data('target');
-            if (oldID == provide_id) {
-                SerialNumbers = $(id).find(
-                    '.modal-body #table_SNS tbody tr td input[name^="product_SN_new"]').map(
-                    function() {
-                        return $(this).val().trim();
-                    }).get();
-            } else {
-                SerialNumbers = $(id).find(
-                    '.modal-body #table_SNS tbody tr td input[name^="product_SN"]').map(
-                    function() {
-                        return $(this).val().trim();
-                    }).get();
-            }
-
-
-            if (SerialNumbers !== null) {
-                data.Product[rowSTT].Seri.push(...SerialNumbers);
-            }
-        });
-
-        $.ajax({
-            url: "{{ route('checkSN') }}",
-            type: "get",
-            data: {
-                Serialnumber: data.Product,
-            },
-            success: function(result) {
-                if (result.success == false) {
-                    error = true;
-                    alert('Sản phẩm ' + result.msg + ' đã tồn tại serial ' + result.data);
-                    return false;
+                id = $(this).find('.exampleModal').data('target');
+                if (oldID == provide_id) {
+                    SerialNumbers = $(id).find(
+                        '.modal-body #table_SNS tbody tr td input[name^="product_SN_new"]').map(
+                        function() {
+                            return $(this).val().trim();
+                        }).get();
                 } else {
-                    if ($('#form_submit')[0].checkValidity()) {
-                        var er = false;
-                        if (checkRow() == false) {
-                            er = true;
-                            alert('Vui lòng nhập ít nhất 1 sản phẩm');
-                        }
+                    SerialNumbers = $(id).find(
+                        '.modal-body #table_SNS tbody tr td input[name^="product_SN"]').map(
+                        function() {
+                            return $(this).val().trim();
+                        }).get();
+                }
+                if (SerialNumbers !== null) {
+                    data.Product[rowSTT].Seri.push(...SerialNumbers);
+                }
+            });
 
-                        // Kiểm tra trùng sản phẩm con
-                        if (checkDuplicateRows()) {
-                            alert('Sản phẩm đã tồn tại');
-                        }
-
-                        if (checkSNNull() == true) {
-                            er = true;
-                            alert('Vui lòng nhập đủ số lượng SN');
-                        }
-                        // Kiểm tra có lỗi hay không
-                        var hasErrors = checkRow() === false ||
-                            checkDuplicateRows() === true || er === true;
-
-                        if (hasErrors) {
-                            return false;
-                        } else {
-                            $('#form_submit').attr('action', '{{ route('updateBillEdit') }}');
-                            $('input[name="_method"]').remove();
-                            updateProductSN();
-                            $('#form_submit')[0].submit();
-                        }
+            $.ajax({
+                url: "{{ route('checkSN') }}",
+                type: "get",
+                data: {
+                    Serialnumber: data.Product,
+                },
+                success: function(result) {
+                    if (result.success == false) {
+                        error = true;
+                        alert('Sản phẩm ' + result.msg + ' đã tồn tại serial ' + result.data);
+                        checkS = 1;
+                        return false;
                     } else {
-                        $('#form_submit')[0].reportValidity();
+                        if ($('#form_submit')[0].checkValidity()) {
+                            var er = false;
+                            if (checkRow() == false) {
+                                er = true;
+                                alert('Vui lòng nhập ít nhất 1 sản phẩm');
+                            }
+
+                            // Kiểm tra trùng sản phẩm con
+                            if (checkDuplicateRows()) {
+                                alert('Sản phẩm đã tồn tại');
+                            }
+
+                            if (checkSNNull() == true) {
+                                er = true;
+                                alert('Vui lòng nhập đủ số lượng SN');
+                            }
+                            // Kiểm tra có lỗi hay không
+                            var hasErrors = checkRow() === false ||
+                                checkDuplicateRows() === true || er === true;
+
+                            if (hasErrors) {
+                                checkS = 1;
+                                return false;
+                            } else {
+                                $('#form_submit').attr('action', '{{ route('updateBillEdit') }}');
+                                $('input[name="_method"]').remove();
+                                updateProductSN();
+                                $('#form_submit')[0].submit();
+                            }
+                        } else {
+                            $('#form_submit')[0].reportValidity();
+                        }
                     }
                 }
-            }
+            });
         });
-    });
+    }
 
     setSTT();
-
 
     // AJAX hiển thị thông tin nhà cung cấp 
     $('.search-info').click(function() {

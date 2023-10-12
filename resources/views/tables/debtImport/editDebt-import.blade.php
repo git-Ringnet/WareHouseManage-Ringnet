@@ -5,7 +5,7 @@
         <span><a href="{{ route('debt_import.index') }}">Công nợ nhập</a></span>
         <span class="px-1">/</span>
         <span><b>Đơn Hàng</b></span>
-        <span class="ml-1"><b>{{$debts->madon}}</b></span>
+        <span class="ml-1"><b>{{ $debts->madon }}</b></span>
     </div>
     <form action="{{ route('debt_import.update', $debts->id) }}" method="POST">
         @csrf
@@ -20,23 +20,24 @@
             <div class="row  mt-2">
                 <div class="col-md-3 col-sm-6">
                     <div class="form-group">
+                        <div class="labelform">Số PO</div>
+                        <input type="text" class="form-control" value="{{ $debts->po }}" name=""
+                            id="" readonly>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="form-group">
                         <div class="labelform">Hóa đơn vào</div>
-                        <input type="text" class="form-control" value="{{$debts->madon}}" name="" id=""
-                            readonly>
+                        <input type="text" class="form-control" value="{{ $debts->madon }}" name=""
+                            id="" readonly>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-6">
                     <div class="form-group">
                         <div class="labelform">Ngày nhập hóa đơn</div>
-                        <input type="text" class="form-control" value="{{date_format(new DateTime($debts->created_at),"d-m-Y") }}" name="" id=""
-                            readonly>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <div class="form-group">
-                        <div class="labelform">Nhà cung cấp</div>
-                        <input type="text" class="form-control" value="{{$debts->nhacungcap}}" name="" id=""
-                            readonly>
+                        <input type="text" class="form-control"
+                            value="{{ date_format(new DateTime($debts->created_at), 'd-m-Y') }}" name=""
+                            id="" readonly>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-6"></div>
@@ -44,16 +45,23 @@
             <div class="row">
                 <div class="col-md-3 col-sm-6">
                     <div class="form-group">
+                        <div class="labelform">Nhà cung cấp</div>
+                        <input type="text" class="form-control" value="{{ $debts->nhacungcap }}" name=""
+                            id="" readonly>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="form-group">
                         <div class="labelform">Nhân viên</div>
-                        <input type="text" class="form-control" value="{{$debts->nhanvien}}" name="" id=""
-                            readonly>
+                        <input type="text" class="form-control" value="{{ $debts->nhanvien }}" name=""
+                            id="" readonly>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-6">
                     <div class="form-group">
                         <div class="labelform">Tổng tiền nhập(+VAT)</div>
-                        <input type="text" class="form-control" value="{{ number_format($debts->total_import) }}" name=""
-                            id="" readonly>
+                        <input type="text" class="form-control" value="{{ number_format($debts->total_import) }}"
+                            name="" id="" readonly>
                     </div>
                 </div>
             </div>
@@ -79,14 +87,20 @@
                                     @foreach ($product as $item)
                                         <tr>
                                             <td><?php echo $stt += 1; ?></td>
-                                            <td class="text-left">{{$item->tensanpham}}</td>
-                                            <td class="text-center">{{$item->dvt}}</td>
-                                            <td class="text-right">{{$item->soluong}}</td>
-                                            <td class="text-right">{{number_format($item->gianhap)}}</td>
+                                            <td class="text-left">{{ $item->tensanpham }}</td>
+                                            <td class="text-center">{{ $item->dvt }}</td>
+                                            <td class="text-right">{{ $item->soluong }}</td>
+                                            <td class="text-right">{{ number_format($item->gianhap) }}</td>
                                             <td class="text-right">
-                                                {{number_format($item->soluong*$item->gianhap)}}
+                                                {{ number_format($item->soluong * $item->gianhap) }}
                                             </td>
-                                            <td class="text-center">@if($item->thue == 99) NOVAT @else {{$item->thue}}%  @endif</td>
+                                            <td class="text-center">
+                                                @if ($item->thue == 99)
+                                                    NOVAT
+                                                @else
+                                                    {{ $item->thue }}%
+                                                @endif
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>

@@ -72,12 +72,14 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="pwd">Công nợ:</label>
+                                    {{ $provides->debt }}
                                     <div class="d-flex align-items-center">
                                         <input type="text" oninput="validateNumberInput(this)" class="form-control"
                                             id="debtInput" value="{{ $provides->debt }}" name="debt"
-                                            style="width:15%;" disabled="">
+                                            style="width:15%;">
                                         <span class="ml-2" id="data-debt">ngày</span>
-                                        <input type="checkbox" id="debtCheckbox" value="0" name="debt"
+                                        <input type="checkbox" id="debtCheckbox"
+                                            value="0" name="debt"
                                             class="ml-3" <?php if ($provides->debt == 0) {
                                                 echo 'checked';
                                             } ?>>
@@ -111,10 +113,13 @@
             input.value = '';
         }
     }
-    var isChecked = $('#debtCheckbox').is(':checked');
     // Đặt trạng thái của input dựa trên checkbox
-    $('#debtInput').prop('disabled', isChecked);
-    $('#debtInput').val(0);
+    var isChecked = $('#debtCheckbox').is(':checked');
+    if (isChecked) {
+        $('#debtInput').prop('disabled', isChecked);
+        $('#debtInput').val(0);
+    }
+
     // Xử lý sự kiện khi checkbox thay đổi
     $(document).on('change', '#debtCheckbox', function() {
         var isChecked = $(this).is(':checked');

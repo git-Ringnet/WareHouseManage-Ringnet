@@ -92,17 +92,26 @@
 </div>
 <script>
     //cho phép nhập số 
+    // function validateNumberInput(input) {
+    //     const regex = /^[-+]?[0-9]{1,3}(?:,?[0-9]{3})*(?:\.[0-9]+)?$/;
+    //     const value = input.value.replace(/,/g, '');
+    //     if (!regex.test(value)) {
+    //         input.value = '';
+    //     }
+    // }
     function validateNumberInput(input) {
-        const regex = /^[-+]?[0-9]{1,3}(?:,?[0-9]{3})*(?:\.[0-9]+)?$/;
-        const value = input.value.replace(/,/g, '');
-        if (!regex.test(value)) {
-            input.value = '';
+        var regex = /^[0-9][0-9-]*$/;
+        if (!regex.test(input.value)) {
+            input.value = input.value.replace(/[^0-9]/g, '');
         }
     }
     var isChecked = $('#debtCheckbox').is(':checked');
-    // Đặt trạng thái của input dựa trên checkbox
-    $('#debtInput').prop('disabled', isChecked);
-    $('#debtInput').val(0);
+    if (isChecked) {
+        // Đặt trạng thái của input dựa trên checkbox
+        $('#debtInput').prop('disabled', isChecked);
+        $('#debtInput').val(0);
+    }
+
     // Xử lý sự kiện khi checkbox thay đổi
     $(document).on('change', '#debtCheckbox', function() {
         var isChecked = $(this).is(':checked');

@@ -193,6 +193,7 @@ class AddProductController extends Controller
         }
         $product_name = $request->product_name;
         $product_unit = $request->product_unit;
+        $product_trademark = $request->product_trademark;
         $product_qty = $request->product_qty;
         $product_tax = $request->product_tax;
         $product_price = str_replace(',', '', $request->product_price);
@@ -213,6 +214,7 @@ class AddProductController extends Controller
             $dataProductOrder = [
                 'product_name' => $product_name[$i],
                 'product_unit' => $product_unit[$i],
+                'product_trademark' => $product_trademark[$i],
                 'product_qty' => $product_qty[$i],
                 'product_tax' => $product_tax[$i],
                 'product_price' => $product_price[$i],
@@ -434,6 +436,7 @@ class AddProductController extends Controller
                 $updateOrder->product_code = $request->product_code;
                 $updateOrder->created_at = $request->product_create === null ? Carbon::now() : $request->product_create;
                 $updateOrder->total_tax = $total_import;
+                $updateOrder->product_po = $request->product_po;
                 $updateOrder->save();
             }
             // Xóa SN Không tồn tại
@@ -488,6 +491,7 @@ class AddProductController extends Controller
                     'product_price' => $product_price[$i],
                     'product_tax' => $product_tax[$i],
                     'product_total' => $product_total[$i],
+                    'product_po' => $request->product_po,
                     'provide_id' => $request->provide_id == null ? $newProvide : $request->provide_id,
                     'product_code' => $request->product_code,
                     'created_at' => $request->product_create === null ? Carbon::now() : $request->product_create
@@ -499,7 +503,7 @@ class AddProductController extends Controller
                 // Thêm id sản phẩm cho SN
                 Serinumbers::where('product_orderid', $id_product[$i])->update([
                     'product_id' => $newP,
-                    'seri_status' => 1
+                    'seri_status' => 1,
                 ]);
             }
             $updateOrder->order_status = 1;
@@ -620,7 +624,8 @@ class AddProductController extends Controller
             'product_code' =>  $request->product_code,
             'created_at' => $request->product_create === null ? Carbon::now() : $request->product_create,
             'total' => $total_price,
-            'total_tax' => $request->total_import
+            'total_tax' => $request->total_import,
+            'product_po' => $request->product_po
         ];
         $order = $this->orders->addOrder($dataOrder);
         for ($i = 0; $i < count($product_name); $i++) {
@@ -672,6 +677,7 @@ class AddProductController extends Controller
                     'product_total' => $product_total[$i],
                     'provide_id' => $request->provide_id == null ? $new :  $request['provide_id'],
                     'product_code' => $request->product_code,
+                    'product_po' => $request->product_po,
                     'created_at' => $request->product_create === null ? Carbon::now() : $request->product_create
                 ];
                 $pro = $this->product->addProduct($data1);
@@ -893,6 +899,7 @@ class AddProductController extends Controller
                 $order->product_code = $request->product_code;
                 $order->created_at = $request->product_create === null ? Carbon::now() : $request->product_create;
                 $order->total_tax = $total_tax;
+                $order->product_po = $request->product_po;
                 $order->save();
             }
             // Lấy ra tất cả sản phẩm theo id bảng order
@@ -1180,7 +1187,8 @@ class AddProductController extends Controller
                     'created_at' => $request->product_create === null ? Carbon::now() : $request->product_create,
                     'provide_id' => $request->provide_id == null ? $add_newProvide : $request->provide_id,
                     'total' => $total_import,
-                    'total_tax' => $total_import
+                    'total_tax' => $total_import,
+                    'product_po' => $request->product_po
                 ];
                 $this->orders->updateOrder($dataOrder, $request->order_id);
 
@@ -1227,6 +1235,7 @@ class AddProductController extends Controller
                     }
                     $data['product_code'] = $request->product_code;
                     $data['created_at'] = $request->product_create === null ? Carbon::now() : $request->product_create;
+                    $data['product_po'] = $request->product_po;
                     $this->product->updateProduct($data, $f->product_id);
                     //Cập nhật công nợ xuất
                     $productIds = $request->product_id;
@@ -1349,6 +1358,7 @@ class AddProductController extends Controller
                             $va->debt_import_end = $endDateFormatted;
                             $va->debt_import_start = $request->product_create === null ? Carbon::now() : $request->product_create;
                             $va->total_difference = ($va->price_export * $va->export_qty) - ($va->export_qty * $Pro->product_price) - $va->tranport_fee;
+                            $va->product_po = $request->product_po;
                             $va->save();
                         }
                     }
