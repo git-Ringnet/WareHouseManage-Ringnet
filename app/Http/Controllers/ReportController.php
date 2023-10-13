@@ -648,9 +648,6 @@ class ReportController extends Controller
                 $lastMonth = $today->subMonth(3);
                 $firstDayOfMonth = $lastMonth->startOfMonth()->format('Y-m-d');
                 $lastDayOfMonth = $lastMonth->addMonths(2)->endOfMonth()->format('Y-m-d');
-                $lastMonth1 = $today->subMonthNoOverflow(3);
-                $firstDayOfMonth1 = $lastMonth1->startOfMonth()->format('Y-m-d');
-                $lastDayOfMonth1 = $lastMonth1->addMonths(2)->endOfMonth()->format('Y-m-d');
                 $count = Exports::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('exports')->where('exports.export_status', '=', 2)
                         ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
@@ -674,8 +671,8 @@ class ReportController extends Controller
                 }, 'countProfit')
                     ->first();
                 $filters = [];
-                $filters[] = Carbon::parse($firstDayOfMonth1);
-                $filters[] = Carbon::parse($lastDayOfMonth1);
+                $filters[] = Carbon::parse($firstDayOfMonth);
+                $filters[] = Carbon::parse($lastDayOfMonth);
                 $Tableexports = $this->exports->dataReportAjax($filters);
                 $test1 = [];
                 foreach ($Tableexports as $item) {
@@ -684,10 +681,7 @@ class ReportController extends Controller
             } else {
                 $lastMonth = $today->subMonthNoOverflow(3);
                 $firstDayOfMonth = $lastMonth->startOfMonth()->format('Y-m-d');
-                $lastDayOfMonth = $lastMonth->endOfMonth()->addMonths(2)->format('Y-m-d');
-                $lastMonth1 = $today->subMonthNoOverflow(2);
-                $firstDayOfMonth1 = $lastMonth1->startOfMonth()->format('Y-m-d');
-                $lastDayOfMonth1 = $lastMonth1->addMonths(2)->endOfMonth()->format('Y-m-d');
+                $lastDayOfMonth = $lastMonth->addMonths(2)->endOfMonth()->format('Y-m-d');
                 $count = Exports::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('exports')->where('exports.export_status', '=', 2)
                         ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
@@ -710,8 +704,8 @@ class ReportController extends Controller
                         ->selectRaw('sum(total_difference)');
                 }, 'countProfit')->first();
                 $filters = [];
-                $filters[] = Carbon::parse($firstDayOfMonth1);
-                $filters[] = Carbon::parse($lastDayOfMonth1);
+                $filters[] = Carbon::parse($firstDayOfMonth);
+                $filters[] = Carbon::parse($lastDayOfMonth);
                 $Tableexports = $this->exports->dataReportAjax($filters);
                 $test1 = [];
                 foreach ($Tableexports as $item) {
@@ -724,8 +718,8 @@ class ReportController extends Controller
                 'countProfit' => $countProfit->countProfit,
                 'countExport' => $count->countExport,
                 'sumExport' => $count->sumExport,
-                'start_date' => Carbon::parse($firstDayOfMonth1)->format('d-m-Y'),
-                'end_date' => Carbon::parse($lastDayOfMonth1)->format('d-m-Y')
+                'start_date' => Carbon::parse($firstDayOfMonth)->format('d-m-Y'),
+                'end_date' => Carbon::parse($lastDayOfMonth)->format('d-m-Y')
             ];
         } else {
             $date_start = Carbon::parse($data['date_start']);
