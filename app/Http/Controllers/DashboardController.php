@@ -313,10 +313,10 @@ class DashboardController extends Controller
                 'end_date' => $lastMonth->endOfMonth()->format('d-m-Y')
             ];
         } elseif ($data['data'] == 3) { // Xử lý lấy dữ liệu 3 tháng trước
-            if ($today->month == 1) {
+            if ($today->month == 10) {
                 $lastMonth = $today->subMonth(3);
                 $firstDayOfMonth = $lastMonth->startOfMonth()->format('Y-m-d');
-                $lastDayOfMonth = $lastMonth->endOfMonth()->addMonths(2)->format('Y-m-d');
+                $lastDayOfMonth = $lastMonth->addMonths(2)->endOfMonth()->format('Y-m-d');
                 $count = Orders::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('orders')->where('orders.order_status', '=', 1)
                         ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
@@ -330,7 +330,7 @@ class DashboardController extends Controller
             } else {
                 $lastMonth = $today->subMonthNoOverflow(3);
                 $firstDayOfMonth = $lastMonth->startOfMonth()->format('Y-m-d');
-                $lastDayOfMonth = $lastMonth->endOfMonth()->addMonths(2)->format('Y-m-d');
+                $lastDayOfMonth = $lastMonth->addMonths(2)->endOfMonth()->format('Y-m-d');
                 $count = Orders::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('orders')->where('orders.order_status', '=', 1)
                         ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
@@ -345,8 +345,8 @@ class DashboardController extends Controller
             return [
                 'countID' => $count->countID,
                 'sumTotal' => $count->sumTotal,
-                'start_date' => $lastMonth->startOfMonth()->subMonths(2)->format('d-m-Y'),
-                'end_date' => $lastMonth->endOfMonth()->addMonths(2)->format('d-m-Y')
+                'start_date' => Carbon::parse($firstDayOfMonth)->format('d-m-Y'),
+                'end_date' =>  Carbon::parse($lastDayOfMonth)->format('d-m-Y')
             ];
         } else {
             $date_start = Carbon::parse($data['date_start']);
@@ -459,10 +459,10 @@ class DashboardController extends Controller
                 'end_date' => $lastMonth->endOfMonth()->format('d-m-Y')
             ];
         } elseif ($data['data'] == 3) { // Xử lý lấy dữ liệu 3 tháng trước
-            if ($today->month == 1) {
+            if ($today->month == 10) {
                 $lastMonth = $today->subMonth(3);
                 $firstDayOfMonth = $lastMonth->startOfMonth()->format('Y-m-d');
-                $lastDayOfMonth = $lastMonth->endOfMonth()->addMonths(2)->format('Y-m-d');
+                $lastDayOfMonth = $lastMonth->addMonths(2)->endOfMonth()->format('Y-m-d');
                 $count = Exports::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('exports')->where('exports.export_status', '=', 2)
                         ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
@@ -477,7 +477,7 @@ class DashboardController extends Controller
             } else {
                 $lastMonth = $today->subMonthNoOverflow(3);
                 $firstDayOfMonth = $lastMonth->startOfMonth()->format('Y-m-d');
-                $lastDayOfMonth = $lastMonth->endOfMonth()->addMonths(2)->format('Y-m-d');
+                $lastDayOfMonth = $lastMonth->addMonths(2)->endOfMonth()->format('Y-m-d');
                 $count = Exports::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('exports')->where('exports.export_status', '=', 2)
                         ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
@@ -493,8 +493,8 @@ class DashboardController extends Controller
             return [
                 'countExport' => $count->countExport,
                 'sumExport' => $count->sumExport,
-                'start_date' => $lastMonth->startOfMonth()->subMonths(2)->format('d-m-Y'),
-                'end_date' => $lastMonth->endOfMonth()->addMonths(2)->format('d-m-Y')
+                'start_date' => Carbon::parse($firstDayOfMonth)->format('d-m-Y'),
+                'end_date' =>  Carbon::parse($lastDayOfMonth)->format('d-m-Y')
             ];
         } else {
             $date_start = Carbon::parse($data['date_start']);
@@ -609,10 +609,10 @@ class DashboardController extends Controller
                 'end_date' => $lastMonth->endOfMonth()->format('d-m-Y')
             ];
         } elseif ($data['data'] == 3) { // Xử lý lấy dữ liệu 3 tháng trước
-            if ($today->month == 1) {
+            if ($today->month == 10) {
                 $lastMonth = $today->subMonth(3);
                 $firstDayOfMonth = $lastMonth->startOfMonth()->format('Y-m-d');
-                $lastDayOfMonth = $lastMonth->endOfMonth()->addMonths(2)->format('Y-m-d');
+                $lastDayOfMonth = $lastMonth->addMonths(2)->endOfMonth()->format('Y-m-d');
                 $count = Product::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('product')->where('product.product_qty', '>', 0)
                         ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
@@ -627,7 +627,7 @@ class DashboardController extends Controller
             } else {
                 $lastMonth = $today->subMonthNoOverflow(3);
                 $firstDayOfMonth = $lastMonth->startOfMonth()->format('Y-m-d');
-                $lastDayOfMonth = $lastMonth->endOfMonth()->addMonths(2)->format('Y-m-d');
+                $lastDayOfMonth = $lastMonth->addMonths(2)->endOfMonth()->format('Y-m-d');
                 $count = Product::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('product')->where('product.product_qty', '>', 0)
                         ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
@@ -643,8 +643,8 @@ class DashboardController extends Controller
             return [
                 'countInventory' => $count->countInventory,
                 'sumInventory' => $count->sumInventory,
-                'start_date' => $lastMonth->startOfMonth()->subMonths(2)->format('d-m-Y'),
-                'end_date' => $lastMonth->endOfMonth()->addMonths(2)->format('d-m-Y')
+                'start_date' => Carbon::parse($firstDayOfMonth)->format('d-m-Y'),
+                'end_date' =>  Carbon::parse($lastDayOfMonth)->format('d-m-Y')
             ];
         } else {
             $date_start = Carbon::parse($data['date_start']);
@@ -783,10 +783,10 @@ class DashboardController extends Controller
                 ];
             }
         } elseif ($data['data'] == 3) { // Xử lý lấy dữ liệu 3 tháng trước
-            if ($today->month == 1) {
+            if ($today->month == 10) {
                 $lastMonth = $today->subMonth(3);
                 $firstDayOfMonth = $lastMonth->startOfMonth()->format('Y-m-d');
-                $lastDayOfMonth = $lastMonth->endOfMonth()->addMonths(2)->format('Y-m-d');
+                $lastDayOfMonth = $lastMonth->addMonths(2)->endOfMonth()->format('Y-m-d');
                 $count = Debt::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('debts')->where('debt_status', '!=', 1)
                         ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
@@ -800,7 +800,7 @@ class DashboardController extends Controller
             } else {
                 $lastMonth = $today->subMonthNoOverflow(3);
                 $firstDayOfMonth = $lastMonth->startOfMonth()->format('Y-m-d');
-                $lastDayOfMonth = $lastMonth->endOfMonth()->addMonths(2)->format('Y-m-d');
+                $lastDayOfMonth = $lastMonth->addMonths(2)->endOfMonth()->format('Y-m-d');
                 $count = Debt::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('debts')->where('debt_status', '!=', 1)
                         ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
@@ -812,21 +812,19 @@ class DashboardController extends Controller
                         ->selectRaw('SUM(total_import)');
                 },  'countDebtImport')->first();
             }
-            if($count)
-            {
+            if ($count) {
                 return [
                     'debt_import' => $countDebtImport->countDebtImport,
                     'debt_export' => $count->count,
-                    'start_date' => $lastMonth->startOfMonth()->subMonths(2)->format('d-m-Y'),
-                    'end_date' => $lastMonth->endOfMonth()->addMonths(2)->format('d-m-Y')
+                    'start_date' => Carbon::parse($firstDayOfMonth)->format('d-m-Y'),
+                    'end_date' =>  Carbon::parse($lastDayOfMonth)->format('d-m-Y')
                 ];
-            }
-            else{
+            } else {
                 return [
                     'debt_import' => $countDebtImport->countDebtImport,
                     'debt_export' => 0,
-                    'start_date' => $lastMonth->startOfMonth()->subMonths(2)->format('d-m-Y'),
-                    'end_date' => $lastMonth->endOfMonth()->addMonths(2)->format('d-m-Y')
+                    'start_date' => Carbon::parse($firstDayOfMonth)->format('d-m-Y'),
+                    'end_date' =>  Carbon::parse($lastDayOfMonth)->format('d-m-Y')
                 ];
             }
         } else {
@@ -844,13 +842,12 @@ class DashboardController extends Controller
             },  'countDebtImport')->first();
             array_push($data1, $count);
             array_push($data1, $countDebtImport);
-            if($count){
+            if ($count) {
                 return [
                     'debt_import' => $countDebtImport->countDebtImport,
                     'debt_export' => $count->count,
                 ];
-            }
-            else{
+            } else {
                 return [
                     'debt_import' => $countDebtImport->countDebtImport,
                     'debt_export' => 0,
@@ -931,10 +928,10 @@ class DashboardController extends Controller
                 'end_date' => $lastMonth->endOfMonth()->format('d-m-Y')
             ];
         } elseif ($data['data'] == 3) { // Xử lý lấy dữ liệu 3 tháng trước
-            if ($today->month == 1) {
+            if ($today->month == 10) {
                 $lastMonth = $today->subMonth(3);
                 $firstDayOfMonth = $lastMonth->startOfMonth()->format('Y-m-d');
-                $lastDayOfMonth = $lastMonth->endOfMonth()->addMonths(2)->format('Y-m-d');
+                $lastDayOfMonth = $lastMonth->addMonths(2)->endOfMonth()->format('Y-m-d');
                 $count = Debt::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('debts')
                         ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
@@ -944,7 +941,7 @@ class DashboardController extends Controller
             } else {
                 $lastMonth = $today->subMonthNoOverflow(3);
                 $firstDayOfMonth = $lastMonth->startOfMonth()->format('Y-m-d');
-                $lastDayOfMonth = $lastMonth->endOfMonth()->addMonths(2)->format('Y-m-d');
+                $lastDayOfMonth = $lastMonth->addMonths(2)->endOfMonth()->format('Y-m-d');
                 $count = Debt::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('debts')
                         ->whereBetween('created_at', [$firstDayOfMonth, $lastDayOfMonth])
@@ -954,8 +951,8 @@ class DashboardController extends Controller
             }
             return [
                 'countProfit' => $count->countProfit,
-                'start_date' => $lastMonth->startOfMonth()->subMonths(2)->format('d-m-Y'),
-                'end_date' => $lastMonth->endOfMonth()->addMonths(2)->format('d-m-Y')
+                'start_date' => Carbon::parse($firstDayOfMonth)->format('d-m-Y'),
+                'end_date' =>  Carbon::parse($lastDayOfMonth)->format('d-m-Y')
             ];
         } else {
             $date_start = Carbon::parse($data['date_start']);
