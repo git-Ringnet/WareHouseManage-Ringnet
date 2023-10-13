@@ -381,13 +381,13 @@ class ReportController extends Controller
                 'end_date' => $lastMonth->endOfMonth()->format('d-m-Y')
             ];
         } elseif ($data['data'] == 3) { // Xử lý lấy dữ liệu 3 tháng trước
-            if ($today->month == 1) {
+            if ($today->month == 10) {
                 $lastMonth = $today->subMonth(3);
                 $firstDayOfMonth = $lastMonth->startOfMonth()->format('Y-m-d');
-                $lastDayOfMonth = $lastMonth->endOfMonth()->addMonths(2)->format('Y-m-d');
-                $lastMonth1 = $today->subMonthNoOverflow(2);
+                $lastDayOfMonth = $lastMonth->addMonths(2)->endOfMonth()->format('Y-m-d');
+                $lastMonth1 = $today->subMonthNoOverflow(3);
                 $firstDayOfMonth1 = $lastMonth1->startOfMonth()->format('Y-m-d');
-                $lastDayOfMonth1 = $lastMonth1->endOfMonth()->addMonths(2)->format('Y-m-d');
+                $lastDayOfMonth1 = $lastMonth1->addMonths(2)->endOfMonth()->format('Y-m-d');
                 $count = Orders::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('orders')->where('orders.order_status', '=', 1)
                         ->where('orders.license_id', Auth::user()->license_id)
@@ -417,10 +417,10 @@ class ReportController extends Controller
             } else {
                 $lastMonth = $today->subMonthNoOverflow(3);
                 $firstDayOfMonth = $lastMonth->startOfMonth()->format('Y-m-d');
-                $lastDayOfMonth = $lastMonth->endOfMonth()->addMonths(2)->format('Y-m-d');
+                $lastDayOfMonth = $lastMonth->addMonths(2)->endOfMonth()->format('Y-m-d');
                 $lastMonth1 = $today->subMonthNoOverflow(2);
                 $firstDayOfMonth1 = $lastMonth1->startOfMonth()->format('Y-m-d');
-                $lastDayOfMonth1 = $lastMonth1->endOfMonth()->addMonths(2)->format('Y-m-d');
+                $lastDayOfMonth1 = $lastMonth1->addMonths(2)->endOfMonth()->format('Y-m-d');
                 $count = Orders::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('orders')->where('orders.order_status', '=', 1)
                         ->where('orders.license_id', Auth::user()->license_id)
@@ -454,8 +454,8 @@ class ReportController extends Controller
                 'countID' => $count->countID,
                 'sumTotal' => $count->sumTotal,
                 'countDebtImport' => $countDebtImport->countDebtImport,
-                'start_date' => $lastMonth->startOfMonth()->subMonths(2)->format('d-m-Y'),
-                'end_date' => $lastMonth->endOfMonth()->addMonths(2)->format('d-m-Y')
+                'start_date' => Carbon::parse($firstDayOfMonth)->format('d-m-Y'),
+                'end_date' => Carbon::parse($lastDayOfMonth)->format('d-m-Y')
             ];
         } else {
             $date_start = Carbon::parse($data['date_start']);
@@ -692,13 +692,13 @@ class ReportController extends Controller
                 'end_date' => $lastMonth->endOfMonth()->format('d-m-Y')
             ];
         } elseif ($data['data'] == 3) { // Xử lý lấy dữ liệu 3 tháng trước
-            if ($today->month == 1) {
+            if ($today->month == 10) {
                 $lastMonth = $today->subMonth(3);
                 $firstDayOfMonth = $lastMonth->startOfMonth()->format('Y-m-d');
-                $lastDayOfMonth = $lastMonth->endOfMonth()->addMonths(2)->format('Y-m-d');
-                $lastMonth1 = $today->subMonthNoOverflow(2);
+                $lastDayOfMonth = $lastMonth->addMonths(2)->endOfMonth()->format('Y-m-d');
+                $lastMonth1 = $today->subMonthNoOverflow(3);
                 $firstDayOfMonth1 = $lastMonth1->startOfMonth()->format('Y-m-d');
-                $lastDayOfMonth1 = $lastMonth1->endOfMonth()->addMonths(2)->format('Y-m-d');
+                $lastDayOfMonth1 = $lastMonth1->addMonths(2)->endOfMonth()->format('Y-m-d');
                 $count = Exports::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('exports')->where('exports.export_status', '=', 2)
                         ->where('exports.license_id', Auth::user()->license_id)
@@ -739,7 +739,7 @@ class ReportController extends Controller
                 $lastDayOfMonth = $lastMonth->endOfMonth()->addMonths(2)->format('Y-m-d');
                 $lastMonth1 = $today->subMonthNoOverflow(2);
                 $firstDayOfMonth1 = $lastMonth1->startOfMonth()->format('Y-m-d');
-                $lastDayOfMonth1 = $lastMonth1->endOfMonth()->addMonths(2)->format('Y-m-d');
+                $lastDayOfMonth1 = $lastMonth1->addMonths(2)->endOfMonth()->format('Y-m-d');
                 $count = Exports::selectSub(function ($query) use ($firstDayOfMonth, $lastDayOfMonth) {
                     $query->from('exports')->where('exports.export_status', '=', 2)
                         ->where('exports.license_id', Auth::user()->license_id)
@@ -780,8 +780,8 @@ class ReportController extends Controller
                 'countProfit' => $countProfit->countProfit,
                 'countExport' => $count->countExport,
                 'sumExport' => $count->sumExport,
-                'start_date' =>  $lastMonth->startOfMonth()->subMonths(2)->format('d-m-Y'),
-                'end_date' => $lastMonth->endOfMonth()->addMonths(2)->format('d-m-Y')
+                'start_date' => Carbon::parse($firstDayOfMonth1)->format('d-m-Y'),
+                'end_date' => Carbon::parse($lastDayOfMonth1)->format('d-m-Y')
             ];
         } else {
             $date_start = Carbon::parse($data['date_start']);
