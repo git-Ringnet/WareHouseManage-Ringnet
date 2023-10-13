@@ -505,7 +505,8 @@ $index = array_search($item['label'], $numberedLabels);
                                             <div class="input-group p-2 justify-content-around">
                                                 <select class="comparison_operator" name="comparison_operator"
                                                     style="width: 40%">
-                                                    <option value=">="
+                                                    <option
+                                                        value=">="
                                                         {{ request('comparison_operator') === '>=' ? 'selected' : '' }}>
                                                         >=
                                                     </option>
@@ -565,7 +566,8 @@ $index = array_search($item['label'], $numberedLabels);
                                             </div>
                                             <div class="input-group p-2 justify-content-around">
                                                 <select class="avg_operator" name="avg_operator" style="width: 40%">
-                                                    <option value=">="
+                                                    <option
+                                                        value=">="
                                                         {{ request('avg_operator') === '>=' ? 'selected' : '' }}>
                                                         >=
                                                     </option>

@@ -869,6 +869,7 @@ $index = array_search($item['label'], $numberedLabels);
                     $(stId).text(data.start_date)
                     $(edId).text(data.end_date)
                 }
+                console.log(data);
                 data.test.forEach(function(item, index) {
                     $('#soluong' + (item.userid)).text(item.product_qty_count);
                     $('#tongnhap' + (item.userid)).text(formatCurrency(item.total_sum));
