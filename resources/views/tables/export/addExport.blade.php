@@ -1037,9 +1037,10 @@
             var dangGD = $(this).closest('tr').find('.dangGD');
             var thue = $(this).closest('tr').find('.product_tax');
             var ulElement = $(this).closest('tr').find(".seri_pro");
-
             $(this).closest('tr').find('.quantity-input').val(null);
-            if (!isNaN(selectedID)) {
+            
+            ulElement.empty();
+            if (selectedID) {
                 $.ajax({
                     url: "{{ route('getProduct') }}",
                     type: "get",
@@ -1086,11 +1087,6 @@
                         }
                     },
                 });
-            } else {
-                $(this).val(null).trigger('change');
-                var productNameElement = $(this).closest('tr').find('.product_name');
-                productNameElement.prop('disabled', true);
-                $(this).data('previous-id', null);
             }
 
             // Kiểm tra nếu ID sản phẩm đã chọn đã có trong danh sách các sản phẩm đã chọn
@@ -1523,7 +1519,11 @@
         );
 
         const snPro = $("<td style='display:none;'><ul class='seri_pro'></ul></td>");
-
+        var defaultOption = $("<option>", {
+            "value": "",
+            "text": "Lựa chọn sản phẩm",
+        });
+        ProInput.find('select').prepend(defaultOption);
         for (let i = 0; i < productList.length; i++) {
             let option = $("<option>", {
                 "value": productList[i].id,

@@ -1969,6 +1969,7 @@
             var ulElement = $(this).closest('tr').find(".seri_pro");
 
             $(this).closest('tr').find('.quantity-input').val(null);
+            ulElement.empty();
             if (selectedID) {
                 $.ajax({
                     url: "{{ route('getProduct') }}",
