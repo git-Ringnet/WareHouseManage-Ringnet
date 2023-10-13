@@ -44,6 +44,69 @@ class Serinumbers extends Model
         return $delete_id;
     }
 
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id', 'id');
+    }
+    function getProductIdsByKeywords($keywords)
+    {
+        $productIds = [];
+
+        if (!empty($keywords)) {
+            $product_order = Product::all();
+
+            foreach ($product_order as $value) {
+                array_push($productIds, $value->id);
+            }
+
+            $serialnumber = DB::table('serinumbers')
+                ->join('product', 'serinumbers.product_id', '=', 'product.id')
+                ->whereIn('product.id', $productIds)
+                ->where('seri_status', '!=', 3)
+                ->where('serinumber', 'like', '%' . $keywords . '%')
+                ->select('serinumbers.product_id')
+                ->get();
+
+            $product_id = [];
+
+            foreach ($serialnumber as $value) {
+                array_push($product_id, $value->product_id);
+            }
+        }
+
+        return $product_id;
+    }
+
+    function getProductIdsHistory($keywords)
+    {
+        $productIds = [];
+
+        if (!empty($keywords)) {
+            $product_order = Product::all();
+
+            foreach ($product_order as $value) {
+                array_push($productIds, $value->id);
+            }
+
+            $serialnumber = DB::table('serinumbers')
+                ->join('product', 'serinumbers.product_id', '=', 'product.id')
+                ->whereIn('product.id', $productIds)
+                ->where('seri_status', '=', 3)
+                ->where('export_seri', '!=', 0)
+                ->where('serinumber', 'like', '%' . $keywords . '%')
+                ->select('serinumbers.product_id')
+                ->get();
+
+            $product_id = [];
+
+            foreach ($serialnumber as $value) {
+                array_push($product_id, $value->product_id);
+            }
+        }
+
+        return $product_id;
+    }
+
 
     public function checkSNS($request)
     {

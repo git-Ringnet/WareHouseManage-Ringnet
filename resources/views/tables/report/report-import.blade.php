@@ -4,7 +4,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <div class="row link-report mb-1 mr-auto d-flex mt-auto px-0">
-            <div class="col-12">
+            <div class="col-12 pr-0">
                 <div class="ml-auto choosetime" style="bottom: -35px !important">
                     <div class="col d-flex px-0" style="position: relative; width: auto">
                         <div class="dropdown w-100" style="z-index:999">
@@ -780,14 +780,17 @@ $index = array_search($item['label'], $numberedLabels);
         $("#this-month-orders").hide();
         $("#last-month-orders").hide();
         $("#3last-month-orders").hide();
+        $('#orders').prop('disabled', true);
     });
     $('#cancel-times-orders').click(function(event) {
         event.preventDefault();
         $('#times-orders-options').hide();
+        $('#orders').prop('disabled', false);
     });
     $('.suscess').click(function(event) {
         event.preventDefault();
         $('#times-orders-options').hide();
+        $('#orders').prop('disabled', false);
     });
     $(document).on('change', '.date_start', function(e) {
         e.preventDefault();
