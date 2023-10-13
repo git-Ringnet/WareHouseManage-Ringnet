@@ -138,9 +138,8 @@
                                                     stroke-linejoin="round" />
                                                 <path d="M30.4167 40H31.6667" stroke="#0095F6" stroke-width="1.5"
                                                     stroke-linecap="round" stroke-linejoin="round" />
-                                                <path d="M44.1667 38.0293V43.3326" stroke="#0095F6"
-                                                    stroke-width="1.5" stroke-linecap="round"
-                                                    stroke-linejoin="round" />
+                                                <path d="M44.1667 38.0293V43.3326" stroke="#0095F6" stroke-width="1.5"
+                                                    stroke-linecap="round" stroke-linejoin="round" />
                                                 <path
                                                     d="M50 51.666H38.5417C38.0444 51.666 37.5675 51.4684 37.2159 51.1168C36.8642 50.7652 36.6667 50.2882 36.6667 49.791V42.611C36.667 42.1607 36.7583 41.7151 36.935 41.301L37.8467 39.1676C37.9912 38.8299 38.2317 38.542 38.5384 38.3396C38.845 38.1373 39.2043 38.0294 39.5717 38.0293H48.7617C49.1288 38.0295 49.4879 38.1374 49.7942 38.3398C50.1006 38.5422 50.3408 38.83 50.485 39.1676L51.3984 41.3043C51.5754 41.7184 51.6666 42.164 51.6667 42.6143V49.9993C51.6667 50.4413 51.4911 50.8653 51.1785 51.1778C50.866 51.4904 50.442 51.666 50 51.666Z"
                                                     stroke="#0095F6" stroke-width="1.5" stroke-linecap="round"
@@ -165,8 +164,8 @@
                                             </g>
                                             <defs>
                                                 <clipPath id="clip0_7857_238972">
-                                                    <rect x="15" y="15" width="40"
-                                                        height="40" rx="4" fill="white" />
+                                                    <rect x="15" y="15" width="40" height="40" rx="4"
+                                                        fill="white" />
                                                 </clipPath>
                                             </defs>
                                         </svg>
@@ -326,9 +325,8 @@
                                                     stroke-linejoin="round" />
                                                 <path d="M30.4167 40H31.6667" stroke="#556AEB" stroke-width="1.5"
                                                     stroke-linecap="round" stroke-linejoin="round" />
-                                                <path d="M44.1667 38.0293V43.3326" stroke="#556AEB"
-                                                    stroke-width="1.5" stroke-linecap="round"
-                                                    stroke-linejoin="round" />
+                                                <path d="M44.1667 38.0293V43.3326" stroke="#556AEB" stroke-width="1.5"
+                                                    stroke-linecap="round" stroke-linejoin="round" />
                                                 <path
                                                     d="M50 51.666H38.5417C38.0444 51.666 37.5675 51.4684 37.2158 51.1168C36.8642 50.7652 36.6667 50.2882 36.6667 49.791V42.611C36.667 42.1607 36.7583 41.7151 36.935 41.301L37.8467 39.1676C37.9912 38.8299 38.2317 38.542 38.5384 38.3396C38.845 38.1373 39.2043 38.0294 39.5717 38.0293H48.7617C49.1288 38.0295 49.4879 38.1374 49.7942 38.3398C50.1006 38.5422 50.3408 38.83 50.485 39.1676L51.3983 41.3043C51.5754 41.7184 51.6666 42.164 51.6667 42.6143V49.9993C51.6667 50.4413 51.4911 50.8653 51.1785 51.1778C50.866 51.4904 50.442 51.666 50 51.666Z"
                                                     stroke="#556AEB" stroke-width="1.5" stroke-linecap="round"
@@ -353,8 +351,8 @@
                                             </g>
                                             <defs>
                                                 <clipPath id="clip0_7866_241710">
-                                                    <rect x="15" y="15" width="40"
-                                                        height="40" rx="4" fill="white" />
+                                                    <rect x="15" y="15" width="40" height="40" rx="4"
+                                                        fill="white" />
                                                 </clipPath>
                                             </defs>
                                         </svg>
@@ -689,8 +687,8 @@
                                             </g>
                                             <defs>
                                                 <clipPath id="clip0_7857_239054">
-                                                    <rect x="15" y="15" width="40"
-                                                        height="40" rx="4" fill="white" />
+                                                    <rect x="15" y="15" width="40" height="40" rx="4"
+                                                        fill="white" />
                                                 </clipPath>
                                             </defs>
                                         </svg>
@@ -733,8 +731,8 @@
                                             </g>
                                             <defs>
                                                 <clipPath id="clip0_7857_239064">
-                                                    <rect x="15" y="15" width="40"
-                                                        height="40" rx="4" fill="white" />
+                                                    <rect x="15" y="15" width="40" height="40" rx="4"
+                                                        fill="white" />
                                                 </clipPath>
                                             </defs>
                                         </svg>
@@ -1273,7 +1271,8 @@
                     $(stId).text(data.start_date)
                     $(edId).text(data.end_date)
                 }
-                
+                console.log(data);
+
             }
         })
     })
@@ -1409,7 +1408,7 @@
                     $(stId).text(data.start_date)
                     $(edId).text(data.end_date)
                 }
-                
+
 
             }
         })
@@ -1437,7 +1436,7 @@
                 } else {
                     $('#debt_import').text(0);
                 }
-                
+
 
             }
         })

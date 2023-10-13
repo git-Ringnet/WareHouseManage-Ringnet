@@ -505,13 +505,14 @@ $index = array_search($item['label'], $numberedLabels);
                                             <div class="input-group p-2 justify-content-around">
                                                 <select class="comparison_operator" name="comparison_operator"
                                                     style="width: 40%">
-                                                    <option value=">="
+                                                    <option
+                                                        value=">="
                                                         {{ request('comparison_operator') === '>=' ? 'selected' : '' }}>
                                                         >=
                                                     </option>
                                                     <option value="<="
                                                         {{ request('comparison_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
                                                 <input class="w-50 quantity-input input-so" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -565,13 +566,14 @@ $index = array_search($item['label'], $numberedLabels);
                                             </div>
                                             <div class="input-group p-2 justify-content-around">
                                                 <select class="avg_operator" name="avg_operator" style="width: 40%">
-                                                    <option value=">="
+                                                    <option
+                                                        value=">="
                                                         {{ request('avg_operator') === '>=' ? 'selected' : '' }}>
                                                         >=
                                                     </option>
                                                     <option value="<="
                                                         {{ request('avg_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=< /option>
+                                                        <=</option>
                                                 </select>
                                                 <input class="w-50 avg-input" type="text" name="avg"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
