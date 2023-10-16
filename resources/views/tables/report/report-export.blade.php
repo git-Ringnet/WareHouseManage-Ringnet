@@ -1013,6 +1013,7 @@ $index = array_search($item['label'], $numberedLabels);
                     $(stId).text(data.start_date)
                     $(edId).text(data.end_date)
                 }
+
                 data.test.forEach(function(item, index) {
                     $('#soluong' + (item.userid)).text(formatCurrency(item.donxuat));
                     $('#tongxuat' + (item.userid)).text(formatCurrency(item.tongtienxuat));
@@ -1052,10 +1053,10 @@ $index = array_search($item['label'], $numberedLabels);
                     $('#countProfit').text(0);
                 }
                 data.test.forEach(function(item, index) {
-                    $('#soluong' + (index + 1)).text(item.donxuat);
-                    $('#tongxuat' + (index + 1)).text(formatCurrency(item.tongtienxuat));
-                    $('#loinhuan' + (index + 1)).text(formatCurrency(item.tongloinhuan));
-                    $('#congno' + (index + 1)).text(formatCurrency(item.tongcongno));
+                    $('#soluong' + (item.userid)).text(item.donxuat);
+                    $('#tongxuat' + (item.userid)).text(formatCurrency(item.tongtienxuat));
+                    $('#loinhuan' + (item.userid)).text(formatCurrency(item.tongloinhuan));
+                    $('#congno' + (item.userid)).text(formatCurrency(item.tongcongno));
                 });
             }
         })
