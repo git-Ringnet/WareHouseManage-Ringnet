@@ -384,8 +384,8 @@ class ReportController extends Controller
                         ->selectRaw('SUM(total_import)');
                 },  'countDebtImport')->first();
                 $filters = [];
-                $filters[] = Carbon::parse($firstDayOfMonth1);
-                $filters[] = Carbon::parse($lastDayOfMonth1);
+                $filters[] = Carbon::parse($firstDayOfMonth);
+                $filters[] = Carbon::parse($lastDayOfMonth);
                 $tableorders = $this->orders->dataReportAjax($filters);
                 $test1 = [];
                 foreach ($tableorders as $item) {
