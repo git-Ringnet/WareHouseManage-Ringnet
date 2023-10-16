@@ -2303,6 +2303,7 @@
                 // Hiển thị thông báo
                 if (mismatchedProducts.length > 0) {
                     alert(alertMessage);
+                    
                     event.preventDefault();
                 }
             }

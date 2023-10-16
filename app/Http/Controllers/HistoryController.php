@@ -301,7 +301,7 @@ class HistoryController extends Controller
             'export_status',
             'total_difference',
             'tranport_fee',
-            'history_note'
+            // 'history_note'
         )
             ->with('getUsers')
             ->with('getProvides')

@@ -1190,7 +1190,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <div class="icon" id="icon-tranport_fee"></div>
                                             </span>
                                         </th>
-                                        <th scope="col">
+                                        {{-- <th scope="col">
                                             <span class="d-flex justify-content-start align-items-center">
                                                 <a href="#" class="sort-link" data-sort-by="history_note"
                                                     data-sort-type="{{ $sortType }}"><button class="btn-sort"
@@ -1198,7 +1198,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                         chú</button></a>
                                                 <div class="icon" id="icon-history_note"></div>
                                             </span>
-                                        </th>
+                                        </th> --}}
                                         <th scope="col">S/N</th>
                                         <th></th>
                                     </tr>
@@ -1303,7 +1303,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 <td class="text-right">{{ number_format($item->total_difference) }}
                                                 </td>
                                                 <td class="text-right">{{ number_format($item->tranport_fee) }}</td>
-                                                <td class="text-left">{{ $item->history_note }}</td>
+                                                {{-- <td class="text-left">{{ $item->history_note }}</td> --}}
                                                 <td data-toggle="modal" data-target="#snModal" class="sn"><img
                                                         src="../../dist/img/icon/list.png"></td>
                                                 <td></td>
@@ -2256,7 +2256,7 @@ $index = array_search($item['label'], $numberedLabels);
                         'Tình trạng xuất',
                         'Lợi nhuận',
                         'Chi phí VC',
-                        'Ghi chú'
+                        // 'Ghi chú'
                     ];
                     // Update the column headers in the worksheet
                     worksheet['A1'].v = headers[0];
@@ -2280,7 +2280,7 @@ $index = array_search($item['label'], $numberedLabels);
                     worksheet['S1'].v = headers[18];
                     worksheet['T1'].v = headers[19];
                     worksheet['U1'].v = headers[20];
-                    worksheet['V1'].v = headers[21];
+                    // worksheet['V1'].v = headers[21];
                     // Add the worksheet to the workbook
                     XLSX.utils.book_append_sheet(workbook, worksheet, 'history');
 
