@@ -904,9 +904,9 @@ $index = array_search($item['label'], $numberedLabels);
                     $('#countDebtImport').text(0);
                 }
                 data[2].forEach(function(item, index) {
-                    $('#soluong' + (index + 1)).text(item.product_qty_count);
-                    $('#tongnhap' + (index + 1)).text(formatCurrency(item.total_sum));
-                    $('#congno' + (index + 1)).text(formatCurrency(item.total_debt));
+                    $('#soluong' + (item.userid)).text(item.product_qty_count);
+                    $('#tongnhap' + (item.userid)).text(formatCurrency(item.total_sum));
+                    $('#congno' + (item.userid)).text(formatCurrency(item.total_debt));
                 });
 
             }
