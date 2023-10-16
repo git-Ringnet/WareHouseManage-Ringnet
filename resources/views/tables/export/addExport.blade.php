@@ -1038,7 +1038,7 @@
             var thue = $(this).closest('tr').find('.product_tax');
             var ulElement = $(this).closest('tr').find(".seri_pro");
             $(this).closest('tr').find('.quantity-input').val(null);
-            
+
             ulElement.empty();
             if (selectedID) {
                 $.ajax({
@@ -1288,76 +1288,89 @@
                 $(this).val(newValue);
             });
             // Kiểm tra các trường có rỗng
+            var selects = document.getElementsByTagName("select");
             if (checkRequiredConditions()) {
-                var selects = document.getElementsByTagName("select");
                 for (var j = 0; j < selects.length; j++) {
                     selects[j].removeAttribute("disabled");
                 }
-            }
+                const productRows = document.querySelectorAll('tr');
+                // Mảng chứa tên sản phẩm có số lượng = 0
+                let mismatchedProducts = [];
+                // Kiểm tra số lượng lớn hơn 0
+                for (let i = 0; i < productRows.length; i++) {
+                    const qtyInput = productRows[i].querySelector('.quantity-input');
+                    const productNameSelect = productRows[i].querySelector('.productName');
 
-            const productRows = document.querySelectorAll('tr');
-            // Mảng chứa tên sản phẩm có số lượng = 0
-            let mismatchedProducts = [];
-            // Kiểm tra số lượng lớn hơn 0
-            for (let i = 0; i < productRows.length; i++) {
-                const qtyInput = productRows[i].querySelector('.quantity-input');
-                const productNameSelect = productRows[i].querySelector('.productName');
+                    if (qtyInput !== null && productNameSelect !== null) {
+                        const selectedOption = productNameSelect.options[productNameSelect.selectedIndex];
 
-                if (qtyInput !== null && productNameSelect !== null) {
-                    const selectedOption = productNameSelect.options[productNameSelect.selectedIndex];
-
-                    if (parseFloat(qtyInput.value) == 0) {
-                        const productName = selectedOption.textContent;
-                        mismatchedProducts.push(productName);
+                        if (parseFloat(qtyInput.value) == 0) {
+                            const productName = selectedOption.textContent;
+                            mismatchedProducts.push(productName);
+                        }
                     }
                 }
-            }
 
-            // Tạo thông báo
-            let alertMessage = "Các sản phẩm sau đây phải lớn hơn 0:\n";
-            if (mismatchedProducts.length > 0) {
-                alertMessage += mismatchedProducts.join('\n');
-                alert(alertMessage);
-                event.preventDefault();
-            }
+                // Tạo thông báo
+                let alertMessage = "Các sản phẩm sau đây phải lớn hơn 0:\n";
+                if (mismatchedProducts.length > 0) {
+                    alertMessage += mismatchedProducts.join('\n');
+                    alert(alertMessage);
+                    for (var j = 0; j < selects.length; j++) {
+                        selects[j].setAttribute("disabled", "disabled");
+                    }
+                    var selectElement = document.querySelector(
+                        "select[class='child-select p-1 productName form-control js-stools-field-filter select2-hidden-accessible']"
+                    );
+                    selectElement.removeAttribute("disabled");
+                    event.preventDefault();
+                }
 
-            let missProducts = [];
-            const productsRows = document.querySelectorAll('tbody tr');
+                let missProducts = [];
+                const productsRows = document.querySelectorAll('tbody tr');
 
-            for (let j = 0; j < productsRows.length; j++) {
-                const ulElement = productsRows[j].querySelector(".seri_pro");
-                const numberOfLiElements = ulElement ? ulElement.querySelectorAll('li').length : 0;
+                for (let j = 0; j < productsRows.length; j++) {
+                    const ulElement = productsRows[j].querySelector(".seri_pro");
+                    const numberOfLiElements = ulElement ? ulElement.querySelectorAll('li').length : 0;
 
-                if (numberOfLiElements > 0) {
-                    // Chỉ push vào mảng khi có ít nhất một phần tử <li> trong <ul>
-                    const qty = productsRows[j].querySelector('.quantity-input');
-                    const productNameElement = productsRows[j].querySelector('.productName');
+                    if (numberOfLiElements > 0) {
+                        // Chỉ push vào mảng khi có ít nhất một phần tử <li> trong <ul>
+                        const qty = productsRows[j].querySelector('.quantity-input');
+                        const productNameElement = productsRows[j].querySelector('.productName');
 
-                    if (qty !== null) {
-                        const idProduct = productNameElement.value;
-                        const numberOfInputs = $(
-                            `input[name="selected_serial_numbers[]"][data-product-id="${idProduct}"]`
-                        ).length;
+                        if (qty !== null) {
+                            const idProduct = productNameElement.value;
+                            const numberOfInputs = $(
+                                `input[name="selected_serial_numbers[]"][data-product-id="${idProduct}"]`
+                            ).length;
 
-                        if (parseInt(qty.value) !== numberOfInputs) {
-                            const selectedOption1 = productNameElement.options[
-                                productNameElement.selectedIndex
-                            ];
-                            const productName1 = selectedOption1.textContent;
+                            if (parseInt(qty.value) !== numberOfInputs) {
+                                const selectedOption1 = productNameElement.options[
+                                    productNameElement.selectedIndex
+                                ];
+                                const productName1 = selectedOption1.textContent;
 
-                            if (!missProducts.includes(productName1)) {
-                                missProducts.push(productName1);
+                                if (!missProducts.includes(productName1)) {
+                                    missProducts.push(productName1);
+                                }
                             }
                         }
                     }
                 }
-            }
-            // Tạo thông báo
-            let alertMessage1 = "Số lượng xuất chưa trùng với số lượng S/N:\n";
-            if (missProducts.length > 0) {
-                alertMessage1 += missProducts.join('\n');
-                alert(alertMessage1);
-                event.preventDefault();
+                // Tạo thông báo
+                let alertMessage1 = "Số lượng xuất chưa trùng với số lượng S/N:\n";
+                if (missProducts.length > 0) {
+                    alertMessage1 += missProducts.join('\n');
+                    alert(alertMessage1);
+                    for (var j = 0; j < selects.length; j++) {
+                        selects[j].setAttribute("disabled", "disabled");
+                    }
+                    var selectElement = document.querySelector(
+                        "select[class='child-select p-1 productName form-control js-stools-field-filter select2-hidden-accessible']"
+                    );
+                    selectElement.removeAttribute("disabled");
+                    event.preventDefault();
+                }
             }
         } else {
             if (formGuest.length === 0) {
