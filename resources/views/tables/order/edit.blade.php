@@ -526,7 +526,7 @@
                                                                 <input type="hidden" value="{{ $se->id }}"
                                                                     name="productSN{{ $stt }}[]">
                                                                 <input
-                                                                    oninput="getInputName(this,{{ $se->serinumber }})"
+                                                                    oninput="getInputName(this,'{{ $se->serinumber }}')"
                                                                     type="text" class="form-control w-25"
                                                                     name="product_SN{{ $stt }}[]"
                                                                     value="{{ $se->serinumber }}"
@@ -1235,6 +1235,7 @@
                         '</div>' +
                         '</div>' +
                         '</div>'
+                    $("#list_modal").empty();
                     $('#list_modal').append(modal);
                     rowCount++;
                     createInput1();

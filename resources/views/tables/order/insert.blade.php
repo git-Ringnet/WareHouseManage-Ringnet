@@ -403,6 +403,7 @@
                             } else {
                                 var provides_id = document.getElementById('form_submit');
                                 provides_id.setAttribute('action', '{{ route('addBill') }}');
+                                updateProductSN()
                                 provides_id.submit();
                             }
                         }
@@ -602,7 +603,7 @@
                     error = true;
                     return false;
                 }
-
+              
                 $.ajax({
                     url: "{{ route('checkSN') }}",
                     type: "get",
@@ -610,6 +611,7 @@
                         Serialnumber: data.Product,
                     },
                     success: function(result) {
+                     
                         if (result.success == false) {
                             error = true;
                             alert('Sản phẩm ' + result.msg + ' đã tồn tại serial ' + result.data);
@@ -620,6 +622,7 @@
                                 checkS = 1;
                                 return false;
                             } else {
+                                updateProductSN()
                                 $('#form_submit')[0].submit();
                             }
                         }
@@ -709,18 +712,18 @@
                         $('input[name="product_code"]').val(Code[0].textContent);
                         $('input[name="product_create"]').val(ngayNhapHoaDon);
                         var titlesValue = THHDVu[i].textContent;
+
                         var numberssValue = Math.floor(SLuong[i].textContent).toString();
                         var typeValue = DVTinh[i].textContent;
                         var price = formatCurrency(DGia[i].textContent);
                         var totalPrice = ThTien[i].textContent;
+
                         var tr = '<tr>' +
                             '<td class="STT"> </td>' +
                             '<td><input required type="text" class="form-control name_product" name="product_name[]" value="' +
-                            titlesValue +
-                            '"></td>' +
+                            titlesValue + '"></td>' +
                             '<td><input required type="text" class="form-control text-center unit_product" name="product_unit[]" value="' +
-                            typeValue +
-                            '"></td>' +
+                            typeValue + '"></td>' +
                             '<td><input required type="text" oninput="validateQtyInput1(this)" name="product_qty[]" class="quantity-input form-control text-center" value="' +
                             numberssValue + '"></td>' +
                             '<td><input required type="text" class="form-control product_price text-center" name="product_price[]" value="' +
@@ -807,6 +810,7 @@
                             '</div>' +
                             '</div>' +
                             '</div>'
+                        $("#list_modal").empty();
                         $('#list_modal').append(modal);
                         rowCount++;
                         createInput();
