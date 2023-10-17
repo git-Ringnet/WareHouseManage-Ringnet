@@ -1129,6 +1129,7 @@
                 var DGia = xmlDoc.getElementsByTagName('DGia');
                 var TSuat = xmlDoc.getElementsByTagName('TSuat');
                 $('tbody tr').remove();
+                $("#list_modal").empty();
                 // Tạo các ô input mới và đặt giá trị của chúng
                 for (var i = 0; i < THHDVu.length; i++) {
                     var tax = 0;
@@ -1235,7 +1236,6 @@
                         '</div>' +
                         '</div>' +
                         '</div>'
-                    $("#list_modal").empty();
                     $('#list_modal').append(modal);
                     rowCount++;
                     createInput1();

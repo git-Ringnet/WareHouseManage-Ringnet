@@ -603,7 +603,7 @@
                     error = true;
                     return false;
                 }
-              
+
                 $.ajax({
                     url: "{{ route('checkSN') }}",
                     type: "get",
@@ -611,7 +611,7 @@
                         Serialnumber: data.Product,
                     },
                     success: function(result) {
-                     
+
                         if (result.success == false) {
                             error = true;
                             alert('Sản phẩm ' + result.msg + ' đã tồn tại serial ' + result.data);
@@ -623,7 +623,7 @@
                                 return false;
                             } else {
                                 updateProductSN()
-                                $('#form_submit')[0].submit();
+                                // $('#form_submit')[0].submit();
                             }
                         }
                     }
@@ -701,6 +701,7 @@
                     var parts = ngayNhapHoaDon.split('-');
                     var formattedDate = parts[2] + '-' + parts[1] + '-' + parts[0];
                     $('tbody tr').remove();
+                    $("#list_modal").empty();
                     // Tạo các ô input mới và đặt giá trị của chúng
                     for (var i = 0; i < THHDVu.length; i++) {
                         var tax = 0;
@@ -810,7 +811,6 @@
                             '</div>' +
                             '</div>' +
                             '</div>'
-                        $("#list_modal").empty();
                         $('#list_modal').append(modal);
                         rowCount++;
                         createInput();
