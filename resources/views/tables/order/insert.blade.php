@@ -623,7 +623,7 @@
                                 return false;
                             } else {
                                 updateProductSN()
-                                // $('#form_submit')[0].submit();
+                                $('#form_submit')[0].submit();
                             }
                         }
                     }
