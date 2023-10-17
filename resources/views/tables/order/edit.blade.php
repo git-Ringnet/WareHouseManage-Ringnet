@@ -1144,10 +1144,10 @@
                     var totalPrice = formatCurrency(numberssValue * (price.replace(/[^0-9.-]+/g, "")));
                     var tr = '<tr>' +
                         '<td class="STT"></td>' +
-                        '<td><input required type="text" class="form-control" name="product_name[]" value="' +
+                        '<td><input required type="text" class="form-control name_product" name="product_name[]" value="' +
                         titlesValue +
                         '"></td>' +
-                        '<td><input required type="text" class="form-control text-center" name="product_unit[]" value="' +
+                        '<td><input required type="text" class="form-control unit_product text-center" name="product_unit[]" value="' +
                         typeValue +
                         '"></td>' +
                         '<td><input required type="text" oninput="validateQtyInput1(this)" name="product_qty[]" class="quantity-input form-control text-center" value="' +

@@ -173,7 +173,7 @@
                                     <th style="width:8%;">Thuế</th>
                                     <th style="width:15%;">Thành tiền</th>
                                     <th style="width:13%;">Ghi chú</th>
-                                    <th style="width:10%;"></th>
+                                    <th style="width:10%;">SN</th>
                                     <th style="width:10%;"></th>
                                 </tr>
                             </thead>
