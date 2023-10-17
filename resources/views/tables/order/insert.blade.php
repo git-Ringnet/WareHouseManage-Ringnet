@@ -407,6 +407,7 @@
                             } else {
                                 var provides_id = document.getElementById('form_submit');
                                 provides_id.setAttribute('action', '{{ route('addBill') }}');
+                                updateProductSN();
                                 provides_id.submit();
                             }
                         }
@@ -625,6 +626,7 @@
                                 checkS = 1;
                                 return false;
                             } else {
+                                updateProductSN();
                                 $('#form_submit')[0].submit();
                             }
                         }
@@ -704,6 +706,7 @@
                     var parts = ngayNhapHoaDon.split('-');
                     var formattedDate = parts[2] + '-' + parts[1] + '-' + parts[0];
                     $('tbody tr').remove();
+                    $("#list_modal").empty();
                     // Tạo các ô input mới và đặt giá trị của chúng
                     for (var i = 0; i < THHDVu.length; i++) {
                         var tax = 0;
@@ -715,18 +718,18 @@
                         $('input[name="product_code"]').val(Code[0].textContent);
                         $('input[name="product_create"]').val(ngayNhapHoaDon);
                         var titlesValue = THHDVu[i].textContent;
+
                         var numberssValue = Math.floor(SLuong[i].textContent).toString();
                         var typeValue = DVTinh[i].textContent;
                         var price = formatCurrency(DGia[i].textContent);
                         var totalPrice = ThTien[i].textContent;
+
                         var tr = '<tr>' +
                             '<td class="STT"> </td>' +
                             '<td><input required type="text" class="form-control name_product" name="product_name[]" value="' +
-                            titlesValue +
-                            '"></td>' +
+                            titlesValue + '"></td>' +
                             '<td><input required type="text" class="form-control text-center unit_product" name="product_unit[]" value="' +
-                            typeValue +
-                            '"></td>' +
+                            typeValue + '"></td>' +
                             '<td><input required type="text" oninput="validateQtyInput1(this)" name="product_qty[]" class="quantity-input form-control text-center" value="' +
                             numberssValue + '"></td>' +
                             '<td><input required type="text" class="form-control product_price text-center" name="product_price[]" value="' +

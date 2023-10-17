@@ -113,9 +113,10 @@ class Serinumbers extends Model
         $SerialNumbers = $request;
         foreach ($SerialNumbers as $product => $seri) {
             foreach ($seri as $product_name => $SN) {
+                $price =  str_replace(',', '', $SN['price']);
                 $product_order = ProductOrders::where('product_name', $SN['name'])
                     ->where('product_unit', $SN['dvt'])
-                    ->where('product_price', $SN['price'])
+                    ->where('product_price', $price)
                     ->where('product_tax', $SN['tax'])
                     ->get();
                 if ($product_order) {

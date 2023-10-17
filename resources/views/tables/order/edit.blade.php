@@ -530,7 +530,7 @@
                                                                 <input type="hidden" value="{{ $se->id }}"
                                                                     name="productSN{{ $stt }}[]">
                                                                 <input
-                                                                    oninput="getInputName(this,{{ $se->serinumber }})"
+                                                                    oninput="getInputName(this,'{{ $se->serinumber }}')"
                                                                     type="text" class="form-control w-25"
                                                                     name="product_SN{{ $stt }}[]"
                                                                     value="{{ $se->serinumber }}"
@@ -1146,6 +1146,7 @@
                 var DGia = xmlDoc.getElementsByTagName('DGia');
                 var TSuat = xmlDoc.getElementsByTagName('TSuat');
                 $('tbody tr').remove();
+                $("#list_modal").empty();
                 // Tạo các ô input mới và đặt giá trị của chúng
                 for (var i = 0; i < THHDVu.length; i++) {
                     var tax = 0;
@@ -1164,7 +1165,7 @@
                         '<td><input required type="text" class="form-control name_product" name="product_name[]" value="' +
                         titlesValue +
                         '"></td>' +
-                        '<td><input required type="text" class="form-control text-center unit_product" name="product_unit[]" value="' +
+                        '<td><input required type="text" class="form-control unit_product text-center" name="product_unit[]" value="' +
                         typeValue +
                         '"></td>' +
                         '<td><input required type="text" oninput="validateQtyInput1(this)" name="product_qty[]" class="quantity-input form-control text-center" value="' +
