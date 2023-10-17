@@ -75,151 +75,150 @@
         <!-- Content Header (Page header) -->
         <form action="{{ route('insertProduct.store') }}" method="POST" id="form_submit">
             <section class="content-header content">
-                <div class="d-flex mb-1 action-don">
+                {{-- <div class="d-flex mb-1 action-don">
                     <button class="btn btn-danger text-white" id="add_bill" type="submit" name="action"
-                        value="1">Duyệt đơn</button>
-                    {{-- <a href="#" class="btn btn-danger text-white" id="add_bill">Duyệt đơn</a> --}}
+                        value="1">Duyệt đơn</button> --}}
+                <a href="#" class="btn btn-danger text-white" id="add_bill">Duyệt đơn</a>
+    </div>
+    <div class="container-fluided">
+        <div class="row my-3">
+            <div class="col">
+                <div class="w-75">
+                    <div class="d-flex mb-2">
+                        <input type="radio" name="options" id="radio1" checked value="1">
+                        <span class="ml-1">Nhà cung cấp cũ</span>
+                        <input type="radio" name="options" id="radio2" style="margin-left: 40px;" value="2">
+                        <span class="ml-1">Nhà cung cấp mới</span>
+                    </div>
+                    <div class="input-group mb-1 position-relative w-50">
+                        <input type="text" class="form-control" placeholder="Nhập thông tin nhà cung cấp"
+                            aria-label="Username" aria-describedby="basic-addon1" id="myInput" autocomplete="off">
+                        <div class="position-absolute" style="right: 5px;top: 17%;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M15.1835 7.36853C13.0254 5.21049 9.52656 5.21049 7.36853 7.36853C5.21049 9.52656 5.21049 13.0254 7.36853 15.1835C9.52656 17.3415 13.0254 17.3415 15.1835 15.1835C17.3415 13.0254 17.3415 9.52656 15.1835 7.36853ZM16.2441 6.30787C13.5003 3.56404 9.05169 3.56404 6.30787 6.30787C3.56404 9.05169 3.56404 13.5003 6.30787 16.2441C9.05169 18.988 13.5003 18.988 16.2441 16.2441C18.988 13.5003 18.988 9.05169 16.2441 6.30787Z"
+                                    fill="#555555" />
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M15.1796 15.1796C15.4725 14.8867 15.9474 14.8867 16.2403 15.1796L19.5303 18.4696C19.8232 18.7625 19.8232 19.2374 19.5303 19.5303C19.2374 19.8232 18.7625 19.8232 18.4696 19.5303L15.1796 16.2403C14.8867 15.9474 14.8867 15.4725 15.1796 15.1796Z"
+                                    fill="#555555" />
+                            </svg>
+                        </div>
+                    </div>
+                    <ul id="myUL" class="bg-white position-absolute rounded shadow p-0 scroll-data"
+                        style="z-index: 99; width:37%;">
+                        @foreach ($provide as $value)
+                            <li class="p-2 search-info" name="search-info" id="{{ $value->id }}">
+                                <a href="#" class="text-dark justify-content-between p-2">
+                                    <span class="w-50">
+                                        {{ $value->provide_name }}
+                                    </span>
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
                 </div>
-                <div class="container-fluided">
-                    <div class="row my-3">
-                        <div class="col">
-                            <div class="w-75">
-                                <div class="d-flex mb-2">
-                                    <input type="radio" name="options" id="radio1" checked value="1">
-                                    <span class="ml-1">Nhà cung cấp cũ</span>
-                                    <input type="radio" name="options" id="radio2" style="margin-left: 40px;"
-                                        value="2">
-                                    <span class="ml-1">Nhà cung cấp mới</span>
-                                </div>
-                                <div class="input-group mb-1 position-relative w-50">
-                                    <input type="text" class="form-control"
-                                        placeholder="Nhập thông tin nhà cung cấp" aria-label="Username"
-                                        aria-describedby="basic-addon1" id="myInput" autocomplete="off">
-                                    <div class="position-absolute" style="right: 5px;top: 17%;">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M15.1835 7.36853C13.0254 5.21049 9.52656 5.21049 7.36853 7.36853C5.21049 9.52656 5.21049 13.0254 7.36853 15.1835C9.52656 17.3415 13.0254 17.3415 15.1835 15.1835C17.3415 13.0254 17.3415 9.52656 15.1835 7.36853ZM16.2441 6.30787C13.5003 3.56404 9.05169 3.56404 6.30787 6.30787C3.56404 9.05169 3.56404 13.5003 6.30787 16.2441C9.05169 18.988 13.5003 18.988 16.2441 16.2441C18.988 13.5003 18.988 9.05169 16.2441 6.30787Z"
-                                                fill="#555555" />
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M15.1796 15.1796C15.4725 14.8867 15.9474 14.8867 16.2403 15.1796L19.5303 18.4696C19.8232 18.7625 19.8232 19.2374 19.5303 19.5303C19.2374 19.8232 18.7625 19.8232 18.4696 19.5303L15.1796 16.2403C14.8867 15.9474 14.8867 15.4725 15.1796 15.1796Z"
-                                                fill="#555555" />
-                                        </svg>
-                                    </div>
-                                </div>
-                                <ul id="myUL" class="bg-white position-absolute rounded shadow p-0 scroll-data"
-                                    style="z-index: 99; width:37%;">
-                                    @foreach ($provide as $value)
-                                        <li class="p-2 search-info" name="search-info" id="{{ $value->id }}">
-                                            <a href="#" class="text-dark justify-content-between p-2">
-                                                <span class="w-50">
-                                                    {{ $value->provide_name }}
-                                                </span>
-                                            </a>
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-            </section>
-            <div class="container-fluided">
-                <input type="hidden" id="provide_id" name="provide_id">
-                @csrf
-                <section id="infor_provide" class="bg-white rounded">
-                </section>
-                <!-- Main content -->
-                <div class="d-flex justify-content-between align-items-center my-2">
-                    <div class="d-flex">
-                        <div style="width:42%;">
-                            <label style="padding: 0 0.75rem;">Số hóa đơn</label>
-                            <input oninput="validateBillInput(this)" type="text" name="product_code"
-                                placeholder="Số hóa đơn" class="form-control">
-                        </div>
-                        <div>
-                            <label class="ml-4">Ngày hóa đơn</label>
-                            <input type="date" name="product_create" placeholder="Ngày nhập hóa đơn"
-                                class="form-control ml-2" id="product_create">
-                        </div>
-                    </div>
-                    <div class="d-flex">
-                        <div>
-                            <label></label>
-                            <label class="btn btn-default btn-file m-2 d-flex">
-                                Import file
-                                <input type="file" id="import_file" class="import_file" accept=".xml">
-                                <div>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none">
-                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                            d="M7.23123 9.23123C7.53954 8.92292 8.03941 8.92292 8.34772 9.23123L12 12.8835L15.6523 9.23123C15.9606 8.92292 16.4605 8.92292 16.7688 9.23123C17.0771 9.53954 17.0771 10.0394 16.7688 10.3477L12.5582 14.5582C12.2499 14.8665 11.7501 14.8665 11.4418 14.5582L7.23123 10.3477C6.92292 10.0394 6.92292 9.53954 7.23123 9.23123Z"
-                                            fill="#555555" />
-                                    </svg>
-                                </div>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                <section class="content">
-                    <div class="container-fluided" style="overflow-x: auto;">
-                        <table class="table table-hover bg-white rounded" id="inputContainer">
-                            <thead>
-                                <tr>
-                                    <th style="width:3%;">STT</th>
-                                    <th style="width:30%;">Tên sản phẩm</th>
-                                    <th style="width:8%;">Đơn vị tính</th>
-                                    <th style="width:8%;">Số lượng</th>
-                                    <th style="width:12%;">Giá nhập</th>
-                                    <th style="width:8%;">Thuế</th>
-                                    <th style="width:15%;">Thành tiền</th>
-                                    <th style="width:13%;">Ghi chú</th>
-                                    <th style="width:10%;"></th>
-                                    <th style="width:10%;"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
-                        <div class="mb-2"><a href="javascript:;" class="btn btn-secondary addRow">Thêm sản phẩm</a>
-                        </div>
-                        <div id="list_modal">
-                        </div>
-                    </div><!-- /.container-fluided -->
-                    <div class="row position-relative footer-total">
-                        <div class="col-sm-6"></div>
-                        <div class="col-sm-6">
-                            <div class="mt-4 w-50" style="float: right;">
-                                <div class="d-flex justify-content-between">
-                                    <span><b>Giá trị trước thuế:</b></span>
-                                    <span id="total-amount-sum">Đ</span>
-                                    <input type="hidden" name="total_price" class="total_price">
-                                </div>
-                                <div class="d-flex justify-content-between mt-2">
-                                    <span><b>Thuế VAT:</b></span>
-                                    <span id="product-tax">Đ</span>
-                                </div>
-                                <div class="d-flex justify-content-between mt-2">
-                                    <span class="text-lg"><b>Tổng cộng:</b></span>
-                                    <span><b id="grand-total">đ</b></span>
-                                    <input type="hidden" name="total_import" class="total_import">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="d-flex justify-content-center btn-fixed">
-                        <button style="bottom: 0;" type="submit" name="action" class="btn btn-primary mr-2"
-                            value="AddProduct">Lưu</button>
-                        <a href="{{ route('insertProduct.index') }}" class="btn btn-light"
-                            onclick="return confirm('Bạn có muốn quay lại ?');">Hủy</a>
-                    </div>
-
             </div>
+        </div>
+        </section>
+        <div class="container-fluided">
+            <input type="hidden" id="provide_id" name="provide_id">
+            @csrf
+            <section id="infor_provide" class="bg-white rounded">
             </section>
+            <!-- Main content -->
+            <div class="d-flex justify-content-between align-items-center my-2">
+                <div class="d-flex">
+                    <div style="width:42%;">
+                        <label style="padding: 0 0.75rem;">Số hóa đơn</label>
+                        <input oninput="validateBillInput(this)" type="text" name="product_code"
+                            placeholder="Số hóa đơn" class="form-control">
+                    </div>
+                    <div>
+                        <label class="ml-4">Ngày hóa đơn</label>
+                        <input type="date" name="product_create" placeholder="Ngày nhập hóa đơn"
+                            class="form-control ml-2" id="product_create">
+                    </div>
+                </div>
+                <div class="d-flex">
+                    <div>
+                        <label></label>
+                        <label class="btn btn-default btn-file m-2 d-flex">
+                            Import file
+                            <input type="file" id="import_file" class="import_file" accept=".xml">
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                    viewBox="0 0 24 24" fill="none">
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M7.23123 9.23123C7.53954 8.92292 8.03941 8.92292 8.34772 9.23123L12 12.8835L15.6523 9.23123C15.9606 8.92292 16.4605 8.92292 16.7688 9.23123C17.0771 9.53954 17.0771 10.0394 16.7688 10.3477L12.5582 14.5582C12.2499 14.8665 11.7501 14.8665 11.4418 14.5582L7.23123 10.3477C6.92292 10.0394 6.92292 9.53954 7.23123 9.23123Z"
+                                        fill="#555555" />
+                                </svg>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <section class="content">
+                <div class="container-fluided" style="overflow-x: auto;">
+                    <table class="table table-hover bg-white rounded" id="inputContainer">
+                        <thead>
+                            <tr>
+                                <th style="width:3%;">STT</th>
+                                <th style="width:30%;">Tên sản phẩm</th>
+                                <th style="width:8%;">Đơn vị tính</th>
+                                <th style="width:8%;">Số lượng</th>
+                                <th style="width:12%;">Giá nhập</th>
+                                <th style="width:8%;">Thuế</th>
+                                <th style="width:15%;">Thành tiền</th>
+                                <th style="width:13%;">Ghi chú</th>
+                                <th style="width:10%;"></th>
+                                <th style="width:10%;"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    <div class="mb-2"><a href="javascript:;" class="btn btn-secondary addRow">Thêm sản phẩm</a>
+                    </div>
+                    <div id="list_modal">
+                    </div>
+                </div><!-- /.container-fluided -->
+                <div class="row position-relative footer-total">
+                    <div class="col-sm-6"></div>
+                    <div class="col-sm-6">
+                        <div class="mt-4 w-50" style="float: right;">
+                            <div class="d-flex justify-content-between">
+                                <span><b>Giá trị trước thuế:</b></span>
+                                <span id="total-amount-sum">Đ</span>
+                                <input type="hidden" name="total_price" class="total_price">
+                            </div>
+                            <div class="d-flex justify-content-between mt-2">
+                                <span><b>Thuế VAT:</b></span>
+                                <span id="product-tax">Đ</span>
+                            </div>
+                            <div class="d-flex justify-content-between mt-2">
+                                <span class="text-lg"><b>Tổng cộng:</b></span>
+                                <span><b id="grand-total">đ</b></span>
+                                <input type="hidden" name="total_import" class="total_import">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-center btn-fixed">
+                    <button style="bottom: 0;" type="submit" name="action" class="btn btn-primary mr-2"
+                        value="AddProduct">Lưu</button>
+                    <a href="{{ route('insertProduct.index') }}" class="btn btn-light"
+                        onclick="return confirm('Bạn có muốn quay lại ?');">Hủy</a>
+                </div>
+
+        </div>
+        </section>
         </form>
         <!-- /.content -->
     </div>
     <script src="{{ asset('dist/js/productOrder.js') }}"></script>
     <script>
+        var checkS = 1;
         $(document).on('input', '.quantity-input, [name^="product_price"]', function(e) {
             var productQty = $(this).closest('tr').find('.quantity-input').val();
             var productPrice = parseFloat($(this).closest('tr').find('input[name^="product_price"]').val().replace(
@@ -299,108 +298,116 @@
 
         // Xử lý duyệt đơn nhanh
         var add_bill = document.getElementById('add_bill');
-        add_bill.addEventListener('click', function(e) {
-            var data = {};
-            this.classList.add('disabled');
-            var countDown = 10;
-            var alertShow = false;
-            var countdownInterval = setInterval(function() {
-                countDown--;
-                if (countDown <= 0) {
-                    clearInterval(countdownInterval);
-                    add_bill.classList.remove('disabled');
-                }
-            }, 100);
-            var isDuplicate = false;
-            e.preventDefault();
-            var error = false;
+        if (checkS == 1) {
+            add_bill.addEventListener('click', function(e) {
+                checkS = 2;
+                var data = {};
+                this.classList.add('disabled');
+                var countDown = 10;
+                var alertShow = false;
+                var countdownInterval = setInterval(function() {
+                    countDown--;
+                    if (countDown <= 0) {
+                        clearInterval(countdownInterval);
+                        add_bill.classList.remove('disabled');
+                    }
+                }, 100);
+                var isDuplicate = false;
+                e.preventDefault();
+                var error = false;
 
-            $('#inputContainer tbody tr').each(function() {
-                var id, SerialNumbers;
-                var productName = $(this).find('.name_product').val().trim();
-                var product_unit = $(this).find('.unit_product').val().trim();
-                var product_price = $(this).find('.product_price').val().trim();
-                var product_tax = $(this).find('.product_tax').val().trim();
-                var rowSTT = $(this).find('.STT').text();
-                var countProduct = $(this).find('.quantity-input').val().trim();
-                id = $(this).find('.exampleModal').data('target');
-                // Kiểm tra nhập số lượng sản phẩm và số lượng SN
-                if (checkInputSN(id, countProduct).check == true) {
-                    alert(checkInputSN(id, countProduct).msg);
+                $('#inputContainer tbody tr').each(function() {
+                    var id, SerialNumbers;
+                    var provide_id = $('#provide_id').val() == "" ? 0 : $('#provide_id').val();
+                    var productName = $(this).find('.name_product').val().trim();
+                    var product_unit = $(this).find('.unit_product').val().trim();
+                    var product_price = $(this).find('.product_price').val().trim();
+                    var product_tax = $(this).find('.product_tax').val().trim();
+                    var rowSTT = $(this).find('.STT').text();
+                    var countProduct = $(this).find('.quantity-input').val().trim();
+                    id = $(this).find('.exampleModal').data('target');
+                    // Kiểm tra nhập số lượng sản phẩm và số lượng SN
+                    if (checkInputSN(id, countProduct).check == true) {
+                        alert(checkInputSN(id, countProduct).msg);
+                        error = true;
+                        alertShow = true;
+                        return false;
+                    }
+
+                    // Tạo mảng con nếu nó chưa tồn tại
+                    if (!data.Product) {
+                        data.Product = {};
+                    }
+                    if (!data.Product[rowSTT]) {
+                        data.Product[rowSTT] = {
+                            name: productName,
+                            dvt: product_unit,
+                            price: product_price,
+                            tax: product_tax,
+                            provide_id: provide_id,
+                            Seri: []
+                        };
+                    }
+                    SerialNumbers = $(id).find('.modal-body #table_SNS tbody tr td .form-control.w-25').map(
+                        function() {
+                            return $(this).val().trim();
+                        }).get();
+
+                    if (SerialNumbers !== null) {
+                        data.Product[rowSTT].Seri.push(...SerialNumbers);
+                    }
+                });
+                e.preventDefault();
+
+                if (!alertShow && checkRow() == false) {
+                    alert('Vui lòng nhập ít nhất 1 sản phẩm');
                     error = true;
-                    alertShow = true;
                     return false;
                 }
 
-                // Tạo mảng con nếu nó chưa tồn tại
-                if (!data.Product) {
-                    data.Product = {};
-                }
-                if (!data.Product[rowSTT]) {
-                    data.Product[rowSTT] = {
-                        name: productName,
-                        dvt: product_unit,
-                        price: product_price,
-                        tax: product_tax,
-                        Seri: []
-                    };
-                }
-                SerialNumbers = $(id).find('.modal-body #table_SNS tbody tr td .form-control.w-25').map(
-                    function() {
-                        return $(this).val().trim();
-                    }).get();
-
-                if (SerialNumbers !== null) {
-                    data.Product[rowSTT].Seri.push(...SerialNumbers);
-                }
-            });
-            e.preventDefault();
-
-            if (!alertShow && checkRow() == false) {
-                alert('Vui lòng nhập ít nhất 1 sản phẩm');
-                error = true;
-                return false;
-            }
-
-            if (!alertShow && $('#provide_id').val().trim() == '' && $('#radio1').prop('checked') == true) {
-                isDuplicate = true;
-                alert('Vui lòng chọn nhà cung cấp');
-                return false;
-            }
-
-            var requiredInputs = document.querySelectorAll('input[required]');
-            for (var i = 0; i < requiredInputs.length; i++) {
-                if (requiredInputs[i].value.trim() === '') {
-                    alert('Vui lòng điền đầy đủ thông tin yêu cầu');
+                if (!alertShow && $('#provide_id').val().trim() == '' && $('#radio1').prop('checked') == true) {
                     isDuplicate = true;
-                    break;
+                    alert('Vui lòng chọn nhà cung cấp');
+                    return false;
                 }
-            }
 
-            $.ajax({
-                url: "{{ route('checkSN') }}",
-                type: "get",
-                data: {
-                    Serialnumber: data.Product,
-                },
-                success: function(result) {
-                    if (result.success == false) {
-                        error = true;
+                var requiredInputs = document.querySelectorAll('input[required]');
+                for (var i = 0; i < requiredInputs.length; i++) {
+                    if (requiredInputs[i].value.trim() === '') {
+                        alert('Vui lòng điền đầy đủ thông tin yêu cầu');
                         isDuplicate = true;
-                        alert('Sản phẩm ' + result.msg + ' đã tồn tại serial ' + result.data);
-                        return false;
-                    } else {
-                        if (isDuplicate || error) {
-                            return false;
-                        } else {
-                            var provides_id = document.getElementById('form_submit');
-                            provides_id.setAttribute('action', '{{ route('addBill') }}');
-                            provides_id.submit();
-                        }
+                        break;
                     }
                 }
-            })
-        });
+
+                $.ajax({
+                    url: "{{ route('checkSN') }}",
+                    type: "get",
+                    data: {
+                        Serialnumber: data.Product,
+                    },
+                    success: function(result) {
+                        if (result.success == false) {
+                            error = true;
+                            isDuplicate = true;
+                            alert('Sản phẩm ' + result.msg + ' đã tồn tại serial ' + result.data);
+                            checkS = 1;
+                            return false;
+                        } else {
+                            if (isDuplicate || error) {
+                                checkS = 1;
+                                return false;
+                            } else {
+                                var provides_id = document.getElementById('form_submit');
+                                provides_id.setAttribute('action', '{{ route('addBill') }}');
+                                updateProductSN()
+                                provides_id.submit();
+                            }
+                        }
+                    }
+                })
+            });
+        }
 
         // Chỉnh sửa thông tin nhà cung cấp
         $(document).on('click', '#btn-addProvide', function(e) {
@@ -517,104 +524,112 @@
             });
         })
 
+        if (checkS == 1) {
+            // Kiểm tra dữ liệu trước khi submit
+            $(document).on('submit', '#form_submit', function(e) {
+                checkS = 2;
+                var data = {};
+                $(e.target).find('.btn.btn-primary.mr-2').prop('disabled', true);
+                var countDown = 10;
+                var alertShow = false;
+                var countdownInterval = setInterval(function() {
+                    countDown--;
+                    if (countDown <= 0) {
+                        clearInterval(countdownInterval);
+                        $(e.target).find('.btn.btn-primary.mr-2').prop('disabled', false);
+                    }
+                }, 100);
 
-        // Kiểm tra dữ liệu trước khi submit
-        $(document).on('submit', '#form_submit', function(e) {
-            var data = {};
-            $(e.target).find('.btn.btn-primary.mr-2').prop('disabled', true);
-            var countDown = 10;
-            var alertShow = false;
-            var countdownInterval = setInterval(function() {
-                countDown--;
-                if (countDown <= 0) {
-                    clearInterval(countdownInterval);
-                    $(e.target).find('.btn.btn-primary.mr-2').prop('disabled', false);
-                }
-            }, 100);
+                e.preventDefault();
+                var error = false;
 
-            e.preventDefault();
-            var error = false;
+                $('#inputContainer tbody tr').each(function() {
+                    var id, SerialNumbers;
+                    var provide_id = $('#provide_id').val() == "" ? 0 : $('#provide_id').val();
+                    var productName = $(this).find('.name_product').val().trim();
+                    var product_unit = $(this).find('.unit_product').val().trim();
+                    var product_price = $(this).find('.product_price').val().trim();
+                    var product_tax = $(this).find('.product_tax').val().trim();
+                    var rowSTT = $(this).find('.STT').text();
+                    var countProduct = $(this).find('.quantity-input').val().trim();
 
-            $('#inputContainer tbody tr').each(function() {
-                var id, SerialNumbers;
-                var productName = $(this).find('.name_product').val().trim();
-                var product_unit = $(this).find('.unit_product').val().trim();
-                var product_price = $(this).find('.product_price').val().trim();
-                var product_tax = $(this).find('.product_tax').val().trim();
-                var rowSTT = $(this).find('.STT').text();
-                var countProduct = $(this).find('.quantity-input').val().trim();
+                    id = $(this).find('.exampleModal').data('target');
+                    // Kiểm tra nhập số lượng sản phẩm và số lượng SN
+                    if (checkInputSN(id, countProduct).check == true) {
+                        alert(checkInputSN(id, countProduct).msg);
+                        error = true;
+                        alertShow = true;
+                        return false;
+                    }
 
-                id = $(this).find('.exampleModal').data('target');
-                // Kiểm tra nhập số lượng sản phẩm và số lượng SN
-                if (checkInputSN(id, countProduct).check == true) {
-                    alert(checkInputSN(id, countProduct).msg);
+                    // Tạo mảng con nếu nó chưa tồn tại
+                    if (!data.Product) {
+                        data.Product = {};
+                    }
+
+                    if (!data.Product[rowSTT]) {
+                        data.Product[rowSTT] = {
+                            name: productName,
+                            dvt: product_unit,
+                            price: product_price,
+                            tax: product_tax,
+                            provide_id: provide_id,
+                            Seri: []
+                        };
+                    }
+                    SerialNumbers = $(id).find('.modal-body #table_SNS tbody tr td .form-control.w-25').map(
+                        function() {
+                            return $(this).val().trim();
+                        }).get();
+                    if (SerialNumbers !== null) {
+                        data.Product[rowSTT].Seri.push(...SerialNumbers);
+                    }
+                });
+
+                if (!alertShow && checkRow() == false) {
+                    alert('Vui lòng nhập ít nhất 1 sản phẩm');
                     error = true;
-                    alertShow = true;
                     return false;
                 }
 
-                // Tạo mảng con nếu nó chưa tồn tại
-                if (!data.Product) {
-                    data.Product = {};
+                if (!alertShow && $('#provide_id').val().trim() == '' && $('#radio1').prop('checked') == true) {
+                    error = true;
+                    alert('Vui lòng chọn nhà cung cấp');
+                    return false;
                 }
 
-                if (!data.Product[rowSTT]) {
-                    data.Product[rowSTT] = {
-                        name: productName,
-                        dvt: product_unit,
-                        price: product_price,
-                        tax: product_tax,
-                        Seri: []
-                    };
+                if (!alertShow && checkDuplicateRows()) {
+                    alert('Sản phẩm đã tồn tại');
+                    error = true;
+                    return false;
                 }
-                SerialNumbers = $(id).find('.modal-body #table_SNS tbody tr td .form-control.w-25').map(
-                    function() {
-                        return $(this).val().trim();
-                    }).get();
-                if (SerialNumbers !== null) {
-                    data.Product[rowSTT].Seri.push(...SerialNumbers);
-                }
-            });
 
-            if (!alertShow && checkRow() == false) {
-                alert('Vui lòng nhập ít nhất 1 sản phẩm');
-                error = true;
-                return false;
-            }
-
-            if (!alertShow && $('#provide_id').val().trim() == '' && $('#radio1').prop('checked') == true) {
-                error = true;
-                alert('Vui lòng chọn nhà cung cấp');
-                return false;
-            }
-
-            if (!alertShow && checkDuplicateRows()) {
-                alert('Sản phẩm đã tồn tại');
-                error = true;
-                return false;
-            }
-
-            $.ajax({
-                url: "{{ route('checkSN') }}",
-                type: "get",
-                data: {
-                    Serialnumber: data.Product,
-                },
-                success: function(result) {
-                    if (result.success == false) {
-                        error = true;
-                        alert('Sản phẩm ' + result.msg + ' đã tồn tại serial ' + result.data);
-                        return false;
-                    } else {
-                        if (error) {
+                $.ajax({
+                    url: "{{ route('checkSN') }}",
+                    type: "get",
+                    data: {
+                        Serialnumber: data.Product,
+                    },
+                    success: function(result) {
+                        if (result.success == false) {
+                            error = true;
+                            alert('Sản phẩm ' + result.msg + ' đã tồn tại serial ' + result.data);
+                            checkS = 1;
                             return false;
                         } else {
-                            $('#form_submit')[0].submit();
+                            if (error) {
+                                checkS = 1;
+                                return false;
+                            } else {
+                                updateProductSN()
+                                $('#form_submit')[0].submit();
+                            }
                         }
                     }
-                }
-            })
-        });
+                })
+            });
+        }
+
 
         // Thêm nhanh nhà cung cấp
         $(document).on('click', '#btn-addCustomer', function(e) {
@@ -686,6 +701,7 @@
                     var parts = ngayNhapHoaDon.split('-');
                     var formattedDate = parts[2] + '-' + parts[1] + '-' + parts[0];
                     $('tbody tr').remove();
+                    $("#list_modal").empty();
                     // Tạo các ô input mới và đặt giá trị của chúng
                     for (var i = 0; i < THHDVu.length; i++) {
                         var tax = 0;
@@ -697,18 +713,18 @@
                         $('input[name="product_code"]').val(Code[0].textContent);
                         $('input[name="product_create"]').val(ngayNhapHoaDon);
                         var titlesValue = THHDVu[i].textContent;
+
                         var numberssValue = Math.floor(SLuong[i].textContent).toString();
                         var typeValue = DVTinh[i].textContent;
                         var price = formatCurrency(DGia[i].textContent);
                         var totalPrice = ThTien[i].textContent;
+
                         var tr = '<tr>' +
                             '<td class="STT"> </td>' +
                             '<td><input required type="text" class="form-control name_product" name="product_name[]" value="' +
-                            titlesValue +
-                            '"></td>' +
+                            titlesValue + '"></td>' +
                             '<td><input required type="text" class="form-control text-center unit_product" name="product_unit[]" value="' +
-                            typeValue +
-                            '"></td>' +
+                            typeValue + '"></td>' +
                             '<td><input required type="text" oninput="validateQtyInput1(this)" name="product_qty[]" class="quantity-input form-control text-center" value="' +
                             numberssValue + '"></td>' +
                             '<td><input required type="text" class="form-control product_price text-center" name="product_price[]" value="' +
@@ -735,7 +751,7 @@
                         $('#inputContainer tbody').append(tr);
 
                         var modal = '<div class="modal fade" id="exampleModal' + rowCount +
-                            '" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">' +
+                            '" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">' +
                             '<div class="modal-dialog" role="document">' +
                             '<div class="modal-content">' +
                             '<div class="modal-header align-items-center">' +

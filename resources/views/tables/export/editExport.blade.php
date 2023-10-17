@@ -1651,11 +1651,17 @@
 
     //cho phép nhập số 
     function validateNumberInput(input) {
-        var regex = /^[0-9]*$/;
+        var regex = /^[0-9][0-9-]*$/;
         if (!regex.test(input.value)) {
             input.value = input.value.replace(/[^0-9]/g, '');
         }
     }
+    // function validateNumberInput(input) {
+    //     var regex = /^[0-9]*$/;
+    //     if (!regex.test(input.value)) {
+    //         input.value = input.value.replace(/[^0-9]/g, '');
+    //     }
+    // }
 
     //giới hạn số lượng nhập của thêm sản phẩm mới
     function limitMaxValue(input) {
