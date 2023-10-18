@@ -197,6 +197,7 @@ class AddProductController extends Controller
         $product_unit = $request->product_unit;
         $product_qty = $request->product_qty;
         $product_tax = $request->product_tax;
+        $product_trademark = $request->product_trademark;
         $product_price = str_replace(',', '', $request->product_price);
         $product_total = str_replace(',', '', $request->product_total);
 
@@ -219,6 +220,7 @@ class AddProductController extends Controller
                 'product_tax' => $product_tax[$i],
                 'product_price' => $product_price[$i],
                 'product_total' => $product_total[$i],
+                'product_trademark' => $product_trademark[$i],
                 'order_id' => $order->id,
                 'provide_id' => $request->provide_id == null ? $new_provide : $request->provide_id,
                 'license_id' => Auth::user()->license_id,
@@ -236,7 +238,7 @@ class AddProductController extends Controller
                             'seri_status' => 0,
                             'products_id' => 0,
                             'order_id' => $order->id,
-                            'check' => 0,
+                            'provide_id' => $request->provide_id == null ? $new_provide : $request->provide_id,
                             'export_seri' => 0,
                             'created_at' => Carbon::now(),
                             'license_id' => Auth::user()->license_id,
@@ -376,7 +378,7 @@ class AddProductController extends Controller
                                         'seri_status' => 0,
                                         'products_id' => 0,
                                         'order_id' => $updateOrder->id,
-                                        'check' => 0,
+                                        'provide_id' => $request->provide_id == null ? $newProvide : $request->provide_id,
                                         'export_seri' => 0,
                                         'created_at' => Carbon::now(),
                                         'license_id' => Auth::user()->license_id,
@@ -417,7 +419,7 @@ class AddProductController extends Controller
                                             'seri_status' => 0,
                                             'products_id' => 0,
                                             'order_id' => $updateOrder->id,
-                                            'check' => 0,
+                                            'provide_id' => $request->provide_id == null ? $newProvide : $request->provide_id,
                                             'export_seri' => 0,
                                             'created_at' => Carbon::now(),
                                             'license_id' => Auth::user()->license_id,
@@ -438,7 +440,7 @@ class AddProductController extends Controller
                                             'seri_status' => 0,
                                             'products_id' => 0,
                                             'order_id' => $updateOrder->id,
-                                            'check' => 0,
+                                            'provide_id' => $request->provide_id == null ? $newProvide : $request->provide_id,
                                             'export_seri' => 0,
                                             'created_at' => Carbon::now(),
                                             'license_id' => Auth::user()->license_id,
@@ -679,7 +681,7 @@ class AddProductController extends Controller
                             'seri_status' => 0,
                             'products_id' => 0,
                             'order_id' => $order,
-                            'check' => 0,
+                            'provide_id' => $request->provide_id == null ? $new :  $request['provide_id'],
                             'export_seri' => 0,
                             'created_at' => Carbon::now(),
                             'license_id' => Auth::user()->license_id,
@@ -848,7 +850,7 @@ class AddProductController extends Controller
                     'product_tax' => $product_tax[$i],
                     'product_price' => $product_price[$i],
                     'product_total' => $product_total[$i],
-                    'provide_id' => $order->provide_id,
+                    'provide_id' => $request->provide_id == null ? $new_provide : $request->provide_id,
                     'order_id' => $request->order_id,
                     'license_id' => Auth::user()->license_id,
                 ];
@@ -870,7 +872,7 @@ class AddProductController extends Controller
                                     'seri_status' => 0,
                                     'products_id' => 0,
                                     'order_id' => $order->id,
-                                    'check' => 0,
+                                    'provide_id' => $request->provide_id == null ? $new_provide : $request->provide_id,
                                     'export_seri' => 0,
                                     'created_at' => Carbon::now(),
                                     'license_id' => Auth::user()->license_id,
@@ -901,7 +903,7 @@ class AddProductController extends Controller
                                         'seri_status' => 0,
                                         'products_id' => 0,
                                         'order_id' => $order->id,
-                                        'check' => 0,
+                                        'provide_id' => $request->provide_id == null ? $new_provide : $request->provide_id,
                                         'export_seri' => 0,
                                         'created_at' => Carbon::now(),
                                         'license_id' => Auth::user()->license_id,
@@ -922,7 +924,7 @@ class AddProductController extends Controller
                                         'seri_status' => 0,
                                         'products_id' => 0,
                                         'order_id' => $order->id,
-                                        'check' => 0,
+                                        'provide_id' => $request->provide_id == null ? $new_provide : $request->provide_id,
                                         'export_seri' => 0,
                                         'created_at' => Carbon::now(),
                                         'license_id' => Auth::user()->license_id,
@@ -1265,6 +1267,7 @@ class AddProductController extends Controller
                             if ($product_SN[$y]) {
                                 $dataSN = [
                                     'serinumber' => $product_SN[$y],
+                                    'provide_id' =>  $request->provide_id == null ? $add_newProvide : $request->provide_id
                                 ];
                                 if (isset($id_SN[$y])) {
                                     $this->Serinumbers->updateSN($dataSN, $id_SN[$y]);

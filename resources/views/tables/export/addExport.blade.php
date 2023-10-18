@@ -363,11 +363,18 @@
 
     //nhập số
     function validateNumberInput(input) {
-        var regex = /^[0-9]*$/;
+        var regex = /^[0-9][0-9-]*$/;
         if (!regex.test(input.value)) {
             input.value = input.value.replace(/[^0-9]/g, '');
         }
     }
+
+    // function validateNumberInput(input) {
+    //     var regex = /^[0-9]*$/;
+    //     if (!regex.test(input.value)) {
+    //         input.value = input.value.replace(/[^0-9]/g, '');
+    //     }
+    // }
 
     //add sản phẩm
     let fieldCounter = 1;
@@ -1540,7 +1547,7 @@
                         idProduct: products[j],
                     },
                     success: function(response2) {
-                        var ulElement = newRow.find(".seri_pro");   
+                        var ulElement = newRow.find(".seri_pro");
                         response2.forEach(function(sn) {
                             var product_id = sn.product_id;
                             var liElement = $("<li>").text(product_id.toString());

@@ -12,7 +12,7 @@ class Provides extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'provide_name', 'provide_represent', 'provide_phone', 'provide_email', 'provide_status', 'provide_address', 'provide_code', 'license_id'
+        'provide_name', 'provide_represent', 'provide_phone', 'provide_email', 'provide_status', 'provide_address', 'provide_code', 'license_id', 'debt'
     ];
     protected $table = 'provides';
     public function getAllProvides($filter = [], $perPage, $name = null, $represent = null, $phonenumber = null, $email = null, $status = [], $keywords = null, $sortByArr = null)
