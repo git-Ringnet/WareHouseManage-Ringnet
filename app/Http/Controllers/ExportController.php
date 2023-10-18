@@ -1569,8 +1569,13 @@ class ExportController extends Controller
             ->selectRaw('COALESCE((product.product_qty - COALESCE(product.product_trade, 0)), 0) as qty_exist')
             ->where('product.license_id', Auth::user()->license_id)
             ->get();
+        $productCancel = productExports::select('product_exports.*')
+            ->join('exports', 'product_exports.export_id', '=', 'exports.id')
+            ->where('export_id', $id)
+            ->where('product_exports.license_id', Auth::user()->license_id)
+            ->get();
         $title = 'Chi tiết đơn hàng';
-        return view('tables.export.editExport', compact('SnProduct', 'check', 'exports', 'guest', 'productExport', 'product_code', 'customer', 'title'));
+        return view('tables.export.editExport', compact('productCancel', 'SnProduct', 'check', 'exports', 'guest', 'productExport', 'product_code', 'customer', 'title'));
     }
 
     /**

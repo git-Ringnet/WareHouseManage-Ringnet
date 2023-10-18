@@ -458,12 +458,12 @@
                 row.remove();
                 fieldCounter--;
                 calculateTotalAmount();
-                calculateTotalTax();
                 calculateGrandTotal();
                 updateRowNumbers();
-                var taxAmount = parseFloat(row.find('.product_tax1').text());
-                var totalTax = parseFloat($('#product-tax').text());
-                totalTax -= taxAmount;
+                var productTaxText = $('#product-tax').text();
+                var productTaxValue = parseFloat(productTaxText.replace(/,/g, ''));
+                var taxAmount = parseFloat(('.product_tax1').text());
+                var totalTax = productTaxValue - taxAmount;
                 $('#product-tax').text(totalTax);
 
                 // Xóa các trường input ẩn selected_serial_numbers[] có data-product-id khớp với sản phẩm đang bị xóa
@@ -709,6 +709,9 @@
             }
             $(document).ready(function() {
                 $('.child-select').select2();
+                $(document).on('select2:open', () => {
+                    document.querySelector('.select2-search__field').focus();
+                });
             });
         });
 
@@ -1012,13 +1015,16 @@
 
     //lấy thông tin sản phẩm con từ tên sản phẩm con
     var selectedProductIDs = [];
-    $(document).ready(function() {
-        // Lấy tất cả các phần tử đang được chọn theo class "productName"
+
+    function updateOption() {
+        selectedProductIDs = [];
         var selectedProducts = document.querySelectorAll(".productName");
-        // Lặp qua từng phần tử và lấy giá trị của nó
         selectedProducts.forEach(function(product) {
             selectedProductIDs.push(product.value);
         });
+    }
+    $(document).ready(function() {
+        updateOption();
         $(document).on('change', '.child-select', function() {
             var selectedID = $(this).val();
             var row = $(this).closest('tr');
@@ -1031,9 +1037,10 @@
             var dangGD = $(this).closest('tr').find('.dangGD');
             var thue = $(this).closest('tr').find('.product_tax');
             var ulElement = $(this).closest('tr').find(".seri_pro");
-
             $(this).closest('tr').find('.quantity-input').val(null);
-            if (!isNaN(selectedID)) {
+            
+            ulElement.empty();
+            if (selectedID) {
                 $.ajax({
                     url: "{{ route('getProduct') }}",
                     type: "get",
@@ -1080,11 +1087,6 @@
                         }
                     },
                 });
-            } else {
-                $(this).val(null).trigger('change');
-                var productNameElement = $(this).closest('tr').find('.product_name');
-                productNameElement.prop('disabled', true);
-                $(this).data('previous-id', null);
             }
 
             // Kiểm tra nếu ID sản phẩm đã chọn đã có trong danh sách các sản phẩm đã chọn
@@ -1122,6 +1124,7 @@
                 }
 
                 selectedProductIDs.push(selectedID); // Lưu ID sản phẩm đã chọn vào mảng
+                updateOption();
                 $(this).data('previous-id',
                     selectedID); // Lưu ID hiện tại vào thuộc tính data của tùy chọn
 
@@ -1448,6 +1451,9 @@
 
     $(document).ready(function() {
         $('.child-select').select2();
+        $(document).on('select2:open', () => {
+            document.querySelector('.select2-search__field').focus();
+        });
     });
 
     for (let j = 0; j < products.length; j++) {
@@ -1513,7 +1519,11 @@
         );
 
         const snPro = $("<td style='display:none;'><ul class='seri_pro'></ul></td>");
-
+        var defaultOption = $("<option>", {
+            "value": "",
+            "text": "Lựa chọn sản phẩm",
+        });
+        ProInput.find('select').prepend(defaultOption);
         for (let i = 0; i < productList.length; i++) {
             let option = $("<option>", {
                 "value": productList[i].id,
@@ -1562,6 +1572,7 @@
         deleteBtn.click(function() {
             var row = $(this).closest("tr");
             var selectedID = row.find('.child-select').val();
+            var productCode = $(this).closest('tr').find('.productName').val();
 
             // Kiểm tra nếu ID sản phẩm đang bị xóa có trong mảng selectedProductIDs
             var index = selectedProductIDs.indexOf(selectedID);
@@ -1571,13 +1582,17 @@
             row.remove();
             fieldCounter--;
             calculateTotalAmount();
-            calculateTotalTax();
             calculateGrandTotal();
             updateRowNumbers();
-            var taxAmount = parseFloat(row.find('.product_tax1').text());
-            var totalTax = parseFloat($('#product-tax').text());
-            totalTax -= taxAmount;
+            var productTaxText = $('#product-tax').text();
+            var productTaxValue = parseFloat(productTaxText.replace(/,/g, ''));
+            var taxAmount = parseFloat(('.product_tax1').text());
+            var totalTax = productTaxValue - taxAmount;
             $('#product-tax').text(totalTax);
+
+            // Xóa các trường input ẩn selected_serial_numbers[] có data-product-id khớp với sản phẩm đang bị xóa
+            $('input[name="selected_serial_numbers[]"][data-product-id="' + productCode +
+                '"]').remove();
         });
 
         //xem S/N sản phẩm

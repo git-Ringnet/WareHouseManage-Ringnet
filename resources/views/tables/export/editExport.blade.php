@@ -258,10 +258,11 @@
                             </div>
                             <div class="form-group">
                                 <label for="email" class="required-label">Mã số thuế:</label>
-                                <input type="text" class="form-control" id="guest_code" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
-                                    echo 'readonly';
-                                } ?>
-                                    placeholder="Nhập thông tin" name="guest_code" value="{{ $guest->guest_code }}">
+                                <input type="text" class="form-control" id="guest_code" required
+                                    <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                        echo 'readonly';
+                                    } ?> placeholder="Nhập thông tin" name="guest_code"
+                                    value="{{ $guest->guest_code }}">
                             </div>
                             <div class="form-group">
                                 <label for="email">Email:</label>
@@ -388,7 +389,7 @@
                                                 class="child-select p-1 form-control productName <?php if ($exports->export_status != 1) {
                                                     echo 'd-none';
                                                 } ?>"
-                                                name="product_id[]" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
+                                                required name="product_id[]" <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                                     echo 'disabled';
                                                 } ?>>
                                                 <option value="{{ $value_export->product_id }}">
@@ -405,7 +406,7 @@
                                             </select>
                                         @endif
                                         @if ($exports->export_status == 1)
-                                            <select class="child-select p-1 form-control productName"
+                                            <select class="child-select p-1 form-control productName" required
                                                 name="product_id[]" data-initial="{{ $value_export->product_id }}"
                                                 <?php if ($exports->export_status != 1 || (Auth::user()->id != $exports->user_id && !Auth::user()->can('isAdmin'))) {
                                                     echo 'disabled';
@@ -773,28 +774,13 @@
 </form>
 </section>
 </div>
-<style>
-    .selectize-input>input {
-        width: calc(100% - 30px) !important;
-        max-width: calc(100% - 30px) !important;
-        position: absolute !important;
-        left: 10px !important;
-    }
-
-    .selectize-input.has-items>.item {
-        display: inline-block !important;
-        width: 90% !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
-        white-space: normal !important;
-        overflow-wrap: break-word !important;
-        margin-top: 4px;
-    }
-</style>
 <script>
     // Chờ cho Select2 được khởi tạo hoàn toàn
     $(document).ready(function() {
         $('.child-select').select2();
+        $(document).on('select2:open', () => {
+            document.querySelector('.select2-search__field').focus();
+        });
     });
     // Thay đổi màu nút save note_form
     $(document).ready(function() {
@@ -1316,6 +1302,7 @@
             deleteBtn.click(function() {
                 var row = $(this).closest("tr");
                 var selectedID = row.find('.child-select').val();
+                var productCode = $(this).closest('tr').find('.productName').val();
 
                 // Kiểm tra nếu ID sản phẩm đang bị xóa có trong mảng selectedProductIDs
                 var index = selectedProductIDs.indexOf(selectedID);
@@ -1602,6 +1589,9 @@
             fieldCounter++;
             $(document).ready(function() {
                 $('.child-select').select2();
+                $(document).on('select2:open', () => {
+                    document.querySelector('.select2-search__field').focus();
+                });
             });
         });
 
@@ -1690,9 +1680,7 @@
         var maxLimit = parseFloat(valueWithoutSlash);
         if (!isNaN(maxLimit) && value > maxLimit) {
             input.value = maxLimit;
-            calculateTotalTax();
             calculateGrandTotal();
-            calculateTotalAmount();
         }
     }
     //giới hạn số lượng nhập của edit sản phẩm
@@ -1957,6 +1945,7 @@
     });
     //lấy thông tin sản phẩm
     var selectedProductIDs = [];
+
     $(document).ready(function() {
         // Lấy tất cả các phần tử đang được chọn theo class "productName"
         var selectedProducts = document.querySelectorAll(".productName");
@@ -1965,11 +1954,9 @@
         selectedProducts.forEach(function(product) {
             selectedProductIDs.push(product.value);
         });
-
         $(document).on('change', '.child-select', function() {
             var selectedID = $(this).val();
             var isInitial = $(this).data('initial') == selectedID;
-            var selectize = $(this)[0].selectize;
             var row = $(this).closest('tr');
             var productNameElement = row.find('.product_name');
             var productUnitElement = $(this).closest('tr').find('.product_unit');
@@ -1982,6 +1969,7 @@
             var ulElement = $(this).closest('tr').find(".seri_pro");
 
             $(this).closest('tr').find('.quantity-input').val(null);
+            ulElement.empty();
             if (selectedID) {
                 $.ajax({
                     url: "{{ route('getProduct') }}",
@@ -2031,10 +2019,11 @@
             }
 
             if (isInitial) {
-                productNameElement.prop('disabled', true);
+                $(this).data('previous-id', null);
             } else if (selectedProductIDs.includes(selectedID)) {
-                productNameElement.prop('disabled', true);
-                $(this).val('Nội dung mới').trigger('change');
+                var productNameElement = $(this).closest('tr').find('.productName');
+                productNameElement.val(null).trigger('change');
+
                 alert('Sản phẩm này đã được thêm trước đó, vui lòng chọn sản phẩm khác');
                 // Kiểm tra nếu giá trị data-previous-id là null, thì bỏ qua bước kiểm tra tiếp theo
                 if ($(this).data('previous-id') !== null) {
@@ -2083,19 +2072,7 @@
             });
         }
     });
-    // Xử lý sự kiện khi nhấn nút Backspace trong ô tìm kiếm
-    $(document).on('keydown', '.selectize-input input', function(event) {
-        if (event.keyCode === 8) { // 8 là mã nút Backspace
-            var inputValue = $(this).val();
-            if (inputValue === '') {
-                var removedID = $(this).closest('.child-select').val();
-                var index = selectedProductIDs.indexOf(removedID);
-                if (index !== -1) {
-                    selectedProductIDs.splice(index, 1); // Xóa ID khỏi mảng khi xóa tùy chọn
-                }
-            }
-        }
-    });
+
     //tính thành tiền của sản phẩm
     $(document).ready(function() {
         calculateTotals();
@@ -2326,6 +2303,7 @@
                 // Hiển thị thông báo
                 if (mismatchedProducts.length > 0) {
                     alert(alertMessage);
+                    
                     event.preventDefault();
                 }
             }
