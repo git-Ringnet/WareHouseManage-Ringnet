@@ -824,6 +824,12 @@ input[type="number"] {
     font-size: 16px;
 }
 
+#notification-license .message {
+    font-weight: 600;
+    color: #ffff;
+    font-size: 16px;
+}
+
 .alert-warning {
     background-color: #ff9500;
     border-color: #ff9500;

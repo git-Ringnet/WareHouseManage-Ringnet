@@ -849,7 +849,9 @@ class ReportController extends Controller
 
         // Thực hiện mysqldump để tạo file SQL và lưu vào thư mục tạm thời
         $fileName = "backup_$date.sql";
-        $command = "mysqldump -u $dbUsername $passwordOption $dbName -e 'SELECT * FROM users WHERE license_id ='" . Auth::user()->license_id . " > $backupPath$fileName";
+        $command = "mysqldump -u $dbUsername $passwordOption $dbName > $backupPath$fileName";
+
+        // $command = "mysqldump -u $dbUsername $passwordOption $dbName -e 'SELECT * FROM users WHERE license_id ='" . Auth::user()->license_id . " > $backupPath$fileName";
         exec($command);
 
         // Tạo tệp zip và nén tệp SQL vào trong đó
