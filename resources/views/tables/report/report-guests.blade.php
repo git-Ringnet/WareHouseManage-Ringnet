@@ -608,7 +608,6 @@ $index = array_search($item['label'], $numberedLabels);
 
                 },
                 success: function(data) {
-                    console.log(data);
                     if (data.start_date && data.end_date) {
                         var stId = '.it' + dataid;
                         var edId = '.id' + dataid;
@@ -674,7 +673,6 @@ $index = array_search($item['label'], $numberedLabels);
 
         $('.sort-link').on('click', function(event) {
             event.preventDefault();
-            console.log(datestart, dateend);
             // Get dữ liệu
             var sort_by = $(this).data('sort-by');
             var sort_type = $(this).data('sort-type');
