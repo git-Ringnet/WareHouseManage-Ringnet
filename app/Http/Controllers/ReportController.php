@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Debt;
 use App\Models\DebtImport;
 use App\Models\Exports;
+use App\Models\Guests;
 use App\Models\Orders;
 use App\Models\Product;
 use App\Models\ProductOrders;
@@ -23,11 +24,13 @@ class ReportController extends Controller
     private $products;
     private $orders;
     private $exports;
+    private $guests;
     public function __construct()
     {
         $this->products = new Product();
         $this->orders = new Orders();
         $this->exports = new Exports();
+        $this->guests = new Guests();
     }
     public function indexExport(Request $request)
     {
@@ -767,6 +770,219 @@ class ReportController extends Controller
             ];
         }
     }
+
+
+    // REPORT GUESTS
+    public function indexGuest(Request $request)
+    {
+        $title = 'Báo cáo khách hàng';
+        $filters = [];
+        $string = [];
+
+        $nhanvien = [];
+        if (!empty($request->nhanvien)) {
+            $nhanvien = $request->input('nhanvien', []);
+            array_push($string, ['label' => 'Tên công ty:', 'values' => $nhanvien, 'class' => 'name']);
+        }
+        if (!empty($request->email)) {
+            $email = $request->email;
+            array_push($filters, ['email', 'like', '%' . $email . '%']);
+            $nameArr = explode(',.@', $email);
+            array_push($string, ['label' => 'Email:', 'values' => $nameArr, 'class' => 'email']);
+        }
+        $export = Exports::selectRaw('MIN(created_at) as min_createat, MAX(created_at) as max_createat')->first();
+        // Lấy giá trị min_createat và max_createat từ kết quả truy vấn
+        $mindate = date('d-m-Y', strtotime($export->min_createat));
+        $maxdate = date('d-m-Y', strtotime($export->max_createat));
+        $sortType = $request->input('sort-type');
+        $sortBy = $request->input('sort-by');
+        $allowSort = ['asc', 'desc'];
+        if (!empty($sortType) && in_array($sortType, $allowSort)) {
+            if ($sortType == 'desc') {
+                $sortType = 'asc';
+            } else {
+                $sortType = 'desc';
+            }
+        } else {
+            $sortType = 'desc';
+        }
+        $perPage = $request->input('perPageinput', 5);
+        $tableorders = $this->guests->reportGuest($filters, $nhanvien, $sortBy, $sortType, $perPage);
+        $allRoles = new Roles();
+        $allRoles = $allRoles->getAll();
+        // dd($tableorders);
+        $companyName = Exports::leftjoin('guests', 'exports.guest_id', '=', 'guests.id')->where('exports.export_status', 2)->get();
+        $perPage = $request->input('perPageinput', 25);
+        return view('tables.report.report-guests', compact(
+            'perPage',
+            'mindate',
+            'maxdate',
+            'title',
+            'string',
+            'sortType',
+            'tableorders',
+            'companyName'
+        ));
+    }
+    public function timeGuest(Request $request)
+    {
+        $data = $request->all();
+        $today = Carbon::today();
+        $data1 = [];
+        // Xử lý lấy tất cả hơn nhập
+        if ($data['data'] == 0) {
+            $export = Exports::selectRaw('MIN(created_at) as min_createat, MAX(created_at) as max_createat')->first();
+            // Lấy giá trị min_createat và max_createat từ kết quả truy vấn
+            $minCreatedAt = $export->min_createat;
+            $maxCreatedAt = $export->max_createat;
+
+            // dd($export);
+
+            $minCreatedAt = Carbon::parse($minCreatedAt);
+            $maxCreatedAt = Carbon::parse($maxCreatedAt);
+            $filters = [];
+            $filters[] = $minCreatedAt->format('Y-m-d');
+            $filters[] = $maxCreatedAt->format('Y-m-d');
+            $tableorders = $this->guests->dataReportGuest($filters, $data['guestIds']);
+            $test1 = [];
+            foreach ($tableorders as $item) {
+                $test1[] = $item;
+            }
+            return [
+                'test' => $test1,
+                'start_date' => $minCreatedAt->format('d-m-Y'),
+                'end_date' => $maxCreatedAt->format('d-m-Y'),
+            ];
+        } elseif ($data['data'] == 1) {  //Xử lý lấy dữ liệu tháng này
+            $today = Carbon::today();
+            $firstDayOfMonth = $today->startOfMonth()->format('Y-m-d'); // Ngày bắt đầu của tháng, đã được định dạng
+            $lastDayOfMonth = $today->endOfMonth()->format('Y-m-d'); // Ngày kết thúc của tháng, đã được định dạng            
+            $filters = [];
+            $filters[] = $today->startOfMonth();
+            $filters[] = $lastDayOfMonth;
+            $tableorders = $this->guests->dataReportGuest($filters, $data['guestIds']);
+            $test1 = [];
+            foreach ($tableorders as $item) {
+                $test1[] = $item;
+            }
+            return [
+                'test' => $test1,
+                'start_date' => $today->startOfMonth()->format('d-m-Y'),
+                'end_date' => $today->endOfMonth()->format('d-m-Y')
+            ];
+        } elseif ($data['data'] == 2) { //Xử lý lấy dữ liệu tháng trước
+            if ($today->month == 1) {
+                $lastMonth = $today->subMonth();
+                $firstDayOfMonth = $lastMonth->startOfMonth()->format('Y-m-d'); // Ngày bắt đầu của tháng, đã được định dạng
+                $lastDayOfMonth = $lastMonth->endOfMonth()->format('Y-m-d');
+                $filters = [];
+                $filters[] = Carbon::parse($lastMonth->startOfMonth());
+                $filters[] = Carbon::parse($lastMonth->endOfMonth());
+                $tableorders = $this->guests->dataReportGuest($filters, $data['guestIds']);
+                $test1 = [];
+                foreach ($tableorders as $item) {
+                    $test1[] = $item;
+                }
+            } else {
+                $lastMonth = $today->subMonthNoOverflow();
+                $firstDayOfMonth = $today->startOfMonth()->format('Y-m-d');
+                $lastDayOfMonth = $lastMonth->endOfMonth()->format('Y-m-d');
+
+                $filters = [];
+                $filters[] = Carbon::parse($lastMonth->startOfMonth());
+                $filters[] = Carbon::parse($lastMonth->endOfMonth());
+                $tableorders = $this->guests->dataReportGuest($filters, $data['guestIds']);
+                $test1 = [];
+                foreach ($tableorders as $item) {
+                    $test1[] = $item;
+                }
+            }
+            return [
+                'test' => $test1,
+                'start_date' => $today->startOfMonth()->format('d-m-Y'),
+                'end_date' => $lastMonth->endOfMonth()->format('d-m-Y')
+            ];
+        } elseif ($data['data'] == 3) { // Xử lý lấy dữ liệu 3 tháng trước
+            if ($today->month == 10) {
+                $lastMonth = $today->subMonth(3);
+                $firstDayOfMonth = $lastMonth->startOfMonth()->format('Y-m-d');
+                $lastDayOfMonth = $lastMonth->addMonths(2)->endOfMonth()->format('Y-m-d');
+                $lastMonth1 = $today->subMonthNoOverflow(3);
+                $firstDayOfMonth1 = $lastMonth1->startOfMonth()->format('Y-m-d');
+                $lastDayOfMonth1 = $lastMonth1->addMonths(2)->endOfMonth()->format('Y-m-d');
+
+                $filters = [];
+                $filters[] = Carbon::parse($firstDayOfMonth);
+                $filters[] = Carbon::parse($lastDayOfMonth);
+                $tableorders = $this->guests->dataReportGuest($filters, $data['guestIds']);
+                $test1 = [];
+                foreach ($tableorders as $item) {
+                    $test1[] = $item;
+                }
+            } else {
+                $lastMonth = $today->subMonthNoOverflow(3);
+                $firstDayOfMonth = $lastMonth->startOfMonth()->format('Y-m-d');
+                $lastDayOfMonth = $lastMonth->addMonths(2)->endOfMonth()->format('Y-m-d');
+                $lastMonth1 = $today->subMonthNoOverflow(2);
+                $firstDayOfMonth1 = $lastMonth1->startOfMonth()->format('Y-m-d');
+                $lastDayOfMonth1 = $lastMonth1->addMonths(2)->endOfMonth()->format('Y-m-d');
+
+                $filters = [];
+                $filters[] = Carbon::parse($firstDayOfMonth1);
+                $filters[] = Carbon::parse($lastDayOfMonth1);
+                $tableorders = $this->guests->dataReportGuest($filters, $data['guestIds']);
+                $test1 = [];
+                foreach ($tableorders as $item) {
+                    $test1[] = $item;
+                }
+            }
+            return [
+                'test' => $test1,
+                'filters' => $firstDayOfMonth1,
+                'start_date' => Carbon::parse($firstDayOfMonth)->format('d-m-Y'),
+                'end_date' => Carbon::parse($lastDayOfMonth)->format('d-m-Y')
+            ];
+        } else {
+            $date_start = Carbon::parse($data['date_start']);
+            $date_end = Carbon::parse($data['date_end']);
+
+            $filters = [];
+            $filters[] = Carbon::parse($data['date_start']);
+            $filters[] = Carbon::parse($data['date_end']);
+            $tableorders = $this->guests->dataReportGuest($filters, $data['guestIds']);
+            $test1 = [];
+            foreach ($tableorders as $item) {
+                $test1[] = $item;
+            }
+            return [
+                'test' => $test1,
+                'start_date' => Carbon::parse($data['date_start'])->format('d-m-Y'),
+                'end_date' => Carbon::parse($data['date_end'])->format('d-m-Y')
+            ];
+        }
+    }
+    public function searchGuestAjax(Request $request)
+    {
+        $data = $request->all();
+        if ($request->ajax()) {
+            $output = '';
+            $guests = $this->guests->ajax($data);
+            if ($guests) {
+                foreach ($guests as $key => $item) {
+                    $output .= '<tr id="guest_' . $item->guest_id . '">
+                                            <td class="text-left">' . $item->guest_name . '</td>
+                                            <td class="text-right"id="congno' . $item->guest_id . '">
+                                                ' . number_format($item->totaltong) . '
+                                            </td>
+                                        </tr>';
+                }
+            }
+            return [
+                'output' => $output,
+            ];
+        }
+    }
+
 
     // Backup DATABASE
     public function exportDatabase()

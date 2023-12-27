@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -26,7 +27,7 @@ class Guests extends Model
         'debt'
     ];
     protected $table = 'guests';
-    public function getAllGuests($filter = [],$perPage,$users_name=[],$name = null,$represent = null,$phonenumber = null,$email = null, $status = [], $keywords = null, $sortByArr = null)
+    public function getAllGuests($filter = [], $perPage, $users_name = [], $name = null, $represent = null, $phonenumber = null, $email = null, $status = [], $keywords = null, $sortByArr = null)
     {
         $guests = DB::table($this->table)
             ->leftJoin('users', 'guests.user_id', '=', 'users.id')
@@ -88,5 +89,66 @@ class Guests extends Model
         $userId = Auth::user()->id;
         $guests = DB::table($this->table)->where('user_id', $userId)->paginate($perPage);
         return $guests;
+    }
+    public function reportGuest($filter = [], $name = [], $orderBy = null, $orderType = null, $perPage)
+    {
+        $tableorders = Exports::select('guests.id as guest_id', 'guests.guest_name', DB::raw('SUM(exports.total) as totaltong'))
+            ->leftJoin('guests', 'exports.guest_id', '=', 'guests.id')
+            ->groupBy('guests.id', 'guests.guest_name');
+        if (!empty($filter)) {
+            $tableorders = $tableorders->where($filter);
+        }
+        if (!empty($name)) {
+            $tableorders = $tableorders->whereIn('guests.guest_name', $name);
+        }
+        if (empty($orderBy)) {
+            $orderBy = 'totaltong';
+        }
+        if (!empty($orderBy) && !empty($orderType)) {
+            if ($orderBy == 'totaltong') {
+                $orderBy ==  $orderBy;
+            };
+            $tableorders = $tableorders->orderBy($orderBy, $orderType);
+        }
+
+        $tableorders = $tableorders->get();
+
+
+        return $tableorders;
+    }
+    public function dataReportGuest($filter = [], $guestIds = [])
+    {
+        $tableorders = Exports::select('guests.id as guest_id', 'guests.guest_name', DB::raw('SUM(exports.total) as totaltong'))
+            ->leftJoin('guests', 'exports.guest_id', '=', 'guests.id');
+        if (!empty($guestIds)) {
+            $tableorders->whereIn('guests.id', $guestIds);
+        }
+        $tableorders->groupBy('guests.id', 'guests.guest_name');
+        if (count($filter) === 2) {
+            $tableorders->whereBetween('exports.created_at', [$filter[0], $filter[1]]);
+        }
+        $tableorders = $tableorders->get();
+        return $tableorders;
+    }
+    public function ajax($data = [])
+    {
+
+        $tableorders = Exports::select('guests.id as guest_id', 'guests.guest_name', DB::raw('SUM(exports.total) as totaltong'))
+            ->leftJoin('guests', 'exports.guest_id', '=', 'guests.id')
+            ->groupBy('guests.id', 'guests.guest_name');
+        if (!empty($data['guestIds'])) {
+            $tableorders->whereIn('guests.id', $data['guestIds']);
+        }
+        if (!empty($data['date_start']) && !empty($data['date_end'])) {
+            $dateStart = Carbon::parse($data['date_start']);
+            $dateEnd = Carbon::parse($data['date_end']);
+
+            $tableorders->whereBetween('exports.created_at', [$dateStart, $dateEnd]);
+        }
+        if (isset($data['sort_by']) && $data['sort_type']) {
+            $tableorders = $tableorders->orderBy($data['sort_by'], $data['sort_type']);
+        }
+        $tableorders = $tableorders->get();
+        return $tableorders;
     }
 }

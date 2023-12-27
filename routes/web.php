@@ -28,6 +28,7 @@ use App\Models\DebtImport;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 Route::prefix('admin')->name('admin.')->middleware('permission:admin')->group(function () {
     Route::get('userlist', [UsersController::class, 'show'])->name('userslist');
     Route::get('adduser', [UsersController::class, 'add'])->name('add');
@@ -97,14 +98,19 @@ Route::get('/editEx/{id}', [ExportController::class, 'editEx'])->name('editEx');
 //Báo cáo
 Route::get('/indexExport', [ReportController::class, 'indexExport'])->name('indexExport');
 Route::get('/indexImport', [ReportController::class, 'indexImport'])->name('indexImport');
-Route::get('/timeImport',[ReportController::class, 'timeImport'])->name('timeImport');
-Route::get('/timeExport',[ReportController::class, 'timeExport'])->name('timeExport');
+
+Route::get('/timeImport', [ReportController::class, 'timeImport'])->name('timeImport');
+Route::get('/timeExport', [ReportController::class, 'timeExport'])->name('timeExport');
+// Báo cáo khách hàng
+Route::get('/indexGuest', [ReportController::class, 'indexGuest'])->name('indexGuest');
+Route::get('/timeGuest', [ReportController::class, 'timeGuest'])->name('timeGuest');
+Route::get('/searchGuestAjax', [ReportController::class, 'searchGuestAjax'])->name('searchGuestAjax');
 
 
 
 // Export DATABASE
-Route::get('/export_database',[ReportController::class, 'exportDatabase'])->name('exportDatabase');
-Route::POST('/importDatabase',[ReportController::class, 'importDatabase'])->name('importDatabase');
+Route::get('/export_database', [ReportController::class, 'exportDatabase'])->name('exportDatabase');
+Route::POST('/importDatabase', [ReportController::class, 'importDatabase'])->name('importDatabase');
 
 
 //kiểm tra số lượng trong xuất hàng
@@ -128,9 +134,9 @@ Route::PUT('/updateProduct/{id}', [ProductsController::class, 'updateProduct'])-
 // EXPORT
 Route::get('/export_product', [ProductController::class, 'export'])->name('export');
 Route::get('/export_order', [AddProductController::class, 'export_order'])->name('export_order');
-Route::get('/export_import',[DebtImportController::class,'export_import'])->name('export_import');
-Route::get('/exportDebt',[DebtController::class, 'exportDebt'])->name('exportDebt');
-Route::get('/exportHistory',[HistoryController::class, 'exportHistory'])->name('exportHistory');
+Route::get('/export_import', [DebtImportController::class, 'export_import'])->name('export_import');
+Route::get('/exportDebt', [DebtController::class, 'exportDebt'])->name('exportDebt');
+Route::get('/exportHistory', [HistoryController::class, 'exportHistory'])->name('exportHistory');
 
 Route::get('/show_provide', [AddProductController::class, 'show_provide'])->name('show_provide');
 Route::get('/update_provide', [AddProductController::class, 'update_provide'])->name('update_provide');
@@ -147,7 +153,7 @@ Route::get('/showProduct', [AddProductController::class, 'showProduct'])->name('
 Route::get('/add_newProvide', [AddProductController::class, 'add_newProvide'])->name('add_newProvide');
 
 // Xóa đơn đã hủy
-Route::get('/delBillCancel',[AddProductController::class,'delBillCancel'])->name('delBillCancel');
+Route::get('/delBillCancel', [AddProductController::class, 'delBillCancel'])->name('delBillCancel');
 
 // Kiểm tra serial number tồn tại chưa
 Route::get('/checkSN', [AddProductController::class, 'checkSN'])->name('checkSN');
@@ -165,11 +171,11 @@ Route::get('/simple', function () {
     return view('tables.simple');
 });
 Route::get('index', [DashboardController::class, 'index']);
-Route::get('/count',[DashboardController::class, 'count'])->name('count');
-Route::get('/countExport',[DashboardController::class, 'countExport'])->name('countExport');
-Route::get('/countInventory',[DashboardController::class, 'countInventory'])->name('countInventory');
-Route::get('/countDebt',[DashboardController::class, 'countDebt'])->name('countDebt');
-Route::get('/countProfit',[DashboardController::class, 'countProfit'])->name('countProfit');
+Route::get('/count', [DashboardController::class, 'count'])->name('count');
+Route::get('/countExport', [DashboardController::class, 'countExport'])->name('countExport');
+Route::get('/countInventory', [DashboardController::class, 'countInventory'])->name('countInventory');
+Route::get('/countDebt', [DashboardController::class, 'countDebt'])->name('countDebt');
+Route::get('/countProfit', [DashboardController::class, 'countProfit'])->name('countProfit');
 
 Route::middleware([
     'auth:sanctum',

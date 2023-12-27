@@ -250,7 +250,7 @@ class Orders extends Model
             ->first();
         if ($check) {
             DB::table($this->table)->where('id', $id)->delete();
-            Serinumbers::where('order_id',$check->id)->delete();
+            Serinumbers::where('order_id', $check->id)->delete();
             return $status = 0;
         } else {
             return $status = 1;

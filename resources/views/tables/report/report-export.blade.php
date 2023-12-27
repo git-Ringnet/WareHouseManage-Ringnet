@@ -113,6 +113,9 @@
                 <a href="{{ route('indexExport') }}" class="title mr-2 pt-2 px-1 active">
                     Xuất hàng
                 </a>
+                <a href="{{ route('indexGuest') }}" class="title mr-2 pt-2 px-1 before">
+                    Doanh số bán hàng
+                </a>
             </div>
 
 
@@ -597,14 +600,13 @@ $index = array_search($item['label'], $numberedLabels);
                                             <div class="input-group p-2 justify-content-around">
                                                 <select class="sale_operator input-so" name="sale_operator"
                                                     style="width: 40%">
-                                                    <option
-                                                        value=">="
+                                                    <option value=">="
                                                         {{ request('sale_operator') === '>=' ? 'selected' : '' }}>
                                                         >=
                                                     </option>
                                                     <option value="<="
                                                         {{ request('sale_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity sale-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -634,7 +636,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('import_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity export-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -658,14 +660,13 @@ $index = array_search($item['label'], $numberedLabels);
                                             <div class="input-group p-2 justify-content-around">
                                                 <select class="difference_operator input-so"
                                                     name="difference_operator" style="width: 40%">
-                                                    <option
-                                                        value=">="
+                                                    <option value=">="
                                                         {{ request('difference_operator') === '>=' ? 'selected' : '' }}>
                                                         >=
                                                     </option>
                                                     <option value="<="
                                                         {{ request('difference_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity difference-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -695,7 +696,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                     </option>
                                                     <option value="<="
                                                         {{ request('sum_debt_operator') === '<=' ? 'selected' : '' }}>
-                                                        <=</option>
+                                                        <=< /option>
                                                 </select>
                                                 <input class="w-50 input-quantity sum_debt-input" type="text"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"

@@ -118,6 +118,9 @@
                 <a href="{{ route('indexExport') }}" class="title mr-2 pt-2 px-1 before">
                     Xuất hàng
                 </a>
+                <a href="{{ route('indexGuest') }}" class="title mr-2 pt-2 px-1 before">
+                    Doanh số bán hàng
+                </a>
             </div>
 
         </div>
