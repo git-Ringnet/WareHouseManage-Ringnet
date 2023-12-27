@@ -92,9 +92,9 @@ class Guests extends Model
     }
     public function reportGuest($filter = [], $name = [], $orderBy = null, $orderType = null, $perPage)
     {
-        $tableorders = Exports::select('guests.id as guest_id', 'guests.guest_name', DB::raw('SUM(exports.total) as totaltong'))
+        $tableorders = Exports::select('guests.guest_name', DB::raw('SUM(exports.total) as totaltong'))
             ->leftJoin('guests', 'exports.guest_id', '=', 'guests.id')
-            ->groupBy('guests.id', 'guests.guest_name');
+            ->groupBy('guests.guest_name');
         if (!empty($filter)) {
             $tableorders = $tableorders->where($filter);
         }
@@ -118,12 +118,12 @@ class Guests extends Model
     }
     public function dataReportGuest($filter = [], $guestIds = [])
     {
-        $tableorders = Exports::select('guests.id as guest_id', 'guests.guest_name', DB::raw('SUM(exports.total) as totaltong'))
+        $tableorders = Exports::select('guests.guest_name', DB::raw('SUM(exports.total) as totaltong'))
             ->leftJoin('guests', 'exports.guest_id', '=', 'guests.id');
         if (!empty($guestIds)) {
-            $tableorders->whereIn('guests.id', $guestIds);
+            $tableorders->whereIn('guests.guest_name', $guestIds);
         }
-        $tableorders->groupBy('guests.id', 'guests.guest_name');
+        $tableorders->groupBy('guests.guest_name');
         if (count($filter) === 2) {
             $tableorders->whereBetween('exports.created_at', [$filter[0], $filter[1]]);
         }
@@ -133,11 +133,11 @@ class Guests extends Model
     public function ajax($data = [])
     {
 
-        $tableorders = Exports::select('guests.id as guest_id', 'guests.guest_name', DB::raw('SUM(exports.total) as totaltong'))
+        $tableorders = Exports::select('guests.guest_name', DB::raw('SUM(exports.total) as totaltong'))
             ->leftJoin('guests', 'exports.guest_id', '=', 'guests.id')
-            ->groupBy('guests.id', 'guests.guest_name');
+            ->groupBy('guests.guest_name');
         if (!empty($data['guestIds'])) {
-            $tableorders->whereIn('guests.id', $data['guestIds']);
+            $tableorders->whereIn('guests.guest_name', $data['guestIds']);
         }
         if (!empty($data['date_start']) && !empty($data['date_end'])) {
             $dateStart = Carbon::parse($data['date_start']);

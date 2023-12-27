@@ -969,9 +969,9 @@ class ReportController extends Controller
             $guests = $this->guests->ajax($data);
             if ($guests) {
                 foreach ($guests as $key => $item) {
-                    $output .= '<tr id="guest_' . $item->guest_id . '">
+                    $output .= '<tr id="guest_' . $item->guest_name . '">
                                             <td class="text-left">' . $item->guest_name . '</td>
-                                            <td class="text-right"id="congno' . $item->guest_id . '">
+                                            <td class="text-right"id="congno' . $item->guest_name . '">
                                                 ' . number_format($item->totaltong) . '
                                             </td>
                                         </tr>';

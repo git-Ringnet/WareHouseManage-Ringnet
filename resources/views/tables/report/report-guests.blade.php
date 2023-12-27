@@ -433,9 +433,9 @@ $index = array_search($item['label'], $numberedLabels);
                                 <tbody id="yourTableId">
                                     <?php $stt = 1; ?>
                                     @foreach ($tableorders as $item)
-                                        <tr id="guest_{{ $item->guest_id }}">
+                                        <tr id="guest_{{ $item->guest_name }}">
                                             <td class="text-left">{{ $item->guest_name }}</td>
-                                            <td class="text-right"id="congno{{ $item->guest_id }}">
+                                            <td class="text-right"id="congno{{ $item->guest_name }}">
                                                 {{ number_format($item->totaltong) }}
                                             </td>
                                         </tr>
@@ -623,7 +623,7 @@ $index = array_search($item['label'], $numberedLabels);
                     var tbody = $('#yourTableId');
                     tbody.empty();
                     data.test.forEach(function(item) {
-                        var rowHtml = `<tr id="guest_${item.guest_id}">
+                        var rowHtml = `<tr id="guest_${item.guest_name}">
         <td class="text-left">${item.guest_name}</td>
         <td class="text-right">${formatCurrency(item.totaltong)}</td>
     </tr>`;
