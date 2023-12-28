@@ -92,14 +92,14 @@ class Guests extends Model
     }
     public function reportGuest($filter = [], $name = [], $orderBy = null, $orderType = null, $perPage)
     {
-        $tableorders = Exports::select('guests.guest_name', DB::raw('SUM(exports.total) as totaltong'))
+        $tableorders = Exports::select('guests.guest_name', DB::raw('MAX(exports.guest_id) as guest_id'), DB::raw('SUM(exports.total) as totaltong'))
             ->leftJoin('guests', 'exports.guest_id', '=', 'guests.id')
             ->groupBy('guests.guest_name');
         if (!empty($filter)) {
             $tableorders = $tableorders->where($filter);
         }
         if (!empty($name)) {
-            $tableorders = $tableorders->whereIn('guests.guest_name', $name);
+            $tableorders = $tableorders->whereIn('guest_id', $name);
         }
         if (empty($orderBy)) {
             $orderBy = 'totaltong';
@@ -118,17 +118,18 @@ class Guests extends Model
     }
     public function dataReportGuest($filter = [], $guestIds = [], $search = null)
     {
-        $tableorders = Exports::select('guests.guest_name', DB::raw('SUM(exports.total) as totaltong'))
+        $tableorders = Exports::select('guests.guest_name', DB::raw('MAX(exports.guest_id) as guest_id'), DB::raw('SUM(exports.total) as totaltong'))
             ->leftJoin('guests', 'exports.guest_id', '=', 'guests.id');
+        $tableorders->groupBy('guests.guest_name');
         if (!empty($search)) {
             $tableorders = $tableorders->where(function ($query) use ($search) {
                 $query->orWhere('guests.guest_name', 'like', '%' . $search . '%');
             });
         }
         if (!empty($guestIds)) {
-            $tableorders->whereIn('guests.guest_name', $guestIds);
+            $tableorders->whereIn('guest_id', $guestIds);
         }
-        $tableorders->groupBy('guests.guest_name');
+
         if (count($filter) === 2) {
             $tableorders->whereBetween('exports.created_at', [$filter[0], $filter[1]]);
         }
@@ -138,7 +139,7 @@ class Guests extends Model
     public function ajax($data = [])
     {
 
-        $tableorders = Exports::select('guests.guest_name', DB::raw('SUM(exports.total) as totaltong'))
+        $tableorders = Exports::select('guests.guest_name', DB::raw('MAX(exports.guest_id) as guest_id'), DB::raw('SUM(exports.total) as totaltong'))
             ->leftJoin('guests', 'exports.guest_id', '=', 'guests.id')
             ->groupBy('guests.guest_name');
         if (isset($data['search'])) {
@@ -147,7 +148,7 @@ class Guests extends Model
             });
         }
         if (!empty($data['guestIds'])) {
-            $tableorders->whereIn('guests.guest_name', $data['guestIds']);
+            $tableorders->whereIn('guest_id', $data['guestIds']);
         }
         if (!empty($data['date_start']) && !empty($data['date_end'])) {
             $dateStart = Carbon::parse($data['date_start']);

@@ -354,17 +354,17 @@ $index = array_search($item['label'], $numberedLabels);
                                                             $seenValues = [];
                                                         @endphp
                                                         @foreach ($companyName as $value)
-                                                            @if (!in_array($value->guest_name, $seenValues))
+                                                            @if (!in_array($value->guest_id, $seenValues))
                                                                 <li>
                                                                     <input type="checkbox" id="name_active"
-                                                                        {{ in_array($value->guest_name, $nhanvien) ? 'checked' : '' }}
+                                                                        {{ in_array($value->guest_id, $nhanvien) ? 'checked' : '' }}
                                                                         name="nhanvien[]"
-                                                                        value="{{ $value->guest_name }}">
+                                                                        value="{{ $value->guest_id }}">
                                                                     <label id="nhanvien"
                                                                         for="">{{ $value->guest_name }}</label>
                                                                 </li>
                                                                 @php
-                                                                    $seenValues[] = $value->guest_name;
+                                                                    $seenValues[] = $value->guest_id;
                                                                 @endphp
                                                             @endif
                                                         @endforeach
@@ -456,9 +456,9 @@ $index = array_search($item['label'], $numberedLabels);
                                 <tbody id="yourTableId">
                                     <?php $stt = 1; ?>
                                     @foreach ($tableorders as $item)
-                                        <tr id="guest_{{ $item->guest_name }}">
+                                        <tr id="guest_{{ $item->guest_id }}">
                                             <td class="text-left">{{ $item->guest_name }}</td>
-                                            <td class="text-right"id="congno{{ $item->guest_name }}">
+                                            <td class="text-right"id="congno{{ $item->guest_id }}">
                                                 {{ number_format($item->totaltong) }}
                                             </td>
                                         </tr>
@@ -742,7 +742,6 @@ $index = array_search($item['label'], $numberedLabels);
                     'date_start': datestart,
                     'date_end': dateend,
                     'search': search,
-
                 },
                 success: function(data) {
                     $('tbody').html(data.output);

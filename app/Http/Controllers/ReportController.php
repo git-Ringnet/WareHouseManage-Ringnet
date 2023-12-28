@@ -782,7 +782,11 @@ class ReportController extends Controller
         $nhanvien = [];
         if (!empty($request->nhanvien)) {
             $nhanvien = $request->input('nhanvien', []);
-            array_push($string, ['label' => 'Tên công ty:', 'values' => $nhanvien, 'class' => 'name']);
+            if (!empty($nhanvien)) {
+                $selectedRoles = Guests::whereIn('id', $nhanvien)->get();
+                $selectedRoleNames = $selectedRoles->pluck('guest_name')->toArray();
+            }
+            array_push($string, ['label' => 'Tên công ty:', 'values' => $selectedRoleNames, 'class' => 'name']);
         }
         if (!empty($request->email)) {
             $email = $request->email;
