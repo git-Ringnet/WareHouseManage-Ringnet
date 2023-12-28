@@ -814,7 +814,13 @@ class ReportController extends Controller
         $tableorders = $this->guests->reportGuest($filters, $nhanvien, $sortBy, $sortType, $perPage);
         $allRoles = new Roles();
         $allRoles = $allRoles->getAll();
-        // dd($tableorders);
+        $duplicateNames = Guests::select('guest_name')
+            ->selectRaw('GROUP_CONCAT(id) as ids')
+            ->selectRaw('COUNT(guest_name) as name_count')
+            ->groupBy('guest_name')
+            ->having('name_count', '>', 1)
+            ->get();
+        // dd($duplicateNames);
         $companyName = Exports::leftjoin('guests', 'exports.guest_id', '=', 'guests.id')->where('exports.export_status', 2)->get();
         $perPage = $request->input('perPageinput', 25);
         return view('tables.report.report-guests', compact(
@@ -825,7 +831,8 @@ class ReportController extends Controller
             'string',
             'sortType',
             'tableorders',
-            'companyName'
+            'companyName',
+            'duplicateNames'
         ));
     }
     public function timeGuest(Request $request)
