@@ -27,6 +27,16 @@
                                         <div class="ca text-left">Tất cả</div>
                                     </div>
                                 </div>
+                                {{-- Năm nay --}}
+                                <div id="this-year-orders" style="display: none">
+                                    <div class="d-flex flex-column all-orders">
+                                        <div class="ca d-flex">
+                                            <div class="it4"></div>->
+                                            <div class="id4"></div>
+                                        </div>
+                                        <div class="ca text-left">Năm nay</div>
+                                    </div>
+                                </div>
                                 {{-- Tháng này Orders --}}
                                 <div id="this-month-orders" style="display: none">
                                     <div class="d-flex flex-column all-orders">
@@ -74,6 +84,8 @@
                                 <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
                                     <a class="dropdown-item dropdown-item-orders" id="btn-all-orders" href="#"
                                         data-value="0">Tất cả</a>
+                                    <a class="dropdown-item dropdown-item-orders" id="btn-this-year-orders"
+                                        href="#" data-value="4">Năm nay</a>
                                     <a class="dropdown-item dropdown-item-orders" id="btn-this-month-orders"
                                         href="#" data-value="1">Tháng này</a>
                                     <a class="dropdown-item dropdown-item-orders" id="btn-last-month-orders"
@@ -102,7 +114,8 @@
                                 </div>
                             </div>
                             <div class="d-flex justify-contents-center align-items-baseline p-2">
-                                <button type="button" class="suscess btn btn-primary btn-block mr-2" value="4">Xác
+                                <button type="button" class="suscess btn btn-primary btn-block mr-2"
+                                    value="5">Xác
                                     nhận</button>
                                 <button type="button" id="cancel-times-orders"
                                     class="btn btn-default btn-block">Hủy</button>
@@ -127,6 +140,16 @@
         <hr class="hr">
         <div class="container-fluided">
             <div class="row m-auto filter">
+                <div class="col-md-5 p-0">
+                    <input type="text" id="search" placeholder="Tìm kiếm tên công ty" name="keywords"
+                        class="pr-4 form-control input-search w-100 searchkeyword" value="{{ request()->keywords }}">
+                    <span id="search-icon" class="search-icon"><i class="fas fa-search sort-link"></i></span>
+                    <input class="sort-link" type="submit" id="hidden-submit" name="hidden-submit"
+                        style="display: none;">
+                </div>
+                <div class="col-2 d-none">
+                    <button type="submit" class="btn btn-primary btn-block">Tìm kiếm</button>
+                </div>
                 <form class="w-100" action="" method="get" id='search-filter'>
                     <div class="d-flex justify-contents-center align-items-center mr-auto row-filter my-3 m-0">
                         <div class="icon-filter mr-3">
@@ -484,6 +507,16 @@ $index = array_search($item['label'], $numberedLabels);
     $("#btn-all-orders").click(function() {
         $("#all-orders").show();
         $("#this-month-orders").hide();
+        $("#this-year-orders").hide();
+        $("#last-month-orders").hide();
+        $("#3last-month-orders").hide();
+        $("#time-orders").hide();
+    });
+    // Năm nay
+    $("#btn-this-year-orders").click(function() {
+        $("#this-year-orders").show();
+        $("#this-month-orders").hide();
+        $("#all-orders").hide();
         $("#last-month-orders").hide();
         $("#3last-month-orders").hide();
         $("#time-orders").hide();
@@ -492,6 +525,7 @@ $index = array_search($item['label'], $numberedLabels);
     $("#btn-this-month-orders").click(function() {
         $("#this-month-orders").show();
         $("#all-orders").hide();
+        $("#this-year-orders").hide();
         $("#last-month-orders").hide();
         $("#3last-month-orders").hide();
         $("#time-orders").hide();
@@ -500,6 +534,7 @@ $index = array_search($item['label'], $numberedLabels);
     $("#btn-last-month-orders").click(function() {
         $("#last-month-orders").show();
         $("#all-orders").hide();
+        $("#this-year-orders").hide();
         $("#this-month-orders").hide();
         $("#3last-month-orders").hide();
         $("#time-orders").hide();
@@ -508,6 +543,7 @@ $index = array_search($item['label'], $numberedLabels);
     $("#btn-3last-month-orders").click(function() {
         $("#3last-month-orders").show();
         $("#all-orders").hide();
+        $("#this-year-orders").hide();
         $("#this-month-orders").hide();
         $("#last-month-orders").hide();
         $("#time-orders").hide();
@@ -516,6 +552,7 @@ $index = array_search($item['label'], $numberedLabels);
     $("#btn-time-orders").click(function() {
         $("#time-orders").show();
         $("#times-orders-options").show();
+        $("#this-year-orders").hide();
         $("#all-orders").hide();
         $("#this-month-orders").hide();
         $("#last-month-orders").hide();
@@ -599,12 +636,15 @@ $index = array_search($item['label'], $numberedLabels);
         });
         $(document).on('click', '.dropdown-item-orders', function() {
             var dataid = $(this).data('value');
+            var search = $('#search').val();
+
             $.ajax({
                 url: "{{ route('timeGuest') }}",
                 type: "get",
                 data: {
                     data: dataid,
                     guestIds: guestIds,
+                    search: search,
 
                 },
                 success: function(data) {
@@ -640,6 +680,8 @@ $index = array_search($item['label'], $numberedLabels);
             var data = $(this).val();
             var date_start = $('.date_start').val();
             var date_end = $('.date_end').val();
+            var search = $('#search').val();
+
             $.ajax({
                 url: "{{ route('timeGuest') }}",
                 type: "get",
@@ -648,9 +690,9 @@ $index = array_search($item['label'], $numberedLabels);
                     date_start: date_start,
                     date_end: date_end,
                     guestIds: guestIds,
+                    search: search,
                 },
                 success: function(data) {
-                    // console.log(data);
                     datestart = data.start_date;
                     dateend = data.end_date;
                     data.test.sort(function(a, b) {
@@ -676,6 +718,7 @@ $index = array_search($item['label'], $numberedLabels);
             // Get dữ liệu
             var sort_by = $(this).data('sort-by');
             var sort_type = $(this).data('sort-type');
+            var search = $('.searchkeyword').val();
 
             sort_type = (sort_type === 'ASC') ? 'DESC' : 'ASC';
             $(this).data('sort-type', sort_type);
@@ -697,7 +740,9 @@ $index = array_search($item['label'], $numberedLabels);
                     'sort_type': sort_type,
                     'guestIds': guestIds,
                     'date_start': datestart,
-                    'date_end': dateend
+                    'date_end': dateend,
+                    'search': search,
+
                 },
                 success: function(data) {
                     $('tbody').html(data.output);

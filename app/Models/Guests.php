@@ -116,10 +116,15 @@ class Guests extends Model
 
         return $tableorders;
     }
-    public function dataReportGuest($filter = [], $guestIds = [])
+    public function dataReportGuest($filter = [], $guestIds = [], $search = null)
     {
         $tableorders = Exports::select('guests.guest_name', DB::raw('SUM(exports.total) as totaltong'))
             ->leftJoin('guests', 'exports.guest_id', '=', 'guests.id');
+        if (!empty($search)) {
+            $tableorders = $tableorders->where(function ($query) use ($search) {
+                $query->orWhere('guests.guest_name', 'like', '%' . $search . '%');
+            });
+        }
         if (!empty($guestIds)) {
             $tableorders->whereIn('guests.guest_name', $guestIds);
         }
@@ -136,6 +141,11 @@ class Guests extends Model
         $tableorders = Exports::select('guests.guest_name', DB::raw('SUM(exports.total) as totaltong'))
             ->leftJoin('guests', 'exports.guest_id', '=', 'guests.id')
             ->groupBy('guests.guest_name');
+        if (isset($data['search'])) {
+            $tableorders = $tableorders->where(function ($query) use ($data) {
+                $query->orWhere('guests.guest_name', 'like', '%' . $data['search'] . '%');
+            });
+        }
         if (!empty($data['guestIds'])) {
             $tableorders->whereIn('guests.guest_name', $data['guestIds']);
         }

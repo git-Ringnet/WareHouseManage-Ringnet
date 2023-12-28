@@ -843,7 +843,7 @@ class ReportController extends Controller
             $filters = [];
             $filters[] = $minCreatedAt->format('Y-m-d');
             $filters[] = $maxCreatedAt->format('Y-m-d');
-            $tableorders = $this->guests->dataReportGuest($filters, $data['guestIds']);
+            $tableorders = $this->guests->dataReportGuest($filters, $data['guestIds'], $data['search']);
             $test1 = [];
             foreach ($tableorders as $item) {
                 $test1[] = $item;
@@ -860,7 +860,7 @@ class ReportController extends Controller
             $filters = [];
             $filters[] = $today->startOfMonth();
             $filters[] = $lastDayOfMonth;
-            $tableorders = $this->guests->dataReportGuest($filters, $data['guestIds']);
+            $tableorders = $this->guests->dataReportGuest($filters, $data['guestIds'], $data['search']);
             $test1 = [];
             foreach ($tableorders as $item) {
                 $test1[] = $item;
@@ -870,6 +870,23 @@ class ReportController extends Controller
                 'start_date' => $today->startOfMonth()->format('d-m-Y'),
                 'end_date' => $today->endOfMonth()->format('d-m-Y')
             ];
+        } elseif ($data['data'] == 4) {  //Xử lý lấy dữ liệu năm nay
+            $today = Carbon::today();
+            $firstDayOfYear = $today->startOfYear()->format('Y-m-d');
+            $lastDayOfYear = $today->endOfYear()->format('Y-m-d');
+            $filters = [];
+            $filters[] = $firstDayOfYear;
+            $filters[] = $lastDayOfYear;
+            $tableorders = $this->guests->dataReportGuest($filters, $data['guestIds'], $data['search']);
+            $test1 = [];
+            foreach ($tableorders as $item) {
+                $test1[] = $item;
+            }
+            return [
+                'test' => $test1,
+                'start_date' => $today->startOfYear()->format('d-m-Y'),
+                'end_date' => $today->endOfYear()->format('d-m-Y')
+            ];
         } elseif ($data['data'] == 2) { //Xử lý lấy dữ liệu tháng trước
             if ($today->month == 1) {
                 $lastMonth = $today->subMonth();
@@ -878,7 +895,7 @@ class ReportController extends Controller
                 $filters = [];
                 $filters[] = Carbon::parse($lastMonth->startOfMonth());
                 $filters[] = Carbon::parse($lastMonth->endOfMonth());
-                $tableorders = $this->guests->dataReportGuest($filters, $data['guestIds']);
+                $tableorders = $this->guests->dataReportGuest($filters, $data['guestIds'], $data['search']);
                 $test1 = [];
                 foreach ($tableorders as $item) {
                     $test1[] = $item;
@@ -891,7 +908,7 @@ class ReportController extends Controller
                 $filters = [];
                 $filters[] = Carbon::parse($lastMonth->startOfMonth());
                 $filters[] = Carbon::parse($lastMonth->endOfMonth());
-                $tableorders = $this->guests->dataReportGuest($filters, $data['guestIds']);
+                $tableorders = $this->guests->dataReportGuest($filters, $data['guestIds'], $data['search']);
                 $test1 = [];
                 foreach ($tableorders as $item) {
                     $test1[] = $item;
@@ -914,7 +931,7 @@ class ReportController extends Controller
                 $filters = [];
                 $filters[] = Carbon::parse($firstDayOfMonth);
                 $filters[] = Carbon::parse($lastDayOfMonth);
-                $tableorders = $this->guests->dataReportGuest($filters, $data['guestIds']);
+                $tableorders = $this->guests->dataReportGuest($filters, $data['guestIds'], $data['search']);
                 $test1 = [];
                 foreach ($tableorders as $item) {
                     $test1[] = $item;
@@ -930,7 +947,7 @@ class ReportController extends Controller
                 $filters = [];
                 $filters[] = Carbon::parse($firstDayOfMonth1);
                 $filters[] = Carbon::parse($lastDayOfMonth1);
-                $tableorders = $this->guests->dataReportGuest($filters, $data['guestIds']);
+                $tableorders = $this->guests->dataReportGuest($filters, $data['guestIds'], $data['search']);
                 $test1 = [];
                 foreach ($tableorders as $item) {
                     $test1[] = $item;
@@ -949,7 +966,7 @@ class ReportController extends Controller
             $filters = [];
             $filters[] = Carbon::parse($data['date_start']);
             $filters[] = Carbon::parse($data['date_end']);
-            $tableorders = $this->guests->dataReportGuest($filters, $data['guestIds']);
+            $tableorders = $this->guests->dataReportGuest($filters, $data['guestIds'], $data['search']);
             $test1 = [];
             foreach ($tableorders as $item) {
                 $test1[] = $item;
