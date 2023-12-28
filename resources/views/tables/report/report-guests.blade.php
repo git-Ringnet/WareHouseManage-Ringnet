@@ -354,17 +354,17 @@ $index = array_search($item['label'], $numberedLabels);
                                                             $seenValues = [];
                                                         @endphp
                                                         @foreach ($companyName as $value)
-                                                            @if (!in_array($value->guest_id, $seenValues))
+                                                            @if (!in_array($value->guest_name, $seenValues))
                                                                 <li>
                                                                     <input type="checkbox" id="name_active"
-                                                                        {{ in_array($value->guest_id, $nhanvien) ? 'checked' : '' }}
+                                                                        {{ in_array($value->guest_name, $nhanvien) ? 'checked' : '' }}
                                                                         name="nhanvien[]"
-                                                                        value="{{ $value->guest_id }}">
+                                                                        value="{{ $value->guest_name }}">
                                                                     <label id="nhanvien"
                                                                         for="">{{ $value->guest_name }}</label>
                                                                 </li>
                                                                 @php
-                                                                    $seenValues[] = $value->guest_id;
+                                                                    $seenValues[] = $value->guest_name;
                                                                 @endphp
                                                             @endif
                                                         @endforeach

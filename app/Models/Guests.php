@@ -176,4 +176,13 @@ class Guests extends Model
         $tableorders = $tableorders->get();
         return $tableorders;
     }
+    public function duplicateNames()
+    {
+        return Guests::select('guest_name')
+            ->selectRaw('GROUP_CONCAT(id) as ids')
+            ->selectRaw('COUNT(guest_name) as name_count')
+            ->groupBy('guest_name')
+            ->having('name_count', '>', 1)
+            ->get();
+    }
 }

@@ -780,14 +780,16 @@ class ReportController extends Controller
         $string = [];
 
         $nhanvien = [];
+        $selectedRoleNames = [];
         if (!empty($request->nhanvien)) {
             $nhanvien = $request->input('nhanvien', []);
             if (!empty($nhanvien)) {
-                $selectedRoles = Guests::whereIn('id', $nhanvien)->get();
-                $selectedRoleNames = $selectedRoles->pluck('guest_name')->toArray();
+                $selectedRoles = Guests::whereIn('guest_name', $nhanvien)->get();
+                $selectedRoleNames = $selectedRoles->pluck('id')->toArray();
             }
-            array_push($string, ['label' => 'Tên công ty:', 'values' => $selectedRoleNames, 'class' => 'name']);
+            array_push($string, ['label' => 'Tên công ty:', 'values' => $nhanvien, 'class' => 'name']);
         }
+
         if (!empty($request->email)) {
             $email = $request->email;
             array_push($filters, ['email', 'like', '%' . $email . '%']);
@@ -811,16 +813,10 @@ class ReportController extends Controller
             $sortType = 'desc';
         }
         $perPage = $request->input('perPageinput', 5);
-        $tableorders = $this->guests->reportGuest($filters, $nhanvien, $sortBy, $sortType, $perPage);
+        $tableorders = $this->guests->reportGuest($filters, $selectedRoleNames, $sortBy, $sortType, $perPage);
         $allRoles = new Roles();
         $allRoles = $allRoles->getAll();
-        $duplicateNames = Guests::select('guest_name')
-            ->selectRaw('GROUP_CONCAT(id) as ids')
-            ->selectRaw('COUNT(guest_name) as name_count')
-            ->groupBy('guest_name')
-            ->having('name_count', '>', 1)
-            ->get();
-        // dd($duplicateNames);
+        $duplicateNames = $this->guests->duplicateNames();
         $companyName = Exports::leftjoin('guests', 'exports.guest_id', '=', 'guests.id')->where('exports.export_status', 2)->get();
         $perPage = $request->input('perPageinput', 25);
         return view('tables.report.report-guests', compact(
