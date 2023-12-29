@@ -753,12 +753,14 @@ class AddProductController extends Controller
             'provide_code' => $data['provide_code'],
             'debt' => $data['provide_debt']
         ];
-        $this->provides->updateProvides($data, $request['provides_id']);
+        $status = $this->provides->updateProvides($data, $request['provides_id']);
+        return $status;
     }
 
     // Thêm hàng mới vào Order
     public function addBillEdit(Request $request)
     {
+        // dd($request->provide_id);
         $order = Orders::findOrFail($request->order_id);
         // Kiểm tra tình trạng 
         if ($order->order_status == 2 || $order->order_status == 1) {
@@ -805,7 +807,7 @@ class AddProductController extends Controller
                     'product_tax' => $product_tax[$i],
                     'product_price' => $product_price[$i],
                     'product_total' => $product_total[$i],
-                    'provide_id' =>$request->provide_id == null ? $new_provide : $request->provide_id,
+                    'provide_id' => $request->provide_id == null ? $new_provide : $request->provide_id,
                     'order_id' => $request->order_id
                 ];
 
@@ -826,7 +828,7 @@ class AddProductController extends Controller
                                     'seri_status' => 0,
                                     'products_id' => 0,
                                     'order_id' => $order->id,
-                                    'provide_id' =>$request->provide_id == null ? $new_provide : $request->provide_id,
+                                    'provide_id' => $request->provide_id == null ? $new_provide : $request->provide_id,
                                     'export_seri' => 0,
                                     'created_at' => Carbon::now(),
                                 ];
@@ -845,7 +847,7 @@ class AddProductController extends Controller
                             if ($product_SN[$y]) {
                                 $dataSN = [
                                     'serinumber' => $product_SN[$y],
-                                    'provide_id' =>$request->provide_id == null ? $new_provide : $request->provide_id
+                                    'provide_id' => $request->provide_id == null ? $new_provide : $request->provide_id
                                 ];
                                 if (isset($id_SN[$y])) {
                                     $this->Serinumbers->updateSN($dataSN, $id_SN[$y]);
@@ -857,7 +859,7 @@ class AddProductController extends Controller
                                         'seri_status' => 0,
                                         'products_id' => 0,
                                         'order_id' => $order->id,
-                                        'provide_id' =>$request->provide_id == null ? $new_provide : $request->provide_id,
+                                        'provide_id' => $request->provide_id == null ? $new_provide : $request->provide_id,
                                         'export_seri' => 0,
                                         'created_at' => Carbon::now(),
                                     ];
@@ -877,7 +879,7 @@ class AddProductController extends Controller
                                         'seri_status' => 0,
                                         'products_id' => 0,
                                         'order_id' => $order->id,
-                                        'provide_id' =>$request->provide_id == null ? $new_provide : $request->provide_id,
+                                        'provide_id' => $request->provide_id == null ? $new_provide : $request->provide_id,
                                         'export_seri' => 0,
                                         'created_at' => Carbon::now(),
                                     ];
@@ -1087,15 +1089,17 @@ class AddProductController extends Controller
     public function add_newProvide(Request $request)
     {
         $data = $request->all();
-        $checkProvides = Provides::where('provide_code', $data['provide_code'])->first();
+        $checkProvides = Provides::where('provide_code', preg_replace('/\s+/', ' ',  $data['provide_code']))
+            ->orwhere('provide_name', preg_replace('/\s+/', ' ',  $data['provide_name']))
+            ->first();
         if ($checkProvides === NULL) {
             $data = [
-                'provide_name' => $data['provide_name'],
-                'provide_represent' => $data['provide_represent'],
+                'provide_name' => preg_replace('/\s+/', ' ',  $data['provide_name']),
+                'provide_represent' => preg_replace('/\s+/', ' ',  $data['provide_represent']),
                 'provide_phone' => $data['provide_phone'],
                 'provide_email' => $data['provide_email'],
                 'provide_status' => 1,
-                'provide_address' => $data['provide_address'],
+                'provide_address' => preg_replace('/\s+/', ' ',  $data['provide_address']),
                 'provide_code' => $data['provide_code'],
                 'debt' => $data['provide_debt']
             ];
@@ -1104,7 +1108,7 @@ class AddProductController extends Controller
             return response()->json(['success' => true, 'msg' => 'Thêm mới nhà cung cấp thành công !', 'data' => $add_newProvide]);
         } else {
             session()->flash('msg', 'Mã số thuế đã tồn tại!');
-            return response()->json(['success' => false, 'msg' => 'Mã số thuế đã tồn tại !']);
+            return response()->json(['success' => false, 'msg' => 'Mã số thuế hoặc tên nhà cung cấp đã tồn tại !']);
         }
     }
 

@@ -13,7 +13,7 @@ class Provides extends Model
         'provide_name', 'provide_represent', 'provide_phone', 'provide_email', 'provide_status', 'provide_address', 'provide_code', 'debt'
     ];
     protected $table = 'provides';
-    public function getAllProvides($filter = [],$perPage, $name = null, $represent = null, $phonenumber = null, $email = null, $status = [], $keywords = null, $sortByArr = null)
+    public function getAllProvides($filter = [], $perPage, $name = null, $represent = null, $phonenumber = null, $email = null, $status = [], $keywords = null, $sortByArr = null)
     {
         $provides = DB::table($this->table)
             ->select('provides.*');
@@ -72,15 +72,27 @@ class Provides extends Model
     }
     public function updateProvides($data, $id)
     {
-        return DB::table($this->table)->where('id', $id)->update($data);
+        $check = DB::table($this->table)
+            ->where('id', '!=', $id)
+            ->where('provide_name', preg_replace('/\s+/', ' ', $data['provide_name']))
+            ->orWhere('provide_code', preg_replace('/\s+/', ' ', $data['provide_code']))->first();
+        if (!$check) {
+            return DB::table($this->table)->where('id', $id)->update($data);
+        } else {
+            return 0;
+        }
     }
-    public function checkProvidesCode($provide_code,$data){
-        $data1 = DB::table($this->table)->where('provide_code', $provide_code)->first();
-        if($data1 === null){
+    public function checkProvidesCode($provide_code, $data)
+    {
+        $data1 = DB::table($this->table)->where('provide_code', $provide_code)
+            ->orWhere('provide_name', $data['provide_name'])
+            ->first();
+
+        if ($data1 === null) {
             $id = DB::table($this->table)->insertGetId($data);
             return $id;
-        }else{
-            DB::table($this->table)->where('id', $data1->id)->update($data);
+        } else {
+            // DB::table($this->table)->where('id', $data1->id)->update($data);
             return $id = $data1->id;
         }
     }

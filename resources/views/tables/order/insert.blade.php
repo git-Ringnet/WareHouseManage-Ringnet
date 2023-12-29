@@ -449,7 +449,11 @@
                         provide_debt: provide_debt
                     },
                     success: function(data) {
-                        alert('Lưu thông tin thành công');
+                        if (data == 0) {
+                            alert('Mã số thuế hoặc tên nhà cung cấp đã tồn tại');
+                        } else {
+                            alert('Lưu thông tin thành công');
+                        }
                     }
                 })
             }
