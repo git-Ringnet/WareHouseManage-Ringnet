@@ -354,17 +354,17 @@ $index = array_search($item['label'], $numberedLabels);
                                                             $seenValues = [];
                                                         @endphp
                                                         @foreach ($companyName as $value)
-                                                            @if (!in_array($value->guest_id, $seenValues))
+                                                            @if (!in_array($value->guest_name, $seenValues))
                                                                 <li>
                                                                     <input type="checkbox" id="name_active"
-                                                                        {{ in_array($value->guest_id, $nhanvien) ? 'checked' : '' }}
+                                                                        {{ in_array($value->guest_name, $nhanvien) ? 'checked' : '' }}
                                                                         name="nhanvien[]"
-                                                                        value="{{ $value->guest_id }}">
+                                                                        value="{{ $value->guest_name }}">
                                                                     <label id="nhanvien"
                                                                         for="">{{ $value->guest_name }}</label>
                                                                 </li>
                                                                 @php
-                                                                    $seenValues[] = $value->guest_id;
+                                                                    $seenValues[] = $value->guest_name;
                                                                 @endphp
                                                             @endif
                                                         @endforeach
@@ -455,12 +455,26 @@ $index = array_search($item['label'], $numberedLabels);
                                 </thead>
                                 <tbody id="yourTableId">
                                     <?php $stt = 1; ?>
-                                    @foreach ($tableorders as $item)
+                                    {{-- @foreach ($tableorders as $item)
                                         <tr id="guest_{{ $item->guest_id }}">
                                             <td class="text-left">{{ $item->guest_name }}</td>
                                             <td class="text-right"id="congno{{ $item->guest_id }}">
                                                 {{ number_format($item->totaltong) }}
                                             </td>
+                                        </tr>
+                                    @endforeach --}}
+                                    @foreach ($tableorders as $item)
+                                        <tr id="guest_{{ $item->guest_id }}">
+                                            <td class="text-left">{{ $item->guest_name }}</td>
+                                            <td class="text-right" id="congno{{ $item->guest_id }}">
+                                                {{ number_format($item->totaltong) }}
+                                            </td>
+                                            @foreach ($duplicateNames as $duplicate)
+                                                @if ($item->guest_name === $duplicate->guest_name)
+                                                    <input type="hidden" name="duplicate_id[]"
+                                                        value="{{ $duplicate->ids }}">
+                                                @endif
+                                            @endforeach
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -634,10 +648,19 @@ $index = array_search($item['label'], $numberedLabels);
                 guestIds.push(idSuffix); // Thêm phần đuôi vào mảng guestIds
             }
         });
+
+        // Xử lý dữ liệu trùng tên khách hàng thì lấy các id trùng của các khách hàng ra
+        $('input[name="duplicate_id[]"]').each(function() {
+            var duplicateIdValue = $(this).val();
+            var idsArray = duplicateIdValue.split(',');
+            for (var i = 0; i < idsArray.length; i++) {
+                guestIds.push(idsArray[i]);
+            }
+        });
+
         $(document).on('click', '.dropdown-item-orders', function() {
             var dataid = $(this).data('value');
             var search = $('#search').val();
-
             $.ajax({
                 url: "{{ route('timeGuest') }}",
                 type: "get",

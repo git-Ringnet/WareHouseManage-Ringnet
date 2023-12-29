@@ -92,9 +92,21 @@ class Guests extends Model
     }
     public function reportGuest($filter = [], $name = [], $orderBy = null, $orderType = null, $perPage)
     {
+        // $tableorders = Exports::select('guests.guest_name', DB::raw('MAX(exports.guest_id) as guest_id'), DB::raw('SUM(exports.total) as totaltong'))
+        //     ->leftJoin('guests', 'exports.guest_id', '=', 'guests.id')
+        //     ->groupBy('guests.guest_name');
+        // $tableorders = Exports::leftJoin('guests', 'exports.guest_id', '=', 'guests.id')
+        //     ->select('guests.guest_name', 'exports.guest_id')
+        //     ->selectSub(function ($query) {
+        //         $query->from('exports')
+        //             ->whereColumn('exports.guest_id', '=', 'guests.id')
+        //             ->selectRaw('SUM(exports.total)');
+        //     }, 'totaltong')->distinct();
+
         $tableorders = Exports::select('guests.guest_name', DB::raw('MAX(exports.guest_id) as guest_id'), DB::raw('SUM(exports.total) as totaltong'))
             ->leftJoin('guests', 'exports.guest_id', '=', 'guests.id')
             ->groupBy('guests.guest_name');
+
         if (!empty($filter)) {
             $tableorders = $tableorders->where($filter);
         }
@@ -112,15 +124,15 @@ class Guests extends Model
         }
 
         $tableorders = $tableorders->get();
-
+        // dd($tableorders);
 
         return $tableorders;
     }
     public function dataReportGuest($filter = [], $guestIds = [], $search = null)
     {
         $tableorders = Exports::select('guests.guest_name', DB::raw('MAX(exports.guest_id) as guest_id'), DB::raw('SUM(exports.total) as totaltong'))
-            ->leftJoin('guests', 'exports.guest_id', '=', 'guests.id');
-        $tableorders->groupBy('guests.guest_name');
+            ->leftJoin('guests', 'exports.guest_id', '=', 'guests.id')
+            ->groupBy('guests.guest_name');
         if (!empty($search)) {
             $tableorders = $tableorders->where(function ($query) use ($search) {
                 $query->orWhere('guests.guest_name', 'like', '%' . $search . '%');
@@ -133,6 +145,8 @@ class Guests extends Model
         if (count($filter) === 2) {
             $tableorders->whereBetween('exports.created_at', [$filter[0], $filter[1]]);
         }
+
+
         $tableorders = $tableorders->get();
         return $tableorders;
     }
@@ -161,5 +175,14 @@ class Guests extends Model
         }
         $tableorders = $tableorders->get();
         return $tableorders;
+    }
+    public function duplicateNames()
+    {
+        return Guests::select('guest_name')
+            ->selectRaw('GROUP_CONCAT(id) as ids')
+            ->selectRaw('COUNT(guest_name) as name_count')
+            ->groupBy('guest_name')
+            ->having('name_count', '>', 1)
+            ->get();
     }
 }

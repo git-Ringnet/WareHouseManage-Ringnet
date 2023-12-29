@@ -926,7 +926,7 @@
             },
             success: function(data) {
                 if (data.hasOwnProperty('message')) {
-                    alert(data.message); // Hiển thị thông báo đã tồn tại
+                    alert(data.message);
                 } else if (data.hasOwnProperty('id')) {
                     alert('Lưu thông tin thành công');
                 }
@@ -1002,7 +1002,7 @@
             },
             success: function(data) {
                 if (data.hasOwnProperty('message')) {
-                    alert(data.message); // Hiển thị thông báo đã tồn tại
+                    alert(data.message);
                 } else if (data.hasOwnProperty('id')) {
                     alert('Thêm thông tin thành công');
                     $('#form-guest input[name="id"]').val(data.id);
@@ -1038,7 +1038,7 @@
             var thue = $(this).closest('tr').find('.product_tax');
             var ulElement = $(this).closest('tr').find(".seri_pro");
             $(this).closest('tr').find('.quantity-input').val(null);
-            
+
             ulElement.empty();
             if (selectedID) {
                 $.ajax({
