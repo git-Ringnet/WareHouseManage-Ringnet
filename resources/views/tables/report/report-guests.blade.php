@@ -248,7 +248,7 @@ $index = array_search($item['label'], $numberedLabels);
                             <div class="filter-admin">
                                 <button class="btn btn-filter btn-light mr-2" id="btn-sales" type="button">
                                     <span>
-                                        Tổng doanh số
+                                        Lọc doanh số
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path fill-rule="evenodd" clip-rule="evenodd"
@@ -538,26 +538,6 @@ $index = array_search($item['label'], $numberedLabels);
                             </table>
                         </div>
                     </div>
-                    <div class="d-flex row justify-content-between">
-                        <div class="paginator mt-2 d-flex justify-content-start">
-                            <span class="text-perpage">
-                                Số hàng mỗi trang:
-                                <select name="perPage" id="perPage">
-                                    <option value="5" {{ $perPage == 5 ? 'selected' : '' }}>5</option>
-                                    <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
-                                    <option value="25" {{ $perPage == 25 ? 'selected' : '' }}>25</option>
-                                    <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
-                                </select>
-                            </span>
-                        </div>
-                        <div class="paginator mt-2 d-flex justify-content-end">
-                            @if (Auth::user()->can('isAdmin'))
-                                {{-- {{ $debts->appends(request()->except('page'))->links() }} --}}
-                            @else
-                                {{-- {{ $debtsCreator->appends(request()->except('page'))->links() }} --}}
-                            @endif
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -715,7 +695,7 @@ $index = array_search($item['label'], $numberedLabels);
             }
         });
 
-        var dataID;
+        var dataID = 0;
         $(document).on('click', '.dropdown-item-orders', function() {
             var dataid = $(this).data('value');
             var search = $('#search').val();
@@ -874,18 +854,51 @@ $index = array_search($item['label'], $numberedLabels);
             $('.filter-group').hide();
             $('input[name="sales-input"]').val(null);
             var search = $('.searchkeyword').val();
+            var date_start = $('.date_start').val();
+            var date_end = $('.date_end').val();
+            console.log(dataID);
             $.ajax({
                 type: 'get',
-                url: '{{ URL::to('searchGuestAjax') }}',
+                url: "{{ route('timeGuest') }}",
                 data: {
+                    'data': dataID,
                     'guestIds': guestIds,
                     'search': search,
+                    'date_start': datestart,
+                    'date_end': dateend,
                 },
                 success: function(data) {
-                    $('tbody').html(data.output);
+                    if (data.start_date && data.end_date) {
+                        var stId = '.it' + dataID;
+                        var edId = '.id' + dataID;
+                        $(stId).text(data.start_date)
+                        $(edId).text(data.end_date)
+                    }
+                    datestart = data.start_date;
+                    dateend = data.end_date;
+                    data.test.sort(function(a, b) {
+                        return b.totaltong - a
+                            .totaltong;
+                    });
+                    var tbody = $('#yourTableId');
+                    tbody.empty();
+                    data.test.forEach(function(item) {
+                        var rowHtml = `<tr id="guest_${item.guest_id}">
+        <td class="text-left">${item.guest_name}</td>
+        <td class="text-right">${formatCurrency(item.totaltong)}</td>
+    </tr>`;
+                        // Thêm hàng vào tbody
+                        tbody.append(rowHtml);
+                    });
                 }
             });
         });
+    });
+
+    $('.searchkeyword').on('keyup', function(event) {
+        if (event.keyCode === 13) {
+            $('.sort-link').click();
+        }
     });
 
 
@@ -948,6 +961,7 @@ $index = array_search($item['label'], $numberedLabels);
             checkbox.prop('checked', !checkbox.prop('checked')); // Đảo ngược trạng thái checked
         }
     });
+
     // company
     $('#btn-company').click(function(event) {
         event.preventDefault();
