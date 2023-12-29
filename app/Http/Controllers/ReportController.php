@@ -850,7 +850,10 @@ class ReportController extends Controller
             $filters = [];
             $filters[] = $minCreatedAt->format('Y-m-d');
             $filters[] = $maxCreatedAt->format('Y-m-d');
-            $tableorders = $this->guests->dataReportGuest($filters, $data['guestIds'], $data['search']);
+            $sales = [];
+            $sales[] = $request->sales_operator;
+            $sales[] = $request->sales_input;
+            $tableorders = $this->guests->dataReportGuest($filters, $data['guestIds'], $data['search'], $sales);
             $test1 = [];
             foreach ($tableorders as $item) {
                 $test1[] = $item;
@@ -867,7 +870,10 @@ class ReportController extends Controller
             $filters = [];
             $filters[] = $today->startOfMonth();
             $filters[] = $lastDayOfMonth;
-            $tableorders = $this->guests->dataReportGuest($filters, $data['guestIds'], $data['search']);
+            $sales = [];
+            $sales[] = $request->sales_operator;
+            $sales[] = $request->sales_input;
+            $tableorders = $this->guests->dataReportGuest($filters, $data['guestIds'], $data['search'], $sales);
             $test1 = [];
             foreach ($tableorders as $item) {
                 $test1[] = $item;
@@ -884,7 +890,10 @@ class ReportController extends Controller
             $filters = [];
             $filters[] = $firstDayOfYear;
             $filters[] = $lastDayOfYear;
-            $tableorders = $this->guests->dataReportGuest($filters, $data['guestIds'], $data['search']);
+            $sales = [];
+            $sales[] = $request->sales_operator;
+            $sales[] = $request->sales_input;
+            $tableorders = $this->guests->dataReportGuest($filters, $data['guestIds'], $data['search'], $sales);
             $test1 = [];
             foreach ($tableorders as $item) {
                 $test1[] = $item;
@@ -902,7 +911,10 @@ class ReportController extends Controller
                 $filters = [];
                 $filters[] = Carbon::parse($lastMonth->startOfMonth());
                 $filters[] = Carbon::parse($lastMonth->endOfMonth());
-                $tableorders = $this->guests->dataReportGuest($filters, $data['guestIds'], $data['search']);
+                $sales = [];
+                $sales[] = $request->sales_operator;
+                $sales[] = $request->sales_input;
+                $tableorders = $this->guests->dataReportGuest($filters, $data['guestIds'], $data['search'], $sales);
                 $test1 = [];
                 foreach ($tableorders as $item) {
                     $test1[] = $item;
@@ -915,7 +927,10 @@ class ReportController extends Controller
                 $filters = [];
                 $filters[] = Carbon::parse($lastMonth->startOfMonth());
                 $filters[] = Carbon::parse($lastMonth->endOfMonth());
-                $tableorders = $this->guests->dataReportGuest($filters, $data['guestIds'], $data['search']);
+                $sales = [];
+                $sales[] = $request->sales_operator;
+                $sales[] = $request->sales_input;
+                $tableorders = $this->guests->dataReportGuest($filters, $data['guestIds'], $data['search'], $sales);
                 $test1 = [];
                 foreach ($tableorders as $item) {
                     $test1[] = $item;
@@ -938,7 +953,10 @@ class ReportController extends Controller
                 $filters = [];
                 $filters[] = Carbon::parse($firstDayOfMonth);
                 $filters[] = Carbon::parse($lastDayOfMonth);
-                $tableorders = $this->guests->dataReportGuest($filters, $data['guestIds'], $data['search']);
+                $sales = [];
+                $sales[] = $request->sales_operator;
+                $sales[] = $request->sales_input;
+                $tableorders = $this->guests->dataReportGuest($filters, $data['guestIds'], $data['search'], $sales);
                 $test1 = [];
                 foreach ($tableorders as $item) {
                     $test1[] = $item;
@@ -954,7 +972,10 @@ class ReportController extends Controller
                 $filters = [];
                 $filters[] = Carbon::parse($firstDayOfMonth1);
                 $filters[] = Carbon::parse($lastDayOfMonth1);
-                $tableorders = $this->guests->dataReportGuest($filters, $data['guestIds'], $data['search']);
+                $sales = [];
+                $sales[] = $request->sales_operator;
+                $sales[] = $request->sales_input;
+                $tableorders = $this->guests->dataReportGuest($filters, $data['guestIds'], $data['search'], $sales);
                 $test1 = [];
                 foreach ($tableorders as $item) {
                     $test1[] = $item;
@@ -973,7 +994,10 @@ class ReportController extends Controller
             $filters = [];
             $filters[] = Carbon::parse($data['date_start']);
             $filters[] = Carbon::parse($data['date_end']);
-            $tableorders = $this->guests->dataReportGuest($filters, $data['guestIds'], $data['search']);
+            $sales = [];
+            $sales[] = $request->sales_operator;
+            $sales[] = $request->sales_input;
+            $tableorders = $this->guests->dataReportGuest($filters, $data['guestIds'], $data['search'], $sales);
             $test1 = [];
             foreach ($tableorders as $item) {
                 $test1[] = $item;
@@ -993,9 +1017,9 @@ class ReportController extends Controller
             $guests = $this->guests->ajax($data);
             if ($guests) {
                 foreach ($guests as $key => $item) {
-                    $output .= '<tr id="guest_' . $item->guest_name . '">
+                    $output .= '<tr id="guest_' . $item->guest_id . '">
                                             <td class="text-left">' . $item->guest_name . '</td>
-                                            <td class="text-right"id="congno' . $item->guest_name . '">
+                                            <td class="text-right"id="congno' . $item->guest_id . '">
                                                 ' . number_format($item->totaltong) . '
                                             </td>
                                         </tr>';

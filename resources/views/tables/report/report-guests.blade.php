@@ -142,7 +142,7 @@
             <div class="row m-auto filter">
                 <div class="col-md-5 p-0">
                     <input type="text" id="search" placeholder="Tìm kiếm tên công ty" name="keywords"
-                        class="pr-4 form-control input-search w-100 searchkeyword" value="{{ request()->keywords }}">
+                        class="pr-4 form-control input-search w-100 searchkeyword" value="">
                     <span id="search-icon" class="search-icon"><i class="fas fa-search sort-link"></i></span>
                     <input class="sort-link" type="submit" id="hidden-submit" name="hidden-submit"
                         style="display: none;">
@@ -201,6 +201,21 @@
                         <div class="row filter-results d-flex row m-0">
 
                             <input id="delete-item-input" type="hidden" name="delete_item" value="">
+
+                            <span class="filter-group" style="order:1;display:none">
+                                <div class="filter-text"></div>
+                                <a class="delete-item delete-btn-name">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M18 18L6 6" stroke="#555555" stroke-width="1.5"
+                                            stroke-linecap="round" stroke-linejoin="round"></path>
+                                        <path d="M18 6L6 18" stroke="#555555" stroke-width="1.5"
+                                            stroke-linecap="round" stroke-linejoin="round"></path>
+                                    </svg>
+                                </a>
+                            </span>
+
+
                             @foreach ($string as $item)
                                 <span class="filter-group"
                                     style="order: 
@@ -229,10 +244,52 @@ $index = array_search($item['label'], $numberedLabels);
                                     </a>
                                 </span>
                             @endforeach
+                            {{-- Tổng doanh số --}}
+                            <div class="filter-admin">
+                                <button class="btn btn-filter btn-light mr-2" id="btn-sales" type="button">
+                                    <span>
+                                        Tổng doanh số
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M7.23123 9.23123C7.53954 8.92292 8.03941 8.92292 8.34772 9.23123L12 12.8835L15.6523 9.23123C15.9606 8.92292 16.4605 8.92292 16.7688 9.23123C17.0771 9.53954 17.0771 10.0394 16.7688 10.3477L12.5582 14.5582C12.2499 14.8665 11.7501 14.8665 11.4418 14.5582L7.23123 10.3477C6.92292 10.0394 6.92292 9.53954 7.23123 9.23123Z"
+                                                fill="#555555" />
+                                        </svg>
+                                    </span>
+                                </button>
+                                {{-- Tổng doanh số --}}
+                                <div class="block-options-admin" id="sales-options" style="display:none">
+                                    <div class="wrap w-100">
+                                        <div class="heading-title title-wrap">
+                                            <h5>Tổng doanh số</h5>
+                                        </div>
+                                        <div class="input-group p-2 justify-content-around">
+                                            <select class="sales_operator input-so" name="sales_operator"
+                                                style="width: 40%">
+                                                <option value=">=">
+                                                    >=
+                                                </option>
+                                                <option value="<=">
+                                                    <= </option>
+                                            </select>
+                                            <input class="w-50 input-quantity sales-input" type="text"
+                                                oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                                name="sales-input" value="" placeholder="Nhập giá">
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-contents-center align-items-baseline p-2">
+                                        <button type="submit" class="sort-link btn btn-primary btn-block mr-2">Xác
+                                            Nhận</button>
+                                        <button type="button" id="cancel-sales"
+                                            class="btn btn-default btn-block">Hủy</button>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="class" style="order:999">
                                 <div class="filter-options">
                                     <div class="dropdown">
-                                        <button class="btn btn-filter btn-light" type="button"
+                                        {{-- <button class="btn btn-filter btn-light" type="button"
                                             id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
                                             aria-expanded="false">
                                             <span><svg width="24" height="24" viewBox="0 0 24 24"
@@ -246,7 +303,7 @@ $index = array_search($item['label'], $numberedLabels);
                                                 </svg>
                                                 Thêm bộ lọc
                                             </span>
-                                        </button>
+                                        </button> --}}
                                         <div class="dropdown-menu" id="dropdown-menu"
                                             aria-labelledby="dropdownMenuButton">
                                             <div class="search-container px-2">
@@ -658,9 +715,23 @@ $index = array_search($item['label'], $numberedLabels);
             }
         });
 
+        var dataID;
         $(document).on('click', '.dropdown-item-orders', function() {
             var dataid = $(this).data('value');
             var search = $('#search').val();
+            dataID = dataid;
+            var sales_operator = $('select[name="sales_operator"]').val();
+            var sales_input = $('input[name="sales-input"]').val();
+            console.log('dasjldjaskd');
+            if (sales_input != '' && sales_operator != '') {
+                $('.filter-text').text('Tổng doanh thu ' + sales_operator +
+                    sales_input);
+                $('.filter-group').show();
+            }
+            $('.block-options-admin').hide();
+            $('.btn-filter').prop('disabled', false);
+
+
             $.ajax({
                 url: "{{ route('timeGuest') }}",
                 type: "get",
@@ -668,7 +739,8 @@ $index = array_search($item['label'], $numberedLabels);
                     data: dataid,
                     guestIds: guestIds,
                     search: search,
-
+                    sales_operator: sales_operator,
+                    sales_input: sales_input,
                 },
                 success: function(data) {
                     if (data.start_date && data.end_date) {
@@ -686,7 +758,7 @@ $index = array_search($item['label'], $numberedLabels);
                     var tbody = $('#yourTableId');
                     tbody.empty();
                     data.test.forEach(function(item) {
-                        var rowHtml = `<tr id="guest_${item.guest_name}">
+                        var rowHtml = `<tr id="guest_${item.guest_id}">
         <td class="text-left">${item.guest_name}</td>
         <td class="text-right">${formatCurrency(item.totaltong)}</td>
     </tr>`;
@@ -704,6 +776,18 @@ $index = array_search($item['label'], $numberedLabels);
             var date_start = $('.date_start').val();
             var date_end = $('.date_end').val();
             var search = $('#search').val();
+            dataID = data;
+            var sales_operator = $('select[name="sales_operator"]').val();
+            var sales_input = $('input[name="sales-input"]').val();
+
+            if (sales_input != '' && sales_operator != '') {
+                $('.filter-text').text('Tổng doanh thu ' + sales_operator +
+                    sales_input);
+                $('.filter-group').show();
+            }
+            $('.block-options-admin').hide();
+            $('.btn-filter').prop('disabled', false);
+
 
             $.ajax({
                 url: "{{ route('timeGuest') }}",
@@ -714,6 +798,8 @@ $index = array_search($item['label'], $numberedLabels);
                     date_end: date_end,
                     guestIds: guestIds,
                     search: search,
+                    sales_operator: sales_operator,
+                    sales_input: sales_input,
                 },
                 success: function(data) {
                     datestart = data.start_date;
@@ -742,6 +828,16 @@ $index = array_search($item['label'], $numberedLabels);
             var sort_by = $(this).data('sort-by');
             var sort_type = $(this).data('sort-type');
             var search = $('.searchkeyword').val();
+            var sales_operator = $('select[name="sales_operator"]').val();
+            var sales_input = $('input[name="sales-input"]').val();
+
+            if (sales_input != '' && sales_operator != '') {
+                $('.filter-text').text('Tổng doanh thu ' + sales_operator +
+                    sales_input);
+                $('.filter-group').show();
+            }
+            $('.block-options-admin').hide();
+            $('.btn-filter').prop('disabled', false);
 
             sort_type = (sort_type === 'ASC') ? 'DESC' : 'ASC';
             $(this).data('sort-type', sort_type);
@@ -765,6 +861,25 @@ $index = array_search($item['label'], $numberedLabels);
                     'date_start': datestart,
                     'date_end': dateend,
                     'search': search,
+                    'sales_operator': sales_operator,
+                    'sales_input': sales_input,
+                },
+                success: function(data) {
+                    $('tbody').html(data.output);
+                }
+            });
+        });
+        //Xóa filter
+        $('.filter-results').on('click', '.delete-item', function() {
+            $('.filter-group').hide();
+            $('input[name="sales-input"]').val(null);
+            var search = $('.searchkeyword').val();
+            $.ajax({
+                type: 'get',
+                url: '{{ URL::to('searchGuestAjax') }}',
+                data: {
+                    'guestIds': guestIds,
+                    'search': search,
                 },
                 success: function(data) {
                     $('tbody').html(data.output);
@@ -773,6 +888,19 @@ $index = array_search($item['label'], $numberedLabels);
         });
     });
 
+
+    //Doanh số
+    $('#btn-sales').click(function(event) {
+        event.preventDefault();
+        $('.btn-filter').prop('disabled', true);
+        $('#sales-options').toggle();
+    });
+    $('#cancel-sales').click(function(event) {
+        event.preventDefault();
+        $('.btn-filter').prop('disabled', false);
+        $('.sales-input').val('');
+        $('#sales-options').hide();
+    });
 
     function filterCreator() {
         var input = $("#myInput-creator");
@@ -881,15 +1009,6 @@ $index = array_search($item['label'], $numberedLabels);
         // Hủy tất cả các checkbox
         $('.deselect-all-creator').click(function() {
             $('#company-options input[type="checkbox"]').prop('checked', false);
-        });
-    });
-
-    //Xóa filter
-
-    $(document).ready(function() {
-        $('.filter-results').on('click', '.delete-btn-name', function() {
-            $('.deselect-all-creator').click();
-            document.getElementById('search-filter').submit();
         });
     });
 

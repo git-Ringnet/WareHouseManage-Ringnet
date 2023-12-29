@@ -128,7 +128,7 @@ class Guests extends Model
 
         return $tableorders;
     }
-    public function dataReportGuest($filter = [], $guestIds = [], $search = null)
+    public function dataReportGuest($filter = [], $guestIds = [], $search = null, $sales = [])
     {
         $tableorders = Exports::select('guests.guest_name', DB::raw('MAX(exports.guest_id) as guest_id'), DB::raw('SUM(exports.total) as totaltong'))
             ->leftJoin('guests', 'exports.guest_id', '=', 'guests.id')
@@ -145,6 +145,9 @@ class Guests extends Model
         if (count($filter) === 2) {
             $tableorders->whereBetween('exports.created_at', [$filter[0], $filter[1]]);
         }
+        if (!empty($sales[0]) && !empty($sales[1])) {
+            $tableorders = $tableorders->having('totaltong', $sales[0], $sales[1]);
+        }
 
 
         $tableorders = $tableorders->get();
@@ -152,7 +155,6 @@ class Guests extends Model
     }
     public function ajax($data = [])
     {
-
         $tableorders = Exports::select('guests.guest_name', DB::raw('MAX(exports.guest_id) as guest_id'), DB::raw('SUM(exports.total) as totaltong'))
             ->leftJoin('guests', 'exports.guest_id', '=', 'guests.id')
             ->groupBy('guests.guest_name');
@@ -168,10 +170,16 @@ class Guests extends Model
             $dateStart = Carbon::parse($data['date_start']);
             $dateEnd = Carbon::parse($data['date_end']);
 
-            $tableorders->whereBetween('exports.created_at', [$dateStart, $dateEnd]);
+            $tableorders = $tableorders->whereBetween('exports.created_at', [$dateStart, $dateEnd]);
         }
+        if (!empty($data['sales_operator']) && !empty($data['sales_input'])) {
+            $tableorders = $tableorders->having('totaltong', $data['sales_operator'], $data['sales_input']);
+        }
+
         if (isset($data['sort_by']) && $data['sort_type']) {
             $tableorders = $tableorders->orderBy($data['sort_by'], $data['sort_type']);
+        } else {
+            $tableorders = $tableorders->orderBy('totaltong', 'DESC');
         }
         $tableorders = $tableorders->get();
         return $tableorders;
