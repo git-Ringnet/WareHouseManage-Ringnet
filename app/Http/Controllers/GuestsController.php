@@ -130,25 +130,21 @@ class GuestsController extends Controller
             ->first();
 
         if ($existingCustomer) {
-            return redirect()->route('guests.index')->with('warning', 'Thêm thất bại,do thông tin khách hàng đã có trong hệ thống!');
+            return redirect()->back()->with('warning', 'Thêm thất bại,do thông tin khách hàng đã có trong hệ thống!');
         } else {
             $guest = new Guests();
-            $guest->guest_name = $request->guest_name;
+            $guest->guest_name = preg_replace('/\s+/', ' ', $request->guest_name);
             $guest->guest_phone = $request->guest_phone;
             $guest->guest_email = $request->guest_email;
             $guest->guest_status = $request->guest_status;
-            $guest->guest_address = $request->guest_address;
+            $guest->guest_address = preg_replace('/\s+/', ' ', $request->guest_address);
             $guest->guest_code = $request->guest_code;
-            $guest->guest_receiver = $request->guest_receiver;
+            $guest->guest_receiver = preg_replace('/\s+/', ' ', $request->guest_receiver);
             $guest->guest_phoneReceiver = $request->guest_phoneReceiver;
             $guest->guest_email_personal = $request->guest_email_personal;
-            $guest->guest_note = $request->guest_note;
-            $guest->user_id =  $request->user_id;
-            if ($request->debt == null) {
-                $guest->debt = 0;
-            } else {
-                $guest->debt = $request->debt;
-            }
+            $guest->guest_note = preg_replace('/\s+/', ' ', $request->guest_note);
+            $guest->user_id = $request->user_id;
+            $guest->debt = $request->debt ?? 0;
             $guest->save();
             return redirect()->route('guests.index')->with('msg', 'Thêm khách hàng thành công!');
         }
@@ -188,39 +184,29 @@ class GuestsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // $existingCustomer = Guests::find($id)->where('guest_name', $request->guest_name)
-        //     ->where('guest_email', $request->guest_email)
-        //     ->where('guest_code', $request->guest_code)
-        //     ->where('guest_receiver', $request->guest_receiver)
-        //     ->where('guest_phoneReceiver', $request->guest_phoneReceiver)
-        //     ->where('guest_phone', $request->guest_phone)
-        //     ->first();
-        // if ($existingCustomer) {
-        //     return redirect()->route('guests.index')->with('warning', 'Cập nhật thất bại, do trùng thông tin khách hàng đã có trong hệ thống!');
-        // } else {
-        //     $guests = Guests::find($id);
-        //     $guests->update($request->all());
-        //     return redirect()->route('guests.index')->with('msg', 'Cập nhật thành công!');
-        // }
-        $guests = Guests::find($id);
-        $guests->guest_name = $request->guest_name;
-        $guests->guest_phone = $request->guest_phone;
-        $guests->guest_email = $request->guest_email;
-        $guests->guest_status = $request->guest_status;
-        $guests->guest_address = $request->guest_address;
-        $guests->guest_code = $request->guest_code;
-        $guests->guest_receiver = $request->guest_receiver;
-        $guests->guest_phoneReceiver = $request->guest_phoneReceiver;
-        $guests->guest_email_personal = $request->guest_email_personal;
-        $guests->guest_note = $request->guest_note;
-        $guests->user_id =  $request->user_id;
-        if ($request->debt == null) {
-            $guests->debt = 0;
+        $id = intval($id);
+        $existingCustomer = Guests::orwhere('guest_name', $request->guest_name)
+            ->orwhere('guest_code', $request->guest_code)
+            ->first();
+        if ($existingCustomer->id !== $id) {
+            return redirect()->back()->with('warning', 'Cập nhật thất bại, do thông tin khách hàng đã có trong hệ thống!');
         } else {
-            $guests->debt = $request->debt;
+            $guests = Guests::findOrFail($id);
+            $guests->guest_name = preg_replace('/\s+/', ' ', $request->guest_name);
+            $guests->guest_phone = $request->guest_phone;
+            $guests->guest_email = $request->guest_email;
+            $guests->guest_status = $request->guest_status;
+            $guests->guest_address = preg_replace('/\s+/', ' ', $request->guest_address);
+            $guests->guest_code = $request->guest_code;
+            $guests->guest_receiver = preg_replace('/\s+/', ' ', $request->guest_receiver);
+            $guests->guest_phoneReceiver = $request->guest_phoneReceiver;
+            $guests->guest_email_personal = $request->guest_email_personal;
+            $guests->guest_note = preg_replace('/\s+/', ' ', $request->guest_note);
+            $guests->user_id = $request->user_id;
+            $guests->debt = $request->debt ?? 0;
+            $guests->save();
+            return redirect()->route('guests.index')->with('msg', 'Cập nhật thành công!');
         }
-        $guests->save();
-        return redirect()->route('guests.index')->with('msg', 'Cập nhật thành công!');
     }
 
     /**
