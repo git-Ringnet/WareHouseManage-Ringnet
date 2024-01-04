@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -15,19 +16,18 @@ class Guests extends Model
         'guest_phone',
         'guest_email',
         'guest_status',
-        'guest_addressInvoice',
+        'guest_address',
         'guest_code',
-        'guest_addressDeliver',
+        'guest_email_personal',
         'guest_receiver',
         'guest_phoneReceiver',
-        'guest_pay',
-        'guest_payTerm',
+        'guest_email_personal',
         'guest_note',
         'user_id',
         'debt'
     ];
     protected $table = 'guests';
-    public function getAllGuests($filter = [],$users_name=[],$name = null,$represent = null,$phonenumber = null,$email = null, $status = [], $keywords = null, $sortByArr = null)
+    public function getAllGuests($filter = [], $perPage, $users_name = [], $name = null, $represent = null, $phonenumber = null, $email = null, $status = [], $keywords = null, $sortByArr = null)
     {
         $guests = DB::table($this->table)
             ->leftJoin('users', 'guests.user_id', '=', 'users.id')
@@ -76,18 +76,121 @@ class Guests extends Model
         if (!empty($keywords)) {
             $guests = $guests->where(function ($query) use ($keywords) {
                 $query->orWhere('guest_name', 'like', '%' . $keywords . '%');
-                $query->orWhere('guest_represent', 'like', '%' . $keywords . '%');
+                // $query->orWhere('guest_represent', 'like', '%' . $keywords . '%');
                 $query->orWhere('guest_email', 'like', '%' . $keywords . '%');
             });
         }
         // dd($guests);
-        $guests = $guests->orderBy('id', 'asc')->paginate(8);
+        $guests = $guests->orderBy('id', 'asc')->paginate($perPage);
         return $guests;
     }
-    public function guestsCreator()
+    public function guestsCreator($perPage)
     {
         $userId = Auth::user()->id;
-        $guests = DB::table($this->table)->where('user_id', $userId)->paginate(8);
+        $guests = DB::table($this->table)->where('user_id', $userId)->paginate($perPage);
         return $guests;
+    }
+    public function reportGuest($filter = [], $name = [], $orderBy = null, $orderType = null, $perPage)
+    {
+        // $tableorders = Exports::select('guests.guest_name', DB::raw('MAX(exports.guest_id) as guest_id'), DB::raw('SUM(exports.total) as totaltong'))
+        //     ->leftJoin('guests', 'exports.guest_id', '=', 'guests.id')
+        //     ->groupBy('guests.guest_name');
+        // $tableorders = Exports::leftJoin('guests', 'exports.guest_id', '=', 'guests.id')
+        //     ->select('guests.guest_name', 'exports.guest_id')
+        //     ->selectSub(function ($query) {
+        //         $query->from('exports')
+        //             ->whereColumn('exports.guest_id', '=', 'guests.id')
+        //             ->selectRaw('SUM(exports.total)');
+        //     }, 'totaltong')->distinct();
+
+        $tableorders = Exports::select('guests.guest_name', DB::raw('MAX(exports.guest_id) as guest_id'), DB::raw('SUM(exports.total) as totaltong'))
+            ->leftJoin('guests', 'exports.guest_id', '=', 'guests.id')
+            ->groupBy('guests.guest_name');
+
+        if (!empty($filter)) {
+            $tableorders = $tableorders->where($filter);
+        }
+        if (!empty($name)) {
+            $tableorders = $tableorders->whereIn('guest_id', $name);
+        }
+        if (empty($orderBy)) {
+            $orderBy = 'totaltong';
+        }
+        if (!empty($orderBy) && !empty($orderType)) {
+            if ($orderBy == 'totaltong') {
+                $orderBy ==  $orderBy;
+            };
+            $tableorders = $tableorders->orderBy($orderBy, $orderType);
+        }
+
+        $tableorders = $tableorders->get();
+        // dd($tableorders);
+
+        return $tableorders;
+    }
+    public function dataReportGuest($filter = [], $guestIds = [], $search = null, $sales = [])
+    {
+        $tableorders = Exports::select('guests.guest_name', DB::raw('MAX(exports.guest_id) as guest_id'), DB::raw('SUM(exports.total) as totaltong'))
+            ->leftJoin('guests', 'exports.guest_id', '=', 'guests.id')
+            ->groupBy('guests.guest_name');
+        if (!empty($search)) {
+            $tableorders = $tableorders->where(function ($query) use ($search) {
+                $query->orWhere('guests.guest_name', 'like', '%' . $search . '%');
+            });
+        }
+        if (!empty($guestIds)) {
+            $tableorders->whereIn('guest_id', $guestIds);
+        }
+
+        if (count($filter) === 2) {
+            $tableorders->whereBetween('exports.created_at', [$filter[0], $filter[1]]);
+        }
+        if (!empty($sales[0]) && !empty($sales[1])) {
+            $tableorders = $tableorders->having('totaltong', $sales[0], $sales[1]);
+        }
+
+
+        $tableorders = $tableorders->get();
+        return $tableorders;
+    }
+    public function ajax($data = [])
+    {
+        $tableorders = Exports::select('guests.guest_name', DB::raw('MAX(exports.guest_id) as guest_id'), DB::raw('SUM(exports.total) as totaltong'))
+            ->leftJoin('guests', 'exports.guest_id', '=', 'guests.id')
+            ->groupBy('guests.guest_name');
+        if (isset($data['search'])) {
+            $tableorders = $tableorders->where(function ($query) use ($data) {
+                $query->orWhere('guests.guest_name', 'like', '%' . $data['search'] . '%');
+            });
+        }
+        if (!empty($data['guestIds'])) {
+            $tableorders->whereIn('guest_id', $data['guestIds']);
+        }
+        if (!empty($data['date_start']) && !empty($data['date_end'])) {
+            $dateStart = Carbon::parse($data['date_start']);
+            $dateEnd = Carbon::parse($data['date_end']);
+
+            $tableorders = $tableorders->whereBetween('exports.created_at', [$dateStart, $dateEnd]);
+        }
+        if (!empty($data['sales_operator']) && !empty($data['sales_input'])) {
+            $tableorders = $tableorders->having('totaltong', $data['sales_operator'], $data['sales_input']);
+        }
+
+        if (isset($data['sort_by']) && $data['sort_type']) {
+            $tableorders = $tableorders->orderBy($data['sort_by'], $data['sort_type']);
+        } else {
+            $tableorders = $tableorders->orderBy('totaltong', 'DESC');
+        }
+        $tableorders = $tableorders->get();
+        return $tableorders;
+    }
+    public function duplicateNames()
+    {
+        return Guests::select('guest_name')
+            ->selectRaw('GROUP_CONCAT(id) as ids')
+            ->selectRaw('COUNT(guest_name) as name_count')
+            ->groupBy('guest_name')
+            ->having('name_count', '>', 1)
+            ->get();
     }
 }

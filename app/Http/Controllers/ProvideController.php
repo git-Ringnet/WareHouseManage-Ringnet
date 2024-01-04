@@ -81,13 +81,13 @@ class ProvideController extends Controller
 
 
         $keywords = null;
-
+        $perPage = $request->input('perPageinput', 25);
         if (!empty($request->keywords)) {
             $keywords = $request->keywords;
         }
-        $provides = $this->provides->getAllProvides($filters, $name, $represent, $phonenumber, $email, $status, $keywords, $sortByArr);
+        $provides = $this->provides->getAllProvides($filters, $perPage, $name, $represent, $phonenumber, $email, $status, $keywords, $sortByArr);
         $title = 'Nhà cung cấp';
-        return view('tables.provide.provides', compact('provides', 'sortType', 'string', 'title'));
+        return view('tables.provide.provides', compact('provides', 'perPage', 'sortType', 'string', 'title'));
     }
 
     /**
@@ -110,21 +110,22 @@ class ProvideController extends Controller
     public function store(Request $request)
     {
         $existingprovide = Provides::where('provide_name', $request->provide_name)
-            ->where('provide_phone', $request->provide_phone)
-            ->where('provide_email', $request->provide_email)
-            ->where('provide_code', $request->provide_code)
+            // ->where('provide_phone', $request->provide_phone)
+            // ->where('provide_email', $request->provide_email)
+            ->orWhere('provide_code', $request->provide_code)
             ->first();
         if ($existingprovide) {
             return redirect()->route('provides.index')->with('warning', 'Thêm thất bại, Do thông tin nhà cung cấp đã có trong hệ thống!');
         } else {
             Provides::create([
-                'provide_name' => $request->provide_name,
-                'provide_represent' => $request->provide_represent,
+                'provide_name' => preg_replace('/\s+/', ' ', $request->provide_name),
+                'provide_represent' => preg_replace('/\s+/', ' ', $request->provide_represent),
                 'provide_phone' => $request->provide_phone,
                 'provide_email' => $request->provide_email,
-                'provide_address' => $request->provide_address,
+                'provide_address' => preg_replace('/\s+/', ' ', $request->provide_address),
                 'provide_code' => $request->provide_code,
                 'provide_status' => $request->provide_status,
+                'debt' => $request->debt == null ? 0 : $request->debt
             ]);
             return redirect()->route('provides.index')->with('msg', 'Thêm nhà cung cấp thành công!');
         }
@@ -163,10 +164,11 @@ class ProvideController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $existingprovide = Provides::find($id)->where('provide_name', $request->provide_name)
-            ->where('provide_phone', $request->provide_phone)
-            ->where('provide_email', $request->provide_email)
-            ->where('provide_code', $request->provide_code)
+        $existingprovide = Provides::where('id', '!=', $id)
+            ->where('provide_name', preg_replace('/\s+/', ' ', $request->provide_name))
+            // ->where('provide_phone', $request->provide_phone)
+            // ->where('provide_email', $request->provide_email)
+            ->orWhere('provide_code', preg_replace('/\s+/', ' ', $request->provide_code))
             ->first();
         if ($existingprovide) {
             return redirect()->route('provides.index')->with('warning', 'Cập nhật thất bại, do trùng thông tin nhà cung cấp đã có trong hệ thống!');

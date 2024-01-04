@@ -25,22 +25,23 @@ class UserRequest extends FormRequest
     public function rules()
     {
         $uniqueEmail = 'unique:users';
+        $required='required|min:8';
         if (session('id')) {
             $id = session('id');
             $uniqueEmail = Rule::unique('users', 'email')->ignore($id);
+            $required='nullable|min:8';
         }
-
         return [
             'name' => 'required|max:255',
             'email' => 'required|email|' . $uniqueEmail . '|max:255',
-            'password' => 'nullable|min:8', // Đặt rule cho password là nullable
-            'confirm_password' => 'nullable|same:password', // Đặt rule cho confirm_password là nullable và khớp với password (nếu được nhập)
+            'password' => $required,
+            'confirm_password' => $required.'|same:password', 
             'role' => ['required', 'integer', function ($attribute, $value, $fail) {
                 if ($value == 0) {
                     $fail('Bắt buộc phải chọn chức vụ');
                 }
             }],
-            'phonenumber' => ['required', 'numeric', 'digits_between:1,11']
+            'phonenumber' => ['nullable','numeric', 'digits_between:1,11']
         ];
     }
 
@@ -52,6 +53,9 @@ class UserRequest extends FormRequest
             'email.email' => 'Email không đúng định dạng',
             'email.unique' => 'Email đã được sử dụng',
             'password.min' => 'Mật khẩu phải chứa ít nhất 8 ký tự',
+            'password.required' => 'Vui lòng nhập mật khẩu',
+            'confirm_password.min' => 'Mật khẩu phải chứa ít nhất 8 ký tự',
+            'confirm_password.required' => 'Vui lòng xác nhận mật khẩu',
             'confirm_password.same' => 'Mật khẩu xác nhận không khớp',
             'role.required' => 'Vui lòng chọn quyền',
             'phonenumber.required' => 'Vui lòng nhập số điện thoại',

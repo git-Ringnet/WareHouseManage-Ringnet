@@ -16,9 +16,9 @@ return new class extends Migration
         Schema::create('productorders', function (Blueprint $table) {
             $table->id()->autoIncrement();
             $table->integer('product_id')->nullable();
-            $table->integer('products_id');
+            // $table->integer('products_id')->nullable();
             $table->string('product_name');
-            $table->string('product_category')->nullable();
+            // $table->string('product_category')->nullable();
             $table->string('product_unit')->nullable();
             $table->string('product_trademark')->nullable();
             $table->integer('product_qty')->nullable();

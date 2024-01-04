@@ -84,8 +84,7 @@ class Products extends Model
                 $query->orWhere('products_code', 'like', '%' . $keywords . '%');
             });
         }
-
-        $products = $products->orderBy('products.created_at', 'asc')->paginate(8);
+        $products = $products->orderBy('products.created_at', 'asc')->paginate(20);
         // dd($products);
 
         return $products;
